@@ -12,7 +12,7 @@ $rithm-display-4: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(112),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Display 3
@@ -21,7 +21,7 @@ $rithm-display-3: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(56),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Display 2
@@ -30,7 +30,7 @@ $rithm-display-2: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(45),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Display 1
@@ -39,7 +39,7 @@ $rithm-display-1: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(34),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Headline
@@ -130,15 +130,15 @@ $custom-typography: mat.define-typography-config(
   $display-3: $rithm-display-3,
   $display-2: $rithm-display-2,
   $display-1: $rithm-display-1,
-  $headline:  $rithm-headline,
-  $title:  $rithm-title,
-  $subheading-2:  $rithm-subheading-2,
-  $subheading-1:  $rithm-subheading-1,
-  $body-1:  $rithm-body-1,
-  $body-2:  $rithm-body-2,
-  $caption:  $rithm-caption,
-  $button:  $rithm-button,
-  $input:  $rithm-input,
+  $headline: $rithm-headline,
+  $title: $rithm-title,
+  $subheading-2: $rithm-subheading-2,
+  $subheading-1: $rithm-subheading-1,
+  $body-1: $rithm-body-1,
+  $body-2: $rithm-body-2,
+  $caption: $rithm-caption,
+  $button: $rithm-button,
+  $input: $rithm-input,
 );
 
 /// Montserrat Thin 100

@@ -5,8 +5,7 @@ import { StationRosterMember } from './station-roster-member';
  *
  * @see `StationDashViewModel` in the back end.
  */
- export interface DashboardStationData {
-
+export interface DashboardStationData {
   /** The global Rithm ID for the station. */
   rithmId: string;
 
@@ -21,5 +20,4 @@ import { StationRosterMember } from './station-roster-member';
 
   /** The list of members on the worker roster. */
   worker: StationRosterMember[];
-
 }

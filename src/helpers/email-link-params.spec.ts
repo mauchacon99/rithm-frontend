@@ -8,7 +8,7 @@ describe('EmailLinkParams', () => {
     params = {
       type: 'register',
       email: 'test@email.com',
-      guid: 'fe7d733b-521a-4f68-91fc-0d59ac7bbf31'
+      guid: 'fe7d733b-521a-4f68-91fc-0d59ac7bbf31',
     };
   });
 

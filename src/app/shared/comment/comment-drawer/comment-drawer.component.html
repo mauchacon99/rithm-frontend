@@ -1,0 +1,101 @@
+<mat-tab-group animationDuration="300ms">
+  <mat-tab label="Document">
+    <ng-template matTabContent>
+      <div *ngIf="!isLoading">
+        <div class="comment-h overflow-y-auto flex flex-col-reverse">
+          <div
+            *ngIf="comments.length === 0"
+            class="flex flex-col justify-center text-accent-500 text-center p-2 comment-h"
+          >
+            There are currently no comments
+          </div>
+          <div class="flex flex-col-reverse" *ngIf="comments.length > 0">
+            <div *ngIf="loadingPostedComment">
+              <app-loading-indicator
+                [inlineText]="'Adding your comment...'"
+              ></app-loading-indicator>
+            </div>
+            <div *ngFor="let comment of comments">
+              <app-comment [comment]="comment"></app-comment>
+            </div>
+            <div class="m-2 h-9 flex justify-center">
+              <app-loading-indicator
+                class="p-4 text-accent-500 text-center"
+                *ngIf="loadingMoreComments"
+                [inlineText]="'Loading...'"
+              ></app-loading-indicator>
+              <button
+                mat-button
+                type="button"
+                color="accent"
+                (click)="loadMore()"
+                *ngIf="!loadingMoreComments && !commentsEnd"
+              >
+                Load More
+              </button>
+              <div class="p-4 text-accent-500 text-center" *ngIf="commentsEnd">
+                No more comments
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-comment-input
+          [stationId]="stationId"
+          [documentId]="documentId"
+          (postingComment)="setPostingLoading($event)"
+          (newComment)="addNewComment($event)"
+        ></app-comment-input>
+      </div>
+      <div class="flex comment-h" *ngIf="isLoading">
+        <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Station">
+    <ng-template matTabContent>
+      <div *ngIf="!isLoading">
+        <div class="comment-h overflow-y-auto flex flex-col-reverse">
+          <div
+            *ngIf="comments.length === 0"
+            class="flex flex-col justify-center text-accent-500 text-center p-2 comment-h"
+          >
+            There are currently no comments
+          </div>
+          <div class="flex flex-col-reverse" *ngIf="comments.length > 0">
+            <div *ngIf="loadingPostedComment">
+              <app-loading-indicator
+                [inlineText]="'Adding your comment...'"
+              ></app-loading-indicator>
+            </div>
+            <div *ngFor="let comment of comments">
+              <app-comment [comment]="comment"></app-comment>
+            </div>
+            <div class="m-2 h-9 flex justify-center">
+              <app-loading-indicator
+                class="p-4 text-accent-500 text-center"
+                *ngIf="loadingMoreComments"
+                [inlineText]="'Loading...'"
+              ></app-loading-indicator>
+              <button
+                mat-button
+                type="button"
+                color="accent"
+                (click)="loadMore()"
+                *ngIf="!loadingMoreComments && !commentsEnd"
+              >
+                Load More
+              </button>
+              <div class="p-4 text-accent-500 text-center" *ngIf="commentsEnd">
+                No more comments
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-comment-input></app-comment-input>
+      </div>
+      <div class="flex comment-h" *ngIf="isLoading">
+        <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

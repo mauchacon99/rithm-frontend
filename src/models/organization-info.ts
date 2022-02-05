@@ -2,7 +2,6 @@
  * Represents information about organization.
  */
 export interface OrganizationInfo {
-
   /** The name of organization. */
   name: string;
 

@@ -13,29 +13,30 @@ import { trigger, style, animate, transition } from '@angular/animations';
       transition(':enter', [
         style({
           opacity: 0,
-          transform: 'translateX(100%)'
+          transform: 'translateX(100%)',
         }),
-        animate('600ms',
+        animate(
+          '600ms',
           style({
             opacity: 1,
-            transform: 'translateX(0)'
+            transform: 'translateX(0)',
           })
         ),
       ]),
       transition(':leave', [
         style({ opacity: 1 }),
-        animate('500ms',
+        animate(
+          '500ms',
           style({
             opacity: 0,
-            transform: 'translateX(100%)'
+            transform: 'translateX(100%)',
           })
-        )
-      ])
+        ),
+      ]),
     ]),
-  ]
+  ],
 })
 export class NotificationCardComponent {
-
   /** The event to dismiss a notification. */
   @Output() dismissEvent: EventEmitter<unknown> = new EventEmitter();
 
@@ -43,7 +44,8 @@ export class NotificationCardComponent {
   @Input() title = 'Steven Rogers tagged you in a comment';
 
   /** The notification message. */
-  @Input() message = '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text';
+  @Input() message =
+    '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text';
 
   /** Whether the notification has been read. */
   @Input() read = false;
@@ -81,5 +83,4 @@ export class NotificationCardComponent {
   goToContext(): void {
     // TODO: bring the user to the specific context
   }
-
 }

@@ -1,11 +1,18 @@
 <section>
   <h4 class="mb-5">My Stations</h4>
-  <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-    <app-station-card *ngFor="let station of stations" [station]="station"></app-station-card>
-    <mat-card *ngIf="!stations || stations.length === 0" class="text-center mt-5">
-      <span class="my-3">
-        No stations
-      </span>
+  <div
+    *ngIf="!isLoading"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+  >
+    <app-station-card
+      *ngFor="let station of stations"
+      [station]="station"
+    ></app-station-card>
+    <mat-card
+      *ngIf="!stations || stations.length === 0"
+      class="text-center mt-5"
+    >
+      <span class="my-3"> No stations </span>
     </mat-card>
   </div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

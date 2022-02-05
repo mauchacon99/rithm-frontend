@@ -20,21 +20,20 @@ describe('PasswordResetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         PasswordResetComponent,
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports: [
         NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatCardModule,
-        MatInputModule
+        MatInputModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
-      ]
-    })
-    .compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

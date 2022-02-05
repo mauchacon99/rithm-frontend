@@ -1,7 +1,16 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
+import {
+  AbstractControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { By } from '@angular/platform-browser';
@@ -25,23 +34,19 @@ describe('SignInComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        SignInComponent,
-        MockComponent(LoadingIndicatorComponent)
-      ],
+      declarations: [SignInComponent, MockComponent(LoadingIndicatorComponent)],
       imports: [
         NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatCardModule,
-        MatInputModule
+        MatInputModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-      .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -92,8 +97,11 @@ describe('SignInComponent', () => {
   });
 
   it('should navigate to dashboard upon successful sign in', fakeAsync(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callFake(async (url) => true);
+    const routerSpy = spyOn(
+      TestBed.inject(Router),
+      'navigateByUrl'
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ).and.callFake(async (url) => true);
     component.signInForm.controls['email'].setValue('someone@email.com');
     component.signInForm.controls['password'].setValue('password1234');
     component.signIn();
@@ -127,7 +135,9 @@ describe('SignInComponent', () => {
       let emailInputHarness: MatInputHarness;
 
       beforeEach(async () => {
-        emailInputHarness = await loader.getHarness(MatInputHarness.with({ selector: '#email' }));
+        emailInputHarness = await loader.getHarness(
+          MatInputHarness.with({ selector: '#email' })
+        );
       });
 
       it('should exist', () => {
@@ -152,7 +162,9 @@ describe('SignInComponent', () => {
       let passwordInputHarness: MatInputHarness;
 
       beforeEach(async () => {
-        passwordInputHarness = await loader.getHarness(MatInputHarness.with({ selector: '#password' }));
+        passwordInputHarness = await loader.getHarness(
+          MatInputHarness.with({ selector: '#password' })
+        );
       });
 
       it('should exist', () => {
@@ -203,7 +215,5 @@ describe('SignInComponent', () => {
         expect(component.signIn).toHaveBeenCalledOnceWith();
       });
     });
-
   });
-
 });

@@ -2,7 +2,6 @@
  * Represents all the ways a document is allowed to be generated on a station.
  */
 export enum DocumentGenerationStatus {
-
   /** Documents are not able to be generated at all at this station. */
   None = 'None',
 
@@ -13,5 +12,5 @@ export enum DocumentGenerationStatus {
   Auto = 'Auto',
 
   /** Documents are able to be generated manually and automatically at this station. */
-  Both = 'Both'
+  Both = 'Both',
 }

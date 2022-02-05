@@ -10,28 +10,23 @@ describe('DocumentTemplateComponent', () => {
   let fixture: ComponentFixture<DocumentTemplateComponent>;
   const formBuilder = new FormBuilder();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const fn = function() { };
+  const fn = function () {};
   const errorMessage = {
     invalidForm: {
       valid: false,
-      message: 'User form is invalid'
-    }
+      message: 'User form is invalid',
+    },
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         DocumentTemplateComponent,
-        MockComponent(DocumentFieldComponent)
+        MockComponent(DocumentFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -59,5 +54,4 @@ describe('DocumentTemplateComponent', () => {
     const error = component.validate();
     expect(error).toEqual(errorMessage);
   });
-
 });

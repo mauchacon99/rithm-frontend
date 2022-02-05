@@ -11,10 +11,9 @@ import { UserService } from 'src/app/core/user.service';
 @Component({
   selector: 'app-user-removal',
   templateUrl: './user-removal.component.html',
-  styleUrls: ['./user-removal.component.scss']
+  styleUrls: ['./user-removal.component.scss'],
 })
 export class UserRemovalComponent {
-
   /** Delete form. */
   deleteForm: FormGroup;
 
@@ -25,26 +24,23 @@ export class UserRemovalComponent {
     private errorService: ErrorService
   ) {
     this.deleteForm = this.fb.group({
-      email: ['', Validators.email]
+      email: ['', Validators.email],
     });
   }
 
   /** Delete. */
   deleteUser(): void {
     const formValues = this.deleteForm.value;
-    this.userService.delete(formValues.email)
+    this.userService
+      .delete(formValues.email)
       .pipe(first())
       .subscribe({
         next: () => {
           this.popupService.notify('Deleted should have worked');
         },
         error: (error: unknown) => {
-          this.errorService.displayError(
-            'unable to delete. ',
-            error,
-            true
-          );
-        }
+          this.errorService.displayError('unable to delete. ', error, true);
+        },
       });
   }
 }

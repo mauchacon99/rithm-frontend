@@ -21,26 +21,19 @@ describe('TopNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        TopNavComponent,
-        MockComponent(UserAvatarComponent)
-      ],
-      imports: [
-        MatMenuModule,
-        RouterTestingModule
-      ],
-      providers: [
-        { provide: UserService, useClass: MockUserService }
-      ]
-    })
-      .compileComponents();
+      declarations: [TopNavComponent, MockComponent(UserAvatarComponent)],
+      imports: [MatMenuModule, RouterTestingModule],
+      providers: [{ provide: UserService, useClass: MockUserService }],
+    }).compileComponents();
   });
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(TopNavComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
-    notificationButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#notification-button' }));
+    notificationButtonHarness = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#notification-button' })
+    );
     fixture.detectChanges();
   });
 

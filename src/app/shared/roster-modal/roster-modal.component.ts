@@ -12,10 +12,9 @@ import { RosterModalData, StationRosterMember } from 'src/models';
 @Component({
   selector: 'app-roster-modal',
   templateUrl: './roster-modal.component.html',
-  styleUrls: ['./roster-modal.component.scss']
+  styleUrls: ['./roster-modal.component.scss'],
 })
 export class RosterModalComponent implements OnInit {
-
   /** Whether the modal is being used for the work roster. */
   isWorker: boolean;
 
@@ -38,7 +37,7 @@ export class RosterModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private dialogRef: MatDialogRef<RosterModalComponent>,
+    private dialogRef: MatDialogRef<RosterModalComponent>
   ) {
     this.stationRithmId = this.data.stationId;
     this.isWorker = this.data.isWorker;
@@ -46,7 +45,9 @@ export class RosterModalComponent implements OnInit {
     if (this.isWorker) {
       this.roster$ = this.dashboardService.getWorkerRoster(this.stationRithmId);
     } else {
-      this.roster$ = this.dashboardService.getSupervisorRoster(this.stationRithmId);
+      this.roster$ = this.dashboardService.getSupervisorRoster(
+        this.stationRithmId
+      );
     }
   }
 
@@ -54,24 +55,21 @@ export class RosterModalComponent implements OnInit {
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
-    this.roster$
-      .pipe(first())
-      .subscribe({
-          next: (rosterMembers) => {
-          this.isLoading = false;
-          if (rosterMembers) {
-            this.members = rosterMembers;
-          }
-        },
-        error: (error: unknown) => {
-          this.isLoading = false;
-          this.dialogRef.close();
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+    this.roster$.pipe(first()).subscribe({
+      next: (rosterMembers) => {
+        this.isLoading = false;
+        if (rosterMembers) {
+          this.members = rosterMembers;
         }
-      });
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.dialogRef.close();
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
-
 }

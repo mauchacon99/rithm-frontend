@@ -18,7 +18,7 @@ module.exports = {
     A100: '#5084ff',
     A200: '#1d60ff',
     A400: '#0045e9',
-    A700: '#003ecf'
+    A700: '#003ecf',
   },
   accent: {
     50: '#e4e8f1',
@@ -34,7 +34,7 @@ module.exports = {
     A100: '#8ba4ff',
     A200: '#587cff',
     A400: '#2554ff',
-    A700: '#0b40ff'
+    A700: '#0b40ff',
   },
   error: {
     50: '#f2e7e6',
@@ -50,7 +50,7 @@ module.exports = {
     A100: '#ff9e98',
     A200: '#ff6d65',
     A400: '#ff3d32',
-    A700: '#ff2519'
+    A700: '#ff2519',
   },
   secondary: {
     50: '#ebedee',
@@ -66,6 +66,6 @@ module.exports = {
     A100: '#94bfff',
     A200: '#61a0ff',
     A400: '#2e81ff',
-    A700: '#1472ff'
-  }
+    A700: '#1472ff',
+  },
 };

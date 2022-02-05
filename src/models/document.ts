@@ -34,5 +34,4 @@ export interface Document {
 
   /** The full name of the user assigned to the document. */
   userAssigned: string;
-
 }

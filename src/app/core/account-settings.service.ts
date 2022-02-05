@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
@@ -6,10 +5,9 @@ import { ReplaySubject } from 'rxjs';
  * Service for communication between account settings and top navigation component.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountSettingsService {
-
   /** The updated user details. */
   private updatedUser$ = new ReplaySubject<UserFirstLast>(1);
 
@@ -24,11 +22,9 @@ export class AccountSettingsService {
   setUser(user: UserFirstLast): void {
     this.updatedUser$.next(user);
   }
-
 }
 
 interface UserFirstLast {
-
   /** The first name of the user. */
   firstName: string;
 

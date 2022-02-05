@@ -13,7 +13,7 @@ import { User } from 'src/models';
 @Component({
   selector: 'app-top-nav',
   templateUrl: './top-nav.component.html',
-  styleUrls: ['./top-nav.component.scss']
+  styleUrls: ['./top-nav.component.scss'],
 })
 export class TopNavComponent implements OnInit {
   /** Trigger for user menu. */
@@ -49,12 +49,14 @@ export class TopNavComponent implements OnInit {
    *
    */
   ngOnInit(): void {
-    this.accountSettingsService.currentUser$.pipe(takeUntil(this.sub$)).subscribe((user) => {
-      if (user && user.firstName && user.lastName) {
-        this.user.firstName = user?.firstName;
-        this.user.lastName = user?.lastName;
-      }
-    });
+    this.accountSettingsService.currentUser$
+      .pipe(takeUntil(this.sub$))
+      .subscribe((user) => {
+        if (user && user.firstName && user.lastName) {
+          this.user.firstName = user?.firstName;
+          this.user.lastName = user?.lastName;
+        }
+      });
 
     if (this.user.role === 'admin') {
       this.navItems.push('admin');
@@ -106,5 +108,4 @@ export class TopNavComponent implements OnInit {
   signOut(): void {
     this.userService.signOut();
   }
-
 }

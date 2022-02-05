@@ -1,0 +1,13 @@
+<div class="px-3">
+  <app-header-menu></app-header-menu>
+</div>
+<div class="p-2">
+  <mat-accordion>
+    <app-expansion-menu
+      [dashboardRole]="dashboardRole.OrganizationDashboard"
+    ></app-expansion-menu>
+    <app-expansion-menu
+      [dashboardRole]="dashboardRole.PersonalDashboard"
+    ></app-expansion-menu>
+  </mat-accordion>
+</div>

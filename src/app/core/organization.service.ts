@@ -10,11 +10,10 @@ const MICROSERVICE_PATH = '/userservice/api/organization';
  * Service for all document behavior and business logic.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrganizationService {
-  constructor(
-    private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Gets a List of users belongs to an organization.
@@ -23,12 +22,18 @@ export class OrganizationService {
    * @param pageNum The desired page number of result.
    * @returns An Users list observable.
    */
-  getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
+  getUsersForOrganization(
+    organizationId: string,
+    pageNum: number
+  ): Observable<OrganizationUsers> {
     const params = new HttpParams()
       .set('rithmid', organizationId)
       .set('pageNum', pageNum)
       .set('usersPerPage', 15);
-    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`, { params });
+    return this.http.get<OrganizationUsers>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`,
+      { params }
+    );
   }
 
   /**
@@ -38,15 +43,21 @@ export class OrganizationService {
    * @param userRithmId The Rithm Id of the user being removed.
    * @returns An empty observable.
    */
-  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`, {
-      body: [
-        {
-          organizationRithmId,
-          userRithmId
-        }
-      ]
-    });
+  removeUserFromOrganization(
+    organizationRithmId: string,
+    userRithmId: string
+  ): Observable<unknown> {
+    return this.http.delete<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`,
+      {
+        body: [
+          {
+            organizationRithmId,
+            userRithmId,
+          },
+        ],
+      }
+    );
   }
 
   /**
@@ -56,9 +67,11 @@ export class OrganizationService {
    * @returns An organization observable.
    */
   getOrganizationInfo(organizationId: string): Observable<OrganizationInfo> {
-    const params = new HttpParams()
-      .set('orgRithmId', organizationId);
-    return this.http.get<OrganizationInfo>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info`, { params });
+    const params = new HttpParams().set('orgRithmId', organizationId);
+    return this.http.get<OrganizationInfo>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info`,
+      { params }
+    );
   }
 
   /**
@@ -69,13 +82,19 @@ export class OrganizationService {
    * @param userRithmId The user's id.
    * @returns An empty observable.
    */
-  updateUserRole(role: 'admin' | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
-    return this.http.put<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`,
+  updateUserRole(
+    role: 'admin' | null,
+    organizationRithmId: string,
+    userRithmId: string
+  ): Observable<unknown> {
+    return this.http.put<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`,
       {
         role,
         organizationRithmId,
-        userRithmId
-      });
+        userRithmId,
+      }
+    );
   }
 
   /**
@@ -85,10 +104,13 @@ export class OrganizationService {
    * @param organizationId The id of the Organization.
    * @returns An organization information observable.
    */
-  updateOrganizationInfo(organizationInfo: OrganizationInfo, organizationId: string): Observable<OrganizationInfo> {
-    return this.http.put<OrganizationInfo>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`,
+  updateOrganizationInfo(
+    organizationInfo: OrganizationInfo,
+    organizationId: string
+  ): Observable<OrganizationInfo> {
+    return this.http.put<OrganizationInfo>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`,
       organizationInfo
     );
   }
-
 }

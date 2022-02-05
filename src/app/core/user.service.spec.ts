@@ -1,10 +1,18 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import {
+  SignInResponse,
+  TokenResponse,
+  User,
+  UserAccountInfo,
+} from 'src/models';
 
 import { UserService } from './user.service';
 
@@ -19,7 +27,7 @@ const testUser: User = {
   rithmId: 'kj34k3jkj',
   notificationSettings: null,
   role: null,
-  organization: ''
+  organization: '',
 };
 
 describe('UserService', () => {
@@ -29,10 +37,7 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule],
     });
     service = TestBed.inject(UserService);
     router = TestBed.inject(Router);
@@ -49,19 +54,24 @@ describe('UserService', () => {
     const expectedResponse: SignInResponse = {
       accessToken: 'kj343kh2o3ih23ih423',
       refreshTokenGuid: 'ab5d4-ae56g',
-      user: testUser
+      user: testUser,
     };
 
-    service.signIn('johndoe@email.com', 'password1234')
+    service
+      .signIn('johndoe@email.com', 'password1234')
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
         expect(service.accessToken).toBeTruthy();
-        expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
+        expect(service.accessToken?.token).toEqual(
+          expectedResponse.accessToken
+        );
         expect(service.user).toEqual(expectedResponse.user);
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/login`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/login`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ email, password });
 
@@ -117,20 +127,21 @@ describe('UserService', () => {
 
   it('should refresh expired access tokens', () => {
     const expectedResponse: TokenResponse = {
-      accessToken: 'kj343kh2o3ih23ih423'
+      accessToken: 'kj343kh2o3ih23ih423',
     };
 
     localStorage.setItem('refreshTokenGuid', 'thisisaguid');
 
-    service.refreshToken()
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-        expect(service.accessToken).toBeTruthy();
-        expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
-      });
+    service.refreshToken().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+      expect(service.accessToken).toBeTruthy();
+      expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-token?refreshTokenGuid=thisisaguid`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-token?refreshTokenGuid=thisisaguid`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
     expect(req.request.params).toBeTruthy();
@@ -152,13 +163,16 @@ describe('UserService', () => {
     const email = 'lilbro@mariobros.com';
     const password = 'mamamia';
 
-    service.register(firstName, lastName, email, password)
+    service
+      .register(firstName, lastName, email, password)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/register`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/register`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ firstName, lastName, email, password });
 
@@ -170,13 +184,14 @@ describe('UserService', () => {
     const guid = 'kdjfkd-kjdkfjd-jkjdfkdjk';
     const email = 'test@email.com';
 
-    service.validateEmail(guid, email)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.validateEmail(guid, email).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validate-email`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/validate-email`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ guid, email });
 
@@ -187,13 +202,14 @@ describe('UserService', () => {
   it('should make request to send password reset email successfully', () => {
     const email = 'test@email.com';
 
-    service.sendPasswordResetEmail(email)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.sendPasswordResetEmail(email).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgot-password`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/forgot-password`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ email });
 
@@ -206,13 +222,14 @@ describe('UserService', () => {
     const email = 'test@email.com';
     const password = 'mamamia';
 
-    service.resetPassword(guid, email, password)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.resetPassword(guid, email, password).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/reset-password`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/reset-password`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ guid, email, password });
 
@@ -221,10 +238,9 @@ describe('UserService', () => {
   });
 
   it('should return terms and conditions', () => {
-    service.getTermsConditions()
-      .subscribe((response) => {
-        expect(response).toBeDefined();
-      });
+    service.getTermsConditions().subscribe((response) => {
+      expect(response).toBeDefined();
+    });
   });
 
   it('should update user account settings', () => {
@@ -232,16 +248,17 @@ describe('UserService', () => {
     const changedAccountInfo: UserAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
-      password: 'mamamia'
+      password: 'mamamia',
     };
 
-    service.updateUserAccount(changedAccountInfo)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.updateUserAccount(changedAccountInfo).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/update`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(changedAccountInfo);
 
@@ -255,17 +272,14 @@ describe('UserService', () => {
     //   comments: true,
     //   commentMentions: false
     // };
-
     // service.updateNotificationSettings(notificationSettings)
     //   .subscribe((response) => {
     //     expect(response).toBeFalsy();
     //   });
-
     // // outgoing request
     // const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`);
     // expect(req.request.method).toEqual('POST');
     // expect(req.request.body).toEqual(notificationSettings);
-
     // req.flush(null);
     // httpTestingController.verify();
   });
@@ -273,17 +287,17 @@ describe('UserService', () => {
   it('should return terms and conditions text', () => {
     const termsAndConditions = 'This isTerms and conditions text';
 
-    service.getTermsConditions()
-      .subscribe((response) => {
-        expect(response).toBeDefined();
-      });
+    service.getTermsConditions().subscribe((response) => {
+      expect(response).toBeDefined();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(termsAndConditions);
     httpTestingController.verify();
   });
-
 });

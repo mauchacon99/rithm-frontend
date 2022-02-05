@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
-import { NestedFieldComponent } from 'src/app/detail/nested-field/nested-field.component';
+import { NestedFieldComponent } from 'src/app/shared/fields/nested-field/nested-field.component';
 import { QuestionFieldType } from 'src/models';
-import { CheckFieldComponent } from '../../detail/check-field/check-field.component';
-import { DateFieldComponent } from '../../detail/date-field/date-field.component';
-import { NumberFieldComponent } from '../../detail/number-field/number-field.component';
-import { SelectFieldComponent } from '../../detail/select-field/select-field.component';
-import { TextFieldComponent } from '../../detail/text-field/text-field.component';
+import { CheckFieldComponent } from '../../shared/fields/check-field/check-field.component';
+import { DateFieldComponent } from '../../shared/fields/date-field/date-field.component';
+import { NumberFieldComponent } from '../../shared/fields/number-field/number-field.component';
+import { SelectFieldComponent } from '../../shared/fields/select-field/select-field.component';
+import { TextFieldComponent } from '../../shared/fields/text-field/text-field.component';
 
 import { DocumentFieldComponent } from './document-field.component';
 
@@ -16,12 +16,12 @@ describe('DocumentFieldComponent', () => {
   let fixture: ComponentFixture<DocumentFieldComponent>;
   const formBuilder = new FormBuilder();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const fn = function() { };
+  const fn = function () {};
   const errorMessage = {
     invalidForm: {
       valid: false,
-      message: 'User form is invalid'
-    }
+      message: 'User form is invalid',
+    },
   };
 
   beforeEach(async () => {
@@ -35,14 +35,9 @@ describe('DocumentFieldComponent', () => {
         MockComponent(CheckFieldComponent),
         MockComponent(NestedFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -51,7 +46,6 @@ describe('DocumentFieldComponent', () => {
     component.field = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address line 1',
-      instructions: '',
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,

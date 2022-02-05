@@ -3,11 +3,24 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 import { MockPopupService, MockUserService } from 'src/mocks';
+import { User } from 'src/models';
 import { DashboardComponent } from '../dashboard/dashboard/dashboard.component';
 
 import { AdminAuthGuard } from './admin-auth.guard';
 import { PopupService } from './popup.service';
 import { UserService } from './user.service';
+
+const user: User = {
+  rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A',
+  firstName: 'Admin',
+  lastName: 'User',
+  email: 'rithmadmin@inpivota.com',
+  role: 'admin',
+  createdDate: '2021-08-23T15:35:42.2234693',
+  isEmailVerified: true,
+  notificationSettings: null,
+  organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+};
 
 describe('AdminAuthGuard', () => {
   let guard: AdminAuthGuard;
@@ -16,14 +29,14 @@ describe('AdminAuthGuard', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
-        RouterTestingModule.withRoutes(
-          [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
-        )
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: MockComponent(DashboardComponent) },
+        ]),
       ],
       providers: [
         { provide: PopupService, useClass: MockPopupService },
-        { provide: UserService, useClass: MockUserService }
-      ]
+        { provide: UserService, useClass: MockUserService },
+      ],
     });
     guard = TestBed.inject(AdminAuthGuard);
   });
@@ -39,8 +52,7 @@ describe('AdminAuthGuard', () => {
   });
 
   it('should allow navigation to admin pages if the user is admin', () => {
-    // eslint-disable-next-line max-len
-    const user = { id: 3021, rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A', firstName: 'Admin', lastName: 'User', email: 'rithmadmin@inpivota.com', role: 'admin', createdDate: '2021-08-23T15:35:42.2234693', objectPermissions: [], globalPermission: null, isEmailVerified: true, notificationSettings: null, organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989' };
+    user.role = 'admin';
     localStorage.setItem('user', JSON.stringify(user));
     guard.canActivate().then((result) => {
       expect(result).toBeTrue();
@@ -48,12 +60,10 @@ describe('AdminAuthGuard', () => {
   });
 
   it('should prevent navigation to admin pages if the user is not admin', () => {
-    // eslint-disable-next-line max-len
-    const user = { id: 3021, rithmId: '69B5A6C1-D380-40DD-BA6D-CCBF86E98C4A', firstName: 'Worker', lastName: 'User', email: 'rithmadmin@inpivota.com', role: null, createdDate: '2021-08-23T15:35:42.2234693', objectPermissions: [], globalPermission: null, isEmailVerified: true, notificationSettings: null, organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989' };
+    user.role = null;
     localStorage.setItem('user', JSON.stringify(user));
     guard.canActivate().then((result) => {
       expect(result).toBeFalse();
     });
   });
-
 });

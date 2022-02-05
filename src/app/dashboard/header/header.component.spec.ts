@@ -3,7 +3,12 @@ import { DashboardService } from '../dashboard.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockDashboardService, MockUserService, MockDocumentService, MockPopupService } from 'src/mocks';
+import {
+  MockDashboardService,
+  MockUserService,
+  MockDocumentService,
+  MockPopupService,
+} from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { MatCardModule } from '@angular/material/card';
 import { PopupService } from 'src/app/core/popup.service';
@@ -16,20 +21,14 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        HeaderComponent,
-        MockComponent(LoadingIndicatorComponent)
-      ],
-      imports: [
-        RouterTestingModule,
-        MatCardModule
-      ],
+      declarations: [HeaderComponent, MockComponent(LoadingIndicatorComponent)],
+      imports: [RouterTestingModule, MatCardModule],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
+        { provide: PopupService, useClass: MockPopupService },
+      ],
     }).compileComponents();
   });
 
@@ -50,5 +49,4 @@ describe('HeaderComponent', () => {
   it('should return dashboard header data for previous documents', () => {
     expect(component.numStations).toBeGreaterThanOrEqual(0);
   });
-
 });

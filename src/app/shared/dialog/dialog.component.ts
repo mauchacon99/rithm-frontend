@@ -8,10 +8,9 @@ import { DialogData, DialogType } from 'src/models';
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+  styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-
   /** The types of dialogs. */
   readonly dialogType = DialogType;
 
@@ -48,7 +47,9 @@ export class DialogComponent {
     this.message = data.message;
     this.important = data.important ? data.important : false;
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
-    this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
+    this.cancelButtonText = data.cancelButtonText
+      ? data.cancelButtonText
+      : 'Cancel';
 
     if (this.type === DialogType.Prompt) {
       this.promptLabel = data.promptLabel ? data.promptLabel : 'Enter a value';

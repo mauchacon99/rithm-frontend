@@ -38,9 +38,9 @@ export class AccountSettingsComponent {
     private popupService: PopupService,
     private dialog: MatDialog,
     private accountSettingsService: AccountSettingsService
-    ) {
+  ) {
     this.settingsForm = this.fb.group({
-      userForm: this.fb.control('')
+      userForm: this.fb.control(''),
     });
   }
 
@@ -61,7 +61,8 @@ export class AccountSettingsComponent {
     const userFormData = this.settingsForm.get('userForm')?.value;
     const { firstName, lastName, confirmPassword } = userFormData;
 
-    this.userService.updateUserAccount({ firstName, lastName, password: confirmPassword })
+    this.userService
+      .updateUserAccount({ firstName, lastName, password: confirmPassword })
       .pipe(first())
       .subscribe({
         next: () => {
@@ -69,13 +70,14 @@ export class AccountSettingsComponent {
           this.settingsForm.reset();
           this.popupService.notify('Your account settings are updated.');
           this.accountSettingsService.setUser({ firstName, lastName });
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -101,26 +103,27 @@ export class AccountSettingsComponent {
   /**
    * Open the terms and conditions modal.
    */
-   async openTerms(): Promise<void> {
+  async openTerms(): Promise<void> {
     let message = '';
     this.isLoading = true;
     try {
-      const termsConditionsText = await firstValueFrom(this.userService.getTermsConditions());
+      const termsConditionsText = await firstValueFrom(
+        this.userService.getTermsConditions()
+      );
       if (termsConditionsText) {
         message = termsConditionsText;
         this.isLoading = false;
         await this.popupService.terms({
           title: 'Terms and Conditions',
-          message
+          message,
         });
       }
     } catch (error) {
       this.isLoading = false;
       this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        "Something went wrong on our end and we're looking into it. Please try again in a little while.",
         error
       );
     }
   }
-
 }

@@ -3,7 +3,6 @@ import { User } from './user';
  * Represents all Users for an organization.
  */
 export interface OrganizationUsers {
-
   /** The total users of an organization. */
   totalOrgUsers: number;
 

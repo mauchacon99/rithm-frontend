@@ -16,19 +16,18 @@ describe('UserRemovalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserRemovalComponent ],
+      declarations: [UserRemovalComponent],
       imports: [
         ReactiveFormsModule,
         NoopAnimationsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-    .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

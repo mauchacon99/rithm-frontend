@@ -6,8 +6,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-notification-settings',
   templateUrl: './notification-settings.component.html',
-  styleUrls: ['./notification-settings.component.scss']
+  styleUrls: ['./notification-settings.component.scss'],
 })
-export class NotificationSettingsComponent {
-
-}
+export class NotificationSettingsComponent {}

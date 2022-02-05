@@ -7,7 +7,6 @@ import { StationRosterMember } from './station-roster-member';
  * @see `DocumentInfoViewModel` in back end.
  */
 export interface DocumentStationInformation {
-
   /** The name of the document. */
   documentName: string;
 

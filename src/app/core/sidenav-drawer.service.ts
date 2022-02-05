@@ -6,7 +6,7 @@ import { ReplaySubject, Subject } from 'rxjs';
  * Service for all behavior and state for the sidenav and drawers.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SidenavDrawerService {
   /** The sidenav component for the mobile navigation. */
@@ -16,7 +16,15 @@ export class SidenavDrawerService {
   private drawerComponent?: MatDrawer;
 
   /** The name of the context for which the drawer is opened. */
-  drawerContext$: Subject<'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo' > = new ReplaySubject(1);
+  drawerContext$: Subject<
+    | 'comments'
+    | 'history'
+    | 'stationInfo'
+    | 'documentInfo'
+    | 'connectionInfo'
+    | 'stationGroupInfo'
+    | 'menuDashboard'
+  > = new ReplaySubject(1);
 
   /** Optional data that is available to the drawer. */
   drawerData$: ReplaySubject<unknown> = new ReplaySubject(1);
@@ -31,6 +39,15 @@ export class SidenavDrawerService {
    */
   get drawerHasBackdrop(): boolean {
     return this._drawerHasBackdrop;
+  }
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return !!this.drawerComponent?.opened;
   }
 
   constructor() {
@@ -84,7 +101,7 @@ export class SidenavDrawerService {
   }
 
   /**
-   * Sets the instance of the drawer component fo rfurther action.
+   * Sets the instance of the drawer component for further action.
    *
    * @param component The component used for the drawer.
    */
@@ -98,10 +115,21 @@ export class SidenavDrawerService {
    * @param context The name of the context for which the drawer is opened.
    * @param data Any data to optionally pass to the drawer.
    */
-  openDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo',
-  data?: unknown): void {
+  openDrawer(
+    context:
+      | 'comments'
+      | 'history'
+      | 'stationInfo'
+      | 'documentInfo'
+      | 'connectionInfo'
+      | 'stationGroupInfo'
+      | 'menuDashboard',
+    data?: unknown
+  ): void {
     if (!this.drawerComponent) {
-      throw new Error('The drawer component is not defined. Did you forget to set it?');
+      throw new Error(
+        'The drawer component is not defined. Did you forget to set it?'
+      );
     }
     this.drawerContext$.next(context);
     this.drawerData$.next(data);
@@ -114,7 +142,9 @@ export class SidenavDrawerService {
    */
   closeDrawer(): void {
     if (!this.drawerComponent) {
-      throw new Error('The drawer component is not defined. Did you forget to set it?');
+      throw new Error(
+        'The drawer component is not defined. Did you forget to set it?'
+      );
     }
     this.drawerComponent.close();
   }
@@ -125,10 +155,24 @@ export class SidenavDrawerService {
    * @param context The name of the context for which the drawer is opened.
    * @param data Any data to optionally pass to the drawer.
    */
-  toggleDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo', data?: unknown): void {
+  toggleDrawer(
+    context:
+      | 'comments'
+      | 'history'
+      | 'stationInfo'
+      | 'documentInfo'
+      | 'connectionInfo'
+      | 'stationGroupInfo'
+      | 'menuDashboard',
+    data?: unknown
+  ): void {
     if (!this.drawerComponent) {
-      throw new Error('The drawer component is not defined. Did you forget to set it?');
+      throw new Error(
+        'The drawer component is not defined. Did you forget to set it?'
+      );
     }
-    !this.drawerComponent.opened ? this.openDrawer(context, data) : this.closeDrawer();
+    !this.drawerComponent.opened
+      ? this.openDrawer(context, data)
+      : this.closeDrawer();
   }
 }

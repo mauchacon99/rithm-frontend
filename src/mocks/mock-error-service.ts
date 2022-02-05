@@ -4,7 +4,6 @@
  * Mocks methods of the `ErrorService`.
  */
 export class MockErrorService {
-
   /**
    * Logs an error to the console.
    *
@@ -25,5 +24,4 @@ export class MockErrorService {
   displayError(displayMessage: string, error: Error, important = false): void {
     return;
   }
-
 }

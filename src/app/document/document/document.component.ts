@@ -1,13 +1,30 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewChecked,
+  ChangeDetectorRef,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation } from 'src/models';
-import { ConnectedStationInfo } from 'src/models';
+import {
+  DocumentAnswer,
+  DocumentStationInformation,
+  ConnectedStationInfo,
+  DocumentAutoFlow,
+} from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PopupService } from 'src/app/core/popup.service';
+import { Subject, forkJoin } from 'rxjs';
+import { Input } from '@angular/core';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Main component for viewing a document.
@@ -15,14 +32,26 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-document',
   templateUrl: './document.component.html',
-  styleUrls: ['./document.component.scss']
+  styleUrls: ['./document.component.scss'],
 })
-export class DocumentComponent implements OnInit {
+export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
+  /** The Document how widget. */
+  @Input() isWidget = false;
+
+  /** Id for station in widget. */
+  @Input() stationRithmIdWidget!: string;
+
+  /** Id for document id widget. */
+  @Input() documentRithmIdWidget!: string;
+
+  /** Return to list of the documents only with isWidget. */
+  @Output() returnDocumentsWidget: EventEmitter<boolean> = new EventEmitter();
+
   /** Document form. */
   documentForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', {static: true})
+  @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
 
   /** The information about the document within a station. */
@@ -30,6 +59,9 @@ export class DocumentComponent implements OnInit {
 
   /** Document Id. */
   private documentId = '';
+
+  /** Station Id. */
+  private stationId = '';
 
   /** Whether the request to get the document info is currently underway. */
   documentLoading = true;
@@ -43,25 +75,86 @@ export class DocumentComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** The all document answers the document actually. */
+  documentAnswer: DocumentAnswer[] = [];
+
+  /** Get Document Name from BehaviorSubject. */
+  private documentName = '';
+
+  /** Show or hidden accordion for all field. */
+  accordionFieldAllExpanded = false;
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private popupService: PopupService,
+    private readonly changeDetectorR: ChangeDetectorRef,
+    private userService: UserService
   ) {
     this.documentForm = this.fb.group({
-      documentTemplateForm: this.fb.control('')
+      documentTemplateForm: this.fb.control(''),
     });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.drawerContext = context;
+      });
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((documentName) => {
+        this.documentName = documentName.baseName;
+      });
+
+    this.documentService.documentAnswer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((answer) => {
+        const answerFound = this.documentAnswer.find(
+          (da) => da.questionRithmId === answer.questionRithmId
+        );
+        if (answerFound === undefined) {
+          /** Answer doesn't exists then add it. */
+          answer.stationRithmId = this.documentInformation.stationRithmId;
+          answer.documentRithmId = this.documentInformation.documentRithmId;
+          this.documentAnswer.push(answer);
+        } else {
+          /** Answer exists then update its value. */
+          const answerIndex = this.documentAnswer.indexOf(answerFound);
+          this.documentAnswer[answerIndex].value = answer.value;
+        }
+      });
   }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.setDrawer(this.detailDrawer);
-    this.getParams();
+    if (!this.isWidget) {
+      this.sidenavDrawerService.setDrawer(this.detailDrawer);
+      this.getParams();
+    } else {
+      this.documentId = this.documentRithmIdWidget;
+      this.stationId = this.stationRithmIdWidget;
+      this.getDocumentStationData();
+    }
+  }
+
+  /**
+   * Checks after the component views and child views.
+   */
+  ngAfterViewChecked(): void {
+    this.changeDetectorR.detectChanges();
   }
 
   /**
@@ -74,27 +167,48 @@ export class DocumentComponent implements OnInit {
   }
 
   /**
+   * Is the current user an admin.
+   *
+   * @returns Validate if user is admin.
+   */
+  get isUserAdmin(): boolean {
+    return this.userService.isAdmin;
+  }
+
+  /**
+   * Is the current user an owner or an admin for this document.
+   *
+   * @returns Validate if user is owner or admin of current document.
+   */
+  get isUserAdminOrOwner(): boolean {
+    const ownerDocument = this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    );
+    return !!ownerDocument || this.userService.isAdmin;
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.queryParams
-      .pipe(first())
-      .subscribe({
-        next: (params) => {
-          if (!params.stationId || !params.documentId) {
-            this.handleInvalidParams();
-          } else {
-            this.documentId = params.documentId;
-            this.getDocumentStationData(params.documentId, params.stationId);
-            this.getConnectedStations(params.documentId, params.stationId);
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+    this.route.queryParams.pipe(first()).subscribe({
+      next: (params) => {
+        if (!params.stationId || !params.documentId) {
+          this.handleInvalidParams();
+        } else {
+          this.documentId = params.documentId;
+          this.stationId = params.stationId;
+          this.getDocumentStationData();
+          this.getConnectedStations();
         }
-      });
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
@@ -110,24 +224,27 @@ export class DocumentComponent implements OnInit {
 
   /**
    * Navigates the user back to the dashboard page.
+   *
+   * @param isReloadDocumentsWidget Boolean, when is true, reload the documents list in widget.
    */
-  private navigateBack(): void {
+  private navigateBack(isReloadDocumentsWidget = false): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
-    this.router.navigateByUrl('dashboard');
+    // If is widget return to the documents list
+    this.isWidget
+      ? this.returnDocumentsWidget.emit(isReloadDocumentsWidget)
+      : this.router.navigateByUrl('dashboard');
   }
 
   /**
    * Get data about the document and station the document is in.
-   *
-   * @param documentId The id of the document for which to get data.
-   * @param stationId The id of the station that the document is in.
    */
-  private getDocumentStationData(documentId: string, stationId: string): void {
+  private getDocumentStationData(): void {
     this.documentLoading = true;
-    this.documentService.getDocumentInfo(documentId, stationId)
+    this.documentService
+      .getDocumentInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
         next: (document) => {
@@ -135,33 +252,33 @@ export class DocumentComponent implements OnInit {
             this.documentInformation = document;
           }
           this.documentLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.navigateBack();
           this.documentLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
   /**
    * Retrieves a list of the connected stations for the given document.
-   *
-   * @param documentId The id of the document for which to retrieve previous stations.
-   * @param stationId The id of the station for which to retrieve forward stations.
    */
-  private getConnectedStations(documentId: string, stationId: string): void {
+  private getConnectedStations(): void {
     this.connectedStationsLoading = true;
-    this.documentService.getConnectedStationInfo(documentId, stationId)
+    this.documentService
+      .getConnectedStationInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
-          this.forwardStations = connectedStations.followingStations;
+          this.forwardStations = connectedStations.nextStations;
           this.previousStations = connectedStations.previousStations;
           this.connectedStationsLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.navigateBack();
           this.connectedStationsLoading = false;
           this.errorService.displayError(
@@ -169,8 +286,113 @@ export class DocumentComponent implements OnInit {
             error,
             false
           );
-        }
+        },
       });
   }
 
+  /** This cancel button clicked show alert. */
+  async cancelDocument(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `Your changes will be lost and you will return to the ${
+        this.isWidget ? 'documents list' : 'dashboard'
+      }.`,
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) this.navigateBack();
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  /**
+   * Save document changes with the save button.
+   */
+  saveDocumentChanges(): void {
+    this.documentLoading = true;
+    const requestArray = [
+      // Update the document name.
+      this.documentService.updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      ),
+
+      // Save the document answers.
+      this.documentService.saveDocumentAnswer(
+        this.documentInformation.documentRithmId,
+        this.documentAnswer
+      ),
+    ];
+
+    forkJoin(requestArray)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.getDocumentStationData();
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save document answers and auto flow.
+   */
+  autoFlowDocument(): void {
+    this.documentLoading = true;
+    const documentAutoFlow: DocumentAutoFlow = {
+      stationRithmId: this.documentInformation.stationRithmId,
+      documentRithmId: this.documentInformation.documentRithmId,
+      // Parameter temporary testMode.
+      testMode: false,
+    };
+
+    const requestArray = [
+      // Save the document answers.
+      this.documentService.saveDocumentAnswer(
+        this.documentInformation.documentRithmId,
+        this.documentAnswer
+      ),
+      // Update the document name.
+      this.documentService.updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      ),
+
+      // Flow a document.
+      this.documentService.autoFlowDocument(documentAutoFlow),
+    ];
+
+    forkJoin(requestArray)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.documentLoading = false;
+          if (this.isUserAdmin) {
+            this.router.navigateByUrl('map');
+          } else {
+            this.router.navigateByUrl('dashboard');
+          }
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
 }

@@ -15,14 +15,13 @@ describe('PreviouslyStartedDocumentsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         PreviouslyStartedDocumentsComponent,
-        MockComponent(DocumentListCardComponent)
+        MockComponent(DocumentListCardComponent),
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -36,7 +35,8 @@ describe('PreviouslyStartedDocumentsComponent', () => {
   });
 
   it('should return previously started documents', () => {
-    expect(component.previouslyStartedDocuments.length).toBeGreaterThanOrEqual(0);
+    expect(component.previouslyStartedDocuments.length).toBeGreaterThanOrEqual(
+      0
+    );
   });
-
 });

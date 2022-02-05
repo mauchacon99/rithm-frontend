@@ -1,6 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { WorkerDashboardHeader, Document } from 'src/models';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import {
+  WorkerDashboardHeader,
+  Document,
+  DashboardItem,
+  WidgetType,
+  DashboardData,
+} from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
@@ -14,10 +23,7 @@ describe('DashboardService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule],
     });
     service = TestBed.inject(DashboardService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -31,21 +37,21 @@ describe('DashboardService', () => {
     const expectedResponse: WorkerDashboardHeader = {
       userRithmId: '1234',
       startedDocuments: 5,
-      rosterStations: 4
+      rosterStations: 4,
     };
 
-    service.getDashboardHeader()
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getDashboardHeader().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/header`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/header`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
     httpTestingController.verify();
-
   });
 
   it('should successfully fetch data for dashboard stations', () => {
@@ -62,7 +68,7 @@ describe('DashboardService', () => {
             lastName: 'User',
             email: 'supervisoruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -70,9 +76,9 @@ describe('DashboardService', () => {
             lastName: 'Potter',
             email: 'harrypotter@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
+            isOwner: false,
+          },
+        ],
       },
       {
         rithmId: '2',
@@ -86,7 +92,7 @@ describe('DashboardService', () => {
             lastName: 'User',
             email: 'workeruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -94,19 +100,20 @@ describe('DashboardService', () => {
             lastName: 'User',
             email: 'supervisoruser@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
-      }
+            isOwner: false,
+          },
+        ],
+      },
     ];
 
-    service.getDashboardStations()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getDashboardStations().subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -122,7 +129,7 @@ describe('DashboardService', () => {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -130,17 +137,18 @@ describe('DashboardService', () => {
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
 
-    service.getWorkerRoster(rithmId)
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getWorkerRoster(rithmId).subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${rithmId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -156,7 +164,7 @@ describe('DashboardService', () => {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -164,18 +172,19 @@ describe('DashboardService', () => {
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
 
-    service.getSupervisorRoster(rithmId)
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getSupervisorRoster(rithmId).subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
     // outgoing request
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${rithmId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -193,15 +202,17 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: ''
-      }];
+        userAssigned: '',
+      },
+    ];
 
-    service.getPriorityQueueDocuments()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getPriorityQueueDocuments().subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -219,19 +230,233 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: ''
-      }];
+        userAssigned: '',
+      },
+    ];
 
-    service.getPreviouslyStartedDocuments()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getPreviouslyStartedDocuments().subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
 
+  it('should return a list of widgets for dashboard', () => {
+    const widgetsExpected: DashboardItem[] = [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ];
+    service.getDashboardWidgets().subscribe((response) => {
+      expect(response).toEqual(widgetsExpected);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(widgetsExpected);
+    httpTestingController.verify();
+  });
+  it('should return updated dashboard', () => {
+    const updateDashboard: DashboardData = {
+      rithmId: '',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 0,
+          rows: 0,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          maxItemCols: 0,
+        },
+      ],
+    };
+    service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
+      expect(response).toEqual(updateDashboard);
+    });
+  });
+  it('should returns organization dashboard', () => {
+    const organizationDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    service.getOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(organizationDashboards);
+    });
+  });
+
+  it('should returns user`s customized dashboards', () => {
+    const personalDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852-963',
+        name: 'Personal 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    service.getPersonalDashboard().subscribe((response) => {
+      expect(response).toEqual(personalDashboards);
+    });
+  });
+
+  it('should return a new dashboard personal', () => {
+    const expectDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service.generateNewPersonalDashboard().subscribe((newDashboard) => {
+      expect(newDashboard).toEqual(expectDashboard);
+    });
+  });
+
+  it('should return new data for dashboard when update dashboard', () => {
+    const dashboardData: DashboardData = {
+      rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
+      name: 'name',
+      widgets: [
+        {
+          cols: 1,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 1,
+          maxItemRows: 2,
+          minItemCols: 1,
+          maxItemCols: 2,
+        },
+      ],
+    };
+
+    service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
+      expect(response).toEqual(dashboardData);
+    });
+  });
+
+  it('should return a new organization dashboard', () => {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service.generateNewOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(newDashboard);
+    });
+  });
 });

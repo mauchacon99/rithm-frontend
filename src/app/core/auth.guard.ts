@@ -7,14 +7,13 @@ import { UserService } from './user.service';
  * Guard for preventing a user from accessing pages if not authenticated.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-
   constructor(
     private userService: UserService,
     private popupService: PopupService
-  ) { }
+  ) {}
 
   /**
    * Determines if the user is signed in and can perform the attempted routing action.
@@ -44,8 +43,7 @@ export class AuthGuard implements CanActivate {
     this.userService.signOut();
     this.popupService.alert({
       title,
-      message: 'You\'ll need to sign in again before you can view that page.'
+      message: "You'll need to sign in again before you can view that page.",
     });
   }
-
 }

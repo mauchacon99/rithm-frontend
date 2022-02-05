@@ -4,11 +4,6 @@
 /// A two color 45 degree gradient
 /// @param {string} $start-color The starting color
 /// @param {string} $end-color The ending color
-@mixin gradient ($start-color, $end-color) {
-  background-image:
-    linear-gradient(
-      45deg,
-      $start-color,
-      $end-color
-    );
+@mixin gradient($start-color, $end-color) {
+  background-image: linear-gradient(45deg, $start-color, $end-color);
 }

@@ -23,6 +23,9 @@ export interface StationMapData {
   /** The ids of the stations that connect FROM this station. */
   nextStations: string[];
 
-  /** The status of the station (what should happen to this flow). */
+  /** The status of the station (what should happen to this station). */
   status: MapItemStatus;
+
+  /** The notes on a station for an admin. */
+  notes: string;
 }

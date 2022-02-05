@@ -1,16 +1,39 @@
 <p class="hidden text-center md:inline-block">
-  {{rangeArr[activeNum -1]}} of {{numItems}}
+  {{ rangeArr[activeNum - 1] }} of {{ numItems }}
 </p>
-<button mat-icon-button [disabled]="pagesArr[0] === activeNum" class="inline-block border-none w-10 h-10 leading-10 text-center bg-transparent rounded-full" (click)="changePage(prevPage)">
+<button
+  mat-icon-button
+  [disabled]="pagesArr[0] === activeNum"
+  class="inline-block border-none w-10 h-10 leading-10 text-center bg-transparent rounded-full"
+  (click)="changePage(prevPage)"
+>
   <i class="fas fa-chevron-left"></i>
 </button>
-<div *ngFor="let num of pagesArr | slice: (startingPageNum === 1 && endingPageNum !== 6 ? 0 : startingPageNum):endingPageNum" class="inline-block">
-  <button [disabled]="pagesArr.length === 1 || num === activeNum" [ngClass]="{'bg-secondary-100 hover:bg-secondary-200': activeNum === num}" (click)="clickPage(num)" class="border-none w-10 h-10 leading-10 text-center bg-transparent rounded-full hover:cursor-pointer hover:bg-secondary-50">
+<div
+  *ngFor="
+    let num of pagesArr
+      | slice
+        : (startingPageNum === 1 && endingPageNum !== 6 ? 0 : startingPageNum)
+        : endingPageNum
+  "
+  class="inline-block"
+>
+  <button
+    [disabled]="pagesArr.length === 1 || num === activeNum"
+    [ngClass]="{ 'bg-secondary-100 hover:bg-secondary-200': activeNum === num }"
+    (click)="clickPage(num)"
+    class="border-none w-10 h-10 leading-10 text-center bg-transparent rounded-full hover:cursor-pointer hover:bg-secondary-50"
+  >
     <span>
       {{ num }}
     </span>
   </button>
 </div>
-<button mat-icon-button [disabled]="pagesArr[pagesArr.length -1] === activeNum" class="w-10 h-10 leading-10 text-center bg-transparent rounded-full" (click)="changePage(nextPage)">
+<button
+  mat-icon-button
+  [disabled]="pagesArr[pagesArr.length - 1] === activeNum"
+  class="w-10 h-10 leading-10 text-center bg-transparent rounded-full"
+  (click)="changePage(nextPage)"
+>
   <i class="fas fa-chevron-right"></i>
 </button>

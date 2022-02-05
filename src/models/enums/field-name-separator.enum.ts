@@ -23,4 +23,3 @@ export enum FieldNameSeparator {
   /** Semicolon separator type. */
   Semicolon = ';',
 }
-

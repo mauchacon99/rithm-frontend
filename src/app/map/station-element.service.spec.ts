@@ -11,9 +11,7 @@ describe('StationElementService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        { provide: MapService, useClass: MockMapService }
-      ]
+      providers: [{ provide: MapService, useClass: MockMapService }],
     });
     service = TestBed.inject(StationElementService);
   });

@@ -17,8 +17,11 @@ describe('AccountSettingsComponent', () => {
   let fixture: ComponentFixture<AccountSettingsComponent>;
   const formBuilder = new FormBuilder();
 
-  // eslint-disable-next-line rxjs/finnish
-  const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of({}), close: null });
+  const dialogRefSpyObj = jasmine.createSpyObj({
+    // eslint-disable-next-line rxjs/finnish
+    afterClosed: of({}),
+    close: null,
+  });
   dialogRefSpyObj.componentInstance = { body: '' };
 
   beforeEach(async () => {
@@ -26,21 +29,16 @@ describe('AccountSettingsComponent', () => {
       declarations: [
         AccountSettingsComponent,
         MockComponent(UserFormComponent),
-        MockComponent(NotificationSettingsComponent)
+        MockComponent(NotificationSettingsComponent),
       ],
-      imports: [
-        MatCardModule,
-        MatDialogModule,
-        ReactiveFormsModule
-      ],
+      imports: [MatCardModule, MatDialogModule, ReactiveFormsModule],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: ErrorService, useClass: MockErrorService }
-      ]
-    })
-      .compileComponents();
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -52,5 +50,4 @@ describe('AccountSettingsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

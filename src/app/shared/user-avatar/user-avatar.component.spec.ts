@@ -10,17 +10,16 @@ describe('UserAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserAvatarComponent ],
-      imports: [ MatTooltipModule, MatBadgeModule ]
-    })
-    .compileComponents();
+      declarations: [UserAvatarComponent],
+      imports: [MatTooltipModule, MatBadgeModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserAvatarComponent);
     component = fixture.componentInstance;
-    component.firstName = 'Tyler';
-    component.lastName = 'Hendrickson';
+    component.firstName = 'tyler';
+    component.lastName = 'hendrickson';
     fixture.detectChanges();
   });
 
@@ -64,5 +63,4 @@ describe('UserAvatarComponent', () => {
     const badgeValue = component.getBadge();
     expect(badgeValue).toEqual('\u2212');
   });
-
 });

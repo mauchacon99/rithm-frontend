@@ -1,7 +1,7 @@
 /**
  * All the environment options for the app.
  */
- export enum EnvironmentName {
+export enum EnvironmentName {
   /** The environment used for development. */
   Dev = 'dev',
 

@@ -1,14 +1,21 @@
 import { Observable, of } from 'rxjs';
-import { WorkerDashboardHeader, DashboardStationData, StationRosterMember } from 'src/models';
+import {
+  WorkerDashboardHeader,
+  DashboardStationData,
+  StationRosterMember,
+  DashboardItem,
+  WidgetType,
+  DashboardData,
+} from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `DashboardService`.
  */
 export class MockDashboardService {
-
   /**
    * Gets info needed for dashboard header.
    *
@@ -18,7 +25,7 @@ export class MockDashboardService {
     const dashboardHeaderData: WorkerDashboardHeader = {
       userRithmId: '1234',
       startedDocuments: 5,
-      rosterStations: 4
+      rosterStations: 4,
     };
 
     return of(dashboardHeaderData).pipe(delay(1000));
@@ -43,7 +50,7 @@ export class MockDashboardService {
             lastName: 'User',
             email: 'workeruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -51,9 +58,9 @@ export class MockDashboardService {
             lastName: 'Potter',
             email: 'harrypotter@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
+            isOwner: false,
+          },
+        ],
       },
       {
         rithmId: '2',
@@ -67,7 +74,7 @@ export class MockDashboardService {
             lastName: 'User',
             email: 'workeruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -75,10 +82,10 @@ export class MockDashboardService {
             lastName: 'Potter',
             email: 'harrypotter@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
-      }
+            isOwner: false,
+          },
+        ],
+      },
     ];
 
     return of(dashboardStationData).pipe(delay(1000));
@@ -98,7 +105,7 @@ export class MockDashboardService {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -106,8 +113,8 @@ export class MockDashboardService {
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
     return of(expectedResponse).pipe(delay(1000));
   }
@@ -126,17 +133,16 @@ export class MockDashboardService {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
-      }
-      ,
+        isOwner: false,
+      },
       {
         rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
     return of(expectedResponse).pipe(delay(1000));
   }
@@ -157,8 +163,9 @@ export class MockDashboardService {
         flowedTimeUTC: '0001-01-01T00:00:00',
         userAssigned: '',
         updatedTimeUTC: '2021-06-18T21:17:34.3506612Z',
-        isEscalated: false
-      }];
+        isEscalated: false,
+      },
+    ];
     return of(expectedResponse).pipe(delay(1000));
   }
 
@@ -178,7 +185,7 @@ export class MockDashboardService {
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
         flowedTimeUTC: '',
-        stationRithmId: ''
+        stationRithmId: '',
       },
       {
         documentName: 'New Doc 2',
@@ -189,10 +196,209 @@ export class MockDashboardService {
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
         flowedTimeUTC: '',
-        stationRithmId: ''
-      }
+        stationRithmId: '',
+      },
     ];
     return of(filterData).pipe(delay(1000));
   }
 
+  /**
+   * Gets widgets for dashboard.
+   *
+   * @returns Returns the list of widgets.
+   */
+  getDashboardWidgets(): Observable<DashboardItem[]> {
+    const widgets: DashboardItem[] = [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ];
+
+    return of(widgets).pipe(delay(1000));
+  }
+
+  /**
+   * Update personal dashboard.
+   *
+   * @param dashboardData Dashboard update.
+   * @returns Personal dashboard data observable.
+   */
+  updatePersonalDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
+  }
+
+  /**
+   * Get all the organization's dashboards.
+   *
+   * @returns Returns a list of dashboards.
+   */
+  getOrganizationDashboard(): Observable<DashboardData[]> {
+    const OrganizationDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    return of(OrganizationDashboards).pipe(delay(1000));
+  }
+
+  /**
+   * Get all dashboards how user.
+   *
+   * @returns Returns list of dashboards.
+   */
+  getPersonalDashboard(): Observable<DashboardData[]> {
+    const personalDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852-963',
+        name: 'Personal 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    return of(personalDashboards).pipe(delay(1000));
+  }
+
+  /**
+   * Generates a new dashboard personal.
+   *
+   * @returns Returns a new default dashboard.
+   */
+  generateNewPersonalDashboard(): Observable<DashboardData> {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    return of(newDashboard).pipe(delay(1000));
+  }
+
+  /**
+   * Generates a new dashboard.
+   *
+   * @returns Returns a new default dashboard.
+   */
+  generateNewOrganizationDashboard(): Observable<DashboardData> {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    return of(newDashboard).pipe(delay(1000));
+  }
+
+  /**
+   * Update organization dashboard`s.
+   *
+   * @returns The updated  data for this dashboard.
+   * @param dashboardData Dashboard data for update.
+   */
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
+  }
 }

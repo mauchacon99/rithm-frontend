@@ -6,12 +6,12 @@ const routes: Routes = [
   {
     path: ':docName',
     component: DocumentComponent,
-    pathMatch: 'prefix'
+    pathMatch: 'prefix',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class DocumentRoutingModule { }
+export class DocumentRoutingModule {}

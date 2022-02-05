@@ -5,8 +5,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './token.interceptor';
 import { CookieService } from 'ngx-cookie-service';
-
-
+import { DialogModule } from '../shared/dialog/dialog.module';
 
 @NgModule({
   declarations: [],
@@ -14,15 +13,16 @@ import { CookieService } from 'ngx-cookie-service';
     CommonModule,
     HttpClientModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    DialogModule,
   ],
   providers: [
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {}

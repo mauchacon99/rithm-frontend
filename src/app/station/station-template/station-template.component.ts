@@ -1,10 +1,15 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ValidationErrors, Validator
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  NG_VALIDATORS,
+  ValidationErrors,
+  Validator,
 } from '@angular/forms';
-import { Question, QuestionFieldType } from 'src/models';
+import { Question } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the list of fields on the station template.
@@ -17,40 +22,30 @@ import { Question, QuestionFieldType } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => StationTemplateComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => StationTemplateComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class StationTemplateComponent implements ControlValueAccessor, Validator {
-
+export class StationTemplateComponent
+  implements ControlValueAccessor, Validator
+{
   /** The station fields in the template area. */
   @Input() fields!: Question[];
 
   /** The form to add to station. */
   stationTemplateForm: FormGroup;
 
-  /** The general instructions field. */
-  readonly stationInstructionsField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
-    prompt: 'General Instructions',
-    instructions: '',
-    questionType: QuestionFieldType.LongText,
-    isReadOnly: false,
-    isRequired: false,
-    isPrivate: false,
-    children: [],
-  };
+  /** The RithmId of the Station. */
+  @Input() stationRithmId = '';
 
-  constructor(
-    private fb: FormBuilder
-  ) {
+  constructor(private fb: FormBuilder, private stationService: StationService) {
     this.stationTemplateForm = this.fb.group({
-      stationFieldForm: this.fb.control('')
+      stationFieldForm: this.fb.control(''),
     });
   }
 
@@ -61,7 +56,11 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns True if the field can be moved up.
    */
   canFieldMoveUp(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? false : this.fields.length - 1 === fieldIndex ? true : true;
+    return fieldIndex === 0
+      ? false
+      : this.fields.length - 1 === fieldIndex
+      ? true
+      : true;
   }
 
   /**
@@ -71,7 +70,11 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns True if the field can be moved down.
    */
   canFieldMoveDown(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? true : this.fields.length - 1 === fieldIndex ? false : true;
+    return fieldIndex === 0
+      ? true
+      : this.fields.length - 1 === fieldIndex
+      ? false
+      : true;
   }
 
   /**
@@ -84,22 +87,37 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     const questionToMove = this.fields.splice(index, 1);
     const directionToMove = direction === 'up' ? -1 : 1;
     this.fields.splice(index + directionToMove, 0, questionToMove[0]);
+    this.stationService.touchStationForm();
   }
 
   /**
-   * Removes a field from the template.
+   * Move a previousquestion field in the template area back to its initial expansion panel.
    *
-   * @param index The current index of the field in the list.
+   * @param field The field to be moved.
    */
-  remove(index: number): void {
+  remove(field: Question): void {
+    const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
+    if (this.stationRithmId !== field.originalStationRithmId) {
+      this.movingQuestion(field);
+    }
+    this.stationService.touchStationForm();
+  }
+
+  /**
+   * Moves a field from the template area to previous fields.
+   *
+   * @param field The field to be moved.
+   */
+  movingQuestion(field: Question): void {
+    this.stationService.moveQuestion(field);
   }
 
   /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -138,7 +156,9 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.stationTemplateForm.disable() : this.stationTemplateForm.enable();
+    isDisabled
+      ? this.stationTemplateForm.disable()
+      : this.stationTemplateForm.enable();
   }
 
   /**
@@ -147,12 +167,13 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.stationTemplateForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Station template form is invalid'
-      }
-    };
+    return this.stationTemplateForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Station template form is invalid',
+          },
+        };
   }
-
 }

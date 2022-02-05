@@ -15,14 +15,13 @@ describe('PriorityQueueComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         PriorityQueueComponent,
-        MockComponent(DocumentListCardComponent)
+        MockComponent(DocumentListCardComponent),
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -38,5 +37,4 @@ describe('PriorityQueueComponent', () => {
   it('should return priority queue documents', () => {
     expect(component.priorityQueueDocuments.length).toBeGreaterThanOrEqual(0);
   });
-
 });

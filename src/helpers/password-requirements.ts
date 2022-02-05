@@ -19,7 +19,9 @@ export class PasswordRequirements {
   private at_least_one_digit_char = new RegExp(/^(?=.*?[0-9])|^$/);
 
   /** Regex to check for one special char (!#$%& etc). */
-  private at_least_one_special_char = new RegExp(/^(?=.*?[" !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"])|^$/);
+  private at_least_one_special_char = new RegExp(
+    /^(?=.*?[" !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"])|^$/
+  );
 
   /**
    * Check password to see if it has 8 chars or more.
@@ -36,7 +38,10 @@ export class PasswordRequirements {
    * @returns A validator function.
    */
   hasOneLowerCaseChar(): ValidatorFn {
-    return this.testRegExp(this.at_least_one_lower_case_char, 'missingLowerChar');
+    return this.testRegExp(
+      this.at_least_one_lower_case_char,
+      'missingLowerChar'
+    );
   }
 
   /**
@@ -45,7 +50,10 @@ export class PasswordRequirements {
    * @returns A validator function.
    */
   hasOneUpperCaseChar(): ValidatorFn {
-    return this.testRegExp(this.at_least_one_upper_case_char, 'missingUpperChar');
+    return this.testRegExp(
+      this.at_least_one_upper_case_char,
+      'missingUpperChar'
+    );
   }
 
   /**
@@ -63,7 +71,10 @@ export class PasswordRequirements {
    * @returns A validator function.
    */
   hasOneSpecialChar(): ValidatorFn {
-    return this.testRegExp(this.at_least_one_special_char, 'missingSpecialChar');
+    return this.testRegExp(
+      this.at_least_one_special_char,
+      'missingSpecialChar'
+    );
   }
 
   /**
@@ -75,7 +86,7 @@ export class PasswordRequirements {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.parent?.get('password')?.value;
       const confirmPass = control.parent?.get('confirmPassword')?.value;
-      return (password !== confirmPass) ? { mismatchingPasswords: true } : null;
+      return password !== confirmPass ? { mismatchingPasswords: true } : null;
     };
   }
 

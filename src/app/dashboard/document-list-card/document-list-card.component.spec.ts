@@ -9,12 +9,9 @@ describe('DocumentListCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DocumentListCardComponent ],
-      imports: [
-        MatCardModule
-      ]
-    })
-    .compileComponents();
+      declarations: [DocumentListCardComponent],
+      imports: [MatCardModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

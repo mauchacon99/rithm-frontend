@@ -4,7 +4,6 @@ import { environment } from 'src/environments/environment';
  * Represents all information and behavior with an access token.
  */
 export class AccessToken {
-
   /** The Base64-encoded access token. */
   token: string;
 

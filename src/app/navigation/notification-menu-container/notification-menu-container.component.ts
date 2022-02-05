@@ -4,10 +4,9 @@ import { Notification } from 'src/models/notification';
 @Component({
   selector: 'app-notification-menu-container',
   templateUrl: './notification-menu-container.component.html',
-  styleUrls: ['./notification-menu-container.component.scss']
+  styleUrls: ['./notification-menu-container.component.scss'],
 })
-export class NotificationMenuContainerComponent implements OnInit{
-
+export class NotificationMenuContainerComponent implements OnInit {
   /** Temp array of notifications. */
   notifications: Notification[] = [
     {
@@ -16,7 +15,7 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: false,
       time: '10 minutes ago',
-      initials: 'SL'
+      initials: 'SL',
     },
     {
       rithmId: '2',
@@ -24,7 +23,7 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: false,
       time: '20 minutes ago',
-      initials: 'MR'
+      initials: 'MR',
     },
     {
       rithmId: '3',
@@ -32,7 +31,7 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: true,
       time: '48 minutes ago',
-      initials: 'SW'
+      initials: 'SW',
     },
     {
       rithmId: '4',
@@ -40,7 +39,7 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: true,
       time: '7 minutes ago',
-      initials: 'VS'
+      initials: 'VS',
     },
     {
       rithmId: '5',
@@ -48,7 +47,7 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: false,
       time: '19 minutes ago',
-      initials: 'SR'
+      initials: 'SR',
     },
     {
       rithmId: '6',
@@ -56,7 +55,7 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: false,
       time: '51 minutes ago',
-      initials: 'CB'
+      initials: 'CB',
     },
     {
       rithmId: '7',
@@ -64,8 +63,8 @@ export class NotificationMenuContainerComponent implements OnInit{
       type: 'comment',
       read: true,
       time: '1 hour ago',
-      initials: 'NR'
-    }
+      initials: 'NR',
+    },
   ];
 
   /** Unread Notifications. */
@@ -76,7 +75,7 @@ export class NotificationMenuContainerComponent implements OnInit{
 
   /** Sort notifications by read value. */
   ngOnInit(): void {
-    this.notifications.forEach(notification => {
+    this.notifications.forEach((notification) => {
       if (notification.read) {
         this.read.push(notification);
       } else {
@@ -84,6 +83,4 @@ export class NotificationMenuContainerComponent implements OnInit{
       }
     });
   }
-
-
 }

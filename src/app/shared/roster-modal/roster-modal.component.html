@@ -1,21 +1,34 @@
 <section>
-  <h4 class="text-center mb-5">{{ isWorker ? 'Worker' : 'Supervisor' }} Roster</h4>
+  <h4 class="text-center mb-5">
+    {{ isWorker ? 'Worker' : 'Supervisor' }} Roster
+  </h4>
   <div *ngIf="!isLoading" class="h-60 overflow-y-auto overflow-x-hidden">
     <div class="flex mt-2" *ngFor="let member of members">
       <div class="user-avatar">
-        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true"></app-user-avatar>
+        <app-user-avatar
+          [firstName]="member.firstName"
+          [lastName]="member.lastName"
+          [hideToolTip]="true"
+        ></app-user-avatar>
       </div>
       <div>
         <p class="leading-none pt-1 px-4">
-          {{member.firstName}} {{member.lastName}}
-          <br>
-          <span class="overline text-secondary-500">{{member.email}}</span>
+          {{ member.firstName }} {{ member.lastName }}
+          <br />
+          <span class="overline-font text-secondary-500">{{
+            member.email
+          }}</span>
         </p>
       </div>
     </div>
   </div>
-  <app-loading-indicator class="h-60 pt-7" *ngIf="isLoading"></app-loading-indicator>
+  <app-loading-indicator
+    class="h-60 pt-7"
+    *ngIf="isLoading"
+  ></app-loading-indicator>
   <div mat-dialog-actions class="flex justify-end">
-    <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">Close</button>
+    <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
+      Close
+    </button>
   </div>
 </section>

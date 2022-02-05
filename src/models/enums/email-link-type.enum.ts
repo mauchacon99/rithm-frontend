@@ -6,5 +6,5 @@ export enum EmailLinkType {
   Register = 'register',
 
   /** The email link is used for initiating password reset. */
-  ForgotPassword = 'reset'
+  ForgotPassword = 'reset',
 }

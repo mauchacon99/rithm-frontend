@@ -1,0 +1,16 @@
+aside {
+  @apply flex flex-col justify-center h-full;
+
+  &.left {
+    @apply items-end;
+  }
+
+  &.right {
+    @apply items-start;
+  }
+
+  /* stylelint-disable-next-line */
+  &.overflow-y-scroll-none::-webkit-scrollbar {
+    @apply hidden;
+  }
+}

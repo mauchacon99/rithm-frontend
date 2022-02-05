@@ -3,8 +3,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
-
 import { StationCardComponent } from './station-card.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StationCardComponent', () => {
   let component: StationCardComponent;
@@ -12,16 +12,9 @@ describe('StationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        StationCardComponent,
-        MockComponent(RosterComponent)
-      ],
-      imports: [
-        MatDialogModule,
-        MatCardModule
-      ]
-    })
-      .compileComponents();
+      declarations: [StationCardComponent, MockComponent(RosterComponent)],
+      imports: [MatDialogModule, MatCardModule, RouterTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -39,7 +32,7 @@ describe('StationCardComponent', () => {
           lastName: 'User',
           email: 'supervisoruser@inpivota.com',
           isWorker: true,
-          isOwner: false
+          isOwner: false,
         },
         {
           rithmId: '',
@@ -47,9 +40,9 @@ describe('StationCardComponent', () => {
           lastName: 'Potter',
           email: 'harrypotter@inpivota.com',
           isWorker: true,
-          isOwner: false
-        }
-      ]
+          isOwner: false,
+        },
+      ],
     };
     fixture.detectChanges();
   });

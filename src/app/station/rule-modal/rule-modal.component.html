@@ -1,0 +1,240 @@
+<div class="modal-container">
+  <!-- Modal header -->
+  <div class="flex justify-center items-center h-full">
+    <h4 class="text-center">New Rule</h4>
+  </div>
+  <!-- Stepper for new rule -->
+  <mat-stepper
+    [linear]="true"
+    (selectionChange)="selectionChangeStep($event)"
+    [orientation]="(stepperOrientation$ | async)!"
+  >
+    <ng-template matStepperIcon="edit">
+      <i class="fas fa-check"></i>
+    </ng-template>
+    <!-- Step 1 -->
+    <mat-step color="accent" [completed]="firstOperand !== ''">
+      <ng-template matStepLabel>
+        <p class="truncate font-semibold ml-2">Select Field</p>
+      </ng-template>
+      <div
+        class="flex flex-col md:w-5/12 justify-start"
+        *ngIf="!questionStationError"
+        [ngClass]="{ 'text-center': questionStationLoading }"
+      >
+        <p class="text-sm mt-1">
+          Select the field-set you'd like to apply a rule to.
+        </p>
+        <mat-form-field
+          appearance="outline"
+          class="mt-2"
+          *ngIf="!questionStationLoading; else selectFieldLoading"
+        >
+          <mat-label>Select Field</mat-label>
+          <mat-select [(value)]="firstOperand">
+            <mat-option
+              *ngFor="let question of questionStation"
+              [value]="question.rithmId"
+              (click)="setOperatorList(question.questionType, question.prompt)"
+            >
+              {{ question.prompt }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <ng-template #selectFieldLoading>
+          <div class="mt-2">
+            <app-loading-indicator
+              id="loading-indicator-questions"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+        </ng-template>
+        <button
+          mat-button
+          matStepperNext
+          class="w-1/12"
+          data-testid="next-step-1"
+          id="next-step-1"
+          [disabled]="firstOperand === ''"
+        >
+          Next
+        </button>
+      </div>
+      <!-- Error in question stations -->
+      <div *ngIf="questionStationError" id="question-stations-error">
+        <p class="text-left text-error-500 mt-2 ml-2 mb-2">
+          Error: Unable to retrive station questions.
+        </p>
+      </div>
+    </mat-step>
+    <!-- Step 2 -->
+    <mat-step color="accent" [completed]="operator !== ''">
+      <ng-template matStepLabel>
+        <p class="truncate ml-2">Comparison Type</p>
+      </ng-template>
+      <div class="flex flex-col md:w-5/12 justify-start">
+        <p class="text-sm mt-1">
+          Select the comparasion value for field type:
+          <span class="font-semibold">{{ firstFieldType | titlecase }}</span>
+        </p>
+        <mat-form-field appearance="outline" class="mt-2">
+          <mat-label>Comparison Type</mat-label>
+          <mat-select
+            [(ngModel)]="operator"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option
+              *ngFor="let option of operatorList"
+              [value]="option.value"
+              (click)="operatorText = option.text"
+            >
+              {{ option.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <button
+          mat-button
+          matStepperPrevious
+          data-testid="back-step-2"
+          id="back-step-2"
+          class="w-1/12"
+        >
+          Back
+        </button>
+        <button
+          mat-button
+          matStepperNext
+          class="w-1/12 text-accent-500"
+          data-testid="next-step-2"
+          id="next-step-2"
+          [disabled]="operator === ''"
+        >
+          Next
+        </button>
+      </div>
+    </mat-step>
+    <!-- Step 3 -->
+    <mat-step
+      color="accent"
+      [completed]="secondOperand !== '' || secondOperandField.value !== ''"
+    >
+      <ng-template matStepLabel>
+        <p class="truncate ml-2">Comparison Value</p>
+      </ng-template>
+      <div class="flex flex-col">
+        <p class="text-sm mt-1">
+          Enter the value you'd like to compare your field to.
+        </p>
+      </div>
+      <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
+        <div (focusin)="secondOperand = ''" [ngSwitch]="firstOperandType">
+          <app-text-field
+            *ngSwitchCase="operandType.String"
+            #textField
+            [field]="secondOperandField"
+            [labelTag]="secondOperandField.prompt"
+            [isStation]="false"
+            [isInput]="true"
+          >
+          </app-text-field>
+          <app-number-field
+            *ngSwitchCase="operandType.Number"
+            #numberField
+            [field]="secondOperandField"
+          >
+          </app-number-field>
+          <app-date-field
+            *ngSwitchCase="operandType.Date"
+            #dateField
+            [field]="secondOperandField"
+          >
+          </app-date-field>
+        </div>
+        <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Previous field</mat-label>
+          <mat-select
+            [disabled]="!secondOperandQuestionList.length"
+            [(ngModel)]="secondOperand"
+            (focus)="refreshComponentField()"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option
+              *ngFor="let question of secondOperandQuestionList"
+              [value]="question.rithmId"
+              (click)="secondOperandText = question.prompt"
+            >
+              {{ question.prompt }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <button
+          mat-button
+          matStepperPrevious
+          class="w-1/12"
+          data-testid="back-step-3"
+          id="back-step-3"
+        >
+          Back
+        </button>
+        <button
+          mat-button
+          matStepperNext
+          class="w-1/12 text-accent-500"
+          data-testid="next-step-3"
+          id="next-step-3"
+          [disabled]="secondOperand === '' && secondOperandField.value === ''"
+        >
+          Next
+        </button>
+      </div>
+    </mat-step>
+    <!-- Step 4 -->
+    <mat-step color="accent" [completed]="false">
+      <ng-template matStepLabel>
+        <p class="truncate ml-2">Done</p>
+      </ng-template>
+      <div class="flex flex-col">
+        <p class="text-sm my-1">
+          {{ firstOperandText }}
+          <span class="font-semibold">{{ operatorText }} </span>
+          {{ secondOperandText }}
+        </p>
+      </div>
+      <div class="flex flex-row space-x-2 mt-5">
+        <button
+          mat-button
+          matStepperPrevious
+          class="w-1/12"
+          data-testid="back-step-4"
+          id="back-step-4"
+        >
+          Back
+        </button>
+        <button
+          mat-button
+          class="w-1/12 text-accent-500"
+          data-testid="done-step"
+          id="done-step"
+        >
+          Done
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+  <div mat-dialog-actions class="flex justify-end">
+    <button
+      mat-button
+      mat-dialog-close
+      data-testid="close-modal-btn"
+      id="close-modal-btn"
+      (click)="closeModal()"
+    >
+      Close
+    </button>
+  </div>
+</div>

@@ -19,9 +19,11 @@ describe('PasswordRequirementsService', () => {
     expect(result).toBeNull();
 
     control = { value: '1234' };
-    const result2 = helper.isGreaterThanEightChars()(control as AbstractControl);
+    const result2 = helper.isGreaterThanEightChars()(
+      control as AbstractControl
+    );
 
-    expect(result2).toEqual({missingPassLength: true});
+    expect(result2).toEqual({ missingPassLength: true });
   });
 
   it('should validate 1 lowercase character', () => {
@@ -33,7 +35,7 @@ describe('PasswordRequirementsService', () => {
     control = { value: 'PASSWORD' };
     const result2 = helper.hasOneLowerCaseChar()(control as AbstractControl);
 
-    expect(result2).toEqual({missingLowerChar: true});
+    expect(result2).toEqual({ missingLowerChar: true });
   });
 
   it('should validate 1 uppercase character', () => {
@@ -45,7 +47,7 @@ describe('PasswordRequirementsService', () => {
     control = { value: 'password' };
     const result2 = helper.hasOneUpperCaseChar()(control as AbstractControl);
 
-    expect(result2).toEqual({missingUpperChar: true});
+    expect(result2).toEqual({ missingUpperChar: true });
   });
 
   it('should validate a number character', () => {
@@ -57,7 +59,7 @@ describe('PasswordRequirementsService', () => {
     control = { value: 'password' };
     const result2 = helper.hasOneDigitChar()(control as AbstractControl);
 
-    expect(result2).toEqual({missingDigitChar: true});
+    expect(result2).toEqual({ missingDigitChar: true });
   });
 
   it('should validate 1 special character', () => {
@@ -69,7 +71,7 @@ describe('PasswordRequirementsService', () => {
     control = { value: 'password' };
     const result2 = helper.hasOneSpecialChar()(control as AbstractControl);
 
-    expect(result2).toEqual({missingSpecialChar: true});
+    expect(result2).toEqual({ missingSpecialChar: true });
   });
 
   it('should pass when control is left blank', () => {
@@ -89,7 +91,5 @@ describe('PasswordRequirementsService', () => {
 
     const result5 = helper.hasOneSpecialChar()(control as AbstractControl);
     expect(result5).toBeNull();
-
-
   });
 });

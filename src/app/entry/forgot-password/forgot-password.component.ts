@@ -12,7 +12,7 @@ import { UserService } from 'src/app/core/user.service';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss']
+  styleUrls: ['./forgot-password.component.scss'],
 })
 export class ForgotPasswordComponent {
   /** Forgot password form. */
@@ -29,7 +29,7 @@ export class ForgotPasswordComponent {
     private router: Router
   ) {
     this.forgotPassForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -38,19 +38,21 @@ export class ForgotPasswordComponent {
    */
   sendEmail(): void {
     this.isLoading = true;
-    this.userService.sendPasswordResetEmail(this.forgotPassForm.value.email)
+    this.userService
+      .sendPasswordResetEmail(this.forgotPassForm.value.email)
       .pipe(first())
       .subscribe({
         next: () => {
           this.isLoading = false;
           this.openAlert();
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
             'Something went wrong and we were unable to send you an email. Please try again in a little while.',
             error
           );
-        }
+        },
       });
   }
 
@@ -61,12 +63,11 @@ export class ForgotPasswordComponent {
     const data = {
       title: 'Request Sent',
       // eslint-disable-next-line max-len
-      message: `Please check your email for instructions on how to reset your password. If you don't receive an email within 10 minutes, please double check that your entered email is correct and try again.`
+      message: `Please check your email for instructions on how to reset your password. If you don't receive an email within 10 minutes, please double check that your entered email is correct and try again.`,
     };
 
     this.popupService.alert(data).then(() => {
       this.router.navigate(['']);
     });
   }
-
 }

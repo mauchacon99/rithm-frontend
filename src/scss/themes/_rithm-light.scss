@@ -14,4 +14,8 @@ $rithm-light-warn: mat.define-palette($error-palette);
 
 // create theme (use mat-dark-theme for themes with dark backgrounds)
 /// Rithm Light Theme creation
-$rithm-light: mat.define-light-theme($rithm-light-primary, $rithm-light-accent, $rithm-light-warn);
+$rithm-light: mat.define-light-theme(
+  $rithm-light-primary,
+  $rithm-light-accent,
+  $rithm-light-warn
+);

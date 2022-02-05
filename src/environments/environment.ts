@@ -2,17 +2,15 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { EnvironmentName } from 'src/models';
 
+export const environment = {
   /** The version number for the app. */
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   appVersionNumber: `${require('../../package.json').version}-dev`,
 
-  /** Whether the environment is used for testing. */
-  testing: false,
-
-  /** Whether the environment is used for production. */
-  production: false,
+  /** The name of the current environment. */
+  name: EnvironmentName.Dev,
 
   /** The base URL for the Rithm API. */
   baseApiUrl: 'https://devapi.rithm.tech',
@@ -21,7 +19,7 @@ export const environment = {
   baseAppUrl: 'https://devapp.rithm.tech',
 
   /** The lifetime for which an access token is valid in milliseconds. */
-  accessTokenLifetime: 900000
+  accessTokenLifetime: 900000,
 };
 
 /*

@@ -1,8 +1,14 @@
 <!-- Title -->
-<h4 id="title" class="text-center" [ngClass]="{'text-error-500': important}">{{ title }}</h4>
+<h4 id="title" class="text-center" [ngClass]="{ 'text-error-500': important }">
+  {{ title }}
+</h4>
 
 <!-- Message if not a prompt dialog. -->
-<mat-dialog-content *ngIf="type !== dialogType.Prompt" id="message" class="py-4 whitespace-pre-wrap overflow-y-auto">
+<mat-dialog-content
+  *ngIf="type !== dialogType.Prompt"
+  id="message"
+  class="py-4 whitespace-pre-wrap overflow-y-auto"
+>
   {{ message }}
 </mat-dialog-content>
 
@@ -16,20 +22,37 @@
   <!-- Input -->
   <mat-form-field class="p-0" appearance="outline">
     <mat-label *ngIf="promptLabel">{{ promptLabel }}</mat-label>
-    <input matInput cdkFocusInitial [(ngModel)]="promptValue" data-testid="prompt-input">
+    <input
+      matInput
+      cdkFocusInitial
+      [(ngModel)]="promptValue"
+      data-testid="prompt-input"
+    />
   </mat-form-field>
-
 </div>
 
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
   <!-- Cancel -->
-  <button *ngIf="type !== dialogType.Alert" id="cancel" mat-button
-    [mat-dialog-close]="type === dialogType.Prompt ? undefined : false" data-testid="dialog-cancel">
-    {{ cancelButtonText }}</button>
+  <button
+    *ngIf="type !== dialogType.Alert"
+    id="cancel"
+    mat-button
+    [mat-dialog-close]="type === dialogType.Prompt ? undefined : false"
+    data-testid="dialog-cancel"
+  >
+    {{ cancelButtonText }}
+  </button>
 
   <!-- OK -->
-  <button *ngIf="type !== dialogType.Terms" id="confirm" mat-button [color]="materialColor"
-    [mat-dialog-close]="type === dialogType.Prompt ? promptValue : true" data-testid="dialog-ok">{{ okButtonText
-    }}</button>
+  <button
+    *ngIf="type !== dialogType.Terms"
+    id="confirm"
+    mat-button
+    [color]="materialColor"
+    [mat-dialog-close]="type === dialogType.Prompt ? promptValue : true"
+    data-testid="dialog-ok"
+  >
+    {{ okButtonText }}
+  </button>
 </div>
