@@ -30,7 +30,7 @@ describe('StationGroupElementService', () => {
     const slope = Number(service.slopeLine(pointStart, pointEnd).toFixed(2));
     expect(slope).toEqual(slopeExpect);
     const slopePi = service.slopeLine(pointStart, pointStart);
-    expect(slopePi).toEqual(Math.PI);
+    expect(Math.abs(slopePi)).toEqual(Math.PI / 2);
   });
 
   it('should move a point by the x-coordinate over the line', () => {
