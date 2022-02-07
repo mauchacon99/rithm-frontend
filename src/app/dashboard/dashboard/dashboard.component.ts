@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Dashboard data, default dashboard general. */
   dashboardData!: DashboardData;
 
- /** Dashboard data Copy for save original data in mode edit. */
+  /** Dashboard data Copy for save original data in mode edit. */
   dashboardDataCopy!: DashboardData;
 
   /** Error Loading dashboard. */
@@ -188,36 +188,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 
- /**
+  /**
    * Toggles the editMode to allow editing.
    *
    * @param statusEditMode Status mode edition.
    */
-  toggleEditMode(statusEditMode:boolean): void {
-      if (!statusEditMode) {
-        const confirm = this.popupService.confirm({
-          title: 'Cancel?',
-          message: 'All unsaved changes will be lost',
-          important: true,
-          okButtonText: 'Yes',
-          cancelButtonText: 'No',
+  toggleEditMode(statusEditMode: boolean): void {
+    if (!statusEditMode) {
+      const confirm = this.popupService.confirm({
+        title: 'Cancel?',
+        message: 'All unsaved changes will be lost',
+        important: true,
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+      });
+
+      confirm
+        .then((status) => {
+          if (status) {
+            this.editMode = false;
+            this.dashboardData = JSON.parse(
+              JSON.stringify(this.dashboardDataCopy)
+            );
+            this.changedOptions();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
-
-        confirm
-          .then((status) => {
-            if (status){
-             this.editMode = false;
-              this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
-              this.changedOptions();
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-      } else this.editMode = statusEditMode;
+    } else this.editMode = statusEditMode;
   }
-
 
   changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
@@ -338,7 +338,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (dashboardData.length) {
             this.dashboardData = dashboardData[0];
             console.log(this.dashboardData);
-            this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
+            this.dashboardDataCopy = JSON.parse(
+              JSON.stringify(this.dashboardData)
+            );
           } else {
             this.isCreateNewDashboard = true;
           }
