@@ -40,6 +40,9 @@ export class StationWidgetComponent implements OnInit {
   /** Variable to show if error message should be displayed. */
   displayDocumentError = false;
 
+  /** Varible to display no document error message in station widget.*/
+  noDocsMessage = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
@@ -68,6 +71,9 @@ export class StationWidgetComponent implements OnInit {
           this.isLoading = false;
           this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
+          if (this.dataStationWidget.documents === []) {
+            this.noDocsMessage = true;
+          }
         },
         error: (error: unknown) => {
           this.failedLoadWidget = true;
