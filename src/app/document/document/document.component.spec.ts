@@ -24,7 +24,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import {
+  DocumentAutoFlow,
+  QuestionFieldType,
+  StationRosterMember,
+} from 'src/models';
 import { throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
@@ -34,6 +38,14 @@ describe('DocumentComponent', () => {
   let component: DocumentComponent;
   let fixture: ComponentFixture<DocumentComponent>;
   const formBuilder = new FormBuilder();
+  const user: StationRosterMember = {
+    rithmId: '123132132',
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'demo@demo.com',
+    isWorker: true,
+    isOwner: false,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -76,7 +88,7 @@ describe('DocumentComponent', () => {
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId: 'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
+      currentAssignedUser: user,
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -397,7 +409,15 @@ describe('DocumentComponent', () => {
     fixture.detectChanges();
     const btnFlow =
       fixture.debugElement.nativeElement.querySelector('#document-flow');
+    const btnSave =
+      fixture.debugElement.nativeElement.querySelector('#document-save');
+    expect(btnSave).toBeTruthy();
+    expect(btnFlow).toBeTruthy();
+    btnSave.click();
+    btnFlow.click();
+    expect(component.documentForm.touched).toBeTruthy();
     expect(btnFlow.disabled).toBeFalsy();
+    expect(btnSave.disabled).toBeFalsy();
   });
 
   it('should called saveAnswers service when saving document changes', () => {
