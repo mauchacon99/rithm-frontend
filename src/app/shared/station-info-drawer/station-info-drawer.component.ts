@@ -168,7 +168,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationStatus !== MapItemStatus.Created) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
-      this.getAllowAllOrgWorkers();
 
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))

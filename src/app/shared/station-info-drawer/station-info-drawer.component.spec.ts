@@ -400,7 +400,7 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(StationService),
       'getAllowAllOrgWorkers'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getAllowAllOrgWorkers']();
     expect(getAllowAllOrgWorkersSpy).toHaveBeenCalledWith(
       component.stationRithmId
     );
@@ -419,7 +419,7 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getAllowAllOrgWorkers']();
     expect(spyError).toHaveBeenCalled();
   });
 });
