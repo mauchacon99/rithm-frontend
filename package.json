@@ -14,7 +14,8 @@
     "compile-docs": "compodoc -p tsconfig.json",
     "compile-style-docs": "sassdoc src/",
     "prepare": "husky install",
-    "a11y": "pa11y-ci"
+    "a11y": "pa11y-ci",
+    "build-uat": "cross-env NODE_ENV=uat ng build --configuration uat"
   },
   "private": true,
   "dependencies": {
@@ -62,12 +63,12 @@
     "husky": "^7.0.4",
     "jasmine-core": "~4.0.0",
     "jasmine-spec-reporter": "~7.0.0",
-    "karma": "~6.3.13",
+    "karma": "~6.3.15",
     "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.1.0",
+    "karma-coverage": "~2.1.1",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "ng-mocks": "^v13.0.0",
+    "ng-mocks": "^v13.0.2",
     "pa11y-ci": "3.0.1",
     "postcss": "^8.4.6",
     "postcss-cli": "^9.1.0",
