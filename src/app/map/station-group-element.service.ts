@@ -323,6 +323,9 @@ export class StationGroupElementService {
 
     // Delete the line under the station group name.
     newTitle.forEach((title, index) => {
+      // If the new Position is greater than half of the number of points.
+      /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
+      at the bottom of the group we delete from the lowest to the highest position. */
       if (
         Math.round((stationGroup.boundaryPoints.length - 1) / 2) > newPosition
       ) {
@@ -344,6 +347,9 @@ export class StationGroupElementService {
 
     // Paint the station group name.
     newTitle.forEach((title, index) => {
+      // If the new Position is greater than half of the number of points.
+      /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
+      at the bottom of the group we paint from the lowest to the highest position. */
       if (
         Math.round((stationGroup.boundaryPoints.length - 1) / 2) > newPosition
       ) {
