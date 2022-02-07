@@ -14,15 +14,28 @@ import {
 } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentName, DocumentNameField } from 'src/models';
+import {
+  DocumentName,
+  DocumentNameField,
+  StationRosterMember,
+} from 'src/models';
 import { UserService } from 'src/app/core/user.service';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
   let fixture: ComponentFixture<DocumentInfoHeaderComponent>;
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;
-
+  const user: StationRosterMember = {
+    rithmId: '123132132',
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'demo@demo.com',
+    isWorker: true,
+    isOwner: false,
+  };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentInfoHeaderComponent],
@@ -31,6 +44,8 @@ describe('DocumentInfoHeaderComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         MatChipsModule,
+        UserAvatarModule,
+        RouterTestingModule,
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -50,7 +65,7 @@ describe('DocumentInfoHeaderComponent', () => {
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211',
-      currentAssignedUser: 'NS',
+      currentAssignedUser: user,
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -234,5 +249,27 @@ describe('DocumentInfoHeaderComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyDocument).toHaveBeenCalled();
+  });
+
+  it('should show document the current assigned worker and button to go to document in full screen mode', () => {
+    component.isWidget = true;
+    fixture.detectChanges();
+    const section = fixture.debugElement.nativeElement.querySelector(
+      '#section-current-worker'
+    );
+    expect(section).toBeTruthy();
+  });
+
+  it('should redirect to document page', () => {
+    component.isWidget = true;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#return-document-button'
+    );
+    expect(button).toBeTruthy();
+
+    const navigateSpy = spyOn(component, 'goToDocument');
+    button.click();
+    expect(navigateSpy).toHaveBeenCalledWith();
   });
 });
