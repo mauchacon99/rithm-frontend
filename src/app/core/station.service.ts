@@ -531,10 +531,10 @@ export class StationService {
   }
 
   /**
-   * Update the allow external workers for the station roster.
+   * Update the the status to allow external workers for the station roster.
    *
    * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers updated to be assigned to station documents.
+   * @returns Allow external workers updated status in the station.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
@@ -543,7 +543,7 @@ export class StationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update the allow external workers',
+              error: 'Cannot update the current status for this.',
             },
           })
       ).pipe(delay(1000));

@@ -395,7 +395,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should update the allow external workers for the station roster', () => {
+  it('should update the allow external workers status for the station roster', () => {
     const updateAllowExternalSpy = spyOn(
       TestBed.inject(StationService),
       'updateAllowExternalWorkers'
@@ -404,7 +404,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(updateAllowExternalSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it('should catch an error if updating the allow external workers fails', () => {
+  it('should catch an error if updating the allow external workers status fails', () => {
     spyOn(
       TestBed.inject(StationService),
       'updateAllowExternalWorkers'

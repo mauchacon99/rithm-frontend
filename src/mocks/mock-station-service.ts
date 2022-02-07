@@ -868,10 +868,10 @@ export class MockStationService {
   }
 
   /**
-   * Update the allow external workers for the station roster.
+   * Update the allow external workers status for the station roster.
    *
    * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers updated to be assigned to station documents.
+   * @returns Allow external workers updated status in the station.
    */
   updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
     if (!stationRithmId) {
@@ -879,7 +879,7 @@ export class MockStationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update the allow external workers',
+              error: "Cannot update the allow external worker's status",
             },
           })
       ).pipe(delay(1000));
