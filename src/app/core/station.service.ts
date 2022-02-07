@@ -532,7 +532,7 @@ export class StationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update field related all org workers',
+              error: 'Cannot update the current status for this.',
             },
           })
       ).pipe(delay(1000));

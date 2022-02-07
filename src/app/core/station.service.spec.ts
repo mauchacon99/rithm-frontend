@@ -968,7 +968,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the field allowAllOrgWorkers in station', () => {
+  it('should update the allowAllOrgWorkers status in station', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
