@@ -19,7 +19,6 @@ import {
   TOOLTIP_HEIGHT,
   TOOLTIP_WIDTH,
   TOOLTIP_PADDING,
-  STATION_GROUP_NAME_MAX_ANGLE_ROTATE,
   SLOPE_RANGE_NOT_ALLOWED,
   SCALE_RENDER_STATION_ELEMENTS,
   STATION_GROUP_NAME_PADDING,
@@ -38,6 +37,13 @@ export class StationGroupElementService {
 
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
+
+  /** The Dimensions of the canvas. */
+  canvasDimensions: {
+    /** The width of the canvas.*/ width: number;
+    /** The height of the canvas.*/
+    height: number;
+  } = { width: 0, height: 0 };
 
   constructor(private mapService: MapService) {
     //set this.mapScale to match the behavior subject in mapService.
@@ -292,6 +298,15 @@ export class StationGroupElementService {
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
 
+    // Get the canvas dimensions.
+    const canvasBoundingRect =
+      this.canvasContext?.canvas.getBoundingClientRect();
+    // Set the canvas dimensions.
+    this.canvasDimensions = {
+      width: canvasBoundingRect.width,
+      height: canvasBoundingRect.height,
+    };
+
     // Calculates the position of the first straightest line.
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
@@ -299,6 +314,7 @@ export class StationGroupElementService {
         STATION_GROUP_PADDING
     );
 
+    // Split station group name.
     const newTitle = this.splitStationGroupName(
       stationGroup.title,
       newPosition,
@@ -307,22 +323,50 @@ export class StationGroupElementService {
 
     // Delete the line under the station group name.
     newTitle.forEach((title, index) => {
-      this.paintOrDeleteLineStationGroupName(
-        title,
-        stationGroup.boundaryPoints[newPosition - index],
-        stationGroup.boundaryPoints[newPosition - index - 1],
-        false
-      );
+      // If the new Position is greater than half of the number of points.
+      /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
+      at the bottom of the group we delete from the lowest to the highest position. */
+      if (
+        Math.round((stationGroup.boundaryPoints.length - 1) / 2) > newPosition
+      ) {
+        this.paintOrDeleteLineStationGroupName(
+          title,
+          stationGroup.boundaryPoints[newPosition + index - 1],
+          stationGroup.boundaryPoints[newPosition + index],
+          false
+        );
+      } else {
+        this.paintOrDeleteLineStationGroupName(
+          title,
+          stationGroup.boundaryPoints[newPosition - index],
+          stationGroup.boundaryPoints[newPosition - index - 1],
+          false
+        );
+      }
     });
 
     // Paint the station group name.
     newTitle.forEach((title, index) => {
-      this.paintOrDeleteLineStationGroupName(
-        title,
-        stationGroup.boundaryPoints[newPosition - index],
-        stationGroup.boundaryPoints[newPosition - index - 1],
-        true
-      );
+      // If the new Position is greater than half of the number of points.
+      /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
+      at the bottom of the group we paint from the lowest to the highest position. */
+      if (
+        Math.round((stationGroup.boundaryPoints.length - 1) / 2) > newPosition
+      ) {
+        this.paintOrDeleteLineStationGroupName(
+          title,
+          stationGroup.boundaryPoints[newPosition + index - 1],
+          stationGroup.boundaryPoints[newPosition + index],
+          true
+        );
+      } else {
+        this.paintOrDeleteLineStationGroupName(
+          title,
+          stationGroup.boundaryPoints[newPosition - index],
+          stationGroup.boundaryPoints[newPosition - index - 1],
+          true
+        );
+      }
     });
   }
 
@@ -570,7 +614,7 @@ export class StationGroupElementService {
       pointEnd.x - pointStart.x > -SLOPE_RANGE_NOT_ALLOWED &&
       pointEnd.x - pointStart.x < SLOPE_RANGE_NOT_ALLOWED
     )
-      return Math.PI;
+      return pointStart.y < pointEnd.y ? Math.PI / 2 : -Math.PI / 2;
 
     return (pointEnd.y - pointStart.y) / (pointEnd.x - pointStart.x);
   }
@@ -595,7 +639,7 @@ export class StationGroupElementService {
     // Calculate the slope between two points.
     const m = this.slopeLine(pointStart, pointEnd);
     // If the slope is 0.
-    if (m === Math.PI) return newPoint;
+    if (Math.abs(m) === Math.PI / 2) return newPoint;
 
     // If true the coordinate is X else the coordinate is Y
     if (coordinate) {
@@ -635,14 +679,14 @@ export class StationGroupElementService {
       // Calculate the slope between two points.
       const m = this.slopeLine(points[i], points[i - 1]);
       const distance = this.distanceBetweenTwoPoints(points[i], points[i - 1]);
-      // If the slope is equal a Pi than continue with next point.
-      if (m === Math.PI) {
-        break;
-      }
-      // Calculation of the angle of rotation.
-      const rotateAngleStationGroupName = Math.atan(m);
-      // If the angle of rotation is greater than the maximum angle of rotation.
-      if (rotateAngleStationGroupName > STATION_GROUP_NAME_MAX_ANGLE_ROTATE) {
+      // If is visible on the canvas.
+      if (
+        points[i].x >= STATION_GROUP_PADDING &&
+        points[i - 1].x >= STATION_GROUP_PADDING &&
+        points[i].x + titleWidth <= this.canvasDimensions.width &&
+        points[i].y >= STATION_GROUP_PADDING &&
+        points[i].y <= this.canvasDimensions.height
+      ) {
         memoryPosition.push({
           position: i,
           slope: m,
@@ -651,8 +695,10 @@ export class StationGroupElementService {
       }
     }
     // The first position is assigned.
-    newPosition = memoryPosition[0].position;
-    let slopeBetter = Math.abs(memoryPosition[0].slope);
+    newPosition =
+      memoryPosition.length > 0 ? memoryPosition[0].position : newPosition;
+    let slopeBetter =
+      memoryPosition.length > 0 ? Math.abs(memoryPosition[0].slope) : 0;
     for (let i = 0; i < memoryPosition.length; i++) {
       //If the slope is 0 and the distance is greater than the station group name.
       if (
@@ -778,9 +824,17 @@ export class StationGroupElementService {
     // Calculation of the slope of the line.
     const m = this.slopeLine(pointStart, pointEnd);
     // Calculation of the angle of rotation of station group name.
-    // If the slope is equal to Pi (in the case of Pi it is a value of references) then it is the vertical line.
-    const rotateAngleStationGroupName =
-      m === Math.PI ? Math.PI / 2 : Math.atan(m);
+    // If the slope is equal to Pi (in the case of Pi/2 it is a value of references) then it is the vertical line.
+    let rotateAngleStationGroupName =
+      Math.abs(m) === Math.PI / 2 ? m : Math.atan(m);
+
+    // If the title is painted from right to left.
+    if (
+      this.mapService.getMapX(pointStart.x) >
+      this.mapService.getMapX(pointEnd.x)
+    ) {
+      rotateAngleStationGroupName = -Math.PI + Math.atan(m);
+    }
 
     // Moves the point on the line.
     const newPoint = this.movePointOnLine(
