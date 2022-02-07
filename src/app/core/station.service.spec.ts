@@ -929,7 +929,6 @@ describe('StationService', () => {
   });
 
   it('should get the questions for station', () => {
-    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const includePreviousQuestions = false;
     const expectedResponse: Question[] = [
       {
@@ -953,14 +952,14 @@ describe('StationService', () => {
     ];
 
     service
-      .getStationQuestions(stationRithmId, includePreviousQuestions)
+      .getStationQuestions(stationId, includePreviousQuestions)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(
       // eslint-disable-next-line max-len
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationRithmId}&includePreviousQuestions=${includePreviousQuestions}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}&includePreviousQuestions=${includePreviousQuestions}`
     );
     expect(req.request.params).toBeTruthy();
     expect(req.request.method).toEqual('GET');
@@ -969,12 +968,21 @@ describe('StationService', () => {
   });
 
   it('should get the allow external workers', () => {
-    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
 
-    service.getAllowExternalWorkers(stationRithmId).subscribe((response) => {
+    service.getAllowExternalWorkers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
+
+  it('should update the allow external workers status in the station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+
+    service.updateAllowExternalWorkers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
   });

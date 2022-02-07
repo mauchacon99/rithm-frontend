@@ -553,4 +553,29 @@ export class StationService {
     };
     return of(expectedResponse.data).pipe(delay(1000));
   }
+
+  /**
+   * Update the the status to allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers updated status in the station.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: true,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
 }

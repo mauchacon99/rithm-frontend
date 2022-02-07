@@ -667,6 +667,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Update the allow external workers for the station roster.
+   */
+  private updateAllowExternalWorkers(): void {
+    this.stationService
+      .updateAllowExternalWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allowExternal) => {
+          this.allowExternal = allowExternal;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Update StationInfoDrawer in the station name.
    */
   updateStationInfoDrawerName(): void {
