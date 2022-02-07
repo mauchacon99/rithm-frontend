@@ -15,7 +15,6 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
-import { MapMode } from 'src/models';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -92,8 +91,10 @@ describe('MapOverlayComponent', () => {
   });
 
   it('should enter mapMode add station', () => {
+    const dialogSpy = spyOn(TestBed.inject(MapService), 'createNewStation');
+    const coords = { x: component.menuX - 5, y: component.menuY - 65 };
     component.addStation();
-    expect(service.mapMode$.value).toBe(MapMode.StationAdd);
+    expect(dialogSpy).toHaveBeenCalledWith(coords);
     expect(service.matMenuStatus$.value).toBe(false);
   });
 });
