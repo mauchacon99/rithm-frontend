@@ -14,7 +14,8 @@
     "compile-docs": "compodoc -p tsconfig.json",
     "compile-style-docs": "sassdoc src/",
     "prepare": "husky install",
-    "a11y": "pa11y-ci"
+    "a11y": "pa11y-ci",
+    "build-uat": "cross-env NODE_ENV=uat ng build --configuration uat"
   },
   "private": true,
   "dependencies": {
