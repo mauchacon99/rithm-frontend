@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Dashboard data, default dashboard general. */
   dashboardData!: DashboardData;
 
-  /** Dashboard data Copy for save original data in mode edit. */
+ /** Dashboard data Copy for save original data in mode edit. */
   dashboardDataCopy!: DashboardData;
 
   /** Error Loading dashboard. */
@@ -193,32 +193,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param statusEditMode Status mode edition.
    */
-  toggleEditMode(statusEditMode: boolean): void {
-    if (!statusEditMode) {
-      const confirm = this.popupService.confirm({
-        title: 'Cancel?',
-        message: 'All unsaved changes will be lost',
-        important: true,
-        okButtonText: 'Yes',
-        cancelButtonText: 'No',
-      });
-
-      confirm
-        .then((status) => {
-          if (status) {
-            this.editMode = false;
-            this.dashboardData = JSON.parse(
-              JSON.stringify(this.dashboardDataCopy)
-            );
-            this.changedOptions();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+  toggleEditMode(statusEditMode:boolean): void {
+      if (!statusEditMode) {
+        const confirm = this.popupService.confirm({
+          title: 'Cancel?',
+          message: 'All unsaved changes will be lost',
+          important: true,
+          okButtonText: 'Yes',
+          cancelButtonText: 'No',
         });
-    } else this.editMode = statusEditMode;
+
+        confirm
+          .then((status) => {
+            if (status){
+             this.editMode = false;
+              this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+              this.changedOptions();
+            }
+          });
+
+      } else this.editMode = statusEditMode;
   }
 
+  /**
+   * Change options of gridster2.
+   */
   changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
@@ -337,10 +336,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (dashboardData) => {
           if (dashboardData.length) {
             this.dashboardData = dashboardData[0];
-            console.log(this.dashboardData);
-            this.dashboardDataCopy = JSON.parse(
-              JSON.stringify(this.dashboardData)
-            );
+            this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
           } else {
             this.isCreateNewDashboard = true;
           }
