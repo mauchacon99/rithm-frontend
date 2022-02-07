@@ -79,7 +79,7 @@
               id="menu-edit-button"
               data-testid="menu-edit-button"
               class="py-3 text-secondary-500"
-              (click)="toggleEditMode()"
+              (click)="toggleEditMode(true)"
             >
               <i class="fas fa-cog text-lg"></i>
             </button>
@@ -108,7 +108,7 @@
                   data-testid="save-button"
                   class="bg-white text-secondary-500 drop-shadow-md font-semibold"
                   style="margin: 1em"
-                  (click)="toggleEditMode()"
+                  (click)="toggleEditMode(false)"
                 >
                   Cancel
                 </button>
