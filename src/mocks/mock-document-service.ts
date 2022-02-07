@@ -28,6 +28,16 @@ import {
  * Mocks methods of the `DocumentService`.
  */
 export class MockDocumentService {
+  /* User demo to use */
+  user: StationRosterMember = {
+    rithmId: '123132132',
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'demo@demo.com',
+    isWorker: true,
+    isOwner: false,
+  };
+
   /** The Name of the Document as BehaviorSubject. */
   documentName$ = new BehaviorSubject<string>('');
 
@@ -573,7 +583,7 @@ export class MockDocumentService {
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId: 'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
+      currentAssignedUser: this.user,
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',

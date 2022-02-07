@@ -28,7 +28,14 @@ import {
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
-
+const user: StationRosterMember = {
+  rithmId: '123132132',
+  firstName: 'Demo',
+  lastName: 'User',
+  email: 'demo@demo.com',
+  isWorker: true,
+  isOwner: false,
+};
 describe('DocumentService', () => {
   let service: DocumentService;
   let httpTestingController: HttpTestingController;
@@ -231,7 +238,7 @@ describe('DocumentService', () => {
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId: 'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
+      currentAssignedUser: user,
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
