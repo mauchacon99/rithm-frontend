@@ -14,7 +14,8 @@
     "compile-docs": "compodoc -p tsconfig.json",
     "compile-style-docs": "sassdoc src/",
     "prepare": "husky install",
-    "a11y": "pa11y-ci"
+    "a11y": "pa11y-ci",
+    "build-uat": "cross-env NODE_ENV=uat ng build --configuration uat"
   },
   "private": true,
   "dependencies": {
@@ -64,7 +65,7 @@
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.3.15",
     "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.1.0",
+    "karma-coverage": "~2.1.1",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
     "ng-mocks": "^v13.0.2",
