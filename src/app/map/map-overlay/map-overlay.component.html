@@ -44,7 +44,10 @@
         >
           Build
         </button>
-        <app-map-search [isLoading]="mapDataLoading"></app-map-search>
+        <app-map-search
+          class="hidden md:block"
+          [isLoading]="mapDataLoading"
+        ></app-map-search>
         <button
           mat-raised-button
           color="basic"
