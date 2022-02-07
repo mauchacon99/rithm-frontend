@@ -969,16 +969,15 @@ describe('StationService', () => {
   });
 
   it('should get the allow external workers', () => {
-    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
 
-    service.getAllowExternalWorkers(stationRithmId).subscribe((response) => {
+    service.getAllowExternalWorkers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
 
-    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`;
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`;
     const req = httpTestingController.expectOne(router);
     expect(req.request.url).toBe(router);
     expect(req.request.method).toEqual('GET');
