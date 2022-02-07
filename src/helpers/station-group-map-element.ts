@@ -132,7 +132,10 @@ export class StationGroupMapElement {
    */
   markAsDeleted(): void {
     //Only mark as deleted if the station group isn't already marked as created.
-    if (this.status !== MapItemStatus.Created) {
+    if (
+      this.status !== MapItemStatus.Created &&
+      this.status !== MapItemStatus.Pending
+    ) {
       this.status = MapItemStatus.Deleted;
     } else {
       throw new Error(
