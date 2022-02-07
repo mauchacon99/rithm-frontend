@@ -302,6 +302,31 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Assign an user to a document.
+   *
+   */
+  assignUserToDocument(): void {
+    this.documentService
+      .assignUserToDocument(
+        this.userService.user.rithmId,
+        this.stationRithmId,
+        this.documentRithmId
+      )
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.ngOnInit();
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
