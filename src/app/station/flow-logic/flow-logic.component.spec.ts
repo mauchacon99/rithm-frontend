@@ -234,4 +234,32 @@ describe('FlowLogicComponent', () => {
     expect(component.flowRuleError).toBeTrue();
     expect(reviewError).toBeTruthy();
   });
+
+  it('should call the method that save the logical flow rules of a station.', () => {
+    component.rithmId = rithmId;
+    const saveStationFlowLogicRuleSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogicRule'
+    ).and.callThrough();
+    component['saveStationFlowLogicRule']();
+    expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(rithmId);
+  });
+
+  it('should show error if petition save flow logic fails', () => {
+    component.flowLogicLoading = false;
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogicRule'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['saveStationFlowLogicRule']();
+    expect(displayErrorSpy).toHaveBeenCalled();
+  });
 });

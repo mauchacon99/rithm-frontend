@@ -83,4 +83,24 @@ export class FlowLogicComponent implements OnInit {
         },
       });
   }
+
+  /**
+   * Save station flow logic.
+   */
+  private saveStationFlowLogicRule(): void {
+    this.documentService
+      .saveStationFlowLogicRule(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.getStationFlowLogicRule();
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
 }
