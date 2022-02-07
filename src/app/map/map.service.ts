@@ -89,6 +89,9 @@ export class MapService {
    */
   zoomCount$ = new BehaviorSubject(0);
 
+  /** Informs the map that which drawer is opened. */
+  openedDrawerType$ = new BehaviorSubject('');
+
   /**
    * The coordinate at which the canvas is currently rendering in regards to the overall map.
    * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
@@ -1413,5 +1416,25 @@ export class MapService {
         this.mapDataReceived$.next(true);
       }
     });
+  }
+
+  /**
+   * Set drawerOpened property of respective map element to false when any drawer is closed.
+   *
+   * @param drawerItem The opened drawer type.
+   */
+  handleDrawerClose(drawerItem: string): void {
+    if (drawerItem === 'stationInfo') {
+      if (this.stationElements.some((e) => e.drawerOpened)) {
+        const openedStations = this.stationElements.filter(
+          (e) => e.drawerOpened
+        );
+        openedStations.forEach((station) => {
+          station.drawerOpened = false;
+        });
+        this.openedDrawerType$.next('');
+        this.mapDataReceived$.next(true);
+      }
+    }
   }
 }

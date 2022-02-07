@@ -57,6 +57,9 @@ export class MockMapService {
   /** The station group elements displayed on the map. */
   stationGroupElements: StationGroupMapElement[] = [];
 
+  /** Informs the map that which drawer is opened. */
+  openedDrawerType$ = new BehaviorSubject('');
+
   /** The station element displayed on the map. */
   station = new StationMapElement({
     rithmId: uuidv4(),
