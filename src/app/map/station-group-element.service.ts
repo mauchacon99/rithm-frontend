@@ -154,19 +154,19 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      stationGroup.selected &&
-      stationGroup.status !== MapItemStatus.Pending
+        stationGroup.selected &&
+        stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
-        ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-          stationGroup.status !== MapItemStatus.Pending
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? MAP_SELECTED
-          : NODE_HOVER_COLOR
-        : CONNECTION_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+            stationGroup.status !== MapItemStatus.Pending
+            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? MAP_SELECTED
+              : NODE_HOVER_COLOR
+            : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       stationGroup.status !== MapItemStatus.Pending &&
@@ -287,17 +287,17 @@ export class StationGroupElementService {
     // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.selected ||
-      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
-        !stationGroup.disabled &&
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+          !stationGroup.disabled &&
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd)
         ? MAP_SELECTED
         : stationGroup.disabled &&
           this.mapService.mapMode$.value === MapMode.StationGroupAdd
-        ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
-        ? NODE_HOVER_COLOR
-        : BUTTON_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Name
+            ? NODE_HOVER_COLOR
+            : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
 
@@ -305,7 +305,7 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING
+      STATION_GROUP_PADDING
     );
 
     const newTitle = this.splitStationGroupName(
@@ -320,6 +320,7 @@ export class StationGroupElementService {
         title,
         stationGroup.boundaryPoints[newPosition - index],
         stationGroup.boundaryPoints[newPosition - index - 1],
+        stationGroup.status,
         false
       );
     });
@@ -330,6 +331,7 @@ export class StationGroupElementService {
         title,
         stationGroup.boundaryPoints[newPosition - index],
         stationGroup.boundaryPoints[newPosition - index - 1],
+        stationGroup.status,
         true
       );
     });
@@ -769,12 +771,14 @@ export class StationGroupElementService {
    * @param title The station group name.
    * @param pointStart The start point of the line.
    * @param pointEnd The end point of the line.
+   * @param stationGroupStatus The status of the station group.
    * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
    */
   private paintOrDeleteLineStationGroupName(
     title: string,
     pointStart: Point,
     pointEnd: Point,
+    stationGroupStatus: MapItemStatus,
     paintOrDelete = true
   ): void {
     // Point the canvasContext to the global one in mapService.
@@ -790,25 +794,11 @@ export class StationGroupElementService {
     // If the slope is equal to Pi (in the case of Pi it is a value of references) then it is the vertical line.
     const rotateAngleStationGroupName =
       m === Math.PI ? Math.PI / 2 : Math.atan(m);
-
-    // Moves the point on the line.
-    const newPoint = this.movePointOnLine(
-      {
-        x: pointStart.x,
-        y: pointStart.y,
-      },
-      {
-        x: pointEnd.x,
-        y: pointEnd.y,
-      },
-      0
-    );
-
     // Save Canvas.
     this.canvasContext.save();
 
     // translate the canvas to the new point.
-    this.canvasContext.translate(newPoint.x, newPoint.y);
+    this.canvasContext.translate(pointStart.x, pointStart.y);
 
     // Rotate station group name.
     this.canvasContext.rotate(rotateAngleStationGroupName);
@@ -820,14 +810,44 @@ export class StationGroupElementService {
         5,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
+      // If status og the station group is pending.
+      if (stationGroupStatus === MapItemStatus.Pending) {
+        // eslint-disable-next-line no-console
+        console.log("here");
+        // Moves the point on the line.
+        const newPoint = this.movePointOnLine(
+          {
+            x: pointStart.x,
+            y: pointStart.y,
+          },
+          {
+            x: pointEnd.x,
+            y: pointEnd.y,
+          },
+          30 * this.mapScale + this.canvasContext.measureText(title).width
+        );
+        const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+        this.canvasContext.font = `${fontSize * 2}px "FontAwesome"`;
+        this.canvasContext.fillText(
+          '\uf00d',
+          newPoint.x - pointStart.x,
+          this.canvasContext.measureText('\uf00d').fontBoundingBoxDescent + 5 * this.mapScale
+        );
+        this.canvasContext.font = `${fontSize * 2}px "FontAwesome"`;
+        this.canvasContext.fillText(
+          '\uf058',
+          45 * this.mapScale + newPoint.x - pointStart.x,
+          this.canvasContext.measureText('\uf00d').fontBoundingBoxDescent + 5 * this.mapScale
+        );
+      }
     } else {
       // Delete the line under the station group name.
       this.canvasContext.clearRect(
         -5,
         -5,
         this.canvasContext.measureText(title).width +
-          STATION_GROUP_NAME_PADDING +
-          5,
+        STATION_GROUP_NAME_PADDING +
+        ((stationGroupStatus === MapItemStatus.Pending) ? 120 : 10) * this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent + 6
       );
@@ -835,7 +855,7 @@ export class StationGroupElementService {
 
     // Reset translate and rotate.
     this.canvasContext.rotate(-rotateAngleStationGroupName);
-    this.canvasContext.translate(-newPoint.x, -newPoint.y);
+    this.canvasContext.translate(-pointStart.x, -pointStart.y);
     // Restore Canvas.
     this.canvasContext.restore();
   }
