@@ -1,5 +1,5 @@
 <ng-container [formGroup]="documentTemplateForm">
-  <h6 class="py-3">General Instructions</h6>
+  <h6 class="py-3" [ngClass]="{ 'text-xs': isWidget }">General Instructions</h6>
   <p>
     {{ stationInstructions }}
   </p>

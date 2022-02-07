@@ -19,6 +19,7 @@ import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connect
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
   let fixture: ComponentFixture<MapOverlayComponent>;
+  let service: MapService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -42,6 +43,7 @@ describe('MapOverlayComponent', () => {
         { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
+    service = TestBed.inject(MapService);
   });
 
   beforeEach(() => {
@@ -86,5 +88,13 @@ describe('MapOverlayComponent', () => {
     const centerButton =
       fixture.debugElement.nativeElement.querySelector('#centerButton');
     expect(centerButton.disabled).toBeTruthy();
+  });
+
+  it('should enter mapMode add station', () => {
+    const dialogSpy = spyOn(TestBed.inject(MapService), 'createNewStation');
+    const coords = { x: component.menuX - 5, y: component.menuY - 65 };
+    component.addStation();
+    expect(dialogSpy).toHaveBeenCalledWith(coords);
+    expect(service.matMenuStatus$.value).toBe(false);
   });
 });

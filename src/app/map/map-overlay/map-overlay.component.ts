@@ -523,6 +523,18 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Method called when a user clicks the add new station.
+   * Sets the map to add station mode in preparation for a station to be selected.
+   */
+  addStation(): void {
+    // calculates current mouse point in map for adding new station.
+    const coords = { x: this.menuX - 5, y: this.menuY - 65 };
+    // creates new station.
+    this.mapService.createNewStation(coords);
+    this.mapService.matMenuStatus$.next(true);
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.

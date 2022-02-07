@@ -6,9 +6,9 @@ import {
 import {
   WorkerDashboardHeader,
   Document,
-  DashboardItem,
   WidgetType,
   DashboardData,
+  RoleDashboardMenu,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -248,43 +248,54 @@ describe('DashboardService', () => {
   });
 
   it('should return a list of widgets for dashboard', () => {
-    const widgetsExpected: DashboardItem[] = [
-      {
-        cols: 4,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-        minItemCols: 4,
-        minItemRows: 4,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      },
-    ];
-    service.getDashboardWidgets().subscribe((response) => {
-      expect(response).toEqual(widgetsExpected);
-    });
+    const expectDashboardData: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service
+      .getDashboardWidgets(expectDashboardData.rithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectDashboardData);
+      });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets?dashboardRithmId=${expectDashboardData.rithmId}`
     );
     expect(req.request.method).toEqual('GET');
-
-    req.flush(widgetsExpected);
+    expect(req.request.params.get('dashboardRithmId')).toEqual(
+      expectDashboardData.rithmId
+    );
+    req.flush(expectDashboardData);
     httpTestingController.verify();
   });
+
   it('should return updated dashboard', () => {
     const updateDashboard: DashboardData = {
       rithmId: '',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Personal,
       widgets: [
         {
           cols: 0,
           rows: 0,
           x: 0,
           y: 0,
-          widgetType: WidgetType.Document,
+          widgetType: WidgetType.Station,
           data: 'string',
           minItemRows: 0,
           maxItemRows: 0,
@@ -296,12 +307,21 @@ describe('DashboardService', () => {
     service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
       expect(response).toEqual(updateDashboard);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
+    );
+
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(updateDashboard);
+    req.flush(updateDashboard);
+    httpTestingController.verify();
   });
   it('should returns organization dashboard', () => {
     const expectedResponse: DashboardData[] = [
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 1',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -320,6 +340,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 2',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -355,6 +376,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -373,6 +395,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -407,6 +430,7 @@ describe('DashboardService', () => {
     const expectedResponse: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Personal,
       widgets: [
         {
           cols: 4,
@@ -443,6 +467,7 @@ describe('DashboardService', () => {
     const dashboardData: DashboardData = {
       rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
       name: 'name',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 1,
@@ -462,12 +487,21 @@ describe('DashboardService', () => {
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
       expect(response).toEqual(dashboardData);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(dashboardData);
+    req.flush(dashboardData);
+    httpTestingController.verify();
   });
 
   it('should return a new organization dashboard', () => {
-    const newDashboard: DashboardData = {
+    const expectedResponse: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,
@@ -483,8 +517,35 @@ describe('DashboardService', () => {
         },
       ],
     };
+
+    const expectBody = { name: expectedResponse.name };
     service.generateNewOrganizationDashboard().subscribe((response) => {
-      expect(response).toEqual(newDashboard);
+      expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectBody);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should be true the emit and subscribe to subject isLoadingDashboard$', () => {
+    service.isLoadingDashboard$.subscribe((status) => {
+      expect(status).toBeTrue();
+    });
+
+    service.toggleLoadingDashboard(true);
+  });
+
+  it('should be false the emit and subscribe to subject isLoadingDashboard$', () => {
+    service.isLoadingDashboard$.subscribe((status) => {
+      expect(status).toBeFalse();
+    });
+
+    service.toggleLoadingDashboard(false);
   });
 });
