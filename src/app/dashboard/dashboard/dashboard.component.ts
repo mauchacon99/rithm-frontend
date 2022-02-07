@@ -295,9 +295,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         : this.dashboardService.updatePersonalDashboard(this.dashboardData);
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
-        this.isLoading = false;
-        this.errorLoadingDashboard = false;
         this.dashboardData = dashboardUpdate;
+        this.isLoading = false;
+        this.editMode = false;
+        this.errorLoadingDashboard = false;
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
