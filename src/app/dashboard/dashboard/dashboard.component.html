@@ -1,6 +1,8 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
   <mat-drawer #drawer mode="over" class="w-[300px] md:w-[360px]">
-    <app-menu *ngIf="drawerContext === 'menuDashboard'"></app-menu>
+    <app-menu
+      *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
+    ></app-menu>
   </mat-drawer>
   <mat-drawer-content class="textured-bg h-calc">
     <ng-container *ngIf="!viewNewDashboard; else newDashboard">
@@ -37,13 +39,37 @@
         >
           <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
         </button>
-        <div class="loading flex" *ngIf="dashboardLoading">
+        <div class="loading flex" *ngIf="isLoading">
           <app-loading-indicator
             class="flex-grow m-auto"
             id="loading-dashboard-widgets"
           ></app-loading-indicator>
         </div>
-        <div class="mx-5" *ngIf="!dashboardLoading && dashboardData">
+
+        <div
+          class="text-error-500 text-center my-4"
+          id="error-loading-dashboard"
+          *ngIf="errorLoadingDashboard"
+        >
+          Unable to retrieve dashboard
+        </div>
+        <div
+          class="text-error-500 text-center my-4"
+          id="message-create-new-dashboard"
+          *ngIf="isCreateNewDashboard"
+        >
+          You don't have any dashboards, create one to get started.
+        </div>
+        <div
+          class="mx-5"
+          id="dashboard-widgets"
+          *ngIf="
+            !isLoading &&
+            dashboardData &&
+            !errorLoadingDashboard &&
+            !isCreateNewDashboard
+          "
+        >
           <div class="flex justify-between items-center" *ngIf="!editMode">
             <h2 class="my-2 font-semibold truncate">
               {{ dashboardData.name }}
@@ -109,15 +135,11 @@
           <div
             class="col-span-full text-error-500 text-center my-4"
             id="error-loading-widgets"
-            *ngIf="errorLoadingWidgets"
+            *ngIf="!dashboardData.widgets.length"
           >
-            Unable to retrieve widgets
+            Current dashboard has no widgets to display
           </div>
-          <gridster
-            class="h-screen bg-transparent px-0"
-            [options]="options"
-            *ngIf="!errorLoadingWidgets"
-          >
+          <gridster class="h-screen bg-transparent px-0" [options]="options">
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"

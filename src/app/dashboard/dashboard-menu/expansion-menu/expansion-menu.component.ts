@@ -42,7 +42,7 @@ export class ExpansionMenuComponent implements OnInit {
     this.showError = false;
     this.isLoading = true;
     const petitionDashboard$ =
-      this.dashboardRole === this.roleDashboardMenu.OrganizationDashboard
+      this.dashboardRole === this.roleDashboardMenu.Company
         ? this.dashboardService.getOrganizationDashboard()
         : this.dashboardService.getPersonalDashboard();
 

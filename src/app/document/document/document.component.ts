@@ -235,6 +235,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     // If is widget return to the documents list
     this.isWidget
       ? this.returnDocumentsWidget.emit(isReloadDocumentsWidget)
+      : this.isUserAdmin
+      ? this.router.navigateByUrl('map')
       : this.router.navigateByUrl('dashboard');
   }
 
@@ -316,6 +318,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
+    this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
       // Update the document name.
@@ -351,6 +354,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document answers and auto flow.
    */
   autoFlowDocument(): void {
+    this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
@@ -380,11 +384,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          if (this.isUserAdmin) {
-            this.router.navigateByUrl('map');
-          } else {
-            this.router.navigateByUrl('dashboard');
-          }
+          this.navigateBack(true);
         },
         error: (error: unknown) => {
           this.documentLoading = false;
