@@ -10,24 +10,28 @@
   *ngIf="!stationLoading"
   [selectedIndex]="selectedTabIndex"
 >
-  <mat-tab>
+  <mat-tab label="tab-station-info">
     <ng-template mat-tab-label>
       <i class="fas fa-cog fa-lg"></i>
     </ng-template>
     <ng-template matTabContent>
-      <div class="grid grid-cols-1 px-4">
-        <div class="w-full py-2">
-          <div class="col-span-12">
-            <h6 class="text-center">Station Information</h6>
-          </div>
-          <div class="col-span-12 pt-2" *ngIf="!openedFromMap || !editMode">
+      <div class="grid grid-cols-1 px-2">
+        <!-- Station Name -->
+        <section class="flex py-4">
+          <div
+            class="col-span-12 pt-2"
+            *ngIf="
+              (openedFromMap && !editMode) || (!openedFromMap && !editMode);
+              else editStationName
+            "
+          >
             <p class="overline-font">Station Name</p>
-            <p>{{ stationName }}</p>
+            <p class="pt-2">{{ stationName }}</p>
           </div>
-          <div class="col-span-12 pt-2" *ngIf="openedFromMap && editMode">
+          <ng-template #editStationName>
             <mat-form-field
               appearance="outline"
-              class="col-span-12 sm:col-span-8 p-0"
+              class="w-full mat-station-name"
             >
               <mat-label>Station Name</mat-label>
               <input
@@ -36,109 +40,98 @@
                 id="station"
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
-                (ngModelChange)="reportNewStationMapChange()"
+                (keyup)="updateStationInfoDrawerName()"
+                (ngModelChange)="
+                  mapMode === mapModeEnum.Build
+                    ? reportNewStationMapChange()
+                    : null
+                "
+              />
+            </mat-form-field>
+          </ng-template>
+        </section>
+
+        <!-- Priority -->
+        <section
+          class="flex justify-between items-center w-full py-4 border-t-2 border-t-secondary-200"
+        >
+          <h6 class="w-11/12">Priority</h6>
+          <div class="text-xs text-secondary-500" *ngIf="locallyCreated">
+            {{ publishStationMessage }}station priority.
+          </div>
+          <div class="flex justify-end items-center">
+            <button
+              *ngIf="!locallyCreated"
+              class="priority rounded-full h-7 w-7 text-center text-lg font-semibold leading-7 text-white bg-error-500 hover:bg-error-700 mat-button-base mat-warn"
+              data-testid="priority-field"
+              id="priority-field"
+            >
+              {{ stationPriority }}
+            </button>
+            <i class="fas fa-chevron-right text-secondary-500 fa-lg ml-2"></i>
+          </div>
+        </section>
+
+        <!-- Last Updated -->
+        <section
+          class="flex justify-between w-full py-4 border-t-2 border-t-secondary-200"
+        >
+          <h6>Last Updated</h6>
+          <div class="flex items-center text-xs" *ngIf="!lastUpdatedLoading">
+            <span class="{{ colorMessage }}">{{ lastUpdatedDate }} </span>
+          </div>
+          <div class="items-center" *ngIf="lastUpdatedLoading">
+            <app-loading-indicator
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+        </section>
+
+        <!-- Chained Flow -->
+        <section
+          class="flex justify-between w-full py-4 border-t-2 border-t-secondary-200"
+        >
+          <h6>Chained Flow</h6>
+          <div>
+            <i
+              class="fas fa-check"
+              [ngClass]="isChained ? 'text-accent-500' : 'text-secondary-500'"
+            ></i>
+          </div>
+        </section>
+
+        <!-- Button Settings -->
+        <section class="w-full py-4 border-t-2 border-t-secondary-200">
+          <div class="flex flex-row gap-2">
+            <h6>Button Settings</h6>
+            <div>
+              <i
+                class="fas fa-question-circle text-secondary-300 cursor-pointer"
+                matTooltip="?"
+                matTooltipPosition="right"
+              ></i>
+            </div>
+          </div>
+          <div>
+            <mat-form-field appearance="outline" class="w-full">
+              <input
+                matInput
+                type="text"
+                placeholder="Button Name"
+                id="button-name"
+                data-testid="button-name"
               />
             </mat-form-field>
           </div>
-        </div>
-        <div class="w-full py-2">
-          <p class="overline-font">station priority</p>
-          <div class="text-xs text-secondary-500 py-2" *ngIf="locallyCreated">
-            {{ publishStationMessage }}station priority.
-          </div>
-          <button
-            *ngIf="!locallyCreated"
-            class="mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn"
-          >
-            {{ stationPriority }}
-          </button>
-        </div>
-        <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
-          <p class="overline-font">document generation</p>
-          <div class="py-2 text-xs text-secondary-500" *ngIf="locallyCreated">
-            {{ publishStationMessage }}document generation status.
-          </div>
-          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
-            <app-loading-indicator
-              id="loading-indicator-status"
-              [inlineText]="'Loading...'"
-            ></app-loading-indicator>
-          </div>
-          <div class="py-1" *ngIf="!docGenLoading && !locallyCreated">
-            <mat-radio-group
-              class="text-sm"
-              aria-label="Set the document generation"
-              (change)="updateStatusStation($event)"
-              *ngIf="!showDocumentGenerationError"
-            >
-              <mat-radio-button
-                class="px-1"
-                value="None"
-                [checked]="stationDocumentGenerationStatus === 'None'"
-              >
-                None
-              </mat-radio-button>
-              <mat-radio-button
-                class="px-1"
-                value="Manual"
-                [checked]="stationDocumentGenerationStatus === 'Manual'"
-                >Manual
-              </mat-radio-button>
-            </mat-radio-group>
-
-            <div
-              class="text-left text-xs py-2"
-              *ngIf="showDocumentGenerationError"
-            >
-              <span class="text-error-500"
-                >Error: unable to set document generation status</span
-              >
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="w-5/6 text-sm text-secondary-300">
+                Users can flow document to previous station
+              </p>
             </div>
+            <mat-slide-toggle class="px-2"></mat-slide-toggle>
           </div>
-        </div>
-
-        <div
-          class="w-full py-2"
-          *ngIf="
-            stationDocumentGenerationStatus === 'Manual' &&
-            (mapMode === 0 || mapMode === undefined) &&
-            !locallyCreated &&
-            (isUserAdminOrOwner || isWorker)
-          "
-        >
-          <div class="py-1" *ngIf="docCreationLoading; else createDocument">
-            <app-loading-indicator
-              id="loading-indicator-status"
-              [inlineText]="'Loading...'"
-            ></app-loading-indicator>
-          </div>
-          <ng-template #createDocument>
-            <button
-              data-testid="new-document"
-              id="new-document"
-              mat-stroked-button
-              color="accent"
-              (click)="createNewDocument()"
-            >
-              New Document
-            </button>
-          </ng-template>
-        </div>
-
-        <div class="w-full py-2" *ngIf="!openedFromMap">
-          <p class="overline-font">last updated</p>
-          <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
-            <app-loading-indicator
-              [inlineText]="'Loading...'"
-            ></app-loading-indicator>
-          </div>
-          <div
-            class="col-span-8 md:col-span-4 text-left text-xs py-2"
-            *ngIf="!lastUpdatedLoading"
-          >
-            <span class="{{ colorMessage }}">{{ lastUpdatedDate }} </span>
-          </div>
-        </div>
+        </section>
         <div *ngIf="mapMode === mapModeEnum.Build">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Notes</mat-label>
@@ -150,13 +143,16 @@
             ></textarea>
           </mat-form-field>
         </div>
-        <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
+        <div
+          class="w-full py-2 px-2 text-center"
+          *ngIf="openedFromMap && !locallyCreated"
+        >
           <button mat-stroked-button color="accent" (click)="goToStation()">
             View Station
           </button>
         </div>
         <div
-          class="w-full py-2"
+          class="w-full py-2 px-2 text-center"
           *ngIf="
             locallyCreated ||
             (openedFromMap && editMode && isUserAdminOrOwner) ||
@@ -166,9 +162,10 @@
         >
           <button
             mat-stroked-button
-            id="delete-station-button"
             color="warn"
             class="priority"
+            id="delete-station-button"
+            data-testid="delete-station-button"
             (click)="deleteStation()"
           >
             Delete Station
@@ -177,12 +174,84 @@
       </div>
     </ng-template>
   </mat-tab>
+
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-file fa-lg"></i>
     </ng-template>
-    <ng-template matTabContent> </ng-template>
+    <ng-template matTabContent>
+      <div class="grid grid-cols-1 px-2">
+        <div class="w-full py-2">
+          <div class="col-span-12">
+            <h6 class="text-center">Document Generation</h6>
+          </div>
+        </div>
+      </div>
+      <section class="px-2">
+        <section class="flex justify-between items-center w-full py-3">
+          <p class="text-secondary-300 inline-block">None</p>
+          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+            <app-loading-indicator
+              id="none-status-loading"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <mat-slide-toggle
+            class="pr-1"
+            *ngIf="!docGenLoading && !locallyCreated"
+            (change)="updateGenerationStatus('None', $event)"
+            [checked]="stationDocumentGenerationStatus === 'None'"
+            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+          >
+          </mat-slide-toggle>
+        </section>
+        <section class="flex justify-between items-center w-full py-3">
+          <p class="text-secondary-300 inline-block">Manual</p>
+          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+            <app-loading-indicator
+              id="manual-status-loading"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <mat-slide-toggle
+            class="pr-1"
+            *ngIf="!docGenLoading && !locallyCreated"
+            (change)="updateGenerationStatus('Manual', $event)"
+            [checked]="stationDocumentGenerationStatus === 'Manual'"
+            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+          >
+          </mat-slide-toggle>
+        </section>
+      </section>
+      <section class="flex justify-between items-center w-full py-3 px-2">
+        <p class="text-secondary-300 inline-block">Schedule</p>
+        <i class="fas fa-chevron-right"></i>
+      </section>
+      <section
+        class="text-center w-full py-3"
+        *ngIf="displayCreateDocumentButton"
+      >
+        <div class="py-1" *ngIf="docCreationLoading; else createDocument">
+          <app-loading-indicator
+            id="creating-document-loading"
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
+        </div>
+        <ng-template #createDocument>
+          <button
+            data-testid="new-document"
+            id="new-document"
+            mat-stroked-button
+            color="accent"
+            (click)="createNewDocument()"
+          >
+            New Document
+          </button>
+        </ng-template>
+      </section>
+    </ng-template>
   </mat-tab>
+
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-users fa-lg"></i>
@@ -235,7 +304,7 @@
               <p class="text-secondary-400 pr-2 inline-block">Make Public</p>
               <i
                 class="fas fa-question-circle fa-2x1 text-secondary-400"
-                matTooltip="Info about Make Public"
+                matTooltip="Allow everyone in your organization to work on documents at this station"
               ></i>
             </div>
             <div class="pr-2">
@@ -248,7 +317,7 @@
               <p class="text-secondary-400 pr-2 inline-block">External</p>
               <i
                 class="fas fa-question-circle fa-2x1 text-secondary-400"
-                matTooltip="Info about External"
+                matTooltip="Allow anyone outside your organization to work on documents at this station"
               ></i>
             </div>
             <div class="pr-2">

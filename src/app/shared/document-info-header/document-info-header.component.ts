@@ -6,6 +6,7 @@ import {
   StationInformation,
   DocumentNameField,
   DocumentName,
+  StationRosterMember,
 } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -13,12 +14,13 @@ import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
+import { Router } from '@angular/router';
 
 /**
  * Reusable component for the document information header.
  */
 @Component({
-  selector: 'app-document-info-header[documentInformation]',
+  selector: 'app-document-info-header[documentInformation][viewNewStation]',
   templateUrl: './document-info-header.component.html',
   styleUrls: ['./document-info-header.component.scss'],
   providers: [],
@@ -56,13 +58,17 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Fields appended to the document name. */
   appendedDocumentName = '';
 
+  /** View new ui for station/document screen. */
+  @Input() viewNewStation = false;
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
     this.documentNameForm = this.fb.group({
       name: [''],
@@ -155,6 +161,25 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     ) !== undefined
       ? true
       : false;
+  }
+
+  /**
+   * Is the current user an owner or an admin for this station.
+   *
+   * @returns Validate if user is owner or admin of current station.
+   */
+  get currentAssignedUserDocument(): StationRosterMember {
+    const user: StationRosterMember = {
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    };
+    return 'currentAssignedUser' in this.documentInformation
+      ? this.documentInformation.currentAssignedUser
+      : user;
   }
 
   /**
@@ -264,6 +289,16 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       appendedName: this.appendedDocumentName,
     };
     this.documentService.updateDocumentNameBS(documentName);
+  }
+
+  /** Navigate the user to the document page. */
+  goToDocument(): void {
+    this.router.navigate(['/', 'document', this.documentRithmId], {
+      queryParams: {
+        documentId: this.documentRithmId,
+        stationId: this.stationRithmId,
+      },
+    });
   }
 
   /**

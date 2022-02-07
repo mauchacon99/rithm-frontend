@@ -1,7 +1,9 @@
 <div class="bg-white relative">
-  <i class="fas fa-search absolute left-2 top-2.5 z-40 text-secondary-300"></i>
   <i
-    class="fas fa-times absolute right-2 top-2.5 z-40 cursor-pointer text-secondary-300"
+    class="fas fa-search text-sm absolute left-3 top-3 z-40 text-secondary-300"
+  ></i>
+  <i
+    class="fas fa-times text-sm absolute right-3 top-3 z-40 cursor-pointer text-secondary-300"
     (click)="clearSearchText()"
   ></i>
   <mat-form-field class="example-full-width text-sm" appearance="fill">
@@ -22,10 +24,14 @@
         class="text-sm"
         *ngFor="let option of filteredStations"
         [value]="option"
-        ><span
-          class="station bg-contain bg-no-repeat w-4 h-4 inline-block align-middle"
+      >
+        <span
+          class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
-        {{ option.stationName }}
+        <span class="inlin-block w-44">
+          {{ option.stationName }}
+          <span class="block text-secondary-300 text-xs">Station</span>
+        </span>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

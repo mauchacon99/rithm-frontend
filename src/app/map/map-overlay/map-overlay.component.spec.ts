@@ -16,10 +16,12 @@ import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
 import { MapSearchComponent } from '../map-search/map-search.component';
+import { MapMode } from 'src/models';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
   let fixture: ComponentFixture<MapOverlayComponent>;
+  let service: MapService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -44,6 +46,7 @@ describe('MapOverlayComponent', () => {
         { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
+    service = TestBed.inject(MapService);
   });
 
   beforeEach(() => {
@@ -88,5 +91,11 @@ describe('MapOverlayComponent', () => {
     const centerButton =
       fixture.debugElement.nativeElement.querySelector('#centerButton');
     expect(centerButton.disabled).toBeTruthy();
+  });
+
+  it('should enter mapMode add station', () => {
+    component.addStation();
+    expect(service.mapMode$.value).toBe(MapMode.StationAdd);
+    expect(service.matMenuStatus$.value).toBe(false);
   });
 });

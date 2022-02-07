@@ -13,10 +13,7 @@ import {
   DocumentNameField,
   ForwardPreviousStationsDocument,
   StandardStringJSON,
-  FlowLogicRule,
-  OperandType,
-  OperatorType,
-  RuleType,
+  StandardBooleanJSON,
 } from 'src/models';
 
 /**
@@ -855,5 +852,18 @@ export class MockStationService {
       ];
       return of(mockQuestions).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers to be assigned to station documents.
+   */
+  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
   }
 }

@@ -13,8 +13,8 @@ export interface DocumentStationInformation {
   /** The priority of the document. */
   documentPriority: number;
 
-  /** The first and last name of the user who is assigned. */
-  currentAssignedUser: string;
+  /** User who is assigned. */
+  currentAssignedUser: StationRosterMember;
 
   /** The time at which this document was most recently flowed as an ISO string date. */
   flowedTimeUTC: string;
