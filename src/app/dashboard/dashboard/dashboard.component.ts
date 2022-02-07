@@ -268,7 +268,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           } else {
             this.isCreateNewDashboard = true;
           }
-          console.log(this.dashboardData);
           this.isLoading = false;
           this.errorLoadingDashboard = false;
         },
@@ -288,7 +287,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Update dashboard.
    */
   updateDashboard(): void {
-    console.log(this.dashboardData);
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
