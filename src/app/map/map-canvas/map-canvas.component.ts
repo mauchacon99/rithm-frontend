@@ -223,7 +223,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.zoomCount = count;
       });
 
-    //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
+    //This subscribe shows if there are any drawers open.
     this.mapService.openedDrawerType$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerType) => {
