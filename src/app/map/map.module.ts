@@ -18,6 +18,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RecognitionModule } from './recognition/recognition.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
     RecognitionModule,
     LoadingIndicatorModule,
     InfoDrawerModule,
+    MatAutocompleteModule,
   ],
 })
 export class MapModule {}
