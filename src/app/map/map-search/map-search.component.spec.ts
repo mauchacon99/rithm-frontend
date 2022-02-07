@@ -67,9 +67,9 @@ describe('MapSearchComponent', () => {
   });
 
   it('should return filtered stations when search text is not empty', () => {
-    component.searchText = 'Untitled';
+    component.searchText = 'untitled';
     component.searchStations();
-    expect(component.filteredStations.length).toBeGreaterThanOrEqual(0);
+    expect(component.filteredStations.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should clear search box text', () => {

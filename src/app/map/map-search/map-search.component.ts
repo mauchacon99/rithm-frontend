@@ -11,7 +11,7 @@ import { MapService } from '../map.service';
   styleUrls: ['./map-search.component.scss'],
 })
 export class MapSearchComponent {
-  /** The Document how widget. */
+  /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
 
   /** List of filtered stations based on search text. */
