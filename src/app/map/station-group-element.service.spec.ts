@@ -30,7 +30,7 @@ describe('StationGroupElementService', () => {
     const slope = Number(service.slopeLine(pointStart, pointEnd).toFixed(2));
     expect(slope).toEqual(slopeExpect);
     const slopePi = service.slopeLine(pointStart, pointStart);
-    expect(slopePi).toEqual(Math.PI);
+    expect(Math.abs(slopePi)).toEqual(Math.PI / 2);
   });
 
   it('should move a point by the x-coordinate over the line', () => {
@@ -73,6 +73,10 @@ describe('StationGroupElementService', () => {
   });
 
   it('should return the position of the points that make the first straight line', () => {
+    service.canvasDimensions = {
+      width: 1200,
+      height: 500,
+    };
     const points: Point[] = [
       { x: 296.64472347020927, y: 518.1905987569099 },
       { x: 456.4144630483116, y: 570.1704797840323 },
