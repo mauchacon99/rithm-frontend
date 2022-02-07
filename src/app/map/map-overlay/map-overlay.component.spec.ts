@@ -15,6 +15,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
+import { MapSearchComponent } from '../map-search/map-search.component';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -27,6 +28,7 @@ describe('MapOverlayComponent', () => {
         MapOverlayComponent,
         MockComponent(LoadingIndicatorComponent),
         MockComponent(ConnectionInfoDrawerComponent),
+        MockComponent(MapSearchComponent),
       ],
       imports: [
         HttpClientTestingModule,
