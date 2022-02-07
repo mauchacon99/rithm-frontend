@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
   DashboardStationData,
   StationRosterMember,
   Document,
-  DashboardItem,
   DashboardData,
 } from 'src/models';
 
@@ -20,6 +19,9 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
   providedIn: 'root',
 })
 export class DashboardService {
+  /** Loading dashboard when generate new dashboard. */
+  isLoadingDashboard$ = new Subject<boolean>();
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -31,6 +33,15 @@ export class DashboardService {
     return this.http.get<WorkerDashboardHeader>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/header`
     );
+  }
+
+  /**
+   * Toggle emit to loading dashboard.
+   *
+   * @param status Boolean true to loading and false not loading.
+   */
+  toggleLoadingDashboard(status: boolean): void {
+    this.isLoadingDashboard$.next(status);
   }
 
   /**
@@ -95,11 +106,14 @@ export class DashboardService {
   /**
    * Gets widgets for dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @returns Returns the list of widgets.
    */
-  getDashboardWidgets(): Observable<DashboardItem[]> {
-    return this.http.get<DashboardItem[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+  getDashboardWidgets(dashboardRithmId: string): Observable<DashboardData> {
+    const params = new HttpParams().set('dashboardRithmId', dashboardRithmId);
+    return this.http.get<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`,
+      { params }
     );
   }
 
