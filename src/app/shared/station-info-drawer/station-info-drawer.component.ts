@@ -53,6 +53,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document generation section. */
   docCreationLoading = false;
 
+  /** Loading in the allow external workers section. */
+  allowExternalLoading = false;
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -652,14 +655,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Get the allow external workers for the station roster.
    */
   private getAllowExternalWorkers(): void {
+    this.allowExternalLoading = true;
     this.stationService
       .getAllowExternalWorkers(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (allowExternal) => {
           this.allowExternal = allowExternal;
+          this.allowExternalLoading = false;
         },
         error: (error: unknown) => {
+          this.allowExternalLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -672,14 +678,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Update the allow external workers for the station roster.
    */
   private updateAllowExternalWorkers(): void {
+    this.allowExternalLoading = true;
     this.stationService
       .updateAllowExternalWorkers(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (allowExternal) => {
           this.allowExternal = allowExternal;
+          this.allowExternalLoading = false;
         },
         error: (error: unknown) => {
+          this.allowExternalLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
