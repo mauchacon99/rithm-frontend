@@ -989,4 +989,13 @@ describe('StationService', () => {
       expect(response).toEqual(expectedResponse.data);
     });
   });
+
+  it('should return the value of allow all org workers', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    service.getAllowAllOrgWorkers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
 });
