@@ -203,11 +203,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         cancelButtonText: 'No',
       });
 
-      if (response){
+      if (response) {
         this.editMode = false;
-        this.dashboardData = JSON.parse(
-          JSON.stringify(this.dashboardDataCopy)
-        );
+        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
         this.changedOptions();
       }
     } else this.editMode = statusEditMode;
