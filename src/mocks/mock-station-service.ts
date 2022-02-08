@@ -872,10 +872,14 @@ export class MockStationService {
   /**
    * Update the allow external workers status for the station roster.
    *
+   * @param newStatus The new status to allow external workers.
    * @param stationRithmId The Specific id of station.
    * @returns Allow external workers updated status in the station.
    */
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+  updateAllowExternalWorkers(
+    newStatus: boolean,
+    stationRithmId: string
+  ): Observable<boolean> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -887,7 +891,7 @@ export class MockStationService {
       ).pipe(delay(1000));
     } else {
       const expectedResponse: StandardBooleanJSON = {
-        data: true,
+        data: newStatus,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }
@@ -914,34 +918,6 @@ export class MockStationService {
         data: true,
       };
       return of(mockData.data).pipe(delay(1000));
-    }
-  }
-
-  /**
-   * Update the allow external workers status for the station roster.
-   *
-   * @param newStatus The new status to allow external workers.
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers updated status in the station.
-   */
-  updateAllowExternalWorkers(
-    newStatus: boolean,
-    stationRithmId: string
-  ): Observable<boolean> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: "Cannot update the allow external worker's status",
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StandardBooleanJSON = {
-        data: newStatus,
-      };
-      return of(expectedResponse.data).pipe(delay(1000));
     }
   }
 

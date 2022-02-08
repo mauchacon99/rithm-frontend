@@ -519,25 +519,21 @@ export class StationService {
   /**
    * Update the the status to allow external workers for the station roster.
    *
+   * @param newStatus The new status to allow external workers.
    * @param stationRithmId The Specific id of station.
    * @returns Allow external workers updated status in the station.
    */
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update the current status for this.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StandardBooleanJSON = {
-        data: true,
-      };
-      return of(expectedResponse.data).pipe(delay(1000));
-    }
+  updateAllowExternalWorkers(
+    newStatus: boolean,
+    stationRithmId: string
+  ): Observable<boolean> {
+    const standardBody: StandardBooleanJSON = { data: newStatus };
+    return this.http
+      .put<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`,
+        standardBody
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -574,26 +570,6 @@ export class StationService {
     return this.http
       .get<StandardBooleanJSON>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
-      )
-      .pipe(map((response) => response.data));
-  }
-
-  /**
-   * Update the the status to allow external workers for the station roster.
-   *
-   * @param newStatus The new status to allow external workers.
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers updated status in the station.
-   */
-  updateAllowExternalWorkers(
-    newStatus: boolean,
-    stationRithmId: string
-  ): Observable<boolean> {
-    const standardBody: StandardBooleanJSON = { data: newStatus };
-    return this.http
-      .put<StandardBooleanJSON>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`,
-        standardBody
       )
       .pipe(map((response) => response.data));
   }
