@@ -970,6 +970,18 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should update the allowAllOrgWorkers status in station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    const allowAllOrgWorkers = true;
+    service
+      .updateAllowAllOrgWorkers(stationId, allowAllOrgWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+  });
+
   it('should get the allow external workers', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,

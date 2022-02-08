@@ -645,6 +645,25 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Update AllowAllOrgWorkers information.
+   *
+   * @param allowAllOrgWorkers The value that will be update.
+   */
+  updateAllOrgWorkersStation(allowAllOrgWorkers: boolean): void {
+    this.stationService
+      .updateAllowAllOrgWorkers(this.stationRithmId, allowAllOrgWorkers)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
