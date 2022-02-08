@@ -13,7 +13,7 @@ import {
   MockSplitService,
   MockStationService,
   MockUserService,
-  MockPopupService
+  MockPopupService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -161,10 +161,6 @@ describe('DashboardComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
 
-    const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
-      'updatePersonalDashboard'
-    ).and.callThrough();
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
@@ -174,9 +170,6 @@ describe('DashboardComponent', () => {
     expect(btnSave).toBeTruthy();
     btnSave.click();
 
-    expect(spyServiceUpdateDashboard).toHaveBeenCalledWith(
-      component.dashboardData
-    );
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
