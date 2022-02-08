@@ -517,6 +517,69 @@ export class StationService {
   }
 
   /**
+   * Get the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers to be assigned to station documents.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
+  }
+
+  /**
+   * Update the the status to allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers updated status in the station.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: true,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the field AllowAllOrgWorkers.
+   *
+   * @param stationRithmId  The station id.
+   * @returns An object with value of AllowAllOrgWorkers.
+   */
+  getAllowAllOrgWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update field related all org workers.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const mockData: StandardBooleanJSON = {
+        data: true,
+      };
+      return of(mockData.data).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Update AllowAllOrgWorkers information.
    *
    * @param stationRithmId The station id that will be update.
@@ -542,19 +605,5 @@ export class StationService {
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }
-  }
-
-  /**
-   * Get the allow external workers for the station roster.
-   *
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers to be assigned to station documents.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    return of(expectedResponse.data).pipe(delay(1000));
   }
 }
