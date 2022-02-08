@@ -54,10 +54,9 @@
           class="color-hover cursor-pointer"
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
-          (click)="navigateToDashboard(dashboard)"
-          [ngClass]="{
-            'bg-accent-100': dashboard.rithmId === dashboardSelected
-          }"
+          (click)="hiddenDrawer()"
+          [routerLink]="'/dashboard/'+dashboard.rithmId"
+          routerLinkActive="bg-accent-100"
         >
           <div class="w-full flex justify-between items-center ml-5">
             {{ dashboard.name }}

@@ -15,7 +15,6 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { RouterTestingModule } from '@angular/router/testing';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
-import { Router } from '@angular/router';
 
 describe('ExpansionMenuComponent', () => {
   let component: ExpansionMenuComponent;
@@ -303,13 +302,9 @@ describe('ExpansionMenuComponent', () => {
   it('should render dashboard and navigate with router', () => {
     component.isLoading = false;
     component.showError = false;
-    const spyNavigateDashboard = spyOn(
+    const spyHiddenDrawer = spyOn(
       component,
-      'navigateToDashboard'
-    ).and.callThrough();
-    const spyRouter = spyOn(
-      TestBed.inject(Router),
-      'navigate'
+      'hiddenDrawer'
     ).and.callThrough();
     const spyDrawer = spyOn(
       TestBed.inject(SidenavDrawerService),
@@ -322,12 +317,7 @@ describe('ExpansionMenuComponent', () => {
     );
     expect(button).toBeTruthy();
     button.click();
-    expect(spyNavigateDashboard).toHaveBeenCalledOnceWith(dashboardsList[1]);
-    expect(spyRouter).toHaveBeenCalledOnceWith([
-      '/',
-      'dashboard',
-      dashboardsList[1].rithmId,
-    ]);
+    expect(spyHiddenDrawer).toHaveBeenCalledOnceWith();
     expect(spyDrawer).toHaveBeenCalledOnceWith('menuDashboard');
   });
 });
