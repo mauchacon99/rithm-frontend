@@ -65,7 +65,7 @@
     <!--    Column Headers-->
     <div class="grid grid-cols-12 text-xs text-secondary-500 py-2">
       <p class="col-span-5 overline-font truncate">Document</p>
-      <p class="col-span-2 overline-font truncate">Assigned</p>
+      <p class="col-span-2 overline-font truncate text-center">Assigned</p>
       <p class="col-span-2 overline-font truncate text-center">Priority</p>
       <p class="col-span-3 sm:col-span-2 overline-font truncate">
         Time in Station
@@ -104,7 +104,7 @@
           </div>
           <div
             *ngIf="!document.assignedUser"
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-center"
           >
             None
           </div>
@@ -122,7 +122,7 @@
             {{ getElapsedTime(document.flowedTimeUTC) }}
           </div>
           <div
-            class="col-span-1 border-solid border-b border-b-primary-100 pb-2"
+            class="col-span-1 border-solid border-b border-b-primary-100 pb-2 text-center"
           >
             <button
               (click)="viewDocument(document.rithmId)"
@@ -149,7 +149,7 @@
   <div class="flex justify-between items-center">
     <button
       mat-icon-button
-      (click)="viewDocument('')"
+      (click)="viewDocument('', true)"
       id="return-list-documents"
       data-testid="return-list-documents"
     >
