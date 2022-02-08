@@ -13,6 +13,7 @@ import {
   MockUserService,
   MockDashboardService,
   MockSplitService,
+  MockPopupService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -29,6 +30,7 @@ import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -54,6 +56,7 @@ describe('DashboardComponent', () => {
         { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService}
       ],
       imports: [
         MatSidenavModule,
