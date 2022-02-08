@@ -551,8 +551,8 @@ export class MapService {
       ) {
         //Remove deleting station group Id from it's parent group
         group.subStationGroups = group.subStationGroups.filter(
-          groupId => groupId !== removedGroup.rithmId
-          );
+          (groupId) => groupId !== removedGroup.rithmId
+        );
         //Move all sub station groups of deleted station group to it's parent.
         group.subStationGroups = group.subStationGroups.concat(
           removedGroup.subStationGroups
