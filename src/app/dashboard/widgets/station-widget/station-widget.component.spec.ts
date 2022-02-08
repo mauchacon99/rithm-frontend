@@ -311,7 +311,7 @@ describe('StationWidgetComponent', () => {
       expect(documentDetail).toBeNull();
       expect(showDocs).toBeTruthy();
       expect(component.documentIdSelected).toBe('');
-      expect(spyMethod).toHaveBeenCalledWith('', true);
+      expect(spyMethod).toHaveBeenCalledOnceWith('', true);
     });
   });
 
