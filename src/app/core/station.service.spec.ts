@@ -978,13 +978,16 @@ describe('StationService', () => {
   });
 
   it('should update the allow external workers status in the station', () => {
+    const allowExtWorkers = true;
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
 
-    service.updateAllowExternalWorkers(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse.data);
-    });
+    service
+      .updateAllowExternalWorkers(stationId, allowExtWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
   });
 
   it('should return the value of allow all org workers', () => {

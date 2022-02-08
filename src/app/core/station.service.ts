@@ -558,10 +558,14 @@ export class StationService {
    * Update the the status to allow external workers for the station roster.
    *
    * @param stationRithmId The Specific id of station.
+   * @param allowExtWorkers Whether to allow external workers.
    * @returns Allow external workers updated status in the station.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+  updateAllowExternalWorkers(
+    stationRithmId: string,
+    allowExtWorkers: boolean
+  ): Observable<boolean> {
     if (!stationRithmId) {
       return throwError(
         () =>

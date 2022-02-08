@@ -77,7 +77,7 @@ describe('CommentDrawerComponent', () => {
     expect(component.comments.length).toBe(4);
   }));
 
-  it('should add a newly posted comment to the list of comments', () => {
+  xit('should add a newly posted comment to the list of comments', () => {
     const comment = {
       displayText: 'This is first comment',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',

@@ -62,15 +62,15 @@
             Back
           </button>
           <button
-          mat-button
-          matStepperNext
-          class="w-1/12 text-accent-500"
-          data-testid="next-step-1"
-          id="next-step-1"
-          [disabled]="firstOperand.value === ''"
-        >
-          Next
-        </button>
+            mat-button
+            matStepperNext
+            class="w-1/12 text-accent-500"
+            data-testid="next-step-1"
+            id="next-step-1"
+            [disabled]="firstOperand.value === ''"
+          >
+            Next
+          </button>
         </div>
       </div>
       <!-- Error in question stations -->
@@ -128,10 +128,7 @@
       </div>
     </mat-step>
     <!-- Step 3 -->
-    <mat-step
-      color="accent"
-      [completed]="secondOperand.value !== ''"
-    >
+    <mat-step color="accent" [completed]="secondOperand.value !== ''">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
@@ -140,14 +137,17 @@
           Enter the value you'd like to compare your field to.
         </p>
       </div>
-      <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2" *ngIf="firstOperand.value!==''">
-        <div [ngSwitch]="firstOperand.type" (focusin)="clearSecondOperandOnFocus()">
+      <div
+        class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2"
+        *ngIf="firstOperand.value !== ''"
+      >
+        <div [ngSwitch]="firstOperand.type">
           <app-text-field
             *ngSwitchCase="operandType.String"
             #textField
             [field]="secondOperandDefaultQuestion"
             [labelTag]="secondOperandDefaultQuestion.prompt"
-            [isStation]="false"
+            [isStation]="true"
             [isInput]="true"
           >
           </app-text-field>
@@ -171,12 +171,12 @@
             [disabled]="!secondOperandQuestionList.length"
             [(ngModel)]="secondOperand.value"
             [ngModelOptions]="{ standalone: true }"
-            (focus)="clearSecondOperandOnFocus()"
-            (selectionChange)="setSecondOperandInformation($event.value)"
+            (focus)="resetQuestionFieldComponent()"
           >
             <mat-option
               *ngFor="let question of secondOperandQuestionList"
-              [value]="question"
+              [value]="question.rithmId"
+              (click)="setSecondOperandInformation(question)"
             >
               {{ question.prompt }}
             </mat-option>
@@ -214,7 +214,7 @@
         <p class="text-sm my-1">
           {{ firstOperand.value }}
           <span class="font-semibold">{{ operatorSelected?.text }} </span>
-          {{ secondOperand.value }}
+          {{ secondOperandToShow }}
         </p>
       </div>
       <div class="flex flex-row space-x-2 mt-5">

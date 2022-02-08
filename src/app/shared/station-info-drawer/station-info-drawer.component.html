@@ -321,7 +321,11 @@
               ></i>
             </div>
             <div class="pr-2">
-              <mat-slide-toggle color="accent" [(ngModel)]="allowExternal">
+              <mat-slide-toggle
+                color="accent"
+                [(ngModel)]="allowExternal"
+                (change)="updateAllowExternalWorkers($event.checked)"
+              >
               </mat-slide-toggle>
             </div>
           </section>

@@ -396,12 +396,16 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should update the allow external workers status for the station roster', () => {
+    const allowExt = true;
     const updateAllowExternalSpy = spyOn(
       TestBed.inject(StationService),
       'updateAllowExternalWorkers'
     ).and.callThrough();
-    component['updateAllowExternalWorkers']();
-    expect(updateAllowExternalSpy).toHaveBeenCalledOnceWith(stationId);
+    component.updateAllowExternalWorkers(allowExt);
+    expect(updateAllowExternalSpy).toHaveBeenCalledOnceWith(
+      stationId,
+      allowExt
+    );
   });
 
   it('should catch an error if updating the allow external workers status fails', () => {
@@ -418,7 +422,7 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['updateAllowExternalWorkers']();
+    component.updateAllowExternalWorkers(true);
     expect(spyError).toHaveBeenCalled();
   });
 

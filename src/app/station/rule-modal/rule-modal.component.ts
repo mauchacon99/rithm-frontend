@@ -21,7 +21,7 @@ import {
   OperandType,
   DocumentAnswer,
   RuleEquation,
-  RuleOperand
+  RuleOperand,
 } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
@@ -39,7 +39,6 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
   providers: [],
 })
 export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
-
   /** The component text-field to be updated for step 3. */
   @ViewChild('textField', { static: false })
   textField!: TextFieldComponent;
@@ -76,7 +75,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The value of the first operand. */
   firstOperand: RuleOperand = {
     value: '',
-    type: OperandType.String
+    type: OperandType.String,
   };
 
   /** The rithmId of the second selected question to be compared if needed. */
@@ -88,7 +87,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The value of the second operand. */
   secondOperand: RuleOperand = {
     value: '',
-    type: OperandType.String
+    type: OperandType.String,
   };
 
   /** The type of the first questions selected for the first operand. */
@@ -96,9 +95,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   operatorSelected: {
     /**Operator text. */
-    text: string,
+    text: string;
     /**Operator type */
-    value: OperatorType,
+    value: OperatorType;
   } | null = null;
 
   operandType = OperandType;
@@ -256,6 +255,17 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Returns the second Operand to display in the las step.
+   *
+   * @returns A normal value or a rithmId to display.
+   */
+  get secondOperandToShow(): string {
+    return this.secondOperand.type === OperandType.Field
+      ? this.secondOperandQuestionPrompt
+      : this.secondOperand.value;
+  }
+
+  /**
    * Get current and previous questions.
    */
   getStationQuestions(): void {
@@ -289,10 +299,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    *
    * @param questionSelected The field type to show the options of the corresponding operator list.
    */
-   setFirstOperandInformation(questionSelected: Question): void {
+  setFirstOperandInformation(questionSelected: Question): void {
     //Set first field type for options of the second operand
     this.firstOperandQuestionType = questionSelected.questionType;
-    this.secondOperandDefaultQuestion.questionType = questionSelected.questionType;
+    this.secondOperandDefaultQuestion.questionType =
+      questionSelected.questionType;
     //Set first operand of text to show. */
     this.firstOperand.value = questionSelected.prompt;
     switch (questionSelected.questionType) {
@@ -304,7 +315,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       case QuestionFieldType.MultiSelect:
         this.operatorList = this.textGroup;
         this.firstOperand.type =
-        questionSelected.questionType !== QuestionFieldType.Phone
+          questionSelected.questionType !== QuestionFieldType.Phone
             ? OperandType.String
             : OperandType.Number;
         break;
@@ -335,20 +346,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    *
    * @param questionSelected The field type to show the options of the corresponding operator list.
    */
-   setSecondOperandInformation(questionSelected: Question): void {
-    this.secondOperandQuestionPrompt = questionSelected.rithmId;
+  setSecondOperandInformation(questionSelected: Question): void {
+    this.secondOperandQuestionPrompt = questionSelected.prompt;
     this.secondOperand.type = OperandType.Field;
   }
-
-  /**
-   * Clear the secondOperand input/select elements.
-   */
-   clearSecondOperandOnFocus(): void{
-      this.secondOperand.value = '';
-      this.secondOperand.type = OperandType.String;
-      this.secondOperandQuestionPrompt = '';
-      this.resetQuestionFieldComponent();
-   }
 
   /**
    * Reset component field when a first operand is selected.
@@ -373,49 +374,52 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param event The stepper selection event for all steps.
    */
   clearOnStepBack(event: StepperSelectionEvent): void {
-    if (event.selectedIndex < event.previouslySelectedIndex){
-      switch (event.selectedIndex){
+    if (event.selectedIndex < event.previouslySelectedIndex) {
+      switch (event.selectedIndex) {
         case 0:
-        this.operatorSelected = null;
-        this.secondOperand.value = '';
-        this.secondOperand.type = OperandType.String;
-        this.secondOperandQuestionPrompt = '';
-        this.resetQuestionFieldComponent();
-        break;
-      case 1:
-        this.secondOperand.value = '';
-        this.secondOperand.type = OperandType.String;
-        this.secondOperandQuestionPrompt = '';
-        this.resetQuestionFieldComponent();
-        break;
+          this.operatorSelected = null;
+          this.secondOperand.value = '';
+          this.secondOperand.type = OperandType.String;
+          this.secondOperandQuestionPrompt = '';
+          this.resetQuestionFieldComponent();
+          break;
+        case 1:
+          this.secondOperand.value = '';
+          this.secondOperand.type = OperandType.String;
+          this.secondOperandQuestionPrompt = '';
+          this.resetQuestionFieldComponent();
+          break;
       }
+    } else if (event.selectedIndex === 2) {
+      this.resetQuestionFieldComponent();
     }
   }
 
   /**
    * Set The value for the current Rule.
    */
-  setEquationContent(): void{
+  setEquationContent(): void {
     this.ruleToAdd = {
       leftOperand: {
         type: this.firstOperand.type,
         value: this.firstOperand.value,
       },
-      operatorType: this.operatorSelected ? this.operatorSelected.value : OperatorType.EqualTo,
+      operatorType: this.operatorSelected
+        ? this.operatorSelected.value
+        : OperatorType.EqualTo,
       rightOperand: {
         type: this.secondOperand.type,
         value: this.secondOperand.value,
       },
     };
-    // eslint-disable-next-line no-console
-    console.log(this.ruleToAdd);
+    this.closeModal();
   }
 
   /**
    * Close rule Modal.
    */
   closeModal(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.ruleToAdd);
   }
 
   /**
