@@ -194,7 +194,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param statusEditMode Status mode edition.
    */
   async toggleEditMode(statusEditMode: boolean): Promise<void> {
-
     if (!statusEditMode) {
       const response = await this.popupService.confirm({
         title: 'Cancel?',

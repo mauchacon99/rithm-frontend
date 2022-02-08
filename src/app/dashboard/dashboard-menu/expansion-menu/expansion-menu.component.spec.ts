@@ -302,10 +302,7 @@ describe('ExpansionMenuComponent', () => {
   it('should render dashboard and navigate with router', () => {
     component.isLoading = false;
     component.showError = false;
-    const spyHiddenDrawer = spyOn(
-      component,
-      'hiddenDrawer'
-    ).and.callThrough();
+    const spyHiddenDrawer = spyOn(component, 'hiddenDrawer').and.callThrough();
     const spyDrawer = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
