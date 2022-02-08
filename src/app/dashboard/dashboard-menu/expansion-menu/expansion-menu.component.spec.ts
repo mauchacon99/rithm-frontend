@@ -12,6 +12,10 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { of, throwError } from 'rxjs';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { Router } from '@angular/router';
 
 describe('ExpansionMenuComponent', () => {
   let component: ExpansionMenuComponent;
@@ -67,8 +71,19 @@ describe('ExpansionMenuComponent', () => {
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
-      imports: [MatExpansionModule, MatListModule, BrowserAnimationsModule],
+      imports: [
+        MatExpansionModule,
+        MatListModule,
+        BrowserAnimationsModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'dashboard/:dashboardId',
+            component: MockComponent(DashboardComponent),
+          },
+        ]),
+      ],
     }).compileComponents();
   });
 
@@ -283,5 +298,36 @@ describe('ExpansionMenuComponent', () => {
         `#${component.dashboardRole}-item-1`
       );
     expect(listOrganizationDashboards).toBeTruthy();
+  });
+
+  it('should render dashboard and navigate with router', () => {
+    component.isLoading = false;
+    component.showError = false;
+    const spyNavigateDashboard = spyOn(
+      component,
+      'navigateToDashboard'
+    ).and.callThrough();
+    const spyRouter = spyOn(
+      TestBed.inject(Router),
+      'navigate'
+    ).and.callThrough();
+    const spyDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      `#${component.dashboardRole}-item-1`
+    );
+    expect(button).toBeTruthy();
+    button.click();
+    expect(spyNavigateDashboard).toHaveBeenCalledOnceWith(dashboardsList[1]);
+    expect(spyRouter).toHaveBeenCalledOnceWith([
+      '/',
+      'dashboard',
+      dashboardsList[1].rithmId,
+    ]);
+    expect(spyDrawer).toHaveBeenCalledOnceWith('menuDashboard');
   });
 });
