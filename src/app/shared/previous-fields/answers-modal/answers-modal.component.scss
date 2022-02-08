@@ -1,0 +1,7 @@
+.mat-dialog-title {
+  font-family: Montserrat, sans-serif;
+}
+
+::ng-deep .mat-dialog-content {
+  overflow-y: hidden !important;
+}
