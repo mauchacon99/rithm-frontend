@@ -80,7 +80,7 @@ describe('StationInfoHeaderComponent', () => {
     updatedDate: '2021-07-18T17:26:47.3506612Z',
     questions: [],
     priority: 2,
-    flowButton: 'Flow Button #1',
+    flowButton: 'Flow',
   };
   const user: StationRosterMember = {
     rithmId: '123132132',
