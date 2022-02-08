@@ -56,7 +56,7 @@ describe('DashboardComponent', () => {
         { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
-        { provide: PopupService, useClass: MockPopupService}
+        { provide: PopupService, useClass: MockPopupService },
       ],
       imports: [
         MatSidenavModule,
