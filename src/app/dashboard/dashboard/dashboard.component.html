@@ -79,7 +79,7 @@
               id="menu-edit-button"
               data-testid="menu-edit-button"
               class="py-3 text-secondary-500"
-              (click)="toggleEditMode()"
+              (click)="toggleEditMode(true)"
             >
               <i class="fas fa-cog text-lg"></i>
             </button>
@@ -96,6 +96,7 @@
                 >
                   <input
                     matInput
+                    [(ngModel)]="dashboardData.name"
                     type="text"
                     placeholder="Untitled Dashboard"
                   />
@@ -104,18 +105,19 @@
               <div class="justify-around">
                 <button
                   mat-button
-                  id="save-button"
-                  data-testid="save-button"
+                  id="cancel-button"
+                  data-testid="cancel-button"
                   class="bg-white text-secondary-500 drop-shadow-md font-semibold"
                   style="margin: 1em"
-                  (click)="toggleEditMode()"
+                  (click)="toggleEditMode(false)"
                 >
                   Cancel
                 </button>
                 <button
+                  (click)="updateDashboard()"
                   mat-button
-                  id="cancel-button"
-                  data-testid="cancel-button"
+                  id="save-button"
+                  data-testid="save-button"
                   class="bg-accent-800 text-secondary-50 drop-shadow-md"
                 >
                   Save
