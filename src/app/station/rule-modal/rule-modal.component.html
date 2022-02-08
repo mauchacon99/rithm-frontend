@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/cyclomatic-complexity -->
 <div class="modal-container">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
@@ -6,14 +7,14 @@
   <!-- Stepper for new rule -->
   <mat-stepper
     [linear]="true"
-    (selectionChange)="selectionChangeStep($event)"
+    (selectionChange)="clearOnStepBack($event)"
     [orientation]="(stepperOrientation$ | async)!"
   >
     <ng-template matStepperIcon="edit">
       <i class="fas fa-check"></i>
     </ng-template>
     <!-- Step 1 -->
-    <mat-step color="accent" [completed]="firstOperand !== ''">
+    <mat-step color="accent" [completed]="firstOperand.value !== ''">
       <ng-template matStepLabel>
         <p class="truncate font-semibold ml-2">Select Field</p>
       </ng-template>
@@ -31,11 +32,11 @@
           *ngIf="!questionStationLoading; else selectFieldLoading"
         >
           <mat-label>Select Field</mat-label>
-          <mat-select [(value)]="firstOperand">
+          <mat-select [(value)]="firstOperandQuestionRithmId">
             <mat-option
               *ngFor="let question of questionStation"
               [value]="question.rithmId"
-              (click)="setOperatorList(question.questionType, question.prompt)"
+              (click)="setFirstOperandInformation(question)"
             >
               {{ question.prompt }}
             </mat-option>
@@ -49,16 +50,28 @@
             ></app-loading-indicator>
           </div>
         </ng-template>
-        <button
+
+        <div class="flex flex-row space-x-2">
+          <button
+            mat-button
+            data-testid="back-step-2"
+            id="back-step-2"
+            class="w-1/12 text-secondary-300"
+            disabled
+          >
+            Back
+          </button>
+          <button
           mat-button
           matStepperNext
-          class="w-1/12"
+          class="w-1/12 text-accent-500"
           data-testid="next-step-1"
           id="next-step-1"
-          [disabled]="firstOperand === ''"
+          [disabled]="firstOperand.value === ''"
         >
           Next
         </button>
+        </div>
       </div>
       <!-- Error in question stations -->
       <div *ngIf="questionStationError" id="question-stations-error">
@@ -68,27 +81,26 @@
       </div>
     </mat-step>
     <!-- Step 2 -->
-    <mat-step color="accent" [completed]="operator !== ''">
+    <mat-step color="accent" [completed]="operatorSelected?.text">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Type</p>
       </ng-template>
       <div class="flex flex-col md:w-5/12 justify-start">
         <p class="text-sm mt-1">
           Select the comparasion value for field type:
-          <span class="font-semibold">{{ firstFieldType | titlecase }}</span>
+          <span class="font-semibold">{{ firstOperandQuestionType }}</span>
         </p>
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
           <mat-select
-            [(ngModel)]="operator"
+            [(ngModel)]="operatorSelected"
             [ngModelOptions]="{ standalone: true }"
           >
             <mat-option
-              *ngFor="let option of operatorList"
-              [value]="option.value"
-              (click)="operatorText = option.text"
+              *ngFor="let operator of operatorList"
+              [value]="operator"
             >
-              {{ option.text }}
+              {{ operator.text }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -109,7 +121,7 @@
           class="w-1/12 text-accent-500"
           data-testid="next-step-2"
           id="next-step-2"
-          [disabled]="operator === ''"
+          [disabled]="!operatorSelected"
         >
           Next
         </button>
@@ -118,7 +130,7 @@
     <!-- Step 3 -->
     <mat-step
       color="accent"
-      [completed]="secondOperand !== '' || secondOperandField.value !== ''"
+      [completed]="secondOperand.value !== ''"
     >
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
@@ -128,13 +140,13 @@
           Enter the value you'd like to compare your field to.
         </p>
       </div>
-      <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
-        <div (focusin)="secondOperand = ''" [ngSwitch]="firstOperandType">
+      <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2" *ngIf="firstOperand.value!==''">
+        <div [ngSwitch]="firstOperand.type" (focusin)="clearSecondOperandOnFocus()">
           <app-text-field
             *ngSwitchCase="operandType.String"
             #textField
-            [field]="secondOperandField"
-            [labelTag]="secondOperandField.prompt"
+            [field]="secondOperandDefaultQuestion"
+            [labelTag]="secondOperandDefaultQuestion.prompt"
             [isStation]="false"
             [isInput]="true"
           >
@@ -142,13 +154,13 @@
           <app-number-field
             *ngSwitchCase="operandType.Number"
             #numberField
-            [field]="secondOperandField"
+            [field]="secondOperandDefaultQuestion"
           >
           </app-number-field>
           <app-date-field
             *ngSwitchCase="operandType.Date"
             #dateField
-            [field]="secondOperandField"
+            [field]="secondOperandDefaultQuestion"
           >
           </app-date-field>
         </div>
@@ -157,14 +169,14 @@
           <mat-label>Previous field</mat-label>
           <mat-select
             [disabled]="!secondOperandQuestionList.length"
-            [(ngModel)]="secondOperand"
-            (focus)="refreshComponentField()"
+            [(ngModel)]="secondOperand.value"
             [ngModelOptions]="{ standalone: true }"
+            (focus)="clearSecondOperandOnFocus()"
+            (selectionChange)="setSecondOperandInformation($event.value)"
           >
             <mat-option
               *ngFor="let question of secondOperandQuestionList"
-              [value]="question.rithmId"
-              (click)="secondOperandText = question.prompt"
+              [value]="question"
             >
               {{ question.prompt }}
             </mat-option>
@@ -187,22 +199,22 @@
           class="w-1/12 text-accent-500"
           data-testid="next-step-3"
           id="next-step-3"
-          [disabled]="secondOperand === '' && secondOperandField.value === ''"
+          [disabled]="secondOperand.value === ''"
         >
           Next
         </button>
       </div>
     </mat-step>
-    <!-- Step 4 -->
+    <!--Step 4 -->
     <mat-step color="accent" [completed]="false">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Done</p>
       </ng-template>
       <div class="flex flex-col">
         <p class="text-sm my-1">
-          {{ firstOperandText }}
-          <span class="font-semibold">{{ operatorText }} </span>
-          {{ secondOperandText }}
+          {{ firstOperand.value }}
+          <span class="font-semibold">{{ operatorSelected?.text }} </span>
+          {{ secondOperand.value }}
         </p>
       </div>
       <div class="flex flex-row space-x-2 mt-5">
@@ -220,6 +232,7 @@
           class="w-1/12 text-accent-500"
           data-testid="done-step"
           id="done-step"
+          (click)="setEquationContent()"
         >
           Done
         </button>
