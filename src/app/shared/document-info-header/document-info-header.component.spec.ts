@@ -293,7 +293,7 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(button).toBeTruthy();
     const assignUserDocument = spyOn(component, 'assignUserToDocument');
     button.click();
-    expect(assignUserDocument).toHaveBeenCalledWith();
+    expect(assignUserDocument).toHaveBeenCalledOnceWith();
   });
 
   it('should executed method for assigned user in document', () => {
