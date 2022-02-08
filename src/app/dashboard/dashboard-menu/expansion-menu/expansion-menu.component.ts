@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { first, Subject, takeUntil } from 'rxjs';
+import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardData } from 'src/models';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
@@ -15,7 +14,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })
-export class ExpansionMenuComponent implements OnInit, OnDestroy {
+export class ExpansionMenuComponent implements OnInit {
   /** Dashboards list. */
   dashboardsList: DashboardData[] = [];
 
@@ -34,28 +33,14 @@ export class ExpansionMenuComponent implements OnInit, OnDestroy {
   /** Show error in list the dashboard. */
   showError = false;
 
-  /** Dashboard selected. */
-  dashboardSelected = '';
-
-  /** Destroyed subscription. */
-  private destroyed$ = new Subject<void>();
-
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private route: ActivatedRoute,
-    private router: Router,
     private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe((param) => {
-      const dashboardRithmId = param.get('dashboardId');
-      if (dashboardRithmId) {
-        this.dashboardSelected = dashboardRithmId;
-      }
-    });
     this.getToListDashboards();
   }
 
@@ -86,18 +71,9 @@ export class ExpansionMenuComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navigate to dashboard.
-   *
-   * @param dashboard This Dashboard to navigate.
+   * Hidden drawer menu dashboard.
    */
-  navigateToDashboard(dashboard: DashboardData): void {
-    this.router.navigate(['/', 'dashboard', dashboard.rithmId]);
+  hiddenDrawer(): void {
     this.sidenavDrawerService.toggleDrawer('menuDashboard');
-  }
-
-  /** Clean subscriptions. */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }
