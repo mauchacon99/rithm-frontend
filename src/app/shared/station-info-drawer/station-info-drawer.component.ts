@@ -314,7 +314,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         updatedDate: '',
         questions: [],
         priority: 0,
-        flowButton: '',
+        flowButton: 'Flow',
       };
     }
   }
