@@ -537,7 +537,7 @@ export class MapService {
    * @param stationGroupId The incoming station group Id to be deleted.
    */
   removeStationGroup(stationGroupId: string): void {
-    //Find the station group from this.stationGroupElements array.
+    // Find the station group from this.stationGroupElements array.
     const removedGroup = this.stationGroupElements.find(
       (group) => group.rithmId === stationGroupId
     );
