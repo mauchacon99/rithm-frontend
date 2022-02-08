@@ -193,9 +193,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param statusEditMode Status mode edition.
    */
-  toggleEditMode(statusEditMode: boolean): void {
+  async toggleEditMode(statusEditMode: boolean): Promise<void> {
     if (!statusEditMode) {
-      const confirm = this.popupService.confirm({
+      const response = await this.popupService.confirm({
         title: 'Cancel?',
         message: 'All unsaved changes will be lost',
         important: true,
@@ -203,15 +203,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         cancelButtonText: 'No',
       });
 
-      confirm.then((status) => {
-        if (status) {
-          this.editMode = false;
-          this.dashboardData = JSON.parse(
-            JSON.stringify(this.dashboardDataCopy)
-          );
-          this.changedOptions();
-        }
-      });
+      if (response){
+        this.editMode = false;
+        this.dashboardData = JSON.parse(
+          JSON.stringify(this.dashboardDataCopy)
+        );
+        this.changedOptions();
+      }
     } else this.editMode = statusEditMode;
   }
 
