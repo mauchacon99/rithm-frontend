@@ -450,7 +450,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-   // awaiting for complete the component update for harness testing
+  // awaiting for complete the component update for harness testing
   xit('should show loading-indicator-allow-external when calling getAllowExternalWorkers', () => {
     component.stationLoading = false;
     component['getAllowExternalWorkers']();
