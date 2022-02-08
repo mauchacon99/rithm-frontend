@@ -273,17 +273,5 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith();
   });
 
-  it('should assign user to document', () => {
-    component.isWidget = true;
-    fixture.detectChanges();
-    //click the button before
-    const button = fixture.debugElement.nativeElement.querySelector(
-      '#start-document-button'
-    );
-    expect(button).toBeTruthy();
 
-    const assignUserDocument = spyOn(component, 'assignUserToDocument');
-    button.click();
-    expect(assignUserDocument).toHaveBeenCalledWith();
-  });
 });
