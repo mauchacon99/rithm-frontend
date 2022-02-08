@@ -111,6 +111,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** Whether the station is allowed for all the organization workers or not. */
+  allowAllOrgWorkers = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -630,6 +633,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get the value of field AllowAllOrgWorkers for a specific station.
+   */
+  private getAllowAllOrgWorkers(): void {
+    this.stationService
+      .getAllowAllOrgWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allOrgWorkers) => {
+          this.allowAllOrgWorkers = allOrgWorkers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Failed to get connected stations for this document.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -643,6 +667,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   private getAllowExternalWorkers(): void {
     this.stationService
       .getAllowExternalWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allowExternal) => {
+          this.allowExternal = allowExternal;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update the allow external workers for the station roster.
+   */
+  private updateAllowExternalWorkers(): void {
+    this.stationService
+      .updateAllowExternalWorkers(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (allowExternal) => {
