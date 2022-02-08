@@ -517,6 +517,30 @@ export class StationService {
   }
 
   /**
+   * Update the the status to allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers updated status in the station.
+   */
+  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: true,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get the field AllowAllOrgWorkers.
    *
    * @param stationRithmId  The station id.
@@ -572,5 +596,33 @@ export class StationService {
         standardBody
       )
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Update the status to allow external workers for the station roster.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param allowAllOrgWorkers The value that will be update.
+   * @returns The field AllowAllOrgWorkers updated.
+   */
+  updateAllowAllOrgWorkers(
+    stationRithmId: string,
+    allowAllOrgWorkers: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowAllOrgWorkers,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
   }
 }

@@ -319,6 +319,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         updatedDate: '',
         questions: [],
         priority: 0,
+        flowButton: 'Flow',
       };
     }
   }
@@ -638,6 +639,25 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             'Failed to get connected stations for this document.',
             error,
             false
+          );
+        },
+      });
+  }
+
+  /**
+   * Update AllowAllOrgWorkers information.
+   *
+   * @param allowAllOrgWorkers The value that will be update.
+   */
+  updateAllOrgWorkersStation(allowAllOrgWorkers: boolean): void {
+    this.stationService
+      .updateAllowAllOrgWorkers(this.stationRithmId, allowAllOrgWorkers)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
           );
         },
       });

@@ -157,15 +157,8 @@
       {{ stationNameDocument }}
     </p>
   </div>
-
-  <div
-    [ngClass]="
-      currentAssignedUserDocument
-        ? 'flex justify-between p-1'
-        : 'flex justify-end'
-    "
-  >
-    <div *ngIf="currentAssignedUserDocument?.rithmId">
+  <div class="flex justify-between p-1">
+    <div *ngIf="currentAssignedUserDocument?.rithmId; else startButton">
       <small
         class="text-secondary-900 font-semibold text-[0.6rem] tracking-[1.5px]"
       >
@@ -179,6 +172,19 @@
         </app-user-avatar>
       </div>
     </div>
+    <ng-template #startButton>
+      <div class="py-2">
+        <button
+          mat-stroked-button
+          (click)="assignUserToDocument()"
+          data-testid="start-document-button"
+          color="accent"
+          id="start-document-button"
+        >
+          Start Document
+        </button>
+      </div>
+    </ng-template>
 
     <button
       mat-button
