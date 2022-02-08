@@ -421,4 +421,29 @@ describe('StationInfoDrawerComponent', () => {
     component['updateAllowExternalWorkers']();
     expect(spyError).toHaveBeenCalled();
   });
+
+  // awaiting for complete the component update for harness testing
+  xit('should show loading-indicator-allow-external when calling getAllowExternalWorkers', () => {
+    component.stationLoading = false;
+    component['getAllowExternalWorkers']();
+    component.selectedTabIndex = 2;
+    fixture.detectChanges();
+    expect(component.allowExternalLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-allow-external'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  xit('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
+    component.stationLoading = false;
+    component['updateAllowExternalWorkers']();
+    component.selectedTabIndex = 2;
+    fixture.detectChanges();
+    expect(component.allowExternalLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-allow-external'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
 });
