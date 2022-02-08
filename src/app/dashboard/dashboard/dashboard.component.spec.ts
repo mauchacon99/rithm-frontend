@@ -180,10 +180,6 @@ describe('DashboardComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
 
-    const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
-      'updateOrganizationDashboard'
-    ).and.callThrough();
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
@@ -193,9 +189,6 @@ describe('DashboardComponent', () => {
     expect(btnSave).toBeTruthy();
     btnSave.click();
 
-    expect(spyServiceUpdateDashboard).toHaveBeenCalledWith(
-      component.dashboardData
-    );
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
