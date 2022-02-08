@@ -49,13 +49,15 @@
     </div>
 
     <div *ngIf="!isLoading && !showError && dashboardsList.length">
-      <div
-        *ngFor="let dashboard of dashboardsList; let i = index"
-        class="color-hover cursor-pointer"
-      >
+      <div *ngFor="let dashboard of dashboardsList; let i = index">
         <mat-list-item
+          class="color-hover cursor-pointer"
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
+          (click)="navigateToDashboard(dashboard)"
+          [ngClass]="{
+            'bg-accent-100': dashboard.rithmId === dashboardSelected
+          }"
         >
           <div class="w-full flex justify-between items-center ml-5">
             {{ dashboard.name }}
