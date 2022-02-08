@@ -48,4 +48,7 @@ export interface StationInformation {
 
   /** Whether to allow previous button be part of the document/station. */
   allowPreviousButton: boolean;
+  
+  /** Customize the name of the flow button. */
+  flowButton: string;
 }

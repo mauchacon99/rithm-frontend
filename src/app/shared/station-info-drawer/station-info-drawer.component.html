@@ -320,10 +320,20 @@
                 matTooltip="Allow anyone outside your organization to work on documents at this station"
               ></i>
             </div>
-            <div class="pr-2">
-              <mat-slide-toggle color="accent" [(ngModel)]="allowExternal">
-              </mat-slide-toggle>
-            </div>
+            <ng-container
+              *ngIf="allowExternalLoading; else slideToggleAllowExt"
+            >
+              <app-loading-indicator
+                id="loading-indicator-allow-external"
+                [inlineText]="'Loading...'"
+              ></app-loading-indicator>
+            </ng-container>
+            <ng-template #slideToggleAllowExt>
+              <div class="pr-2">
+                <mat-slide-toggle color="accent" [(ngModel)]="allowExternal">
+                </mat-slide-toggle>
+              </div>
+            </ng-template>
           </section>
           <section class="flex justify-between items-center">
             <div>

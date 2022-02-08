@@ -141,6 +141,7 @@ describe('StationComponent', () => {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      flowButton: 'Flow',
     };
 
     fixture.detectChanges();

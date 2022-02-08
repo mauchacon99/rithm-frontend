@@ -81,6 +81,7 @@ describe('StationInfoHeaderComponent', () => {
     questions: [],
     priority: 2,
     allowPreviousButton: false,
+    flowButton: 'Flow',
   };
   const user: StationRosterMember = {
     rithmId: '123132132',
