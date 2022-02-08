@@ -291,6 +291,7 @@ describe('StationWidgetComponent', () => {
 
     it('should return of list the documents', () => {
       const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.failedLoadWidget = false;
       component.isDocument = true;
       component.isLoading = false;
       fixture.detectChanges();
@@ -299,16 +300,18 @@ describe('StationWidgetComponent', () => {
           '#return-list-documents'
         );
       btnReturnDocuments.click();
+      component.failedLoadWidget = false;
+      component.isLoading = false;
       fixture.detectChanges();
       const documentDetail =
         fixture.debugElement.nativeElement.querySelector('#document-detail');
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
-
+      fixture.detectChanges();
       expect(documentDetail).toBeNull();
       expect(showDocs).toBeTruthy();
       expect(component.documentIdSelected).toBe('');
-      expect(spyMethod).toHaveBeenCalledWith('');
+      expect(spyMethod).toHaveBeenCalledWith('', true);
     });
   });
 

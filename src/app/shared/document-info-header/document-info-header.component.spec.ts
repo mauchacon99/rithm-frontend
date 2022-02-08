@@ -272,4 +272,26 @@ describe('DocumentInfoHeaderComponent', () => {
     button.click();
     expect(navigateSpy).toHaveBeenCalledWith();
   });
+
+  it('should assign user to document', () => {
+    component.isWidget = true;
+
+    spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    });
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#start-document-button'
+    );
+
+    expect(button).toBeTruthy();
+    const assignUserDocument = spyOn(component, 'assignUserToDocument');
+    button.click();
+    expect(assignUserDocument).toHaveBeenCalledWith();
+  });
 });
