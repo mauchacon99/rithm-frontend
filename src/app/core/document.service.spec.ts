@@ -794,7 +794,7 @@ describe('DocumentService', () => {
         },
       ],
     };
-    service.saveStationFlowLogicRule(stationId).subscribe((response) => {
+    service.saveStationFlowLogic(stationId).subscribe((response) => {
       expect(response).toEqual(expectedEventsResponse);
     });
   });

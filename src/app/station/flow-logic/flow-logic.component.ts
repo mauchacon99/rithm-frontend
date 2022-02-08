@@ -87,9 +87,9 @@ export class FlowLogicComponent implements OnInit {
   /**
    * Save station flow logic.
    */
-  private saveStationFlowLogicRule(): void {
+  private saveStationFlowLogic(): void {
     this.documentService
-      .saveStationFlowLogicRule(this.rithmId)
+      .saveStationFlowLogic(this.rithmId)
       .pipe(first())
       .subscribe({
         next: () => {

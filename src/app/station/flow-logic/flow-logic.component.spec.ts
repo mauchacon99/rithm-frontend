@@ -239,9 +239,9 @@ describe('FlowLogicComponent', () => {
     component.rithmId = rithmId;
     const saveStationFlowLogicRuleSpy = spyOn(
       TestBed.inject(DocumentService),
-      'saveStationFlowLogicRule'
+      'saveStationFlowLogic'
     ).and.callThrough();
-    component['saveStationFlowLogicRule']();
+    component['saveStationFlowLogic']();
     expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(rithmId);
   });
 
@@ -249,7 +249,7 @@ describe('FlowLogicComponent', () => {
     component.flowLogicLoading = false;
     spyOn(
       TestBed.inject(DocumentService),
-      'saveStationFlowLogicRule'
+      'saveStationFlowLogic'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
@@ -259,7 +259,7 @@ describe('FlowLogicComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['saveStationFlowLogicRule']();
+    component['saveStationFlowLogic']();
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 });

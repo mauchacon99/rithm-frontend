@@ -493,9 +493,9 @@ export class DocumentService {
    * Save station flow rules.
    *
    * @param stationRithmId The specific  station id.
-   * @returns Station flow logic rule.
+   * @returns Station flow logic.
    */
-  saveStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
+  saveStationFlowLogic(stationRithmId: string): Observable<FlowLogicRule> {
     if (!stationRithmId) {
       return throwError(
         () =>
