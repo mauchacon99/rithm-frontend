@@ -163,6 +163,7 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
     };
 
     const expectedResponse: StationInformation = {
@@ -207,6 +208,7 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
     };
 
     service.updateStation(station).subscribe((response) => {
@@ -800,6 +802,7 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      allowPreviousButton: false,
     };
 
     service.updateStationName(newName, station.rithmId);
