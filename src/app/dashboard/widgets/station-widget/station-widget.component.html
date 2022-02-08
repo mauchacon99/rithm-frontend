@@ -51,6 +51,14 @@
           >
             New Document <i class="fas fa-plus"></i>
           </button>
+          <div
+            *ngIf="displayDocumentError"
+            class="text-error-500 text-xs p-0.5"
+            data-testid="create-document-error"
+            id="create-document-error"
+          >
+            Document not created!
+          </div>
         </div>
       </div>
     </div>
@@ -65,6 +73,13 @@
     </div>
     <!--    Row Container-->
     <div class="flex-grow overflow-auto scrollbar">
+      <div
+        *ngIf="!dataStationWidget.documents.length"
+        class="text-center my-4"
+        id="no-docs-message"
+      >
+        No documents found in station.
+      </div>
       <div
         *ngIf="dataStationWidget"
         class="grid grid-cols-12 text-secondary-500 items-center"

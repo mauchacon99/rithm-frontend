@@ -12,6 +12,10 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { of, throwError } from 'rxjs';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { Router } from '@angular/router';
 
 describe('ExpansionMenuComponent', () => {
   let component: ExpansionMenuComponent;
@@ -20,6 +24,7 @@ describe('ExpansionMenuComponent', () => {
     {
       rithmId: '123654-789654-7852',
       name: 'Dashboard 1',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,
@@ -38,6 +43,7 @@ describe('ExpansionMenuComponent', () => {
     {
       rithmId: '123654-789654-7852',
       name: 'Dashboard 2',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,
@@ -65,8 +71,19 @@ describe('ExpansionMenuComponent', () => {
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
-      imports: [MatExpansionModule, MatListModule, BrowserAnimationsModule],
+      imports: [
+        MatExpansionModule,
+        MatListModule,
+        BrowserAnimationsModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'dashboard/:dashboardId',
+            component: MockComponent(DashboardComponent),
+          },
+        ]),
+      ],
     }).compileComponents();
   });
 
@@ -82,7 +99,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should returns the organization`s dashboard list', () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
+    component.dashboardRole = RoleDashboardMenu.Company;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'getOrganizationDashboard'
@@ -92,7 +109,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
+    component.dashboardRole = RoleDashboardMenu.Company;
     spyOn(
       TestBed.inject(DashboardService),
       'getOrganizationDashboard'
@@ -110,7 +127,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should returns user`s customized dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -120,7 +137,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should catch an error if the request to get user`s customized dashboard fails', () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -156,7 +173,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should only show an error if the request to get organization dashboard fails', () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
+    component.dashboardRole = RoleDashboardMenu.Company;
     spyOn(
       TestBed.inject(DashboardService),
       'getOrganizationDashboard'
@@ -184,7 +201,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should only show an error if the request to get user`s customized personal dashboard fails', () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -212,7 +229,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should only show message if nor return list to dashboard for organization dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
+    component.dashboardRole = RoleDashboardMenu.Company;
     spyOn(
       TestBed.inject(DashboardService),
       'getOrganizationDashboard'
@@ -236,7 +253,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should only show message if nor return list to dashboard for user dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -260,7 +277,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should list to personal dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     component.isLoading = false;
     component.showError = false;
     fixture.detectChanges();
@@ -272,7 +289,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should list to organization dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
+    component.dashboardRole = RoleDashboardMenu.Company;
     component.isLoading = false;
     component.showError = false;
     fixture.detectChanges();
@@ -281,5 +298,36 @@ describe('ExpansionMenuComponent', () => {
         `#${component.dashboardRole}-item-1`
       );
     expect(listOrganizationDashboards).toBeTruthy();
+  });
+
+  it('should render dashboard and navigate with router', () => {
+    component.isLoading = false;
+    component.showError = false;
+    const spyNavigateDashboard = spyOn(
+      component,
+      'navigateToDashboard'
+    ).and.callThrough();
+    const spyRouter = spyOn(
+      TestBed.inject(Router),
+      'navigate'
+    ).and.callThrough();
+    const spyDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      `#${component.dashboardRole}-item-1`
+    );
+    expect(button).toBeTruthy();
+    button.click();
+    expect(spyNavigateDashboard).toHaveBeenCalledOnceWith(dashboardsList[1]);
+    expect(spyRouter).toHaveBeenCalledOnceWith([
+      '/',
+      'dashboard',
+      dashboardsList[1].rithmId,
+    ]);
+    expect(spyDrawer).toHaveBeenCalledOnceWith('menuDashboard');
   });
 });

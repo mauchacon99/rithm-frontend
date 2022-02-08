@@ -1,14 +1,22 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { first } from 'rxjs/operators';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, Station } from 'src/models';
+import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 /**
  * Main component for the dashboard screens.
@@ -18,7 +26,7 @@ import { GridsterConfig } from 'angular-gridster2';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   /** The component for the side nav on the dashboard. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
@@ -26,20 +34,29 @@ export class DashboardComponent implements OnInit {
   /** Show the dashboard menu. */
   drawerContext = 'menuDashboard';
 
+  /** Validate type of role. */
+  roleDashboardMenu = RoleDashboardMenu;
+
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
 
+  /** View new dashboard. */
   viewNewDashboard = false;
+
+  private destroyed$ = new Subject<void>();
+
+  /** If it needs to create new dashboard. */
+  isCreateNewDashboard = false;
 
   /** Dashboard data, default dashboard general. */
   dashboardData!: DashboardData;
 
-  /** Error Loading loading widget. */
-  errorLoadingWidgets = false;
+  /** Error Loading dashboard. */
+  errorLoadingDashboard = false;
 
   /** Load indicator in dashboard. */
-  dashboardLoading = false;
+  isLoading = false;
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
@@ -96,7 +113,9 @@ export class DashboardComponent implements OnInit {
     private splitService: SplitService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -107,34 +126,55 @@ export class DashboardComponent implements OnInit {
           this.stations = stations;
         });
     }
+
+    this.dashboardService.isLoadingDashboard$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((status) => {
+        this.isLoading = status;
+        this.errorLoadingDashboard = false;
+        this.isCreateNewDashboard = false;
+      });
   }
 
   /**
    * Initialize split on page load.
    */
   ngOnInit(): void {
+    this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
       this.splitService.initSdk(user.organization);
     }
 
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /** Split Service. */
+  private split(): void {
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getDashboardTreatment();
-        treatment === 'on'
-          ? (this.viewNewDashboard = true)
-          : (this.viewNewDashboard = false);
+        this.viewNewDashboard = treatment === 'on';
+        if (this.viewNewDashboard) {
+          this.getParams();
+        }
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
       },
     });
+  }
 
-    this.getDashboardWidgets();
-    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /**
@@ -154,69 +194,29 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Gets widgets for dashboard.
-   */
-  private getDashboardWidgets(): void {
-    this.errorLoadingWidgets = false;
-    this.dashboardLoading = true;
-    this.dashboardService
-      .getDashboardWidgets()
-      .pipe(first())
-      .subscribe({
-        next: (widgets) => {
-          this.dashboardData = {
-            rithmId: '',
-            name: 'General',
-            widgets,
-          };
-          this.dashboardLoading = false;
-        },
-        error: (error: unknown) => {
-          this.errorLoadingWidgets = true;
-          this.dashboardLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Update personal dashboard.
-   */
-  updatePersonalDashboard(): void {
-    this.dashboardService
-      .updatePersonalDashboard(this.dashboardData)
-      .pipe(first())
-      .subscribe({
-        next: (dashboardUpdate) => {
-          this.dashboardData = dashboardUpdate;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Update dashboard name.
+   * Get dashboard by rithmId.
    *
-   * @param dashboardData The dashboard data for update name.
+   * @param dashboardRithmId String of rithmId of dashboard.
    */
-  updateOrganizationDashboard(dashboardData: DashboardData): void {
+  private getDashboardByRithmId(dashboardRithmId: string): void {
+    this.errorLoadingDashboard = false;
+    this.isLoading = true;
     this.dashboardService
-      .updateOrganizationDashboard(dashboardData)
+      .getDashboardWidgets(dashboardRithmId)
       .pipe(first())
       .subscribe({
+        next: (dashboardByRithmId) => {
+          this.dashboardData = dashboardByRithmId;
+          this.isLoading = false;
+        },
         error: (error: unknown) => {
+          this.errorLoadingDashboard = true;
+          this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
+          this.router.navigateByUrl('dashboard');
         },
       });
   }
@@ -232,17 +232,49 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Generates a new dashboard personal.
+   * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
-  generateNewPersonalDashboard(): void {
+  private getParams(): void {
+    this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (params) => {
+        const dashboardId = params.get('dashboardId');
+        if (dashboardId) {
+          this.getDashboardByRithmId(dashboardId);
+        } else {
+          this.getOrganizationDashboard();
+        }
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /** Get organization dashboard. */
+  private getOrganizationDashboard(): void {
+    this.isLoading = true;
+    this.errorLoadingDashboard = false;
+    this.isCreateNewDashboard = false;
     this.dashboardService
-      .generateNewPersonalDashboard()
+      .getOrganizationDashboard()
       .pipe(first())
       .subscribe({
-        next: (newDashboard) => {
-          this.dashboardData = newDashboard;
+        next: (dashboardData) => {
+          if (dashboardData.length) {
+            this.dashboardData = dashboardData[0];
+          } else {
+            this.isCreateNewDashboard = true;
+          }
+          this.isLoading = false;
+          this.errorLoadingDashboard = false;
         },
         error: (error: unknown) => {
+          this.errorLoadingDashboard = true;
+          this.isLoading = false;
+          this.isCreateNewDashboard = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -252,22 +284,36 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Generates a new default dashboard.
+   * Update dashboard.
    */
-  generateNewOrganizationDashboard(): void {
-    this.dashboardService
-      .generateNewOrganizationDashboard()
-      .pipe(first())
-      .subscribe({
-        next: (newDashboard) => {
-          this.dashboardData = newDashboard;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+  updateDashboard(): void {
+    this.isLoading = true;
+    this.errorLoadingDashboard = false;
+    const updateDashboard$ =
+      this.dashboardData.type === this.roleDashboardMenu.Company
+        ? this.dashboardService.updateOrganizationDashboard(this.dashboardData)
+        : this.dashboardService.updatePersonalDashboard(this.dashboardData);
+    updateDashboard$.pipe(first()).subscribe({
+      next: (dashboardUpdate) => {
+        this.dashboardData = dashboardUpdate;
+        this.isLoading = false;
+        this.editMode = false;
+        this.errorLoadingDashboard = false;
+      },
+      error: (error: unknown) => {
+        this.errorLoadingDashboard = true;
+        this.isLoading = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

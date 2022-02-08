@@ -16,10 +16,10 @@ import {
   StationInformation,
 } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
-import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 
 /**
@@ -110,6 +110,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** The selected tab index/init. */
   selectedTabIndex = 0;
+
+  /** Whether the station is allowed for all the organization workers or not. */
+  allowAllOrgWorkers = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -208,6 +211,43 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       this.userService.isStationOwner(this.stationInformation) ||
       this.userService.isAdmin
     );
+  }
+
+  /**
+   * Whether to show the create document button or not.
+   *
+   * @returns True/show False/hide.
+   */
+  get displayCreateDocumentButton(): boolean {
+    return (
+      this.stationDocumentGenerationStatus ===
+        DocumentGenerationStatus.Manual &&
+      (this.mapMode === 0 || this.mapMode === undefined) &&
+      !this.locallyCreated &&
+      (this.isUserAdminOrOwner || this.isWorker)
+    );
+  }
+
+  /**
+   * Update status the station.
+   *
+   * @param status New status the station update.
+   * @param statusNew New status the station update.
+   */
+  updateGenerationStatus(
+    status: string,
+    statusNew: MatSlideToggleChange
+  ): void {
+    const value =
+      status === 'None' && statusNew.checked
+        ? DocumentGenerationStatus.None
+        : status === 'None' && !statusNew.checked
+        ? DocumentGenerationStatus.Manual
+        : status === 'Manual' && statusNew.checked
+        ? DocumentGenerationStatus.Manual
+        : DocumentGenerationStatus.None;
+
+    this.updateStationDocumentGenerationStatus(this.stationRithmId, value);
   }
 
   /**
@@ -462,18 +502,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Update status the station.
-   *
-   * @param statusNew New status the station update.
-   */
-  updateStatusStation(statusNew: MatRadioChange): void {
-    this.updateStationDocumentGenerationStatus(
-      this.stationRithmId,
-      statusNew.value
-    );
-  }
-
   //HELPER AND ADDITIONALS methods to redirect/navigate/openModals/report and others
 
   /**
@@ -590,6 +618,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get the value of field AllowAllOrgWorkers for a specific station.
+   */
+  private getAllowAllOrgWorkers(): void {
+    this.stationService
+      .getAllowAllOrgWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allOrgWorkers) => {
+          this.allowAllOrgWorkers = allOrgWorkers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Failed to get connected stations for this document.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -603,6 +652,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   private getAllowExternalWorkers(): void {
     this.stationService
       .getAllowExternalWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allowExternal) => {
+          this.allowExternal = allowExternal;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update the allow external workers for the station roster.
+   */
+  private updateAllowExternalWorkers(): void {
+    this.stationService
+      .updateAllowExternalWorkers(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (allowExternal) => {

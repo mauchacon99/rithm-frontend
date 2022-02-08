@@ -311,4 +311,25 @@ describe('StationWidgetComponent', () => {
       expect(spyMethod).toHaveBeenCalledWith('');
     });
   });
+
+  it('should show error under the new document button', () => {
+    spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.createNewDocument();
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#create-document-error'
+    );
+    expect(component.displayDocumentError).toBeTrue();
+    expect(errorMessage).toBeTruthy();
+  });
+
+  it('should not display a message when there are documents', () => {
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeFalsy();
+  });
 });

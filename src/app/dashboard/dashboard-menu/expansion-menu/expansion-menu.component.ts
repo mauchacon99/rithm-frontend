@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardData } from 'src/models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -13,7 +15,7 @@ import { DashboardData } from 'src/models';
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })
-export class ExpansionMenuComponent implements OnInit {
+export class ExpansionMenuComponent implements OnInit, OnDestroy {
   /** Dashboards list. */
   dashboardsList: DashboardData[] = [];
 
@@ -32,17 +34,37 @@ export class ExpansionMenuComponent implements OnInit {
   /** Show error in list the dashboard. */
   showError = false;
 
+  /** Dashboard selected. */
+  dashboardSelected = '';
+
+  /** Destroyed subscription. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private dashboardService: DashboardService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe((param) => {
+      const dashboardRithmId = param.get('dashboardId');
+      if (dashboardRithmId) {
+        this.dashboardSelected = dashboardRithmId;
+      }
+    });
+    this.getToListDashboards();
+  }
+
+  /** Get list to dashboard in expansion menu. */
+  private getToListDashboards(): void {
     this.showError = false;
     this.isLoading = true;
     const petitionDashboard$ =
-      this.dashboardRole === this.roleDashboardMenu.OrganizationDashboard
+      this.dashboardRole === this.roleDashboardMenu.Company
         ? this.dashboardService.getOrganizationDashboard()
         : this.dashboardService.getPersonalDashboard();
 
@@ -61,5 +83,21 @@ export class ExpansionMenuComponent implements OnInit {
         );
       },
     });
+  }
+
+  /**
+   * Navigate to dashboard.
+   *
+   * @param dashboard This Dashboard to navigate.
+   */
+  navigateToDashboard(dashboard: DashboardData): void {
+    this.router.navigate(['/', 'dashboard', dashboard.rithmId]);
+    this.sidenavDrawerService.toggleDrawer('menuDashboard');
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

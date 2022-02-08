@@ -8,17 +8,16 @@ import { MyStationsComponent } from '../my-stations/my-stations.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
 import {
+  MockDashboardService,
   MockErrorService,
+  MockSplitService,
   MockStationService,
   MockUserService,
-  MockDashboardService,
-  MockSplitService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { throwError } from 'rxjs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from '../dashboard-menu/menu/menu.component';
@@ -26,12 +25,22 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { DashboardData, WidgetType } from 'src/models';
+import { RoleDashboardMenu } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
+import { RouterTestingModule } from '@angular/router/testing';
+import { throwError } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+  const dashboardRithmId = '123-951-753-789';
+  const dashboardData = {
+    rithmId: 'ABC-123-BCA-321',
+    name: 'update Dashboard',
+    widgets: [],
+    type: RoleDashboardMenu.Company,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -57,7 +66,18 @@ describe('DashboardComponent', () => {
         MatSidenavModule,
         NoopAnimationsModule,
         GridsterModule,
+        FormsModule,
         MatInputModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'dashboard/:dashboardId',
+            component: MockComponent(DashboardComponent),
+          },
+          {
+            path: 'dashboard',
+            component: MockComponent(DashboardComponent),
+          },
+        ]),
       ],
     }).compileComponents();
   });
@@ -72,68 +92,47 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call service from return data widgets', () => {
-    const spyService = spyOn(
-      TestBed.inject(DashboardService),
-      'getDashboardWidgets'
-    ).and.callThrough();
-
-    component.ngOnInit();
-
-    expect(spyService).toHaveBeenCalled();
-  });
-
-  it('should catch error if petition to service fails', () => {
-    spyOn(
-      TestBed.inject(DashboardService),
-      'getDashboardWidgets'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-
-    component.ngOnInit();
-    expect(spyError).toHaveBeenCalled();
-  });
-
-  it('should show error message when request for station widgets', () => {
-    component.viewNewDashboard = true;
-    component.dashboardData = {
-      widgets: [],
-      name: 'General',
-      rithmId: '',
-    };
-    spyOn(
-      TestBed.inject(DashboardService),
-      'getDashboardWidgets'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.errorLoadingWidgets).toBeTrue();
-    const errorComponent = fixture.debugElement.nativeElement.querySelector(
-      '#error-loading-widgets'
-    );
-    expect(errorComponent).toBeTruthy();
-  });
-
   it('should render the app-loading-indicator component', () => {
     component.viewNewDashboard = true;
-    component.dashboardLoading = true;
+    component.isLoading = true;
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
       '#loading-dashboard-widgets'
     );
+    const dashboardWidgets =
+      fixture.debugElement.nativeElement.querySelector('#dashboard-widgets');
+
     expect(loader).toBeTruthy();
+    expect(dashboardWidgets).toBeNull();
+  });
+
+  it('should show error message when return error dashboard', function () {
+    component.viewNewDashboard = true;
+    component.errorLoadingDashboard = true;
+    fixture.detectChanges();
+    const errorLoadingDashboard =
+      fixture.debugElement.nativeElement.querySelector(
+        '#error-loading-dashboard'
+      );
+    const dashboardWidgets =
+      fixture.debugElement.nativeElement.querySelector('#dashboard-widgets');
+
+    expect(errorLoadingDashboard).toBeTruthy();
+    expect(dashboardWidgets).toBeNull();
+  });
+
+  it('should show message when dashboard its empty', function () {
+    component.viewNewDashboard = true;
+    component.isCreateNewDashboard = true;
+    fixture.detectChanges();
+    const dashboardEmpty = fixture.debugElement.nativeElement.querySelector(
+      '#message-create-new-dashboard'
+    );
+    const dashboardWidgets =
+      fixture.debugElement.nativeElement.querySelector('#dashboard-widgets');
+
+    expect(dashboardEmpty).toBeTruthy();
+    expect(dashboardWidgets).toBeNull();
   });
 
   it('should call the `toggle` method on the `SidenavService`', () => {
@@ -151,101 +150,124 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should call service from generateNewPersonalDashboard', () => {
-    const spyService = spyOn(
-      TestBed.inject(DashboardService),
-      'generateNewPersonalDashboard'
-    ).and.callThrough();
-
-    component.generateNewPersonalDashboard();
-    expect(spyService).toHaveBeenCalled();
-  });
-
-  it('should show an error message when calling generateNewPersonalDashboard', () => {
-    spyOn(
-      TestBed.inject(DashboardService),
-      'generateNewPersonalDashboard'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-
-    component.generateNewPersonalDashboard();
-    expect(spyError).toHaveBeenCalled();
-  });
-
   it('should call service to update a personal dashboard', () => {
     component.viewNewDashboard = true;
-    const updatePersonalDashboardSpy = spyOn(
+    component.isLoading = false;
+    dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData = dashboardData;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spyServiceUpdateDashboard = spyOn(
       TestBed.inject(DashboardService),
       'updatePersonalDashboard'
     ).and.callThrough();
-
-    component['updatePersonalDashboard']();
-    expect(updatePersonalDashboardSpy).toHaveBeenCalled();
-  });
-
-  it('should call service from generateNewOrganizationDashboard', () => {
-    const spyService = spyOn(
-      TestBed.inject(DashboardService),
-      'generateNewOrganizationDashboard'
+    const spyMethodUpdateDashboard = spyOn(
+      component,
+      'updateDashboard'
     ).and.callThrough();
 
-    component.generateNewOrganizationDashboard();
-    expect(spyService).toHaveBeenCalled();
+    const btnSave = fixture.nativeElement.querySelector('#save-button');
+    expect(btnSave).toBeTruthy();
+    btnSave.click();
+
+    expect(spyServiceUpdateDashboard).toHaveBeenCalledWith(
+      component.dashboardData
+    );
+    expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
-  it('should show an error message when calling generateNewOrganizationDashboard', () => {
+  it('should call service to update a organization dashboard', () => {
+    component.viewNewDashboard = true;
+    component.isLoading = false;
+    component.dashboardData = dashboardData;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spyServiceUpdateDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'updateOrganizationDashboard'
+    ).and.callThrough();
+    const spyMethodUpdateDashboard = spyOn(
+      component,
+      'updateDashboard'
+    ).and.callThrough();
+
+    const btnSave = fixture.nativeElement.querySelector('#save-button');
+    expect(btnSave).toBeTruthy();
+    btnSave.click();
+
+    expect(spyServiceUpdateDashboard).toHaveBeenCalledWith(
+      component.dashboardData
+    );
+    expect(spyMethodUpdateDashboard).toHaveBeenCalled();
+  });
+
+  it('should returns the organization`s dashboard list', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getOrganizationDashboard'
+    ).and.callThrough();
+    component['getOrganizationDashboard']();
+    expect(spyService).toHaveBeenCalledOnceWith();
+  });
+
+  it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
     spyOn(
       TestBed.inject(DashboardService),
-      'generateNewOrganizationDashboard'
+      'getOrganizationDashboard'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-
-    component.generateNewOrganizationDashboard();
+    component['getOrganizationDashboard']();
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call the service updateOrganizationDashboard ', () => {
-    const dashboardData: DashboardData = {
-      rithmId: '',
-      name: 'new name',
-      widgets: [
-        {
-          cols: 1,
-          rows: 2,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Document,
-          data: 'string',
-          minItemRows: 1,
-          maxItemRows: 2,
-          minItemCols: 1,
-          maxItemCols: 2,
-        },
-      ],
-    };
-
-    const methodService = spyOn(
+  it('should call service dashboard for id', () => {
+    const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'updateOrganizationDashboard'
+      'getDashboardWidgets'
     ).and.callThrough();
 
-    component.updateOrganizationDashboard(dashboardData);
-    expect(methodService).toHaveBeenCalledWith(dashboardData);
+    component['getDashboardByRithmId'](dashboardRithmId);
+
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return dashboard for id service fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDashboardWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getDashboardByRithmId'](dashboardRithmId);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  describe('Test for SidenavDrawerService', () => {
+    let sidenavDrawer: SidenavDrawerService;
+
+    beforeEach(() => {
+      sidenavDrawer = TestBed.inject(SidenavDrawerService);
+    });
+
+    it('should call sidenav service for live init cycle component', () => {
+      const spySideNav = spyOn(sidenavDrawer, 'setDrawer').and.callThrough();
+      component.ngOnInit();
+      expect(spySideNav).toHaveBeenCalled();
+    });
   });
 });

@@ -6,6 +6,7 @@ import {
   StationInformation,
   DocumentNameField,
   DocumentName,
+  StationRosterMember,
 } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -13,6 +14,7 @@ import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
+import { Router } from '@angular/router';
 
 /**
  * Reusable component for the document information header.
@@ -65,7 +67,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
     this.documentNameForm = this.fb.group({
       name: [''],
@@ -161,6 +164,25 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Is the current user an owner or an admin for this station.
+   *
+   * @returns Validate if user is owner or admin of current station.
+   */
+  get currentAssignedUserDocument(): StationRosterMember {
+    const user: StationRosterMember = {
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    };
+    return 'currentAssignedUser' in this.documentInformation
+      ? this.documentInformation.currentAssignedUser
+      : user;
+  }
+
+  /**
    * Toggles the open state of the drawer for document info.
    *
    * @param drawerItem The drawer item to toggle.
@@ -185,7 +207,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
         next: (documentName) => {
           this.documentNameForm.controls.name.setValue(documentName.baseName);
           this.documentName = documentName.baseName;
-          this.appendedDocumentName = documentName.appendedName;
+          this.appendedDocumentName = this.formatAppendedName(
+            documentName.appendedName
+          );
+          documentName.appendedName = this.appendedDocumentName;
           this.documentService.updateDocumentNameBS(documentName);
         },
         error: (error: unknown) => {
@@ -195,6 +220,38 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Give a properly format to the appendedName.
+   *
+   * @param appendedName Unformatted appendedName.
+   * @returns Formatted appendedName.
+   */
+  private formatAppendedName(appendedName: string): string {
+    const formatted: string[] = [];
+    const separatedChips: string[] = appendedName.split('/');
+    //Separate each chip added to appended name
+    separatedChips.forEach((element) => {
+      //verify each element is in a readable format and added to the final form
+      if (!element.includes('|') && !element.includes(':')) {
+        formatted.push(element);
+      } else {
+        // if an element contain rithmsId or it is not readable then it will be splitted till become readable
+        const items: string[] = [];
+        if (element.includes('|')) {
+          const barItems = element.split('|');
+          barItems.forEach((item) => {
+            items.push(item.split(':')[1]);
+          });
+          formatted.push(items.toString().replace(/(,)/g, ' | '));
+        } else {
+          formatted.push(element.split(':')[1]);
+        }
+      }
+    });
+    //finally we rebuilt the string to make it readable again.
+    return formatted.toString().replace(/(,)/g, ' / ');
   }
 
   /**
@@ -267,6 +324,16 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       appendedName: this.appendedDocumentName,
     };
     this.documentService.updateDocumentNameBS(documentName);
+  }
+
+  /** Navigate the user to the document page. */
+  goToDocument(): void {
+    this.router.navigate(['/', 'document', this.documentRithmId], {
+      queryParams: {
+        documentId: this.documentRithmId,
+        stationId: this.stationRithmId,
+      },
+    });
   }
 
   /**
