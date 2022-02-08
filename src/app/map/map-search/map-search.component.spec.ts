@@ -2,13 +2,15 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationMapElement } from 'src/helpers';
 import { MockMapService } from 'src/mocks';
-import { MapItemStatus } from 'src/models';
+import { MapItemStatus, MapMode, StationInfoDrawerData } from 'src/models';
 import { MapService } from '../map.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MapSearchComponent } from './map-search.component';
 import { FormBuilder, FormsModule } from '@angular/forms';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 
 describe('MapSearchComponent', () => {
   let component: MapSearchComponent;
@@ -74,6 +76,44 @@ describe('MapSearchComponent', () => {
 
   it('should clear search box text', () => {
     component.clearSearchText();
+    expect(component.searchText).toEqual('');
+    expect(component.filteredStations.length).toEqual(0);
+  });
+
+  it('should open drawer when any autocomplete option is selected', () => {
+    const sideNavSpy = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'openDrawer'
+    );
+    const stationServiceSpy = spyOn(
+      TestBed.inject(StationService),
+      'updatedStationNameText'
+    );
+    const station = new StationMapElement({
+      rithmId: '',
+      stationName: 'Untitled Station',
+      mapPoint: {
+        x: 12,
+        y: 15,
+      },
+      noOfDocuments: 0,
+      previousStations: [],
+      nextStations: [],
+      status: MapItemStatus.Normal,
+      notes: '',
+    });
+    const dataInfoDrawer: StationInfoDrawerData = {
+      stationRithmId: '',
+      stationName: 'Untitled Station',
+      editMode: true,
+      stationStatus: MapItemStatus.Normal,
+      mapMode: MapMode.Build,
+      openedFromMap: true,
+      notes: '',
+    };
+    component.openDrawer(station);
+    expect(sideNavSpy).toHaveBeenCalledWith('stationInfo', dataInfoDrawer);
+    expect(stationServiceSpy).toHaveBeenCalledWith(dataInfoDrawer.stationName);
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
   });

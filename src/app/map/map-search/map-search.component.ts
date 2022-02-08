@@ -1,5 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 import { StationMapElement } from 'src/helpers';
+import { MapMode, StationInfoDrawerData } from 'src/models';
 import { MapService } from '../map.service';
 
 /**
@@ -20,7 +23,11 @@ export class MapSearchComponent {
   /** Search text. */
   searchText = '';
 
-  constructor(private mapService: MapService) {}
+  constructor(
+    private mapService: MapService,
+    private sidenavDrawerService: SidenavDrawerService,
+    private stationService: StationService
+  ) {}
 
   /**
    * Display station name when it's selected.
@@ -51,6 +58,28 @@ export class MapSearchComponent {
    *
    */
   clearSearchText(): void {
+    this.searchText = '';
+    this.filteredStations = [];
+  }
+
+  /**
+   * Opens the drawer of selected map element.
+   *
+   * @param drawerItem The selected item.
+   */
+  openDrawer(drawerItem: StationMapElement): void {
+    const dataInformationDrawer: StationInfoDrawerData = {
+      stationRithmId: drawerItem.rithmId,
+      stationName: drawerItem.stationName,
+      editMode: this.mapService.mapMode$.value === MapMode.Build,
+      stationStatus: drawerItem.status,
+      mapMode: this.mapService.mapMode$.value,
+      openedFromMap: true,
+      notes: drawerItem.notes,
+    };
+    //Pass dataInformationDrawer to open the station info drawer.
+    this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+    this.stationService.updatedStationNameText(drawerItem.stationName);
     this.searchText = '';
     this.filteredStations = [];
   }
