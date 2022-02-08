@@ -2036,7 +2036,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param canvasPoint Calculated canvas position of click which is used to identify position of boundary name.
    */
   checkStationGroupClick(contextPoint: Point, canvasPoint: Point): void {
-    //Loop through groups to find the group that was clicked.
+    // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
         stationGroup.checkElementHover(
