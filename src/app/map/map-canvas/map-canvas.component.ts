@@ -645,7 +645,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('document:contextmenu', ['$event'])
   contextmenu(event: MouseEvent): void {
-    event.preventDefault();
+    // Regular context menu in view mode.
+    if (this.mapMode === MapMode.Build) {
+       event.preventDefault();
+    }
   }
 
   /**
