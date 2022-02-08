@@ -55,7 +55,7 @@
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
           (click)="hiddenDrawer()"
-          [routerLink]="'/dashboard/' + dashboard.rithmId"
+          [routerLink]="['/', 'dashboard', dashboard.rithmId]"
           routerLinkActive="bg-accent-100"
         >
           <div class="w-full flex justify-between items-center ml-5">
