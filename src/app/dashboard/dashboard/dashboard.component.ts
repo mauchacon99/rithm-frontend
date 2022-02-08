@@ -194,6 +194,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param statusEditMode Status mode edition.
    */
   async toggleEditMode(statusEditMode: boolean): Promise<void> {
+
     if (!statusEditMode) {
       const response = await this.popupService.confirm({
         title: 'Cancel?',
@@ -208,7 +209,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
         this.changedOptions();
       }
-    } else this.editMode = statusEditMode;
+    } else {
+      this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
+      this.editMode = statusEditMode;
+    }
   }
 
   /**
@@ -332,9 +336,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (dashboardData) => {
           if (dashboardData.length) {
             this.dashboardData = dashboardData[0];
-            this.dashboardDataCopy = JSON.parse(
-              JSON.stringify(this.dashboardData)
-            );
           } else {
             this.isCreateNewDashboard = true;
           }
