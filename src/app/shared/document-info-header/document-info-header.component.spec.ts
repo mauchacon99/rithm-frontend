@@ -272,6 +272,4 @@ describe('DocumentInfoHeaderComponent', () => {
     button.click();
     expect(navigateSpy).toHaveBeenCalledWith();
   });
-
-
 });
