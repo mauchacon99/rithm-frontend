@@ -13,6 +13,7 @@ import {
   MockSplitService,
   MockStationService,
   MockUserService,
+  MockPopupService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -29,6 +30,7 @@ import { RoleDashboardMenu } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 
 describe('DashboardComponent', () => {
@@ -61,6 +63,7 @@ describe('DashboardComponent', () => {
         { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
       imports: [
         MatSidenavModule,
@@ -158,10 +161,6 @@ describe('DashboardComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
 
-    const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
-      'updatePersonalDashboard'
-    ).and.callThrough();
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
@@ -171,9 +170,6 @@ describe('DashboardComponent', () => {
     expect(btnSave).toBeTruthy();
     btnSave.click();
 
-    expect(spyServiceUpdateDashboard).toHaveBeenCalledWith(
-      component.dashboardData
-    );
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
@@ -184,10 +180,6 @@ describe('DashboardComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
 
-    const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
-      'updateOrganizationDashboard'
-    ).and.callThrough();
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
@@ -197,9 +189,6 @@ describe('DashboardComponent', () => {
     expect(btnSave).toBeTruthy();
     btnSave.click();
 
-    expect(spyServiceUpdateDashboard).toHaveBeenCalledWith(
-      component.dashboardData
-    );
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
