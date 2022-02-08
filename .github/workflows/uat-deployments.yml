@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - 'src/**'
-    branches:
-      - 'uat'
+    branches-ignore:
+      - '**'
 
 jobs:
   # Deploys the web app

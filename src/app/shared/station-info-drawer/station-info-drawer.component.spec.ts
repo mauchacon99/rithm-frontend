@@ -422,7 +422,35 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  // awaiting for complete the component update for harness testing
+  it('should call the method that returns the value of all org workers', () => {
+    const getAllowAllOrgWorkersSpy = spyOn(
+      TestBed.inject(StationService),
+      'getAllowAllOrgWorkers'
+    ).and.callThrough();
+    component['getAllowAllOrgWorkers']();
+    expect(getAllowAllOrgWorkersSpy).toHaveBeenCalledWith(
+      component.stationRithmId
+    );
+  });
+
+  it('should catch error and executed error service when the method of allow all org workers return error.', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllowAllOrgWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getAllowAllOrgWorkers']();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+   // awaiting for complete the component update for harness testing
   xit('should show loading-indicator-allow-external when calling getAllowExternalWorkers', () => {
     component.stationLoading = false;
     component['getAllowExternalWorkers']();
