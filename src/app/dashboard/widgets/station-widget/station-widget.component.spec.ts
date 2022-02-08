@@ -329,4 +329,10 @@ describe('StationWidgetComponent', () => {
     expect(component.displayDocumentError).toBeTrue();
     expect(errorMessage).toBeTruthy();
   });
+
+  it('should not display a message when there are documents', () => {
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeFalsy();
+  });
 });

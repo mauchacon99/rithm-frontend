@@ -74,6 +74,13 @@
     <!--    Row Container-->
     <div class="flex-grow overflow-auto scrollbar">
       <div
+        *ngIf="!dataStationWidget.documents.length"
+        class="text-center my-4"
+        id="no-docs-message"
+      >
+        No documents found in station.
+      </div>
+      <div
         *ngIf="dataStationWidget"
         class="grid grid-cols-12 text-secondary-500 items-center"
       >
