@@ -647,7 +647,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   contextmenu(event: MouseEvent): void {
     // Regular context menu in view mode.
     if (this.mapMode === MapMode.Build) {
-       event.preventDefault();
+      event.preventDefault();
     }
   }
 
