@@ -17,6 +17,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Main component for the dashboard screens.
@@ -51,6 +52,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Dashboard data, default dashboard general. */
   dashboardData!: DashboardData;
+
+  /** Dashboard data Copy for save original data in mode edit. */
+  dashboardDataCopy!: DashboardData;
 
   /** Error Loading dashboard. */
   errorLoadingDashboard = false;
@@ -115,7 +119,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private popupService: PopupService
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -188,9 +193,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /**
    * Toggles the editMode to allow editing.
+   *
+   * @param statusEditMode Status mode edition.
    */
-  toggleEditMode(): void {
-    this.editMode = !this.editMode;
+  async toggleEditMode(statusEditMode: boolean): Promise<void> {
+    if (!statusEditMode) {
+      const response = await this.popupService.confirm({
+        title: 'Cancel?',
+        message: 'All unsaved changes will be lost',
+        important: true,
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+      });
+
+      if (response) {
+        this.editMode = false;
+        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+        this.changedOptions();
+      }
+    } else {
+      this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
+      this.editMode = statusEditMode;
+    }
+  }
+
+  /**
+   * Change options of gridster2.
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
   }
 
   /**
@@ -199,6 +232,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param dashboardRithmId String of rithmId of dashboard.
    */
   private getDashboardByRithmId(dashboardRithmId: string): void {
+    this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
     this.dashboardService
