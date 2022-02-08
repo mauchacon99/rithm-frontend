@@ -987,6 +987,13 @@ describe('StationService', () => {
     service.getAllowExternalWorkers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.url).toBe(router);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should update the allow external workers status in the station', () => {

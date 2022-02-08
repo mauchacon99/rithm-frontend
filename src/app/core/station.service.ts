@@ -517,20 +517,6 @@ export class StationService {
   }
 
   /**
-   * Get the allow external workers for the station roster.
-   *
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers to be assigned to station documents.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    return of(expectedResponse.data).pipe(delay(1000));
-  }
-
-  /**
    * Update the the status to allow external workers for the station roster.
    *
    * @param stationRithmId The Specific id of station.
@@ -579,7 +565,21 @@ export class StationService {
   }
 
   /**
-   * Update AllowAllOrgWorkers information.
+   * Get the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers to be assigned to station documents.
+   */
+  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    return this.http
+      .get<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Update the status to allow external workers for the station roster.
    *
    * @param stationRithmId The station id that will be update.
    * @param allowAllOrgWorkers The value that will be update.
