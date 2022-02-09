@@ -490,6 +490,8 @@ export class MapService {
 
     //If there are any selected stations or groups in newGroup, add it to the stationGroupElements array.
     if (newGroup.stations.length > 0 || newGroup.subStationGroups.length > 0) {
+      //set up a boolean to check if an error needs to be thrown because there is no parent group.
+      let parentGroupFound = false;
       /* Edit the group that will house newGroup to include it in it's list of subgroups,
       and remove the stations and subgroups contained in newGroup from parent. */
       this.stationGroupElements.forEach((group) => {
@@ -502,6 +504,7 @@ export class MapService {
             newGroup.subStationGroups.includes(subGroup)
           )
         ) {
+          parentGroupFound = true;
           //Remove every station from parent group that newGroup contains.
           const remainingStations = group.stations.filter((stationId) => {
             return !newGroup.stations.some(
@@ -524,7 +527,9 @@ export class MapService {
           group.markAsUpdated();
         }
       });
-
+      if (!parentGroupFound) {
+        throw new Error(`No parent station group could be found.`);
+      }
       this.stationGroupElements.push(newGroup);
       //Note a change in map data.
       this.mapDataReceived$.next(true);
@@ -544,11 +549,14 @@ export class MapService {
     if (!removedGroup) {
       throw new Error('Station group was not found.');
     }
+    //set up a boolean to check if an error needs to be thrown because there is no parent group.
+    let parentGroupFound = false;
     this.stationGroupElements.forEach((group) => {
       if (
         //Find parent station group of incoming station group.
         group.subStationGroups.includes(removedGroup.rithmId)
       ) {
+        parentGroupFound = true;
         //Remove deleting station group Id from it's parent group
         group.subStationGroups = group.subStationGroups.filter(
           (groupId) => groupId !== removedGroup.rithmId
@@ -588,6 +596,11 @@ export class MapService {
         this.mapDataReceived$.next(true);
       }
     });
+    if (!parentGroupFound) {
+      throw new Error(
+        `No parent station group could be found for ${stationGroupId}.`
+      );
+    }
   }
 
   /**

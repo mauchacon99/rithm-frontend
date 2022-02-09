@@ -3,7 +3,12 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MapData, MapItemStatus, StationGroupMapData } from 'src/models';
+import {
+  MapData,
+  MapItemStatus,
+  StationGroupMapData,
+  StationMapData,
+} from 'src/models';
 import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
@@ -333,6 +338,15 @@ describe('MapService', () => {
   it('should Delete the station group and find parent to move all stations and sub groups', () => {
     const stationGroupMapData: StationGroupMapData[] = [
       {
+        rithmId: 'Root',
+        title: 'Root',
+        organizationRithmId: '',
+        stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        subStationGroups: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: true,
+      },
+      {
         rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
         title: 'Rithm Group',
         organizationRithmId: '',
@@ -373,5 +387,260 @@ describe('MapService', () => {
     expect(removedGroup?.subStationGroups.length).toEqual(0);
     expect(removedGroup?.stations.length).toEqual(0);
     service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
+  });
+
+  it('should add only the parent group to a pending group when a group and subgroup are selected', () => {
+    const stationGroupMapData: StationGroupMapData[] = [
+      {
+        rithmId: 'Root',
+        title: 'Root',
+        organizationRithmId: '',
+        stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        subStationGroups: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: true,
+      },
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        title: 'Rithm Group',
+        organizationRithmId: '',
+        stations: [],
+        subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+      {
+        rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        title: ' Sub RithmGroup',
+        organizationRithmId: '',
+        stations: [],
+        subStationGroups: [],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+    ];
+    service.stationGroupElements = stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    for (const group of service.stationGroupElements) {
+      if (
+        group.status !== MapItemStatus.Pending &&
+        !group.isReadOnlyRootStationGroup
+      ) {
+        group.selected = true;
+      }
+    }
+    service.updatePendingStationGroup();
+    const pendingGroup =
+      service.stationGroupElements[service.stationGroupElements.length - 1];
+    expect(pendingGroup.status).toEqual(MapItemStatus.Pending);
+    expect(pendingGroup.subStationGroups.length).toEqual(1);
+    expect(pendingGroup.subStationGroups[0]).toEqual(
+      'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+    );
+  });
+
+  it('should add only the outer stations to a pending group when stations within and outside a selected group are also selected', () => {
+    const stationMapData: StationMapData[] = [
+      {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        stationName: 'Development',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 12,
+          y: 15,
+        },
+        previousStations: [],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
+        status: MapItemStatus.Normal,
+        notes: '',
+      },
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+        stationName: 'Step 1',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 200,
+          y: 80,
+        },
+        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        nextStations: [],
+        status: MapItemStatus.Normal,
+        notes: '',
+      },
+      {
+        rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+        stationName: 'Step 2',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 500,
+          y: 400,
+        },
+        previousStations: [],
+        nextStations: [],
+        status: MapItemStatus.Normal,
+        notes: '',
+      },
+      {
+        rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+        stationName: 'Step 3',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 50,
+          y: 240,
+        },
+        previousStations: [],
+        nextStations: [],
+        status: MapItemStatus.Normal,
+        notes: '',
+      },
+    ];
+    service.stationElements = stationMapData.map(
+      (e) => new StationMapElement(e)
+    );
+    for (const station of service.stationElements) {
+      station.selected = true;
+    }
+
+    const stationGroupMapData: StationGroupMapData[] = [
+      {
+        rithmId: 'Root',
+        title: 'Root',
+        organizationRithmId: '',
+        stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: true,
+      },
+      {
+        rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        title: ' Sub RithmGroup',
+        organizationRithmId: '',
+        stations: [
+          'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+          'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+          'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+        ],
+        subStationGroups: [],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+    ];
+    service.stationGroupElements = stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    for (const group of service.stationGroupElements) {
+      if (
+        group.status !== MapItemStatus.Pending &&
+        !group.isReadOnlyRootStationGroup
+      ) {
+        group.selected = true;
+      }
+    }
+
+    service.updatePendingStationGroup();
+    const pendingGroup =
+      service.stationGroupElements[service.stationGroupElements.length - 1];
+    expect(pendingGroup.status).toEqual(MapItemStatus.Pending);
+    expect(pendingGroup.subStationGroups.length).toEqual(1);
+    expect(pendingGroup.subStationGroups[0]).toEqual(
+      'ED6155C9-ABB7-458E-A250-9542B2535B1C'
+    );
+    expect(pendingGroup.stations.length).toEqual(1);
+    expect(pendingGroup.stations[0]).toEqual(
+      'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    );
+  });
+
+  it('should replace old pending group when a new one is added', () => {
+    const stationMapData: StationMapData[] = [
+      {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        stationName: 'Development',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 12,
+          y: 15,
+        },
+        previousStations: [],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
+        status: MapItemStatus.Normal,
+        notes: '',
+      },
+    ];
+    service.stationElements = stationMapData.map(
+      (e) => new StationMapElement(e)
+    );
+    for (const station of service.stationElements) {
+      station.selected = true;
+    }
+
+    const stationGroupMapData: StationGroupMapData[] = [
+      {
+        rithmId: 'Root',
+        title: 'Root',
+        organizationRithmId: '',
+        stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: true,
+      },
+      {
+        rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        title: ' Sub RithmGroup',
+        organizationRithmId: '',
+        stations: [
+          'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+          'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+          'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+        ],
+        subStationGroups: [],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+    ];
+    service.stationGroupElements = stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+
+    service.updatePendingStationGroup();
+
+    const firstPendingId =
+      service.stationGroupElements[service.stationGroupElements.length - 1]
+        .rithmId;
+    const firstPending =
+      service.stationGroupElements[service.stationGroupElements.length - 1];
+
+    expect(service.stationGroupElements.length).toEqual(3);
+    expect(
+      service.stationGroupElements[service.stationGroupElements.length - 1]
+        .status
+    ).toEqual(MapItemStatus.Pending);
+    expect(firstPending.subStationGroups.length).toEqual(0);
+
+    for (const group of service.stationGroupElements) {
+      if (
+        group.status !== MapItemStatus.Pending &&
+        !group.isReadOnlyRootStationGroup
+      ) {
+        group.selected = true;
+      }
+    }
+
+    service.updatePendingStationGroup();
+
+    const secondPending =
+      service.stationGroupElements[service.stationGroupElements.length - 1];
+
+    expect(service.stationGroupElements.length).toEqual(3);
+    expect(
+      service.stationGroupElements[service.stationGroupElements.length - 1]
+        .status
+    ).toEqual(MapItemStatus.Pending);
+    expect(
+      service.stationGroupElements[service.stationGroupElements.length - 1]
+        .rithmId
+    ).not.toEqual(firstPendingId);
+    expect(secondPending.subStationGroups.length).toEqual(1);
   });
 });
