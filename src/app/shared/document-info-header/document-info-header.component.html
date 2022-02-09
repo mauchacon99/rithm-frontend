@@ -96,7 +96,8 @@
           <div class="flex items-center justify-between col-span-12">
             <div class="w-full">
               <p>
-                Document Name: {{ documentName }}
+                Document Name:
+                {{ documentName ? documentName : 'Untitled Document' }}
                 {{ appendedDocumentName }}
               </p>
             </div>
