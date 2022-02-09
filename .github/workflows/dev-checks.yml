@@ -8,17 +8,17 @@ on:
 jobs:
   # Checks that the app has been formatted with Prettier
   #check-prettier:
-  #runs-on: [self-hosted, uirunner]
-  #timeout-minutes: 4
+    #runs-on: [self-hosted, format-check]
+    #timeout-minutes: 4
 
-  #steps:
-  #- uses: actions/checkout@v2
-  #- uses: actions/setup-node@v2
-  #with:
-  #node-version: '16'
+    #steps:
+      #- uses: actions/checkout@v2
+      #- uses: actions/setup-node@v2
+        #with:
+          #node-version: '16'
 
-  #- name: Check Prettier
-  #run: npm run format-check
+      #- name: Check Prettier
+        #run: npm run format-check
 
   # Checks that the Angular app conforms to standards
   lint-app:
