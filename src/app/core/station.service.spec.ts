@@ -102,8 +102,6 @@ describe('StationService', () => {
       name: 'Example Station',
       rithmId: '3j4k-3h2j-hj4j',
       instructions: 'Do as I instruct',
-      allowAllOrgWorkers: false,
-      allowExternalWorkers: false,
     };
 
     service.getAllStations().subscribe((response) => {
@@ -164,6 +162,8 @@ describe('StationService', () => {
       questions: [],
       priority: 1,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
@@ -210,6 +210,8 @@ describe('StationService', () => {
       questions: [],
       priority: 1,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
@@ -805,6 +807,8 @@ describe('StationService', () => {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
@@ -985,7 +989,7 @@ describe('StationService', () => {
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
     );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(expectedResponse);

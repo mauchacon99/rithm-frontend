@@ -186,10 +186,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationStatus !== MapItemStatus.Created) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
-      //Get the allow external workers
-      this.getAllowExternalWorkers();
-      //Get the allow all organization workers
-      this.getAllowAllOrgWorkers();
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
         .subscribe({
@@ -332,6 +328,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         questions: [],
         priority: 0,
         allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
         flowButton: 'Flow',
       };
     }
@@ -631,27 +629,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get the value of field AllowAllOrgWorkers for a specific station.
-   */
-  private getAllowAllOrgWorkers(): void {
-    this.stationService
-      .getAllowAllOrgWorkers(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (allOrgWorkers) => {
-          this.allowAllOrgWorkers = allOrgWorkers;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            'Failed to get connected stations for this document.',
-            error,
-            false
-          );
-        },
-      });
-  }
-
-  /**
    * Update AllowAllOrgWorkers information.
    *
    * @param allowAllOrgWorkers The value that will be update.
@@ -662,29 +639,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Get the allow external workers for the station roster.
-   */
-  private getAllowExternalWorkers(): void {
-    this.allowExternalLoading = true;
-    this.stationService
-      .getAllowExternalWorkers(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (allowExternal) => {
-          this.allowExternal = allowExternal;
-          this.allowExternalLoading = false;
-        },
-        error: (error: unknown) => {
-          this.allowExternalLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
