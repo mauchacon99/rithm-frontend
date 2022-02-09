@@ -53,11 +53,10 @@ export class FlowLogicComponent implements OnInit {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
       data: this.rithmId,
+      disableClose: true,
     });
     if (dialog) {
-      // handle returned rule
-    } else {
-      // handle error
+      // handle on close.
     }
   }
 
