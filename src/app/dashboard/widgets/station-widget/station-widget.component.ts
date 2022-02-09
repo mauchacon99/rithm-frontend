@@ -126,7 +126,7 @@ export class StationWidgetComponent implements OnInit {
     this.isLoading = true;
     this.displayDocumentError = false;
     this.documentService
-      .createNewDocument('', 0, this.stationRithmId)
+      .createNewDocument('New Document', 0, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentRithmId) => {
