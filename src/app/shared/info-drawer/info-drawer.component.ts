@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { MapService } from 'src/app/map/map.service';
 import { StationInfoDrawerData } from 'src/models';
 
 /**
@@ -21,7 +22,10 @@ export class InfoDrawerComponent implements OnDestroy {
 
   openedFromMap = false;
 
-  constructor(private sidenavDrawerService: SidenavDrawerService) {
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private mapService: MapService
+  ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -64,6 +68,7 @@ export class InfoDrawerComponent implements OnDestroy {
       drawerItem === 'stationInfo' ||
       drawerItem === 'history'
     ) {
+      this.mapService.openedDrawerType$.next(drawerItem);
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
     this.drawerMode = '';
