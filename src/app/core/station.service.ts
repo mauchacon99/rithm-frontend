@@ -517,6 +517,20 @@ export class StationService {
   }
 
   /**
+   * Get the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers to be assigned to station documents.
+   */
+  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    return this.http
+      .get<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  /**
    * Update the the status to allow external workers for the station roster.
    *
    * @param stationRithmId The Specific id of station.
@@ -547,33 +561,9 @@ export class StationService {
    * @returns An object with value of AllowAllOrgWorkers.
    */
   getAllowAllOrgWorkers(stationRithmId: string): Observable<boolean> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update field related all org workers.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const mockData: StandardBooleanJSON = {
-        data: true,
-      };
-      return of(mockData.data).pipe(delay(1000));
-    }
-  }
-
-  /**
-   * Get the allow external workers for the station roster.
-   *
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers to be assigned to station documents.
-   */
-  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
     return this.http
       .get<StandardBooleanJSON>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationRithmId}`
       )
       .pipe(map((response) => response.data));
   }
