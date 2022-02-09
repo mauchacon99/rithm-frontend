@@ -261,12 +261,12 @@
         <section class="flex w-full py-5">
           <div class="flex w-full flex-col justify-center">
             <h6>Station Owners</h6>
-            <p class="overline-font" *ngIf="ownersRosterLength">
+            <p class="overline-font" *ngIf="ownersRosterLength >= 0">
               {{ ownersRosterLength }}
               {{ ownersRosterLength === 1 ? 'member' : 'members' }}
             </p>
             <app-loading-indicator
-              *ngIf="!ownersRosterLength"
+              *ngIf="ownersRosterLength < 0"
               [inlineText]="'Loading...'"
             ></app-loading-indicator>
           </div>
@@ -332,8 +332,8 @@
               <div class="pr-2">
                 <mat-slide-toggle
                   color="accent"
-                  [(ngModel)]="allowExternal"
                   (change)="updateAllowExternalWorkers($event.checked)"
+                  [checked]="allowExternal"
                 >
                 </mat-slide-toggle>
               </div>
