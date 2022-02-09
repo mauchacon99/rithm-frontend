@@ -26,8 +26,13 @@
 
       position: absolute !important;
       height: 100%;
+      padding-top: 55px;
     }
   }
+}
+
+::ng-deep .mat-drawer-content.static{
+  position: static !important;
 }
 
 //Needed for the center-map icon.

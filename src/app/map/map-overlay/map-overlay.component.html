@@ -25,14 +25,13 @@
         *ngIf="drawerMode === 'stationGroupInfo'"
       ></app-station-group-info-drawer>
     </mat-drawer>
-    <mat-drawer-content>
+    <mat-drawer-content [ngClass]="{'static' : mapElementDrawer.opened}">
       <div
         *ngIf="mapScale > zoomBuild && isAdmin"
-        [ngClass]="{
-          'absolute left-0 right-0 bottom-0': mapElementDrawer.opened
-        }"
-        class="h-12 flex justify-end items-center space-x-2.5 md:m-2 mx-2 py-2 overflow-hidden"
+        class="flex justify-end items-center space-x-2.5 mx-2 overflow-hidden"
+        [ngClass]="mapElementDrawer.opened ? 'absolute z-20 right-0 pt-2 h-15 pr-3' : 'md:m-2 py-2 h-12'"
       >
+      <span [class.invisible]="mapElementDrawer.opened">
         <button
           mat-raised-button
           color="accent"
@@ -44,10 +43,6 @@
         >
           Build
         </button>
-        <app-map-search
-          class="hidden md:block"
-          [isLoading]="mapDataLoading"
-        ></app-map-search>
         <button
           mat-raised-button
           color="basic"
@@ -70,6 +65,11 @@
         >
           Publish
         </button>
+      </span>
+        <app-map-search
+          class="hidden md:block"
+          [isLoading]="mapDataLoading"
+        ></app-map-search>
       </div>
     </mat-drawer-content>
   </mat-drawer-container>
