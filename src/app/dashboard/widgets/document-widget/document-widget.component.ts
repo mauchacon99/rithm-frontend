@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget',
+  selector: 'app-document-widget[documentRithmId]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
