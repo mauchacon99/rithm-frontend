@@ -893,7 +893,7 @@ export class MockStationService {
       ).pipe(delay(1000));
     } else {
       const expectedResponse: StandardBooleanJSON = {
-        data: true,
+        data: allowExtWorkers,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }

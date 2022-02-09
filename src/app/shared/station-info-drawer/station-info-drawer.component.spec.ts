@@ -397,7 +397,7 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should update the allow external workers status for the station roster', () => {
-    const allowExt = false;
+    component.allowExternal = true;
     const updateAllowExternalSpy = spyOn(
       TestBed.inject(StationService),
       'updateAllowExternalWorkers'
@@ -405,7 +405,7 @@ describe('StationInfoDrawerComponent', () => {
     component.updateAllowExternalWorkers();
     expect(updateAllowExternalSpy).toHaveBeenCalledOnceWith(
       stationId,
-      allowExt
+      component.allowExternal
     );
   });
 

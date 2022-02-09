@@ -591,23 +591,14 @@ export class StationService {
    */
   updateAllowExternalWorkers(
     stationRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     allowExtWorkers: boolean
   ): Observable<boolean> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update the current status for this.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StandardBooleanJSON = {
-        data: true,
-      };
-      return of(expectedResponse.data).pipe(delay(1000));
-    }
+    const standardBody: StandardBooleanJSON = { data: allowExtWorkers };
+    return this.http
+      .put<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`,
+        standardBody
+      )
+      .pipe(map((response) => response.data));
   }
 }
