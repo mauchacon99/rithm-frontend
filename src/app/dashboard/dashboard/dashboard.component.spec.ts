@@ -259,4 +259,12 @@ describe('DashboardComponent', () => {
       expect(spySideNav).toHaveBeenCalled();
     });
   });
+
+  it('should called method config Edit Mode and change status draggable and resizable', () => {
+    expect(component.options.draggable?.enabled).toBeFalse();
+    expect(component.options.resizable?.enabled).toBeFalse();
+    component['configEditMode'](true, true);
+    expect(component.options.draggable?.enabled).toBeTrue();
+    expect(component.options.resizable?.enabled).toBeTrue();
+  });
 });
