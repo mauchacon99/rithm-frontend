@@ -1,7 +1,7 @@
 import { Question } from './question';
 
 /**
- * Represents the data the station-widget.
+ * Represents the data the document-widget.
  */
 export interface documentWidget {
   /** The name of the document. */
