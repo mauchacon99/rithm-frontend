@@ -227,6 +227,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.zoomCount = count;
       });
 
+    //This subscribe shows if there are any drawers open.
+    this.mapService.openedDrawerType$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerType) => {
+        if (this.sidenavDrawerService.isDrawerOpen) {
+          this.mapService.handleDrawerClose(drawerType);
+        }
+      });
+
     /* This subscribe sets this.currentMousePoint when the behavior subject changes.
     If this.dragItem is set to node or station or stationGroup:
     checks to see if the mouse is on the edge of the screen, or in other words, outside the pan bounding box,
