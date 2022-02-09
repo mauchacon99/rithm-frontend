@@ -211,7 +211,7 @@ export class StationComponent
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getStationDocumentTreatment();
-        this.viewNewStation = treatment === 'on ';
+        this.viewNewStation = treatment === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
