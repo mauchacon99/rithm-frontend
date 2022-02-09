@@ -207,13 +207,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
 
       if (response) {
+        if (
+          JSON.stringify(this.dashboardData) !==
+          JSON.stringify(this.dashboardDataCopy)
+        ) {
+          this.dashboardData = JSON.parse(
+            JSON.stringify(this.dashboardDataCopy)
+          );
+          this.changedOptions();
+        }
         this.editMode = false;
-        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
-        this.changedOptions();
       }
     } else {
       this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
-      this.editMode = statusEditMode;
+      this.editMode = true;
     }
   }
 
