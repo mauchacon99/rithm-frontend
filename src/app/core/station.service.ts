@@ -541,17 +541,45 @@ export class StationService {
   }
 
   /**
+   * Update the status to allow external workers for the station roster.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param allowAllOrgWorkers The value that will be update.
+   * @returns The field AllowAllOrgWorkers updated.
+   */
+  updateAllowAllOrgWorkers(
+    stationRithmId: string,
+    allowAllOrgWorkers: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowAllOrgWorkers,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get the allow external workers for the station roster.
    *
    * @param stationRithmId The Specific id of station.
    * @returns Allow external workers to be assigned to station documents.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    return of(expectedResponse.data).pipe(delay(1000));
+    return this.http
+      .get<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**

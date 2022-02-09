@@ -45,4 +45,7 @@ export interface StationInformation {
 
   /** The priority of the document. */
   priority: number;
+
+  /** Customize the name of the flow button. */
+  flowButton: string;
 }

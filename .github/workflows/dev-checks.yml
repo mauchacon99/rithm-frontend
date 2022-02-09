@@ -8,7 +8,7 @@ on:
 jobs:
   # Checks that the app has been formatted with Prettier
   check-prettier:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, uirunner]
     timeout-minutes: 4
 
     steps:
@@ -22,7 +22,7 @@ jobs:
 
   # Checks that the Angular app conforms to standards
   lint-app:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, uirunner]
     needs: [check-prettier]
     timeout-minutes: 4
 
@@ -40,7 +40,7 @@ jobs:
 
   # Checks that all stylesheets conform to standards
   lint-stylesheets:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, uirunner]
     needs: [check-prettier]
     timeout-minutes: 4
 

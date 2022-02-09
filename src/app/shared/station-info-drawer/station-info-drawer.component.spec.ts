@@ -95,6 +95,7 @@ describe('StationInfoDrawerComponent', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      flowButton: 'Flow',
     };
     component.stationRithmId = stationId;
     fixture.detectChanges();
@@ -386,7 +387,6 @@ describe('StationInfoDrawerComponent', () => {
         throw new Error();
       })
     );
-
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
@@ -452,5 +452,59 @@ describe('StationInfoDrawerComponent', () => {
     ).and.callThrough();
     component['getAllowAllOrgWorkers']();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should update the allowAllOrgWorkers status in station', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'updateAllowAllOrgWorkers'
+    ).and.callThrough();
+
+    const allowAllOrgWorkers = true;
+    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
+    expect(spyMethod).toHaveBeenCalledOnceWith(stationId, allowAllOrgWorkers);
+  });
+
+  it('should catch an error when updating the allowAllOrgWorkers status fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'updateAllowAllOrgWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const allowAllOrgWorkers = true;
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
+    expect(spyError).toHaveBeenCalled();
+  });
+  // awaiting for complete the component update for harness testing
+  xit('should show loading-indicator-allow-external when calling getAllowExternalWorkers', () => {
+    component.stationLoading = false;
+    component['getAllowExternalWorkers']();
+    component.selectedTabIndex = 2;
+    fixture.detectChanges();
+    expect(component.allowExternalLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-allow-external'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  xit('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
+    const allowExt = true;
+    component.stationLoading = false;
+    component.updateAllowExternalWorkers(allowExt);
+    component.selectedTabIndex = 2;
+    fixture.detectChanges();
+    expect(component.allowExternalLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-allow-external'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });
