@@ -370,6 +370,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
+        this.configEditMode(false, false);
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
