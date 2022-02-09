@@ -352,7 +352,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.dashboardData.widgets[widgetIndex].layerIndex = 2;
     } else {
       this.dashboardData.widgets[widgetIndex].layerIndex = 1;
-      this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+      this.dashboardData.widgets[widgetIndex] = JSON.parse(
+        JSON.stringify(this.dashboardDataCopy)
+      ).widgets[widgetIndex];
     }
     this.changedOptions();
   }
