@@ -219,10 +219,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((answer: DocumentAnswer) => {
-        if (answer.value) {
-          this.secondOperand.value = answer.value;
-          this.secondOperand.type = this.firstOperand.type;
-        }
+        this.secondOperand.value = answer.value;
+        this.secondOperand.type = this.firstOperand.type;
       });
   }
 

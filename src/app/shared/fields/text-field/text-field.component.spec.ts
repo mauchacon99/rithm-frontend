@@ -167,7 +167,7 @@ describe('TextFieldComponent', () => {
     });
   });
 
-  describe('shortText field', () => {
+  describe('shortText field when is not a station', () => {
     beforeEach(() => {
       component.field = FIELDS[0];
       component.isStation = false;
@@ -175,7 +175,7 @@ describe('TextFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    xit('should require an input in short text field', () => {
+    it('should require an input in short text field', () => {
       const shortText = component.textFieldForm.controls['shortText'];
       expect(component.field.questionType).toBeTruthy();
       expect(shortText.valid).toBeFalse();
@@ -184,7 +184,7 @@ describe('TextFieldComponent', () => {
     });
   });
 
-  describe('longText field', () => {
+  describe('longText field when is not a station', () => {
     beforeEach(() => {
       component.field = FIELDS[1];
       component.field.isRequired = false;
@@ -193,7 +193,7 @@ describe('TextFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    xit('should not require an input in long text field', () => {
+    it('should not require an input in long text field', () => {
       const longText = component.textFieldForm.controls['longText'];
       expect(longText.valid).toBeTrue();
       expect(longText.hasError('required')).toBeFalse();
@@ -201,7 +201,7 @@ describe('TextFieldComponent', () => {
     });
   });
 
-  describe('url field', () => {
+  describe('url field when is not a station', () => {
     beforeEach(() => {
       component.field = FIELDS[2];
       component.isStation = false;
@@ -209,14 +209,14 @@ describe('TextFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    xit('should not require an input in url field', () => {
+    it('should not require an input in url field', () => {
       const url = component.textFieldForm.controls['url'];
       expect(url.valid).toBeTrue();
       expect(url.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();
     });
 
-    xit('should require a valid url', () => {
+    it('should require a valid url', () => {
       const url = component.textFieldForm.controls['url'];
       url.setValue('test.com');
       expect(url.valid).toBeFalse();
@@ -225,7 +225,7 @@ describe('TextFieldComponent', () => {
     });
   });
 
-  describe('email field', () => {
+  describe('email field when is not a station', () => {
     beforeEach(() => {
       component.field = FIELDS[3];
       component.isStation = false;
@@ -233,14 +233,14 @@ describe('TextFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    xit('should require an input in email field', () => {
+    it('should require an input in email field', () => {
       const email = component.textFieldForm.controls['email'];
       expect(email.valid).toBeFalse();
       expect(email.hasError('required')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
     });
 
-    xit('should require a valid email', () => {
+    it('should require a valid email', () => {
       const email = component.textFieldForm.controls['email'];
       email.setValue('test.com');
       expect(email.valid).toBeFalse();

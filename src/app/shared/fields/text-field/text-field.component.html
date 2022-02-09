@@ -83,7 +83,7 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <div *ngIf="isStation; noStation">
+    <div *ngIf="isStation; else noStation">
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput"
         matInput

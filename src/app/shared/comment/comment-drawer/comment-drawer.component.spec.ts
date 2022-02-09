@@ -77,7 +77,7 @@ describe('CommentDrawerComponent', () => {
     expect(component.comments.length).toBe(4);
   }));
 
-  xit('should add a newly posted comment to the list of comments', () => {
+  it('should add a newly posted comment to the list of comments', () => {
     const comment = {
       displayText: 'This is first comment',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -87,8 +87,9 @@ describe('CommentDrawerComponent', () => {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
     };
+    expect(component.comments).toHaveSize(0);
     component.addNewComment(comment);
-    expect(component.comments.unshift(comment));
+    expect(component.comments).toHaveSize(1);
   });
 
   it('should set the loading status when a comment is loading `true`', () => {

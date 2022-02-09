@@ -171,7 +171,9 @@
             [disabled]="!secondOperandQuestionList.length"
             [(ngModel)]="secondOperand.value"
             [ngModelOptions]="{ standalone: true }"
-            (focus)="resetQuestionFieldComponent()"
+            (focus)="
+              secondOperandQuestionList.length && resetQuestionFieldComponent()
+            "
           >
             <mat-option
               *ngFor="let question of secondOperandQuestionList"
