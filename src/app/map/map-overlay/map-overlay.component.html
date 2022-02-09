@@ -25,47 +25,51 @@
         *ngIf="drawerMode === 'stationGroupInfo'"
       ></app-station-group-info-drawer>
     </mat-drawer>
-    <mat-drawer-content [ngClass]="{'static' : mapElementDrawer.opened}">
+    <mat-drawer-content [ngClass]="{ static: mapElementDrawer.opened }">
       <div
         *ngIf="mapScale > zoomBuild && isAdmin"
         class="flex justify-end items-center space-x-2.5 mx-2 overflow-hidden"
-        [ngClass]="mapElementDrawer.opened ? 'absolute z-20 right-0 pt-2 h-15 pr-3' : 'md:m-2 py-2 h-12'"
+        [ngClass]="
+          mapElementDrawer.opened
+            ? 'absolute z-20 right-0 pt-2 h-15 pr-3'
+            : 'md:m-2 py-2 h-12'
+        "
       >
-      <span [class.invisible]="mapElementDrawer.opened">
-        <button
-          mat-raised-button
-          color="accent"
-          *ngIf="!isBuilding"
-          [disabled]="mapDataLoading"
-          (click)="build()"
-          data-testid="build"
-          class="h-9 md:w-auto w-full"
-        >
-          Build
-        </button>
-        <button
-          mat-raised-button
-          color="basic"
-          *ngIf="isBuilding"
-          [disabled]="mapDataLoading"
-          (click)="cancel()"
-          data-testid="cancel"
-          class="h-9 w-1/2 md:w-auto"
-        >
-          Cancel
-        </button>
-        <button
-          mat-raised-button
-          color="accent"
-          *ngIf="isBuilding"
-          [disabled]="mapDataLoading || !mapHasChanges"
-          (click)="publish()"
-          data-testid="publish"
-          class="h-9 w-1/2 md:w-auto"
-        >
-          Publish
-        </button>
-      </span>
+        <span [class.invisible]="mapElementDrawer.opened">
+          <button
+            mat-raised-button
+            color="accent"
+            *ngIf="!isBuilding"
+            [disabled]="mapDataLoading"
+            (click)="build()"
+            data-testid="build"
+            class="h-9 md:w-auto w-full"
+          >
+            Build
+          </button>
+          <button
+            mat-raised-button
+            color="basic"
+            *ngIf="isBuilding"
+            [disabled]="mapDataLoading"
+            (click)="cancel()"
+            data-testid="cancel"
+            class="h-9 w-1/2 md:w-auto"
+          >
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            *ngIf="isBuilding"
+            [disabled]="mapDataLoading || !mapHasChanges"
+            (click)="publish()"
+            data-testid="publish"
+            class="h-9 w-1/2 md:w-auto"
+          >
+            Publish
+          </button>
+        </span>
         <app-map-search
           class="hidden md:block"
           [isLoading]="mapDataLoading"
