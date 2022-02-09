@@ -37,12 +37,6 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const dashboardRithmId = '123-951-753-789';
-  const dashboardData = {
-    rithmId: 'ABC-123-BCA-321',
-    name: 'update Dashboard',
-    widgets: [],
-    type: RoleDashboardMenu.Company,
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -154,42 +148,65 @@ describe('DashboardComponent', () => {
   });
 
   it('should call service to update a personal dashboard', () => {
-    component.viewNewDashboard = true;
-    component.isLoading = false;
-    dashboardData.type = RoleDashboardMenu.Personal;
-    component.dashboardData = dashboardData;
-    component.editMode = true;
-    fixture.detectChanges();
-
+    const dashboardData = {
+      rithmId: 'ABC-123-BCA-321',
+      name: 'update Dashboard',
+      widgets: [],
+      type: RoleDashboardMenu.Personal,
+    };
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
     ).and.callThrough();
+    const spyServiceUpdateDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'updatePersonalDashboard'
+    ).and.callThrough();
+
+    component.viewNewDashboard = true;
+    component.dashboardData = dashboardData;
+    component.isLoading = false;
+    component.editMode = true;
+    fixture.detectChanges();
 
     const btnSave = fixture.nativeElement.querySelector('#save-button');
     expect(btnSave).toBeTruthy();
+    component.dashboardData = dashboardData;
     btnSave.click();
 
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
+    expect(spyServiceUpdateDashboard).toHaveBeenCalledOnceWith(dashboardData);
   });
 
   it('should call service to update a organization dashboard', () => {
+    const dashboardData = {
+      rithmId: 'ABC-123-BCA-321',
+      name: 'update Dashboard',
+      widgets: [],
+      type: RoleDashboardMenu.Company,
+    };
+    const spyMethodUpdateDashboard = spyOn(
+      component,
+      'updateDashboard'
+    ).and.callThrough();
+
+    const spyServiceUpdateDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'updateOrganizationDashboard'
+    ).and.callThrough();
+
     component.viewNewDashboard = true;
     component.isLoading = false;
     component.dashboardData = dashboardData;
     component.editMode = true;
     fixture.detectChanges();
 
-    const spyMethodUpdateDashboard = spyOn(
-      component,
-      'updateDashboard'
-    ).and.callThrough();
-
     const btnSave = fixture.nativeElement.querySelector('#save-button');
     expect(btnSave).toBeTruthy();
     btnSave.click();
 
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
+    expect(spyServiceUpdateDashboard).toHaveBeenCalledOnceWith(dashboardData);
   });
 
   it('should returns the organization`s dashboard list', () => {
