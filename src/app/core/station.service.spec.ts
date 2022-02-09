@@ -1012,13 +1012,24 @@ describe('StationService', () => {
   });
 
   it('should update the allow external workers status in the station', () => {
+    const allowExtWorkers = true;
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
-
-    service.updateAllowExternalWorkers(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse.data);
-    });
+    service
+      .updateAllowExternalWorkers(stationId, allowExtWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`
+    );
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return the value of allow all org workers', () => {
