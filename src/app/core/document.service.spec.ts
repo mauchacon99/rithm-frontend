@@ -770,4 +770,32 @@ describe('DocumentService', () => {
     req.flush(expectedEventsResponse);
     httpTestingController.verify();
   });
+
+  it('should make request to save station flow logic', () => {
+    const expectedEventsResponse: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRules: [
+        {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+        },
+      ],
+    };
+    service.saveStationFlowLogic(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedEventsResponse);
+    });
+  });
 });

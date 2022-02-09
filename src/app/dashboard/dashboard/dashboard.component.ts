@@ -12,11 +12,12 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, Station } from 'src/models';
+import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Main component for the dashboard screens.
@@ -34,6 +35,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Show the dashboard menu. */
   drawerContext = 'menuDashboard';
 
+  /** Validate type of role. */
+  roleDashboardMenu = RoleDashboardMenu;
+
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
@@ -48,6 +52,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Dashboard data, default dashboard general. */
   dashboardData!: DashboardData;
+
+  /** Dashboard data Copy for save original data in mode edit. */
+  dashboardDataCopy!: DashboardData;
 
   /** Error Loading dashboard. */
   errorLoadingDashboard = false;
@@ -112,7 +119,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private popupService: PopupService
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -185,9 +193,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /**
    * Toggles the editMode to allow editing.
+   *
+   * @param statusEditMode Status mode edition.
    */
-  toggleEditMode(): void {
-    this.editMode = !this.editMode;
+  async toggleEditMode(statusEditMode: boolean): Promise<void> {
+    if (!statusEditMode) {
+      const response = await this.popupService.confirm({
+        title: 'Cancel?',
+        message: 'All unsaved changes will be lost',
+        important: true,
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+      });
+
+      if (response) {
+        this.editMode = false;
+        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+        this.changedOptions();
+      }
+    } else {
+      this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
+      this.editMode = statusEditMode;
+    }
+  }
+
+  /**
+   * Change options of gridster2.
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
   }
 
   /**
@@ -196,6 +232,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param dashboardRithmId String of rithmId of dashboard.
    */
   private getDashboardByRithmId(dashboardRithmId: string): void {
+    this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
     this.dashboardService
@@ -214,45 +251,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             error
           );
           this.router.navigateByUrl('dashboard');
-        },
-      });
-  }
-
-  /**
-   * Update personal dashboard.
-   */
-  updatePersonalDashboard(): void {
-    this.dashboardService
-      .updatePersonalDashboard(this.dashboardData)
-      .pipe(first())
-      .subscribe({
-        next: (dashboardUpdate) => {
-          this.dashboardData = dashboardUpdate;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Update dashboard name.
-   *
-   * @param dashboardData The dashboard data for update name.
-   */
-  updateOrganizationDashboard(dashboardData: DashboardData): void {
-    this.dashboardService
-      .updateOrganizationDashboard(dashboardData)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
         },
       });
   }
@@ -317,6 +315,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Update dashboard.
+   */
+  updateDashboard(): void {
+    this.isLoading = true;
+    this.errorLoadingDashboard = false;
+    const updateDashboard$ =
+      this.dashboardData.type === this.roleDashboardMenu.Company
+        ? this.dashboardService.updateOrganizationDashboard(this.dashboardData)
+        : this.dashboardService.updatePersonalDashboard(this.dashboardData);
+    updateDashboard$.pipe(first()).subscribe({
+      next: (dashboardUpdate) => {
+        this.dashboardData = dashboardUpdate;
+        this.isLoading = false;
+        this.editMode = false;
+        this.errorLoadingDashboard = false;
+      },
+      error: (error: unknown) => {
+        this.errorLoadingDashboard = true;
+        this.isLoading = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /** Clean subscriptions. */

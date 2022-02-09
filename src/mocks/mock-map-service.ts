@@ -456,4 +456,24 @@ export class MockMapService {
       }
     });
   }
+
+  /**
+   * Set drawerOpened property of respective map element to false when any drawer is closed.
+   *
+   * @param drawerItem The opened drawer type.
+   */
+  handleDrawerClose(drawerItem: string): void {
+    if (drawerItem === 'stationInfo') {
+      if (this.stationElements.some((e) => e.drawerOpened)) {
+        const openedStations = this.stationElements.filter(
+          (e) => e.drawerOpened
+        );
+        openedStations.forEach((station) => {
+          station.drawerOpened = false;
+        });
+        this.openedDrawerType$.next('');
+        this.mapDataReceived$.next(true);
+      }
+    }
+  }
 }
