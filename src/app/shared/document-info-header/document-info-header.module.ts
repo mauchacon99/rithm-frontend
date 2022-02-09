@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [DocumentInfoHeaderComponent],
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
     MatInputModule,
     UserAvatarModule,
     RouterModule,
+    MatButtonModule,
   ],
   exports: [DocumentInfoHeaderComponent],
 })
