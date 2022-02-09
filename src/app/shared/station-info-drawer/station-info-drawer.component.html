@@ -261,14 +261,18 @@
         <section class="flex w-full py-5">
           <div class="flex w-full flex-col justify-center">
             <h6>Station Owners</h6>
-            <p class="overline-font" *ngIf="ownersRosterLength">
+            <p
+              class="overline-font"
+              *ngIf="ownersRosterLength >= 0; else noRosterMember"
+            >
               {{ ownersRosterLength }}
               {{ ownersRosterLength === 1 ? 'member' : 'members' }}
             </p>
-            <app-loading-indicator
-              *ngIf="!ownersRosterLength"
-              [inlineText]="'Loading...'"
-            ></app-loading-indicator>
+            <ng-template #noRosterMember>
+              <app-loading-indicator
+                [inlineText]="'Loading...'"
+              ></app-loading-indicator>
+            </ng-template>
           </div>
           <div
             class="py-2 text-secondary-500 text-xs"
