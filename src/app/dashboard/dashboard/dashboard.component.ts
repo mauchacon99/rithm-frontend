@@ -14,7 +14,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { GridsterConfig } from 'angular-gridster2';
+import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
@@ -72,25 +72,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     pushItems: true,
     draggable: {
       enabled: true,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
     },
     resizable: {
       enabled: true,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
     },
     margin: 16,
     minCols: 12,
     maxCols: 12,
+    allowMultiLayer: true,
+    defaultLayerIndex: 1,
+    maxLayerIndex: 2,
+    baseLayerIndex: 1,
   };
 
   /**
@@ -212,7 +204,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.changedOptions();
       }
     } else {
-      this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
       this.editMode = statusEditMode;
     }
   }
@@ -299,6 +290,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (dashboardData) => {
           if (dashboardData.length) {
             this.dashboardData = dashboardData[0];
+            this.dashboardDataCopy = JSON.parse(
+              JSON.stringify(this.dashboardData)
+            );
           } else {
             this.isCreateNewDashboard = true;
           }
@@ -330,6 +324,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
+        this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
@@ -343,6 +338,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  /**
+   * Expand widget selected.
+   *
+   * @param widgetIndex String of the rithmId widget.
+   * @param isExpandWidget Boolean if is expand widget.
+   */
+  toggleExpandWidget(widgetIndex: number, isExpandWidget: boolean): void {
+    if (isExpandWidget) {
+      this.dashboardData.widgets[widgetIndex].rows++;
+      this.dashboardData.widgets[widgetIndex].layerIndex = 2;
+    } else {
+      this.dashboardData.widgets[widgetIndex].layerIndex = 1;
+      this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+    }
+    this.changedOptions();
+  }
+
+  /**
+   * TrackBy in *ngFor, to widgets.
+   *
+   * @param index Number of index *ngFor.
+   * @param item Item of the interface GridsterItem.
+   * @returns Item id of the GridsterItem.
+   */
+  trackBy(index: number, item: GridsterItem): number {
+    return item.id;
   }
 
   /** Clean subscriptions. */

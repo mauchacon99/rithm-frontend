@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -18,6 +18,12 @@ import { PopupService } from 'src/app/core/popup.service';
 export class StationWidgetComponent implements OnInit {
   /** Station rithmId. */
   @Input() stationRithmId = '';
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** To set its expanded the widget. */
+  isExpandWidget = false;
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
@@ -147,5 +153,10 @@ export class StationWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  toggleExpandWidget(): void {
+    this.isExpandWidget = !this.isExpandWidget;
+    this.expandWidget.emit(this.isExpandWidget);
   }
 }
