@@ -426,7 +426,6 @@ export class MockDashboardService {
     return of(dashboardData).pipe(delay(1000));
   }
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Delete organization dashboard`s.
    *

@@ -193,14 +193,16 @@ export class DashboardService {
     );
   }
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Delete organization dashboard`s.
    *
    * @param rithmId The dashboard specific to delete.
    * @returns The rithmId deleted dashboard.
    */
-  deleteOrganizationDashboard(rithmId: string): Observable<unknown> {
+  deleteOrganizationDashboard(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rithmId: string
+  ): Observable<unknown> {
     return of().pipe(delay(1000));
   }
 }

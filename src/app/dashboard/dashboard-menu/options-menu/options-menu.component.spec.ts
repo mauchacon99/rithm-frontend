@@ -181,21 +181,18 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should call method deleteOrganizationDashboard', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deleteOrganizationDashboard'
     ).and.callThrough();
 
-    component.deleteOrganizationDashboard(
-      '247cf568-27a4-4968-9338-046ccfee24f3'
-    );
-
-    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
-      '247cf568-27a4-4968-9338-046ccfee24f3'
-    );
+    component.deleteOrganizationDashboard(rithmId);
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(rithmId);
   });
 
   it('should show error if the request deleteOrganizationDashboard fail', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deleteOrganizationDashboard'
@@ -210,9 +207,7 @@ describe('OptionsMenuComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.deleteOrganizationDashboard(
-      '247cf568-27a4-4968-9338-046ccfee24f3'
-    );
+    component.deleteOrganizationDashboard(rithmId);
 
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
