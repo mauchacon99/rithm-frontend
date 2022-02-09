@@ -26,7 +26,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { RoleDashboardMenu } from 'src/models';
+import { RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -274,6 +274,46 @@ describe('DashboardComponent', () => {
       const spySideNav = spyOn(sidenavDrawer, 'setDrawer').and.callThrough();
       component.ngOnInit();
       expect(spySideNav).toHaveBeenCalled();
+    });
+  });
+
+  describe('Expand widget', () => {
+    const dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+
+    it('should expand widget', () => {
+      component.dashboardDataCopy = dashboardData;
+      component.dashboardData = dashboardData;
+      component.toggleExpandWidget(0, true);
+
+      expect(component.dashboardData.widgets[0].rows).toEqual(3);
+      expect(component.dashboardData.widgets[0].layerIndex).toEqual(2);
+    });
+
+    it('should not expand widget', () => {
+      component.dashboardDataCopy = dashboardData;
+      component.dashboardData = dashboardData;
+      component.toggleExpandWidget(0, false);
+
+      expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
+      expect(component.dashboardData).toEqual(component.dashboardDataCopy);
     });
   });
 });

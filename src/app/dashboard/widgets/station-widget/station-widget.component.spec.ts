@@ -335,4 +335,19 @@ describe('StationWidgetComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
   });
+
+  it('should expand widget', () => {
+    component.isExpandWidget = false;
+    component.failedLoadWidget = false;
+    component.isDocument = true;
+    component.isLoading = false;
+    fixture.detectChanges();
+    component.expandWidget.subscribe((isExpandWidget) => {
+      expect(isExpandWidget).toBeTrue();
+    });
+    const btnExpandWidget =
+      fixture.debugElement.nativeElement.querySelector('#expand-document');
+    expect(btnExpandWidget).toBeTruthy();
+    btnExpandWidget.click();
+  });
 });
