@@ -332,8 +332,8 @@
               <div class="pr-2">
                 <mat-slide-toggle
                   color="accent"
-                  (change)="updateAllowExternalWorkers($event.checked)"
-                  [checked]="allowExternal"
+                  [(ngModel)]="allowExternal"
+                  (change)="updateAllowExternalWorkers()"
                 >
                 </mat-slide-toggle>
               </div>

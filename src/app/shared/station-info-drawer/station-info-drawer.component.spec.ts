@@ -396,12 +396,12 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should update the allow external workers status for the station roster', () => {
-    const allowExt = true;
+    const allowExt = false;
     const updateAllowExternalSpy = spyOn(
       TestBed.inject(StationService),
       'updateAllowExternalWorkers'
     ).and.callThrough();
-    component.updateAllowExternalWorkers(allowExt);
+    component.updateAllowExternalWorkers();
     expect(updateAllowExternalSpy).toHaveBeenCalledOnceWith(
       stationId,
       allowExt
@@ -422,7 +422,7 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.updateAllowExternalWorkers(true);
+    component.updateAllowExternalWorkers();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -496,9 +496,8 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   xit('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
-    const allowExt = true;
     component.stationLoading = false;
-    component.updateAllowExternalWorkers(allowExt);
+    component.updateAllowExternalWorkers();
     component.selectedTabIndex = 2;
     fixture.detectChanges();
     expect(component.allowExternalLoading).toBe(true);

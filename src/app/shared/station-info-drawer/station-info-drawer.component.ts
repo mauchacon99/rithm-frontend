@@ -679,13 +679,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Update the allow external workers for the station roster.
-   *
-   * @param statusNew Whether to allow External workers or not.
    */
-  updateAllowExternalWorkers(statusNew: boolean): void {
+  updateAllowExternalWorkers(): void {
     this.allowExternalLoading = true;
     this.stationService
-      .updateAllowExternalWorkers(this.stationRithmId, statusNew)
+      .updateAllowExternalWorkers(this.stationRithmId, this.allowExternal)
       .pipe(first())
       .subscribe({
         next: (allowExternal) => {
