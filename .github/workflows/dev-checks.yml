@@ -8,7 +8,7 @@ on:
 jobs:
   # Checks that the app has been formatted with Prettier
   check-prettier:
-    runs-on: [self-hosted, uirunner]
+    runs-on: [self-hosted, format-check]
     timeout-minutes: 4
 
     steps:
