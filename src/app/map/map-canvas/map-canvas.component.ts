@@ -2197,6 +2197,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       updatedDate: '',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
       flowButton: 'Flow',
     };
     //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.

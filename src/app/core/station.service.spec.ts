@@ -163,6 +163,7 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
       flowButton: 'Flow',
     };
 
@@ -208,6 +209,7 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
       flowButton: 'Flow',
     };
 
@@ -802,6 +804,7 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      allowPreviousButton: false,
       flowButton: 'Flow',
     };
 
