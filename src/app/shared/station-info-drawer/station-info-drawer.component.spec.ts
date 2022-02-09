@@ -404,8 +404,8 @@ describe('StationInfoDrawerComponent', () => {
     ).and.callThrough();
     component.updateAllowExternalWorkers();
     expect(updateAllowExternalSpy).toHaveBeenCalledOnceWith(
-      component.allowExternal,
-      stationId
+      stationId,
+      component.allowExternal
     );
   });
 
@@ -498,7 +498,7 @@ describe('StationInfoDrawerComponent', () => {
 
   xit('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
     component.stationLoading = false;
-    component['updateAllowExternalWorkers']();
+    component.updateAllowExternalWorkers();
     component.selectedTabIndex = 2;
     fixture.detectChanges();
     expect(component.allowExternalLoading).toBe(true);

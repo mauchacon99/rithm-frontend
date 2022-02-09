@@ -95,6 +95,7 @@ describe('FlowLogicComponent', () => {
         panelClass: ['w-5/6', 'sm:w-4/5'],
         maxWidth: '1024px',
         data: rithmId,
+        disableClose: true,
       };
       const dialogSpy = spyOn(
         TestBed.inject(MatDialog),
