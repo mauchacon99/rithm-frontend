@@ -412,7 +412,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (confirm) {
       this.docCreationLoading = true;
       this.documentService
-        .createNewDocument('New Document', 0, this.stationRithmId)
+        .createNewDocument('', 0, this.stationRithmId)
         .pipe(first())
         .subscribe({
           next: (documentId) => {

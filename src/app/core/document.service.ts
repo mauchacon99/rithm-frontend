@@ -409,7 +409,7 @@ export class DocumentService {
     stationRithmId: string
   ): Observable<string> {
     const requestObject = {
-      name,
+      name: name ? name : 'New Document',
       priority,
     };
     return this.http
