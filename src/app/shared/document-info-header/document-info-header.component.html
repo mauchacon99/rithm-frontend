@@ -97,7 +97,7 @@
             <div class="w-full">
               <p>
                 Document Name:
-                {{ documentName ? documentName : 'Untitled Document' }}
+                {{ documentName }}
                 {{ appendedDocumentName }}
               </p>
             </div>
@@ -151,7 +151,7 @@
 >
   <div class="py-2 border-b border-secondary-400">
     <p class="font-semibold">
-      {{ documentName ? documentName : 'Untitled Document' }}
+      {{ documentName }}
     </p>
 
     <p class="text-xs">
@@ -191,10 +191,9 @@
       mat-icon-button
       data-testid="return-document-button"
       id="return-document-button"
-      class="text-secondary-500"
-      (click)="goToDocument()"
+      class="text-secondary-500 flex justify-center items-center"
     >
-      <i class="fas fa-external-link-alt p-5"></i>
+      <i class="fas fa-external-link-alt"></i>
     </button>
   </div>
 </section>
