@@ -179,4 +179,19 @@ describe('OptionsMenuComponent', () => {
     expect(spyToggleMenu).toHaveBeenCalledWith('menuDashboard');
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should call method delete dashboard', () => {
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deleteOrganizationDashboard'
+    ).and.callThrough();
+
+    component.deleteOrganizationDashboard(
+      '247cf568-27a4-4968-9338-046ccfee24f3'
+    );
+
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
+      '247cf568-27a4-4968-9338-046ccfee24f3'
+    );
+  });
 });
