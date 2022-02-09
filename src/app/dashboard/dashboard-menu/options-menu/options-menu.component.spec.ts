@@ -180,7 +180,7 @@ describe('OptionsMenuComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call method delete dashboard', () => {
+  it('should call method deleteOrganizationDashboard', () => {
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deleteOrganizationDashboard'
@@ -193,5 +193,28 @@ describe('OptionsMenuComponent', () => {
     expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
       '247cf568-27a4-4968-9338-046ccfee24f3'
     );
+  });
+
+  it('should show error if the request deleteOrganizationDashboard fail', () => {
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deleteOrganizationDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.deleteOrganizationDashboard(
+      '247cf568-27a4-4968-9338-046ccfee24f3'
+    );
+
+    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 });

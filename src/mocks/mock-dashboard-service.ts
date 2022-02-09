@@ -426,13 +426,14 @@ export class MockDashboardService {
     return of(dashboardData).pipe(delay(1000));
   }
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Delete organization dashboard`s.
    *
+   * @param rithmId The dashboard specific to delete.
    * @returns The rithmId deleted dashboard.
-   * @param rithmId The rithmId  the dashboard to delete.
    */
   deleteOrganizationDashboard(rithmId: string): Observable<unknown> {
-    return of(rithmId).pipe(delay(1000));
+    return of().pipe(delay(1000));
   }
 }
