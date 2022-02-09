@@ -277,6 +277,14 @@ describe('DashboardComponent', () => {
     });
   });
 
+  it('should called method config Edit Mode and change status draggable and resizable', () => {
+    expect(component.options.draggable?.enabled).toBeFalse();
+    expect(component.options.resizable?.enabled).toBeFalse();
+    component['configEditMode'](true, true);
+    expect(component.options.draggable?.enabled).toBeTrue();
+    expect(component.options.resizable?.enabled).toBeTrue();
+  });
+
   describe('Expand widget', () => {
     const dashboardData = {
       rithmId: '123654-789654-7852',

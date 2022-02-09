@@ -71,10 +71,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     displayGrid: 'onDrag&Resize',
     pushItems: true,
     draggable: {
-      enabled: true,
+      enabled: false,
     },
     resizable: {
-      enabled: true,
+      enabled: false,
     },
     margin: 16,
     minCols: 12,
@@ -199,13 +199,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
 
       if (response) {
+        if (
+          JSON.stringify(this.dashboardData) !==
+          JSON.stringify(this.dashboardDataCopy)
+        ) {
+          this.dashboardData = JSON.parse(
+            JSON.stringify(this.dashboardDataCopy)
+          );
+        }
         this.editMode = false;
-        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
-        this.changedOptions();
+        this.configEditMode(false, false);
       }
     } else {
-      this.editMode = statusEditMode;
+      this.editMode = true;
+      this.configEditMode(true, true);
     }
+  }
+
+  /**
+   * Enable or disable resizable and draggable in  gridster2.
+   *
+   * @param isDraggable Is enabled draggable.
+   * @param isResizable Is enabled resizable.
+   */
+  private configEditMode(isDraggable: boolean, isResizable: boolean): void {
+    this.options.draggable = {
+      enabled: isDraggable,
+    };
+
+    this.options.resizable = {
+      enabled: isResizable,
+    };
+    this.changedOptions();
   }
 
   /**
@@ -328,6 +353,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
+        this.configEditMode(false, false);
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
