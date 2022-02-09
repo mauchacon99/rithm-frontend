@@ -18,7 +18,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 })
 export class StationWidgetComponent implements OnInit {
   /** The component for the document info header. */
-  @ViewChild('DocumentComponent', { static: false })
+  @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
   /** Station rithmId. */
