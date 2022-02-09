@@ -330,7 +330,11 @@
             </ng-container>
             <ng-template #slideToggleAllowExt>
               <div class="pr-2">
-                <mat-slide-toggle color="accent" [(ngModel)]="allowExternal">
+                <mat-slide-toggle
+                  color="accent"
+                  (change)="updateAllowExternalWorkers()"
+                  [(ngModel)]="allowExternal"
+                >
                 </mat-slide-toggle>
               </div>
             </ng-template>
