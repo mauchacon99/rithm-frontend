@@ -3,7 +3,7 @@ import { Question } from './question';
 /**
  * Represents the data the document-widget.
  */
-export interface documentWidget {
+export interface DocumentWidget {
   /** The name of the document. */
   documentName: string;
   /** The Document rithmId. */
