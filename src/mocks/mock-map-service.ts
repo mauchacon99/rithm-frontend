@@ -57,6 +57,9 @@ export class MockMapService {
   /** The station group elements displayed on the map. */
   stationGroupElements: StationGroupMapElement[] = [];
 
+  /** Informs the map that which drawer is opened. */
+  openedDrawerType$ = new BehaviorSubject('');
+
   /** The station element displayed on the map. */
   station = new StationMapElement({
     rithmId: uuidv4(),
@@ -452,5 +455,25 @@ export class MockMapService {
         this.mapDataReceived$.next(true);
       }
     });
+  }
+
+  /**
+   * Set drawerOpened property of respective map element to false when any drawer is closed.
+   *
+   * @param drawerItem The opened drawer type.
+   */
+  handleDrawerClose(drawerItem: string): void {
+    if (drawerItem === 'stationInfo') {
+      if (this.stationElements.some((e) => e.drawerOpened)) {
+        const openedStations = this.stationElements.filter(
+          (e) => e.drawerOpened
+        );
+        openedStations.forEach((station) => {
+          station.drawerOpened = false;
+        });
+        this.openedDrawerType$.next('');
+        this.mapDataReceived$.next(true);
+      }
+    }
   }
 }

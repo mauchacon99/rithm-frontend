@@ -22,6 +22,7 @@ import {
 import { UserService } from 'src/app/core/user.service';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { throwError } from 'rxjs';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -280,5 +281,63 @@ describe('DocumentInfoHeaderComponent', () => {
       '#assign-user-loading'
     );
     expect(loadingComponent).toBeNull();
+  });
+  it('should assign user to document', () => {
+    component.isWidget = true;
+
+    spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    });
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#start-document-button'
+    );
+
+    expect(button).toBeTruthy();
+    const assignUserDocument = spyOn(component, 'assignUserToDocument');
+    button.click();
+    expect(assignUserDocument).toHaveBeenCalledOnceWith();
+  });
+
+  it('should executed method for assigned user in document', () => {
+    const userService: UserService = TestBed.inject(UserService);
+    const spyMethod = spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.callThrough();
+    component.assignUserToDocument();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      userService.user.rithmId,
+      component.stationRithmId,
+      component.documentRithmId
+    );
+  });
+
+  it('should catch error in petition to assign to user in document', () => {
+    const userService: UserService = TestBed.inject(UserService);
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    const spyMethod = spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.assignUserToDocument();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      userService.user.rithmId,
+      component.stationRithmId,
+      component.documentRithmId
+    );
+    expect(spyError).toHaveBeenCalled();
   });
 });

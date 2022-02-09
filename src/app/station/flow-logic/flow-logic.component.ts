@@ -53,11 +53,10 @@ export class FlowLogicComponent implements OnInit {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
       data: this.rithmId,
+      disableClose: true,
     });
     if (dialog) {
-      // handle returned rule
-    } else {
-      // handle error
+      // handle on close.
     }
   }
 
@@ -76,6 +75,26 @@ export class FlowLogicComponent implements OnInit {
         error: (error: unknown) => {
           this.flowRuleError = true;
           this.flowLogicLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save station flow logic.
+   */
+  private saveStationFlowLogic(): void {
+    this.documentService
+      .saveStationFlowLogic(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.getStationFlowLogicRule();
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
