@@ -155,6 +155,7 @@ export class StationWidgetComponent implements OnInit {
       });
   }
 
+  /** Expand widget. */
   toggleExpandWidget(): void {
     this.isExpandWidget = !this.isExpandWidget;
     this.expandWidget.emit(this.isExpandWidget);
