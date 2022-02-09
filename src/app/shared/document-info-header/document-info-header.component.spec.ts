@@ -332,4 +332,30 @@ describe('DocumentInfoHeaderComponent', () => {
     );
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should show error under start document button', () => {
+    component.isWidget = true;
+    spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    });
+    spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.assignUserToDocument();
+    fixture.detectChanges();
+    const errorMessage =
+      fixture.debugElement.nativeElement.querySelector('#assign-user-error');
+    expect(component.displayAssignUserError).toBeTrue();
+    expect(errorMessage).toBeTruthy();
+  });
 });

@@ -61,6 +61,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** View new ui for station/document screen. */
   @Input() viewNewStation = false;
 
+  /** Variable to show if error message should be displayed. */
+  displayAssignUserError = false;
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
@@ -341,6 +344,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
   assignUserToDocument(): void {
+    this.displayAssignUserError = false;
     this.documentService
       .assignUserToDocument(
         this.userService.user.rithmId,
@@ -351,8 +355,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.ngOnInit();
+          this.displayAssignUserError = false;
         },
         error: (error: unknown) => {
+          this.displayAssignUserError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

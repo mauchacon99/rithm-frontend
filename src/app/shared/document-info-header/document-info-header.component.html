@@ -57,7 +57,7 @@
             class="flex items-center document-header-form"
           >
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Document Name: </mat-label>
+              <mat-label>Document Name:</mat-label>
               <input
                 id="name"
                 type="text"
@@ -183,6 +183,14 @@
         >
           Start Document
         </button>
+        <div
+          *ngIf="displayAssignUserError"
+          class="text-error-500 text-xs px-[15px] pt-2"
+          data-testid="assign-user-error"
+          id="assign-user-error"
+        >
+          User not assigned!
+        </div>
       </div>
     </ng-template>
 
