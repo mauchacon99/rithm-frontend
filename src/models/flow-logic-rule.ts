@@ -11,5 +11,5 @@ export interface FlowLogicRule {
   destinationStationRithmId: string;
 
   /** The Flow rules. */
-  flowRules: Rule[];
+  flowRules: Rule;
 }

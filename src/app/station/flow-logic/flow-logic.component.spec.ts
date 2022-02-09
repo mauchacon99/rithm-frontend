@@ -91,6 +91,8 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should to call MatDialog service', async () => {
+      const ruleType = 'and';
+      const connectedStationId = '34904ac2-6bdd-4157-a818-50ffb37fdfbc';
       const expectDataModal = {
         panelClass: ['w-5/6', 'sm:w-4/5'],
         maxWidth: '1024px',
@@ -101,7 +103,7 @@ describe('FlowLogicComponent', () => {
         TestBed.inject(MatDialog),
         'open'
       ).and.callThrough();
-      await component.openModal();
+      await component.openModal(ruleType, connectedStationId);
       expect(dialogSpy).toHaveBeenCalledOnceWith(
         RuleModalComponent,
         expectDataModal
@@ -161,24 +163,23 @@ describe('FlowLogicComponent', () => {
       {
         stationRithmId: rithmId,
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRules: [
-          {
-            ruleType: RuleType.Or,
-            equations: [
-              {
-                leftOperand: {
-                  type: OperandType.Field,
-                  value: 'birthday',
-                },
-                operatorType: OperatorType.Before,
-                rightOperand: {
-                  type: OperandType.Date,
-                  value: '5/27/1982',
-                },
+        flowRules: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
               },
-            ],
-          },
-        ],
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+          subRules: [],
+        },
       },
     ];
     spyOn(
