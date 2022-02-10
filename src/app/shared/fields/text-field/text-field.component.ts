@@ -48,15 +48,6 @@ import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 export class TextFieldComponent
   implements OnInit, ControlValueAccessor, Validator
 {
-  /** Output the value of the field. */
-  @Output() removeOptionField = new EventEmitter<Question>();
-
-  /** Output the value of a possibleAnswer. */
-  @Output() updPossibleAnswer = new EventEmitter<Question>();
-
-  /** The form to add this field in the template. */
-  textFieldForm!: FormGroup;
-
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -66,12 +57,6 @@ export class TextFieldComponent
   /** Does the field need to be removable? */
   @Input() removableField!: boolean;
 
-  /** The field type of the input. */
-  fieldTypeEnum = QuestionFieldType;
-
-  /** Helper class for field validation. */
-  fieldValidation = new DocumentFieldValidation();
-
   /** The label tag for each field. */
   @Input() labelTag!: string;
 
@@ -80,6 +65,21 @@ export class TextFieldComponent
 
   /** Whether Field belongs to another component beside station to be displayed as an inputText instead a textarea. */
   @Input() isInput = false;
+
+  /** Output the value of the field. */
+  @Output() removeOptionField = new EventEmitter<Question>();
+
+  /** Output the value of a possibleAnswer. */
+  @Output() updPossibleAnswer = new EventEmitter<Question>();
+
+  /** The form to add this field in the template. */
+  textFieldForm!: FormGroup;
+
+  /** The field type of the input. */
+  fieldTypeEnum = QuestionFieldType;
+
+  /** Helper class for field validation. */
+  fieldValidation = new DocumentFieldValidation();
 
   constructor(
     private fb: FormBuilder,
@@ -100,7 +100,9 @@ export class TextFieldComponent
     const validators: ValidatorFn[] = [];
 
     //The field is required. Validators.required must be included.
-    if (this.field.isRequired) {
+    if (this.isStation) {
+      validators.push(Validators.required);
+    } else if (this.field.isRequired) {
       validators.push(Validators.required);
     }
 
