@@ -40,6 +40,26 @@ describe('FlowLogicComponent', () => {
       name: 'Untitled Station',
     },
   ];
+  const newFlowLogic: FlowLogicRule = {
+    stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+    destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+    flowRule: {
+      ruleType: RuleType.Or,
+      equations: [
+        {
+          leftOperand: {
+            type: OperandType.Field,
+            value: 'birthday',
+          },
+          operatorType: OperatorType.Before,
+          rightOperand: {
+            type: OperandType.Date,
+            value: '5/27/1982',
+          },
+        },
+      ],
+    },
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -161,24 +181,22 @@ describe('FlowLogicComponent', () => {
       {
         stationRithmId: rithmId,
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRules: [
-          {
-            ruleType: RuleType.Or,
-            equations: [
-              {
-                leftOperand: {
-                  type: OperandType.Field,
-                  value: 'birthday',
-                },
-                operatorType: OperatorType.Before,
-                rightOperand: {
-                  type: OperandType.Date,
-                  value: '5/27/1982',
-                },
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
               },
-            ],
-          },
-        ],
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+        },
       },
     ];
     spyOn(
@@ -237,16 +255,19 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should call the method that save the logical flow rules of a station.', () => {
-    component.rithmId = rithmId;
+    component.newFlowLogic = newFlowLogic;
     const saveStationFlowLogicRuleSpy = spyOn(
       TestBed.inject(DocumentService),
       'saveStationFlowLogic'
     ).and.callThrough();
-    component['saveStationFlowLogic']();
-    expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(rithmId);
+    component.saveStationFlowLogic();
+    expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(
+      component.newFlowLogic
+    );
   });
 
   it('should show error if petition save flow logic fails', () => {
+    component.newFlowLogic = newFlowLogic;
     component.flowLogicLoading = false;
     spyOn(
       TestBed.inject(DocumentService),
@@ -260,7 +281,7 @@ describe('FlowLogicComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['saveStationFlowLogic']();
+    component.saveStationFlowLogic();
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 });

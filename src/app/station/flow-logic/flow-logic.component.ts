@@ -31,6 +31,9 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** Contains the new flow logic rule for saved . */
+  newFlowLogic!: FlowLogicRule;
+
   constructor(
     private dialog: MatDialog,
     private stationService: StationService,
@@ -85,15 +88,14 @@ export class FlowLogicComponent implements OnInit {
 
   /**
    * Save station flow logic.
+   *
+   * @param newFlowLogic New flow logic rule for current station.
    */
-  private saveStationFlowLogic(): void {
+  saveStationFlowLogic(): void {
     this.documentService
-      .saveStationFlowLogic(this.rithmId)
+      .saveStationFlowLogic(this.newFlowLogic)
       .pipe(first())
       .subscribe({
-        next: () => {
-          this.getStationFlowLogicRule();
-        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
