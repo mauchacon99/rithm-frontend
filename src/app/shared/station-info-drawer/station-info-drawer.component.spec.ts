@@ -519,7 +519,7 @@ describe('StationInfoDrawerComponent', () => {
         throw new Error();
       })
     );
-    component.ngOnInit();
+    component['getAllowAllOrgWorkers']();
     fixture.detectChanges();
     const viewError = fixture.debugElement.nativeElement.querySelector(
       '#allow-externarl-error'
