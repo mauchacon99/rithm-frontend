@@ -117,6 +117,20 @@ describe('StationInfoDrawerComponent', () => {
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
+  it('should update the update allow previous button status in station', () => {
+    component.statusAllowPreviousButton = false;
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'updateAllowPreviousButton'
+    ).and.callThrough();
+
+    component.updateAllowPreviousButton();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      component.stationRithmId,
+      component.statusAllowPreviousButton
+    );
+  });
+
   it('should delete a station', async () => {
     const deleteStationSpy = spyOn(
       TestBed.inject(StationService),
