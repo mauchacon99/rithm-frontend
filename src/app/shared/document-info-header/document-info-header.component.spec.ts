@@ -274,6 +274,14 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith();
   });
 
+  it('should show assign-user-loading when assign user is in process', () => {
+    component.assignUserToDocument();
+    fixture.detectChanges();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#assign-user-loading'
+    );
+    expect(loadingComponent).toBeNull();
+  });
   it('should assign user to document', () => {
     component.isWidget = true;
 
