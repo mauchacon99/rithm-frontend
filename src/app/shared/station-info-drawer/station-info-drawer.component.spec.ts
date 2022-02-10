@@ -131,6 +131,23 @@ describe('StationInfoDrawerComponent', () => {
     );
   });
 
+  it('should catch error and executed error service when update the status allow-previous-button ', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'updateAllowPreviousButton'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.updateAllowPreviousButton();
+    expect(spyError).toHaveBeenCalled();
+  });
+
   it('should delete a station', async () => {
     const deleteStationSpy = spyOn(
       TestBed.inject(StationService),
