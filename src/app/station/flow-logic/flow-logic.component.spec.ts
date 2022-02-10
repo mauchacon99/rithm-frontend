@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlowLogicComponent } from './flow-logic.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -163,7 +167,7 @@ describe('FlowLogicComponent', () => {
       {
         stationRithmId: rithmId,
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRules: {
+        flowRule: {
           ruleType: RuleType.Or,
           equations: [
             {
@@ -237,31 +241,75 @@ describe('FlowLogicComponent', () => {
     expect(reviewError).toBeTruthy();
   });
 
-  it('should call the method that save the logical flow rules of a station.', () => {
-    component.rithmId = rithmId;
-    const saveStationFlowLogicRuleSpy = spyOn(
-      TestBed.inject(DocumentService),
-      'saveStationFlowLogic'
-    ).and.callThrough();
-    component['saveStationFlowLogic']();
-    expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(rithmId);
-  });
+  describe('New rule modal afterClosed', () => {
+    const ruleToAdd = {
+      leftOperand: {
+        type: OperandType.String,
+        value: '',
+      },
+      operatorType: OperatorType.EqualTo,
+      rightOperand: {
+        type: OperandType.String,
+        value: '',
+      },
+    };
+    beforeEach(() => {
+      fixture = TestBed.createComponent(FlowLogicComponent);
+      component = fixture.componentInstance;
+      component.rithmId = rithmId;
+      component.flowLogicRules = [
+        {
+          stationRithmId: rithmId,
+          destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+          flowRule: {
+            ruleType: RuleType.And,
+            equations: [],
+            subRules: [],
+          },
+        },
+      ];
+      fixture.detectChanges();
+    });
 
-  it('should show error if petition save flow logic fails', () => {
-    component.flowLogicLoading = false;
-    spyOn(
-      TestBed.inject(DocumentService),
-      'saveStationFlowLogic'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const displayErrorSpy = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component['saveStationFlowLogic']();
-    expect(displayErrorSpy).toHaveBeenCalled();
+    it('should add a new flowLogicRule with equations if station doesnt exists', async () => {
+      component.flowLogicRules[0].destinationStationRithmId =
+        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
+
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('all', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(2);
+    });
+
+    it('should update a flowLogicRule with equations if station exists', async () => {
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('all', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(1);
+    });
+
+    it('should add a new flowLogicRule with subrules if station doesnt exists', async () => {
+      component.flowLogicRules[0].destinationStationRithmId =
+        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('any', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(2);
+    });
+
+    it('should update a flowLogicRule with subrules if it exists', async () => {
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('any', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(1);
+    });
   });
 });
