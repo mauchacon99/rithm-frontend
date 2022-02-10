@@ -548,4 +548,18 @@ describe('DashboardService', () => {
 
     service.toggleLoadingDashboard(false);
   });
+
+  it('should delete a organization dashboard', () => {
+    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    service.deleteOrganizationDashboard(rithmId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
+  });
 });
