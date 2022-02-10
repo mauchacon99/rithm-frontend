@@ -117,6 +117,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station is allowed for all the organization workers or not. */
   allowAllOrgWorkers = false;
 
+  /** The loading if changed toggle to allow all workers in the organization. */
+  allowAllOrgLoading = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -294,6 +297,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
+              this.allowExternal = stationInfo.allowExternalWorkers;
+              this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
             this.stationLoading = false;
           },
@@ -629,16 +634,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update AllowAllOrgWorkers information.
-   *
-   * @param allowAllOrgWorkers The value that will be update.
+   * Update the AllowAllOrgWorkers status.
    */
-  updateAllOrgWorkersStation(allowAllOrgWorkers: boolean): void {
+  updateAllOrgWorkersStation(): void {
+    this.allowAllOrgLoading = true;
     this.stationService
-      .updateAllowAllOrgWorkers(this.stationRithmId, allowAllOrgWorkers)
+      .updateAllowAllOrgWorkers(this.stationRithmId, this.allowAllOrgWorkers)
       .pipe(first())
       .subscribe({
+        next: (allowAllOrgWorkers) => {
+          this.allowAllOrgWorkers = allowAllOrgWorkers;
+          this.allowAllOrgLoading = false;
+        },
         error: (error: unknown) => {
+          this.allowAllOrgLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

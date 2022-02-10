@@ -404,14 +404,16 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should update the allowAllOrgWorkers status in station', () => {
+    component.allowAllOrgWorkers = true;
     const spyMethod = spyOn(
       TestBed.inject(StationService),
       'updateAllowAllOrgWorkers'
     ).and.callThrough();
-
-    const allowAllOrgWorkers = true;
-    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
-    expect(spyMethod).toHaveBeenCalledOnceWith(stationId, allowAllOrgWorkers);
+    component.updateAllOrgWorkersStation();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      stationId,
+      component.allowAllOrgWorkers
+    );
   });
 
   it('should catch an error when updating the allowAllOrgWorkers status fails', () => {
@@ -423,12 +425,11 @@ describe('StationInfoDrawerComponent', () => {
         throw new Error();
       })
     );
-    const allowAllOrgWorkers = true;
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
+    component.updateAllOrgWorkersStation();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -442,5 +443,19 @@ describe('StationInfoDrawerComponent', () => {
       '#loading-indicator-allow-external'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  xit('should show loading-indicator-allow-external while update field allowAllOrgWorkers', () => {
+    component.stationLoading = false;
+    component.allowAllOrgLoading = true;
+    component.selectedTabIndex = 2;
+    component.updateAllOrgWorkersStation();
+    fixture.detectChanges();
+    expect(component.allowAllOrgLoading).toBe(true);
+    const loadingAllOrgWorker =
+      fixture.debugElement.nativeElement.querySelector(
+        '#loading-indicator-allow-org-workers'
+      );
+    expect(loadingAllOrgWorker).toBeTruthy();
   });
 });
