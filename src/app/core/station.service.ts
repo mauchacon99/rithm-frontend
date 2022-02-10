@@ -523,21 +523,13 @@ export class StationService {
    * @returns An object with value of AllowAllOrgWorkers.
    */
   getAllowAllOrgWorkers(stationRithmId: string): Observable<boolean> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update field related all org workers.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const mockData: StandardBooleanJSON = {
-        data: true,
-      };
-      return of(mockData.data).pipe(delay(1000));
-    }
+    const params = new HttpParams().set('rithmId', stationRithmId);
+    return this.http
+      .get<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers`,
+        { params }
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**

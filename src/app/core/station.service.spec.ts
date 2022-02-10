@@ -977,27 +977,6 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the allowAllOrgWorkers status in station', () => {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    const allowAllOrgWorkers = true;
-    service
-      .updateAllowAllOrgWorkers(stationId, allowAllOrgWorkers)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse.data);
-      });
-
-    const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
-    );
-    expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(expectedResponse);
-
-    req.flush(expectedResponse);
-    httpTestingController.verify();
-  });
-
   it('should get the allow external workers', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
@@ -1040,8 +1019,38 @@ describe('StationService', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
+
     service.getAllowAllOrgWorkers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
+    );
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should update the allowAllOrgWorkers status in station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    const allowAllOrgWorkers = true;
+    service
+      .updateAllowAllOrgWorkers(stationId, allowAllOrgWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
