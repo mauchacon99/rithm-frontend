@@ -201,11 +201,17 @@ export class DashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
    */
-  deleteOrganizationDashboard(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    rithmId: string
-  ): Observable<unknown> {
-    return of().pipe(delay(1000));
+  deleteOrganizationDashboard(rithmId: string): Observable<DashboardData> {
+    return this.http.delete<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
+      {
+        body: [
+          {
+            rithmId: rithmId,
+          },
+        ],
+      }
+    );
   }
 
   /**
