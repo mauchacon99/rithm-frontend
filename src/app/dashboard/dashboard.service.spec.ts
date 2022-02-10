@@ -548,4 +548,11 @@ describe('DashboardService', () => {
 
     service.toggleLoadingDashboard(false);
   });
+
+  it('should delete a personal dashboard', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    service.deletePersonalDashboard(rithmId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+  });
 });
