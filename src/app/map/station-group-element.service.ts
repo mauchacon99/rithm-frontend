@@ -833,7 +833,7 @@ export class StationGroupElementService {
    * @param title The station group name.
    * @param pointStart The start point of the line.
    * @param pointEnd The end point of the line.
-   * @param stationGroup The status of the station group.
+   * @param stationGroup The station group.
    * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
    */
   private paintOrDeleteLineStationGroupName(
@@ -881,7 +881,7 @@ export class StationGroupElementService {
         5,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
-      // If status og the station group is pending.
+      // If status of the station group is pending.
       if (stationGroup.status === MapItemStatus.Pending) {
         const titleWidth =
           this.canvasContext.measureText(title).width +
