@@ -1363,7 +1363,7 @@ export class MockDocumentService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Invalid flow logic rule.',
+              error: 'Cannot be saved flow logic rule.',
             },
           })
       ).pipe(delay(1000));
