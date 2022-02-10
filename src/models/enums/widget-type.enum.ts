@@ -7,5 +7,5 @@ export enum WidgetType {
   /** Widget type station. */
   Station = 'station',
   /** Widget type document. */
-  Document = 'document',
+  Document = 'document-list',
 }
