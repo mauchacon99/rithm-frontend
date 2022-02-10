@@ -196,7 +196,7 @@ export class DashboardService {
   /**
    * Delete organization dashboard`s.
    *
-   * @param rithmId The dashboard specific to delete.
+   * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
    */
   deleteOrganizationDashboard(

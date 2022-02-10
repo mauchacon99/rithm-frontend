@@ -82,7 +82,7 @@ export class OptionsMenuComponent {
   /**
    * Delete organization dashboard.
    *
-   * @param rithmId The rithmId  the dashboard to delete.
+   * @param rithmId The dashboard rithmId to delete.
    */
   deleteOrganizationDashboard(rithmId: string): void {
     this.dashboardService
