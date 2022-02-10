@@ -201,14 +201,7 @@ export class DashboardService {
    */
   deleteOrganizationDashboard(rithmId: string): Observable<DashboardData> {
     return this.http.delete<DashboardData>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
-      {
-        body: [
-          {
-            rithmId: rithmId,
-          },
-        ],
-      }
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
     );
   }
 }

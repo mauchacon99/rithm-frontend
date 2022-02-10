@@ -556,7 +556,7 @@ describe('DashboardService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
     );
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
