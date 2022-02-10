@@ -114,6 +114,7 @@ describe('MapSearchComponent', () => {
     component.openDrawer(station);
     expect(sideNavSpy).toHaveBeenCalledWith('stationInfo', dataInfoDrawer);
     expect(stationServiceSpy).toHaveBeenCalledWith(dataInfoDrawer.stationName);
+    expect(station.drawerOpened).toBeTrue();
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
   });

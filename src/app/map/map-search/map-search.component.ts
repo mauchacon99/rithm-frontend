@@ -80,6 +80,7 @@ export class MapSearchComponent {
     //Pass dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     this.stationService.updatedStationNameText(drawerItem.stationName);
+    drawerItem.drawerOpened = true;
     this.searchText = '';
     this.filteredStations = [];
   }
