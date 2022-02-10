@@ -96,7 +96,8 @@
           <div class="flex items-center justify-between col-span-12">
             <div class="w-full">
               <p>
-                Document Name: {{ documentName }}
+                Document Name:
+                {{ documentName }}
                 {{ appendedDocumentName }}
               </p>
             </div>
@@ -187,13 +188,13 @@
     </ng-template>
 
     <button
-      mat-button
+      mat-icon-button
       data-testid="return-document-button"
       id="return-document-button"
       class="text-secondary-500"
       (click)="goToDocument()"
     >
-      <i class="fas fa-external-link-alt p-5"></i>
+      <i class="fas fa-external-link-alt"></i>
     </button>
   </div>
 </section>
