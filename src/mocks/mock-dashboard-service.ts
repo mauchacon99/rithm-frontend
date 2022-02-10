@@ -427,7 +427,7 @@ export class MockDashboardService {
   }
 
   /**
-   * Delete organization dashboard`s.
+   * Delete organization dashboards.
    *
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The dashboard rithmId deleted.
