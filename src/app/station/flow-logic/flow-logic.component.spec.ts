@@ -10,6 +10,7 @@ import {
   FlowLogicRule,
   OperandType,
   OperatorType,
+  Rule,
   RuleType,
 } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
@@ -33,6 +34,7 @@ import { of, throwError } from 'rxjs';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
+import { RuleEquation } from '../../../models/rule-equation';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -242,7 +244,7 @@ describe('FlowLogicComponent', () => {
   });
 
   describe('New rule modal afterClosed', () => {
-    const ruleToAdd = {
+    const ruleToAdd: RuleEquation = {
       leftOperand: {
         type: OperandType.String,
         value: '',
@@ -311,5 +313,77 @@ describe('FlowLogicComponent', () => {
       expect(dialogRef).toHaveBeenCalled();
       expect(component.flowLogicRules).toHaveSize(1);
     });
+  });
+
+  it('Should return a default  flowRuleObject for the current station if not exists', async () => {
+    const defaultRule: Rule = {
+      ruleType: RuleType.And,
+      equations: [],
+      subRules: [],
+    };
+
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+              operatorType: OperatorType.EqualTo,
+              rightOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    fixture.detectChanges();
+
+    const ruleObject = component.getStationFlowRules(
+      '4157-a818-34904ac2-50ffb37fdfbc'
+    );
+
+    expect(ruleObject).toEqual(defaultRule);
+  });
+
+  it('Should return an flowRuleObject for the current station if exists', async () => {
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+              operatorType: OperatorType.EqualTo,
+              rightOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    fixture.detectChanges();
+
+    const ruleObject = component.getStationFlowRules(
+      '4157-a818-34904ac2-6bdd-50ffb37fdfbc'
+    );
+
+    expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
   });
 });
