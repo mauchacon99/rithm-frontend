@@ -5,11 +5,6 @@ import {
   Point,
   PathButton,
 } from '../models';
-import {
-  GROUP_CHARACTER_SIZE,
-  GROUP_NAME_HEIGHT,
-  STATION_GROUP_NAME_PADDING,
-} from 'src/app/map/map-constants';
 
 export interface StationGroupMapElement extends StationGroupMapData {
   /** The points used for the boundary shape of the station group (the points used for the convex hull). */
@@ -53,15 +48,11 @@ export class StationGroupMapElement {
    * Checks whether the station group boundary is being hovered over.
    *
    * @param point The cursor location.
-   * @param canvasPoint The event canvas point.
    * @param ctx The rendering context for the canvas.
-   * @param scale The scale of the map.
    */
   checkElementHover(
     point: Point,
-    canvasPoint: Point,
     ctx: CanvasRenderingContext2D,
-    scale: number
   ): void {
     //Saves the current state of the canvas context.
     ctx.save();
@@ -80,9 +71,9 @@ export class StationGroupMapElement {
           // If the mouse hovers over the icon button then hoverItem changes.
           if (
             this.isPointInStationGroupPendingButtons(
-              canvasPoint,
+              point,
               iconButton,
-              ctx
+              ctx,
             )
           ) {
             this.hoverItem = iconButton.typeButton;
@@ -91,38 +82,12 @@ export class StationGroupMapElement {
         }
       } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
         this.hoverItem = StationGroupElementHoverItem.Boundary;
-      } else if (this.isPointInStationGroupName(canvasPoint, scale)) {
-        this.hoverItem = StationGroupElementHoverItem.Name;
       } else {
         this.hoverItem = StationGroupElementHoverItem.None;
       }
     }
     //Restore the saved context state and undo the changes to it.
     ctx.restore();
-  }
-
-  /**
-   * Checks whether point is in a station group name or not.
-   *
-   * @param point The cursor location.
-   * @param scale The scale of the map.
-   * @returns A boolean.
-   */
-  isPointInStationGroupName(point: Point, scale: number): boolean {
-    const scaledStationHeight = GROUP_NAME_HEIGHT * scale;
-    const scaledStationWidth = this.title.length * GROUP_CHARACTER_SIZE * scale;
-
-    //Check if cursor is within a rectangle set around the station group name.
-    return (
-      point.x >= this.boundaryPoints[0].x - STATION_GROUP_NAME_PADDING &&
-      point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
-      point.y >=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y -
-          STATION_GROUP_NAME_PADDING &&
-      point.y <=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y +
-          scaledStationHeight
-    );
   }
 
   /**
@@ -176,14 +141,14 @@ export class StationGroupMapElement {
   isPointInStationGroupPendingButtons(
     point: Point,
     pathButtons: PathButton,
-    ctx: CanvasRenderingContext2D
+    ctx: CanvasRenderingContext2D,
   ): boolean {
     // check whether the mouse is hovering over the icon path
     // Compares the path with the current point of the mouse to canvas context.
     return ctx.isPointInStroke(
       pathButtons.path,
-      point.x * window.devicePixelRatio,
-      point.y * window.devicePixelRatio
+      point.x,
+      point.y
     );
   }
 }

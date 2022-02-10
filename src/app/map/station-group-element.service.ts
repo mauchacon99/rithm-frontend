@@ -133,8 +133,7 @@ export class StationGroupElementService {
         this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
         stationGroup.disabled &&
         !stationGroup.selected &&
-        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-          stationGroup.hoverItem === StationGroupElementHoverItem.Name)
+        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
       ) {
         this.drawStationGroupToolTip(stationGroup);
       }
@@ -298,15 +297,14 @@ export class StationGroupElementService {
     // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.selected ||
-      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+      (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
         !stationGroup.disabled &&
         this.mapService.mapMode$.value === MapMode.StationGroupAdd)
         ? MAP_SELECTED
         : stationGroup.disabled &&
           this.mapService.mapMode$.value === MapMode.StationGroupAdd
         ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
         ? NODE_HOVER_COLOR
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
