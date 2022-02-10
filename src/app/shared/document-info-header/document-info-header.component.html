@@ -184,6 +184,12 @@
         >
           Start Document
         </button>
+        <div *ngIf="loadingAssignUser" class="w-24 items-center py-2">
+          <app-loading-indicator
+            id="assign-user-loading"
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
+        </div>
       </div>
     </ng-template>
 

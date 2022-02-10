@@ -148,12 +148,18 @@
   <!--  Header -->
   <div class="flex justify-between items-center">
     <button
+      [disabled]="documentComponent?.documentLoading || false"
       mat-icon-button
       (click)="viewDocument('', true)"
       id="return-list-documents"
       data-testid="return-list-documents"
     >
-      <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
+      <i
+        [ngClass]="{
+          'text-secondary-300': documentComponent?.documentLoading || false
+        }"
+        class="fas text-secondary-500 fa-arrow-left text-lg"
+      ></i>
     </button>
     <button mat-icon-button id="expand-document" data-testid="expand-document">
       <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
