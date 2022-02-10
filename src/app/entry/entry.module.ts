@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { UserFormModule } from '../shared/user-form/user-form.module';
 import { PasswordRequirementsModule } from '../shared/password-requirements/password-requirements.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { PasswordRequirementsModule } from '../shared/password-requirements/pass
     LoadingIndicatorModule,
     UserFormModule,
     PasswordRequirementsModule,
+    MatCheckboxModule,
   ],
 })
 export class EntryModule {}
