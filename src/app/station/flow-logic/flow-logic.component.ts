@@ -89,7 +89,6 @@ export class FlowLogicComponent implements OnInit {
   /**
    * Save station flow logic.
    *
-   * @param newFlowLogic New flow logic rule for current station.
    */
   saveStationFlowLogic(): void {
     this.documentService
