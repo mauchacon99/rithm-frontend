@@ -22,7 +22,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
-import { OperandType, Question, QuestionFieldType } from 'src/models';
+import {
+  OperandType,
+  Question,
+  QuestionFieldType,
+  OperatorType,
+} from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
@@ -109,7 +114,7 @@ describe('RuleModalComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#next-step-1');
     const valueStationQuestion = 'value 1';
     expect(btnNextInStep1.disabled).toBeTruthy();
-    component.firstOperand = valueStationQuestion;
+    component.firstOperand.value = valueStationQuestion;
     fixture.detectChanges();
     expect(btnNextInStep1.disabled).toBeFalsy();
   });
@@ -120,7 +125,7 @@ describe('RuleModalComponent', () => {
     )?.componentInstance;
     const step1 = stepperComponent.steps.toArray()[0];
     expect(step1.completed).toBeFalse();
-    component.firstOperand = 'value-1';
+    component.firstOperand.value = 'value-1';
     fixture.detectChanges();
     expect(step1.completed).toBeTrue();
   });
@@ -163,9 +168,11 @@ describe('RuleModalComponent', () => {
   it('should activate the next button in step 2', () => {
     const btnNextInStep2 =
       fixture.debugElement.nativeElement.querySelector('#next-step-2');
-    const option = 'is not';
     expect(btnNextInStep2.disabled).toBeTrue();
-    component.operator = option;
+    component.operatorSelected = {
+      text: 'is not',
+      value: OperatorType.EqualTo,
+    };
     fixture.detectChanges();
     expect(btnNextInStep2.disabled).toBeFalse();
   });
@@ -176,7 +183,10 @@ describe('RuleModalComponent', () => {
     )?.componentInstance;
     const step2 = stepperComponent.steps.toArray()[1];
     expect(step2.completed).toBeFalse();
-    component.operator = 'is not';
+    component.operatorSelected = {
+      text: 'is not',
+      value: OperatorType.EqualTo,
+    };
     fixture.detectChanges();
     expect(step2.completed).toBeTrue();
   });
@@ -186,7 +196,7 @@ describe('RuleModalComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#next-step-3');
     const option = 'Fieldset #2';
     expect(btnNextInStep3.disabled).toBeTrue();
-    component.secondOperand = option;
+    component.secondOperand.value = option;
     fixture.detectChanges();
     expect(btnNextInStep3.disabled).toBeFalse();
   });
@@ -197,21 +207,41 @@ describe('RuleModalComponent', () => {
     )?.componentInstance;
     const step3 = stepperComponent.steps.toArray()[2];
     expect(step3.completed).toBeFalse();
-    component.secondOperand = 'Fieldset #2';
+    component.secondOperand.value = 'Fieldset #2';
     fixture.detectChanges();
     expect(step3.completed).toBeTrue();
   });
 
   it('should set the operator list as operator options when adding the field type question', () => {
+    const question: Question = {
+      prompt: 'Example question#1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
     expect(component.operatorList).toHaveSize(0);
-    component.setOperatorList(QuestionFieldType.ShortText, 'Fieldset #1');
+    component.setFirstOperandInformation(question);
     expect(component.operatorList.length > 0).toBeTrue();
   });
 
   it('should set the first field type when calling setOperatorList', () => {
-    expect(component.firstFieldType).toBeUndefined();
-    component.setOperatorList(QuestionFieldType.LongText, 'Fieldset #1');
-    expect(component.firstFieldType).toEqual(QuestionFieldType.LongText);
+    const question: Question = {
+      prompt: 'Example question#1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.LongText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
+    expect(component.firstOperandQuestionType).toBeUndefined();
+    component.setFirstOperandInformation(question);
+    expect(component.firstOperandQuestionType).toEqual(
+      QuestionFieldType.LongText
+    );
   });
 
   it('should close the rule modal when close-modal-btn clicked', () => {
@@ -224,16 +254,34 @@ describe('RuleModalComponent', () => {
   });
 
   it('should set the first operand type and first operand text when calling setOperatorList', () => {
-    expect(component.firstOperandType).toBeUndefined();
-    component.setOperatorList(QuestionFieldType.Number, 'Fieldset #1');
-    expect(component.firstOperandType).toEqual(OperandType.Number);
-    expect(component.firstOperandText).toBe('Fieldset #1');
+    const question: Question = {
+      prompt: 'Fieldset #1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
+    expect(component.firstOperandQuestionType).toBeUndefined();
+    component.setFirstOperandInformation(question);
+    expect(component.firstOperandQuestionType).toEqual(OperandType.Number);
+    expect(component.firstOperand.value).toBe('Fieldset #1');
   });
 
-  it('should call to refresh component field', () => {
-    const spyMethod = spyOn(component, 'refreshComponentField');
+  it('should call resetQuestionFieldComponent to refresh component field', () => {
+    const question: Question = {
+      prompt: 'Example question#1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
+    const spyMethod = spyOn(component, 'resetQuestionFieldComponent');
     expect(component.textField).toBeUndefined();
-    component.setOperatorList(QuestionFieldType.Select, 'Fieldset #1');
+    component.setFirstOperandInformation(question);
     fixture.detectChanges();
     expect(spyMethod).toHaveBeenCalled();
     expect(component.textField).toBeDefined();
@@ -266,35 +314,5 @@ describe('RuleModalComponent', () => {
     );
     const valueExpected = component.secondOperandQuestionList;
     expect(valueExpected).toBe(expectedResponse);
-  });
-
-  it('should call to selectionChangeStep and empty operands and operator', () => {
-    component.firstOperand = 'value-1';
-    component.operator = 'is not';
-    component.secondOperand = 'value-2';
-
-    const btnNextInStep1 =
-      fixture.debugElement.nativeElement.querySelector('#next-step-1');
-    const btnNextInStep2 =
-      fixture.debugElement.nativeElement.querySelector('#next-step-2');
-    const btnBackInStep2 =
-      fixture.debugElement.nativeElement.querySelector('#back-step-2');
-
-    expect(component.firstOperand).not.toBe('');
-    expect(component.operator).not.toBe('');
-    expect(component.secondOperand).not.toBe('');
-
-    btnNextInStep1.click();
-    fixture.detectChanges();
-
-    btnNextInStep2.click();
-    fixture.detectChanges();
-
-    btnBackInStep2.click();
-    fixture.detectChanges();
-
-    expect(component.firstOperand).toBe('');
-    expect(component.operator).toBe('');
-    expect(component.secondOperand).toBe('');
   });
 });
