@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [DocumentInfoHeaderComponent],
@@ -20,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
     UserAvatarModule,
     RouterModule,
     MatButtonModule,
+    LoadingIndicatorModule,
   ],
   exports: [DocumentInfoHeaderComponent],
 })
