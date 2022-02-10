@@ -1023,7 +1023,7 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
     );
-    expect(req.request.params).toBeTruthy();
+    expect(req.request.params.get('rithmId')).toBe(stationId);
     expect(req.request.method).toEqual('GET');
     req.flush(expectedResponse);
     httpTestingController.verify();
