@@ -10,4 +10,10 @@ export enum StationGroupElementHoverItem {
 
   /** The map cursor is not hovering over anything specific. */
   None = 'none',
+
+  /** The map cursor is hovering over the button cancel. */
+  ButtonCancel = 'buttonCancel',
+
+  /** The map cursor is hovering over the button accept. */
+  ButtonAccept = 'buttonAccept',
 }

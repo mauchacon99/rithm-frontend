@@ -48,8 +48,14 @@ export const STATION_GROUP_POINT_RADIUS = 15;
 export const STATION_GROUP_NAME_PADDING = 6;
 export const GROUP_NAME_HEIGHT = 20;
 export const GROUP_CHARACTER_SIZE = 10;
-export const STATION_GROUP_NAME_TRANSLATE = 40;
+export const STATION_GROUP_NAME_TRANSLATE = 20;
 export const SLOPE_RANGE_NOT_ALLOWED = 0.00005;
+
+// Icon of the Station Group.
+export const ICON_STATION_GROUP_HOVER_COLOR_CANCEL = '#91372C';
+export const ICON_STATION_GROUP_CANCEL = '\uf00d';
+export const ICON_STATION_GROUP_ACCEPT = '\uf058';
+export const ICON_STATION_GROUP_PATH_RADIUS = 25;
 
 // Station
 export const STATION_PADDING = 10;

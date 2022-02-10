@@ -3,6 +3,7 @@ import {
   StationGroupMapData,
   MapItemStatus,
   Point,
+  PathButton,
 } from '../models';
 import {
   GROUP_CHARACTER_SIZE,
@@ -71,11 +72,30 @@ export class StationGroupMapElement {
       /* If cursor is hovering over a group boundary set hoverItem to that,
       if cursor is over group name, set hoverItem to that,
       otherwise set it to none. */
-      this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
-        ? StationGroupElementHoverItem.Boundary
-        : this.isPointInStationGroupName(canvasPoint, scale)
-        ? StationGroupElementHoverItem.Name
-        : StationGroupElementHoverItem.None;
+      if (
+        this.pathButtons !== undefined &&
+        this.status === MapItemStatus.Pending
+      ) {
+        for (const iconButton of this.pathButtons) {
+          // If the mouse hovers over the icon button then hoverItem changes.
+          if (
+            this.isPointInStationGroupPendingButtons(
+              canvasPoint,
+              iconButton,
+              ctx
+            )
+          ) {
+            this.hoverItem = iconButton.typeButton;
+            break;
+          }
+        }
+      } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
+        this.hoverItem = StationGroupElementHoverItem.Boundary;
+      } else if (this.isPointInStationGroupName(canvasPoint, scale)) {
+        this.hoverItem = StationGroupElementHoverItem.Name;
+      } else {
+        this.hoverItem = StationGroupElementHoverItem.None;
+      }
     }
     //Restore the saved context state and undo the changes to it.
     ctx.restore();
@@ -143,5 +163,27 @@ export class StationGroupMapElement {
           'You should instead remove it from the array of station groups.'
       );
     }
+  }
+
+  /**
+   * Checks whether point is in a station group buttons in status pending or not.
+   *
+   * @param point The cursor location.
+   * @param pathButtons The path of the station group button.
+   * @param ctx The rendering context for the canvas.
+   * @returns A boolean.
+   */
+  isPointInStationGroupPendingButtons(
+    point: Point,
+    pathButtons: PathButton,
+    ctx: CanvasRenderingContext2D
+  ): boolean {
+    // check whether the mouse is hovering over the icon path
+    // Compares the path with the current point of the mouse to canvas context.
+    return ctx.isPointInStroke(
+      pathButtons.path,
+      point.x * window.devicePixelRatio,
+      point.y * window.devicePixelRatio
+    );
   }
 }
