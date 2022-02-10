@@ -875,9 +875,13 @@ export class MockStationService {
    * Update the allow external workers status for the station roster.
    *
    * @param stationRithmId The Specific id of station.
+   * @param allowExtWorkers Whether to allow external workers.
    * @returns Allow external workers updated status in the station.
    */
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+  updateAllowExternalWorkers(
+    stationRithmId: string,
+    allowExtWorkers: boolean
+  ): Observable<boolean> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -889,7 +893,7 @@ export class MockStationService {
       ).pipe(delay(1000));
     } else {
       const expectedResponse: StandardBooleanJSON = {
-        data: true,
+        data: allowExtWorkers,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }
