@@ -87,8 +87,9 @@ describe('CommentDrawerComponent', () => {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
     };
+    expect(component.comments).toHaveSize(0);
     component.addNewComment(comment);
-    expect(component.comments.unshift(comment));
+    expect(component.comments).toHaveSize(1);
   });
 
   it('should set the loading status when a comment is loading `true`', () => {

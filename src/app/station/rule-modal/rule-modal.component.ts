@@ -4,6 +4,7 @@ import {
   Component,
   Inject,
   OnInit,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -19,6 +20,8 @@ import {
   OperatorType,
   OperandType,
   DocumentAnswer,
+  RuleEquation,
+  RuleOperand,
 } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
@@ -35,22 +38,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
   styleUrls: ['./rule-modal.component.scss'],
   providers: [],
 })
-export class RuleModalComponent implements OnInit, AfterViewChecked {
-  /** Station Rithm id. */
-  stationRithmId = '';
-
-  /** Orientation for stepper. */
-  stepperOrientation$: Observable<StepperOrientation>;
-
-  /** Get current and previous Questions for Stations. */
-  questionStation: Question[] = [];
-
-  /** The error if question stations fails . */
-  questionStationError = false;
-
-  /** Loading in current and previous questions for stations. */
-  questionStationLoading = false;
-
+export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The component text-field to be updated for step 3. */
   @ViewChild('textField', { static: false })
   textField!: TextFieldComponent;
@@ -66,20 +54,53 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
+  /** Orientation for stepper. */
+  stepperOrientation$: Observable<StepperOrientation>;
+
+  /** Get current and previous Questions for Stations. */
+  questionStation: Question[] = [];
+
+  /** The error if question stations fails . */
+  questionStationError = false;
+
+  /** Loading in current and previous questions for stations. */
+  questionStationLoading = false;
+
+  /** The rithmId of the first selected question to be compared. */
+  firstOperandQuestionRithmId = '';
+
   /** The value of the first operand. */
-  firstOperand = '';
+  firstOperand: RuleOperand = {
+    value: '',
+    type: OperandType.String,
+  };
 
-  /** The value of the first question field type. */
-  firstFieldType!: QuestionFieldType;
+  /** The rithmId of the second selected question to be compared if needed. */
+  secondOperandQuestionRithmId = '';
 
-  /** The value of the first operand type. */
-  firstOperandType!: OperandType;
+  /** Set the text to show when the secondOperand is a field. */
+  secondOperandQuestionPrompt = '';
 
-  /** The first operand of text to show. */
-  firstOperandText = '';
+  /** The value of the second operand. */
+  secondOperand: RuleOperand = {
+    value: '',
+    type: OperandType.String,
+  };
 
-  /** The value of the operator. */
-  operator = '';
+  /** The type of the first questions selected for the first operand. */
+  firstOperandQuestionType!: QuestionFieldType;
+
+  operatorSelected: {
+    /**Operator text. */
+    text: string;
+    /**Operator type */
+    value: OperatorType;
+  } | null = null;
+
+  operandType = OperandType;
 
   /** Text group for the operator options. */
   textGroup = [
@@ -165,29 +186,20 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
     value: OperatorType;
   }[] = [];
 
-  /** The operator text to show. */
-  operatorText = '';
-
-  /** The operand type for the field. */
-  operandType = OperandType;
-
-  /** The value of the second operand. */
-  secondOperand = '';
-
-  /** The second operand of text to show. */
-  secondOperandText = '';
-
-  /** The second operand of field. */
-  secondOperandField: Question = {
+  /** The default value for the second question if is needed.*/
+  secondOperandDefaultQuestion: Question = {
     questionType: QuestionFieldType.ShortText,
     rithmId: Math.random().toString(36).slice(2),
-    prompt: 'Custom Value',
+    prompt: 'Custom',
     isReadOnly: false,
     isRequired: false,
     isPrivate: false,
     value: '',
     children: [],
   };
+
+  /** The rule to be returned and added to new rulesArray. */
+  ruleToAdd!: RuleEquation;
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -207,13 +219,8 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((answer: DocumentAnswer) => {
-        if (answer.value !== '') {
-          this.secondOperandField.value = answer.value;
-          this.secondOperandText = answer.value;
-        } else {
-          this.secondOperandField.value = '';
-          this.secondOperandText = '';
-        }
+        this.secondOperand.value = answer.value;
+        this.secondOperand.type = this.firstOperand.type;
       });
   }
 
@@ -229,6 +236,31 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
    */
   ngAfterViewChecked(): void {
     this.changeDetectorR.detectChanges();
+  }
+
+  /**
+   * Get the list of questions for the second operand.
+   *
+   * @returns Questions for the second operand options.
+   */
+  get secondOperandQuestionList(): Question[] {
+    const secondOperandQuestions: Question[] = this.questionStation.filter(
+      (question: Question) =>
+        question.rithmId !== this.firstOperandQuestionRithmId &&
+        question.questionType === this.firstOperandQuestionType
+    );
+    return secondOperandQuestions;
+  }
+
+  /**
+   * Returns the second Operand to display in the las step.
+   *
+   * @returns A normal value or a rithmId to display.
+   */
+  get secondOperandToShow(): string {
+    return this.secondOperand.type === OperandType.Field
+      ? this.secondOperandQuestionPrompt
+      : this.secondOperand.value;
   }
 
   /**
@@ -261,34 +293,18 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
   }
 
   /**
-   * Get the list of questions for the second operand.
-   *
-   * @returns Questions for the second operand options.
-   */
-  get secondOperandQuestionList(): Question[] {
-    const secondOperandQuestions: Question[] = this.questionStation.filter(
-      (question: Question) =>
-        question.rithmId !== this.firstOperand &&
-        question.questionType === this.firstFieldType
-    );
-    return secondOperandQuestions;
-  }
-
-  /**
    * Set operator list for the comparison type and set first operand type.
    *
-   * @param fieldType The field type to show the options of the corresponding operator list.
-   * @param text The text to be shown for the first operand.
+   * @param questionSelected The field type to show the options of the corresponding operator list.
    */
-  setOperatorList(fieldType: QuestionFieldType, text: string): void {
-    this.operatorList = [];
-    this.operator = '';
+  setFirstOperandInformation(questionSelected: Question): void {
     //Set first field type for options of the second operand
-    this.firstFieldType = fieldType;
+    this.firstOperandQuestionType = questionSelected.questionType;
+    this.secondOperandDefaultQuestion.questionType =
+      questionSelected.questionType;
     //Set first operand of text to show. */
-    this.firstOperandText = text;
-    this.secondOperandField.questionType = fieldType;
-    switch (fieldType) {
+    this.firstOperand.value = questionSelected.prompt;
+    switch (questionSelected.questionType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
       case QuestionFieldType.Email:
@@ -296,38 +312,48 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
       case QuestionFieldType.Phone:
       case QuestionFieldType.MultiSelect:
         this.operatorList = this.textGroup;
-        this.firstOperandType =
-          fieldType !== QuestionFieldType.Phone
+        this.firstOperand.type =
+          questionSelected.questionType !== QuestionFieldType.Phone
             ? OperandType.String
             : OperandType.Number;
         break;
       case QuestionFieldType.LongText:
       case QuestionFieldType.CheckList:
         this.operatorList = this.contentGroup;
-        this.firstOperandType = OperandType.String;
+        this.firstOperand.type = OperandType.String;
         break;
       case QuestionFieldType.Number:
       case QuestionFieldType.Currency:
         this.operatorList = this.numberGroup;
-        this.firstOperandType = OperandType.Number;
+        this.firstOperand.type = OperandType.Number;
         break;
       case QuestionFieldType.Date:
         this.operatorList = this.dateGroup;
-        this.firstOperandType = OperandType.Date;
+        this.firstOperand.type = OperandType.Date;
         break;
       case QuestionFieldType.Select:
         this.operatorList = this.selectGroup;
-        this.firstOperandType = OperandType.String;
+        this.firstOperand.type = OperandType.String;
         break;
     }
-    this.refreshComponentField();
+    this.resetQuestionFieldComponent();
   }
 
   /**
-   * Refresh component field when a first operand is selected.
+   * Set operator list for the comparison type and set first operand type.
+   *
+   * @param questionSelected The field type to show the options of the corresponding operator list.
    */
-  refreshComponentField(): void {
-    switch (this.firstOperandType) {
+  setSecondOperandInformation(questionSelected: Question): void {
+    this.secondOperandQuestionPrompt = questionSelected.prompt;
+    this.secondOperand.type = OperandType.Field;
+  }
+
+  /**
+   * Reset component field when a first operand is selected.
+   */
+  resetQuestionFieldComponent(): void {
+    switch (this.firstOperand.type) {
       case OperandType.String:
         this.textField?.ngOnInit();
         break;
@@ -345,21 +371,53 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
    *
    * @param event The stepper selection event for all steps.
    */
-  selectionChangeStep(event: StepperSelectionEvent): void {
-    // Logic when it returns to step 1 and the previous step is greater than the current step.
-    if (event.selectedIndex === 0 && event.previouslySelectedIndex > 0) {
-      this.firstOperand = '';
-      this.secondOperand = '';
-      this.secondOperandField.value = '';
-      this.operator = '';
+  clearOnStepBack(event: StepperSelectionEvent): void {
+    if (event.selectedIndex < event.previouslySelectedIndex) {
+      switch (event.selectedIndex) {
+        case 0:
+          this.operatorSelected = null;
+          this.secondOperand.value = '';
+          this.secondOperand.type = OperandType.String;
+          this.secondOperandQuestionPrompt = '';
+          this.resetQuestionFieldComponent();
+          break;
+        case 1:
+          this.secondOperand.value = '';
+          this.secondOperand.type = OperandType.String;
+          this.secondOperandQuestionPrompt = '';
+          this.resetQuestionFieldComponent();
+          break;
+      }
+    } else if (event.selectedIndex === 2) {
+      this.resetQuestionFieldComponent();
     }
+  }
+
+  /**
+   * Set The value for the current Rule.
+   */
+  setEquationContent(): void {
+    this.ruleToAdd = {
+      leftOperand: {
+        type: this.firstOperand.type,
+        value: this.firstOperand.value,
+      },
+      operatorType: this.operatorSelected
+        ? this.operatorSelected.value
+        : OperatorType.EqualTo,
+      rightOperand: {
+        type: this.secondOperand.type,
+        value: this.secondOperand.value,
+      },
+    };
+    this.closeModal();
   }
 
   /**
    * Close rule Modal.
    */
   closeModal(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.ruleToAdd);
   }
 
   /**

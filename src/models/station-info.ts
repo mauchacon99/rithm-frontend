@@ -45,4 +45,10 @@ export interface StationInformation {
 
   /** The priority of the document. */
   priority: number;
+
+  /** Whether to allow previous button be part of the document/station. */
+  allowPreviousButton: boolean;
+
+  /** Customize the name of the flow button. */
+  flowButton: string;
 }

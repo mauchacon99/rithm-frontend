@@ -140,6 +140,8 @@ describe('StationComponent', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
 
     fixture.detectChanges();

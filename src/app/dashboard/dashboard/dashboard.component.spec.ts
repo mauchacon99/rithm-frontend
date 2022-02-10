@@ -8,11 +8,12 @@ import { MyStationsComponent } from '../my-stations/my-stations.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
 import {
+  MockDashboardService,
   MockErrorService,
+  MockSplitService,
   MockStationService,
   MockUserService,
-  MockDashboardService,
-  MockSplitService,
+  MockPopupService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -25,15 +26,23 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
+import { RoleDashboardMenu } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
+import { FormsModule } from '@angular/forms';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const dashboardRithmId = '123-951-753-789';
+  const dashboardData = {
+    rithmId: 'ABC-123-BCA-321',
+    name: 'update Dashboard',
+    widgets: [],
+    type: RoleDashboardMenu.Company,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -54,11 +63,13 @@ describe('DashboardComponent', () => {
         { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
       imports: [
         MatSidenavModule,
         NoopAnimationsModule,
         GridsterModule,
+        FormsModule,
         MatInputModule,
         RouterTestingModule.withRoutes([
           {
@@ -144,43 +155,41 @@ describe('DashboardComponent', () => {
 
   it('should call service to update a personal dashboard', () => {
     component.viewNewDashboard = true;
-    const updatePersonalDashboardSpy = spyOn(
-      TestBed.inject(DashboardService),
-      'updatePersonalDashboard'
+    component.isLoading = false;
+    dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData = dashboardData;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spyMethodUpdateDashboard = spyOn(
+      component,
+      'updateDashboard'
     ).and.callThrough();
 
-    component.updatePersonalDashboard();
-    expect(updatePersonalDashboardSpy).toHaveBeenCalled();
+    const btnSave = fixture.nativeElement.querySelector('#save-button');
+    expect(btnSave).toBeTruthy();
+    btnSave.click();
+
+    expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
-  it('should call the service updateOrganizationDashboard ', () => {
-    const dashboardData: DashboardData = {
-      rithmId: '',
-      name: 'new name',
-      type: RoleDashboardMenu.Company,
-      widgets: [
-        {
-          cols: 1,
-          rows: 2,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Document,
-          data: 'string',
-          minItemRows: 1,
-          maxItemRows: 2,
-          minItemCols: 1,
-          maxItemCols: 2,
-        },
-      ],
-    };
+  it('should call service to update a organization dashboard', () => {
+    component.viewNewDashboard = true;
+    component.isLoading = false;
+    component.dashboardData = dashboardData;
+    component.editMode = true;
+    fixture.detectChanges();
 
-    const methodService = spyOn(
-      TestBed.inject(DashboardService),
-      'updateOrganizationDashboard'
+    const spyMethodUpdateDashboard = spyOn(
+      component,
+      'updateDashboard'
     ).and.callThrough();
 
-    component.updateOrganizationDashboard(dashboardData);
-    expect(methodService).toHaveBeenCalledWith(dashboardData);
+    const btnSave = fixture.nativeElement.querySelector('#save-button');
+    expect(btnSave).toBeTruthy();
+    btnSave.click();
+
+    expect(spyMethodUpdateDashboard).toHaveBeenCalled();
   });
 
   it('should returns the organization`s dashboard list', () => {
@@ -249,5 +258,13 @@ describe('DashboardComponent', () => {
       component.ngOnInit();
       expect(spySideNav).toHaveBeenCalled();
     });
+  });
+
+  it('should called method config Edit Mode and change status draggable and resizable', () => {
+    expect(component.options.draggable?.enabled).toBeFalse();
+    expect(component.options.resizable?.enabled).toBeFalse();
+    component['configEditMode'](true, true);
+    expect(component.options.draggable?.enabled).toBeTrue();
+    expect(component.options.resizable?.enabled).toBeTrue();
   });
 });

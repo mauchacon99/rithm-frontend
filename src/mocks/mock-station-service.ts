@@ -104,6 +104,8 @@ export class MockStationService {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
     return of(data).pipe(delay(1000));
   }
@@ -205,6 +207,8 @@ export class MockStationService {
         updatedDate: '2021-07-18T17:26:47.3506612Z',
         questions: [],
         priority: 2,
+        allowPreviousButton: false,
+        flowButton: 'Flow',
       };
       return of(data).pipe(delay(1000));
     }
@@ -855,6 +859,47 @@ export class MockStationService {
   }
 
   /**
+   * Get the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers to be assigned to station documents.
+   */
+  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
+  }
+
+  /**
+   * Update the allow external workers status for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param allowExtWorkers Whether to allow external workers.
+   * @returns Allow external workers updated status in the station.
+   */
+  updateAllowExternalWorkers(
+    stationRithmId: string,
+    allowExtWorkers: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: "Cannot update the allow external worker's status",
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowExtWorkers,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get the field AllowAllOrgWorkers.
    *
    * @param stationRithmId  The station id.
@@ -879,37 +924,28 @@ export class MockStationService {
   }
 
   /**
-   * Get the allow external workers for the station roster.
+   * Update AllowAllOrgWorkers information.
    *
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers to be assigned to station documents.
+   * @param stationRithmId The station id that will be update.
+   * @param allowAllOrgWorkers The value that will be update.
+   * @returns The field AllowAllOrgWorkers updated.
    */
-  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    return of(expectedResponse.data).pipe(delay(1000));
-  }
-
-  /**
-   * Update the allow external workers status for the station roster.
-   *
-   * @param stationRithmId The Specific id of station.
-   * @returns Allow external workers updated status in the station.
-   */
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+  updateAllowAllOrgWorkers(
+    stationRithmId: string,
+    allowAllOrgWorkers: boolean
+  ): Observable<boolean> {
     if (!stationRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: "Cannot update the allow external worker's status",
+              error: 'Cannot update the current status for this.',
             },
           })
       ).pipe(delay(1000));
     } else {
       const expectedResponse: StandardBooleanJSON = {
-        data: true,
+        data: allowAllOrgWorkers,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }

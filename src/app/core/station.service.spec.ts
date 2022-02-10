@@ -163,6 +163,8 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
 
     const expectedResponse: StationInformation = {
@@ -207,6 +209,8 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
 
     service.updateStation(station).subscribe((response) => {
@@ -800,6 +804,8 @@ describe('StationService', () => {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
 
     service.updateStationName(newName, station.rithmId);
@@ -967,6 +973,18 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should update the allowAllOrgWorkers status in station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    const allowAllOrgWorkers = true;
+    service
+      .updateAllowAllOrgWorkers(stationId, allowAllOrgWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+  });
+
   it('should get the allow external workers', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
@@ -975,16 +993,34 @@ describe('StationService', () => {
     service.getAllowExternalWorkers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.url).toBe(router);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should update the allow external workers status in the station', () => {
+    const allowExtWorkers = true;
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
-
-    service.updateAllowExternalWorkers(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse.data);
-    });
+    service
+      .updateAllowExternalWorkers(stationId, allowExtWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`
+    );
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return the value of allow all org workers', () => {
