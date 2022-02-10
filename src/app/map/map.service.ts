@@ -89,6 +89,9 @@ export class MapService {
    */
   zoomCount$ = new BehaviorSubject(0);
 
+  /** Informs the map that which drawer is opened. */
+  openedDrawerType$ = new BehaviorSubject('');
+
   /**
    * The coordinate at which the canvas is currently rendering in regards to the overall map.
    * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
@@ -537,7 +540,7 @@ export class MapService {
    * @param stationGroupId The incoming station group Id to be deleted.
    */
   removeStationGroup(stationGroupId: string): void {
-    //Find the station group from this.stationGroupElements array.
+    // Find the station group from this.stationGroupElements array.
     const removedGroup = this.stationGroupElements.find(
       (group) => group.rithmId === stationGroupId
     );
@@ -549,6 +552,10 @@ export class MapService {
         //Find parent station group of incoming station group.
         group.subStationGroups.includes(removedGroup.rithmId)
       ) {
+        //Remove deleting station group Id from it's parent group
+        group.subStationGroups = group.subStationGroups.filter(
+          (groupId) => groupId !== removedGroup.rithmId
+        );
         //Move all sub station groups of deleted station group to it's parent.
         group.subStationGroups = group.subStationGroups.concat(
           removedGroup.subStationGroups
@@ -1610,5 +1617,25 @@ export class MapService {
         (stationGroup) => stationGroup.status !== MapItemStatus.Normal
       )
     );
+  }
+
+  /**
+   * Set drawerOpened property of respective map element to false when any drawer is closed.
+   *
+   * @param drawerItem The opened drawer type.
+   */
+  handleDrawerClose(drawerItem: string): void {
+    if (drawerItem === 'stationInfo') {
+      if (this.stationElements.some((e) => e.drawerOpened)) {
+        const openedStations = this.stationElements.filter(
+          (e) => e.drawerOpened
+        );
+        openedStations.forEach((station) => {
+          station.drawerOpened = false;
+        });
+        this.openedDrawerType$.next('');
+        this.mapDataReceived$.next(true);
+      }
+    }
   }
 }

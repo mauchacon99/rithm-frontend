@@ -104,6 +104,8 @@ export class MockStationService {
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
       priority: 2,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
     return of(data).pipe(delay(1000));
   }
@@ -205,6 +207,8 @@ export class MockStationService {
         updatedDate: '2021-07-18T17:26:47.3506612Z',
         questions: [],
         priority: 2,
+        allowPreviousButton: false,
+        flowButton: 'Flow',
       };
       return of(data).pipe(delay(1000));
     }
@@ -871,9 +875,13 @@ export class MockStationService {
    * Update the allow external workers status for the station roster.
    *
    * @param stationRithmId The Specific id of station.
+   * @param allowExtWorkers Whether to allow external workers.
    * @returns Allow external workers updated status in the station.
    */
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+  updateAllowExternalWorkers(
+    stationRithmId: string,
+    allowExtWorkers: boolean
+  ): Observable<boolean> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -885,7 +893,59 @@ export class MockStationService {
       ).pipe(delay(1000));
     } else {
       const expectedResponse: StandardBooleanJSON = {
+        data: allowExtWorkers,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the field AllowAllOrgWorkers.
+   *
+   * @param stationRithmId  The station id.
+   * @returns An object with value of AllowAllOrgWorkers.
+   */
+  getAllowAllOrgWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update field related all org workers.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const mockData: StandardBooleanJSON = {
         data: true,
+      };
+      return of(mockData.data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update AllowAllOrgWorkers information.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param allowAllOrgWorkers The value that will be update.
+   * @returns The field AllowAllOrgWorkers updated.
+   */
+  updateAllowAllOrgWorkers(
+    stationRithmId: string,
+    allowAllOrgWorkers: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowAllOrgWorkers,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }

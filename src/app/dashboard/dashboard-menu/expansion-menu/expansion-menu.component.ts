@@ -4,6 +4,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardData } from 'src/models';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -34,11 +35,17 @@ export class ExpansionMenuComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
+    this.getToListDashboards();
+  }
+
+  /** Get list to dashboard in expansion menu. */
+  private getToListDashboards(): void {
     this.showError = false;
     this.isLoading = true;
     const petitionDashboard$ =
@@ -61,5 +68,12 @@ export class ExpansionMenuComponent implements OnInit {
         );
       },
     });
+  }
+
+  /**
+   * Hidden drawer menu dashboard.
+   */
+  hiddenDrawer(): void {
+    this.sidenavDrawerService.toggleDrawer('menuDashboard');
   }
 }

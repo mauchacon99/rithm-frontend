@@ -95,6 +95,7 @@ describe('FlowLogicComponent', () => {
         panelClass: ['w-5/6', 'sm:w-4/5'],
         maxWidth: '1024px',
         data: rithmId,
+        disableClose: true,
       };
       const dialogSpy = spyOn(
         TestBed.inject(MatDialog),
@@ -233,5 +234,33 @@ describe('FlowLogicComponent', () => {
     );
     expect(component.flowRuleError).toBeTrue();
     expect(reviewError).toBeTruthy();
+  });
+
+  it('should call the method that save the logical flow rules of a station.', () => {
+    component.rithmId = rithmId;
+    const saveStationFlowLogicRuleSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogic'
+    ).and.callThrough();
+    component['saveStationFlowLogic']();
+    expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(rithmId);
+  });
+
+  it('should show error if petition save flow logic fails', () => {
+    component.flowLogicLoading = false;
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogic'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['saveStationFlowLogic']();
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 });

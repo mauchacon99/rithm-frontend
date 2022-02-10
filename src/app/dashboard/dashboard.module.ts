@@ -8,7 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { MyStationsComponent } from './my-stations/my-stations.component';
 import { PreviouslyStartedDocumentsComponent } from './previously-started-documents/previously-started-documents.component';
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { GridsterModule } from 'angular-gridster2';
 import { StationWidgetComponent } from './widgets/station-widget/station-widget.component';
@@ -27,6 +27,7 @@ import { MatListModule } from '@angular/material/list';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { DocumentModule } from 'src/app/document/document.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { DocumentWidgetComponent } from './widgets/document-widget/document-widget.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MatMenuModule } from '@angular/material/menu';
     OptionsMenuComponent,
     ExpansionMenuComponent,
     MenuComponent,
+    DocumentWidgetComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +62,7 @@ import { MatMenuModule } from '@angular/material/menu';
     UserAvatarModule,
     DocumentModule,
     MatMenuModule,
+    FormsModule,
   ],
 })
 export class DashboardModule {}

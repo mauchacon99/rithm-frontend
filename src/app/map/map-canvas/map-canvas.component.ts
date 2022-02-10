@@ -227,6 +227,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.zoomCount = count;
       });
 
+    //This subscribe shows if there are any drawers open.
+    this.mapService.openedDrawerType$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerType) => {
+        if (this.sidenavDrawerService.isDrawerOpen) {
+          this.mapService.handleDrawerClose(drawerType);
+        }
+      });
+
     /* This subscribe sets this.currentMousePoint when the behavior subject changes.
     If this.dragItem is set to node or station or stationGroup:
     checks to see if the mouse is on the edge of the screen, or in other words, outside the pan bounding box,
@@ -649,7 +658,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('document:contextmenu', ['$event'])
   contextmenu(event: MouseEvent): void {
-    event.preventDefault();
+    // Regular context menu in view mode.
+    if (this.mapMode === MapMode.Build) {
+      event.preventDefault();
+    }
   }
 
   /**
@@ -2036,7 +2048,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param canvasPoint Calculated canvas position of click which is used to identify position of boundary name.
    */
   checkStationGroupClick(contextPoint: Point, canvasPoint: Point): void {
-    //Loop through groups to find the group that was clicked.
+    // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
         stationGroup.checkElementHover(
@@ -2194,6 +2206,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       updatedDate: '',
       questions: [],
       priority: 1,
+      allowPreviousButton: false,
+      flowButton: 'Flow',
     };
     //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.
     const dataInformationDrawer: StationInfoDrawerData = {
