@@ -179,4 +179,70 @@ describe('OptionsMenuComponent', () => {
     expect(spyToggleMenu).toHaveBeenCalledWith('menuDashboard');
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should call method deleteOrganizationDashboard', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deleteOrganizationDashboard'
+    ).and.callThrough();
+
+    component.deleteOrganizationDashboard(rithmId);
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(rithmId);
+  });
+
+  it('should show error if the request deleteOrganizationDashboard fail', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deleteOrganizationDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.deleteOrganizationDashboard(rithmId);
+
+    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call method deletePersonalDashboard', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const deleteIndividualDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deletePersonalDashboard'
+    ).and.callThrough();
+
+    component.deletePersonalDashboard(rithmId);
+    expect(deleteIndividualDashboard).toHaveBeenCalledOnceWith(rithmId);
+  });
+
+  it('should show error if the request deletePersonalDashboard fails', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const deleteIndividualDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deletePersonalDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.deletePersonalDashboard(rithmId);
+
+    expect(deleteIndividualDashboard).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
