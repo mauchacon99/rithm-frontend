@@ -165,19 +165,19 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      stationGroup.selected &&
-      stationGroup.status !== MapItemStatus.Pending
+        stationGroup.selected &&
+        stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
-        ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-          stationGroup.status !== MapItemStatus.Pending
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? MAP_SELECTED
-          : NODE_HOVER_COLOR
-        : CONNECTION_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+            stationGroup.status !== MapItemStatus.Pending
+            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? MAP_SELECTED
+              : NODE_HOVER_COLOR
+            : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       stationGroup.status !== MapItemStatus.Pending &&
@@ -298,17 +298,17 @@ export class StationGroupElementService {
     // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.selected ||
-      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
-        !stationGroup.disabled &&
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+          !stationGroup.disabled &&
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd)
         ? MAP_SELECTED
         : stationGroup.disabled &&
           this.mapService.mapMode$.value === MapMode.StationGroupAdd
-        ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
-        ? NODE_HOVER_COLOR
-        : BUTTON_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Name
+            ? NODE_HOVER_COLOR
+            : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
 
@@ -325,7 +325,7 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING
+      STATION_GROUP_PADDING
     );
 
     // Split station group name.
@@ -662,7 +662,7 @@ export class StationGroupElementService {
         //  The x-coordinate is shifted because when we use the rotate it moves in y-coordinate.
         newPoint.x += displacement;
       } else {
-        newPoint.y += displacement;
+        newPoint.y += Math.sign(m) * displacement;
       }
 
       return newPoint;
@@ -915,14 +915,14 @@ export class StationGroupElementService {
         -5,
         -5,
         this.canvasContext.measureText(title).width +
-          STATION_GROUP_NAME_PADDING +
-          (stationGroup.status === MapItemStatus.Pending
-            ? STATION_GROUP_NAME_TRANSLATE * 6
-            : STATION_GROUP_NAME_TRANSLATE / 2) *
-            this.mapScale,
+        STATION_GROUP_NAME_PADDING +
+        (stationGroup.status === MapItemStatus.Pending
+          ? STATION_GROUP_NAME_TRANSLATE * 6
+          : STATION_GROUP_NAME_TRANSLATE / 2) *
+        this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
-          STATION_GROUP_NAME_PADDING
+        STATION_GROUP_NAME_PADDING
       );
     }
 
@@ -996,7 +996,7 @@ export class StationGroupElementService {
     // Create a circle over the icon button for hovering.
     path.arc(
       newUnRotatedPointStart.x +
-        (m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0),
+      (m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0),
       newUnRotatedPointStart.y,
       ICON_STATION_GROUP_PATH_RADIUS * this.mapScale,
       0,
