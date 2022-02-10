@@ -324,23 +324,34 @@
                 matTooltip="Allow anyone outside your organization to work on documents at this station"
               ></i>
             </div>
-            <ng-container
-              *ngIf="allowExternalLoading; else slideToggleAllowExt"
+            <div
+              id="allow-externarl-error"
+              *ngIf="allowExternalError; else allowExternalTemp"
+              class="pl-3"
             >
-              <app-loading-indicator
-                id="loading-indicator-allow-external"
-                [inlineText]="'Loading...'"
-              ></app-loading-indicator>
-            </ng-container>
-            <ng-template #slideToggleAllowExt>
-              <div class="pr-2">
-                <mat-slide-toggle
-                  color="accent"
-                  (change)="updateAllowExternalWorkers()"
-                  [(ngModel)]="allowExternal"
-                >
-                </mat-slide-toggle>
-              </div>
+              <p class="text-error-500 text-xs inline-block">
+                Error: Unable to get/update the allow extenernal workers
+              </p>
+            </div>
+            <ng-template #allowExternalTemp>
+              <ng-container
+                *ngIf="allowExternalLoading; else slideToggleAllowExt"
+              >
+                <app-loading-indicator
+                  id="loading-indicator-allow-external"
+                  [inlineText]="'Loading...'"
+                ></app-loading-indicator>
+              </ng-container>
+              <ng-template #slideToggleAllowExt>
+                <div class="pr-2">
+                  <mat-slide-toggle
+                    color="accent"
+                    (change)="updateAllowExternalWorkers()"
+                    [(ngModel)]="allowExternal"
+                  >
+                  </mat-slide-toggle>
+                </div>
+              </ng-template>
             </ng-template>
           </section>
           <section class="flex justify-between items-center">

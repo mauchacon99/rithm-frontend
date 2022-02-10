@@ -44,6 +44,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station allow to add external users to the roster. */
   allowExternal = false;
 
+  /** Loading in the allow external workers section. */
+  allowExternalLoading = false;
+
+  /** Check if there is an error when getting or updating the allow external workers. */
+  allowExternalError = false;
+
+  /** Whether the station is allowed for all the organization workers or not. */
+  allowAllOrgWorkers = false;
+
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
@@ -52,9 +61,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Loading in the document generation section. */
   docCreationLoading = false;
-
-  /** Loading in the allow external workers section. */
-  allowExternalLoading = false;
 
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
@@ -113,9 +119,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** The selected tab index/init. */
   selectedTabIndex = 0;
-
-  /** Whether the station is allowed for all the organization workers or not. */
-  allowAllOrgWorkers = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -678,6 +681,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   private getAllowExternalWorkers(): void {
     this.allowExternalLoading = true;
+    this.allowExternalError = false;
     this.stationService
       .getAllowExternalWorkers(this.stationRithmId)
       .pipe(first())
@@ -688,6 +692,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.allowExternalLoading = false;
+          this.allowExternalError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -701,6 +706,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateAllowExternalWorkers(): void {
     this.allowExternalLoading = true;
+    this.allowExternalError = false;
     this.stationService
       .updateAllowExternalWorkers(this.stationRithmId, this.allowExternal)
       .pipe(first())
@@ -711,6 +717,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.allowExternalLoading = false;
+          this.allowExternalError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

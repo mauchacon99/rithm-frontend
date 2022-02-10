@@ -507,4 +507,22 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(loadingComponent).toBeTruthy();
   });
+
+  xit('should show allow-externarl-error when calling getAllowExternalWorkers', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const viewError = fixture.debugElement.nativeElement.querySelector(
+      '#allow-externarl-error'
+    );
+    expect(component.allowExternalError).toBeTrue();
+    expect(viewError).toBeTruthy();
+  });
 });
