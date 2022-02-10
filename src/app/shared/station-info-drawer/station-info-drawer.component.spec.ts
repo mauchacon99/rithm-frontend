@@ -509,6 +509,8 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   xit('should show allow-externarl-error when calling getAllowExternalWorkers', () => {
+    component.stationLoading = false;
+    component.selectedTabIndex = 2;
     spyOn(
       TestBed.inject(StationService),
       'getAllowExternalWorkers'
