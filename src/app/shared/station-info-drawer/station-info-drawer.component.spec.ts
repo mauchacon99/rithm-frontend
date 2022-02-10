@@ -37,7 +37,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 
-describe('StationInfoDrawerComponent', () => {
+fdescribe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
   const formBuilder = new FormBuilder();
@@ -174,22 +174,37 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  // awaiting for complete the component update for harness testing
-  xit('should show loading-indicators while get data the status station document', () => {
+  it('should show none-status-loading while get data the status station document', () => {
     component.stationLoading = false;
+    component.selectedTabIndex = 1;
     component.getStationDocumentGenerationStatus();
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
 
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
-      '#loading-indicator-status'
+      '#none-status-loading'
     );
     expect(loadingComponent).toBeTruthy();
   });
 
-  xit('should show loading-indicators while update data the status station document', () => {
+  it('should show manual-status-loading while get data the status station document', () => {
     component.stationLoading = false;
+    component.selectedTabIndex = 1;
+    component.getStationDocumentGenerationStatus();
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
+    fixture.detectChanges();
+    expect(component.docGenLoading).toBe(true);
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#manual-status-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show none-status-loading while update data the status station document', () => {
+    component.stationLoading = false;
+    component.selectedTabIndex = 1;
     const newStatus = DocumentGenerationStatus.Manual;
     component.updateStationDocumentGenerationStatus(
       component.stationRithmId,
@@ -199,7 +214,24 @@ describe('StationInfoDrawerComponent', () => {
     fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
-      '#loading-indicator-status'
+      '#none-status-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show manual-status-loading while update data the status station document', () => {
+    component.stationLoading = false;
+    component.selectedTabIndex = 1;
+    const newStatus = DocumentGenerationStatus.Manual;
+    component.updateStationDocumentGenerationStatus(
+      component.stationRithmId,
+      newStatus
+    );
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
+    fixture.detectChanges();
+    expect(component.docGenLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#manual-status-loading'
     );
     expect(loadingComponent).toBeTruthy();
   });
@@ -211,20 +243,20 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyRefresh).toHaveBeenCalledOnceWith();
   });
 
-  // awaiting for complete the component update for harness testing
-  xit('should show the delete-station-button on the station information', () => {
+  it('should show the delete-station-button on the station information', () => {
     component.stationLoading = false;
-    component.editMode = true;
+    component.selectedTabIndex = 0;
+    Object.defineProperty(component, 'displayDeleteStationButton', {
+      value: true,
+    });
     fixture.detectChanges();
-    expect(component.editMode).toBeTrue();
     const deleteButton = fixture.debugElement.nativeElement.querySelector(
       '#delete-station-button'
     );
     expect(deleteButton).toBeTruthy();
   });
 
-  // awaiting for complete the component update for harness testing
-  xit('should not show the delete-station-button on the station information if the user is a worker', () => {
+  it('should not show the delete-station-button on the station information if the user is a worker', () => {
     component.stationLoading = false;
     component.editMode = false;
     spyOnProperty(component, 'isWorker').and.returnValue(true);
@@ -304,7 +336,8 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  xit('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
+  it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
+    component.selectedTabIndex = 1;
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
@@ -336,15 +369,16 @@ describe('StationInfoDrawerComponent', () => {
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 
-  xit('should show loading-indicators while creating a new document is underway', async () => {
+  it('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
+    component.selectedTabIndex = 1;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     await component.createNewDocument();
     fixture.detectChanges();
     expect(component.docCreationLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
-      '#loading-indicator-status'
+      '#creating-document-loading'
     );
     expect(loadingComponent).toBeTruthy();
   });
@@ -483,24 +517,11 @@ describe('StationInfoDrawerComponent', () => {
     component.updateAllOrgWorkersStation(allowAllOrgWorkers);
     expect(spyError).toHaveBeenCalled();
   });
-  // awaiting for complete the component update for harness testing
-  xit('should show loading-indicator-allow-external when calling getAllowExternalWorkers', () => {
-    component.stationLoading = false;
-    component['getAllowExternalWorkers']();
-    component.selectedTabIndex = 2;
-    fixture.detectChanges();
-    expect(component.allowExternalLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
-      '#loading-indicator-allow-external'
-    );
-    expect(loadingComponent).toBeTruthy();
-  });
 
   xit('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
     component.stationLoading = false;
-    component.updateAllowExternalWorkers();
     component.selectedTabIndex = 2;
-    fixture.detectChanges();
+    component.updateAllowExternalWorkers();
     expect(component.allowExternalLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
       '#loading-indicator-allow-external'
