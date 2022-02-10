@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { delay, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -191,5 +191,18 @@ export class DashboardService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
       dashboardData
     );
+  }
+
+  /**
+   * Delete personal dashboards.
+   *
+   * @param rithmId The specific dashboard rithmId to delete.
+   * @returns The rithmId of the deleted dashboard.
+   */
+  deletePersonalDashboard(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rithmId: string
+  ): Observable<unknown> {
+    return of().pipe(delay(1000));
   }
 }

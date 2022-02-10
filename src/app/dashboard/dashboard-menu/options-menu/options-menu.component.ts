@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
-import { first } from 'rxjs';
+import { first, pipe } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -77,5 +77,24 @@ export class OptionsMenuComponent {
         );
       },
     });
+  }
+
+  /**
+   * Delete personal dashboard.
+   *
+   * @param rithmId The dashboard rithmId to delete.
+   */
+  deletePersonalDashboard(rithmId: string): void {
+    this.dashboardService
+      .deletePersonalDashboard(rithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
