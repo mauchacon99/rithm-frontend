@@ -87,8 +87,7 @@
 
   <app-password-requirements
     class="mat-elevation-z8 w-full"
-      *ngIf="passwordRequirementsVisible"
-    "
+    *ngIf="passwordRequirementsVisible"
     [passReq]="userForm.get(errorsToGet)?.errors"
     [match]="showMatch"
   ></app-password-requirements>
