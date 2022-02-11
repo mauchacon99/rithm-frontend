@@ -708,7 +708,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.statusAllowPreviousButton = allowPreviousButton;
         },
         error: (error: unknown) => {
-          this.statusAllowPreviousButton = !this.statusAllowPreviousButton;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
