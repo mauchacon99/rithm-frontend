@@ -32,6 +32,7 @@ import {
   ICON_STATION_GROUP_HOVER_COLOR_CANCEL,
   STATION_GROUP_NAME_TRANSLATE,
   ICON_STATION_GROUP_PATH_RADIUS,
+  GROUP_CHARACTER_SIZE,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -650,7 +651,7 @@ export class StationGroupElementService {
     displacement: number,
     coordinate = true
   ): Point {
-    const newPoint = pointStart;
+    const newPoint = { ...pointStart };
 
     // Calculate the slope between two points.
     const m = this.slopeLine(pointStart, pointEnd);
@@ -674,7 +675,7 @@ export class StationGroupElementService {
       newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
     } else {
       // Y-coordinate displacement.
-      newPoint.y -= displacement;
+      newPoint.y += displacement;
       // The point-slope equation evaluating Y.
       newPoint.x = (newPoint.y - pointEnd.y) / m + pointEnd.x;
     }
@@ -900,7 +901,7 @@ export class StationGroupElementService {
         this.drawStationGroupIcon(
           pointStart,
           pointEnd,
-          titleWidth + STATION_GROUP_NAME_TRANSLATE * 2 * this.mapScale,
+          titleWidth + GROUP_CHARACTER_SIZE * 5 * this.mapScale,
           StationGroupElementHoverItem.ButtonAccept,
           ICON_STATION_GROUP_ACCEPT,
           MAP_SELECTED,
@@ -986,20 +987,24 @@ export class StationGroupElementService {
         x: pointEnd.x,
         y: pointEnd.y,
       },
-      displacement - STATION_GROUP_PADDING * this.mapScale,
-      Math.abs(m) < Math.PI / 2
+      displacement,
+      Math.abs(m) < Math.PI / 4
     );
 
     const path = new Path2D();
-    // Create a circle over the icon button for hovering.
-    path.arc(
-      newUnRotatedPointStart.x +
-        (m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0),
-      newUnRotatedPointStart.y,
-      ICON_STATION_GROUP_PATH_RADIUS * this.mapScale,
-      0,
-      2 * Math.PI
-    );
+    for (let i = 0; i <= ICON_STATION_GROUP_PATH_RADIUS; i++) {
+      // Create a circle over the icon button for hovering.
+      path.arc(
+        newUnRotatedPointStart.x +
+          (m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0),
+        newUnRotatedPointStart.y,
+        i * this.mapScale,
+        0,
+        2 * Math.PI
+      );
+    }
+    path.closePath();
+    this.canvasContext.fill(path);
 
     // Adds the hover zone of the button in position Buttons of the stationGroup.
     stationGroup.pathButtons?.push({
