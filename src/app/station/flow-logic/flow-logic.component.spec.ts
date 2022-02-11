@@ -7,7 +7,6 @@ import {
 } from '@angular/material/dialog';
 import {
   ConnectedStationInfo,
-  FlowLogicRule,
   OperandType,
   OperatorType,
   Rule,
@@ -164,13 +163,15 @@ describe('FlowLogicComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should not show the display message when there are rules.', () => {
+  it('should not display the red message when there are rules in each station.', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
         flowRule: {
-          ruleType: RuleType.Or,
+          ruleType: RuleType.And,
           equations: [
             {
               leftOperand: {
@@ -188,26 +189,30 @@ describe('FlowLogicComponent', () => {
         },
       },
     ];
-    component.ngOnInit();
     fixture.detectChanges();
     const messageNotRules = fixture.debugElement.nativeElement.querySelector(
-      '.there-are-not-rules'
+      '#there-are-not-rules-0'
     );
     expect(messageNotRules).toBeFalsy();
   });
 
-  it('should show the display message when there are not rules.', () => {
+  it('should display the red message when there are not rules in each station.', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    const expectStationFlowLogic: FlowLogicRule[] = [];
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationFlowLogicRule'
-    ).and.returnValue(of(expectStationFlowLogic));
-    component.ngOnInit();
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [],
+          subRules: [],
+        },
+      },
+    ];
     fixture.detectChanges();
     const messageNotRules = fixture.debugElement.nativeElement.querySelector(
-      '.there-are-not-rules'
+      '#there-are-not-rules-0'
     );
     expect(messageNotRules).toBeTruthy();
   });

@@ -1,5 +1,8 @@
 <div *ngIf="nextStations.length; else notConnectedStations">
-  <div *ngFor="let station of nextStations" class="flex flex-col justify-start">
+  <div
+    *ngFor="let station of nextStations; let i = index"
+    class="flex flex-col justify-start"
+  >
     <div class="mb-6">
       <p class="font-semibold mt-10">{{ station.name }} Rules</p>
       <!-- Loader for flow logic -->
@@ -14,10 +17,11 @@
       </div>
       <div *ngIf="!flowLogicLoading && !flowRuleError">
         <p
-          class="text-error-500 mt-4 there-are-not-rules"
+          class="text-error-500 mt-4"
+          [id]="'there-are-not-rules-' + i"
           *ngIf="
-            getStationFlowRules(station.rithmId).equations.length === 0 &&
-            getStationFlowRules(station.rithmId).subRules.length === 0
+            !getStationFlowRules(station.rithmId).equations.length &&
+            !getStationFlowRules(station.rithmId).subRules.length
           "
         >
           Documents will always flow here if there are no rules.
@@ -96,7 +100,6 @@
                     type="button"
                     mat-icon-button
                     matSuffix
-                    class="icon"
                     matTooltip="Edit current rule"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
@@ -105,7 +108,6 @@
                     type="button"
                     mat-icon-button
                     matSuffix
-                    class="icon"
                     matTooltip="Remove current rule"
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
