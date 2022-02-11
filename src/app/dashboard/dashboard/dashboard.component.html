@@ -54,7 +54,7 @@
           Unable to retrieve dashboard
         </div>
         <div
-          class="text-error-500 text-center my-4"
+          class="text-center my-4"
           id="message-create-new-dashboard"
           *ngIf="isCreateNewDashboard"
         >
@@ -135,7 +135,7 @@
             </button>
           </div>
           <div
-            class="col-span-full text-error-500 text-center my-4"
+            class="col-span-full text-center my-4"
             id="error-loading-widgets"
             *ngIf="!dashboardData.widgets.length"
           >
@@ -157,6 +157,11 @@
                 [stationRithmId]="item.data"
               >
               </app-station-widget>
+              <app-document-widget
+                *ngIf="item.widgetType === 'document-list'"
+                [documentRithmId]="item.data"
+              >
+              </app-document-widget>
             </gridster-item>
           </gridster>
         </div>

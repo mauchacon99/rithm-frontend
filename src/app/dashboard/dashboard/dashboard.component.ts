@@ -71,10 +71,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     displayGrid: 'onDrag&Resize',
     pushItems: true,
     draggable: {
-      enabled: true,
+      enabled: false,
     },
     resizable: {
-      enabled: true,
+      enabled: false,
     },
     margin: 16,
     minCols: 12,
@@ -189,6 +189,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param statusEditMode Status mode edition.
    */
   async toggleEditMode(statusEditMode: boolean): Promise<void> {
+    this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
     if (!statusEditMode) {
       const response = await this.popupService.confirm({
         title: 'Cancel?',
@@ -200,12 +201,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       if (response) {
         this.editMode = false;
-        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
-        this.changedOptions();
+        this.configEditMode(false, false);
       }
     } else {
-      this.editMode = statusEditMode;
+      this.editMode = true;
+      this.configEditMode(true, true);
     }
+  }
+
+  /**
+   * Enable or disable resizable and draggable in  gridster2.
+   *
+   * @param isDraggable Is enabled draggable.
+   * @param isResizable Is enabled resizable.
+   */
+  private configEditMode(isDraggable: boolean, isResizable: boolean): void {
+    this.options.draggable = {
+      enabled: isDraggable,
+      start: () => {
+        /** Do something. */
+      },
+      stop: () => {
+        /** Do something. */
+      },
+    };
+
+    this.options.resizable = {
+      enabled: isResizable,
+      start: () => {
+        /** Do something. */
+      },
+      stop: () => {
+        /** Do something. */
+      },
+    };
+    this.changedOptions();
   }
 
   /**
@@ -233,6 +263,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (dashboardByRithmId) => {
           this.dashboardData = dashboardByRithmId;
           this.isLoading = false;
+          this.configEditMode(false, false);
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -328,6 +359,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
+        this.configEditMode(false, false);
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;

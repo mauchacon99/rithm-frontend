@@ -88,7 +88,7 @@
           <div
             class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
           >
-            {{ document.name }}
+            {{ document.name || 'Untitled Document' }}
           </div>
           <div
             *ngIf="document.assignedUser"
@@ -148,12 +148,18 @@
   <!--  Header -->
   <div class="flex justify-between items-center">
     <button
+      [disabled]="documentComponent?.documentLoading || false"
       mat-icon-button
       (click)="viewDocument('', true)"
       id="return-list-documents"
       data-testid="return-list-documents"
     >
-      <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
+      <i
+        [ngClass]="{
+          'text-secondary-300': documentComponent?.documentLoading || false
+        }"
+        class="fas text-secondary-500 fa-arrow-left text-lg"
+      ></i>
     </button>
     <button
       mat-icon-button

@@ -8,7 +8,7 @@ on:
 jobs:
   # Checks that the app has been formatted with Prettier
   check-prettier:
-    runs-on: [self-hosted, uirunner]
+    runs-on: front-end-runner
     timeout-minutes: 4
 
     steps:
@@ -22,7 +22,7 @@ jobs:
 
   # Checks that the Angular app conforms to standards
   lint-app:
-    runs-on: [self-hosted, uirunner]
+    runs-on: front-end-runner
     needs: [check-prettier]
     timeout-minutes: 4
 
@@ -40,7 +40,7 @@ jobs:
 
   # Checks that all stylesheets conform to standards
   lint-stylesheets:
-    runs-on: [self-hosted, uirunner]
+    runs-on: front-end-runner
     needs: [check-prettier]
     timeout-minutes: 4
 
@@ -58,7 +58,7 @@ jobs:
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
   build:
-    runs-on: [self-hosted, front-end-checks]
+    runs-on: front-end-runner
     needs: [lint-app, lint-stylesheets]
     timeout-minutes: 10
 
@@ -76,7 +76,7 @@ jobs:
 
   # Checks that the Angular app passes all defined unit and integration tests
   test:
-    runs-on: [self-hosted, front-end-checks]
+    runs-on: front-end-runner
     needs: build
     timeout-minutes: 6
 

@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
+import { DocumentComponent } from 'src/app/document/document/document.component';
 
 /**
  * Component for Station widget.
@@ -16,6 +17,10 @@ import { PopupService } from 'src/app/core/popup.service';
   providers: [UtcTimeConversion],
 })
 export class StationWidgetComponent implements OnInit {
+  /** The component for the document info header. */
+  @ViewChild(DocumentComponent, { static: false })
+  documentComponent!: DocumentComponent;
+
   /** Station rithmId. */
   @Input() stationRithmId = '';
 
@@ -51,7 +56,7 @@ export class StationWidgetComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService
-  ) {}
+  ) { }
 
   /**
    * Initial Method.

@@ -105,6 +105,8 @@ export class MockStationService {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      allowAllOrgWorkers: true,
+      allowExternalWorkers: false,
       flowButton: 'Flow',
     };
     return of(data).pipe(delay(1000));
@@ -121,8 +123,6 @@ export class MockStationService {
         name: 'Example Station',
         rithmId: '3j4k-3h2j-hj4j',
         instructions: 'Do as I instruct',
-        allowAllOrgWorkers: false,
-        allowExternalWorkers: true,
       },
     ];
     return of(mockStationData).pipe(delay(1000));
@@ -208,6 +208,8 @@ export class MockStationService {
         questions: [],
         priority: 2,
         allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
         flowButton: 'Flow',
       };
       return of(data).pipe(delay(1000));
@@ -875,9 +877,13 @@ export class MockStationService {
    * Update the allow external workers status for the station roster.
    *
    * @param stationRithmId The Specific id of station.
+   * @param allowExtWorkers Whether to allow external workers.
    * @returns Allow external workers updated status in the station.
    */
-  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+  updateAllowExternalWorkers(
+    stationRithmId: string,
+    allowExtWorkers: boolean
+  ): Observable<boolean> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -889,7 +895,7 @@ export class MockStationService {
       ).pipe(delay(1000));
     } else {
       const expectedResponse: StandardBooleanJSON = {
-        data: true,
+        data: allowExtWorkers,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }
