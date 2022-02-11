@@ -262,6 +262,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (dashboardByRithmId) => {
           this.dashboardData = dashboardByRithmId;
+          this.dashboardDataCopy = JSON.parse(
+            JSON.stringify(this.dashboardData)
+          );
           this.isLoading = false;
           this.configEditMode(false, false);
         },
