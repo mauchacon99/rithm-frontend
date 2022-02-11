@@ -327,32 +327,21 @@
               </mat-slide-toggle>
             </div>
           </section>
-          <section class="flex justify-between items-center pb-4">
-            <div>
-              <p class="text-secondary-400 pr-2 inline-block">External</p>
-              <i
-                class="fas fa-question-circle fa-2x1 text-secondary-400"
-                matTooltip="Allow anyone outside your organization to work on documents at this station"
-              ></i>
-            </div>
-            <div
-              id="allow-externarl-error"
-              *ngIf="allowExternalError; else allowExternalTemp"
-              class="pl-3"
-            >
-              <p class="text-error-500 text-xs inline-block">
-                Error: Unable to get/update the allow extenernal workers
-              </p>
-            </div>
-            <ng-template #allowExternalTemp>
-              <ng-container
-                *ngIf="allowExternalLoading; else slideToggleAllowExt"
-              >
+          <section class="pb-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-secondary-400 pr-2 inline-block">External</p>
+                <i
+                  class="fas fa-question-circle fa-2x1 text-secondary-400"
+                  matTooltip="Allow anyone outside your organization to work on documents at this station"
+                ></i>
+              </div>
+              <div *ngIf="allowExternalLoading; else slideToggleAllowExt">
                 <app-loading-indicator
                   id="loading-indicator-allow-external"
                   [inlineText]="'Loading...'"
                 ></app-loading-indicator>
-              </ng-container>
+              </div>
               <ng-template #slideToggleAllowExt>
                 <div class="pr-2">
                   <mat-slide-toggle
@@ -363,7 +352,12 @@
                   </mat-slide-toggle>
                 </div>
               </ng-template>
-            </ng-template>
+            </div>
+            <div class="flex justify-end" *ngIf="allowExternalError">
+              <p class="w-8/12 pt-2 text-error-500 text-xs inline-block">
+                Error: Unable to update the allow extenernal workers.
+              </p>
+            </div>
           </section>
           <section class="flex justify-between items-center">
             <div>

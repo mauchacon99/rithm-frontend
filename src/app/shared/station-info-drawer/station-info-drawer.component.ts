@@ -47,7 +47,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the allow external workers section. */
   allowExternalLoading = false;
 
-  /** Check if there is an error when getting or updating the allow external workers. */
+  /** Check if there is an error when updating the allow external workers. */
   allowExternalError = false;
 
   /** Whether the station is allowed for all the organization workers or not. */

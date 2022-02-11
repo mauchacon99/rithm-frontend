@@ -458,24 +458,4 @@ describe('StationInfoDrawerComponent', () => {
       );
     expect(loadingAllOrgWorker).toBeTruthy();
   });
-
-  xit('should show allow-externarl-error when calling getAllowExternalWorkers', () => {
-    component.stationLoading = false;
-    component.selectedTabIndex = 2;
-    spyOn(
-      TestBed.inject(StationService),
-      'getAllowExternalWorkers'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    component['getAllowAllOrgWorkers']();
-    fixture.detectChanges();
-    const viewError = fixture.debugElement.nativeElement.querySelector(
-      '#allow-externarl-error'
-    );
-    expect(component.allowExternalError).toBeTrue();
-    expect(viewError).toBeTruthy();
-  });
 });
