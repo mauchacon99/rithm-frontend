@@ -34,6 +34,7 @@ import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { RuleEquation } from 'src/models/rule-equation';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -57,6 +58,7 @@ describe('FlowLogicComponent', () => {
         MatInputModule,
         FormsModule,
         ReactiveFormsModule,
+        MatTooltipModule,
       ],
       declarations: [
         FlowLogicComponent,

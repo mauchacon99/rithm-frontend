@@ -33,14 +33,18 @@
             </p>
             <section>
               <div
-                class="flex justify-between border-b border-secondary-100"
+                class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
                   let rule of getStationFlowRules(station.rithmId).equations
                 "
               >
-                <p class="flex py-2 pl-3 text-secondary-500 items-end">
-                  {{ rule.leftOperand.value | titlecase }} -
-                  <b>{{ rule.operatorType }}</b> -
+                <p
+                  class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
+                >
+                  {{ rule.leftOperand.value | titlecase }}
+                  <span class="font-semibold px-2">
+                    - {{ rule.operatorType }} -</span
+                  >
                   {{ rule.rightOperand.value | titlecase }}
                 </p>
                 <figure class="flex">
@@ -48,7 +52,6 @@
                     type="button"
                     mat-icon-button
                     matSuffix
-                    class="icon"
                     matTooltip="Edit current rule"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
@@ -57,7 +60,6 @@
                     type="button"
                     mat-icon-button
                     matSuffix
-                    class="icon"
                     matTooltip="Remove current rule"
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
@@ -85,14 +87,18 @@
             <p>Flow to {{ station.name }} if ANY of the following are true.</p>
             <section>
               <div
-                class="flex justify-between border-b border-secondary-100"
+                class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
                   let rule of getStationFlowRules(station.rithmId).subRules
                 "
               >
-                <p class="flex py-2 pl-3 text-secondary-500 items-end">
-                  {{ rule.leftOperand.value | titlecase }} -
-                  <b>{{ rule.operatorType }}</b> -
+                <p
+                  class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
+                >
+                  {{ rule.leftOperand.value | titlecase }}
+                  <span class="font-semibold px-2">
+                    - {{ rule.operatorType }} -</span
+                  >
                   {{ rule.rightOperand.value | titlecase }}
                 </p>
                 <figure class="flex">

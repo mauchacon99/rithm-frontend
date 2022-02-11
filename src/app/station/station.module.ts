@@ -31,6 +31,7 @@ import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fi
 import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
 import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-field.module';
 import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.mod
     InfoDrawerModule,
     NumberFieldModule,
     DateFieldModule,
+    MatTooltipModule,
   ],
 })
 export class StationModule {}
