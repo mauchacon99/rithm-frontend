@@ -34,7 +34,7 @@ import { of, throwError } from 'rxjs';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
-import { RuleEquation } from '../../../models/rule-equation';
+import { RuleEquation } from 'src/models/rule-equation';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -165,7 +165,7 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should not show the display message when there are rules.', () => {
-    const expectStationFlowLogic: FlowLogicRule[] = [
+    component.flowLogicRules = [
       {
         stationRithmId: rithmId,
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
@@ -188,14 +188,11 @@ describe('FlowLogicComponent', () => {
         },
       },
     ];
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationFlowLogicRule'
-    ).and.returnValue(of(expectStationFlowLogic));
     component.ngOnInit();
     fixture.detectChanges();
-    const messageNotRules =
-      fixture.debugElement.nativeElement.querySelector('#there-not-rules');
+    const messageNotRules = fixture.debugElement.nativeElement.querySelector(
+      '.there-are-not-rules'
+    );
     expect(messageNotRules).toBeFalsy();
   });
 
@@ -209,8 +206,9 @@ describe('FlowLogicComponent', () => {
     ).and.returnValue(of(expectStationFlowLogic));
     component.ngOnInit();
     fixture.detectChanges();
-    const messageNotRules =
-      fixture.debugElement.nativeElement.querySelector('#there-not-rules');
+    const messageNotRules = fixture.debugElement.nativeElement.querySelector(
+      '.there-are-not-rules'
+    );
     expect(messageNotRules).toBeTruthy();
   });
 

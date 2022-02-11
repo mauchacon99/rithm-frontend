@@ -14,18 +14,53 @@
       </div>
       <div *ngIf="!flowLogicLoading && !flowRuleError">
         <p
-          class="text-error-500 mt-4"
-          *ngIf="flowLogicRules.length === 0"
-          data-testid="there-not-rules"
-          id="there-not-rules"
+          class="text-error-500 mt-4 there-are-not-rules"
+          *ngIf="
+            getStationFlowRules(station.rithmId).equations.length === 0 &&
+            getStationFlowRules(station.rithmId).subRules.length === 0
+          "
         >
           Documents will always flow here if there are no rules.
         </p>
         <div>
-          <div>
+          <section class="all-rules">
             <p class="mt-3">
               Flow to {{ station.name }} if ALL of the following are true.
             </p>
+            <section>
+              <div
+                class="flex justify-between border-b border-secondary-100"
+                *ngFor="
+                  let rule of getStationFlowRules(station.rithmId).equations
+                "
+              >
+                <p class="flex py-2 pl-3 text-secondary-500 items-end">
+                  {{ rule.leftOperand.value | titlecase }} -
+                  <b>{{ rule.operatorType }}</b> -
+                  {{ rule.rightOperand.value | titlecase }}
+                </p>
+                <figure class="flex">
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    class="icon"
+                    matTooltip="Edit current rule"
+                  >
+                    <i class="fas fa-pen text-secondary-300 text-base"></i>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    class="icon"
+                    matTooltip="Remove current rule"
+                  >
+                    <i class="fas fa-trash text-secondary-300 text-base"></i>
+                  </button>
+                </figure>
+              </div>
+            </section>
             <div class="mt-4">
               <button
                 mat-stroked-button
@@ -38,12 +73,46 @@
                 New Rule
               </button>
             </div>
-          </div>
+          </section>
           <div class="mt-5">
             <span>- OR -</span>
           </div>
-          <div>
+          <section class="any-rules">
             <p>Flow to {{ station.name }} if ANY of the following are true.</p>
+            <section>
+              <div
+                class="flex justify-between border-b border-secondary-100"
+                *ngFor="
+                  let rule of getStationFlowRules(station.rithmId).subRules
+                "
+              >
+                <p class="flex py-2 pl-3 text-secondary-500 items-end">
+                  {{ rule.leftOperand.value | titlecase }} -
+                  <b>{{ rule.operatorType }}</b> -
+                  {{ rule.rightOperand.value | titlecase }}
+                </p>
+                <figure class="flex">
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    class="icon"
+                    matTooltip="Edit current rule"
+                  >
+                    <i class="fas fa-pen text-secondary-300 text-base"></i>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    class="icon"
+                    matTooltip="Remove current rule"
+                  >
+                    <i class="fas fa-trash text-secondary-300 text-base"></i>
+                  </button>
+                </figure>
+              </div>
+            </section>
             <div class="mt-4">
               <button
                 mat-stroked-button
@@ -56,7 +125,7 @@
                 New Rule
               </button>
             </div>
-          </div>
+          </section>
         </div>
       </div>
       <!-- Error in rules flow logic -->
