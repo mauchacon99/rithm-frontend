@@ -9,7 +9,6 @@ import {
   delay,
   map,
   Observable,
-  of,
   Subject,
   throwError,
 } from 'rxjs';
@@ -28,9 +27,6 @@ import {
   FlowLogicRule,
   DocumentEvent,
   QuestionFieldType,
-  RuleType,
-  OperandType,
-  OperatorType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -492,42 +488,13 @@ export class DocumentService {
   /**
    * Save station flow rules.
    *
-   * @param stationRithmId The specific  station id.
+   * @param newFlowLogic New flow logic rule for current station.
    * @returns Station flow logic.
    */
-  saveStationFlowLogic(stationRithmId: string): Observable<FlowLogicRule> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'The id of the Station cannot be empty.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const stationFlowLogic: FlowLogicRule = {
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
-              },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
-        },
-      };
-      return of(stationFlowLogic).pipe(delay(1000));
-    }
+  saveStationFlowLogic(newFlowLogic: FlowLogicRule): Observable<unknown> {
+    return this.http.put<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
+      newFlowLogic
+    );
   }
 }

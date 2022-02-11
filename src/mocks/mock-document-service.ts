@@ -1355,16 +1355,16 @@ export class MockDocumentService {
   /**
    * Save station flow rules.
    *
-   * @param stationRithmId The specific  station id.
+   * @param newFlowLogic New flow logic rule for current station.
    * @returns Station flow logic.
    */
-  saveStationFlowLogic(stationRithmId: string): Observable<FlowLogicRule> {
-    if (!stationRithmId) {
+  saveStationFlowLogic(newFlowLogic: FlowLogicRule): Observable<unknown> {
+    if (!newFlowLogic) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'The id of the Station cannot be empty.',
+              error: 'Cannot be saved flow logic rule.',
             },
           })
       ).pipe(delay(1000));

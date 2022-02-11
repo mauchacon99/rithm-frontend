@@ -35,6 +35,9 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** Contains the new flow logic rule for saved . */
+  newFlowLogic!: FlowLogicRule;
+
   constructor(
     public dialog: MatDialog,
     private errorService: ErrorService,
