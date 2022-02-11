@@ -279,6 +279,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (dashboardByRithmId) => {
           this.dashboardData = dashboardByRithmId;
           this.isLoading = false;
+          this.configEditMode(false, false);
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;

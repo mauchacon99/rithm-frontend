@@ -693,6 +693,7 @@ describe('DocumentService', () => {
               },
             },
           ],
+          subRules: [],
         },
       },
     ];
@@ -788,6 +789,7 @@ describe('DocumentService', () => {
             },
           },
         ],
+        subRules: [],
       },
     };
 

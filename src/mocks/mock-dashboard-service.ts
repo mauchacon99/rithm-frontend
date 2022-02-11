@@ -425,4 +425,14 @@ export class MockDashboardService {
   ): Observable<DashboardData> {
     return of(dashboardData).pipe(delay(1000));
   }
+
+  /**
+   * Delete organization dashboard`s.
+   *
+   * @param rithmId The specific dashboard rithmId to delete.
+   * @returns The dashboard rithmId deleted.
+   */
+  deleteOrganizationDashboard(rithmId: string): Observable<unknown> {
+    return of().pipe(delay(1000));
+  }
 }
