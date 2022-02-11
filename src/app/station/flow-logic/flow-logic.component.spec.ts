@@ -1,11 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlowLogicComponent } from './flow-logic.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {
   ConnectedStationInfo,
-  FlowLogicRule,
   OperandType,
   OperatorType,
+  Rule,
   RuleType,
 } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
@@ -29,6 +33,8 @@ import { of, throwError } from 'rxjs';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
+import { RuleEquation } from 'src/models/rule-equation';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -52,6 +58,7 @@ describe('FlowLogicComponent', () => {
         MatInputModule,
         FormsModule,
         ReactiveFormsModule,
+        MatTooltipModule,
       ],
       declarations: [
         FlowLogicComponent,
@@ -91,6 +98,8 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should to call MatDialog service', async () => {
+      const ruleType = 'and';
+      const connectedStationId = '34904ac2-6bdd-4157-a818-50ffb37fdfbc';
       const expectDataModal = {
         panelClass: ['w-5/6', 'sm:w-4/5'],
         maxWidth: '1024px',
@@ -101,7 +110,7 @@ describe('FlowLogicComponent', () => {
         TestBed.inject(MatDialog),
         'open'
       ).and.callThrough();
-      await component.openModal();
+      await component.openModal(ruleType, connectedStationId);
       expect(dialogSpy).toHaveBeenCalledOnceWith(
         RuleModalComponent,
         expectDataModal
@@ -156,54 +165,57 @@ describe('FlowLogicComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should not show the display message when there are rules.', () => {
-    const expectStationFlowLogic: FlowLogicRule[] = [
+  it('should not display the red message when there are rules in each station.', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRules: [
-          {
-            ruleType: RuleType.Or,
-            equations: [
-              {
-                leftOperand: {
-                  type: OperandType.Field,
-                  value: 'birthday',
-                },
-                operatorType: OperatorType.Before,
-                rightOperand: {
-                  type: OperandType.Date,
-                  value: '5/27/1982',
-                },
+        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
               },
-            ],
-          },
-        ],
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+          subRules: [],
+        },
       },
     ];
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationFlowLogicRule'
-    ).and.returnValue(of(expectStationFlowLogic));
-    component.ngOnInit();
     fixture.detectChanges();
-    const messageNotRules =
-      fixture.debugElement.nativeElement.querySelector('#there-not-rules');
+    const messageNotRules = fixture.debugElement.nativeElement.querySelector(
+      '#there-are-not-rules-0'
+    );
     expect(messageNotRules).toBeFalsy();
   });
 
-  it('should show the display message when there are not rules.', () => {
+  it('should display the red message when there are not rules in each station.', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    const expectStationFlowLogic: FlowLogicRule[] = [];
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationFlowLogicRule'
-    ).and.returnValue(of(expectStationFlowLogic));
-    component.ngOnInit();
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [],
+          subRules: [],
+        },
+      },
+    ];
     fixture.detectChanges();
-    const messageNotRules =
-      fixture.debugElement.nativeElement.querySelector('#there-not-rules');
+    const messageNotRules = fixture.debugElement.nativeElement.querySelector(
+      '#there-are-not-rules-0'
+    );
     expect(messageNotRules).toBeTruthy();
   });
 
@@ -236,31 +248,147 @@ describe('FlowLogicComponent', () => {
     expect(reviewError).toBeTruthy();
   });
 
-  it('should call the method that save the logical flow rules of a station.', () => {
-    component.rithmId = rithmId;
-    const saveStationFlowLogicRuleSpy = spyOn(
-      TestBed.inject(DocumentService),
-      'saveStationFlowLogic'
-    ).and.callThrough();
-    component['saveStationFlowLogic']();
-    expect(saveStationFlowLogicRuleSpy).toHaveBeenCalledWith(rithmId);
+  describe('New rule modal afterClosed', () => {
+    const ruleToAdd: RuleEquation = {
+      leftOperand: {
+        type: OperandType.String,
+        value: '',
+      },
+      operatorType: OperatorType.EqualTo,
+      rightOperand: {
+        type: OperandType.String,
+        value: '',
+      },
+    };
+    beforeEach(() => {
+      fixture = TestBed.createComponent(FlowLogicComponent);
+      component = fixture.componentInstance;
+      component.rithmId = rithmId;
+      component.flowLogicRules = [
+        {
+          stationRithmId: rithmId,
+          destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+          flowRule: {
+            ruleType: RuleType.And,
+            equations: [],
+            subRules: [],
+          },
+        },
+      ];
+      fixture.detectChanges();
+    });
+
+    it('should add a new flowLogicRule with equations if station doesnt exists', async () => {
+      component.flowLogicRules[0].destinationStationRithmId =
+        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
+
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('all', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(2);
+    });
+
+    it('should update a flowLogicRule with equations if station exists', async () => {
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('all', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(1);
+    });
+
+    it('should add a new flowLogicRule with subrules if station doesnt exists', async () => {
+      component.flowLogicRules[0].destinationStationRithmId =
+        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('any', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(2);
+    });
+
+    it('should update a flowLogicRule with subrules if it exists', async () => {
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('any', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(1);
+    });
   });
 
-  it('should show error if petition save flow logic fails', () => {
-    component.flowLogicLoading = false;
-    spyOn(
-      TestBed.inject(DocumentService),
-      'saveStationFlowLogic'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
+  it('Should return a default  flowRuleObject for the current station if not exists', async () => {
+    const defaultRule: Rule = {
+      ruleType: RuleType.And,
+      equations: [],
+      subRules: [],
+    };
+
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+              operatorType: OperatorType.EqualTo,
+              rightOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    fixture.detectChanges();
+
+    const ruleObject = component.getStationFlowRules(
+      '4157-a818-34904ac2-50ffb37fdfbc'
     );
-    const displayErrorSpy = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component['saveStationFlowLogic']();
-    expect(displayErrorSpy).toHaveBeenCalled();
+
+    expect(ruleObject).toEqual(defaultRule);
+  });
+
+  it('Should return an flowRuleObject for the current station if exists', async () => {
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+              operatorType: OperatorType.EqualTo,
+              rightOperand: {
+                type: OperandType.String,
+                value: '',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    fixture.detectChanges();
+
+    const ruleObject = component.getStationFlowRules(
+      '4157-a818-34904ac2-6bdd-50ffb37fdfbc'
+    );
+
+    expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
   });
 });

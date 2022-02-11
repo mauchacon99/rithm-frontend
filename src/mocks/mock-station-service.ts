@@ -105,6 +105,8 @@ export class MockStationService {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      allowAllOrgWorkers: true,
+      allowExternalWorkers: false,
       flowButton: 'Flow',
     };
     return of(data).pipe(delay(1000));
@@ -121,8 +123,6 @@ export class MockStationService {
         name: 'Example Station',
         rithmId: '3j4k-3h2j-hj4j',
         instructions: 'Do as I instruct',
-        allowAllOrgWorkers: false,
-        allowExternalWorkers: true,
       },
     ];
     return of(mockStationData).pipe(delay(1000));
@@ -208,6 +208,8 @@ export class MockStationService {
         questions: [],
         priority: 2,
         allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
         flowButton: 'Flow',
       };
       return of(data).pipe(delay(1000));
@@ -946,6 +948,34 @@ export class MockStationService {
     } else {
       const expectedResponse: StandardBooleanJSON = {
         data: allowAllOrgWorkers,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the allowPreviousButton button status.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param allowPreviousButton The value that will be update.
+   * @returns The status allowPreviousButton updated.
+   */
+  updateAllowPreviousButton(
+    stationRithmId: string,
+    allowPreviousButton: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowPreviousButton,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }

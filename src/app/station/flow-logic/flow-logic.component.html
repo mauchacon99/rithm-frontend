@@ -1,5 +1,8 @@
 <div *ngIf="nextStations.length; else notConnectedStations">
-  <div *ngFor="let station of nextStations" class="flex flex-col justify-start">
+  <div
+    *ngFor="let station of nextStations; let i = index"
+    class="flex flex-col justify-start"
+  >
     <div class="mb-6">
       <p class="font-semibold mt-10">{{ station.name }} Rules</p>
       <!-- Loader for flow logic -->
@@ -15,22 +18,60 @@
       <div *ngIf="!flowLogicLoading && !flowRuleError">
         <p
           class="text-error-500 mt-4"
-          *ngIf="stationFlowLogic.length === 0"
-          data-testid="there-not-rules"
-          id="there-not-rules"
+          [id]="'there-are-not-rules-' + i"
+          *ngIf="
+            !getStationFlowRules(station.rithmId).equations.length &&
+            !getStationFlowRules(station.rithmId).subRules.length
+          "
         >
           Documents will always flow here if there are no rules.
         </p>
         <div>
-          <div>
+          <section class="all-rules">
             <p class="mt-3">
               Flow to {{ station.name }} if ALL of the following are true.
             </p>
+            <section>
+              <div
+                class="flex justify-between items-center border-b border-secondary-100"
+                *ngFor="
+                  let rule of getStationFlowRules(station.rithmId).equations
+                "
+              >
+                <p
+                  class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
+                >
+                  {{ rule.leftOperand.value | titlecase }}
+                  <span class="font-semibold px-2">
+                    - {{ rule.operatorType }} -</span
+                  >
+                  {{ rule.rightOperand.value | titlecase }}
+                </p>
+                <figure class="flex">
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    matTooltip="Edit current rule"
+                  >
+                    <i class="fas fa-pen text-secondary-300 text-base"></i>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    matTooltip="Remove current rule"
+                  >
+                    <i class="fas fa-trash text-secondary-300 text-base"></i>
+                  </button>
+                </figure>
+              </div>
+            </section>
             <div class="mt-4">
               <button
                 mat-stroked-button
                 type="button"
-                (click)="openModal()"
+                (click)="openModal('all', station.rithmId)"
                 data-testid="all-new-rule"
                 id="all-new-rule"
                 class="px-4 py-1 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold"
@@ -38,17 +79,53 @@
                 New Rule
               </button>
             </div>
-          </div>
+          </section>
           <div class="mt-5">
             <span>- OR -</span>
           </div>
-          <div>
+          <section class="any-rules">
             <p>Flow to {{ station.name }} if ANY of the following are true.</p>
+            <section>
+              <div
+                class="flex justify-between items-center border-b border-secondary-100"
+                *ngFor="
+                  let rule of getStationFlowRules(station.rithmId).subRules
+                "
+              >
+                <p
+                  class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
+                >
+                  {{ rule.leftOperand.value | titlecase }}
+                  <span class="font-semibold px-2">
+                    - {{ rule.operatorType }} -</span
+                  >
+                  {{ rule.rightOperand.value | titlecase }}
+                </p>
+                <figure class="flex">
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    matTooltip="Edit current rule"
+                  >
+                    <i class="fas fa-pen text-secondary-300 text-base"></i>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    matTooltip="Remove current rule"
+                  >
+                    <i class="fas fa-trash text-secondary-300 text-base"></i>
+                  </button>
+                </figure>
+              </div>
+            </section>
             <div class="mt-4">
               <button
                 mat-stroked-button
                 type="button"
-                (click)="openModal()"
+                (click)="openModal('any', station.rithmId)"
                 data-testid="any-new-rule"
                 id="any-new-rule"
                 class="px-4 py-1 mt-4 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold"
@@ -56,7 +133,7 @@
                 New Rule
               </button>
             </div>
-          </div>
+          </section>
         </div>
       </div>
       <!-- Error in rules flow logic -->
