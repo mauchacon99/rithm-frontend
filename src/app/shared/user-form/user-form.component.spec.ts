@@ -8,6 +8,7 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { MockUserService } from 'src/mocks';
+import { PasswordRequirementsModule } from 'src/app/shared/password-requirements/password-requirements.module';
 
 import { UserFormComponent } from './user-form.component';
 
@@ -25,6 +26,7 @@ describe('UserFormComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
+        PasswordRequirementsModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

@@ -53,6 +53,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station is allowed for all the organization workers or not. */
   allowAllOrgWorkers = false;
 
+  /** The loading if changed toggle to allow all workers in the organization. */
+  allowAllOrgLoading = false;
+
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
@@ -192,10 +195,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationStatus !== MapItemStatus.Created) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
-      //Get the allow external workers
-      this.getAllowExternalWorkers();
-      //Get the allow all organization workers
-      this.getAllowAllOrgWorkers();
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
         .subscribe({
@@ -304,6 +303,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
+              this.allowExternal = stationInfo.allowExternalWorkers;
+              this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
             this.stationLoading = false;
           },
@@ -338,6 +339,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         questions: [],
         priority: 0,
         allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
         flowButton: 'Flow',
       };
     }
@@ -637,62 +640,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get the value of field AllowAllOrgWorkers for a specific station.
+   * Update the AllowAllOrgWorkers status.
    */
-  private getAllowAllOrgWorkers(): void {
+  updateAllOrgWorkersStation(): void {
+    this.allowAllOrgLoading = true;
     this.stationService
-      .getAllowAllOrgWorkers(this.stationRithmId)
+      .updateAllowAllOrgWorkers(this.stationRithmId, this.allowAllOrgWorkers)
       .pipe(first())
       .subscribe({
-        next: (allOrgWorkers) => {
-          this.allowAllOrgWorkers = allOrgWorkers;
+        next: (allowAllOrgWorkers) => {
+          this.allowAllOrgWorkers = allowAllOrgWorkers;
+          this.allowAllOrgLoading = false;
         },
         error: (error: unknown) => {
-          this.errorService.displayError(
-            'Failed to get connected stations for this document.',
-            error,
-            false
-          );
-        },
-      });
-  }
-
-  /**
-   * Update AllowAllOrgWorkers information.
-   *
-   * @param allowAllOrgWorkers The value that will be update.
-   */
-  updateAllOrgWorkersStation(allowAllOrgWorkers: boolean): void {
-    this.stationService
-      .updateAllowAllOrgWorkers(this.stationRithmId, allowAllOrgWorkers)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Get the allow external workers for the station roster.
-   */
-  private getAllowExternalWorkers(): void {
-    this.allowExternalLoading = true;
-    this.allowExternalError = false;
-    this.stationService
-      .getAllowExternalWorkers(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (allowExternal) => {
-          this.allowExternal = allowExternal;
-          this.allowExternalLoading = false;
-        },
-        error: (error: unknown) => {
-          this.allowExternalLoading = false;
-          this.allowExternalError = true;
+          this.allowAllOrgLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

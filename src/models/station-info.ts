@@ -49,6 +49,12 @@ export interface StationInformation {
   /** Whether to allow previous button be part of the document/station. */
   allowPreviousButton: boolean;
 
+  /** Allows members of the organization to be part of the list of workers of the current station. */
+  allowAllOrgWorkers: boolean;
+
+  /** Whether to allow external workers be part of the station owner/worker roster. */
+  allowExternalWorkers: boolean;
+
   /** Customize the name of the flow button. */
   flowButton: string;
 }

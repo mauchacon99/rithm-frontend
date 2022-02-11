@@ -4,6 +4,8 @@ import { UserFormComponent } from './user-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PasswordRequirementsModule } from '../password-requirements/password-requirements.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [UserFormComponent],
@@ -12,6 +14,8 @@ import { PasswordRequirementsModule } from '../password-requirements/password-re
     MatFormFieldModule,
     ReactiveFormsModule,
     PasswordRequirementsModule,
+    MatInputModule,
+    MatButtonModule,
   ],
   exports: [UserFormComponent],
 })
