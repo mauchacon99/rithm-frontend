@@ -171,7 +171,10 @@
       id="expand-document"
       data-testid="expand-document"
     >
-      <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
+      <i
+        [ngClass]="isExpandWidget ? 'fa-compress-alt' : 'fa-expand-alt'"
+        class="fas text-secondary-500 text-lg"
+      ></i>
     </button>
   </div>
   <!--  Document component -->
