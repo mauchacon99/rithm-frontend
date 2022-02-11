@@ -156,7 +156,9 @@
     >
       <i
         [ngClass]="{
-          'text-secondary-300': documentComponent ? documentComponent?.documentLoading : true
+          'text-secondary-300': documentComponent
+            ? documentComponent?.documentLoading
+            : true
         }"
         class="fas text-secondary-500 fa-arrow-left text-lg"
       ></i>

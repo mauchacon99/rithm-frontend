@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -56,7 +63,7 @@ export class StationWidgetComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService
-  ) { }
+  ) {}
 
   /**
    * Initial Method.

@@ -65,26 +65,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
 
-  /** Config grid. */
-  options: GridsterConfig = {
-    gridType: 'verticalFixed',
-    displayGrid: 'onDrag&Resize',
-    pushItems: true,
-    draggable: {
-      enabled: false,
-    },
-    resizable: {
-      enabled: false,
-    },
-    margin: 16,
-    minCols: 12,
-    maxCols: 12,
-    allowMultiLayer: true,
-    defaultLayerIndex: 1,
-    maxLayerIndex: 2,
-    baseLayerIndex: 1,
-  };
-
   /**
    * Whether the signed in user is an admin or not.
    *
@@ -149,6 +129,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 
+  /**
+   * Config grid.
+   *
+   * @returns Options of the grid.
+   */
+  get options(): GridsterConfig {
+    return {
+      gridType: 'verticalFixed',
+      displayGrid: 'onDrag&Resize',
+      pushItems: true,
+      draggable: {
+        enabled: this.editMode,
+      },
+      resizable: {
+        enabled: this.editMode,
+      },
+      margin: 16,
+      minCols: 12,
+      maxCols: 12,
+      allowMultiLayer: true,
+      defaultLayerIndex: 1,
+      maxLayerIndex: 2,
+      baseLayerIndex: 1,
+    };
+  }
+
   /** Split Service. */
   private split(): void {
     this.splitService.sdkReady$.pipe(first()).subscribe({
@@ -198,32 +204,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         okButtonText: 'Yes',
         cancelButtonText: 'No',
       });
-
-      if (response) {
-        this.editMode = false;
-        this.configEditMode(false, false);
-      }
+      this.editMode = !response;
     } else {
       this.editMode = true;
-      this.configEditMode(true, true);
     }
-  }
-
-  /**
-   * Enable or disable resizable and draggable in  gridster2.
-   *
-   * @param isDraggable Is enabled draggable.
-   * @param isResizable Is enabled resizable.
-   */
-  private configEditMode(isDraggable: boolean, isResizable: boolean): void {
-    this.options.draggable = {
-      enabled: isDraggable,
-    };
-
-    this.options.resizable = {
-      enabled: isResizable,
-    };
-    this.changedOptions();
   }
 
   /**
@@ -254,7 +238,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             JSON.stringify(this.dashboardData)
           );
           this.isLoading = false;
-          this.configEditMode(false, false);
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -350,7 +333,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
-        this.configEditMode(false, false);
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
