@@ -23,6 +23,8 @@ import {
   STATION_HEIGHT,
   SCALE_REDUCED_RENDER,
   CENTER_ZOOM_BUFFER,
+  STATION_PAN_CENTER_WIDTH,
+  STATION_PAN_CENTER_HEIGHT,
 } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
@@ -129,6 +131,9 @@ export class MapService {
 
   /** The number of times this.center() should be called. It will continually be incremented until centering is done.*/
   centerCount$ = new BehaviorSubject(0);
+
+  /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
+  centerStationCount$ = new BehaviorSubject(0);
 
   constructor(private http: HttpClient) {}
 
@@ -1636,6 +1641,97 @@ export class MapService {
         this.openedDrawerType$.next('');
         this.mapDataReceived$.next(true);
       }
+    }
+  }
+
+  /**
+   * Smoothly sets the scale and pans the station to center.
+   *
+   * @param station Station which should be pan to center.
+   */
+  centerStation(station: StationMapElement): void {
+    //If there are no stations to center around, do nothing.
+    if (this.stationElements.length === 0) {
+      return;
+    }
+
+    //We put our logic in a const so we can call it later.
+    const centerStationLogic = () => {
+      //If there is still centering that needs to be done for the station.
+      if (this.centerStationCount$.value > 0) {
+        //Smoothly pan station to the center.
+        this.stationCenterPan(station);
+        //Decrement centerStationCount to note that we've moved the station a step further to the center.
+        this.centerStationCount$.next(this.centerStationCount$.value - 1);
+        //Recursively call method so we can animate a smooth pan and scale.
+        this.centerStation(station);
+        //If centering is finished.
+      } else {
+        //Reset properties that mark that more centering needs to happen.
+        this.centerActive$.next(false);
+        this.centerStationCount$.next(0);
+      }
+    };
+
+    //End method if centerActive is false.
+    if (!this.centerActive$.value) {
+      return;
+    }
+
+    setTimeout(() => {
+      centerStationLogic();
+    }, 4);
+  }
+
+  /**
+   * Pans the station when centerStation method is called.
+   *
+   * @param station Station which should be pan to center.
+   */
+  private stationCenterPan(station: StationMapElement): void {
+    //Get the point that currentCanvasPoint needs to be set to.
+    const canvasCenter = this.getCanvasCenterPoint();
+    // Determine the canvas point of station to pan it to the center.
+    const adjustedCenter = {
+      x:
+        station.mapPoint.x +
+        STATION_PAN_CENTER_WIDTH / this.mapScale$.value -
+        canvasCenter.x / this.mapScale$.value,
+      y:
+        station.mapPoint.y +
+        STATION_PAN_CENTER_HEIGHT / this.mapScale$.value -
+        canvasCenter.y / this.mapScale$.value,
+    };
+
+    //How far away is the currentCanvasPoint from the map center?
+    const totalPanNeeded = {
+      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
+      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
+    };
+
+    //initialize variable needed to set panVelocity.
+    const panAmount: Point = { x: 0, y: 0 };
+
+    //Set x axis of panAmount as 1% of totalPanNeeded.
+    panAmount.x = totalPanNeeded.x * 0.1;
+
+    //Set y axis of panAmount as 1% of totalPanNeeded.
+    panAmount.y = totalPanNeeded.y * 0.1;
+
+    /* In order to have a fade out animation effect we exponentially decrement the totalPanNeeded with each recursive call of centerPan().
+    This means that panAmount wil never reach 0, so we need to decide on a number thats close enough.
+    If we waited for 0 we'd get caught in an infinite loop.
+    The number settled on for now is .12. */
+    if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
+      //nextPanVelocity on map canvas will be set to this.
+      this.centerPanVelocity$.next(panAmount);
+      //Increment the centerStationCount. This lets the center method know we aren't done centering.
+      this.centerStationCount$.next(this.centerStationCount$.value + 1);
+    } else {
+      //After the animation is finished, jump to the station center.
+      this.currentCanvasPoint$.next(adjustedCenter);
+      //Cancel panning by setting panVelocity to 0,0.
+      this.centerPanVelocity$.next({ x: 0, y: 0 });
     }
   }
 }

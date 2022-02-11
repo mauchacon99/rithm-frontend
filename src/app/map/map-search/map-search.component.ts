@@ -83,5 +83,13 @@ export class MapSearchComponent {
     drawerItem.drawerOpened = true;
     this.searchText = '';
     this.filteredStations = [];
+    //Close any open station option menus.
+    this.mapService.matMenuStatus$.next(true);
+    //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+    this.mapService.centerActive$.next(true);
+    //Increment centerStationCount to show that more centering of station needs to be done.
+    this.mapService.centerStationCount$.next(1);
+    //Call method to run logic for centering of the station.
+    this.mapService.centerStation(drawerItem);
   }
 }

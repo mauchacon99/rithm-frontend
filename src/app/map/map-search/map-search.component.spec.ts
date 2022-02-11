@@ -16,6 +16,7 @@ describe('MapSearchComponent', () => {
   let component: MapSearchComponent;
   let fixture: ComponentFixture<MapSearchComponent>;
   const formBuilder = new FormBuilder();
+  let service: MapService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -32,6 +33,7 @@ describe('MapSearchComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
       ],
     }).compileComponents();
+    service = TestBed.inject(MapService);
   });
 
   beforeEach(() => {
@@ -89,6 +91,7 @@ describe('MapSearchComponent', () => {
       TestBed.inject(StationService),
       'updatedStationNameText'
     );
+    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'centerStation');
     const station = new StationMapElement({
       rithmId: '',
       stationName: 'Untitled Station',
@@ -117,5 +120,9 @@ describe('MapSearchComponent', () => {
     expect(station.drawerOpened).toBeTrue();
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
+    service.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
+    service.centerActive$.subscribe((res) => expect(res).toBe(true));
+    service.centerStationCount$.subscribe((res) => expect(res).toBe(1));
+    expect(mapServiceSpy).toHaveBeenCalledWith(station);
   });
 });
