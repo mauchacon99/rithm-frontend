@@ -585,4 +585,26 @@ describe('DashboardService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('should call method getDocumentWidget', () => {
+    const expectedResponse = {
+      documentName: 'Untitled Dashboard',
+      documentRithmId: '8263330A-BCAA-40DB-8C06-D4C111D5C9DA',
+      questions: [
+        {
+          rithmId: '8263330A-BCAA-40DB-8C06-D4C111D5C9D2',
+          prompt: '',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: true,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ],
+    };
+
+    service.getDocumentWidget().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
 });
