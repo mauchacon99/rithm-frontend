@@ -2197,6 +2197,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       questions: [],
       priority: 1,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
     //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.
