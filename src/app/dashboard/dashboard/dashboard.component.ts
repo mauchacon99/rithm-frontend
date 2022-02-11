@@ -218,22 +218,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private configEditMode(isDraggable: boolean, isResizable: boolean): void {
     this.options.draggable = {
       enabled: isDraggable,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
     };
 
     this.options.resizable = {
       enabled: isResizable,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
     };
     this.changedOptions();
   }

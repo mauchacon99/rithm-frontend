@@ -277,6 +277,17 @@ describe('DashboardComponent', () => {
     });
   });
 
+<<<<<<< HEAD
+=======
+  it('should called method config Edit Mode and change status draggable and resizable', () => {
+    expect(component.options.draggable?.enabled).toBeFalse();
+    expect(component.options.resizable?.enabled).toBeFalse();
+    component['configEditMode'](true, true);
+    expect(component.options.draggable?.enabled).toBeTrue();
+    expect(component.options.resizable?.enabled).toBeTrue();
+  });
+
+>>>>>>> 410d8855867af61a2e5addd24ab167d2160fe546
   describe('Expand widget', () => {
     const dashboardData = {
       rithmId: '123654-789654-7852',
@@ -315,13 +326,5 @@ describe('DashboardComponent', () => {
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
     });
-  });
-
-  it('should called method config Edit Mode and change status draggable and resizable', () => {
-    expect(component.options.draggable?.enabled).toBeFalse();
-    expect(component.options.resizable?.enabled).toBeFalse();
-    component['configEditMode'](true, true);
-    expect(component.options.draggable?.enabled).toBeTrue();
-    expect(component.options.resizable?.enabled).toBeTrue();
   });
 });
