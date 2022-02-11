@@ -112,13 +112,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   isChained = false;
 
   /** Display the ownerRoster length. */
-  ownersRosterLength: number | null = 0;
+  ownersRosterLength = -1;
 
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
   /** Whether the station is allowed for all the organization workers or not. */
   allowAllOrgWorkers = false;
+
+  /** The loading if changed toggle to allow all workers in the organization. */
+  allowAllOrgLoading = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -161,21 +164,22 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationStatus = dataDrawer.stationStatus;
             this.openedFromMap = dataDrawer.openedFromMap;
             this.stationNotes = dataDrawer.notes;
-            const currentStationIndex =
-              this.mapService.stationElements.findIndex(
-                (e) => e.rithmId === this.stationRithmId
-              );
-            this.mapService.stationElements[currentStationIndex].drawerOpened =
-              true;
-            this.mapService.mapDataReceived$.next(true);
+            if (this.openedFromMap) {
+              const currentStationIndex =
+                this.mapService.stationElements.findIndex(
+                  (e) => e.rithmId === this.stationRithmId
+                );
+              this.mapService.stationElements[
+                currentStationIndex
+              ].drawerOpened = true;
+              this.mapService.mapDataReceived$.next(true);
+            }
             if (
               this.openedFromMap &&
               this.stationStatus !== MapItemStatus.Created
             ) {
               this.getStationDocumentGenerationStatus();
             }
-            //Get the allow external workers for slide-toggle allowExternal
-            this.getAllowExternalWorkers();
           } else {
             throw new Error('There was no station info drawer data');
           }
@@ -191,7 +195,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationStatus !== MapItemStatus.Created) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
-
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
         .subscribe({
@@ -207,8 +210,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         });
     }
   }
-
-  //LOCAL GETTERS & SETTERS
 
   /**
    * Whether the station is locally created on the map.
@@ -287,8 +288,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     return this.userService.isWorker(this.stationInformation);
   }
 
-  // GETTERS: Methods to make get request
-
   /**
    * Get data about the station the document is in.
    *
@@ -305,6 +304,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
               this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
+              this.allowExternal = stationInfo.allowExternalWorkers;
+              this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
             this.stationLoading = false;
           },
@@ -339,6 +340,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         questions: [],
         priority: 0,
         allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
         flowButton: 'Flow',
       };
     }
@@ -414,8 +417,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
       });
   }
-
-  //SETTERS: methods to save/update
 
   /**
    * Open a modal to create a new document.
@@ -528,8 +529,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       });
   }
 
-  //HELPER AND ADDITIONALS methods to redirect/navigate/openModals/report and others
-
   /**
    * Navigate to station edit page upon confirmation in Map build mode and without any confirmation in Map view mode.
    *
@@ -587,13 +586,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(first())
       .subscribe(() => {
-        this.ownersRosterLength = null;
+        this.ownersRosterLength = -1;
         this.refreshInfoDrawer(true);
         this.selectedTabIndex = 2;
       });
   }
-
-  //CLOSING: Methods to refresh/close/destroy components
 
   /**
    * Refresh the Info drawer after modal is close.
@@ -644,68 +641,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get the value of field AllowAllOrgWorkers for a specific station.
+   * Update the AllowAllOrgWorkers status.
    */
-  private getAllowAllOrgWorkers(): void {
+  updateAllOrgWorkersStation(): void {
+    this.allowAllOrgLoading = true;
     this.stationService
-      .getAllowAllOrgWorkers(this.stationRithmId)
+      .updateAllowAllOrgWorkers(this.stationRithmId, this.allowAllOrgWorkers)
       .pipe(first())
       .subscribe({
-        next: (allOrgWorkers) => {
-          this.allowAllOrgWorkers = allOrgWorkers;
+        next: (allowAllOrgWorkers) => {
+          this.allowAllOrgWorkers = allowAllOrgWorkers;
+          this.allowAllOrgLoading = false;
         },
         error: (error: unknown) => {
-          this.errorService.displayError(
-            'Failed to get connected stations for this document.',
-            error,
-            false
-          );
-        },
-      });
-  }
-
-  /**
-   * Update AllowAllOrgWorkers information.
-   *
-   * @param allowAllOrgWorkers The value that will be update.
-   */
-  updateAllOrgWorkersStation(allowAllOrgWorkers: boolean): void {
-    this.stationService
-      .updateAllowAllOrgWorkers(this.stationRithmId, allowAllOrgWorkers)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
-   * Get the allow external workers for the station roster.
-   */
-  private getAllowExternalWorkers(): void {
-    this.allowExternalLoading = true;
-    this.stationService
-      .getAllowExternalWorkers(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (allowExternal) => {
-          this.allowExternal = allowExternal;
-          this.allowExternalLoading = false;
-        },
-        error: (error: unknown) => {
-          this.allowExternalLoading = false;
+          this.allowAllOrgLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -720,7 +669,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   updateAllowExternalWorkers(): void {
     this.allowExternalLoading = true;
     this.stationService
-      .updateAllowExternalWorkers(this.allowExternal, this.stationRithmId)
+      .updateAllowExternalWorkers(this.stationRithmId, this.allowExternal)
       .pipe(first())
       .subscribe({
         next: (allowExternal) => {
@@ -763,5 +712,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+  
+ /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
