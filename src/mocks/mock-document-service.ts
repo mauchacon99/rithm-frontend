@@ -1292,24 +1292,23 @@ export class MockDocumentService {
       const stationFlowLogic: FlowLogicRule = {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRules: [
-          {
-            ruleType: RuleType.Or,
-            equations: [
-              {
-                leftOperand: {
-                  type: OperandType.Field,
-                  value: 'birthday',
-                },
-                operatorType: OperatorType.Before,
-                rightOperand: {
-                  type: OperandType.Date,
-                  value: '5/27/1982',
-                },
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
               },
-            ],
-          },
-        ],
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+          subRules: [],
+        },
       };
       return of(stationFlowLogic).pipe(delay(1000));
     }
@@ -1356,16 +1355,16 @@ export class MockDocumentService {
   /**
    * Save station flow rules.
    *
-   * @param stationRithmId The specific  station id.
+   * @param newFlowLogic New flow logic rule for current station.
    * @returns Station flow logic.
    */
-  saveStationFlowLogic(stationRithmId: string): Observable<FlowLogicRule> {
-    if (!stationRithmId) {
+  saveStationFlowLogic(newFlowLogic: FlowLogicRule): Observable<unknown> {
+    if (!newFlowLogic) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'The id of the Station cannot be empty.',
+              error: 'Cannot be saved flow logic rule.',
             },
           })
       ).pipe(delay(1000));
@@ -1373,24 +1372,23 @@ export class MockDocumentService {
       const stationFlowLogic: FlowLogicRule = {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRules: [
-          {
-            ruleType: RuleType.Or,
-            equations: [
-              {
-                leftOperand: {
-                  type: OperandType.Field,
-                  value: 'birthday',
-                },
-                operatorType: OperatorType.Before,
-                rightOperand: {
-                  type: OperandType.Date,
-                  value: '5/27/1982',
-                },
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
               },
-            ],
-          },
-        ],
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+          subRules: [],
+        },
       };
       return of(stationFlowLogic).pipe(delay(1000));
     }

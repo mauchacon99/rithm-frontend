@@ -24,6 +24,7 @@
         class="text-sm"
         *ngFor="let option of filteredStations"
         [value]="option"
+        (click)="openDrawer(option)"
       >
         <span
           class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
