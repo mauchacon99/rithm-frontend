@@ -65,6 +65,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document generation section. */
   docCreationLoading = false;
 
+  /** Whether the station allow previous button or not. */
+  statusAllowPreviousButton = false;
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -303,6 +306,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
+              this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
@@ -692,6 +696,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationName);
+  }
+
+  /**
+   * Update status allow previous button in the station.
+   */
+  updateAllowPreviousButton(): void {
+    this.stationService
+      .updateAllowPreviousButton(
+        this.stationRithmId,
+        this.statusAllowPreviousButton
+      )
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.statusAllowPreviousButton = !this.statusAllowPreviousButton;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
