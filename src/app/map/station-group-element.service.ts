@@ -987,7 +987,7 @@ export class StationGroupElementService {
         x: pointEnd.x,
         y: pointEnd.y,
       },
-      displacement,
+      displacement - 3 * this.mapScale,
       Math.abs(m) < Math.PI / 4
     );
 
@@ -1004,7 +1004,6 @@ export class StationGroupElementService {
       );
     }
     path.closePath();
-    this.canvasContext.fill(path);
 
     // Adds the hover zone of the button in position Buttons of the stationGroup.
     stationGroup.pathButtons?.push({
