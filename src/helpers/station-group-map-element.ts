@@ -50,10 +50,7 @@ export class StationGroupMapElement {
    * @param point The cursor location.
    * @param ctx The rendering context for the canvas.
    */
-  checkElementHover(
-    point: Point,
-    ctx: CanvasRenderingContext2D,
-  ): void {
+  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
     //Saves the current state of the canvas context.
     ctx.save();
     //This will allow users to click in the area around group boundaries without having to click in the rendered space.
@@ -70,11 +67,7 @@ export class StationGroupMapElement {
         for (const iconButton of this.pathButtons) {
           // If the mouse hovers over the icon button then hoverItem changes.
           if (
-            this.isPointInStationGroupPendingButtons(
-              point,
-              iconButton,
-              ctx,
-            )
+            this.isPointInStationGroupPendingButtons(point, iconButton, ctx)
           ) {
             this.hoverItem = iconButton.typeButton;
             break;
@@ -141,14 +134,10 @@ export class StationGroupMapElement {
   isPointInStationGroupPendingButtons(
     point: Point,
     pathButtons: PathButton,
-    ctx: CanvasRenderingContext2D,
+    ctx: CanvasRenderingContext2D
   ): boolean {
     // check whether the mouse is hovering over the icon path
     // Compares the path with the current point of the mouse to canvas context.
-    return ctx.isPointInStroke(
-      pathButtons.path,
-      point.x,
-      point.y
-    );
+    return ctx.isPointInStroke(pathButtons.path, point.x, point.y);
   }
 }

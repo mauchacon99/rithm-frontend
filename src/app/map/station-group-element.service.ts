@@ -960,7 +960,7 @@ export class StationGroupElementService {
         'Cannot draw station group boundary line if context is not defined'
       );
     }
-    // Calculation of the slope of the line.
+    //Calculation of the slope of the line.
     const m = this.slopeLine(pointStart, pointEnd);
 
     // Move the point on the line to paint on the map.
