@@ -78,4 +78,23 @@ export class OptionsMenuComponent {
       },
     });
   }
+
+  /**
+   * Delete organization dashboard.
+   *
+   * @param rithmId The dashboard rithmId to delete.
+   */
+  deleteOrganizationDashboard(rithmId: string): void {
+    this.dashboardService
+      .deleteOrganizationDashboard(rithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
 }
