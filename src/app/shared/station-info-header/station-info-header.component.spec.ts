@@ -81,6 +81,8 @@ describe('StationInfoHeaderComponent', () => {
     questions: [],
     priority: 2,
     allowPreviousButton: false,
+    allowAllOrgWorkers: false,
+    allowExternalWorkers: true,
     flowButton: 'Flow',
   };
   const user: StationRosterMember = {
