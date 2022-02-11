@@ -141,6 +141,8 @@ describe('StationComponent', () => {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
