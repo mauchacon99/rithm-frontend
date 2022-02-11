@@ -120,6 +120,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The loading if changed toggle to allow all workers in the organization. */
   allowAllOrgLoading = false;
 
+  /** Use for catch error in update for permission of all org workers. */
+  allowAllOrgError = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -291,6 +294,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   getStationInfo(): void {
     this.stationLoading = true;
+    this.allowAllOrgLoading = true;
     if (this.stationStatus !== MapItemStatus.Created) {
       this.stationService
         .getStationInfo(this.stationRithmId)
@@ -302,6 +306,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationPriority = stationInfo.priority;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
+              this.allowAllOrgLoading = false;
+              this.lastUpdatedLoading = false;
             }
             this.stationLoading = false;
           },
@@ -312,6 +318,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             } else {
               this.stationLoading = false;
             }
+            this.allowAllOrgError = true;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -651,6 +658,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.allowAllOrgLoading = false;
+          this.allowAllOrgError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

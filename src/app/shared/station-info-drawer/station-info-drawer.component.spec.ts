@@ -445,7 +445,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  xit('should show loading-indicator-allow-external while update field allowAllOrgWorkers', () => {
+  xit('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', () => {
     component.stationLoading = false;
     component.allowAllOrgLoading = true;
     component.selectedTabIndex = 2;
