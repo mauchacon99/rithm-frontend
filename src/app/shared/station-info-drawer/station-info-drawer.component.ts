@@ -56,7 +56,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the allow external workers section. */
   allowExternalLoading = false;
 
-  /** Loading in the allow external workers section. */
+  /** Whether the station allow previous button or not. */
   statusAllowPreviousButton = false;
 
   /** Use to determinate generation of document. */

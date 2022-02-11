@@ -117,7 +117,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it('should update the update allow previous button status in station', () => {
+  it('should call the service to update the allowPreviousButton status in station', () => {
     component.statusAllowPreviousButton = false;
     const spyMethod = spyOn(
       TestBed.inject(StationService),
@@ -131,7 +131,7 @@ describe('StationInfoDrawerComponent', () => {
     );
   });
 
-  it('should catch error and executed error service when update the status allow-previous-button ', () => {
+  it('should catch an error when updating the status allow-previous-button fails', () => {
     spyOn(
       TestBed.inject(StationService),
       'updateAllowPreviousButton'
