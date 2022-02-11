@@ -148,7 +148,9 @@
   <!--  Header -->
   <div class="flex justify-between items-center">
     <button
-      [disabled]="documentComponent ? documentComponent?.documentLoading : true"
+      [disabled]="
+        documentComponent ? documentComponent.documentLoading || true : true
+      "
       mat-icon-button
       (click)="viewDocument('', true)"
       id="return-list-documents"
@@ -157,7 +159,7 @@
       <i
         [ngClass]="{
           'text-secondary-300': documentComponent
-            ? documentComponent?.documentLoading
+            ? documentComponent.documentLoading || true
             : true
         }"
         class="fas text-secondary-500 fa-arrow-left text-lg"

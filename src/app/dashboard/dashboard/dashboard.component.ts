@@ -65,6 +65,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
 
+  /** Config grid. */
+  options: GridsterConfig = {
+    gridType: 'verticalFixed',
+    displayGrid: 'onDrag&Resize',
+    pushItems: true,
+    draggable: {
+      enabled: false,
+    },
+    resizable: {
+      enabled: false,
+    },
+    margin: 16,
+    minCols: 12,
+    maxCols: 12,
+    allowMultiLayer: true,
+    defaultLayerIndex: 1,
+    maxLayerIndex: 2,
+    baseLayerIndex: 1,
+  };
+
   /**
    * Whether the signed in user is an admin or not.
    *
@@ -129,32 +149,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 
-  /**
-   * Config grid.
-   *
-   * @returns Options of the grid.
-   */
-  get options(): GridsterConfig {
-    return {
-      gridType: 'verticalFixed',
-      displayGrid: 'onDrag&Resize',
-      pushItems: true,
-      draggable: {
-        enabled: this.editMode,
-      },
-      resizable: {
-        enabled: this.editMode,
-      },
-      margin: 16,
-      minCols: 12,
-      maxCols: 12,
-      allowMultiLayer: true,
-      defaultLayerIndex: 1,
-      maxLayerIndex: 2,
-      baseLayerIndex: 1,
-    };
-  }
-
   /** Split Service. */
   private split(): void {
     this.splitService.sdkReady$.pipe(first()).subscribe({
@@ -195,7 +189,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param statusEditMode Status mode edition.
    */
   async toggleEditMode(statusEditMode: boolean): Promise<void> {
-    this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
     if (!statusEditMode) {
       const response = await this.popupService.confirm({
         title: 'Cancel?',
@@ -204,10 +197,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
         okButtonText: 'Yes',
         cancelButtonText: 'No',
       });
-      this.editMode = !response;
+
+      if (response) {
+        this.editMode = false;
+        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+        this.configEditMode();
+      }
     } else {
       this.editMode = true;
+      this.configEditMode();
     }
+  }
+
+  /**
+   * Enable or disable resizable and draggable in  gridster2.
+   */
+  private configEditMode(): void {
+    this.options.draggable = {
+      enabled: this.editMode,
+    };
+    this.options.resizable = {
+      enabled: this.editMode,
+    };
+    this.changedOptions();
   }
 
   /**
@@ -238,6 +250,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             JSON.stringify(this.dashboardData)
           );
           this.isLoading = false;
+          this.configEditMode();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -333,6 +346,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
+        this.configEditMode();
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
