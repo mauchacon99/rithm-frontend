@@ -60,6 +60,11 @@
             Document not created!
           </div>
         </div>
+        <div *ngIf="editMode" class="-mr--1">
+          <button mat-button class="text-secondary-500" style="min-width: 40px">
+            <i class="fas fa-cog text-lg"></i>
+          </button>
+        </div>
       </div>
     </div>
     <!--    Column Headers-->

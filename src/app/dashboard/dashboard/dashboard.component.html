@@ -150,6 +150,7 @@
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"
                 [stationRithmId]="item.data"
+                [editMode]="editMode"
               >
               </app-station-widget>
               <app-document-widget
