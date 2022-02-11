@@ -57,10 +57,10 @@ describe('StationGroupElementService', () => {
     const pointEnd: Point = { x: 29.0, y: -1.1 };
     const pointExpectY: Point = {
       x:
-        (pointStart.y - STATION_GROUP_NAME_TRANSLATE - pointEnd.y) /
+        (pointStart.y + STATION_GROUP_NAME_TRANSLATE - pointEnd.y) /
           service.slopeLine(pointStart, pointEnd) +
         pointEnd.x,
-      y: pointStart.y - STATION_GROUP_NAME_TRANSLATE,
+      y: pointStart.y + STATION_GROUP_NAME_TRANSLATE,
     };
     const movedPointInY = service.movePointOnLine(
       pointStart,
