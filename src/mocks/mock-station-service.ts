@@ -952,4 +952,32 @@ export class MockStationService {
       return of(expectedResponse.data).pipe(delay(1000));
     }
   }
+
+  /**
+   * Update the allowPreviousButton button status.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param allowPreviousButton The value that will be update.
+   * @returns The status allowPreviousButton updated.
+   */
+  updateAllowPreviousButton(
+    stationRithmId: string,
+    allowPreviousButton: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowPreviousButton,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
 }
