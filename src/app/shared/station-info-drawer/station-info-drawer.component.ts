@@ -713,8 +713,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
       });
   }
-  
- /**
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
