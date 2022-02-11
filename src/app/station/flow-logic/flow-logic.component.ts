@@ -1,8 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ConnectedStationInfo, FlowLogicRule } from 'src/models';
+import {
+  ConnectedStationInfo,
+  FlowLogicRule,
+  Rule,
+  RuleType,
+} from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
-import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
@@ -23,7 +27,7 @@ export class FlowLogicComponent implements OnInit {
   @Input() rithmId = '';
 
   /** The station Flow Logic Rule. */
-  stationFlowLogic: FlowLogicRule[] = [];
+  flowLogicRules: FlowLogicRule[] = [];
 
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
@@ -31,9 +35,11 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** Contains the new flow logic rule for saved . */
+  newFlowLogic!: FlowLogicRule;
+
   constructor(
-    private dialog: MatDialog,
-    private stationService: StationService,
+    public dialog: MatDialog,
     private errorService: ErrorService,
     private documentService: DocumentService
   ) {}
@@ -47,8 +53,11 @@ export class FlowLogicComponent implements OnInit {
 
   /**
    * Open a modal rule-modal.
+   *
+   * @param type If the rule to add is AND/OR type.
+   * @param connectedStationId The connected station to create the rule.
    */
-  async openModal(): Promise<void> {
+  async openModal(type: string, connectedStationId: string): Promise<void> {
     const dialog = await this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
@@ -56,7 +65,40 @@ export class FlowLogicComponent implements OnInit {
       disableClose: true,
     });
     if (dialog) {
-      // handle on close.
+      dialog
+        .afterClosed()
+        .pipe(first())
+        .subscribe((rule) => {
+          const flowLogicStation = this.flowLogicRules.find(
+            (station) =>
+              station.destinationStationRithmId === connectedStationId
+          );
+          if (!flowLogicStation) {
+            // add a flowLogicRule with this connectedStation to the FlowLogicRule array
+            const flowLogic: FlowLogicRule = {
+              stationRithmId: this.rithmId,
+              destinationStationRithmId: connectedStationId,
+              flowRule: {
+                ruleType: RuleType.And,
+                equations: [],
+                subRules: [],
+              },
+            };
+            if (type === 'all') {
+              flowLogic.flowRule.equations.push(rule);
+            } else {
+              flowLogic.flowRule.subRules.push(rule);
+            }
+            this.flowLogicRules.push(flowLogic);
+          } else {
+            // Update the flowRules if the station exists in the FlowLogicRule array
+            if (type === 'all') {
+              flowLogicStation.flowRule.equations.push(rule);
+            } else {
+              flowLogicStation.flowRule.subRules.push(rule);
+            }
+          }
+        });
     }
   }
 
@@ -70,7 +112,7 @@ export class FlowLogicComponent implements OnInit {
       .subscribe({
         next: (stationFlowLogic) => {
           this.flowLogicLoading = false;
-          this.stationFlowLogic = stationFlowLogic;
+          this.flowLogicRules = stationFlowLogic;
         },
         error: (error: unknown) => {
           this.flowRuleError = true;
@@ -84,22 +126,20 @@ export class FlowLogicComponent implements OnInit {
   }
 
   /**
-   * Save station flow logic.
+   * Return the flowRule Object of the currentStation if exist.
+   *
+   * @param connectedStationId The id of each station connected to the FlowLogicRule.
+   * @returns And emptyByDefault or existing RuleObject.
    */
-  private saveStationFlowLogic(): void {
-    this.documentService
-      .saveStationFlowLogic(this.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.getStationFlowLogicRule();
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+  getStationFlowRules(connectedStationId: string): Rule {
+    const defaultRule: Rule = {
+      ruleType: RuleType.And,
+      equations: [],
+      subRules: [],
+    };
+    const rule = this.flowLogicRules.find(
+      (station) => station.destinationStationRithmId === connectedStationId
+    )?.flowRule;
+    return rule ? rule : defaultRule;
   }
 }

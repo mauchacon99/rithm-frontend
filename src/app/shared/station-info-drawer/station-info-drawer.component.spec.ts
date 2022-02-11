@@ -96,6 +96,8 @@ describe('StationInfoDrawerComponent', () => {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
     component.stationRithmId = stationId;
@@ -115,6 +117,37 @@ describe('StationInfoDrawerComponent', () => {
     component.getLastUpdated();
 
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should call the service to update the allowPreviousButton status in station', () => {
+    component.statusAllowPreviousButton = false;
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'updateAllowPreviousButton'
+    ).and.callThrough();
+
+    component.updateAllowPreviousButton();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      component.stationRithmId,
+      component.statusAllowPreviousButton
+    );
+  });
+
+  it('should catch an error when updating the status allow-previous-button fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'updateAllowPreviousButton'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.updateAllowPreviousButton();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should delete a station', async () => {
@@ -404,32 +437,6 @@ describe('StationInfoDrawerComponent', () => {
     });
   });
 
-  it('should get the allow external workers for the station roster', () => {
-    const getAllowExternalSpy = spyOn(
-      TestBed.inject(StationService),
-      'getAllowExternalWorkers'
-    ).and.callThrough();
-    component['getAllowExternalWorkers']();
-    expect(getAllowExternalSpy).toHaveBeenCalledOnceWith(stationId);
-  });
-
-  it('should catch an error if getting the allow external workers fails', () => {
-    spyOn(
-      TestBed.inject(StationService),
-      'getAllowExternalWorkers'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component['getAllowExternalWorkers']();
-    expect(spyError).toHaveBeenCalled();
-  });
-
   it('should update the allow external workers status for the station roster', () => {
     component.allowExternal = true;
     const updateAllowExternalSpy = spyOn(
@@ -461,43 +468,17 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call the method that returns the value of all org workers', () => {
-    const getAllowAllOrgWorkersSpy = spyOn(
-      TestBed.inject(StationService),
-      'getAllowAllOrgWorkers'
-    ).and.callThrough();
-    component['getAllowAllOrgWorkers']();
-    expect(getAllowAllOrgWorkersSpy).toHaveBeenCalledWith(
-      component.stationRithmId
-    );
-  });
-
-  it('should catch error and executed error service when the method of allow all org workers return error.', () => {
-    spyOn(
-      TestBed.inject(StationService),
-      'getAllowAllOrgWorkers'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component['getAllowAllOrgWorkers']();
-    expect(spyError).toHaveBeenCalled();
-  });
-
   it('should update the allowAllOrgWorkers status in station', () => {
+    component.allowAllOrgWorkers = true;
     const spyMethod = spyOn(
       TestBed.inject(StationService),
       'updateAllowAllOrgWorkers'
     ).and.callThrough();
-
-    const allowAllOrgWorkers = true;
-    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
-    expect(spyMethod).toHaveBeenCalledOnceWith(stationId, allowAllOrgWorkers);
+    component.updateAllOrgWorkersStation();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      stationId,
+      component.allowAllOrgWorkers
+    );
   });
 
   it('should catch an error when updating the allowAllOrgWorkers status fails', () => {
@@ -509,12 +490,11 @@ describe('StationInfoDrawerComponent', () => {
         throw new Error();
       })
     );
-    const allowAllOrgWorkers = true;
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
+    component.updateAllOrgWorkersStation();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -527,5 +507,19 @@ describe('StationInfoDrawerComponent', () => {
       '#loading-indicator-allow-external'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  xit('should show loading-indicator-allow-external while update field allowAllOrgWorkers', () => {
+    component.stationLoading = false;
+    component.allowAllOrgLoading = true;
+    component.selectedTabIndex = 2;
+    component.updateAllOrgWorkersStation();
+    fixture.detectChanges();
+    expect(component.allowAllOrgLoading).toBe(true);
+    const loadingAllOrgWorker =
+      fixture.debugElement.nativeElement.querySelector(
+        '#loading-indicator-allow-org-workers'
+      );
+    expect(loadingAllOrgWorker).toBeTruthy();
   });
 });

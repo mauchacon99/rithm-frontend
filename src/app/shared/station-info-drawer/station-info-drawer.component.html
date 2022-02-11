@@ -129,7 +129,11 @@
                 Users can flow document to previous station
               </p>
             </div>
-            <mat-slide-toggle class="px-2"></mat-slide-toggle>
+            <mat-slide-toggle
+              class="px-2"
+              [(ngModel)]="statusAllowPreviousButton"
+              (ngModelChange)="updateAllowPreviousButton()"
+            ></mat-slide-toggle>
           </div>
         </section>
         <div *ngIf="mapMode === mapModeEnum.Build">
@@ -171,7 +175,7 @@
     </ng-template>
   </mat-tab>
 
-  <mat-tab>
+  <mat-tab label="tab-document-info">
     <ng-template mat-tab-label>
       <i class="fas fa-file fa-lg"></i>
     </ng-template>
@@ -248,7 +252,7 @@
     </ng-template>
   </mat-tab>
 
-  <mat-tab>
+  <mat-tab label="tab-owner-info">
     <ng-template mat-tab-label>
       <i class="fas fa-users fa-lg"></i>
     </ng-template>
@@ -308,7 +312,18 @@
               ></i>
             </div>
             <div class="pr-2">
-              <mat-slide-toggle color="accent" [(ngModel)]="isPublic">
+              <app-loading-indicator
+                *ngIf="allowAllOrgLoading"
+                id="loading-indicator-allow-org-workers"
+                [inlineText]="'Loading...'"
+              ></app-loading-indicator>
+
+              <mat-slide-toggle
+                color="accent"
+                *ngIf="!allowAllOrgLoading"
+                (change)="updateAllOrgWorkersStation()"
+                [(ngModel)]="allowAllOrgWorkers"
+              >
               </mat-slide-toggle>
             </div>
           </section>

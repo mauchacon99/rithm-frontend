@@ -102,8 +102,6 @@ describe('StationService', () => {
       name: 'Example Station',
       rithmId: '3j4k-3h2j-hj4j',
       instructions: 'Do as I instruct',
-      allowAllOrgWorkers: false,
-      allowExternalWorkers: false,
     };
 
     service.getAllStations().subscribe((response) => {
@@ -164,6 +162,8 @@ describe('StationService', () => {
       questions: [],
       priority: 1,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
@@ -210,6 +210,8 @@ describe('StationService', () => {
       questions: [],
       priority: 1,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
@@ -805,6 +807,8 @@ describe('StationService', () => {
       questions: [],
       priority: 2,
       allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
       flowButton: 'Flow',
     };
 
@@ -973,18 +977,6 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the allowAllOrgWorkers status in station', () => {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    const allowAllOrgWorkers = true;
-    service
-      .updateAllowAllOrgWorkers(stationId, allowAllOrgWorkers)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse.data);
-      });
-  });
-
   it('should get the allow external workers', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
@@ -1027,7 +1019,46 @@ describe('StationService', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
+
     service.getAllowAllOrgWorkers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
+    );
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should update the allowAllOrgWorkers status in station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    const allowAllOrgWorkers = true;
+    service
+      .updateAllowAllOrgWorkers(stationId, allowAllOrgWorkers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-all-org-workers?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should update the state of the allow-previous-button button for the station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    service.updateAllowPreviousButton(stationId, true).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
   });
