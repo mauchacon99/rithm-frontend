@@ -14,7 +14,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { GridsterConfig } from 'angular-gridster2';
+import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
@@ -72,25 +72,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     pushItems: true,
     draggable: {
       enabled: false,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
     },
     resizable: {
       enabled: false,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
     },
     margin: 16,
     minCols: 12,
     maxCols: 12,
+    allowMultiLayer: true,
+    defaultLayerIndex: 1,
+    maxLayerIndex: 2,
+    baseLayerIndex: 1,
   };
 
   /**
@@ -207,49 +199,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
 
       if (response) {
-        if (
-          JSON.stringify(this.dashboardData) !==
-          JSON.stringify(this.dashboardDataCopy)
-        ) {
-          this.dashboardData = JSON.parse(
-            JSON.stringify(this.dashboardDataCopy)
-          );
-        }
         this.editMode = false;
-        this.configEditMode(false, false);
+        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+        this.configEditMode();
       }
     } else {
-      this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
       this.editMode = true;
-      this.configEditMode(true, true);
+      this.configEditMode();
     }
   }
 
   /**
    * Enable or disable resizable and draggable in  gridster2.
-   *
-   * @param isDraggable Is enabled draggable.
-   * @param isResizable Is enabled resizable.
    */
-  private configEditMode(isDraggable: boolean, isResizable: boolean): void {
+  private configEditMode(): void {
     this.options.draggable = {
-      enabled: isDraggable,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
+      enabled: this.editMode,
     };
-
     this.options.resizable = {
-      enabled: isResizable,
-      start: () => {
-        /** Do something. */
-      },
-      stop: () => {
-        /** Do something. */
-      },
+      enabled: this.editMode,
     };
     this.changedOptions();
   }
@@ -278,8 +246,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (dashboardByRithmId) => {
           this.dashboardData = dashboardByRithmId;
+          this.dashboardDataCopy = JSON.parse(
+            JSON.stringify(this.dashboardData)
+          );
           this.isLoading = false;
-          this.configEditMode(false, false);
+          this.configEditMode();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -337,6 +308,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (dashboardData) => {
           if (dashboardData.length) {
             this.dashboardData = dashboardData[0];
+            this.dashboardDataCopy = JSON.parse(
+              JSON.stringify(this.dashboardData)
+            );
           } else {
             this.isCreateNewDashboard = true;
           }
@@ -368,10 +342,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
+        this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
         this.isLoading = false;
         this.editMode = false;
         this.errorLoadingDashboard = false;
-        this.configEditMode(false, false);
+        this.configEditMode();
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
@@ -382,6 +357,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  /**
+   * Expand widget selected.
+   *
+   * @param widgetIndex String of the rithmId widget.
+   * @param isExpandWidget Boolean if is expand widget.
+   */
+  toggleExpandWidget(widgetIndex: number, isExpandWidget: boolean): void {
+    if (isExpandWidget) {
+      this.dashboardData.widgets[widgetIndex].rows++;
+      this.dashboardData.widgets[widgetIndex].layerIndex = 2;
+    } else {
+      this.dashboardData.widgets[widgetIndex].layerIndex = 1;
+      this.dashboardData.widgets[widgetIndex] = JSON.parse(
+        JSON.stringify(this.dashboardDataCopy)
+      ).widgets[widgetIndex];
+    }
+    this.changedOptions();
+  }
+
+  /**
+   * TrackBy in *ngFor, to widgets.
+   *
+   * @param index Number of index *ngFor.
+   * @param item Item of the interface GridsterItem.
+   * @returns Item id of the GridsterItem.
+   */
+  trackBy(index: number, item: GridsterItem): number {
+    return item.id;
   }
 
   /** Clean subscriptions. */
