@@ -129,7 +129,11 @@
                 Users can flow document to previous station
               </p>
             </div>
-            <mat-slide-toggle class="px-2"></mat-slide-toggle>
+            <mat-slide-toggle
+              class="px-2"
+              [(ngModel)]="statusAllowPreviousButton"
+              (ngModelChange)="updateAllowPreviousButton()"
+            ></mat-slide-toggle>
           </div>
         </section>
         <div *ngIf="mapMode === mapModeEnum.Build">
@@ -153,14 +157,10 @@
         </div>
         <div
           class="w-full py-2 px-2 text-center"
-          *ngIf="
-            locallyCreated ||
-            (openedFromMap && editMode && isUserAdminOrOwner) ||
-            (!openedFromMap && editMode) ||
-            (!openedFromMap && isUserAdminOrOwner)
-          "
+          *ngIf="displayDeleteStationButton"
         >
           <button
+            type="button"
             mat-stroked-button
             color="warn"
             class="priority"
@@ -342,14 +342,12 @@
                 matTooltip="Allow anyone outside your organization to work on documents at this station"
               ></i>
             </div>
-            <ng-container
-              *ngIf="allowExternalLoading; else slideToggleAllowExt"
-            >
+            <div *ngIf="allowExternalLoading; else slideToggleAllowExt">
               <app-loading-indicator
                 id="loading-indicator-allow-external"
                 [inlineText]="'Loading...'"
               ></app-loading-indicator>
-            </ng-container>
+            </div>
             <ng-template #slideToggleAllowExt>
               <div class="pr-2">
                 <mat-slide-toggle
