@@ -138,6 +138,6 @@ export class StationGroupMapElement {
   ): boolean {
     // check whether the mouse is hovering over the icon path
     // Compares the path with the current point of the mouse to canvas context.
-    return ctx.isPointInStroke(pathButtons.path, point.x, point.y);
+    return ctx.isPointInPath(pathButtons.path, point.x, point.y);
   }
 }

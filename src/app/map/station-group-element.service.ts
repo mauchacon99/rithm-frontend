@@ -513,7 +513,6 @@ export class StationGroupElementService {
       } else if (point.x === minX) {
         point.x -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       }
-
       if (point.y === maxY) {
         point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       } else if (point.y === minY) {
@@ -901,7 +900,7 @@ export class StationGroupElementService {
         this.drawStationGroupIcon(
           pointStart,
           pointEnd,
-          titleWidth + GROUP_CHARACTER_SIZE * 5 * this.mapScale,
+          titleWidth + GROUP_CHARACTER_SIZE * 4 * this.mapScale,
           StationGroupElementHoverItem.ButtonAccept,
           ICON_STATION_GROUP_ACCEPT,
           MAP_SELECTED,
@@ -987,29 +986,9 @@ export class StationGroupElementService {
         x: pointEnd.x,
         y: pointEnd.y,
       },
-      displacement - 3 * this.mapScale,
+      displacement + (Math.abs(m) === Math.PI / 2 ? 0 : -5 * this.mapScale),
       Math.abs(m) < Math.PI / 4
     );
-
-    const path = new Path2D();
-    for (let i = 0; i <= ICON_STATION_GROUP_PATH_RADIUS; i++) {
-      // Create a circle over the icon button for hovering.
-      path.arc(
-        newUnRotatedPointStart.x +
-          (m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0),
-        newUnRotatedPointStart.y,
-        i * this.mapScale,
-        0,
-        2 * Math.PI
-      );
-    }
-    path.closePath();
-
-    // Adds the hover zone of the button in position Buttons of the stationGroup.
-    stationGroup.pathButtons?.push({
-      typeButton: typeButton,
-      path: path,
-    });
 
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
@@ -1026,5 +1005,24 @@ export class StationGroupElementService {
       displacedMap ? newPoint.x - pointStart.x : newPoint.x,
       this.canvasContext.measureText(icon).fontBoundingBoxDescent
     );
+    // If the slope is 0 then we do a displacement by the x-coordinate so that it does not overlap the station group name.
+    const displacementX =
+      m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0;
+    const path = new Path2D();
+    // Create a circle over the icon button for hovering.
+    path.arc(
+      newUnRotatedPointStart.x + displacementX,
+      newUnRotatedPointStart.y,
+      ICON_STATION_GROUP_PATH_RADIUS * this.mapScale,
+      0,
+      2 * Math.PI
+    );
+    path.closePath();
+
+    // Adds the hover zone of the button in position Buttons of the stationGroup.
+    stationGroup.pathButtons?.push({
+      typeButton: typeButton,
+      path: path,
+    });
   }
 }

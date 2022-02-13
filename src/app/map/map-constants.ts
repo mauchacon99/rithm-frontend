@@ -55,7 +55,7 @@ export const SLOPE_RANGE_NOT_ALLOWED = 0.00005;
 export const ICON_STATION_GROUP_HOVER_COLOR_CANCEL = '#91372C';
 export const ICON_STATION_GROUP_CANCEL = '\uf00d';
 export const ICON_STATION_GROUP_ACCEPT = '\uf058';
-export const ICON_STATION_GROUP_PATH_RADIUS = 18;
+export const ICON_STATION_GROUP_PATH_RADIUS = 30;
 
 // Station
 export const STATION_PADDING = 10;
