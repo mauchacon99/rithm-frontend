@@ -1054,12 +1054,19 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the state of the allow-previous-button button for the station', () => {
+  fit('should update the state of the allow-previous-button button for the station', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
     service.updateAllowPreviousButton(stationId, true).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-previous-button?rithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
