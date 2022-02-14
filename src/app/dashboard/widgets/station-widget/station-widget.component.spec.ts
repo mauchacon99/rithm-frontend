@@ -96,7 +96,7 @@ describe('StationWidgetComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
-  it('should try request again  listing documents if fails', () => {
+  it('should try request again listing documents if fails', () => {
     component.failedLoadWidget = true;
     fixture.detectChanges();
 

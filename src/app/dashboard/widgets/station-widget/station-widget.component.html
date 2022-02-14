@@ -16,7 +16,7 @@
       <button
         mat-stroked-button
         color="warn"
-        (click)="editStationWidget()"
+        (click)="getStationWidgetDocuments()"
         id="try-again"
         data-testid="try-again"
       >
@@ -47,6 +47,7 @@
             color="accent"
             data-testid="create-new-document"
             id="create-new-document"
+            (click)="createNewDocument()"
           >
             New Document <i class="fas fa-plus"></i>
           </button>

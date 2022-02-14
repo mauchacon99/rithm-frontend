@@ -132,12 +132,6 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should call the `toggle` method on the `SidenavService`', () => {
-    const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
-    component.toggleDrawer('menuDashboard');
-    expect(spy).toHaveBeenCalledOnceWith('menuDashboard');
-  });
-
   it('should click the dashboard menu button ', () => {
     component.viewNewDashboard = true;
     fixture.detectChanges();
@@ -274,6 +268,44 @@ describe('DashboardComponent', () => {
       const spySideNav = spyOn(sidenavDrawer, 'setDrawer').and.callThrough();
       component.ngOnInit();
       expect(spySideNav).toHaveBeenCalled();
+    });
+
+    it('should call the `toggle` method on the `SidenavService`', () => {
+      const spyProperty = spyOnProperty(
+        sidenavDrawer,
+        'isDrawerOpen',
+        'get'
+      ).and.returnValue(false);
+      const spy = spyOn(sidenavDrawer, 'toggleDrawer');
+      component.toggleDrawer('menuDashboard');
+      expect(spyProperty).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledOnceWith('menuDashboard', null);
+    });
+
+    it('should call twice the `toggle` method on the `SidenavService` if `isDrawerOpen` is true', () => {
+      const spyService = spyOn(sidenavDrawer, 'toggleDrawer');
+      const spyProperty = spyOnProperty(
+        sidenavDrawer,
+        'isDrawerOpen',
+        'get'
+      ).and.returnValue(true);
+      component.toggleDrawer('menuDashboard');
+      expect(spyProperty).toHaveBeenCalled();
+      expect(spyService).toHaveBeenCalledTimes(2);
+    });
+
+    it('Should toggle drawer of the station widget', () => {
+      spyOn(sidenavDrawer, 'toggleDrawer');
+      const [stationRithmId, widgetIndex] = [
+        '247cf568-27a4-4968-9338-046ccfee24f3',
+        1,
+      ];
+      const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
+      component.toggleStationWidgetDrawer(stationRithmId, widgetIndex);
+      expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
+        stationRithmId,
+        widgetIndex,
+      });
     });
   });
 
