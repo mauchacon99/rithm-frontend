@@ -157,14 +157,10 @@
         </div>
         <div
           class="w-full py-2 px-2 text-center"
-          *ngIf="
-            locallyCreated ||
-            (openedFromMap && editMode && isUserAdminOrOwner) ||
-            (!openedFromMap && editMode) ||
-            (!openedFromMap && isUserAdminOrOwner)
-          "
+          *ngIf="displayDeleteStationButton"
         >
           <button
+            type="button"
             mat-stroked-button
             color="warn"
             class="priority"
