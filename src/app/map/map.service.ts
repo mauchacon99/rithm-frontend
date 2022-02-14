@@ -74,6 +74,9 @@ export class MapService {
   /** An array that stores a backup of connectionElements when buildMap is called. */
   storedConnectionElements: ConnectionMapElement[] = [];
 
+  /** An object containing the data needed to properly display and interact with the map boundary box. */
+  // boundaryElement:
+
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
 
