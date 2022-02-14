@@ -695,9 +695,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.allowExternalLoading = false;
         },
         error: (error: unknown) => {
+          this.allowExternal = !this.allowExternal;
           this.allowExternalLoading = false;
           this.allowExternalError = true;
-          this.allowExternal = !this.allowExternal;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
