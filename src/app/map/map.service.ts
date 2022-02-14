@@ -32,6 +32,7 @@ import {
   StationGroupMapElement,
   StationMapElement,
 } from 'src/helpers';
+import { BoundaryMapElement } from 'src/helpers/boundary-map-element';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
@@ -75,7 +76,7 @@ export class MapService {
   storedConnectionElements: ConnectionMapElement[] = [];
 
   /** An object containing the data needed to properly display and interact with the map boundary box. */
-  // boundaryElement:
+  boundaryElement?: BoundaryMapElement;
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -193,6 +194,8 @@ export class MapService {
     );
     //Trigger logic to set connections based on station data.
     this.setConnections();
+    //Trigger logic to set map boundary box.
+    this.setBoundary();
     //Trigger logic to use station map points and update stationCanvasPoints accordingly.
     this.updateStationCanvasPoints();
   }
@@ -206,6 +209,24 @@ export class MapService {
       //Update the connection lines as the stations are updated.
       this.updateConnection(station);
     });
+    //Update the canvas points of the boundary.
+    this.updateBoundary(true);
+  }
+
+  /**
+   * Sets the boundary element based on info from this.stationElements.
+   */
+  setBoundary(): void {
+    this.boundaryElement = new BoundaryMapElement(this.stationElements);
+  }
+
+  /**
+   * Updates the boundary coordinates based on the parameter.
+   *
+   * @param canvasPoint If point type is canvasPoint.
+   */
+  updateBoundary(canvasPoint: boolean): void {
+    this.boundaryElement?.updatePoints(this.stationElements, canvasPoint);
   }
 
   /**
@@ -1143,13 +1164,19 @@ export class MapService {
       );
     }
 
+    if (!this.boundaryElement) {
+      throw new Error(
+        'Cannot get center point of map if map boundaries are not defined.'
+      );
+    }
+
     //Get correct size of the canvas.
     const canvasBoundingRect =
       this.canvasContext.canvas.getBoundingClientRect();
 
     //Get the canvas points of the top-left corner and bottom-right corner of the map.
-    const minPoint = this.getMinCanvasPoint();
-    const maxPoint = this.getMaxCanvasPoint();
+    const minPoint = this.boundaryElement.minCanvasPoint;
+    const maxPoint = this.boundaryElement.maxCanvasPoint;
 
     //Get the DPI of the screen.
     const pixelRatio = window.devicePixelRatio || 1;
@@ -1326,79 +1353,6 @@ export class MapService {
   }
 
   /**
-   * Logic for finding top-left or bottom-right canvas or map points.
-   *
-   * @param pointType A mapPoint or a canvasPoint.
-   * @param isMax Is the point the top-left corner of the map or the bottom-right? Bottom-right is the max.
-   * @returns An object with the points.
-   */
-  private getEdgePoint(
-    pointType: 'mapPoint' | 'canvasPoint',
-    isMax: boolean
-  ): Point {
-    //An array of all station y coords in order from top to bottom.
-    const orderedYPoints = this.stationElements
-      .map((station) => station[pointType].y)
-      .sort((a, b) => a - b);
-    //An array of all station x coords in order from left to right.
-    const orderedXPoints = this.stationElements
-      .map((station) => station[pointType].x)
-      .sort((a, b) => a - b);
-
-    /* If isMax = true, set X to the last x coord in the array plus the width of a station, or the rightmost station.
-    Otherwise set it to the first x coord in the array, leftmost. */
-    const x = isMax
-      ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH
-      : orderedXPoints[0];
-    /* If isMax = true, set Y to the last y coord in the array plus the height of a station, or the bottommost station.
-    Otherwise set it to the first y coord in the array, or the topmost station. */
-    const y = isMax
-      ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT
-      : orderedYPoints[0];
-
-    return {
-      x: x,
-      y: y,
-    };
-  }
-
-  /**
-   * Gets the top-left mapPoint.
-   *
-   * @returns A point.
-   */
-  getMinMapPoint(): Point {
-    return this.getEdgePoint('mapPoint', false);
-  }
-
-  /**
-   * Gets the bottom-right mapPoint.
-   *
-   * @returns A point.
-   */
-  getMaxMapPoint(): Point {
-    return this.getEdgePoint('mapPoint', true);
-  }
-
-  /**
-   * Gets the top-left canvasPoint.
-   *
-   * @returns A point.
-   */
-  getMinCanvasPoint(): Point {
-    return this.getEdgePoint('canvasPoint', false);
-  }
-
-  /**
-   * Gets the bottom-right canvasPoint.
-   *
-   * @returns A point.
-   */
-  getMaxCanvasPoint(): Point {
-    return this.getEdgePoint('canvasPoint', true);
-  }
-
-  /**
    * Gets the center point of the canvas.
    *
    * @returns The center point of the canvas.
@@ -1459,9 +1413,15 @@ export class MapService {
    * @returns The center point of the map.
    */
   getMapCenterPoint(): Point {
-    //We use the map points of each station here.
-    const minPoint = this.getMinMapPoint();
-    const maxPoint = this.getMaxMapPoint();
+    if (!this.boundaryElement) {
+      throw new Error(
+        'Cannot get center point of map if map boundaries are not defined.'
+      );
+    }
+
+    //Use the min and max mapPoints of the boundary element to find the middle.
+    const minPoint = this.boundaryElement.minMapPoint;
+    const maxPoint = this.boundaryElement.maxMapPoint;
 
     const center: Point = {
       x: Math.floor((minPoint.x + maxPoint.x) / 2),
