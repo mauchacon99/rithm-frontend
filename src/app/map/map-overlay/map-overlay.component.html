@@ -35,7 +35,10 @@
             : 'md:m-2 py-2 h-12'
         "
       >
-        <span [class.invisible]="mapElementDrawer.opened">
+        <span
+          [class.invisible]="mapElementDrawer.opened"
+          class="w-full flex justify-end items-center space-x-2.5"
+        >
           <button
             mat-raised-button
             color="accent"
@@ -71,7 +74,7 @@
           </button>
         </span>
         <app-map-search
-          class="hidden md:block"
+          class="fixed md:static z-20 top-36 -mt-1"
           [isLoading]="mapDataLoading"
         ></app-map-search>
       </div>
