@@ -66,5 +66,6 @@ import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-dra
     MatMenuModule,
     FormsModule,
   ],
+  exports: [StationWidgetDrawerComponent],
 })
 export class DashboardModule {}

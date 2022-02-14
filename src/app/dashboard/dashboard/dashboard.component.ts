@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   drawer!: MatDrawer;
 
   /** Show the dashboard menu. */
-  drawerContext = 'menuDashboard';
+  drawerContext: 'menuDashboard' | 'stationWidget' = 'menuDashboard';
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
@@ -183,12 +183,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Opens side nav on the dashboard.
+   * Open drawers on the dashboard.
    *
    * @param drawerItem The information that will be displayed in the side drawer.
+   * @param drawerData Data optional of the drawer.
    */
-  toggleMenu(drawerItem: 'menuDashboard'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem);
+  toggleDrawer(
+    drawerItem: 'menuDashboard' | 'stationWidget',
+    drawerData = <unknown>null
+  ): void {
+    this.drawerContext = drawerItem;
+    this.sidenavDrawerService.toggleDrawer(drawerItem, drawerData);
+  }
+
+  /**
+   * Toggle drawer of the station widget.
+   *
+   * @param stationRithmId String of the stationRithmId.
+   * @param widgetIndex Number of the position the widget.
+   */
+  toggleStationWidgetDrawer(stationRithmId: string, widgetIndex: number): void {
+    this.toggleDrawer('stationWidget', {
+      stationRithmId,
+      widgetIndex,
+    });
   }
 
   /**

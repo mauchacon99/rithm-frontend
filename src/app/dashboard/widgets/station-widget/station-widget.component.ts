@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -23,6 +30,9 @@ export class StationWidgetComponent implements OnInit {
 
   /** Station rithmId. */
   @Input() stationRithmId = '';
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<string>();
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
@@ -152,5 +162,10 @@ export class StationWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  /** Toggle drawer when edit station widget. */
+  editStationWidget(): void {
+    this.toggleDrawer.emit(this.stationRithmId);
   }
 }

@@ -8,9 +8,8 @@ describe('StationWidgetDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationWidgetDrawerComponent ]
-    })
-    .compileComponents();
+      declarations: [StationWidgetDrawerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
