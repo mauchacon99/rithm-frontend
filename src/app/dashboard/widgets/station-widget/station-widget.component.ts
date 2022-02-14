@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -26,6 +33,12 @@ export class StationWidgetComponent implements OnInit {
 
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** To set its expanded the widget. */
+  isExpandWidget = false;
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
@@ -155,5 +168,11 @@ export class StationWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  /** Expand widget. */
+  toggleExpandWidget(): void {
+    this.isExpandWidget = !this.isExpandWidget;
+    this.expandWidget.emit(this.isExpandWidget);
   }
 }

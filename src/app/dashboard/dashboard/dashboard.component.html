@@ -145,10 +145,15 @@
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"
-              *ngFor="let item of dashboardData.widgets"
+              *ngFor="
+                let item of dashboardData.widgets;
+                let index = index;
+                trackBy: trackBy
+              "
             >
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"
+                (expandWidget)="toggleExpandWidget(index, $event)"
                 [stationRithmId]="item.data"
                 [editMode]="editMode"
               >
