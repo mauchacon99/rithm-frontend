@@ -410,14 +410,14 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         value: this.secondOperand.value,
       },
     };
-    this.closeModal();
+    this.dialogRef.close(this.ruleToAdd);
   }
 
   /**
    * Close rule Modal.
    */
   closeModal(): void {
-    this.dialogRef.close(this.ruleToAdd);
+    this.dialogRef.close();
   }
 
   /**
