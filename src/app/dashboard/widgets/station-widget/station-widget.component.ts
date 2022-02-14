@@ -24,7 +24,7 @@ export class StationWidgetComponent implements OnInit {
   /** Station rithmId. */
   @Input() stationRithmId = '';
 
-  /** Edit mode from dashboard. */
+  /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
   /** Data to station widget. */
