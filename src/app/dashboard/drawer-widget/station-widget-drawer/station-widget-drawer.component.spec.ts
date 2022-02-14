@@ -29,9 +29,12 @@ describe('StationWidgetDrawerComponent', () => {
   it('Should subscribe to sidenavDrawerService.drawerData$', () => {
     const [stationRithmId, widgetIndex] = [
       '247cf568-27a4-4968-9338-046ccfee24f3',
-      1
+      1,
     ];
-    TestBed.inject(SidenavDrawerService).drawerData$.next({ stationRithmId, widgetIndex });
+    TestBed.inject(SidenavDrawerService).drawerData$.next({
+      stationRithmId,
+      widgetIndex,
+    });
 
     expect(component.stationRithmId).toEqual(stationRithmId);
     expect(component.widgetIndex).toEqual(widgetIndex);
