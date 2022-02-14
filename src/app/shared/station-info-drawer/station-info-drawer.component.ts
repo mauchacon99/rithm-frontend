@@ -253,6 +253,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether to show the deleteStation button or not.
+   *
+   * @returns True/show False/hide.
+   */
+  get displayDeleteStationButton(): boolean {
+    return (
+      this.locallyCreated ||
+      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner) ||
+      (!this.openedFromMap && this.editMode) ||
+      (!this.openedFromMap && this.isUserAdminOrOwner)
+    );
+  }
+
+  /**
    * Update status the station.
    *
    * @param status New status the station update.
