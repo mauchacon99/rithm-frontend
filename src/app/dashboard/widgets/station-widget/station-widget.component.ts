@@ -34,6 +34,12 @@ export class StationWidgetComponent implements OnInit {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<string>();
 
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** To set its expanded the widget. */
+  isExpandWidget = false;
+
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
 
@@ -60,7 +66,7 @@ export class StationWidgetComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService
-  ) {}
+  ) { }
 
   /**
    * Initial Method.
@@ -167,5 +173,11 @@ export class StationWidgetComponent implements OnInit {
   /** Toggle drawer when edit station widget. */
   editStationWidget(): void {
     this.toggleDrawer.emit(this.stationRithmId);
+  }
+
+  /** Expand widget. */
+  toggleExpandWidget(): void {
+    this.isExpandWidget = !this.isExpandWidget;
+    this.expandWidget.emit(this.isExpandWidget);
   }
 }

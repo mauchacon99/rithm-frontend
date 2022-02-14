@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
-import { StationInfoDrawerData } from '../../../../models';
 import { Subject } from 'rxjs';
 
 /**
@@ -38,7 +37,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           widgetIndex: number;
         };
         if (dataDrawer) {
-          console.log(dataDrawer);
           this.stationRithmId = dataDrawer.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
         }

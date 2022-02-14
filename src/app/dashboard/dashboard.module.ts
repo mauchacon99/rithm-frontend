@@ -29,6 +29,7 @@ import { DocumentModule } from 'src/app/document/document.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { DocumentWidgetComponent } from './widgets/document-widget/document-widget.component';
 import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-drawer/station-widget-drawer.component';
+import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-drawer.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-dra
     MenuComponent,
     DocumentWidgetComponent,
     StationWidgetDrawerComponent,
+    WidgetDrawerComponent,
   ],
   imports: [
     CommonModule,

@@ -18,12 +18,7 @@ export class InfoDrawerComponent implements OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
-  drawerMode:
-    | ''
-    | 'stationInfo'
-    | 'documentInfo'
-    | 'history'
-    | 'stationWidget' = '';
+  drawerMode: '' | 'stationInfo' | 'documentInfo' | 'history' = '';
 
   openedFromMap = false;
 
@@ -37,8 +32,7 @@ export class InfoDrawerComponent implements OnDestroy {
         if (
           data === 'documentInfo' ||
           data === 'stationInfo' ||
-          data === 'history' ||
-          data === 'stationWidget'
+          data === 'history'
         ) {
           this.drawerMode = data;
         }
@@ -67,18 +61,12 @@ export class InfoDrawerComponent implements OnDestroy {
    * @param drawerItem The drawer item to toggle.
    */
   async toggleDrawer(
-    drawerItem:
-      | ''
-      | 'stationInfo'
-      | 'documentInfo'
-      | 'history'
-      | 'stationWidget'
+    drawerItem: '' | 'stationInfo' | 'documentInfo' | 'history'
   ): Promise<void> {
     if (
       drawerItem === 'documentInfo' ||
       drawerItem === 'stationInfo' ||
-      drawerItem === 'history' ||
-      drawerItem === 'stationWidget'
+      drawerItem === 'history'
     ) {
       this.mapService.openedDrawerType$.next(drawerItem);
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
