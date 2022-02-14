@@ -66,7 +66,7 @@ export class StationWidgetComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService
-  ) { }
+  ) {}
 
   /**
    * Initial Method.

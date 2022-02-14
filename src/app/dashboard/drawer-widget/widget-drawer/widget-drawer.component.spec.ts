@@ -8,9 +8,8 @@ describe('WidgetDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WidgetDrawerComponent ]
-    })
-    .compileComponents();
+      declarations: [WidgetDrawerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

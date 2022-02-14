@@ -1,8 +1,15 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
-  <mat-drawer #drawer mode="over" [position]="drawerContext === 'menuDashboard' ? 'start' : 'end'"
-              class="w-[300px] md:w-[360px]">
-    <app-menu *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"></app-menu>
-    <app-widget-drawer *ngIf="drawerContext === 'stationWidget' && isDrawerOpen"
+  <mat-drawer
+    #drawer
+    mode="over"
+    [position]="drawerContext === 'menuDashboard' ? 'start' : 'end'"
+    class="w-[300px] md:w-[360px]"
+  >
+    <app-menu
+      *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
+    ></app-menu>
+    <app-widget-drawer
+      *ngIf="drawerContext === 'stationWidget' && isDrawerOpen"
     ></app-widget-drawer>
   </mat-drawer>
   <mat-drawer-content class="textured-bg h-calc">
@@ -11,7 +18,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
           <app-header class="lg:col-span-6"></app-header>
           <app-priority-queue class="lg:col-span-3"></app-priority-queue>
-          <app-previously-started-documents class="lg:col-span-3"></app-previously-started-documents>
+          <app-previously-started-documents
+            class="lg:col-span-3"
+          ></app-previously-started-documents>
           <app-my-stations class="lg:col-span-6"></app-my-stations>
           <div *ngIf="isAdmin" class="lg:col-span-6">
             <h6 class="text-orange-500">
@@ -30,75 +39,137 @@
     </ng-container>
     <ng-template #newDashboard>
       <div class="container mx-auto px-3 py-5 lg:px-0">
-        <button mat-button id="menu-button"
-                class="transition ease-in-out bg-darkBlue w-[40px] h-[40px] rounded hover:scale-x-110 hover:translate-x-1 -left-1 top-36 z-10 shadow-lg"
-                (click)="toggleDrawer('menuDashboard')">
+        <button
+          mat-button
+          id="menu-button"
+          class="transition ease-in-out bg-darkBlue w-[40px] h-[40px] rounded hover:scale-x-110 hover:translate-x-1 -left-1 top-36 z-10 shadow-lg"
+          (click)="toggleDrawer('menuDashboard')"
+        >
           <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
         </button>
         <div class="loading flex" *ngIf="isLoading">
-          <app-loading-indicator class="flex-grow m-auto" id="loading-dashboard-widgets"></app-loading-indicator>
+          <app-loading-indicator
+            class="flex-grow m-auto"
+            id="loading-dashboard-widgets"
+          ></app-loading-indicator>
         </div>
 
-        <div class="text-error-500 text-center my-4" id="error-loading-dashboard" *ngIf="errorLoadingDashboard">
+        <div
+          class="text-error-500 text-center my-4"
+          id="error-loading-dashboard"
+          *ngIf="errorLoadingDashboard"
+        >
           Unable to retrieve dashboard
         </div>
-        <div class="text-center my-4" id="message-create-new-dashboard" *ngIf="isCreateNewDashboard">
+        <div
+          class="text-center my-4"
+          id="message-create-new-dashboard"
+          *ngIf="isCreateNewDashboard"
+        >
           You don't have any dashboards, create one to get started.
         </div>
-        <div class="mx-5" id="dashboard-widgets" *ngIf="
+        <div
+          class="mx-5"
+          id="dashboard-widgets"
+          *ngIf="
             !isLoading &&
             dashboardData &&
             !errorLoadingDashboard &&
             !isCreateNewDashboard
-          ">
+          "
+        >
           <div class="flex justify-between items-center" *ngIf="!editMode">
             <h2 class="my-2 font-semibold truncate">
               {{ dashboardData.name }}
             </h2>
-            <button mat-icon-button id="menu-edit-button" data-testid="menu-edit-button" class="py-3 text-secondary-500"
-                    (click)="toggleEditMode(true)">
+            <button
+              mat-icon-button
+              id="menu-edit-button"
+              data-testid="menu-edit-button"
+              class="py-3 text-secondary-500"
+              (click)="toggleEditMode(true)"
+            >
               <i class="fas fa-cog text-lg"></i>
             </button>
           </div>
           <!--Edit dashboard name.-->
           <div *ngIf="editMode">
-            <div class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100">
+            <div
+              class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100"
+            >
               <div>
-                <mat-form-field appearance="outline" class="lg:w-72 w-full input-wrapper">
-                  <input matInput [(ngModel)]="dashboardData.name" type="text" placeholder="Untitled Dashboard" />
+                <mat-form-field
+                  appearance="outline"
+                  class="lg:w-72 w-full input-wrapper"
+                >
+                  <input
+                    matInput
+                    [(ngModel)]="dashboardData.name"
+                    type="text"
+                    placeholder="Untitled Dashboard"
+                  />
                 </mat-form-field>
               </div>
               <div class="justify-around">
-                <button mat-button id="cancel-button" data-testid="cancel-button"
-                        class="bg-white text-secondary-500 drop-shadow-md font-semibold" style="margin: 1em"
-                        (click)="toggleEditMode(false)">
+                <button
+                  mat-button
+                  id="cancel-button"
+                  data-testid="cancel-button"
+                  class="bg-white text-secondary-500 drop-shadow-md font-semibold"
+                  style="margin: 1em"
+                  (click)="toggleEditMode(false)"
+                >
                   Cancel
                 </button>
-                <button (click)="updateDashboard()" mat-button id="save-button" data-testid="save-button"
-                        class="bg-accent-800 text-secondary-50 drop-shadow-md">
+                <button
+                  (click)="updateDashboard()"
+                  mat-button
+                  id="save-button"
+                  data-testid="save-button"
+                  class="bg-accent-800 text-secondary-50 drop-shadow-md"
+                >
                   Save
                 </button>
               </div>
             </div>
-            <button mat-button id="add-widget-button" data-testid="add-widget-button"
-                    class="bg-accent-800 text-secondary-50 drop-shadow-md" style="margin-top: 1em">
+            <button
+              mat-button
+              id="add-widget-button"
+              data-testid="add-widget-button"
+              class="bg-accent-800 text-secondary-50 drop-shadow-md"
+              style="margin-top: 1em"
+            >
               <i class="fas fa-plus"></i> Add Widget
             </button>
           </div>
-          <div class="col-span-full text-center my-4" id="error-loading-widgets" *ngIf="!dashboardData.widgets.length">
+          <div
+            class="col-span-full text-center my-4"
+            id="error-loading-widgets"
+            *ngIf="!dashboardData.widgets.length"
+          >
             Current dashboard has no widgets to display
           </div>
           <gridster class="h-screen bg-transparent px-0" [options]="options">
-            <gridster-item [item]="item" class="drop-shadow-md rounded min-h-[250px]" *ngFor="
+            <gridster-item
+              [item]="item"
+              class="drop-shadow-md rounded min-h-[250px]"
+              *ngFor="
                 let item of dashboardData.widgets;
                 let index = index;
                 trackBy: trackBy
-              ">
-              <app-station-widget *ngIf="item.widgetType === 'station'"
-                                  (expandWidget)="toggleExpandWidget(index, $event)" [stationRithmId]="item.data"
-                                  (toggleDrawer)="toggleStationWidgetDrawer($event, index)">
+              "
+            >
+              <app-station-widget
+                *ngIf="item.widgetType === 'station'"
+                (expandWidget)="toggleExpandWidget(index, $event)"
+                [stationRithmId]="item.data"
+                (toggleDrawer)="toggleStationWidgetDrawer($event, index)"
+              >
               </app-station-widget>
-              <app-document-widget *ngIf="item.widgetType === 'document-list'" [documentRithmId]="item.data">
+              <app-document-widget
+                *ngIf="item.widgetType === 'document-list'"
+                [documentRithmId]="item.data"
+              >
               </app-document-widget>
             </gridster-item>
           </gridster>
