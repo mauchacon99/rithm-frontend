@@ -58,8 +58,12 @@ export class MapSearchComponent {
    *
    */
   clearSearchText(): void {
+    if (this.searchText !== '' || this.searchText.length !== 0) {
+      this.sidenavDrawerService.toggleDrawer('stationInfo');
+    }
     this.searchText = '';
     this.filteredStations = [];
+    this.mapService.handleDrawerClose('stationInfo');
   }
 
   /**
@@ -81,7 +85,5 @@ export class MapSearchComponent {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     this.stationService.updatedStationNameText(drawerItem.stationName);
     drawerItem.drawerOpened = true;
-    this.searchText = '';
-    this.filteredStations = [];
   }
 }
