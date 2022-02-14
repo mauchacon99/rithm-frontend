@@ -1006,8 +1006,7 @@ export class StationGroupElementService {
       this.canvasContext.measureText(icon).fontBoundingBoxDescent
     );
     // If the slope is 0 then we do a displacement by the x-coordinate so that it does not overlap the station group name.
-    const displacementX =
-      m === 0 ? STATION_GROUP_NAME_PADDING * this.mapScale : 0;
+    const displacementX = m === 0 ? GROUP_CHARACTER_SIZE * this.mapScale : 0;
     const path = new Path2D();
     // Create a circle over the icon button for hovering.
     path.arc(
