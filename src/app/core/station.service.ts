@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -584,5 +584,33 @@ export class StationService {
         standardBody
       )
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Update AllowPreviousButton information.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param allowPreviousButton The value that will be update.
+   * @returns The status allowPreviousButton updated.
+   */
+  updateAllowPreviousButton(
+    stationRithmId: string,
+    allowPreviousButton: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the current status for this.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: allowPreviousButton,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
   }
 }
