@@ -353,4 +353,11 @@ describe('StationWidgetComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
   });
+
+  it('should emit toggleDrawer', () => {
+    component.toggleDrawer.subscribe((expectStationRithmId) => {
+      expect(expectStationRithmId).toEqual(component.stationRithmId);
+    });
+    component.editStationWidget();
+  });
 });

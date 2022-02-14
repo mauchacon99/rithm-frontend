@@ -134,14 +134,14 @@ describe('DashboardComponent', () => {
 
   it('should call the `toggle` method on the `SidenavService`', () => {
     const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
-    component.toggleMenu('menuDashboard');
+    component.toggleDrawer('menuDashboard');
     expect(spy).toHaveBeenCalledOnceWith('menuDashboard');
   });
 
   it('should click the dashboard menu button ', () => {
     component.viewNewDashboard = true;
     fixture.detectChanges();
-    const spy = spyOn(component, 'toggleMenu');
+    const spy = spyOn(component, 'toggleDrawer');
     const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
