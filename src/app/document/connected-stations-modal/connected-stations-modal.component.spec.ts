@@ -172,6 +172,7 @@ describe('ConnectedStationsModalComponent', () => {
     expect(component.connectedError).toBeTrue();
     expect(reviewError).toBeTruthy();
   });
+
   it('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
