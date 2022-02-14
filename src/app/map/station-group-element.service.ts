@@ -30,9 +30,9 @@ import {
   ICON_STATION_GROUP_CANCEL,
   ICON_STATION_GROUP_ACCEPT,
   ICON_STATION_GROUP_HOVER_COLOR_CANCEL,
-  STATION_GROUP_NAME_TRANSLATE,
   ICON_STATION_GROUP_PATH_RADIUS,
   GROUP_CHARACTER_SIZE,
+  STATION_GROUP_DISPLACEMENT,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -666,15 +666,25 @@ export class StationGroupElementService {
       return newPoint;
     }
 
-    // If true the coordinate is X else the coordinate is Y
+    // If true the coordinate is X else the coordinate is Y.
     if (coordinate) {
       // x-coordinate displacement.
       newPoint.x += displacement;
       // The point-slope equation evaluating X.
       newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
     } else {
-      // Y-coordinate displacement.
-      newPoint.y += displacement;
+      // If the Start point in y-coordinate is greater than the End point in y-coordinate
+      // Then subtract the displacement to the new position, or sum the displacement to the new position..
+      if (
+        this.mapService.getMapX(pointStart.y) >
+        this.mapService.getMapX(pointEnd.y)
+      ) {
+        // Y-coordinate displacement.
+        newPoint.y -= displacement;
+      } else {
+        // Y-coordinate displacement.
+        newPoint.y += displacement;
+      }
       // The point-slope equation evaluating Y.
       newPoint.x = (newPoint.y - pointEnd.y) / m + pointEnd.x;
     }
@@ -876,14 +886,15 @@ export class StationGroupElementService {
       // Paint the station group name.
       this.canvasContext.fillText(
         title,
-        5,
+        STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
       // If status of the station group is pending.
       if (stationGroup.status === MapItemStatus.Pending) {
         const titleWidth =
           this.canvasContext.measureText(title).width +
-          STATION_GROUP_NAME_TRANSLATE * this.mapScale;
+          GROUP_CHARACTER_SIZE * 2 * this.mapScale;
+
         // Reset pathButtons of the station group.
         stationGroup.pathButtons = [];
         // Paint the Cancel Icon on the map.
@@ -910,13 +921,13 @@ export class StationGroupElementService {
     } else {
       // Delete the line under the station group name.
       this.canvasContext.clearRect(
-        -5,
-        -5,
+        -STATION_GROUP_DISPLACEMENT,
+        -STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).width +
           STATION_GROUP_NAME_PADDING +
           (stationGroup.status === MapItemStatus.Pending
-            ? STATION_GROUP_NAME_TRANSLATE * 6
-            : STATION_GROUP_NAME_TRANSLATE / 2) *
+            ? GROUP_CHARACTER_SIZE * 12
+            : GROUP_CHARACTER_SIZE) *
             this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
@@ -976,6 +987,16 @@ export class StationGroupElementService {
       displacement
     );
 
+    // Calculation of the new displacement as a function of the slope of the line.
+    // If the slope is greater than pi/4 we adjust the icon multiplied by 3.
+    const newDisplacement =
+      displacement +
+      (Math.abs(m) === Math.PI / 2
+        ? 0
+        : Math.abs(m) < Math.PI / 4
+        ? -STATION_GROUP_DISPLACEMENT * this.mapScale
+        : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
+
     // Moves the point on the line to delimit where the hover zone begins.
     const newUnRotatedPointStart = this.movePointOnLine(
       {
@@ -986,14 +1007,17 @@ export class StationGroupElementService {
         x: pointEnd.x,
         y: pointEnd.y,
       },
-      displacement + (Math.abs(m) === Math.PI / 2 ? 0 : -5 * this.mapScale),
+      newDisplacement,
       Math.abs(m) < Math.PI / 4
     );
 
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
     // Font selected to paint the icon.
-    this.canvasContext.font = `${fontSize * 2}px "FontAwesome"`;
+    // If the icon is hover we increase the font by 0.5.
+    this.canvasContext.font = `${
+      fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
+    }px "FontAwesome"`;
 
     // Hovering changes the color of the icon.
     this.canvasContext.fillStyle =
