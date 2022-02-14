@@ -1,5 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { StationMapElement } from 'src/helpers';
 import { MockMapService } from 'src/mocks';
 import { MapItemStatus, MapMode, StationInfoDrawerData } from 'src/models';
@@ -82,7 +87,7 @@ describe('MapSearchComponent', () => {
     expect(component.filteredStations.length).toEqual(0);
   });
 
-  it('should open drawer when any autocomplete option is selected', () => {
+  it('should open drawer when any autocomplete option is selected', fakeAsync(() => {
     const sideNavSpy = spyOn(
       TestBed.inject(SidenavDrawerService),
       'openDrawer'
@@ -114,6 +119,7 @@ describe('MapSearchComponent', () => {
       openedFromMap: true,
       notes: '',
     };
+    const drawerWidth = 0;
     component.openDrawer(station);
     expect(sideNavSpy).toHaveBeenCalledWith('stationInfo', dataInfoDrawer);
     expect(stationServiceSpy).toHaveBeenCalledWith(dataInfoDrawer.stationName);
@@ -123,6 +129,7 @@ describe('MapSearchComponent', () => {
     service.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
     service.centerActive$.subscribe((res) => expect(res).toBe(true));
     service.centerStationCount$.subscribe((res) => expect(res).toBe(1));
-    expect(mapServiceSpy).toHaveBeenCalledWith(station);
-  });
+    tick(1);
+    expect(mapServiceSpy).toHaveBeenCalledWith(station, drawerWidth);
+  }));
 });

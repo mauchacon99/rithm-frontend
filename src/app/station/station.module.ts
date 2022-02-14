@@ -19,18 +19,19 @@ import { MatInputModule } from '@angular/material/input';
 import { RuleModalComponent } from './rule-modal/rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
-import { TextFieldModule } from '../shared/fields/text-field/text-field.module';
-import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { TextFieldModule } from 'src/app/shared/fields/text-field/text-field.module';
+import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SubHeaderModule } from '../shared/sub-header/sub-header.module';
-import { DetailDrawerModule } from '../shared/detail-drawer/detail-drawer.module';
-import { ConnectedStationPaneModule } from '../shared/connected-station-pane/connected-station-pane.module';
-import { StationInfoHeaderModule } from '../shared/station-info-header/station-info-header.module';
-import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
-import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
-import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
-import { NumberFieldModule } from '../shared/fields/number-field/number-field.module';
-import { DateFieldModule } from '../shared/fields/date-field/date-field.module';
+import { SubHeaderModule } from 'src/app/shared/sub-header/sub-header.module';
+import { DetailDrawerModule } from 'src/app/shared/detail-drawer/detail-drawer.module';
+import { ConnectedStationPaneModule } from 'src/app/shared/connected-station-pane/connected-station-pane.module';
+import { StationInfoHeaderModule } from 'src/app/shared/station-info-header/station-info-header.module';
+import { DocumentInfoHeaderModule } from 'src/app/shared/document-info-header/document-info-header.module';
+import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fields.module';
+import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
+import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-field.module';
+import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { DateFieldModule } from '../shared/fields/date-field/date-field.module';
     InfoDrawerModule,
     NumberFieldModule,
     DateFieldModule,
+    MatTooltipModule,
   ],
 })
 export class StationModule {}

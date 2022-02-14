@@ -79,6 +79,7 @@ export class MapSearchComponent {
     };
     //Pass dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+    const drawer = document.getElementsByTagName('mat-drawer');
     this.stationService.updatedStationNameText(drawerItem.stationName);
     drawerItem.drawerOpened = true;
     this.searchText = '';
@@ -90,6 +91,11 @@ export class MapSearchComponent {
     //Increment centerStationCount to show that more centering of station needs to be done.
     this.mapService.centerStationCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.centerStation(drawerItem);
+    setTimeout(() => {
+      this.mapService.centerStation(
+        drawerItem,
+        drawer[0] ? drawer[0].clientWidth : 0
+      );
+    }, 1);
   }
 }

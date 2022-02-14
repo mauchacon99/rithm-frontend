@@ -58,8 +58,8 @@ export const STATION_WIDTH = 160;
 export const STATION_RADIUS = 10;
 export const STATION_BORDER_LINE_WIDTH = 2;
 export const STATION_BORDER_LINE_WIDTH_SELECTED = 5;
-export const STATION_PAN_CENTER_WIDTH = 25;
-export const STATION_PAN_CENTER_HEIGHT = 35;
+export const STATION_PAN_CENTER_WIDTH = 40;
+export const STATION_PAN_CENTER_HEIGHT = 50;
 
 // Station badge
 export const BADGE_RADIUS = 15;

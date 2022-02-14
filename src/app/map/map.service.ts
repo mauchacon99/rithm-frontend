@@ -1661,8 +1661,9 @@ export class MapService {
    * Smoothly sets the scale and pans the station to center.
    *
    * @param station Station which should be pan to center.
+   * @param drawerWidth Width of the opened drawer.
    */
-  centerStation(station: StationMapElement): void {
+  centerStation(station: StationMapElement, drawerWidth: number): void {
     //If there are no stations to center around, do nothing.
     if (this.stationElements.length === 0) {
       return;
@@ -1673,11 +1674,11 @@ export class MapService {
       //If there is still centering that needs to be done for the station.
       if (this.centerStationCount$.value > 0) {
         //Smoothly pan station to the center.
-        this.stationCenterPan(station);
+        this.stationCenterPan(station, drawerWidth);
         //Decrement centerStationCount to note that we've moved the station a step further to the center.
         this.centerStationCount$.next(this.centerStationCount$.value - 1);
         //Recursively call method so we can animate a smooth pan and scale.
-        this.centerStation(station);
+        this.centerStation(station, drawerWidth);
         //If centering is finished.
       } else {
         //Reset properties that mark that more centering needs to happen.
@@ -1700,14 +1701,19 @@ export class MapService {
    * Pans the station when centerStation method is called.
    *
    * @param station Station which should be pan to center.
+   * @param drawerWidth Width of the opened drawer.
    */
-  private stationCenterPan(station: StationMapElement): void {
+  private stationCenterPan(
+    station: StationMapElement,
+    drawerWidth: number
+  ): void {
     //Get the point that currentCanvasPoint needs to be set to.
     const canvasCenter = this.getCanvasCenterPoint();
     // Determine the canvas point of station to pan it to the center.
     const adjustedCenter = {
       x:
         station.mapPoint.x +
+        drawerWidth / 2 / this.mapScale$.value +
         STATION_PAN_CENTER_WIDTH / this.mapScale$.value -
         canvasCenter.x / this.mapScale$.value,
       y:
