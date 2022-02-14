@@ -1054,7 +1054,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  fit('should update the state of the allow-previous-button button for the station', () => {
+  it('should update the state of the allow-previous-button button for the station', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
