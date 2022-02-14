@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -25,6 +25,9 @@ export class FlowLogicComponent implements OnInit {
 
   /** Station Rithm id. */
   @Input() rithmId = '';
+
+  /** The list the new Rules to save. */
+  @Output() newRulesFlowLogic = new EventEmitter<FlowLogicRule[]>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -99,6 +102,7 @@ export class FlowLogicComponent implements OnInit {
                 flowLogicStation.flowRule.subRules.push(rule);
               }
             }
+            this.newRulesFlowLogic.emit(this.flowLogicRules);
           }
         });
     }

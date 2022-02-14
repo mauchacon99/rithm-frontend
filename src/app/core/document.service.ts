@@ -491,7 +491,7 @@ export class DocumentService {
    * @param newFlowLogic New flow logic rule for current station.
    * @returns Station flow logic.
    */
-  saveStationFlowLogic(newFlowLogic: FlowLogicRule): Observable<unknown> {
+  saveStationFlowLogic(newFlowLogic: FlowLogicRule[]): Observable<unknown> {
     return this.http.put<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       newFlowLogic

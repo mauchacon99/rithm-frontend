@@ -19,6 +19,7 @@ import {
   DocumentNameField,
   Question,
   PossibleAnswer,
+  FlowLogicRule,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -26,6 +27,8 @@ import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Main component for viewing a station.
@@ -84,8 +87,15 @@ export class StationComponent
   /** View new station. */
   viewNewStation = false;
 
+  /** Flag that renames the save button when the selected tab is Flow Logic. */
+  buttonNameSaved = false;
+
+  /** Contains the rules received of Flow Logic. */
+  flowLogicRules: FlowLogicRule[] = [];
+
   constructor(
     private stationService: StationService,
+    private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
@@ -379,6 +389,9 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
+
+      //Save flow logic rules of current station.
+      this.documentService.saveStationFlowLogic(this.flowLogicRules),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -524,5 +537,23 @@ export class StationComponent
       addressChildren.push(child);
     });
     return addressChildren;
+  }
+
+  /**
+   * Detect tabs changed.
+   *
+   * @param tabChangeEvent Receives the detail from tab selected.
+   */
+  tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
+    this.buttonNameSaved = tabChangeEvent.index === 1 ? true : false;
+  }
+
+  /**
+   * Receives new rules of flow logic.
+   *
+   * @param newRuleFlowLogic Contains the rules flow logic of station current.
+   */
+  newRulesStation(newRuleFlowLogic: FlowLogicRule[]): void {
+    this.flowLogicRules = newRuleFlowLogic;
   }
 }
