@@ -59,7 +59,7 @@ export class MapSearchComponent {
    */
   clearSearchText(): void {
     if (this.searchText !== '' || this.searchText.length !== 0) {
-      this.sidenavDrawerService.toggleDrawer('stationInfo');
+      this.sidenavDrawerService.closeDrawer();
     }
     this.searchText = '';
     this.filteredStations = [];
