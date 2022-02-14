@@ -35,6 +35,9 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** Contains the new flow logic rule for saved . */
+  newFlowLogic!: FlowLogicRule;
+
   constructor(
     public dialog: MatDialog,
     private errorService: ErrorService,
@@ -66,33 +69,35 @@ export class FlowLogicComponent implements OnInit {
         .afterClosed()
         .pipe(first())
         .subscribe((rule) => {
-          const flowLogicStation = this.flowLogicRules.find(
-            (station) =>
-              station.destinationStationRithmId === connectedStationId
-          );
-          if (!flowLogicStation) {
-            // add a flowLogicRule with this connectedStation to the FlowLogicRule array
-            const flowLogic: FlowLogicRule = {
-              stationRithmId: this.rithmId,
-              destinationStationRithmId: connectedStationId,
-              flowRule: {
-                ruleType: RuleType.And,
-                equations: [],
-                subRules: [],
-              },
-            };
-            if (type === 'all') {
-              flowLogic.flowRule.equations.push(rule);
+          if (rule) {
+            const flowLogicStation = this.flowLogicRules.find(
+              (station) =>
+                station.destinationStationRithmId === connectedStationId
+            );
+            if (!flowLogicStation) {
+              // add a flowLogicRule with this connectedStation to the FlowLogicRule array
+              const flowLogic: FlowLogicRule = {
+                stationRithmId: this.rithmId,
+                destinationStationRithmId: connectedStationId,
+                flowRule: {
+                  ruleType: RuleType.And,
+                  equations: [],
+                  subRules: [],
+                },
+              };
+              if (type === 'all') {
+                flowLogic.flowRule.equations.push(rule);
+              } else {
+                flowLogic.flowRule.subRules.push(rule);
+              }
+              this.flowLogicRules.push(flowLogic);
             } else {
-              flowLogic.flowRule.subRules.push(rule);
-            }
-            this.flowLogicRules.push(flowLogic);
-          } else {
-            // Update the flowRules if the station exists in the FlowLogicRule array
-            if (type === 'all') {
-              flowLogicStation.flowRule.equations.push(rule);
-            } else {
-              flowLogicStation.flowRule.subRules.push(rule);
+              // Update the flowRules if the station exists in the FlowLogicRule array
+              if (type === 'all') {
+                flowLogicStation.flowRule.equations.push(rule);
+              } else {
+                flowLogicStation.flowRule.subRules.push(rule);
+              }
             }
           }
         });

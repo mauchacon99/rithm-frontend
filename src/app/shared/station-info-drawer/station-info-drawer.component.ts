@@ -56,6 +56,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the allow external workers section. */
   allowExternalLoading = false;
 
+  /** Whether the station allow previous button or not. */
+  statusAllowPreviousButton = false;
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -250,6 +253,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether to show the deleteStation button or not.
+   *
+   * @returns True/show False/hide.
+   */
+  get displayDeleteStationButton(): boolean {
+    return (
+      this.locallyCreated ||
+      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner) ||
+      (!this.openedFromMap && this.editMode) ||
+      (!this.openedFromMap && this.isUserAdminOrOwner)
+    );
+  }
+
+  /**
    * Update status the station.
    *
    * @param status New status the station update.
@@ -300,6 +317,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
+              this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
@@ -687,6 +705,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationName);
+  }
+
+  /**
+   * Update status allow previous button in the station.
+   */
+  updateAllowPreviousButton(): void {
+    this.stationService
+      .updateAllowPreviousButton(
+        this.stationRithmId,
+        this.statusAllowPreviousButton
+      )
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.statusAllowPreviousButton = !this.statusAllowPreviousButton;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
