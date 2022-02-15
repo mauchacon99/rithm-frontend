@@ -120,6 +120,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The loading if changed toggle to allow all workers in the organization. */
   allowAllOrgLoading = false;
 
+  /** Get flow button name. */
+  flowButtonName = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -183,6 +186,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.getStationInfo();
         }
       });
+    this.stationService.flowButtonText$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.flowButtonName = data;
+      });
   }
 
   /**
@@ -204,6 +212,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               error
             );
           },
+        });
+
+      this.stationService.flowButtonText$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((data) => {
+          this.flowButtonName = data;
         });
     }
   }
@@ -302,6 +316,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationPriority = stationInfo.priority;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
+              this.flowButtonName = stationInfo.flowButton;
             }
             this.stationLoading = false;
           },
@@ -687,6 +702,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationName);
+  }
+
+  /**
+   * Update flow button name.
+   */
+  updateFlowButtonName(): void {
+    this.stationService.updatedFlowButtonText(this.flowButtonName);
   }
 
   /**

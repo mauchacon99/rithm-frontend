@@ -119,6 +119,9 @@
                 type="text"
                 placeholder="Button Name"
                 id="button-name"
+                [value]="flowButtonName"
+                [(ngModel)]="flowButtonName"
+                (mouseout)="updateFlowButtonName()"
                 data-testid="button-name"
               />
             </mat-form-field>

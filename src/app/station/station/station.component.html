@@ -75,6 +75,8 @@
                         placeholder="General Instructions"
                         rows="3"
                         spellcheck="true"
+                        [value]="flowButtonName"
+                        [(ngModel)]="flowButtonName"
                         formControlName="generalInstructions"
                       ></textarea>
                     </mat-form-field>

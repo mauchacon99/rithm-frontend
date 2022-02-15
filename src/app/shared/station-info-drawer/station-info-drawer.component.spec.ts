@@ -458,4 +458,14 @@ describe('StationInfoDrawerComponent', () => {
       );
     expect(loadingAllOrgWorker).toBeTruthy();
   });
+
+  it('should update the flow button name', () => {
+    const spyUpdateFlowButton = spyOn(
+      TestBed.inject(StationService),
+      'updatedFlowButtonText'
+    ).and.callThrough();
+    component.flowButtonName = 'test';
+    component.updateFlowButtonName();
+    expect(spyUpdateFlowButton).toHaveBeenCalled();
+  });
 });
