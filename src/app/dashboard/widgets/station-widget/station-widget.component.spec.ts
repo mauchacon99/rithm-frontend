@@ -13,7 +13,7 @@ import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { LoadingWidgetComponent } from '../loading-widget/loading-widget.component';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;

@@ -6,7 +6,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
 import { MockComponent } from 'ng-mocks';
-import { LoadingWidgetComponent } from '../loading-widget/loading-widget.component';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
