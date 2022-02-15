@@ -198,7 +198,7 @@ export class StationGroupElementService {
    */
   animatePendingGroup(): void {
     this.offset++;
-    if (this.offset > 90) {
+    if (this.offset > 14) {
       this.offset = 0;
     }
   }
