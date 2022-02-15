@@ -41,7 +41,7 @@ describe('DocumentWidgetComponent', () => {
 
     component.getDocumentWidget();
 
-    expect(methodGetDocumentWidget).toHaveBeenCalled();
+    expect(methodGetDocumentWidget).toHaveBeenCalledOnceWith(component.documentRithmId);
   });
 
   it('should show error if the request getDocumentWidget fail', () => {
@@ -61,18 +61,16 @@ describe('DocumentWidgetComponent', () => {
 
     component.getDocumentWidget();
 
-    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(component.documentRithmId);
     expect(spyError).toHaveBeenCalled();
   });
 
   it('should call method getDocumentWidget', () => {
-    const testDocumentRithmId = '8263330A-BCAA-40DB-8C06-D4C111D5C9DA';
-
     const spyDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
     component.getDocumentWidget();
-    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
+    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(component.documentRithmId);
   });
 });
