@@ -11,6 +11,7 @@ import {
   Observable,
   Subject,
   throwError,
+  of,
 } from 'rxjs';
 import {
   StationDocuments,
@@ -496,5 +497,28 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       newFlowLogic
     );
+  }
+
+  /**
+   * Delete rule from station flow logic.
+   *
+   * @param RulesFromStationFlowLogic Delete flow logic rule for current station.
+   * @returns Station flow logic.
+   */
+  deleteRuleFromStationFlowLogic(
+    RulesFromStationFlowLogic: FlowLogicRule[]
+  ): Observable<unknown> {
+    if (!RulesFromStationFlowLogic) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot be removed station flow logic rule.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }

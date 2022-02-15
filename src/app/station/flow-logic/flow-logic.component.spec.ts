@@ -20,8 +20,11 @@ import {
   MockErrorService,
   MockStationService,
   MockDocumentService,
+  MockPopupService,
 } from 'src/mocks';
+
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
@@ -40,6 +43,29 @@ describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
+  const flowLogicRule = [
+    {
+      stationRithmId: rithmId,
+      destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+      flowRule: {
+        ruleType: RuleType.And,
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              value: 'birthday',
+            },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              value: '5/27/1982',
+            },
+          },
+        ],
+        subRules: [],
+      },
+    },
+  ];
   const nextStations: ConnectedStationInfo[] = [
     {
       rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
@@ -72,6 +98,7 @@ describe('FlowLogicComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -168,29 +195,7 @@ describe('FlowLogicComponent', () => {
   it('should not display the red message when there are rules in each station.', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    component.flowLogicRules = [
-      {
-        stationRithmId: rithmId,
-        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
-        flowRule: {
-          ruleType: RuleType.And,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
-              },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
-        },
-      },
-    ];
+    component.flowLogicRules = flowLogicRule;
     fixture.detectChanges();
     const messageNotRules = fixture.debugElement.nativeElement.querySelector(
       '#there-are-not-rules-0'
@@ -390,5 +395,23 @@ describe('FlowLogicComponent', () => {
     );
 
     expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
+  });
+
+  it('should to call method deleteRuleFromStationFlowLogic after clicked in button with id: button-delete-rule ', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+    const deleteRuleFromStationFlowLogicSpy = spyOn(
+      component,
+      'deleteRuleFromStationFlowLogic'
+    );
+    const btnDelete = fixture.nativeElement.querySelector(
+      '.button-delete-rule'
+    );
+    expect(btnDelete).toBeTruthy();
+    btnDelete.click();
+
+    expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 });

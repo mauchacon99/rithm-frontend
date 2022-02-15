@@ -20,8 +20,8 @@
           class="text-error-500 mt-4"
           [id]="'there-are-not-rules-' + i"
           *ngIf="
-            !getStationFlowRules(station.rithmId).equations.length &&
-            !getStationFlowRules(station.rithmId).subRules.length
+            !getStationFlowRules(station.rithmId)?.equations?.length &&
+            !getStationFlowRules(station.rithmId)?.subRules?.length
           "
         >
           Documents will always flow here if there are no rules.
@@ -60,7 +60,10 @@
                     type="button"
                     mat-icon-button
                     matSuffix
+                    class="button-delete-rule"
+                    data-testid="button-delete-rule"
                     matTooltip="Remove current rule"
+                    (click)="deleteRuleFromStationFlowLogic()"
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>
@@ -114,7 +117,10 @@
                     type="button"
                     mat-icon-button
                     matSuffix
+                    class="button-delete-rule"
+                    data-testid="button-delete-rule"
                     matTooltip="Remove current rule"
+                    (click)="deleteRuleFromStationFlowLogic()"
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>
