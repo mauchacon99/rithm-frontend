@@ -1,18 +1,16 @@
 <div class="p-3 h-full w-full overflow-auto scrollbar">
-  <p>document-widget works!</p>
-
   <div class="mt-3 overflow-auto" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questions of dataDocumentWidget.questions">
-      <div *ngIf="questions.value" class="py-3 border-b border-b-secondary-200">
-        <p class="font-semibold">{{ questions.value }}</p>
+      <div class="py-3 border-b border-b-secondary-200">
+        <p class="font-semibold">{{ questions.prompt }}</p>
         <p class="pt-3">
           {{ questions.answer?.value || "This question don't have answer." }}
         </p>
       </div>
     </ng-container>
     <div
-      class="text-center py-2"
-      *ngIf="!dataDocumentWidget.questions.length || isEmptyQuestions"
+      class="text-center py-2 text-sm"
+      *ngIf="!dataDocumentWidget.questions.length"
     >
       This document, don't have questions.
     </div>

@@ -49,16 +49,4 @@ export class DocumentWidgetComponent implements OnInit {
         },
       });
   }
-
-  /**
-   * Check if its empty all questions of the array dataDocumentWidget.questions.
-   *
-   * @returns Boolean, true if its empty questions and false if it has some value.
-   */
-  get isEmptyQuestions(): boolean {
-    const isEmpty = !!this.dataDocumentWidget.questions.find(
-      (question) => question.value
-    );
-    return !isEmpty;
-  }
 }
