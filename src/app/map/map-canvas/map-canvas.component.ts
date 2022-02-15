@@ -1969,11 +1969,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
-            setInterval(() => {
-              //Animate the boundary for the pending stationGroup.
-              this.stationGroupElementService.animatePendingGroup();
-              this.drawElements();
-            }, 100);
+            this.triggerAnimate();
           }
           return;
         } else {
@@ -1992,6 +1988,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //Check if click was on a station group boundary.
     this.checkStationGroupClick(contextPoint, point);
+  }
+
+/**
+ * This animates the pending station group line when station is selected.
+ */
+  triggerAnimate(): void {
+      const  animateGroup =  setInterval(() => {
+        if (this.mapService.stationElements.some((st) => st.selected) ||
+          this.mapService.stationGroupElements.some((stGroup) => stGroup.selected)) {
+          this.stationGroupElementService.animatePendingGroup();
+          this.drawElements();
+        } else {
+          // This cancels the loop. Ending the animation.
+          clearInterval(animateGroup);
+          this.drawElements();
+        }
+      }, 100);
   }
 
   /**

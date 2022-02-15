@@ -160,7 +160,8 @@ export class StationGroupElementService {
 
     //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
-    ctx.lineDashOffset = stationGroup.status !== MapItemStatus.Pending ? 0 : -this.offset ;
+    ctx.lineDashOffset =
+      stationGroup.status !== MapItemStatus.Pending ? 0 : -this.offset;
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
@@ -195,7 +196,7 @@ export class StationGroupElementService {
   /**
    * Animate the pending station group on the map.
    */
-   animatePendingGroup(): void {
+  animatePendingGroup(): void {
     this.offset++;
     if (this.offset > 90) {
       this.offset = 0;
