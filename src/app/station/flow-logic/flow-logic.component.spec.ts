@@ -391,4 +391,38 @@ describe('FlowLogicComponent', () => {
 
     expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
   });
+
+  it('should call the method that updates logical flow rules for each station', () => {
+    component.flowLogicRules = [
+      {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Number,
+                value: '102',
+              },
+              operatorType: OperatorType.GreaterOrEqual,
+              rightOperand: {
+                type: OperandType.Number,
+                value: '101',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    const updateStationFlowLogicRuleSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'updateStationFlowLogicRule'
+    ).and.callThrough();
+    component['updateStationFlowLogicRule']();
+    expect(updateStationFlowLogicRuleSpy).toHaveBeenCalledWith(
+      component.flowLogicRules
+    );
+  });
 });

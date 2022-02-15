@@ -53,6 +53,7 @@
                     mat-icon-button
                     matSuffix
                     matTooltip="Edit current rule"
+                    (click)="openModal('all', station.rithmId)"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
                   </button>
@@ -107,6 +108,7 @@
                     mat-icon-button
                     matSuffix
                     matTooltip="Edit current rule"
+                    (click)="openModal('any', station.rithmId)"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
                   </button>
