@@ -3,12 +3,8 @@ import {
   StationGroupMapData,
   MapItemStatus,
   Point,
+  PathButton,
 } from '../models';
-import {
-  GROUP_CHARACTER_SIZE,
-  GROUP_NAME_HEIGHT,
-  STATION_GROUP_NAME_PADDING,
-} from 'src/app/map/map-constants';
 
 export interface StationGroupMapElement extends StationGroupMapData {
   /** The points used for the boundary shape of the station group (the points used for the convex hull). */
@@ -52,16 +48,9 @@ export class StationGroupMapElement {
    * Checks whether the station group boundary is being hovered over.
    *
    * @param point The cursor location.
-   * @param canvasPoint The event canvas point.
    * @param ctx The rendering context for the canvas.
-   * @param scale The scale of the map.
    */
-  checkElementHover(
-    point: Point,
-    canvasPoint: Point,
-    ctx: CanvasRenderingContext2D,
-    scale: number
-  ): void {
+  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
     //Saves the current state of the canvas context.
     ctx.save();
     //This will allow users to click in the area around group boundaries without having to click in the rendered space.
@@ -71,38 +60,27 @@ export class StationGroupMapElement {
       /* If cursor is hovering over a group boundary set hoverItem to that,
       if cursor is over group name, set hoverItem to that,
       otherwise set it to none. */
-      this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
-        ? StationGroupElementHoverItem.Boundary
-        : this.isPointInStationGroupName(canvasPoint, scale)
-        ? StationGroupElementHoverItem.Name
-        : StationGroupElementHoverItem.None;
+      if (
+        this.pathButtons !== undefined &&
+        this.status === MapItemStatus.Pending
+      ) {
+        for (const iconButton of this.pathButtons) {
+          // If the mouse hovers over the icon button then hoverItem changes.
+          if (
+            this.isPointInStationGroupPendingButtons(point, iconButton, ctx)
+          ) {
+            this.hoverItem = iconButton.typeButton;
+            break;
+          }
+        }
+      } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
+        this.hoverItem = StationGroupElementHoverItem.Boundary;
+      } else {
+        this.hoverItem = StationGroupElementHoverItem.None;
+      }
     }
     //Restore the saved context state and undo the changes to it.
     ctx.restore();
-  }
-
-  /**
-   * Checks whether point is in a station group name or not.
-   *
-   * @param point The cursor location.
-   * @param scale The scale of the map.
-   * @returns A boolean.
-   */
-  isPointInStationGroupName(point: Point, scale: number): boolean {
-    const scaledStationHeight = GROUP_NAME_HEIGHT * scale;
-    const scaledStationWidth = this.title.length * GROUP_CHARACTER_SIZE * scale;
-
-    //Check if cursor is within a rectangle set around the station group name.
-    return (
-      point.x >= this.boundaryPoints[0].x - STATION_GROUP_NAME_PADDING &&
-      point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
-      point.y >=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y -
-          STATION_GROUP_NAME_PADDING &&
-      point.y <=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y +
-          scaledStationHeight
-    );
   }
 
   /**
@@ -143,5 +121,23 @@ export class StationGroupMapElement {
           'You should instead remove it from the array of station groups.'
       );
     }
+  }
+
+  /**
+   * Checks whether point is in a station group buttons in status pending or not.
+   *
+   * @param point The cursor location.
+   * @param pathButtons The path of the station group button.
+   * @param ctx The rendering context for the canvas.
+   * @returns A boolean.
+   */
+  isPointInStationGroupPendingButtons(
+    point: Point,
+    pathButtons: PathButton,
+    ctx: CanvasRenderingContext2D
+  ): boolean {
+    // check whether the mouse is hovering over the icon path
+    // Compares the path with the current point of the mouse to canvas context.
+    return ctx.isPointInPath(pathButtons.path, point.x, point.y);
   }
 }
