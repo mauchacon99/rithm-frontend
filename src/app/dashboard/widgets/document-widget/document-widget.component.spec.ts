@@ -88,10 +88,10 @@ describe('DocumentWidgetComponent', () => {
   it('should rendered component loading for widget', () => {
     component.isLoading = true;
     fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
     const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
       '#app-loading-indicator'
     );
-
     expect(loadingIndicator).toBeTruthy();
   });
 });
