@@ -213,12 +213,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             );
           },
         });
-
-      this.stationService.flowButtonText$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((data) => {
-          this.flowButtonName = data;
-        });
     }
   }
 

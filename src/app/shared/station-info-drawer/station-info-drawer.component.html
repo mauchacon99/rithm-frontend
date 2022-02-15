@@ -121,7 +121,7 @@
                 id="button-name"
                 [value]="flowButtonName"
                 [(ngModel)]="flowButtonName"
-                (mouseout)="updateFlowButtonName()"
+                (ngModelChange)="updateFlowButtonName()"
                 data-testid="button-name"
               />
             </mat-form-field>

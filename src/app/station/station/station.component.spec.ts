@@ -33,6 +33,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
+  let stationInject: StationService;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -77,6 +78,7 @@ describe('StationComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StationComponent);
+    stationInject = TestBed.inject(StationService);
     component = fixture.componentInstance;
     component.stationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -296,5 +298,14 @@ describe('StationComponent', () => {
     const fieldType: QuestionFieldType = QuestionFieldType.AddressLine;
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions[0].children).toHaveSize(5);
+  });
+
+  it('should update text of flow button', () => {
+    expect(component.flowButtonName).toBe('');
+    stationInject.flowButtonText$.next('test');
+    expect(component.flowButtonName).toBe('test');
+    expect(component.stationForm.controls.generalInstructions.value).toBe(
+      component.flowButtonName
+    );
   });
 });

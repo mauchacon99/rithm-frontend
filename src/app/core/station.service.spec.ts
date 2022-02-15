@@ -1053,4 +1053,11 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should test the behavior subject of flow button text', () => {
+    service.flowButtonText$.subscribe((flowButtonText) => {
+      expect(flowButtonText).toBe('');
+    });
+    service.updatedFlowButtonText('');
+  });
 });
