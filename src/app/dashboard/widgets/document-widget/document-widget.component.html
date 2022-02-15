@@ -2,9 +2,9 @@
   <div class="mt-3 overflow-auto" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questions of dataDocumentWidget.questions">
       <div class="py-3 border-b border-b-secondary-200">
-        <p class="font-semibold">{{ questions.prompt }}</p>
-        <p class="pt-3">
-          {{ questions.answer?.value || "This question don't have answer." }}
+        <p class="font-semibold text-sm">{{ questions.prompt }}</p>
+        <p class="pt-3 text-sm">
+          {{ questions.answer?.value || "This question, don't have answer." }}
         </p>
       </div>
     </ng-container>

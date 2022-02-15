@@ -460,7 +460,7 @@ export class MockDashboardService {
       documentRithmId: 'CDB317AA-A5FE-431D-B003-784A578B3FC2',
       questions: [
         {
-          rithmId: '',
+          rithmId: '1020-654684304-05060708-090100',
           prompt: 'Instructions',
           questionType: QuestionFieldType.Instructions,
           isReadOnly: false,
@@ -470,11 +470,11 @@ export class MockDashboardService {
           answer: {
             questionRithmId: '',
             referAttribute: '',
-            value: '',
+            value: 'Some value.',
           },
         },
         {
-          rithmId: '',
+          rithmId: '1020-65sdvsd4-05060708-090trhrth',
           prompt: 'Name your field',
           questionType: QuestionFieldType.ShortText,
           isReadOnly: false,
