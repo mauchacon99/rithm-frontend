@@ -43,6 +43,9 @@ export class StationGroupElementService {
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
 
+  /** The default scale value for the station group animation. */
+  private offset = 0;
+
   /** The Dimensions of the canvas. */
   canvasDimensions: {
     /** The width of the canvas.*/ width: number;
@@ -157,6 +160,7 @@ export class StationGroupElementService {
 
     //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
+    ctx.lineDashOffset = -this.offset;
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
@@ -186,6 +190,19 @@ export class StationGroupElementService {
     }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Draws the station group tooltip on the map for a station group.
+   */
+  march(): void {
+    this.offset++;
+    if (this.offset > 16) {
+      this.offset = 0;
+    }
+    setInterval(() => {
+      this.march();
+    }, 20);
   }
 
   /**

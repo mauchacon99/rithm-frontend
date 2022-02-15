@@ -310,6 +310,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //Redraw to reflect changes.
         this.drawElements();
+        this.stationGroupElementService.march();
       });
 
     //Redraw again for good measure.
