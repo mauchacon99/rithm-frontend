@@ -48,8 +48,19 @@ export const STATION_GROUP_POINT_RADIUS = 15;
 export const STATION_GROUP_NAME_PADDING = 6;
 export const GROUP_NAME_HEIGHT = 20;
 export const GROUP_CHARACTER_SIZE = 10;
-export const STATION_GROUP_NAME_TRANSLATE = 40;
 export const SLOPE_RANGE_NOT_ALLOWED = 0.00005;
+// Adjusts the displacement of the station group name.
+export const STATION_GROUP_DISPLACEMENT = 5;
+
+// Icon of the Station Group.
+// Color of the icon cancel.
+export const ICON_STATION_GROUP_HOVER_COLOR_CANCEL = '#91372C';
+// Fa-times icon in Unicode Format from FontAwesome.
+export const ICON_STATION_GROUP_CANCEL = '\uf00d';
+// Fa-check-circle icon in Unicode Format from FontAwesome.
+export const ICON_STATION_GROUP_ACCEPT = '\uf058';
+// The radius of the hover icon area.
+export const ICON_STATION_GROUP_PATH_RADIUS = 30;
 
 // Station
 export const STATION_PADDING = 10;
