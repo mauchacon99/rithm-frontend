@@ -444,7 +444,7 @@ export class MockDashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The dashboard rithmId deleted.
    */
-   deletePersonalDashboard(rithmId: string): Observable<unknown> {
+  deletePersonalDashboard(rithmId: string): Observable<unknown> {
     return of().pipe(delay(1000));
   }
 
@@ -467,11 +467,11 @@ export class MockDashboardService {
           isRequired: true,
           isPrivate: false,
           children: [],
-          answer:{
+          answer: {
             questionRithmId: '',
             referAttribute: '',
             value: '',
-          }
+          },
         },
         {
           rithmId: '',
@@ -483,7 +483,7 @@ export class MockDashboardService {
           children: [],
           value: '',
         },
-      ]
+      ],
     };
     return of(response).pipe(delay(1000));
   }

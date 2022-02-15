@@ -213,7 +213,7 @@ export class DashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId of the deleted dashboard.
    */
-   deletePersonalDashboard(
+  deletePersonalDashboard(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     rithmId: string
   ): Observable<unknown> {
@@ -226,7 +226,7 @@ export class DashboardService {
    * @param documentRithmId Rithm of document.
    * @returns Returns DocumentWidget.
    */
-   getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
     const response = {
       documentName: 'Untitled Dashboard',
       documentRithmId: documentRithmId,
@@ -239,11 +239,11 @@ export class DashboardService {
           isRequired: true,
           isPrivate: false,
           children: [],
-          answer:{
+          answer: {
             questionRithmId: '',
             referAttribute: '',
             value: '',
-          }
+          },
         },
         {
           rithmId: '',
@@ -255,7 +255,7 @@ export class DashboardService {
           children: [],
           value: '',
         },
-      ]
+      ],
     };
     return of(response).pipe(delay(1000));
   }

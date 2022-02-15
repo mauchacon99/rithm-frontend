@@ -585,11 +585,11 @@ describe('DashboardService', () => {
           isRequired: true,
           isPrivate: false,
           children: [],
-          answer:{
+          answer: {
             questionRithmId: '',
             referAttribute: '',
             value: '',
-          }
+          },
         },
         {
           rithmId: '',
@@ -601,7 +601,7 @@ describe('DashboardService', () => {
           children: [],
           value: '',
         },
-      ]
+      ],
     };
 
     service.getDocumentWidget(documentRithm).subscribe((response) => {
