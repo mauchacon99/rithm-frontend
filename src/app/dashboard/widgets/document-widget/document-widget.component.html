@@ -1,10 +1,13 @@
-<div class="p-3 h-full w-full overflow-auto scrollbar">
-  <div class="mt-3 overflow-auto scrollbar" *ngIf="dataDocumentWidget">
+<!--List of the questions-->
+<div class="w-full p-2 flex h-full">
+  <div class="overflow-auto scrollbar h-full w-full" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questions of dataDocumentWidget.questions">
       <div class="py-3 border-b border-b-secondary-200">
         <p class="font-semibold text-sm">{{ questions.prompt }}</p>
         <p class="pt-3 text-sm">
-          {{ questions.answer?.value || "This question, don't have answer." }}
+          {{
+            questions.answer?.value || "This question doesn't have an answer."
+          }}
         </p>
       </div>
     </ng-container>
@@ -12,7 +15,7 @@
       class="text-center py-2 text-sm"
       *ngIf="!dataDocumentWidget.questions.length"
     >
-      This document, don't have questions.
+      This document doesn't have any questions.
     </div>
   </div>
 </div>
