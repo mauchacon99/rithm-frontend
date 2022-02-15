@@ -310,7 +310,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //Redraw to reflect changes.
         this.drawElements();
-        this.stationGroupElementService.march();
       });
 
     //Redraw again for good measure.
@@ -1970,7 +1969,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
-            this.drawElements();
+            setInterval(() => {
+              //Animate the boundary for the pending stationGroup.
+              this.stationGroupElementService.animatePendingGroup();
+              this.drawElements();
+            }, 100);
           }
           return;
         } else {
