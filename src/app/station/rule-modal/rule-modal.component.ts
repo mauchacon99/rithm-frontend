@@ -455,7 +455,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   setEquationContent(): void {
     this.ruleToAdd = {
       leftOperand: {
-        type: OperandType.Field,
+        type: this.firstOperand.type,
         value: this.firstOperandQuestionRithmId,
         text: this.firstOperand.text,
       },
