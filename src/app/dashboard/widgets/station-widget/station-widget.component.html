@@ -1,11 +1,7 @@
-<div
+<app-loading-widget
   *ngIf="isLoading"
-  id="loading-docs"
-  class="h-full flex justify-center items-center flex-col"
->
-  <p class="py-2 truncate">Loading</p>
-  <app-loading-indicator></app-loading-indicator>
-</div>
+  id="app-loading-indicator"
+></app-loading-widget>
 
 <div *ngIf="failedLoadWidget" class="h-full" id="card-error">
   <div class="w-full h-full flex items-center justify-center">
