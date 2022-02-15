@@ -28,6 +28,7 @@ import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-field.component';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -39,6 +40,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
   providers: [],
 })
 export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
+
   /** The component text-field to be updated for step 3. */
   @ViewChild('textField', { static: false })
   textField!: TextFieldComponent;
@@ -50,6 +52,14 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The component date-field to be updated for step 3. */
   @ViewChild('dateField', { static: false })
   dateField!: DateFieldComponent;
+
+  /** The component date-field to be updated for step 3. */
+  @ViewChild('selectField', { static: false })
+  selectField!: SelectFieldComponent;
+
+  /** The component date-field to be updated for step 3. */
+  @ViewChild('checkField', { static: false })
+  checkField!: SelectFieldComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -74,8 +84,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** The value of the first operand. */
   firstOperand: RuleOperand = {
-    value: '',
     type: OperandType.String,
+    value: '',
+    text: ''
   };
 
   /** The rithmId of the second selected question to be compared if needed. */
@@ -86,8 +97,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** The value of the second operand. */
   secondOperand: RuleOperand = {
-    value: '',
     type: OperandType.String,
+    value: '',
+    text: ''
   };
 
   /** The type of the first questions selected for the first operand. */
@@ -100,7 +112,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     value: OperatorType;
   } | null = null;
 
+  /** Get all the existing Operand types. */
   operandType = OperandType;
+
+  /** Get all the existing question fields types. */
+  fieldTypes = QuestionFieldType;
 
   /** Text group for the operator options. */
   textGroup = [
@@ -196,6 +212,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     isPrivate: false,
     value: '',
     children: [],
+    possibleAnswers: [],
   };
 
   /** The rule to be returned and added to new rulesArray. */
@@ -264,6 +281,22 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Returns the second Operand to display in the las step.
+   *
+   * @returns A normal value or a rithmId to display.
+   */
+  get displayOperatorType(): string {
+    return this.firstOperand.type === this.operandType.String ? 'string' :
+           this.firstOperand.type === this.operandType.Date ? 'date' :
+           this.firstOperand.type === this.operandType.Number ? 'number' :
+           this.firstOperand.type === this.operandType.Field ?
+            this.firstOperandQuestionType === this.fieldTypes.Select ? 'select' :
+            this.firstOperandQuestionType === this.fieldTypes.MultiSelect ? 'multiselect'
+            : 'checklist'
+           : 'string';
+  }
+
+  /**
    * Get current and previous questions.
    */
   getStationQuestions(): void {
@@ -298,19 +331,16 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param questionSelected The field type to show the options of the corresponding operator list.
    */
   setFirstOperandInformation(questionSelected: Question): void {
-    //Set first field type for options of the second operand
     this.firstOperandQuestionType = questionSelected.questionType;
     this.secondOperandDefaultQuestion.questionType =
       questionSelected.questionType;
-    //Set first operand of text to show. */
-    this.firstOperand.value = questionSelected.prompt;
+    this.firstOperand.value = questionSelected.rithmId;
+    this.firstOperand.text = questionSelected.prompt;
     switch (questionSelected.questionType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
       case QuestionFieldType.Email:
-      case QuestionFieldType.AddressLine:
       case QuestionFieldType.Phone:
-      case QuestionFieldType.MultiSelect:
         this.operatorList = this.textGroup;
         this.firstOperand.type =
           questionSelected.questionType !== QuestionFieldType.Phone
@@ -318,10 +348,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
             : OperandType.Number;
         break;
       case QuestionFieldType.LongText:
-      case QuestionFieldType.CheckList:
         this.operatorList = this.contentGroup;
         this.firstOperand.type = OperandType.String;
         break;
+
       case QuestionFieldType.Number:
       case QuestionFieldType.Currency:
         this.operatorList = this.numberGroup;
@@ -331,9 +361,13 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.operatorList = this.dateGroup;
         this.firstOperand.type = OperandType.Date;
         break;
+      case QuestionFieldType.CheckList:
+      case QuestionFieldType.MultiSelect:
       case QuestionFieldType.Select:
         this.operatorList = this.selectGroup;
-        this.firstOperand.type = OperandType.String;
+        this.firstOperand.type = OperandType.Field;
+        this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+        this.secondOperandDefaultQuestion.possibleAnswers = questionSelected.possibleAnswers;
         break;
     }
     this.resetQuestionFieldComponent();
@@ -353,17 +387,34 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Reset component field when a first operand is selected.
    */
   resetQuestionFieldComponent(): void {
-    switch (this.firstOperand.type) {
-      case OperandType.String:
+    switch (this.displayOperatorType) {
+      case 'string':
         this.textField?.ngOnInit();
         break;
-      case OperandType.Number:
+      case 'number':
         this.numberField?.ngOnInit();
         break;
-      case OperandType.Date:
+      case 'date':
         this.dateField?.ngOnInit();
         break;
+      case 'select':
+        this.selectField?.ngOnInit();
+        break;
     }
+    // switch (this.firstOperand.type) {
+    //   case OperandType.String:
+    //     this.textField?.ngOnInit();
+    //     break;
+    //   case OperandType.Number:
+    //     this.numberField?.ngOnInit();
+    //     break;
+    //   case OperandType.Date:
+    //     this.dateField?.ngOnInit();
+    //     break;
+    //   case OperandType.Field:
+    //     this.dateField?.ngOnInit();
+    //     break;
+    // }
   }
 
   /**
@@ -399,8 +450,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   setEquationContent(): void {
     this.ruleToAdd = {
       leftOperand: {
-        type: this.firstOperand.type,
-        value: this.firstOperand.value,
+        type: OperandType.Field,
+        value: this.firstOperandQuestionRithmId,
+        text: this.firstOperand.text
       },
       operatorType: this.operatorSelected
         ? this.operatorSelected.value
@@ -408,6 +460,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       rightOperand: {
         type: this.secondOperand.type,
         value: this.secondOperand.value,
+        text: this.secondOperandToShow
       },
     };
     this.dialogRef.close(this.ruleToAdd);

@@ -41,11 +41,11 @@
                 <p
                   class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                 >
-                  {{ rule.leftOperand.value | titlecase }}
+                  {{ rule.leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
                     - {{ rule.operatorType }} -</span
                   >
-                  {{ rule.rightOperand.value | titlecase }}
+                  {{ rule.rightOperand.text | titlecase }}
                 </p>
                 <figure class="flex">
                   <button
@@ -95,11 +95,11 @@
                 <p
                   class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                 >
-                  {{ rule.leftOperand.value | titlecase }}
+                  {{ rule.leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
                     - {{ rule.operatorType }} -</span
                   >
-                  {{ rule.rightOperand.value | titlecase }}
+                  {{ rule.rightOperand.text | titlecase }}
                 </p>
                 <figure class="flex">
                   <button
