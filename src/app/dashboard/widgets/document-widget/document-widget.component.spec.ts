@@ -84,4 +84,14 @@ describe('DocumentWidgetComponent', () => {
       component.documentRithmId
     );
   });
+
+  it('should rendered component loading for widget', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator'
+    );
+
+    expect(loadingIndicator).toBeTruthy();
+  });
 });

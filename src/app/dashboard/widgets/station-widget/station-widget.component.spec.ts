@@ -245,7 +245,7 @@ describe('StationWidgetComponent', () => {
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
       const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
+        '#app-loading-indicator'
       );
 
       expect(loadingDocs).toBeNull();
