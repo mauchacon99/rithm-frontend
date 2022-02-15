@@ -554,7 +554,6 @@ export class StationComponent
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
   addFlowLogicRule(flowLogicRule: FlowLogicRule[]): void {
-    console.log(flowLogicRule)
     this.flowLogicRules = flowLogicRule;
   }
 }
