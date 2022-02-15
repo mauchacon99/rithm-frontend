@@ -5,6 +5,8 @@ import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
+import { MockComponent } from 'ng-mocks';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -14,7 +16,10 @@ describe('DocumentWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentWidgetComponent],
+      declarations: [
+        DocumentWidgetComponent,
+        MockComponent(ErrorWidgetComponent),
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
@@ -76,5 +81,17 @@ describe('DocumentWidgetComponent', () => {
     ).and.callThrough();
     component.getDocumentWidget(testDocumentRithmId);
     expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
+  });
+
+  it('should try request again  listing documents if fails', () => {
+    component.failedLoadDocument = true;
+    fixture.detectChanges();
+
+    const methodCalled = spyOn(component, 'getDocumentWidget');
+    const tryAgain =
+      fixture.debugElement.nativeElement.querySelector('#try-again');
+    expect(tryAgain).toBeTruthy();
+    tryAgain.click();
+    expect(methodCalled).toHaveBeenCalled();
   });
 });

@@ -1,1 +1,16 @@
 <p>document-widget works!</p>
+
+<app-error-widget
+  *ngIf="failedLoadDocument"
+  [errorMessage]="'Unable to retrieve document data'"
+>
+  <button
+    mat-stroked-button
+    color="warn"
+    (click)="getDocumentWidget(documentRithmId)"
+    id="try-again"
+    data-testid="try-again"
+  >
+    Try Again
+  </button>
+</app-error-widget>

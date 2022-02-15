@@ -14,6 +14,7 @@ import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { ErrorWidgetComponent } from '../error-widget/error-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -28,6 +29,7 @@ describe('StationWidgetComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
+        MockComponent(ErrorWidgetComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -99,10 +101,6 @@ describe('StationWidgetComponent', () => {
   it('should try request again  listing documents if fails', () => {
     component.failedLoadWidget = true;
     fixture.detectChanges();
-
-    const card =
-      fixture.debugElement.nativeElement.querySelector('#card-error');
-    expect(card).toBeTruthy();
 
     const methodCalled = spyOn(component, 'getStationWidgetDocuments');
     const tryAgain =
