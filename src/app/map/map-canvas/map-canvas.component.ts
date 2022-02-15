@@ -1990,21 +1990,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.checkStationGroupClick(contextPoint, point);
   }
 
-/**
- * This animates the pending station group line when station is selected.
- */
+  /**
+   * This animates the pending station group line when station is selected.
+   */
   triggerAnimate(): void {
-      const  animateGroup =  setInterval(() => {
-        if (this.mapService.stationElements.some((st) => st.selected) ||
-          this.mapService.stationGroupElements.some((stGroup) => stGroup.selected)) {
-          this.stationGroupElementService.animatePendingGroup();
-          this.drawElements();
-        } else {
-          // This cancels the loop. Ending the animation.
-          clearInterval(animateGroup);
-          this.drawElements();
-        }
-      }, 100);
+    const animateGroup = setInterval(() => {
+      if (
+        this.mapService.stationElements.some((st) => st.selected) ||
+        this.mapService.stationGroupElements.some((stGroup) => stGroup.selected)
+      ) {
+        this.stationGroupElementService.animatePendingGroup();
+        this.drawElements();
+      } else {
+        // This cancels the loop. Ending the animation.
+        clearInterval(animateGroup);
+        this.drawElements();
+      }
+    }, 100);
   }
 
   /**
