@@ -120,7 +120,7 @@ describe('StationInfoHeaderComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         NoopAnimationsModule,
-        MatButtonModule
+        MatButtonModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

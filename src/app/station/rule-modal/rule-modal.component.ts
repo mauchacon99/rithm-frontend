@@ -40,7 +40,6 @@ import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-
   providers: [],
 })
 export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
-
   /** The component text-field to be updated for step 3. */
   @ViewChild('textField', { static: false })
   textField!: TextFieldComponent;
@@ -86,7 +85,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   firstOperand: RuleOperand = {
     type: OperandType.String,
     value: '',
-    text: ''
+    text: '',
   };
 
   /** The rithmId of the second selected question to be compared if needed. */
@@ -99,7 +98,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   secondOperand: RuleOperand = {
     type: OperandType.String,
     value: '',
-    text: ''
+    text: '',
   };
 
   /** The type of the first questions selected for the first operand. */
@@ -286,14 +285,19 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @returns A normal value or a rithmId to display.
    */
   get displayOperatorType(): string {
-    return this.firstOperand.type === this.operandType.String ? 'string' :
-           this.firstOperand.type === this.operandType.Date ? 'date' :
-           this.firstOperand.type === this.operandType.Number ? 'number' :
-           this.firstOperand.type === this.operandType.Field ?
-            this.firstOperandQuestionType === this.fieldTypes.Select ? 'select' :
-            this.firstOperandQuestionType === this.fieldTypes.MultiSelect ? 'multiselect'
-            : 'checklist'
-           : 'string';
+    return this.firstOperand.type === this.operandType.String
+      ? 'string'
+      : this.firstOperand.type === this.operandType.Date
+      ? 'date'
+      : this.firstOperand.type === this.operandType.Number
+      ? 'number'
+      : this.firstOperand.type === this.operandType.Field
+      ? this.firstOperandQuestionType === this.fieldTypes.Select
+        ? 'select'
+        : this.firstOperandQuestionType === this.fieldTypes.MultiSelect
+        ? 'multiselect'
+        : 'checklist'
+      : 'string';
   }
 
   /**
@@ -367,7 +371,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.operatorList = this.selectGroup;
         this.firstOperand.type = OperandType.Field;
         this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
-        this.secondOperandDefaultQuestion.possibleAnswers = questionSelected.possibleAnswers;
+        this.secondOperandDefaultQuestion.possibleAnswers =
+          questionSelected.possibleAnswers;
         break;
     }
     this.resetQuestionFieldComponent();
@@ -452,7 +457,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       leftOperand: {
         type: OperandType.Field,
         value: this.firstOperandQuestionRithmId,
-        text: this.firstOperand.text
+        text: this.firstOperand.text,
       },
       operatorType: this.operatorSelected
         ? this.operatorSelected.value
@@ -460,7 +465,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       rightOperand: {
         type: this.secondOperand.type,
         value: this.secondOperand.value,
-        text: this.secondOperandToShow
+        text: this.secondOperandToShow,
       },
     };
     this.dialogRef.close(this.ruleToAdd);
