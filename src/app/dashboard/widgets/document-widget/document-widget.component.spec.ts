@@ -39,19 +39,17 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should call method getDocumentWidget', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const methodGetDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
 
-    component.getDocumentWidget(documentRithm);
+    component.getDocumentWidget();
 
     expect(methodGetDocumentWidget).toHaveBeenCalled();
   });
 
   it('should show error if the request getDocumentWidget fail', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
@@ -66,32 +64,18 @@ describe('DocumentWidgetComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.getDocumentWidget(documentRithm);
+    component.getDocumentWidget();
 
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });
 
   it('should call method getDocumentWidget', () => {
-    const testDocumentRithmId = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
-
     const spyDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
-    component.getDocumentWidget(testDocumentRithmId);
-    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
-  });
-
-  it('should try request again  listing documents if fails', () => {
-    component.failedLoadDocument = true;
-    fixture.detectChanges();
-
-    const methodCalled = spyOn(component, 'getDocumentWidget');
-    const tryAgain =
-      fixture.debugElement.nativeElement.querySelector('#try-again');
-    expect(tryAgain).toBeTruthy();
-    tryAgain.click();
-    expect(methodCalled).toHaveBeenCalled();
+    component.getDocumentWidget();
+    expect(spyDocumentWidget).toHaveBeenCalled();
   });
 });

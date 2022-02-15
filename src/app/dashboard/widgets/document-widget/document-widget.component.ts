@@ -32,16 +32,16 @@ export class DocumentWidgetComponent implements OnInit {
    */
   ngOnInit(): void {
     this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
+    this.getDocumentWidget();
   }
 
   /**
    * Get document widget.
-   *
-   * @param documentRithmId Rithm of document.
    */
-  getDocumentWidget(documentRithmId: string): void {
+  getDocumentWidget(): void {
+    this.failedLoadDocument = false;
     this.dashboardService
-      .getDocumentWidget(documentRithmId)
+      .getDocumentWidget(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (documentWidget) => {

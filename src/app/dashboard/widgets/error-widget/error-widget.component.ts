@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * Component for show error.
@@ -11,4 +11,14 @@ import { Component, Input } from '@angular/core';
 export class ErrorWidgetComponent {
   /** Show message error. */
   @Input() errorMessage!: string;
+
+  /** Output try again. */
+  @Output() tryAgain = new EventEmitter();
+
+  /**
+   * Try again.
+   */
+  reloadRequest(): void {
+    this.tryAgain.emit();
+  }
 }
