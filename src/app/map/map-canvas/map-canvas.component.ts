@@ -1237,8 +1237,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     ) {
       for (const station of this.stations) {
         if (station.dragging) {
-          station.mapPoint.x -= xMove;
-          station.mapPoint.y -= yMove;
+          this.panningAllowed(-xMove, true)
+            ? station.mapPoint.x -= xMove
+            : 0;
+          this.panningAllowed(-yMove, false)
+            ? station.mapPoint.y -= yMove
+            : 0;
         }
       }
     }
