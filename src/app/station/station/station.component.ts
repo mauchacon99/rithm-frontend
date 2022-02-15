@@ -88,7 +88,7 @@ export class StationComponent
   viewNewStation = false;
 
   /** Flag that renames the save button when the selected tab is Flow Logic. */
-  buttonNameSaved = false;
+  isFlowLogicTab = false;
 
   /** Contains the rules received of Flow Logic. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -545,15 +545,16 @@ export class StationComponent
    * @param tabChangeEvent Receives the detail from tab selected.
    */
   tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
-    this.buttonNameSaved = tabChangeEvent.index === 1 ? true : false;
+    this.isFlowLogicTab = tabChangeEvent.index === 1 ? true : false;
   }
 
   /**
-   * Receives new rules of flow logic.
+   * Receives a flow logic rule.
    *
-   * @param newRuleFlowLogic Contains the rules flow logic of station current.
+   * @param flowLogicRule Contains a flow logic rules of the current station.
    */
-  newRulesStation(newRuleFlowLogic: FlowLogicRule[]): void {
-    this.flowLogicRules = newRuleFlowLogic;
+  addFlowLogicRule(flowLogicRule: FlowLogicRule[]): void {
+    console.log(flowLogicRule)
+    this.flowLogicRules = flowLogicRule;
   }
 }

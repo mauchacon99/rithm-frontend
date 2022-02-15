@@ -156,7 +156,7 @@
                   <app-flow-logic
                     [rithmId]="stationRithmId"
                     [nextStations]="forwardStations"
-                    (newRulesFlowLogic)="newRulesStation($event)"
+                    (newRulesFlowLogic)="addFlowLogicRule($event)"
                   ></app-flow-logic>
                 </ng-template>
               </mat-tab>
@@ -190,10 +190,10 @@
                           !stationForm.dirty ||
                           !stationForm.controls.stationTemplateForm.touched
                         )) ||
-                      (flowLogicRules.length === 0 && buttonNameSaved)
+                      (flowLogicRules.length === 0 && isFlowLogicTab)
                     "
                   >
-                    {{ this.buttonNameSaved ? 'Save Rules' : 'Save' }}
+                    {{ this.isFlowLogicTab ? 'Save Rules' : 'Save' }}
                   </button>
                 </div>
               </div>
