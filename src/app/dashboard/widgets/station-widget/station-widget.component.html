@@ -36,7 +36,7 @@
   <div class="w-full p-2 flex flex-col h-full">
     <!--  Header Container  -->
     <div class="m-2">
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName }}
         </h3>
@@ -62,16 +62,16 @@
         </div>
         <div
           *ngIf="editMode"
-          class="-mr--1"
+          class="-mr--2"
           data-testid="gear-icon"
           id="gear-icon"
         >
           <button
             mat-icon-button
             class="text-secondary-500"
-            style="min-width: 40px"
+            style="min-width: 40px; padding-left: 20px; margin-top: -5px"
           >
-            <i class="fas fa-cog text-lg"></i>
+            <i class="fas fa-cog text-[16px]"></i>
           </button>
         </div>
       </div>
@@ -143,6 +143,7 @@
               mat-icon-button
               data-testid="show-document-widget"
               id="show-document-widget"
+              [disabled]="editMode"
             >
               <i class="fas fa-angle-double-right"></i>
             </button>
