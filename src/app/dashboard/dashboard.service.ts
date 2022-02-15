@@ -21,7 +21,7 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
   providedIn: 'root',
 })
 export class DashboardService {
-  /** Loading dashboard when generate new dashboard. */
+  /** Loading dashboard when generating new dashboard. */
   isLoadingDashboard$ = new Subject<boolean>();
 
   constructor(private http: HttpClient) {}
