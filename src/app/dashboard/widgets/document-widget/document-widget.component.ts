@@ -42,7 +42,7 @@ export class DocumentWidgetComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (documentWidget) => {
-          this.documentWidget = documentWidget;
+          this.dataDocumentWidget = documentWidget;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
