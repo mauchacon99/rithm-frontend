@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDashboardService, MockErrorService } from 'src/mocks';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
 
@@ -65,5 +65,17 @@ describe('DocumentWidgetComponent', () => {
 
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call method getDocumentWidget', async () => {
+    const testDocumentRithmId = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+
+    const spyDocumentWidget = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentWidget'
+    ).and.callThrough();
+
+    component.getDocumentWidget(testDocumentRithmId);
+    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
   });
 });

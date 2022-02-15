@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { DocumentWidget } from 'src/models';
 
 /**
  * Component for list field the document how widget.
@@ -14,6 +15,9 @@ import { DashboardService } from '../../dashboard.service';
 export class DocumentWidgetComponent implements OnInit {
   /** Document rithmId. */
   @Input() documentRithmId = '';
+
+  /** Document widget. */
+  documentWidget!: DocumentWidget;
 
   constructor(
     private errorService: ErrorService,
@@ -37,6 +41,9 @@ export class DocumentWidgetComponent implements OnInit {
       .getDocumentWidget(documentRithmId)
       .pipe(first())
       .subscribe({
+        next: (documentWidget) => {
+          this.documentWidget = documentWidget;
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
