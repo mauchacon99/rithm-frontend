@@ -9,6 +9,7 @@ import {
   WidgetType,
   DashboardData,
   RoleDashboardMenu,
+  QuestionFieldType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -549,6 +550,13 @@ describe('DashboardService', () => {
     service.toggleLoadingDashboard(false);
   });
 
+  it('should delete a personal dashboard', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    service.deletePersonalDashboard(rithmId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+  });
+
   it('should delete a organization dashboard', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     service.deleteOrganizationDashboard(rithmId).subscribe((response) => {
@@ -561,5 +569,43 @@ describe('DashboardService', () => {
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should call method getDocumentWidget', () => {
+    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+    const expectedResponse = {
+      documentName: 'Untitled Dashboard',
+      documentRithmId: 'CDB317AA-A5FE-431D-B003-784A578B3FC2',
+      questions: [
+        {
+          rithmId: '',
+          prompt: 'Instructions',
+          questionType: QuestionFieldType.Instructions,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: '',
+          },
+        },
+        {
+          rithmId: '',
+          prompt: 'Name your field',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '',
+        },
+      ],
+    };
+
+    service.getDocumentWidget(documentRithm).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 });
