@@ -740,6 +740,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       )
       .pipe(first())
       .subscribe({
+        next: (allowPreviousButton) => {
+          this.statusAllowPreviousButton = allowPreviousButton;
+        },
         error: (error: unknown) => {
           this.statusAllowPreviousButton = !this.statusAllowPreviousButton;
           this.errorService.displayError(

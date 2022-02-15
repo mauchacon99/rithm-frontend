@@ -1004,7 +1004,6 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse.data);
       });
-    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationId}`
     );
