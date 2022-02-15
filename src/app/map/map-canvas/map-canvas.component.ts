@@ -1103,26 +1103,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     /* Find corners of map using the min and max canvas points.
     Corners are set using the canvas points of the topmost, leftmost, rightmost and bottommost stations.
-    minMapPoint is the topleft corner of the map. maxMapPoint is the bottom right corner of the map. */
-    const minMapPoint = this.mapService.boundaryElement.minCanvasPoint;
-    const maxMapPoint = this.mapService.boundaryElement.maxCanvasPoint;
+    mapMin is the topleft corner of the map. mapMax is the bottom right corner of the map. */
+    const mapMin = this.mapService.boundaryElement.minCanvasPoint;
+    const mapMax = this.mapService.boundaryElement.maxCanvasPoint;
 
-    /* We will draw each line of the box using the minMapPoint and maxMapPoint
+    /* We will draw each line of the box using the mapMin and mapMax
     and then offsetting that using screenDimension and this.boundaryPadding. */
     const leftBoundaryEdge =
-      minMapPoint.x -
+      mapMin.x -
       (screenDimension * this.scale) / 2 +
       this.boundaryPadding.topLeft;
     const topBoundaryEdge =
-      minMapPoint.y -
+      mapMin.y -
       (screenDimension * this.scale) / 2 +
       this.boundaryPadding.topLeft;
     const rightBoundaryEdge =
-      maxMapPoint.x +
+      mapMax.x +
       (screenDimension * this.scale) / 2 -
       this.boundaryPadding.rightBottom;
     const bottomBoundaryEdge =
-      maxMapPoint.y +
+      mapMax.y +
       (screenDimension * this.scale) / 2 -
       this.boundaryPadding.rightBottom;
 
@@ -1624,6 +1624,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       }
     });
+
+    //Update the map boundary after stations have been adjusted.
+    this.mapService.updateBoundary();
 
     //Reset properties.
     this.eventStartCoords = DEFAULT_MOUSE_POINT;

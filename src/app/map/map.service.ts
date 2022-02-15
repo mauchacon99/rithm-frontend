@@ -231,6 +231,15 @@ export class MapService {
   }
 
   /**
+   * Updates the mapPoints of the map boundary.
+   */
+  updateBoundary(): void {
+    if (this.boundaryElement) {
+      this.boundaryElement.updatePoints(this.stationElements);
+    }
+  }
+
+  /**
    * Fills in connections array with info from this.stationElements.
    */
   setConnections(): void {
