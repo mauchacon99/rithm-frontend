@@ -30,11 +30,11 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import {
+  BoundaryMapElement,
   ConnectionMapElement,
   StationGroupMapElement,
   StationMapElement,
 } from 'src/helpers';
-import { BoundaryMapElement } from 'src/helpers/boundary-map-element';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
