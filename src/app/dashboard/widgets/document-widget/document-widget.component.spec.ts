@@ -34,19 +34,17 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should call method getDocumentWidget', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const methodGetDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
 
-    component.getDocumentWidget(documentRithm);
+    component.getDocumentWidget();
 
     expect(methodGetDocumentWidget).toHaveBeenCalled();
   });
 
   it('should show error if the request getDocumentWidget fail', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
@@ -61,20 +59,20 @@ describe('DocumentWidgetComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.getDocumentWidget(documentRithm);
+    component.getDocumentWidget();
 
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });
 
   it('should call method getDocumentWidget', () => {
-    const testDocumentRithmId = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+    const testDocumentRithmId = '8263330A-BCAA-40DB-8C06-D4C111D5C9DA';
 
     const spyDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
-    component.getDocumentWidget(testDocumentRithmId);
+    component.getDocumentWidget();
     expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
   });
 });

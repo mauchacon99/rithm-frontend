@@ -1,1 +1,14 @@
-<p>document-widget works!</p>
+<!-- Document widget -->
+<div class="h-full w-full">
+  <!-- Header widget -->
+  <div class="w-full p-2 flex flex-col h-full">
+    <!--  Header Container -->
+    <div class="m-2">
+      <div class="flex justify-between">
+        <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
+          {{ dataDocumentWidget.documentName }}
+        </h3>
+      </div>
+    </div>
+  </div>
+</div>
