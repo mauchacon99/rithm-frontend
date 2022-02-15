@@ -1,5 +1,5 @@
 <div class="p-3 h-full w-full overflow-auto scrollbar">
-  <div class="mt-3 overflow-auto" *ngIf="dataDocumentWidget">
+  <div class="mt-3 overflow-auto scrollbar" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questions of dataDocumentWidget.questions">
       <div class="py-3 border-b border-b-secondary-200">
         <p class="font-semibold text-sm">{{ questions.prompt }}</p>
