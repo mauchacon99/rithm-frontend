@@ -8,6 +8,8 @@ import {
   StationRosterMember,
   Document,
   DashboardData,
+  DocumentWidget,
+  QuestionFieldType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -216,5 +218,45 @@ export class DashboardService {
     rithmId: string
   ): Observable<unknown> {
     return of().pipe(delay(1000));
+  }
+
+  /**
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const response = {
+      documentName: 'Untitled Dashboard',
+      documentRithmId: documentRithmId,
+      questions: [
+        {
+          rithmId: '',
+          prompt: 'Instructions',
+          questionType: QuestionFieldType.Instructions,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: '',
+          },
+        },
+        {
+          rithmId: '',
+          prompt: 'Name your field',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '',
+        },
+      ],
+    };
+    return of(response).pipe(delay(1000));
   }
 }
