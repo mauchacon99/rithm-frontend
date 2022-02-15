@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationMapElement } from 'src/helpers';
@@ -14,6 +15,9 @@ import { MapService } from '../map.service';
   styleUrls: ['./map-search.component.scss'],
 })
 export class MapSearchComponent {
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
 
@@ -23,11 +27,31 @@ export class MapSearchComponent {
   /** Search text. */
   searchText = '';
 
+  placeHolder= '';
+
   constructor(
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService
-  ) {}
+  ) {
+    this.sidenavDrawerService.drawerData$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        const dataDrawer = data as StationInfoDrawerData;
+        if (dataDrawer.openedFromSearch) {
+            this.searchText;
+        }
+      });
+  }
+
+ /**
+  * Whether the drawer is open.
+  *
+  * @returns True if the drawer is open, false otherwise.
+  */
+  get isDrawerOpen(): boolean {
+    return !!this.sidenavDrawerService.isDrawerOpen;
+  }
 
   /**
    * Display station name when it's selected.
@@ -53,6 +77,7 @@ export class MapSearchComponent {
         ));
   }
 
+
   /**
    * Clear search box text on click of close icon.
    *
@@ -62,9 +87,22 @@ export class MapSearchComponent {
       this.sidenavDrawerService.closeDrawer();
     }
     this.searchText = '';
+    this.placeHolder = '';
     this.filteredStations = [];
     this.mapService.handleDrawerClose('stationInfo');
   }
+
+  /**
+   * Initiate previous search box text on click of arrow icon.
+   *
+   */
+    returnSearchText(): void {
+      if (this.searchText !== '' || this.searchText.length !== 0) {
+        this.sidenavDrawerService.closeDrawer();
+        this.searchText = this.placeHolder;
+      }
+    }
+
 
   /**
    * Opens the drawer of selected map element.
@@ -80,6 +118,7 @@ export class MapSearchComponent {
       mapMode: this.mapService.mapMode$.value,
       openedFromMap: true,
       notes: drawerItem.notes,
+      openedFromSearch: true,
     };
     //Pass dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);

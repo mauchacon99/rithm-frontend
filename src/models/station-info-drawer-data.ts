@@ -24,4 +24,7 @@ export interface StationInfoDrawerData {
 
   /** Optional notes to station. */
   notes?: string;
+
+  /** Whether the station drawer is opened from search or not (used for the map). */
+  openedFromSearch: boolean;
 }

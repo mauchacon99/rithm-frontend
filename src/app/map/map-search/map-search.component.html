@@ -2,9 +2,9 @@
   <i
     class="fas text-sm absolute left-3 top-3 z-40 text-secondary-300"
     [ngClass]="
-      searchText !== '' ? ' fa-arrow-left cursor-pointer ' : ' fa-search '
+      searchText !== '' && isDrawerOpen ? ' fa-arrow-left cursor-pointer ' : ' fa-search '
     "
-    (click)="clearSearchText()"
+    (click)="returnSearchText()"
   ></i>
   <i
     class="fas fa-times text-sm absolute right-3 top-3 z-40 cursor-pointer text-secondary-300"
