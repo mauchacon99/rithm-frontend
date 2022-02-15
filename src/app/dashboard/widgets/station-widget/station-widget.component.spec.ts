@@ -354,7 +354,7 @@ describe('StationWidgetComponent', () => {
     expect(noDocsMessage).toBeFalsy();
   });
 
-  it('should show gear icon in edit mode', () => {
+  it('should show a gear icon in edit mode', () => {
     component.isLoading = false;
     component.failedLoadWidget = false;
     component.isDocument = false;
