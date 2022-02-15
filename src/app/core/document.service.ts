@@ -502,7 +502,7 @@ export class DocumentService {
   /**
    * Delete rule from station flow logic.
    *
-   * @param RulesFromStationFlowLogic Delete flow logic rule for current station.
+   * @param RulesFromStationFlowLogic The flow logic rule to be updated.
    * @returns Station flow logic.
    */
   deleteRuleFromStationFlowLogic(

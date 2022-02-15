@@ -808,7 +808,7 @@ describe('DocumentService', () => {
   });
 
   it('should make request to delete station flow logic rule', () => {
-    const parametersBody: FlowLogicRule[] = [
+    const bodyParameters: FlowLogicRule[] = [
       {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
@@ -833,7 +833,7 @@ describe('DocumentService', () => {
     ];
 
     service
-      .deleteRuleFromStationFlowLogic(parametersBody)
+      .deleteRuleFromStationFlowLogic(bodyParameters)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });

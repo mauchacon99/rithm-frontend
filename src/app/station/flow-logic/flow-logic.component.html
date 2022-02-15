@@ -20,8 +20,8 @@
           class="text-error-500 mt-4"
           [id]="'there-are-not-rules-' + i"
           *ngIf="
-            !getStationFlowRules(station.rithmId)?.equations?.length &&
-            !getStationFlowRules(station.rithmId)?.subRules?.length
+            !getStationFlowRules(station.rithmId).equations.length &&
+            !getStationFlowRules(station.rithmId).subRules.length
           "
         >
           Documents will always flow here if there are no rules.
