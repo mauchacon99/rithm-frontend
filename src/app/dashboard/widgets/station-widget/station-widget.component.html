@@ -40,7 +40,7 @@
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName }}
         </h3>
-        <div *ngIf="dataStationWidget">
+        <div *ngIf="dataStationWidget && !editMode">
           <button
             *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
             mat-stroked-button
@@ -60,7 +60,12 @@
             Document not created!
           </div>
         </div>
-        <div *ngIf="editMode" class="-mr--1">
+        <div
+          *ngIf="editMode"
+          class="-mr--1"
+          data-testid="gear-icon"
+          id="gear-icon"
+        >
           <button
             mat-icon-button
             class="text-secondary-500"
