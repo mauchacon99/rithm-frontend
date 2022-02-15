@@ -29,16 +29,13 @@ export class DocumentWidgetComponent implements OnInit {
    */
   ngOnInit(): void {
     this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
+    this.getDocumentWidget();
   }
 
-  /**
-   * Get document widget.
-   *
-   * @param documentRithmId Rithm of document.
-   */
-  getDocumentWidget(documentRithmId: string): void {
+  /** Get document widget. */
+  getDocumentWidget(): void {
     this.dashboardService
-      .getDocumentWidget(documentRithmId)
+      .getDocumentWidget(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (documentWidget) => {
@@ -51,5 +48,17 @@ export class DocumentWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Check if its empty all questions of the array dataDocumentWidget.questions.
+   *
+   * @returns Boolean, true if its empty questions and false if it has some value.
+   */
+  get isEmptyQuestions(): boolean {
+    const isEmpty = !!this.dataDocumentWidget.questions.find(
+      (question) => question.value
+    );
+    return !isEmpty;
   }
 }
