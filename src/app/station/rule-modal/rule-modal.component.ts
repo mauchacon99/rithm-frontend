@@ -56,10 +56,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('selectField', { static: false })
   selectField!: SelectFieldComponent;
 
-  /** The component date-field to be updated for step 3. */
-  @ViewChild('checkField', { static: false })
-  checkField!: SelectFieldComponent;
-
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -371,14 +367,15 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         break;
       case QuestionFieldType.MultiSelect:
       case QuestionFieldType.Select:
-        this.operatorList = this.selectGroup;
+        this.operatorList = this.textGroup;
+        this.firstOperand.type = OperandType.Field;
         this.secondOperand.type = OperandType.String;
         this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
         this.secondOperandDefaultQuestion.possibleAnswers =
           questionSelected.possibleAnswers;
         break;
       case QuestionFieldType.CheckList:
-        this.operatorList = this.selectGroup;
+        this.operatorList = this.textGroup;
         this.firstOperand.type = OperandType.Field;
         this.secondOperand.type = OperandType.String;
         this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;

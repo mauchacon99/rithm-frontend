@@ -32,7 +32,6 @@ import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module'
 import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-field.module';
 import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.module';
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
-import { CheckFieldModule } from 'src/app/shared/fields/check-field/check-field.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
@@ -72,7 +71,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     NumberFieldModule,
     DateFieldModule,
     SelectFieldModule,
-    CheckFieldModule,
     MatTooltipModule,
   ],
 })
