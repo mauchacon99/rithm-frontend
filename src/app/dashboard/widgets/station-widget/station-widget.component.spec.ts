@@ -14,7 +14,7 @@ import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { ErrorWidgetComponent } from '../error-widget/error-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
