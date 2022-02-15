@@ -49,6 +49,9 @@ export class StationGroupElementService {
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
 
+  /** The default offset value for the pending station group animation. */
+  private offset = 0;
+
   /** The Dimensions of the canvas. */
   canvasDimensions: {
     /** The width of the canvas.*/ width: number;
@@ -162,6 +165,8 @@ export class StationGroupElementService {
 
     //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
+    ctx.lineDashOffset =
+      stationGroup.status !== MapItemStatus.Pending ? 0 : -this.offset;
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
@@ -191,6 +196,16 @@ export class StationGroupElementService {
     }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Animate the pending station group on the map.
+   */
+  animatePendingGroup(): void {
+    this.offset++;
+    if (this.offset > 14) {
+      this.offset = 0;
+    }
   }
 
   /**
