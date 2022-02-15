@@ -56,9 +56,7 @@ const TEST_STATIONS_DATA: StationMapData[] = [
   },
 ];
 
-const TEST_STATIONS = TEST_STATIONS_DATA.map(
-  (e) => new StationMapElement(e)
-);
+const TEST_STATIONS = TEST_STATIONS_DATA.map((e) => new StationMapElement(e));
 
 describe('BoundaryMapElement', () => {
   let boundary: BoundaryMapElement;
