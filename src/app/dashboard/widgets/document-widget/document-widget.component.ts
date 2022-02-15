@@ -16,8 +16,8 @@ export class DocumentWidgetComponent implements OnInit {
   /** Document rithmId. */
   @Input() documentRithmId = '';
 
-  /** Document widget. */
-  documentWidget!: DocumentWidget;
+  /** Data to document list for widget. */
+  dataDocumentWidget!: DocumentWidget;
 
   constructor(
     private errorService: ErrorService,
@@ -42,7 +42,7 @@ export class DocumentWidgetComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (documentWidget) => {
-          this.documentWidget = documentWidget;
+          this.dataDocumentWidget = documentWidget;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

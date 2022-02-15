@@ -74,7 +74,6 @@ describe('DocumentWidgetComponent', () => {
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
-
     component.getDocumentWidget(testDocumentRithmId);
     expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
   });
