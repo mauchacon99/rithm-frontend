@@ -34,30 +34,28 @@ export class BoundaryMapElement {
   ) {
     this.minMapPoint = this.getMinMapPoint(stationElements);
     this.maxMapPoint = this.getMaxMapPoint(stationElements);
-    this.minCanvasPoint = this.getMinCanvasPoint(stationElements);
-    this.maxCanvasPoint = this.getMaxCanvasPoint(stationElements);
+    this.minCanvasPoint = this.getMinMapPoint(stationElements);
+    this.maxCanvasPoint = this.getMaxMapPoint(stationElements);
   }
 
   /**
-   * Logic for finding top-left or bottom-right canvas or map points.
+   * Logic for finding top-left or bottom-right map points.
    *
    * @param stations The array of stations to check.
-   * @param pointType A mapPoint or a canvasPoint.
    * @param isMax Is the point the top-left corner of the map or the bottom-right? Bottom-right is the max.
    * @returns An object with the points.
    */
-  private getEdgePoint(
+  private getEdgeMapPoint(
     stations: StationMapElement[],
-    pointType: 'mapPoint' | 'canvasPoint',
     isMax: boolean
   ): Point {
     //An array of all station y coords in order from top to bottom.
     const orderedYPoints = stations
-      .map((station) => station[pointType].y)
+      .map((station) => station.mapPoint.y)
       .sort((a, b) => a - b);
     //An array of all station x coords in order from left to right.
     const orderedXPoints = stations
-      .map((station) => station[pointType].x)
+      .map((station) => station.mapPoint.x)
       .sort((a, b) => a - b);
 
     /* If isMax = true, set X to the last x coord in the array plus the width of a station, or the rightmost station.
@@ -84,7 +82,7 @@ export class BoundaryMapElement {
    * @returns A point.
    */
   private getMinMapPoint(stations: StationMapElement[]): Point {
-    return this.getEdgePoint(stations, 'mapPoint', false);
+    return this.getEdgeMapPoint(stations, false);
   }
 
   /**
@@ -94,43 +92,17 @@ export class BoundaryMapElement {
    * @returns A point.
    */
   private getMaxMapPoint(stations: StationMapElement[]): Point {
-    return this.getEdgePoint(stations, 'mapPoint', true);
+    return this.getEdgeMapPoint(stations, true);
   }
 
   /**
-   * Gets the top-left canvasPoint.
+   * Updates the min and max mapPoints.
    *
    * @param stations The array of stations to check.
-   * @returns A point.
    */
-  private getMinCanvasPoint(stations: StationMapElement[]): Point {
-    return this.getEdgePoint(stations, 'canvasPoint', false);
-  }
-
-  /**
-   * Gets the bottom-right canvasPoint.
-   *
-   * @param stations The array of stations to check.
-   * @returns A point.
-   */
-  private getMaxCanvasPoint(stations: StationMapElement[]): Point {
-    return this.getEdgePoint(stations, 'canvasPoint', true);
-  }
-
-  /**
-   * Updates a given pair of points.
-   *
-   * @param stations The array of stations to check.
-   * @param canvasPoint If point type is canvasPoint.
-   */
-  updatePoints(stations: StationMapElement[], canvasPoint: boolean): void {
-    if (canvasPoint) {
-      this.minCanvasPoint = this.getMinCanvasPoint(stations);
-      this.maxCanvasPoint = this.getMaxCanvasPoint(stations);
-    } else {
+  updatePoints(stations: StationMapElement[]): void {
       this.minMapPoint = this.getMinMapPoint(stations);
       this.maxMapPoint = this.getMaxMapPoint(stations);
-    }
   }
 
 }

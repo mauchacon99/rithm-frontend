@@ -214,8 +214,13 @@ export class MapService {
       //Update the connection lines as the stations are updated.
       this.updateConnection(station);
     });
-    //Update the canvas points of the boundary.
-    this.updateBoundary(true);
+
+    //Also update the boundary canvas points.
+    if (this.boundaryElement) {
+      //Update the canvas points of the boundary.
+      this.boundaryElement.minCanvasPoint = this.getCanvasPoint(this.boundaryElement.minMapPoint);
+      this.boundaryElement.maxCanvasPoint = this.getCanvasPoint(this.boundaryElement.maxMapPoint);
+    }
   }
 
   /**
@@ -223,15 +228,6 @@ export class MapService {
    */
   setBoundary(): void {
     this.boundaryElement = new BoundaryMapElement(this.stationElements);
-  }
-
-  /**
-   * Updates the boundary coordinates based on the parameter.
-   *
-   * @param canvasPoint If point type is canvasPoint.
-   */
-  updateBoundary(canvasPoint: boolean): void {
-    this.boundaryElement?.updatePoints(this.stationElements, canvasPoint);
   }
 
   /**
