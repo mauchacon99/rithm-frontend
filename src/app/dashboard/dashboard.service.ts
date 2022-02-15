@@ -8,6 +8,8 @@ import {
   StationRosterMember,
   Document,
   DashboardData,
+  DocumentWidget,
+  QuestionFieldType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -199,10 +201,62 @@ export class DashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
    */
-  deleteOrganizationDashboard(
+  deleteOrganizationDashboard(rithmId: string): Observable<DashboardData> {
+    return this.http.delete<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
+    );
+  }
+
+  /**
+   * Delete personal dashboards.
+   *
+   * @param rithmId The specific dashboard rithmId to delete.
+   * @returns The rithmId of the deleted dashboard.
+   */
+  deletePersonalDashboard(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     rithmId: string
   ): Observable<unknown> {
     return of().pipe(delay(1000));
+  }
+
+  /**
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const response = {
+      documentName: 'Untitled Dashboard',
+      documentRithmId: documentRithmId,
+      questions: [
+        {
+          rithmId: '',
+          prompt: 'Instructions',
+          questionType: QuestionFieldType.Instructions,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: '',
+          },
+        },
+        {
+          rithmId: '',
+          prompt: 'Name your field',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '',
+        },
+      ],
+    };
+    return of(response).pipe(delay(1000));
   }
 }

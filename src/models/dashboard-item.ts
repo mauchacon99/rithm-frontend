@@ -24,4 +24,6 @@ export interface DashboardItem {
   maxItemRows?: number;
   /** Maximum items by cols. */
   maxItemCols?: number;
+  /** Z-index of widget. */
+  layerIndex?: 1 | 2;
 }

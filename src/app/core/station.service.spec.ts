@@ -1060,4 +1060,12 @@ describe('StationService', () => {
     });
     service.updatedFlowButtonText('');
   });
+  it('should update the state of the allow-previous-button button for the station', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    service.updateAllowPreviousButton(stationId, true).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
 });
