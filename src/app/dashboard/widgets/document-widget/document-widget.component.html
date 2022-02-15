@@ -4,18 +4,17 @@
   <div class="mt-3 overflow-auto" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questions of dataDocumentWidget.questions">
       <div *ngIf="questions.value" class="py-3 border-b border-b-secondary-200">
-        <p class="font-semibold">{{questions.value || 'Fieldset name'}}</p>
+        <p class="font-semibold">{{ questions.value }}</p>
         <p class="pt-3">
-          {{questions.answer?.value || "This question don't have answer."}}
+          {{ questions.answer?.value || "This question don't have answer." }}
         </p>
       </div>
     </ng-container>
-    <div class="text-center py-2" *ngIf="
-      !dataDocumentWidget.questions.length
-      || isEmptyQuestions
-    ">
+    <div
+      class="text-center py-2"
+      *ngIf="!dataDocumentWidget.questions.length || isEmptyQuestions"
+    >
       This document, don't have questions.
     </div>
   </div>
-
 </div>
