@@ -621,7 +621,5 @@ describe('DashboardService', () => {
     service.getDocumentWidget(documentRithm).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
-
   });
 });
-
