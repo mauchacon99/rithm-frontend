@@ -235,8 +235,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((answer: DocumentAnswer) => {
+        this.secondOperand.text = answer.value;
         this.secondOperand.value = answer.value;
-        this.secondOperand.type = this.firstOperand.type;
       });
   }
 
@@ -350,27 +350,40 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
           questionSelected.questionType !== QuestionFieldType.Phone
             ? OperandType.String
             : OperandType.Number;
+        this.secondOperand.type = this.firstOperand.type;
         break;
       case QuestionFieldType.LongText:
         this.operatorList = this.contentGroup;
         this.firstOperand.type = OperandType.String;
+        this.secondOperand.type = this.firstOperand.type;
         break;
 
       case QuestionFieldType.Number:
       case QuestionFieldType.Currency:
         this.operatorList = this.numberGroup;
         this.firstOperand.type = OperandType.Number;
+        this.secondOperand.type = this.firstOperand.type;
         break;
       case QuestionFieldType.Date:
         this.operatorList = this.dateGroup;
         this.firstOperand.type = OperandType.Date;
+        this.secondOperand.type = this.firstOperand.type;
         break;
-      case QuestionFieldType.CheckList:
       case QuestionFieldType.MultiSelect:
       case QuestionFieldType.Select:
         this.operatorList = this.selectGroup;
-        this.firstOperand.type = OperandType.Field;
+        this.secondOperand.type = OperandType.String;
         this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+        this.secondOperandDefaultQuestion.possibleAnswers =
+          questionSelected.possibleAnswers;
+        break;
+      case QuestionFieldType.CheckList:
+        this.operatorList = this.selectGroup;
+        this.firstOperand.type = OperandType.Field;
+        this.secondOperand.type = OperandType.String;
+        this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+        this.secondOperandDefaultQuestion.questionType =
+          QuestionFieldType.MultiSelect;
         this.secondOperandDefaultQuestion.possibleAnswers =
           questionSelected.possibleAnswers;
         break;
@@ -403,23 +416,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.dateField?.ngOnInit();
         break;
       case 'select':
+      case 'multiselect':
+      case 'checklist':
         this.selectField?.ngOnInit();
         break;
     }
-    // switch (this.firstOperand.type) {
-    //   case OperandType.String:
-    //     this.textField?.ngOnInit();
-    //     break;
-    //   case OperandType.Number:
-    //     this.numberField?.ngOnInit();
-    //     break;
-    //   case OperandType.Date:
-    //     this.dateField?.ngOnInit();
-    //     break;
-    //   case OperandType.Field:
-    //     this.dateField?.ngOnInit();
-    //     break;
-    // }
   }
 
   /**

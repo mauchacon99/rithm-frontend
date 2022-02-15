@@ -174,7 +174,19 @@
           >
           </app-date-field>
           <app-select-field
-            *ngSwitchCase="'select' || 'multiselect'"
+            *ngSwitchCase="'select'"
+            #selectField
+            [field]="secondOperandDefaultQuestion"
+          >
+          </app-select-field>
+          <app-select-field
+            *ngSwitchCase="'multiselect'"
+            #selectField
+            [field]="secondOperandDefaultQuestion"
+          >
+          </app-select-field>
+          <app-select-field
+            *ngSwitchCase="'checklist'"
             #selectField
             [field]="secondOperandDefaultQuestion"
           >
