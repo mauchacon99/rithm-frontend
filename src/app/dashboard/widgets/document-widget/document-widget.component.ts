@@ -29,10 +29,12 @@ export class DocumentWidgetComponent implements OnInit {
 
   /**
    * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
    */
-  getDocumentWidget(): void {
+  getDocumentWidget(documentRithmId: string): void {
     this.dashboardService
-      .getDocumentWidget()
+      .getDocumentWidget(documentRithmId)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {

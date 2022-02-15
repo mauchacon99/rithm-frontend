@@ -441,23 +441,39 @@ export class MockDashboardService {
   /**
    * Get document widget.
    *
+   * @param documentRithmId Rithm of document.
    * @returns Returns DocumentWidget.
    */
-  getDocumentWidget(): Observable<DocumentWidget> {
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
     const response = {
       documentName: 'Untitled Dashboard',
-      documentRithmId: '8263330A-BCAA-40DB-8C06-D4C111D5C9DA',
+      documentRithmId: 'CDB317AA-A5FE-431D-B003-784A578B3FC2',
       questions: [
         {
-          rithmId: '8263330A-BCAA-40DB-8C06-D4C111D5C9D2',
-          prompt: '',
-          questionType: QuestionFieldType.ShortText,
-          isReadOnly: true,
+          rithmId: '',
+          prompt: 'Instructions',
+          questionType: QuestionFieldType.Instructions,
+          isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
+          answer:{
+            questionRithmId: '',
+            referAttribute: '',
+            value: '',
+          }
         },
-      ],
+        {
+          rithmId: '',
+          prompt: 'Name your field',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '',
+        },
+      ]
     };
     return of(response).pipe(delay(1000));
   }
