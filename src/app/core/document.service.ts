@@ -506,7 +506,7 @@ export class DocumentService {
    * Update each station flow rules.
    *
    * @param flowsLogic Flow logic rules for each station.
-   * @returns Updated station logic flows.
+   * @returns Updated station logic flows rules.
    */
   updateStationFlowLogicRule(flowsLogic: FlowLogicRule[]): Observable<unknown> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

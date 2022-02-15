@@ -128,7 +128,7 @@ export class FlowLogicComponent implements OnInit {
   }
 
   /**
-   * Update each station flow rules.
+   * Update each station flow logic rules.
    */
   private updateStationFlowLogicRule(): void {
     this.documentService

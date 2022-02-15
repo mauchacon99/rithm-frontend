@@ -425,4 +425,21 @@ describe('FlowLogicComponent', () => {
       component.flowLogicRules
     );
   });
+
+  it('should show error message when updates logical flow rules for each station', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'updateStationFlowLogicRule'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['updateStationFlowLogicRule']();
+    expect(displayErrorSpy).toHaveBeenCalled();
+  });
 });

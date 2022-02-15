@@ -1397,8 +1397,8 @@ export class MockDocumentService {
   /**
    * Update each station flow rules.
    *
-   * @param flowsLogic Flow logic rules for each station..
-   * @returns Updated station logic flows.
+   * @param flowsLogic Flow logic rules for each station.
+   * @returns Updated station logic flows rules.
    */
   updateStationFlowLogicRule(flowsLogic: FlowLogicRule[]): Observable<unknown> {
     if (!flowsLogic) {
