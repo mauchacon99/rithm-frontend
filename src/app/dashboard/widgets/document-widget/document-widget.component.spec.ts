@@ -67,7 +67,7 @@ describe('DocumentWidgetComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call method getDocumentWidget', async () => {
+  it('should call method getDocumentWidget', () => {
     const testDocumentRithmId = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
 
     const spyDocumentWidget = spyOn(
