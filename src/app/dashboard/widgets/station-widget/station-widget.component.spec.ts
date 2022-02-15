@@ -339,4 +339,12 @@ describe('StationWidgetComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
   });
+
+  it('should show error-widget in station-widget', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
+  });
 });

@@ -38,17 +38,6 @@ describe('DocumentWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call method getDocumentWidget', () => {
-    const methodGetDocumentWidget = spyOn(
-      TestBed.inject(DashboardService),
-      'getDocumentWidget'
-    ).and.callThrough();
-
-    component.getDocumentWidget();
-
-    expect(methodGetDocumentWidget).toHaveBeenCalled();
-  });
-
   it('should show error if the request getDocumentWidget fail', () => {
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
@@ -76,6 +65,16 @@ describe('DocumentWidgetComponent', () => {
       'getDocumentWidget'
     ).and.callThrough();
     component.getDocumentWidget();
-    expect(spyDocumentWidget).toHaveBeenCalled();
+    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
+  });
+
+  it('should show error-widget in document-widget', () => {
+    component.failedLoadDocument = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
   });
 });

@@ -8,6 +8,7 @@
 </div>
 <app-error-widget
   *ngIf="failedLoadWidget"
+  id="error-load-widget"
   [errorMessage]="'Unable to retrieve station data'"
   (tryAgain)="getStationWidgetDocuments()"
 >
