@@ -218,8 +218,12 @@ export class MapService {
     //Also update the boundary canvas points.
     if (this.boundaryElement) {
       //Update the canvas points of the boundary.
-      this.boundaryElement.minCanvasPoint = this.getCanvasPoint(this.boundaryElement.minMapPoint);
-      this.boundaryElement.maxCanvasPoint = this.getCanvasPoint(this.boundaryElement.maxMapPoint);
+      this.boundaryElement.minCanvasPoint = this.getCanvasPoint(
+        this.boundaryElement.minMapPoint
+      );
+      this.boundaryElement.maxCanvasPoint = this.getCanvasPoint(
+        this.boundaryElement.maxMapPoint
+      );
     }
   }
 

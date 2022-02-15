@@ -1,6 +1,6 @@
-import { STATION_HEIGHT, STATION_WIDTH } from "src/app/map/map-constants";
-import { Point } from "src/models";
-import { StationMapElement } from ".";
+import { STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
+import { Point } from 'src/models';
+import { StationMapElement } from '.';
 
 /**
  * Represents all information about the map boundary box.
@@ -29,9 +29,7 @@ export class BoundaryMapElement {
    *
    * @param stationElements Should contain all the stations in the map.
    */
-  constructor(
-    stationElements: StationMapElement[],
-  ) {
+  constructor(stationElements: StationMapElement[]) {
     this.minMapPoint = this.getMinMapPoint(stationElements);
     this.maxMapPoint = this.getMaxMapPoint(stationElements);
     this.minCanvasPoint = this.getMinMapPoint(stationElements);
@@ -101,8 +99,7 @@ export class BoundaryMapElement {
    * @param stations The array of stations to check.
    */
   updatePoints(stations: StationMapElement[]): void {
-      this.minMapPoint = this.getMinMapPoint(stations);
-      this.maxMapPoint = this.getMaxMapPoint(stations);
+    this.minMapPoint = this.getMinMapPoint(stations);
+    this.maxMapPoint = this.getMaxMapPoint(stations);
   }
-
 }
