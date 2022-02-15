@@ -1315,12 +1315,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Loop through the station group array to check if there is a station group being interacted with.
       for (const stationGroup of this.stationGroups) {
         //Checks whether the station group boundary is being hovered over.
-        stationGroup.checkElementHover(
-          eventContextPoint,
-          eventCanvasPoint,
-          this.context,
-          this.scale
-        );
+        stationGroup.checkElementHover(eventContextPoint, this.context);
 
         //If hovering over the station group boundary or name and MapDragItem should not be Node and Station.
         if (
@@ -1807,17 +1802,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           });
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
-            stationGroup.checkElementHover(
-              eventContextPoint,
-              eventCanvasPoint,
-              this.context,
-              this.scale
-            );
+            stationGroup.checkElementHover(eventContextPoint, this.context);
             //If cursor is over a group boundary or name.
             if (
-              stationGroup.hoverItem ===
-                StationGroupElementHoverItem.Boundary ||
-              stationGroup.hoverItem === StationGroupElementHoverItem.Name
+              stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
             ) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1992,7 +1980,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Check if click was on a station group boundary.
-    this.checkStationGroupClick(contextPoint, point);
+    this.checkStationGroupClick(contextPoint);
   }
 
   /**
@@ -2088,18 +2076,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
-   * @param canvasPoint Calculated canvas position of click which is used to identify position of boundary name.
    */
-  checkStationGroupClick(contextPoint: Point, canvasPoint: Point): void {
+  checkStationGroupClick(contextPoint: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
-        stationGroup.checkElementHover(
-          contextPoint,
-          canvasPoint,
-          this.context,
-          this.scale
-        );
+        stationGroup.checkElementHover(contextPoint, this.context);
         //If MapMode is StationGroupAdd we select the group.
         if (this.mapMode === MapMode.StationGroupAdd) {
           //If the cursor is over the group boundary and the group is not disabled.
@@ -2130,8 +2112,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ) {
           //If map mode is view or build, then should open station group info drawer.
           if (
-            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-            stationGroup.hoverItem === StationGroupElementHoverItem.Name
+            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
           ) {
             //Set this variable to use the information from passed in station group.
             const dataInformationDrawer: StationGroupInfoDrawerData = {
