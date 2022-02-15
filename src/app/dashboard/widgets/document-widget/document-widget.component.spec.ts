@@ -41,7 +41,9 @@ describe('DocumentWidgetComponent', () => {
 
     component.getDocumentWidget();
 
-    expect(methodGetDocumentWidget).toHaveBeenCalledOnceWith(component.documentRithmId);
+    expect(methodGetDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
   });
 
   it('should show error if the request getDocumentWidget fail', () => {
@@ -61,7 +63,9 @@ describe('DocumentWidgetComponent', () => {
 
     component.getDocumentWidget();
 
-    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(component.documentRithmId);
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -71,6 +75,8 @@ describe('DocumentWidgetComponent', () => {
       'getDocumentWidget'
     ).and.callThrough();
     component.getDocumentWidget();
-    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(component.documentRithmId);
+    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
   });
 });
