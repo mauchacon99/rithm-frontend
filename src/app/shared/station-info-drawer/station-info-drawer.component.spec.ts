@@ -4,6 +4,9 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatTabGroupHarness } from '@angular/material/tabs/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import {
@@ -21,6 +24,7 @@ import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
@@ -32,7 +36,6 @@ import { DocumentService } from 'src/app/core/document.service';
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { DocumentComponent } from 'src/app/document/document/document.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -40,6 +43,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
+  let loader: HarnessLoader;
+
   const formBuilder = new FormBuilder();
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
@@ -81,6 +86,7 @@ describe('StationInfoDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationInfoDrawerComponent);
     component = fixture.componentInstance;
+    component.selectedTabIndex = 0;
     component.stationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'Dry Goods & Liquids',
@@ -102,6 +108,7 @@ describe('StationInfoDrawerComponent', () => {
     };
     component.stationRithmId = stationId;
     fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
   it('should create', () => {
@@ -509,10 +516,22 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  xit('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', () => {
+  xit('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', async () => {
     component.stationLoading = false;
+    fixture.detectChanges();
+
+    const tabGroups = await loader.getAllHarnesses(
+      MatTabGroupHarness.with({
+        selectedTabLabel: 'tab-station-info',
+      })
+    );
+    expect(tabGroups.length).toBe(1);
+
+    const tabGroup = await loader.getHarness(MatTabGroupHarness);
+    const tabs = await tabGroup.getTabs();
+    expect(tabs.length).toBe(3);
+
     component.allowAllOrgLoading = true;
-    component.selectedTabIndex = 2;
     component.updateAllOrgWorkersStation();
     fixture.detectChanges();
     expect(component.allowAllOrgLoading).toBe(true);

@@ -10,7 +10,7 @@
   *ngIf="!stationLoading"
   [selectedIndex]="selectedTabIndex"
 >
-  <mat-tab label="tab-station-info">
+  <mat-tab label="tab-station-info" aria-label="tab-station-info">
     <ng-template mat-tab-label>
       <i class="fas fa-cog fa-lg"></i>
     </ng-template>
@@ -175,7 +175,7 @@
     </ng-template>
   </mat-tab>
 
-  <mat-tab label="tab-document-info">
+  <mat-tab label="tab-document-info" aria-label="tab-document-info">
     <ng-template mat-tab-label>
       <i class="fas fa-file fa-lg"></i>
     </ng-template>
@@ -252,7 +252,7 @@
     </ng-template>
   </mat-tab>
 
-  <mat-tab label="tab-owner-info">
+  <mat-tab label="tab-owner-info" aria-label="tab-owner-info">
     <ng-template mat-tab-label>
       <i class="fas fa-users fa-lg"></i>
     </ng-template>

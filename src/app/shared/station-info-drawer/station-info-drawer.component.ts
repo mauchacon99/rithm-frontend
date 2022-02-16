@@ -327,10 +327,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
-              this.allowAllOrgLoading = false;
-              this.lastUpdatedLoading = false;
             }
             this.stationLoading = false;
+            this.allowAllOrgLoading = false;
+            this.lastUpdatedLoading = false;
           },
           // eslint-disable-next-line
           error: (error: any) => {
