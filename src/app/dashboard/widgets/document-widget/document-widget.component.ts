@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { DocumentWidget } from 'src/models';
 
 /**
  * Component for list field the document how widget.
@@ -12,10 +16,51 @@ export class DocumentWidgetComponent implements OnInit {
   /** Document rithmId. */
   @Input() documentRithmId = '';
 
+  /** Data to document list for widget. */
+  dataDocumentWidget!: DocumentWidget;
+
+  /** Loading document widget. */
+  isLoading = false;
+
+  /** Show error if get documentWidget fail. */
+  failedLoadWidget = false;
+
+  constructor(
+    private errorService: ErrorService,
+    private dashboardService: DashboardService
+  ) {}
+
   /**
    * Initial Method.
    */
   ngOnInit(): void {
     this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
+    this.getDocumentWidget();
+  }
+
+  /**
+   * Get document widget.
+   */
+  getDocumentWidget(): void {
+    this.isLoading = true;
+    this.failedLoadWidget = false;
+    this.dashboardService
+      .getDocumentWidget(this.documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentWidget) => {
+          this.dataDocumentWidget = documentWidget;
+          this.isLoading = false;
+          this.failedLoadWidget = false;
+        },
+        error: (error: unknown) => {
+          this.isLoading = false;
+          this.failedLoadWidget = true;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

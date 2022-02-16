@@ -97,4 +97,23 @@ export class OptionsMenuComponent {
         },
       });
   }
+
+  /**
+   * Delete personal dashboard.
+   *
+   * @param rithmId The dashboard rithmId to delete.
+   */
+  deletePersonalDashboard(rithmId: string): void {
+    this.dashboardService
+      .deletePersonalDashboard(rithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
 }

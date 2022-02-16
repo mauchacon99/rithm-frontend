@@ -5,7 +5,7 @@ import { MockMapService } from 'src/mocks';
 import { StationGroupElementService } from './station-group-element.service';
 import { MapService } from './map.service';
 import { Point } from 'src/models';
-import { STATION_GROUP_NAME_TRANSLATE } from './map-constants';
+import { GROUP_CHARACTER_SIZE } from './map-constants';
 
 describe('StationGroupElementService', () => {
   let service: StationGroupElementService;
@@ -37,16 +37,16 @@ describe('StationGroupElementService', () => {
     const pointStart: Point = { x: 10.1, y: -5.1 };
     const pointEnd: Point = { x: 29.0, y: -1.1 };
     const pointExpectX: Point = {
-      x: pointStart.x + STATION_GROUP_NAME_TRANSLATE,
+      x: pointStart.x + GROUP_CHARACTER_SIZE,
       y:
         service.slopeLine(pointStart, pointEnd) *
-          (pointStart.x + STATION_GROUP_NAME_TRANSLATE - pointEnd.x) +
+          (pointStart.x + GROUP_CHARACTER_SIZE - pointEnd.x) +
         pointEnd.y,
     };
     const movedPointInX = service.movePointOnLine(
       pointStart,
       pointEnd,
-      STATION_GROUP_NAME_TRANSLATE
+      GROUP_CHARACTER_SIZE
     );
 
     expect(movedPointInX).toEqual(pointExpectX);
@@ -57,15 +57,15 @@ describe('StationGroupElementService', () => {
     const pointEnd: Point = { x: 29.0, y: -1.1 };
     const pointExpectY: Point = {
       x:
-        (pointStart.y + STATION_GROUP_NAME_TRANSLATE - pointEnd.y) /
+        (pointStart.y + GROUP_CHARACTER_SIZE - pointEnd.y) /
           service.slopeLine(pointStart, pointEnd) +
         pointEnd.x,
-      y: pointStart.y + STATION_GROUP_NAME_TRANSLATE,
+      y: pointStart.y + GROUP_CHARACTER_SIZE,
     };
     const movedPointInY = service.movePointOnLine(
       pointStart,
       pointEnd,
-      STATION_GROUP_NAME_TRANSLATE,
+      GROUP_CHARACTER_SIZE,
       false
     );
 
