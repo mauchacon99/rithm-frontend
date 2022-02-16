@@ -16,7 +16,7 @@ export class MapBoundaryService {
   constructor(private mapService: MapService) {}
 
   /**
-   * Draws a boundary box on the map. Draws any nested flows first through recursion.
+   * Draws a boundary box on the map.
    *
    * @param minBoundaryCoords The minimum boundary coordinates to be used draw boundary box on the map.
    * @param maxBoundaryCoords The maximum boundary coordinates to be used draw boundary box on the map.
