@@ -802,6 +802,44 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * This animates the pending station group line when station is selected.
+   */
+  animatePendingGroup(): void {
+    //Check if there isn't already a loop running, and check if there is a pending group.
+    if (
+      !this.pendingGroupActive &&
+      this.stationGroups.some(
+        (stGroup) => stGroup.status === MapItemStatus.Pending
+      )
+    ) {
+      //Set this.pendingGroupActive to true so that there can be only one animatePendingGroup loop at a time.
+      this.pendingGroupActive = true;
+      //The loop to run on each animation frame.
+      const animateGroup = (): void => {
+        this.stationGroupElementService.animatePendingGroup();
+        //Don't want to overlap the animation from panActive.
+        if (!this.panActive) {
+          this.drawElements();
+        }
+        this.drawElements();
+        if (
+          this.stationGroups.some(
+            (stGroup) => stGroup.status === MapItemStatus.Pending
+          )
+        ) {
+          this.pendingGroupReq = requestAnimationFrame(animateGroup);
+        } else {
+          // This cancels the loop. Ending the animation.
+          cancelAnimationFrame(this.pendingGroupReq as number);
+          this.pendingGroupActive = false;
+        }
+      };
+      //Begin loop.
+      this.pendingGroupReq = requestAnimationFrame(animateGroup);
+    }
+  }
+
+  /**
    * Uses a setInterval to continuously check if the map should be auto panning.
    * Used when outside the auto pan bounding box and dragging a station or node.
    * Used with a fast map drag.
@@ -918,7 +956,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the Boundary box
-      this.drawBoundaryBox();
+      if (this.mapService.boundaryElement) {
+        this.drawBoundaryBox();
+      }
 
       // Draw the stations
       this.stations.forEach((station) => {
@@ -1049,6 +1089,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * boundary overlap otherwise.
    */
   private drawBoundaryBox(): void {
+    if (!this.mapService.boundaryElement) {
+      throw new Error(
+        'Cannot draw boundary, if boundaryElement is not defined.'
+      );
+    }
+
     //Set to width or height depending on which is longer.
     const screenDimension =
       window.innerWidth > window.innerHeight
@@ -1057,26 +1103,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     /* Find corners of map using the min and max canvas points.
     Corners are set using the canvas points of the topmost, leftmost, rightmost and bottommost stations.
-    minMapPoint is the topleft corner of the map. maxMapPoint is the bottom right corner of the map. */
-    const minMapPoint = this.mapService.getMinCanvasPoint();
-    const maxMapPoint = this.mapService.getMaxCanvasPoint();
+    mapMin is the topleft corner of the map. mapMax is the bottom right corner of the map. */
+    const mapMin = this.mapService.boundaryElement.minCanvasPoint;
+    const mapMax = this.mapService.boundaryElement.maxCanvasPoint;
 
-    /* We will draw each line of the box using the minMapPoint and maxMapPoint
+    /* We will draw each line of the box using the mapMin and mapMax
     and then offsetting that using screenDimension and this.boundaryPadding. */
     const leftBoundaryEdge =
-      minMapPoint.x -
+      mapMin.x -
       (screenDimension * this.scale) / 2 +
       this.boundaryPadding.topLeft;
     const topBoundaryEdge =
-      minMapPoint.y -
+      mapMin.y -
       (screenDimension * this.scale) / 2 +
       this.boundaryPadding.topLeft;
     const rightBoundaryEdge =
-      maxMapPoint.x +
+      mapMax.x +
       (screenDimension * this.scale) / 2 -
       this.boundaryPadding.rightBottom;
     const bottomBoundaryEdge =
-      maxMapPoint.y +
+      mapMax.y +
       (screenDimension * this.scale) / 2 -
       this.boundaryPadding.rightBottom;
 
@@ -1191,8 +1237,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     ) {
       for (const station of this.stations) {
         if (station.dragging) {
-          station.mapPoint.x -= xMove;
-          station.mapPoint.y -= yMove;
+          this.panningAllowed(-xMove, true) ? (station.mapPoint.x -= xMove) : 0;
+          this.panningAllowed(-yMove, false)
+            ? (station.mapPoint.y -= yMove)
+            : 0;
         }
       }
     }
@@ -1578,6 +1626,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       }
     });
+
+    //Update the map boundary after stations have been adjusted.
+    this.mapService.updateBoundary();
 
     //Reset properties.
     this.eventStartCoords = DEFAULT_MOUSE_POINT;
@@ -2023,44 +2074,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * This animates the pending station group line when station is selected.
-   */
-  animatePendingGroup(): void {
-    //Check if there isn't already a loop running, and check if there is a pending group.
-    if (
-      !this.pendingGroupActive &&
-      this.stationGroups.some(
-        (stGroup) => stGroup.status === MapItemStatus.Pending
-      )
-    ) {
-      //Set this.pendingGroupActive to true so that there can be only one animatePendingGroup loop at a time.
-      this.pendingGroupActive = true;
-      //The loop to run on each animation frame.
-      const animateGroup = (): void => {
-        this.stationGroupElementService.animatePendingGroup();
-        //Don't want to overlap the animation from panActive.
-        if (!this.panActive) {
-          this.drawElements();
-        }
-        this.drawElements();
-        if (
-          this.stationGroups.some(
-            (stGroup) => stGroup.status === MapItemStatus.Pending
-          )
-        ) {
-          this.pendingGroupReq = requestAnimationFrame(animateGroup);
-        } else {
-          // This cancels the loop. Ending the animation.
-          cancelAnimationFrame(this.pendingGroupReq as number);
-          this.pendingGroupActive = false;
-        }
-      };
-      //Begin loop.
-      this.pendingGroupReq = requestAnimationFrame(animateGroup);
-    }
-  }
-
-  /**
    * Restores the connection line to previous state if something fails while moving current connection line.
    */
   private restoreConnection(): void {
@@ -2142,7 +2155,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setStationGroupStatus(stationGroup);
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
-            this.drawElements();
+            this.animatePendingGroup();
             break;
           }
         } else if (
