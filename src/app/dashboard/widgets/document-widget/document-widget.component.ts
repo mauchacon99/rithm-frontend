@@ -32,10 +32,7 @@ export class DocumentWidgetComponent implements OnInit {
     this.getDocumentWidget();
   }
 
-  /**
-   * Get document widget.
-   *
-   */
+  /** Get document widget. */
   getDocumentWidget(): void {
     this.dashboardService
       .getDocumentWidget(this.documentRithmId)
