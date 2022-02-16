@@ -120,7 +120,7 @@ export class OptionsMenuComponent {
   }
 
   /**
-   * A method to initiate a confirmation popup for either dashboard delete methods.
+   * Initiate a confirmation popup for either dashboard delete methods.
    */
   async confirmDashboardDelete(): Promise<void> {
     await this.popupService.confirm({
