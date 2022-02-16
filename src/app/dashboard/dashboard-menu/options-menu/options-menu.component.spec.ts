@@ -253,7 +253,7 @@ describe('OptionsMenuComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call method deleteOrganizationDashboard', async () => {
+  it('should display a confirmation pop up', async () => {
     const confirmationData = {
       title: 'Delete dashboard?',
       message: 'This cannot be undone!',
