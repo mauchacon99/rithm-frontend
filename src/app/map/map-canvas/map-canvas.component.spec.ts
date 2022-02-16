@@ -43,41 +43,41 @@ describe('MapCanvasComponent', () => {
       isReadOnlyRootStationGroup: true,
       status: 3,
       isChained: false,
-      path: null,
+      path: {},
     },
     {
       boundaryPoints: [
         {
-          x: -164.85872329855573,
-          y: 306.0491896659986,
+          x: -40.858723298555475,
+          y: 513.0491896659987,
         },
         {
-          x: 762.0246289113937,
-          y: 382.1039629583143,
+          x: 886.024628911394,
+          y: 589.1039629583148,
         },
         {
-          x: 937.1147544764376,
-          y: 382.1039629583143,
+          x: 1061.1147544764374,
+          y: 589.1039629583148,
         },
         {
-          x: 937.1147544764376,
-          y: 212.4854038171784,
+          x: 1061.1147544764374,
+          y: 419.48540381717856,
         },
         {
-          x: 794.8540274548395,
-          y: 107.97848512054304,
+          x: 918.8540274548398,
+          y: 314.97848512054316,
         },
         {
-          x: 685.4226989766872,
-          y: 107.97848512054304,
+          x: 809.4226989766875,
+          y: 314.97848512054316,
         },
         {
-          x: 155.77506914243037,
-          y: 134.78916059769034,
+          x: 279.7750691424306,
+          y: 341.78916059769045,
         },
         {
-          x: -164.85872329855573,
-          y: 223.9756933073844,
+          x: -40.858723298555475,
+          y: 430.9756933073845,
         },
       ],
       dragging: false,
@@ -92,7 +92,7 @@ describe('MapCanvasComponent', () => {
       isReadOnlyRootStationGroup: false,
       status: 3,
       isChained: false,
-      path: null,
+      path: {},
     },
     {
       boundaryPoints: [
@@ -133,7 +133,7 @@ describe('MapCanvasComponent', () => {
       isReadOnlyRootStationGroup: false,
       status: 3,
       isChained: false,
-      path: null,
+      path: {},
     },
   ];
 
@@ -401,7 +401,7 @@ describe('MapCanvasComponent', () => {
     component.stationGroups = groups;
     component.stations = updatedStations;
     service.stationGroupElements = groups;
-    const contextPoint = { x: 606, y: 158 };
+    const contextPoint = { x: 902, y: 413 };
     component.checkStationGroupClick(contextPoint);
     expect(setStatusSpy).toHaveBeenCalled();
     expect(groups[1].disabled).toBe(false);
