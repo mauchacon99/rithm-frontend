@@ -6,6 +6,8 @@ import {
   WidgetType,
   DashboardData,
   RoleDashboardMenu,
+  DocumentWidget,
+  QuestionFieldType,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -427,12 +429,62 @@ export class MockDashboardService {
   }
 
   /**
-   * Delete organization dashboard`s.
+   * Delete organization dashboards.
    *
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The dashboard rithmId deleted.
    */
   deleteOrganizationDashboard(rithmId: string): Observable<unknown> {
     return of().pipe(delay(1000));
+  }
+
+  /**
+   * Delete personal dashboards.
+   *
+   * @param rithmId The specific dashboard rithmId to delete.
+   * @returns The dashboard rithmId deleted.
+   */
+  deletePersonalDashboard(rithmId: string): Observable<unknown> {
+    return of().pipe(delay(1000));
+  }
+
+  /**
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const response = {
+      documentName: 'Untitled Dashboard',
+      documentRithmId: 'CDB317AA-A5FE-431D-B003-784A578B3FC2',
+      questions: [
+        {
+          rithmId: '',
+          prompt: 'Instructions',
+          questionType: QuestionFieldType.Instructions,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: '',
+          },
+        },
+        {
+          rithmId: '',
+          prompt: 'Name your field',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '',
+        },
+      ],
+    };
+    return of(response).pipe(delay(1000));
   }
 }

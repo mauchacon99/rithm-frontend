@@ -86,6 +86,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Flag for auto pan checks. While true, a pan loop will continually execute.*/
   private panActive = false;
 
+  /** Flag for auto pan checks. While true, a pan loop will continually execute.*/
+  private pendingGroupActive = false;
+
   /** Track what the next pan velocity is. Pan velocity determines what direction and how fast the map automatically pans. */
   private nextPanVelocity: Point = { x: 0, y: 0 };
 
@@ -102,7 +105,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   currentMousePoint: Point = DEFAULT_MOUSE_POINT;
 
   /** Requested animation frame for raf.*/
-  private myReq?: number;
+  private panReq?: number;
+
+  private pendingGroupReq?: number;
 
   /** The coordinate on the canvas where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
@@ -819,15 +824,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //If we're currently tracking the mouse point and it is outside the auto pan bounding box.
         if (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
           //Loop through again.
-          this.myReq = requestAnimationFrame(step);
+          this.panReq = requestAnimationFrame(step);
         } else {
           //Close loop. Reset Properties.
-          cancelAnimationFrame(this.myReq as number);
+          cancelAnimationFrame(this.panReq as number);
           this.panActive = false;
         }
       };
       //Begin loop.
-      this.myReq = requestAnimationFrame(step);
+      this.panReq = requestAnimationFrame(step);
     }
 
     //If panning is due to a fast drag.
@@ -849,10 +854,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             y: this.nextPanVelocity.y * PAN_DECAY_RATE,
           };
           //Loop through again.
-          this.myReq = requestAnimationFrame(step);
+          this.panReq = requestAnimationFrame(step);
         } else {
           //Close loop. Reset properties.
-          cancelAnimationFrame(this.myReq as number);
+          cancelAnimationFrame(this.panReq as number);
           this.panActive = false;
           this.fastDrag = false;
           this.nextPanVelocity = { x: 0, y: 0 };
@@ -860,7 +865,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       };
       //Begin loop.
-      this.myReq = requestAnimationFrame(step);
+      this.panReq = requestAnimationFrame(step);
     }
 
     //If panning is due to center button being pressed.
@@ -874,15 +879,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //If center button was pressed, centerActive will be set to true, unless it was cancelled or finished.
         if (this.mapService.centerActive$.value) {
           //Loop through again.
-          this.myReq = requestAnimationFrame(step);
+          this.panReq = requestAnimationFrame(step);
         } else {
           //Close loop. Reset properties.
-          cancelAnimationFrame(this.myReq as number);
+          cancelAnimationFrame(this.panReq as number);
           this.panActive = false;
         }
       };
       //Begin loop.
-      this.myReq = requestAnimationFrame(step);
+      this.panReq = requestAnimationFrame(step);
     }
   }
 
@@ -1244,7 +1249,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Check if there is an auto pan loop going on.
     if (this.panActive) {
       //Cancel the loop and reset related properties.
-      cancelAnimationFrame(this.myReq as number);
+      cancelAnimationFrame(this.panReq as number);
       this.panActive = false;
       this.fastDrag = false;
       this.mapService.centerActive$.next(false);
@@ -1310,12 +1315,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Loop through the station group array to check if there is a station group being interacted with.
       for (const stationGroup of this.stationGroups) {
         //Checks whether the station group boundary is being hovered over.
-        stationGroup.checkElementHover(
-          eventContextPoint,
-          eventCanvasPoint,
-          this.context,
-          this.scale
-        );
+        stationGroup.checkElementHover(eventContextPoint, this.context);
 
         //If hovering over the station group boundary or name and MapDragItem should not be Node and Station.
         if (
@@ -1802,17 +1802,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           });
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
-            stationGroup.checkElementHover(
-              eventContextPoint,
-              eventCanvasPoint,
-              this.context,
-              this.scale
-            );
+            stationGroup.checkElementHover(eventContextPoint, this.context);
             //If cursor is over a group boundary or name.
             if (
-              stationGroup.hoverItem ===
-                StationGroupElementHoverItem.Boundary ||
-              stationGroup.hoverItem === StationGroupElementHoverItem.Name
+              stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
             ) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1836,10 +1829,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    /* while panActive is true, don't trigger draw elements,
+    /* while panActive or pendingGroupActive is true, don't trigger draw elements,
     we'll draw with checkAutoPan instead.
     This is to help with performance. Drawing too often creates lag. */
-    if (!this.panActive) {
+    if (!this.panActive && !this.pendingGroupActive) {
       this.drawElements();
     }
   }
@@ -1969,7 +1962,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
-            this.drawElements();
+            this.animatePendingGroup();
           }
           return;
         } else {
@@ -1987,7 +1980,45 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Check if click was on a station group boundary.
-    this.checkStationGroupClick(contextPoint, point);
+    this.checkStationGroupClick(contextPoint);
+  }
+
+  /**
+   * This animates the pending station group line when station is selected.
+   */
+  animatePendingGroup(): void {
+    //Check if there isn't already a loop running, and check if there is a pending group.
+    if (
+      !this.pendingGroupActive &&
+      this.stationGroups.some(
+        (stGroup) => stGroup.status === MapItemStatus.Pending
+      )
+    ) {
+      //Set this.pendingGroupActive to true so that there can be only one animatePendingGroup loop at a time.
+      this.pendingGroupActive = true;
+      //The loop to run on each animation frame.
+      const animateGroup = (): void => {
+        this.stationGroupElementService.animatePendingGroup();
+        //Don't want to overlap the animation from panActive.
+        if (!this.panActive) {
+          this.drawElements();
+        }
+        this.drawElements();
+        if (
+          this.stationGroups.some(
+            (stGroup) => stGroup.status === MapItemStatus.Pending
+          )
+        ) {
+          this.pendingGroupReq = requestAnimationFrame(animateGroup);
+        } else {
+          // This cancels the loop. Ending the animation.
+          cancelAnimationFrame(this.pendingGroupReq as number);
+          this.pendingGroupActive = false;
+        }
+      };
+      //Begin loop.
+      this.pendingGroupReq = requestAnimationFrame(animateGroup);
+    }
   }
 
   /**
@@ -2045,18 +2076,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
-   * @param canvasPoint Calculated canvas position of click which is used to identify position of boundary name.
    */
-  checkStationGroupClick(contextPoint: Point, canvasPoint: Point): void {
+  checkStationGroupClick(contextPoint: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
-        stationGroup.checkElementHover(
-          contextPoint,
-          canvasPoint,
-          this.context,
-          this.scale
-        );
+        stationGroup.checkElementHover(contextPoint, this.context);
         //If MapMode is StationGroupAdd we select the group.
         if (this.mapMode === MapMode.StationGroupAdd) {
           //If the cursor is over the group boundary and the group is not disabled.
@@ -2087,8 +2112,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ) {
           //If map mode is view or build, then should open station group info drawer.
           if (
-            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-            stationGroup.hoverItem === StationGroupElementHoverItem.Name
+            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
           ) {
             //Set this variable to use the information from passed in station group.
             const dataInformationDrawer: StationGroupInfoDrawerData = {
