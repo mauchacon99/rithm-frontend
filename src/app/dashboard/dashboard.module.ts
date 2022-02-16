@@ -28,6 +28,7 @@ import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module'
 import { DocumentModule } from 'src/app/document/document.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { DocumentWidgetComponent } from './widgets/document-widget/document-widget.component';
+import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { DocumentWidgetComponent } from './widgets/document-widget/document-widg
     ExpansionMenuComponent,
     MenuComponent,
     DocumentWidgetComponent,
+    ErrorWidgetComponent,
   ],
   imports: [
     CommonModule,

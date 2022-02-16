@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { throwError } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockDashboardService, MockErrorService } from 'src/mocks';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
+import { MockComponent } from 'ng-mocks';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -10,7 +16,14 @@ describe('DocumentWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentWidgetComponent],
+      declarations: [
+        DocumentWidgetComponent,
+        MockComponent(ErrorWidgetComponent),
+      ],
+      providers: [
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: DashboardService, useClass: MockDashboardService },
+      ],
     }).compileComponents();
   });
 
@@ -23,5 +36,45 @@ describe('DocumentWidgetComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show error if the request getDocumentWidget fail', () => {
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentWidget'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.getDocumentWidget();
+
+    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call method getDocumentWidget', () => {
+    const spyDocumentWidget = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentWidget'
+    ).and.callThrough();
+    component.getDocumentWidget();
+    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
+  });
+
+  it('should show error-widget in document-widget', () => {
+    component.failedLoadDocument = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
   });
 });
