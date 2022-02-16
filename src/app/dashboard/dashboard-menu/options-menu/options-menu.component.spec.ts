@@ -6,7 +6,11 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { of, throwError } from 'rxjs';
 import { Location } from '@angular/common';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDashboardService, MockErrorService } from 'src//mocks';
+import {
+  MockDashboardService,
+  MockErrorService,
+  MockPopupService,
+} from 'src//mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
@@ -14,6 +18,7 @@ import { MenuComponent } from '../menu/menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -47,6 +52,7 @@ describe('OptionsMenuComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
       imports: [
         MatMenuModule,
@@ -180,19 +186,37 @@ describe('OptionsMenuComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call method deleteOrganizationDashboard', () => {
+  it('should call method deleteOrganizationDashboard', async () => {
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const confirmationData = {
+      title: 'Delete dashboard?',
+      message: 'This cannot be undone.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deleteOrganizationDashboard'
     ).and.callThrough();
 
-    component.deleteOrganizationDashboard(rithmId);
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    await component.deleteOrganizationDashboard(rithmId);
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
     expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(rithmId);
   });
 
-  it('should show error if the request deleteOrganizationDashboard fail', () => {
+  it('should show error if the request deleteOrganizationDashboard fail', async () => {
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const confirmationData = {
+      title: 'Delete dashboard?',
+      message: 'This cannot be undone.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deleteOrganizationDashboard'
@@ -202,30 +226,54 @@ describe('OptionsMenuComponent', () => {
       })
     );
 
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
 
-    component.deleteOrganizationDashboard(rithmId);
+    await component.deleteOrganizationDashboard(rithmId);
 
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call method deletePersonalDashboard', () => {
+  it('should call method deletePersonalDashboard', async () => {
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const confirmationData = {
+      title: 'Delete dashboard?',
+      message: 'This cannot be undone.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
     const deleteIndividualDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deletePersonalDashboard'
     ).and.callThrough();
 
-    component.deletePersonalDashboard(rithmId);
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    await component.deletePersonalDashboard(rithmId);
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
     expect(deleteIndividualDashboard).toHaveBeenCalledOnceWith(rithmId);
   });
 
-  it('should show error if the request deletePersonalDashboard fails', () => {
+  it('should show error if the request deletePersonalDashboard fails', async () => {
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const confirmationData = {
+      title: 'Delete dashboard?',
+      message: 'This cannot be undone.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
     const deleteIndividualDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deletePersonalDashboard'
@@ -235,13 +283,19 @@ describe('OptionsMenuComponent', () => {
       })
     );
 
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
 
-    component.deletePersonalDashboard(rithmId);
+    await component.deletePersonalDashboard(rithmId);
 
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
     expect(deleteIndividualDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });

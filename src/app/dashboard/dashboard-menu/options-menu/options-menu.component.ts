@@ -90,7 +90,8 @@ export class OptionsMenuComponent {
     const confirm = await this.popupService.confirm({
       title: 'Delete dashboard?',
       message: 'This cannot be undone.',
-      okButtonText: 'Delete',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
     });
     if (confirm) {
       this.dashboardService
@@ -116,7 +117,8 @@ export class OptionsMenuComponent {
     const confirm = await this.popupService.confirm({
       title: 'Delete dashboard?',
       message: 'This cannot be undone.',
-      okButtonText: 'Delete',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
     });
     //If user confirms.
     if (confirm) {
