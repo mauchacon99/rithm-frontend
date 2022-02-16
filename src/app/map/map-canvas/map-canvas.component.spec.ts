@@ -393,6 +393,10 @@ describe('MapCanvasComponent', () => {
       e.path = path;
     });
     groups[1].hoverItem = StationGroupElementHoverItem.Boundary;
+    component['context'] = component['mapCanvas'].nativeElement.getContext(
+      '2d'
+    ) as CanvasRenderingContext2D;
+    service.registerCanvasContext(component['context']);
     component.mapMode = MapMode.StationGroupAdd;
     component.stationGroups = groups;
     component.stations = updatedStations;
