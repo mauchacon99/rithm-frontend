@@ -129,7 +129,11 @@
                 Users can flow document to previous station
               </p>
             </div>
-            <mat-slide-toggle class="px-2"></mat-slide-toggle>
+            <mat-slide-toggle
+              class="px-2"
+              [(ngModel)]="statusAllowPreviousButton"
+              (ngModelChange)="updateAllowPreviousButton()"
+            ></mat-slide-toggle>
           </div>
         </section>
         <div *ngIf="mapMode === mapModeEnum.Build">
@@ -153,14 +157,10 @@
         </div>
         <div
           class="w-full py-2 px-2 text-center"
-          *ngIf="
-            locallyCreated ||
-            (openedFromMap && editMode && isUserAdminOrOwner) ||
-            (!openedFromMap && editMode) ||
-            (!openedFromMap && isUserAdminOrOwner)
-          "
+          *ngIf="displayDeleteStationButton"
         >
           <button
+            type="button"
             mat-stroked-button
             color="warn"
             class="priority"
@@ -334,32 +334,37 @@
               organization.
             </p>
           </section>
-          <section class="flex justify-between items-center pb-4">
-            <div>
-              <p class="text-secondary-400 pr-2 inline-block">External</p>
-              <i
-                class="fas fa-question-circle fa-2x1 text-secondary-400"
-                matTooltip="Allow anyone outside your organization to work on documents at this station"
-              ></i>
-            </div>
-            <ng-container
-              *ngIf="allowExternalLoading; else slideToggleAllowExt"
-            >
-              <app-loading-indicator
-                id="loading-indicator-allow-external"
-                [inlineText]="'Loading...'"
-              ></app-loading-indicator>
-            </ng-container>
-            <ng-template #slideToggleAllowExt>
-              <div class="pr-2">
-                <mat-slide-toggle
-                  color="accent"
-                  (change)="updateAllowExternalWorkers()"
-                  [(ngModel)]="allowExternal"
-                >
-                </mat-slide-toggle>
+          <section class="pb-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-secondary-400 pr-2 inline-block">External</p>
+                <i
+                  class="fas fa-question-circle fa-2x1 text-secondary-400"
+                  matTooltip="Allow anyone outside your organization to work on documents at this station"
+                ></i>
               </div>
-            </ng-template>
+              <div *ngIf="allowExternalLoading; else slideToggleAllowExt">
+                <app-loading-indicator
+                  id="loading-indicator-allow-external"
+                  [inlineText]="'Loading...'"
+                ></app-loading-indicator>
+              </div>
+              <ng-template #slideToggleAllowExt>
+                <div class="pr-2">
+                  <mat-slide-toggle
+                    color="accent"
+                    (change)="updateAllowExternalWorkers()"
+                    [(ngModel)]="allowExternal"
+                  >
+                  </mat-slide-toggle>
+                </div>
+              </ng-template>
+            </div>
+            <div class="flex justify-end" *ngIf="allowExternalError">
+              <p class="w-8/12 pt-2 text-error-500 text-xs inline-block">
+                Error: Unable to update the allow extenernal workers.
+              </p>
+            </div>
           </section>
           <section class="flex justify-between items-center">
             <div>

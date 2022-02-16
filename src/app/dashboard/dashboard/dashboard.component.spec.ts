@@ -26,7 +26,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { RoleDashboardMenu } from 'src/models';
+import { RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -37,12 +37,6 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const dashboardRithmId = '123-951-753-789';
-  const dashboardData = {
-    rithmId: 'ABC-123-BCA-321',
-    name: 'update Dashboard',
-    widgets: [],
-    type: RoleDashboardMenu.Company,
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -154,42 +148,65 @@ describe('DashboardComponent', () => {
   });
 
   it('should call service to update a personal dashboard', () => {
-    component.viewNewDashboard = true;
-    component.isLoading = false;
-    dashboardData.type = RoleDashboardMenu.Personal;
-    component.dashboardData = dashboardData;
-    component.editMode = true;
-    fixture.detectChanges();
-
+    const dashboardData = {
+      rithmId: 'ABC-123-BCA-321',
+      name: 'update Dashboard',
+      widgets: [],
+      type: RoleDashboardMenu.Personal,
+    };
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
     ).and.callThrough();
+    const spyServiceUpdateDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'updatePersonalDashboard'
+    ).and.callThrough();
+
+    component.viewNewDashboard = true;
+    component.dashboardData = dashboardData;
+    component.isLoading = false;
+    component.editMode = true;
+    fixture.detectChanges();
 
     const btnSave = fixture.nativeElement.querySelector('#save-button');
     expect(btnSave).toBeTruthy();
+    component.dashboardData = dashboardData;
     btnSave.click();
 
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
+    expect(spyServiceUpdateDashboard).toHaveBeenCalledOnceWith(dashboardData);
   });
 
   it('should call service to update a organization dashboard', () => {
+    const dashboardData = {
+      rithmId: 'ABC-123-BCA-321',
+      name: 'update Dashboard',
+      widgets: [],
+      type: RoleDashboardMenu.Company,
+    };
+    const spyMethodUpdateDashboard = spyOn(
+      component,
+      'updateDashboard'
+    ).and.callThrough();
+
+    const spyServiceUpdateDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'updateOrganizationDashboard'
+    ).and.callThrough();
+
     component.viewNewDashboard = true;
     component.isLoading = false;
     component.dashboardData = dashboardData;
     component.editMode = true;
     fixture.detectChanges();
 
-    const spyMethodUpdateDashboard = spyOn(
-      component,
-      'updateDashboard'
-    ).and.callThrough();
-
     const btnSave = fixture.nativeElement.querySelector('#save-button');
     expect(btnSave).toBeTruthy();
     btnSave.click();
 
     expect(spyMethodUpdateDashboard).toHaveBeenCalled();
+    expect(spyServiceUpdateDashboard).toHaveBeenCalledOnceWith(dashboardData);
   });
 
   it('should returns the organization`s dashboard list', () => {
@@ -260,11 +277,43 @@ describe('DashboardComponent', () => {
     });
   });
 
-  it('should called method config Edit Mode and change status draggable and resizable', () => {
-    expect(component.options.draggable?.enabled).toBeFalse();
-    expect(component.options.resizable?.enabled).toBeFalse();
-    component['configEditMode'](true, true);
-    expect(component.options.draggable?.enabled).toBeTrue();
-    expect(component.options.resizable?.enabled).toBeTrue();
+  describe('Expand widget', () => {
+    const dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+
+    it('should expand widget', () => {
+      component.dashboardDataCopy = dashboardData;
+      component.dashboardData = dashboardData;
+      component.toggleExpandWidget(0, true);
+
+      expect(component.dashboardData.widgets[0].rows).toEqual(3);
+      expect(component.dashboardData.widgets[0].layerIndex).toEqual(2);
+    });
+
+    it('should not expand widget', () => {
+      component.dashboardDataCopy = dashboardData;
+      component.dashboardData = dashboardData;
+      component.toggleExpandWidget(0, false);
+
+      expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
+      expect(component.dashboardData).toEqual(component.dashboardDataCopy);
+    });
   });
 });

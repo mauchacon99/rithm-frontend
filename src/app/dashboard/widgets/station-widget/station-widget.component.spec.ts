@@ -18,6 +18,7 @@ import { PopupService } from 'src/app/core/popup.service';
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
+
   const stationRithmId =
     '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
@@ -264,6 +265,22 @@ describe('StationWidgetComponent', () => {
   });
 
   describe('Display detail of the document', () => {
+    it('should expand widget', () => {
+      component.isExpandWidget = false;
+      component.failedLoadWidget = false;
+      component.isDocument = true;
+      component.isLoading = false;
+      fixture.detectChanges();
+      component.expandWidget.subscribe((isExpandWidget) => {
+        expect(isExpandWidget).toBeTrue();
+      });
+
+      const btnExpandWidget =
+        fixture.debugElement.nativeElement.querySelector('#expand-document');
+      expect(btnExpandWidget).toBeTruthy();
+      btnExpandWidget.click();
+    });
+
     it('should show detail of the document', () => {
       const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
       component.isLoading = false;
@@ -299,6 +316,7 @@ describe('StationWidgetComponent', () => {
         fixture.debugElement.nativeElement.querySelector(
           '#return-list-documents'
         );
+      btnReturnDocuments.disabled = false;
       btnReturnDocuments.click();
       component.failedLoadWidget = false;
       component.isLoading = false;
@@ -334,5 +352,16 @@ describe('StationWidgetComponent', () => {
     const noDocsMessage =
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
+  });
+
+  it('should show a gear icon in edit mode', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    const gearIcon =
+      fixture.debugElement.nativeElement.querySelector('#gear-icon');
+    expect(gearIcon).toBeTruthy();
   });
 });

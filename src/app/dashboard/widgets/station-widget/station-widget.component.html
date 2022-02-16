@@ -36,11 +36,11 @@
   <div class="w-full p-2 flex flex-col h-full">
     <!--  Header Container  -->
     <div class="m-2">
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName }}
         </h3>
-        <div *ngIf="dataStationWidget">
+        <div *ngIf="dataStationWidget && !editMode">
           <button
             *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
             mat-stroked-button
@@ -59,6 +59,11 @@
           >
             Document not created!
           </div>
+        </div>
+        <div *ngIf="editMode" id="gear-icon">
+          <button mat-icon-button class="text-secondary-500">
+            <i class="fas fa-cog text-[16px]"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -129,6 +134,7 @@
               mat-icon-button
               data-testid="show-document-widget"
               id="show-document-widget"
+              [disabled]="editMode"
             >
               <i class="fas fa-angle-double-right"></i>
             </button>
@@ -148,7 +154,13 @@
   <!--  Header -->
   <div class="flex justify-between items-center">
     <button
-      [disabled]="documentComponent?.documentLoading || false"
+      [disabled]="
+        documentComponent
+          ? documentComponent.documentLoading === undefined
+            ? true
+            : documentComponent.documentLoading
+          : true
+      "
       mat-icon-button
       (click)="viewDocument('', true)"
       id="return-list-documents"
@@ -156,13 +168,25 @@
     >
       <i
         [ngClass]="{
-          'text-secondary-300': documentComponent?.documentLoading || false
+          'text-secondary-300': documentComponent
+            ? documentComponent.documentLoading === undefined
+              ? true
+              : documentComponent.documentLoading
+            : true
         }"
         class="fas text-secondary-500 fa-arrow-left text-lg"
       ></i>
     </button>
-    <button mat-icon-button id="expand-document" data-testid="expand-document">
-      <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
+    <button
+      mat-icon-button
+      (click)="toggleExpandWidget()"
+      id="expand-document"
+      data-testid="expand-document"
+    >
+      <i
+        [ngClass]="isExpandWidget ? 'fa-compress-alt' : 'fa-expand-alt'"
+        class="fas text-secondary-500 text-lg"
+      ></i>
     </button>
   </div>
   <!--  Document component -->
