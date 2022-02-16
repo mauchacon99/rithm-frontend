@@ -9,11 +9,11 @@ import {
 } from 'src/mocks';
 import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
-import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('StationWidgetComponent', () => {
@@ -26,7 +26,7 @@ describe('StationWidgetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationWidgetComponent,
-        MockComponent(LoadingIndicatorComponent),
+        MockComponent(LoadingWidgetComponent),
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
@@ -213,16 +213,13 @@ describe('StationWidgetComponent', () => {
     it('should be to show loading-indicator', () => {
       component.isLoading = true;
       fixture.detectChanges();
-      const loadingDocs =
-        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const loadingDocs = fixture.debugElement.nativeElement.querySelector(
+        '#app-loading-indicator'
+      );
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
-      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
-      );
 
       expect(loadingDocs).toBeTruthy();
-      expect(loadingIndicator).toBeTruthy();
       expect(showDocs).toBeNull();
     });
 
@@ -234,7 +231,7 @@ describe('StationWidgetComponent', () => {
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
       const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
+        '#app-loading-indicator'
       );
 
       expect(loadingDocs).toBeNull();
