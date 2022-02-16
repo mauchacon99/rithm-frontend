@@ -7,7 +7,7 @@
 </app-error-widget>
 
 <!--List of the questions-->
-<div class="w-full p-2 flex h-full">
+<div class="w-full p-2 flex h-full" *ngIf="!failedLoadDocument">
   <div class="overflow-auto scrollbar h-full w-full" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questions of dataDocumentWidget.questions">
       <div class="py-3 border-b border-b-secondary-200">
