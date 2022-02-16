@@ -98,7 +98,7 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should show error-widget in document-widget', () => {
-    component.failedLoadDocument = true;
+    component.failedLoadWidget = true;
     fixture.detectChanges();
     const errorWidget =
       fixture.debugElement.nativeElement.querySelector('#error-load-widget');
