@@ -50,6 +50,7 @@
         <div *ngIf="editMode" id="gear-icon">
           <button
             mat-icon-button
+            [disabled]="isDrawerOpen && drawerContext === 'stationWidget'"
             (click)="toggleEditStation()"
             id="toggle-edit-station"
             data-testid="toggle-edit-station"

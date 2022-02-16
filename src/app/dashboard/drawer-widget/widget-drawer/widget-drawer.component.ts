@@ -16,7 +16,7 @@ export class WidgetDrawerComponent implements OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Whether the called widget-drawer. */
-  drawerMode: '' | 'stationWidget' = '';
+  drawerMode: 'stationWidget' = 'stationWidget';
 
   constructor(private sidenavDrawerService: SidenavDrawerService) {
     sidenavDrawerService.drawerContext$
@@ -33,11 +33,10 @@ export class WidgetDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  async toggleDrawer(drawerItem: '' | 'stationWidget'): Promise<void> {
+  async toggleDrawer(drawerItem: 'stationWidget'): Promise<void> {
     if (drawerItem === 'stationWidget') {
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
-    this.drawerMode = '';
   }
 
   /**

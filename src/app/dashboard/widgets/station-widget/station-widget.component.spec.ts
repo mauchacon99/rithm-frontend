@@ -362,9 +362,7 @@ describe('StationWidgetComponent', () => {
     component.isDocument = false;
     component.editMode = true;
     fixture.detectChanges();
-    component.toggleDrawer.subscribe((expectStationRithmId) => {
-      expect(expectStationRithmId).toEqual(component.stationRithmId);
-    });
+    spyOn(component.toggleDrawer, 'emit');
     spyOn(component, 'toggleEditStation').and.callThrough();
 
     const btnEdit = fixture.debugElement.nativeElement.querySelector(
@@ -372,7 +370,9 @@ describe('StationWidgetComponent', () => {
     );
 
     expect(btnEdit).toBeTruthy();
+    btnEdit.disabled = false;
     btnEdit.click();
     expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
   });
 });

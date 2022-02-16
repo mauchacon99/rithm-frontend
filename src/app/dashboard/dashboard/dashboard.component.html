@@ -3,7 +3,12 @@
     #drawer
     mode="over"
     [position]="drawerContext === 'menuDashboard' ? 'start' : 'end'"
-    class="w-[300px] md:w-[360px]"
+    [ngClass]="
+      drawerContext === 'menuDashboard'
+        ? 'w-[300px] md:w-[360px]'
+        : 'w-[250px] md:w-[300px]'
+    "
+    class=""
   >
     <app-menu
       *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
@@ -164,7 +169,7 @@
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [stationRithmId]="item.data"
                 [editMode]="editMode"
-                (toggleDrawer)="toggleStationWidgetDrawer($event, index)"
+                (toggleDrawer)="toggleStationWidgetDrawer(item.data, index)"
               >
               </app-station-widget>
               <app-document-widget

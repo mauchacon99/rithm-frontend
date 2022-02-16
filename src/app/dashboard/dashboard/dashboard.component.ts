@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { first, takeUntil } from 'rxjs/operators';
+import { delay, first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
@@ -16,7 +16,7 @@ import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
@@ -179,27 +179,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param drawerItem The information that will be displayed in the side drawer.
    * @param drawerData Data optional of the drawer.
+   * @param drawerData.stationData String of station widget data.
+   * @param drawerData.widgetIndex Number of index of the widget.
    */
   toggleDrawer(
     drawerItem: 'menuDashboard' | 'stationWidget',
-    drawerData = <unknown>null
+    drawerData?: {
+      /** String of station widget data. */
+      stationData: string;
+      /** Number of index of the widget. */
+      widgetIndex: number;
+    }
   ): void {
     if (this.isDrawerOpen) {
       this.sidenavDrawerService.toggleDrawer(this.drawerContext);
+      this.drawer.close().then(() => {
+        this.drawerContext = drawerItem;
+        this.sidenavDrawerService.toggleDrawer(drawerItem, drawerData);
+      });
+    } else {
+      this.drawerContext = drawerItem;
+      this.sidenavDrawerService.toggleDrawer(drawerItem, drawerData);
     }
-    this.drawerContext = drawerItem;
-    this.sidenavDrawerService.toggleDrawer(drawerItem, drawerData);
   }
 
   /**
    * Toggle drawer of the station widget.
    *
-   * @param stationRithmId String of the stationRithmId.
+   * @param stationData String of the data station.
    * @param widgetIndex Number of the position the widget.
    */
-  toggleStationWidgetDrawer(stationRithmId: string, widgetIndex: number): void {
+  toggleStationWidgetDrawer(stationData: string, widgetIndex: number): void {
     this.toggleDrawer('stationWidget', {
-      stationRithmId,
+      stationData,
       widgetIndex,
     });
   }

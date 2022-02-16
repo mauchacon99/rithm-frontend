@@ -27,16 +27,17 @@ describe('StationWidgetDrawerComponent', () => {
   });
 
   it('Should subscribe to sidenavDrawerService.drawerData$', () => {
-    const [stationRithmId, widgetIndex] = [
-      '247cf568-27a4-4968-9338-046ccfee24f3',
+    const [stationData, widgetIndex] = [
+      // eslint-disable-next-line max-len
+      '{"stationRithmId":"21316c62-8a45-4e79-ba58-0927652569cc", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
       1,
     ];
     TestBed.inject(SidenavDrawerService).drawerData$.next({
-      stationRithmId,
+      stationData,
       widgetIndex,
     });
 
-    expect(component.stationRithmId).toEqual(stationRithmId);
+    expect(component.stationData).toEqual(JSON.parse(stationData));
     expect(component.widgetIndex).toEqual(widgetIndex);
   });
 });

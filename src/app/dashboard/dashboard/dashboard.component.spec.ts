@@ -279,31 +279,34 @@ describe('DashboardComponent', () => {
       const spy = spyOn(sidenavDrawer, 'toggleDrawer');
       component.toggleDrawer('menuDashboard');
       expect(spyProperty).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledOnceWith('menuDashboard', null);
+      expect(spy).toHaveBeenCalledOnceWith('menuDashboard', undefined);
     });
 
-    it('should call twice the `toggle` method on the `SidenavService` if `isDrawerOpen` is true', () => {
+    it('should call twice the `toggle` method on the `SidenavService` if `isDrawerOpen` is true', async () => {
       const spyService = spyOn(sidenavDrawer, 'toggleDrawer');
+      spyOn(component.drawer, 'close').and.callThrough();
       const spyProperty = spyOnProperty(
         sidenavDrawer,
         'isDrawerOpen',
         'get'
       ).and.returnValue(true);
-      component.toggleDrawer('menuDashboard');
+      await component.toggleDrawer('menuDashboard');
       expect(spyProperty).toHaveBeenCalled();
-      expect(spyService).toHaveBeenCalledTimes(2);
+      expect(spyService).toHaveBeenCalled();
+      expect(component.drawer.close).toHaveBeenCalled();
     });
 
     it('Should toggle drawer of the station widget', () => {
       spyOn(sidenavDrawer, 'toggleDrawer');
-      const [stationRithmId, widgetIndex] = [
-        '247cf568-27a4-4968-9338-046ccfee24f3',
+      const [stationData, widgetIndex] = [
+        // eslint-disable-next-line max-len
+        '{"stationRithmId":"21316c62-8a45-4e79-ba58-0927652569cc", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
         1,
       ];
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-      component.toggleStationWidgetDrawer(stationRithmId, widgetIndex);
+      component.toggleStationWidgetDrawer(stationData, widgetIndex);
       expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
-        stationRithmId,
+        stationData,
         widgetIndex,
       });
     });

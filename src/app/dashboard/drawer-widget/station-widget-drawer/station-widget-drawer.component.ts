@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { WidgetStation } from 'src/models';
 
 /**
  * Component for Station widget drawer.
@@ -12,8 +13,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./station-widget-drawer.component.scss'],
 })
 export class StationWidgetDrawerComponent implements OnDestroy {
-  /** Station rithmId. */
-  stationRithmId!: string;
+  /** Station data. */
+  stationData!: WidgetStation;
 
   /** Position of the widget. */
   widgetIndex!: number;
@@ -26,13 +27,15 @@ export class StationWidgetDrawerComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const dataDrawer = data as {
-          /** Station rithmId. */
-          stationRithmId: string;
+          /** Station data. */
+          stationData: string;
           /** Position of the widget. */
           widgetIndex: number;
         };
         if (dataDrawer) {
-          this.stationRithmId = dataDrawer.stationRithmId;
+          this.stationData = JSON.parse(
+            dataDrawer.stationData
+          ) as WidgetStation;
           this.widgetIndex = dataDrawer.widgetIndex;
         }
       });
