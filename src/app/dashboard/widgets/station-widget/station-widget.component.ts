@@ -80,6 +80,7 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   getStationWidgetDocuments(): void {
+    this.failedLoadWidget = false;
     this.isLoading = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)

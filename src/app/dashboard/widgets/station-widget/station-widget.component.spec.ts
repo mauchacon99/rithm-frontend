@@ -14,6 +14,7 @@ import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.comp
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -28,6 +29,7 @@ describe('StationWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
+        MockComponent(ErrorWidgetComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -94,22 +96,6 @@ describe('StationWidgetComponent', () => {
     component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
-  });
-
-  it('should try request again  listing documents if fails', () => {
-    component.failedLoadWidget = true;
-    fixture.detectChanges();
-
-    const card =
-      fixture.debugElement.nativeElement.querySelector('#card-error');
-    expect(card).toBeTruthy();
-
-    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
-    const tryAgain =
-      fixture.debugElement.nativeElement.querySelector('#try-again');
-    expect(tryAgain).toBeTruthy();
-    tryAgain.click();
-    expect(methodCalled).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
@@ -360,5 +346,13 @@ describe('StationWidgetComponent', () => {
     const gearIcon =
       fixture.debugElement.nativeElement.querySelector('#gear-icon');
     expect(gearIcon).toBeTruthy();
+  });
+
+  it('should show error-widget in station-widget', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
   });
 });

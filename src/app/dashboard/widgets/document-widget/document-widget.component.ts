@@ -22,6 +22,9 @@ export class DocumentWidgetComponent implements OnInit {
   /** Loading document widget. */
   isLoading = false;
 
+  /** Show error if get documentWidget fail. */
+  failedLoadDocument = false;
+
   constructor(
     private errorService: ErrorService,
     private dashboardService: DashboardService
@@ -40,6 +43,7 @@ export class DocumentWidgetComponent implements OnInit {
    */
   getDocumentWidget(): void {
     this.isLoading = true;
+    this.failedLoadDocument = false;
     this.dashboardService
       .getDocumentWidget(this.documentRithmId)
       .pipe(first())
@@ -47,9 +51,11 @@ export class DocumentWidgetComponent implements OnInit {
         next: (documentWidget) => {
           this.dataDocumentWidget = documentWidget;
           this.isLoading = false;
+          this.failedLoadDocument = false;
         },
         error: (error: unknown) => {
           this.isLoading = false;
+          this.failedLoadDocument = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
