@@ -392,7 +392,6 @@ describe('MapCanvasComponent', () => {
       }
       e.path = path;
     });
-    groups[1].hoverItem = StationGroupElementHoverItem.Boundary;
     component['context'] = component['mapCanvas'].nativeElement.getContext(
       '2d'
     ) as CanvasRenderingContext2D;
@@ -403,6 +402,7 @@ describe('MapCanvasComponent', () => {
     service.stationGroupElements = groups;
     const contextPoint = { x: 902, y: 413 };
     component.checkStationGroupClick(contextPoint);
+    groups[1].hoverItem = StationGroupElementHoverItem.Boundary;
     expect(setStatusSpy).toHaveBeenCalled();
     expect(groups[1].disabled).toBe(false);
     expect(setStationGroupStatusSpy).toHaveBeenCalled();
