@@ -49,7 +49,7 @@ describe('FlowLogicComponent', () => {
   const flowLogicRule = [
     {
       stationRithmId: rithmId,
-      destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+      destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
       flowRule: {
         ruleType: RuleType.And,
         equations: [
