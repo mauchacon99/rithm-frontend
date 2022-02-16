@@ -27,8 +27,6 @@ export class MapSearchComponent {
   /** Search text. */
   searchText = '';
 
-  placeHolder= '';
-
   constructor(
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -39,16 +37,16 @@ export class MapSearchComponent {
       .subscribe((data) => {
         const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer.openedFromSearch) {
-            this.searchText;
+          this.searchText;
         }
       });
   }
 
- /**
-  * Whether the drawer is open.
-  *
-  * @returns True if the drawer is open, false otherwise.
-  */
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
   get isDrawerOpen(): boolean {
     return !!this.sidenavDrawerService.isDrawerOpen;
   }
@@ -77,7 +75,6 @@ export class MapSearchComponent {
         ));
   }
 
-
   /**
    * Clear search box text on click of close icon.
    *
@@ -87,7 +84,6 @@ export class MapSearchComponent {
       this.sidenavDrawerService.closeDrawer();
     }
     this.searchText = '';
-    this.placeHolder = '';
     this.filteredStations = [];
     this.mapService.handleDrawerClose('stationInfo');
   }
@@ -96,13 +92,12 @@ export class MapSearchComponent {
    * Initiate previous search box text on click of arrow icon.
    *
    */
-    returnSearchText(): void {
-      if (this.searchText !== '' || this.searchText.length !== 0) {
-        this.sidenavDrawerService.closeDrawer();
-        this.searchText = this.placeHolder;
-      }
+  returnSearchText(): void {
+    if (this.searchText !== '' || this.searchText.length !== 0) {
+      this.sidenavDrawerService.closeDrawer();
+      this.mapService.handleDrawerClose('stationInfo');
     }
-
+  }
 
   /**
    * Opens the drawer of selected map element.
@@ -125,8 +120,7 @@ export class MapSearchComponent {
     const drawer = document.getElementsByTagName('mat-drawer');
     this.stationService.updatedStationNameText(drawerItem.stationName);
     drawerItem.drawerOpened = true;
-    this.searchText = '';
-    this.filteredStations = [];
+
     //Close any open station option menus.
     this.mapService.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
