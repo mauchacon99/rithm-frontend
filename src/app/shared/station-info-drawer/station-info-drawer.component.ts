@@ -333,7 +333,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
-              this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
+              this.stationInformation.flowButton =
+                stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
             }
             this.stationLoading = false;
