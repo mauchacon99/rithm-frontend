@@ -31,6 +31,9 @@ export class StationWidgetComponent implements OnInit {
   /** Station rithmId. */
   @Input() stationRithmId = '';
 
+  /** Edit mode toggle from dashboard. */
+  @Input() editMode = false;
+
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
 
@@ -55,7 +58,7 @@ export class StationWidgetComponent implements OnInit {
   /** Update document list when a new document is created. */
   reloadDocumentList = false;
 
-  /** Variable to show if error message should be displayed. */
+  /** Variable to show if the error message should be displayed. */
   displayDocumentError = false;
 
   constructor(
