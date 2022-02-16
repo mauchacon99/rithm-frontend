@@ -228,7 +228,7 @@ export class DashboardService {
    */
   getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
     const response = {
-      documentName: 'Untitled Dashboard',
+      documentName: 'Untitled Document',
       documentRithmId: documentRithmId,
       questions: [
         {
