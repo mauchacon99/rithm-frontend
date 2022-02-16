@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService, MockPopupService } from 'src/mocks';
-import { MapItemStatus, MapMode, Point } from 'src/models';
+import { MapItemStatus, MapMode, Point, StationGroupElementHoverItem } from 'src/models';
 import { MapService } from '../map.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapCanvasComponent } from './map-canvas.component';
@@ -387,6 +387,7 @@ describe('MapCanvasComponent', () => {
       }
       e.path = path;
     });
+    groups[1].hoverItem = StationGroupElementHoverItem.Boundary;
     component.mapMode = MapMode.StationGroupAdd;
     component.stationGroups = groups;
     component.stations = updatedStations;
