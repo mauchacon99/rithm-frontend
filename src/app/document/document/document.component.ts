@@ -334,7 +334,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Check Click Outside sub header.
+   * Check click outside sub header.
    *
    * @param clickInside To catch event that verify click comment drawer outside.
    */
