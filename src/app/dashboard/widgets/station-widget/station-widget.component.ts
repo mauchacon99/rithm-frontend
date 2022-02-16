@@ -18,7 +18,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[stationRithmId]',
+  selector: 'app-station-widget[stationRithmId][editMode]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
