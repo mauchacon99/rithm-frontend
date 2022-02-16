@@ -340,6 +340,17 @@ describe('StationWidgetComponent', () => {
     expect(noDocsMessage).toBeFalsy();
   });
 
+  it('should show a gear icon in edit mode', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    const gearIcon =
+      fixture.debugElement.nativeElement.querySelector('#gear-icon');
+    expect(gearIcon).toBeTruthy();
+  });
+
   it('should show error-widget in station-widget', () => {
     component.failedLoadWidget = true;
     fixture.detectChanges();
