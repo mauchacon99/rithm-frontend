@@ -153,7 +153,7 @@ export class FlowLogicComponent implements OnInit {
   async deleteRuleFromStationFlowLogic(): Promise<void> {
     await this.popupService.confirm({
       title: 'Remove Rule',
-      message: `Are you sure you want to remove the selected rule from this logic flow?`,
+      message: `Are you sure to remove the selected rule from this station?`,
       okButtonText: 'Remove',
     });
   }

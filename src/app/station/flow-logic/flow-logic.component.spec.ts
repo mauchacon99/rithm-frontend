@@ -397,7 +397,7 @@ describe('FlowLogicComponent', () => {
     expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
   });
 
-  it('should call the method that deletes  the rule  after clicking the button with id: delete-rule-button-all ', () => {
+  it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = flowLogicRule;
@@ -417,7 +417,7 @@ describe('FlowLogicComponent', () => {
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 
-  it('should call the method that deletes the rule  after clicking the button with id: delete-rule-button-any ', () => {
+  it('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
@@ -462,7 +462,7 @@ describe('FlowLogicComponent', () => {
   it('should open confirmation popup when call the method that deletes the rule', () => {
     const dataToConfirmPopup = {
       title: 'Remove Rule',
-      message: `Are you sure you want to remove the selected rule from this logic flow?`,
+      message: `Are you sure to remove the selected rule from this station?`,
       okButtonText: 'Remove',
     };
     const popUpConfirmSpy = spyOn(
