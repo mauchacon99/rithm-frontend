@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -609,20 +609,12 @@ export class StationService {
     stationRithmId: string,
     allowPreviousButton: boolean
   ): Observable<boolean> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update the current status for this.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StandardBooleanJSON = {
-        data: allowPreviousButton,
-      };
-      return of(expectedResponse.data).pipe(delay(1000));
-    }
+    const standardBody: StandardBooleanJSON = { data: allowPreviousButton };
+    return this.http
+      .put<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-previous-button?rithmId=${stationRithmId}`,
+        standardBody
+      )
+      .pipe(map((response) => response.data));
   }
 }
