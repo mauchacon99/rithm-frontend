@@ -1,5 +1,20 @@
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoading"
+  id="app-loading-indicator"
+></app-loading-widget>
+
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="failedLoadWidget"
+  id="error-load-widget"
+  [errorMessage]="'Unable to retrieve document data'"
+  (tryAgain)="getDocumentWidget()"
+>
+</app-error-widget>
+
 <!--List of the questions-->
-<div class="w-full p-2 flex h-full">
+<div class="w-full p-2 flex h-full" *ngIf="!failedLoadWidget && !isLoading">
   <div class="overflow-auto scrollbar h-full w-full" *ngIf="dataDocumentWidget">
     <ng-container *ngFor="let questionList of dataDocumentWidget.questions">
       <ng-container *ngFor="let questions of questionList.questions">

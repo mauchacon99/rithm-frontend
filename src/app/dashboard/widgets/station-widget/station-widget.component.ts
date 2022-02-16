@@ -18,7 +18,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[stationRithmId]',
+  selector: 'app-station-widget[stationRithmId][editMode]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -80,6 +80,7 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   getStationWidgetDocuments(): void {
+    this.failedLoadWidget = false;
     this.isLoading = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
