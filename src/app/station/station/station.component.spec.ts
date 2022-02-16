@@ -320,41 +320,37 @@ describe('StationComponent', () => {
       'tabSelectedChanged'
     ).and.callThrough();
     component.tabSelectedChanged(tabsIndex);
-    expect(component.buttonNameSaved).toBeTrue();
+    expect(component.isFlowLogicTab).toBeTrue();
     expect(spyTabsChange).toHaveBeenCalledWith(tabsIndex);
   });
 
   it('should call the method that returns new flow logic rules.', () => {
-    const stationFlowLogic: FlowLogicRule[] = [
-      {
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
-              },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
+    const stationFlowLogic: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRule: {
+        ruleType: RuleType.Or,
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              value: 'birthday',
             },
-          ],
-          subRules: [],
-        },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              value: '5/27/1982',
+            },
+          },
+        ],
+        subRules: [],
       },
-    ];
+    };
     const spyNewRulesStation = spyOn(
       component,
-      'newRulesStation'
+      'addFlowLogicRule'
     ).and.callThrough();
-    expect(component.flowLogicRules).toHaveSize(0);
-    component.newRulesStation(stationFlowLogic);
-    expect(component.flowLogicRules).toHaveSize(1);
+    component.addFlowLogicRule(stationFlowLogic);
     expect(spyNewRulesStation).toHaveBeenCalledWith(stationFlowLogic);
   });
 });

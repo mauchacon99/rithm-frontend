@@ -27,7 +27,7 @@ export class FlowLogicComponent implements OnInit {
   @Input() rithmId = '';
 
   /** The list the new Rules to save. */
-  @Output() newRulesFlowLogic = new EventEmitter<FlowLogicRule[]>();
+  @Output() newRulesFlowLogic = new EventEmitter<FlowLogicRule>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -75,13 +75,13 @@ export class FlowLogicComponent implements OnInit {
           if (rule) {
             const flowLogicStation = this.flowLogicRules.find(
               (station) =>
-                station.destinationStationRithmId === connectedStationId
+                station.destinationStationRithmID === connectedStationId
             );
             if (!flowLogicStation) {
               // add a flowLogicRule with this connectedStation to the FlowLogicRule array
               const flowLogic: FlowLogicRule = {
                 stationRithmId: this.rithmId,
-                destinationStationRithmId: connectedStationId,
+                destinationStationRithmID: connectedStationId,
                 flowRule: {
                   ruleType: RuleType.And,
                   equations: [],
@@ -94,6 +94,7 @@ export class FlowLogicComponent implements OnInit {
                 flowLogic.flowRule.subRules.push(rule);
               }
               this.flowLogicRules.push(flowLogic);
+              this.newRulesFlowLogic.emit(flowLogic);
             } else {
               // Update the flowRules if the station exists in the FlowLogicRule array
               if (type === 'all') {
@@ -101,8 +102,8 @@ export class FlowLogicComponent implements OnInit {
               } else {
                 flowLogicStation.flowRule.subRules.push(rule);
               }
+              this.newRulesFlowLogic.emit(flowLogicStation);
             }
-            this.newRulesFlowLogic.emit(this.flowLogicRules);
           }
         });
     }
@@ -144,7 +145,7 @@ export class FlowLogicComponent implements OnInit {
       subRules: [],
     };
     const rule = this.flowLogicRules.find(
-      (station) => station.destinationStationRithmId === connectedStationId
+      (station) => station.destinationStationRithmID === connectedStationId
     )?.flowRule;
     return rule ? rule : defaultRule;
   }

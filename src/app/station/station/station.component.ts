@@ -553,7 +553,17 @@ export class StationComponent
    *
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
-  addFlowLogicRule(flowLogicRule: FlowLogicRule[]): void {
-    this.flowLogicRules = flowLogicRule;
+  addFlowLogicRule(flowLogicRule: FlowLogicRule): void {
+    const flowLogicStation = this.flowLogicRules.findIndex(
+      (flowRule) =>
+        flowRule.destinationStationRithmID ===
+          flowLogicRule.destinationStationRithmID &&
+        flowRule.stationRithmId === flowLogicRule.stationRithmId
+    );
+    if (flowLogicStation >= 0) {
+      this.flowLogicRules[flowLogicStation] = flowLogicRule;
+    } else {
+      this.flowLogicRules.push(flowLogicRule);
+    }
   }
 }

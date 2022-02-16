@@ -171,7 +171,7 @@ describe('FlowLogicComponent', () => {
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
         flowRule: {
           ruleType: RuleType.And,
           equations: [
@@ -204,7 +204,7 @@ describe('FlowLogicComponent', () => {
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
         flowRule: {
           ruleType: RuleType.And,
           equations: [],
@@ -267,7 +267,7 @@ describe('FlowLogicComponent', () => {
       component.flowLogicRules = [
         {
           stationRithmId: rithmId,
-          destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+          destinationStationRithmID: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
           flowRule: {
             ruleType: RuleType.And,
             equations: [],
@@ -279,7 +279,7 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should add a new flowLogicRule with equations if station doesnt exists', async () => {
-      component.flowLogicRules[0].destinationStationRithmId =
+      component.flowLogicRules[0].destinationStationRithmID =
         '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
 
       const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
@@ -300,7 +300,7 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should add a new flowLogicRule with subrules if station doesnt exists', async () => {
-      component.flowLogicRules[0].destinationStationRithmId =
+      component.flowLogicRules[0].destinationStationRithmID =
         '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
       const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
         afterClosed: () => of(ruleToAdd),
@@ -330,7 +330,7 @@ describe('FlowLogicComponent', () => {
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        destinationStationRithmID: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
         flowRule: {
           ruleType: RuleType.And,
           equations: [
@@ -363,7 +363,7 @@ describe('FlowLogicComponent', () => {
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmId: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        destinationStationRithmID: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
         flowRule: {
           ruleType: RuleType.And,
           equations: [
