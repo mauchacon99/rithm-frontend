@@ -35,7 +35,8 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).equations
+                  let rule of getStationFlowRules(station.rithmId).equations;
+                  let id = index
                 "
               >
                 <p
@@ -49,6 +50,10 @@
                 </p>
                 <figure class="flex">
                   <button
+                    attr.data-testid="btn-edit-rule-all-{{
+                      id + station.rithmId
+                    }}"
+                    id="btn-edit-rule-all-{{ id + station.rithmId }}"
                     type="button"
                     mat-icon-button
                     matSuffix
@@ -90,7 +95,8 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).subRules
+                  let rule of getStationFlowRules(station.rithmId).subRules;
+                  let id = index
                 "
               >
                 <p
@@ -104,6 +110,10 @@
                 </p>
                 <figure class="flex">
                   <button
+                    attr.data-testid="btn-edit-rule-any-{{
+                      id + station.rithmId
+                    }}"
+                    id="btn-edit-rule-any-{{ id + station.rithmId }}"
                     type="button"
                     mat-icon-button
                     matSuffix

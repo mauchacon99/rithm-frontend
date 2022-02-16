@@ -46,6 +46,41 @@ describe('FlowLogicComponent', () => {
       name: 'Untitled Station',
     },
   ];
+  const flowLogicRule = [
+    {
+      stationRithmId: rithmId,
+      destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+      flowRule: {
+        ruleType: RuleType.And,
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              value: 'birthday',
+            },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              value: '5/27/1982',
+            },
+          },
+        ],
+        subRules: [
+          {
+            leftOperand: {
+              type: OperandType.Number,
+              value: '102',
+            },
+            operatorType: OperatorType.GreaterOrEqual,
+            rightOperand: {
+              type: OperandType.Number,
+              value: '101',
+            },
+          },
+        ],
+      },
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -441,5 +476,41 @@ describe('FlowLogicComponent', () => {
     ).and.callThrough();
     component['updateStationFlowLogicRule']();
     expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should open the modal after clicking on btn-edit-rule-all to edit the existing rule', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+
+    const spyFunc = spyOn(component, 'openModal').and.callThrough();
+    const index = 0;
+    const stationRithmId = component.nextStations[0].rithmId;
+    const btnEditRuleAll = fixture.nativeElement.querySelector(
+      `#btn-edit-rule-all-${index + stationRithmId}`
+    );
+
+    expect(btnEditRuleAll).toBeTruthy();
+    btnEditRuleAll.click();
+    expect(spyFunc).toHaveBeenCalled();
+  });
+
+  it('should open the modal after clicking on btn-edit-rule-any to edit the existing rule', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+
+    const spyFunc = spyOn(component, 'openModal').and.callThrough();
+    const index = 0;
+    const stationRithmId = component.nextStations[0].rithmId;
+    const btnEditRuleAny = fixture.nativeElement.querySelector(
+      `#btn-edit-rule-any-${index + stationRithmId}`
+    );
+
+    expect(btnEditRuleAny).toBeTruthy();
+    btnEditRuleAny.click();
+    expect(spyFunc).toHaveBeenCalled();
   });
 });
