@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -8,8 +8,6 @@ import {
   StationRosterMember,
   Document,
   DashboardData,
-  DocumentWidget,
-  QuestionFieldType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -217,45 +215,5 @@ export class DashboardService {
     return this.http.delete<DashboardData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
     );
-  }
-
-  /**
-   * Get document widget.
-   *
-   * @param documentRithmId Rithm of document.
-   * @returns Returns DocumentWidget.
-   */
-  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
-    const response = {
-      documentName: 'Untitled Document',
-      documentRithmId: documentRithmId,
-      questions: [
-        {
-          rithmId: '1020-654684304-05060708-090100',
-          prompt: 'Instructions',
-          questionType: QuestionFieldType.Instructions,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-          answer: {
-            questionRithmId: '',
-            referAttribute: '',
-            value: 'Some value.',
-          },
-        },
-        {
-          rithmId: '1020-65sdvsd4-05060708-090trhrth',
-          prompt: 'Name your field',
-          questionType: QuestionFieldType.ShortText,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-          value: '',
-        },
-      ],
-    };
-    return of(response).pipe(delay(1000));
   }
 }
