@@ -1416,7 +1416,7 @@ export class MockDocumentService {
       const stationLogicFlows: FlowLogicRule[] = [
         {
           stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+          destinationStationRithmID: '63d47261-1932-4fcf-82bd-159eb1a7243g',
           flowRule: {
             ruleType: RuleType.Or,
             equations: [

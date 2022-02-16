@@ -769,7 +769,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should make request to save station flow logic', () => {
+  fit('should make request to save station flow logic', () => {
     const parametersBody = flowlogicRule;
     service.saveStationFlowLogic([parametersBody]).subscribe((response) => {
       expect(response).toBeFalsy();
@@ -779,7 +779,7 @@ describe('DocumentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`
     );
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(parametersBody);
+    expect(req.request.body).toEqual([parametersBody]);
 
     req.flush(null);
     httpTestingController.verify();
