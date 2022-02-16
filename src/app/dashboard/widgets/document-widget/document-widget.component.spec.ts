@@ -6,6 +6,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
 import { MockComponent } from 'ng-mocks';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
@@ -18,6 +19,7 @@ describe('DocumentWidgetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         DocumentWidgetComponent,
+        MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
       providers: [
@@ -38,6 +40,19 @@ describe('DocumentWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should call method getDocumentWidget', () => {
+    const methodGetDocumentWidget = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentWidget'
+    ).and.callThrough();
+
+    component.getDocumentWidget();
+
+    expect(methodGetDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
+  });
+
   it('should show error if the request getDocumentWidget fail', () => {
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
@@ -55,7 +70,9 @@ describe('DocumentWidgetComponent', () => {
 
     component.getDocumentWidget();
 
-    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -70,8 +87,18 @@ describe('DocumentWidgetComponent', () => {
     );
   });
 
+  it('should rendered component loading for widget', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator'
+    );
+    expect(loadingIndicator).toBeTruthy();
+  });
+
   it('should show error-widget in document-widget', () => {
-    component.failedLoadDocument = true;
+    component.failedLoadWidget = true;
     fixture.detectChanges();
     const errorWidget =
       fixture.debugElement.nativeElement.querySelector('#error-load-widget');
