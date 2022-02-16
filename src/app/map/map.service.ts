@@ -390,6 +390,10 @@ export class MapService {
 
     //Update the stationElements array.
     this.stationElements.push(newStation);
+    //Update the map boundary.
+    if (this.boundaryElement) {
+      this.boundaryElement.updatePoints(this.stationElements);
+    }
     //Note a change in map data.
     this.mapDataReceived$.next(true);
   }
