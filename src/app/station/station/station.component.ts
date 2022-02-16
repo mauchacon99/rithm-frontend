@@ -315,9 +315,7 @@ export class StationComponent
               stationInfo.instructions
             );
           }
-          this.stationInformation.flowButton = stationInfo.flowButton
-            ? stationInfo.flowButton
-            : 'Flow';
+          this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.flowButtonName = this.stationInformation.flowButton;
           this.stationLoading = false;
         },
