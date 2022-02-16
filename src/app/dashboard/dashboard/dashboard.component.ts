@@ -204,6 +204,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.configEditMode();
       }
     } else {
+      this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
       this.editMode = true;
       this.configEditMode();
     }

@@ -2,8 +2,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { first } from 'rxjs';
@@ -23,7 +25,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class StationWidgetComponent implements OnInit {
+export class StationWidgetComponent implements OnInit, OnChanges {
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
@@ -74,6 +76,17 @@ export class StationWidgetComponent implements OnInit {
   ngOnInit(): void {
     this.stationRithmId = JSON.parse(this.stationRithmId).stationRithmId;
     this.getStationWidgetDocuments();
+  }
+
+  /**
+   * Detect changes of this component.
+   *
+   * @param changes Object of the properties in this component.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.editMode && this.isDocument) {
+      this.viewDocument('', true);
+    }
   }
 
   /**
@@ -138,6 +151,9 @@ export class StationWidgetComponent implements OnInit {
     if (this.reloadDocumentList || reloadDocuments) {
       this.getStationWidgetDocuments();
       this.reloadDocumentList = false;
+      if (this.isExpandWidget) {
+        this.toggleExpandWidget();
+      }
     }
   }
 
