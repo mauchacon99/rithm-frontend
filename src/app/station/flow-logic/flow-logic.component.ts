@@ -130,6 +130,25 @@ export class FlowLogicComponent implements OnInit {
   }
 
   /**
+   * Update each station flow logic rules.
+   */
+  private updateStationFlowLogicRule(): void {
+    this.documentService
+      .updateStationFlowLogicRule(this.flowLogicRules)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.flowRuleError = true;
+          this.flowLogicLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Return the flowRule Object of the currentStation if exist.
    *
    * @param connectedStationId The id of each station connected to the FlowLogicRule.

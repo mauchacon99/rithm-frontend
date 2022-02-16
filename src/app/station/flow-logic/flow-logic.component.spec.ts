@@ -43,6 +43,12 @@ describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
+  const nextStations: ConnectedStationInfo[] = [
+    {
+      rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+      name: 'Untitled Station',
+    },
+  ];
   const flowLogicRule = [
     {
       stationRithmId: rithmId,
@@ -62,14 +68,20 @@ describe('FlowLogicComponent', () => {
             },
           },
         ],
-        subRules: [],
+        subRules: [
+          {
+            leftOperand: {
+              type: OperandType.Number,
+              value: '102',
+            },
+            operatorType: OperatorType.GreaterOrEqual,
+            rightOperand: {
+              type: OperandType.Number,
+              value: '101',
+            },
+          },
+        ],
       },
-    },
-  ];
-  const nextStations: ConnectedStationInfo[] = [
-    {
-      rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
-      name: 'Untitled Station',
     },
   ];
 
@@ -395,6 +407,93 @@ describe('FlowLogicComponent', () => {
     );
 
     expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
+  });
+
+  it('should call the method that updates logical flow rules for each station', () => {
+    component.flowLogicRules = [
+      {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Number,
+                value: '102',
+              },
+              operatorType: OperatorType.GreaterOrEqual,
+              rightOperand: {
+                type: OperandType.Number,
+                value: '101',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    const updateStationFlowLogicRuleSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'updateStationFlowLogicRule'
+    ).and.callThrough();
+    component['updateStationFlowLogicRule']();
+    expect(updateStationFlowLogicRuleSpy).toHaveBeenCalledWith(
+      component.flowLogicRules
+    );
+  });
+
+  it('should show error message when updates logical flow rules for each station', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'updateStationFlowLogicRule'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['updateStationFlowLogicRule']();
+    expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+
+    const spyFunc = spyOn(component, 'openModal').and.callThrough();
+    const index = 0;
+    const stationRithmId = component.nextStations[0].rithmId;
+    const editRuleBtnAll = fixture.nativeElement.querySelector(
+      `#edit-rule-button-all-${index + stationRithmId}`
+    );
+
+    expect(editRuleBtnAll).toBeTruthy();
+    editRuleBtnAll.click();
+    expect(spyFunc).toHaveBeenCalled();
+  });
+
+  it('should open the modal when clicking on edit-rule-button-any to edit the existing rule', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+
+    const spyFunc = spyOn(component, 'openModal').and.callThrough();
+    const index = 0;
+    const stationRithmId = component.nextStations[0].rithmId;
+    const editRuleBtnAny = fixture.nativeElement.querySelector(
+      `#edit-rule-button-any-${index + stationRithmId}`
+    );
+
+    expect(editRuleBtnAny).toBeTruthy();
+    editRuleBtnAny.click();
+    expect(spyFunc).toHaveBeenCalled();
   });
 
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {

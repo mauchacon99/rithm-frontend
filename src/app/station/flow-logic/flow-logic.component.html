@@ -50,10 +50,15 @@
                 </p>
                 <figure class="flex">
                   <button
+                    attr.data-testid="edit-rule-button-all-{{
+                      j + station.rithmId
+                    }}"
+                    id="edit-rule-button-all-{{ j + station.rithmId }}"
                     type="button"
                     mat-icon-button
                     matSuffix
                     matTooltip="Edit current rule"
+                    (click)="openModal('all', station.rithmId)"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
                   </button>
@@ -108,10 +113,15 @@
                 </p>
                 <figure class="flex">
                   <button
+                    attr.data-testid="edit-rule-button-any-{{
+                      k + station.rithmId
+                    }}"
+                    id="edit-rule-button-any-{{ k + station.rithmId }}"
                     type="button"
                     mat-icon-button
                     matSuffix
                     matTooltip="Edit current rule"
+                    (click)="openModal('any', station.rithmId)"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
                   </button>
