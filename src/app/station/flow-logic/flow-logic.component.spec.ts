@@ -397,7 +397,7 @@ describe('FlowLogicComponent', () => {
     expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
   });
 
-  it('should call the method that deletes the rule after clicking the button with id: button-delete-rule ', () => {
+  it('should call the method that deletes  the rule  after clicking the button with id: delete-rule-button-all ', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = flowLogicRule;
@@ -406,12 +406,70 @@ describe('FlowLogicComponent', () => {
       component,
       'deleteRuleFromStationFlowLogic'
     );
+    const { 0: station } = nextStations;
     const btnDelete = fixture.nativeElement.querySelector(
-      '.button-delete-rule'
+      `#delete-rule-button-all-${station.rithmId}-0`
     );
+
     expect(btnDelete).toBeTruthy();
     btnDelete.click();
 
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
+  });
+
+  it('should call the method that deletes the rule  after clicking the button with id: delete-rule-button-any ', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [],
+          subRules: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+        },
+      },
+    ];
+    fixture.detectChanges();
+    const deleteRuleFromStationFlowLogicSpy = spyOn(
+      component,
+      'deleteRuleFromStationFlowLogic'
+    );
+    const { 0: station } = nextStations;
+    const btnDelete = fixture.nativeElement.querySelector(
+      `#delete-rule-button-any-${station.rithmId}-0`
+    );
+
+    expect(btnDelete).toBeTruthy();
+    btnDelete.click();
+
+    expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
+  });
+
+  it('should open confirmation popup when call the method that deletes the rule', () => {
+    const dataToConfirmPopup = {
+      title: 'Remove Rule',
+      message: `Are you sure you want to remove the selected rule from this logic flow?`,
+      okButtonText: 'Remove',
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    component.deleteRuleFromStationFlowLogic();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
 });

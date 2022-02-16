@@ -35,7 +35,8 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).equations
+                  let rule of getStationFlowRules(station.rithmId).equations;
+                  let j = index
                 "
               >
                 <p
@@ -60,8 +61,8 @@
                     type="button"
                     mat-icon-button
                     matSuffix
-                    class="button-delete-rule"
-                    data-testid="button-delete-rule"
+                    id="delete-rule-button-all-{{ station.rithmId }}-{{ j }}"
+                    data-testid="delete-rule-button-all"
                     matTooltip="Remove current rule"
                     (click)="deleteRuleFromStationFlowLogic()"
                   >
@@ -92,7 +93,8 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).subRules
+                  let rule of getStationFlowRules(station.rithmId).subRules;
+                  let k = index
                 "
               >
                 <p
@@ -117,8 +119,8 @@
                     type="button"
                     mat-icon-button
                     matSuffix
-                    class="button-delete-rule"
-                    data-testid="button-delete-rule"
+                    id="delete-rule-button-any-{{ station.rithmId }}-{{ k }}"
+                    data-testid="delete-rule-button-any"
                     matTooltip="Remove current rule"
                     (click)="deleteRuleFromStationFlowLogic()"
                   >
