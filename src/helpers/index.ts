@@ -5,4 +5,5 @@ export * from './station-map-element';
 export * from './preset-field-options';
 export * from './station-group-map-element';
 export * from './station-map-element';
+export * from './boundary-map-element';
 export * from './connection-map-element';
