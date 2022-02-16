@@ -1,11 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService, MockPopupService } from 'src/mocks';
-import {
-  MapItemStatus,
-  MapMode,
-  Point,
-} from 'src/models';
+import { MapItemStatus, MapMode, Point } from 'src/models';
 import { MapService } from '../map.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapCanvasComponent } from './map-canvas.component';
@@ -384,10 +380,7 @@ describe('MapCanvasComponent', () => {
     const UpdatedStations = stations.map((e) => new StationMapElement(e));
     groups.map((e) => {
       const path = new Path2D();
-      path.moveTo(
-        e.boundaryPoints[0].x,
-        e.boundaryPoints[0].y
-      );
+      path.moveTo(e.boundaryPoints[0].x, e.boundaryPoints[0].y);
       e.boundaryPoints = e.boundaryPoints.concat(e.boundaryPoints.splice(0, 1));
       for (const boundaryPoint of e.boundaryPoints) {
         path.lineTo(boundaryPoint.x, boundaryPoint.y);
@@ -427,10 +420,7 @@ describe('MapCanvasComponent', () => {
     const UpdatedStations = stations.map((e) => new StationMapElement(e));
     groups.map((e) => {
       const path = new Path2D();
-      path.moveTo(
-        e.boundaryPoints[0].x,
-        e.boundaryPoints[0].y
-      );
+      path.moveTo(e.boundaryPoints[0].x, e.boundaryPoints[0].y);
       e.boundaryPoints = e.boundaryPoints.concat(e.boundaryPoints.splice(0, 1));
       for (const boundaryPoint of e.boundaryPoints) {
         path.lineTo(boundaryPoint.x, boundaryPoint.y);
