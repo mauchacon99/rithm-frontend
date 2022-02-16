@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { delay, first, takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
@@ -16,7 +16,7 @@ import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
