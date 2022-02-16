@@ -502,13 +502,13 @@ export class DocumentService {
   /**
    * Delete rule from station flow logic.
    *
-   * @param RulesFromStationFlowLogic The flow logic rule to be updated.
+   * @param rulesFromStationFlowLogic The flow logic rule to be updated.
    * @returns Station flow logic.
    */
   deleteRuleFromStationFlowLogic(
-    RulesFromStationFlowLogic: FlowLogicRule[]
+    rulesFromStationFlowLogic: FlowLogicRule[]
   ): Observable<unknown> {
-    if (!RulesFromStationFlowLogic) {
+    if (!rulesFromStationFlowLogic) {
       return throwError(
         () =>
           new HttpErrorResponse({

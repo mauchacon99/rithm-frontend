@@ -397,7 +397,7 @@ describe('FlowLogicComponent', () => {
     expect(ruleObject).toEqual(component.flowLogicRules[0].flowRule);
   });
 
-  it('should to call method deleteRuleFromStationFlowLogic after clicked in button with id: button-delete-rule ', () => {
+  it('should call the method that deletes the rule after clicking the button with id: button-delete-rule ', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = flowLogicRule;

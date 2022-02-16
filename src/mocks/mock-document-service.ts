@@ -1397,13 +1397,13 @@ export class MockDocumentService {
   /**
    * Delete rule from station flow logic.
    *
-   * @param RulesFromStationFlowLogic Delete flow logic rule for current station.
+   * @param rulesFromStationFlowLogic Delete flow logic rule for current station.
    * @returns Station flow logic.
    */
   deleteRuleFromStationFlowLogic(
-    RulesFromStationFlowLogic: FlowLogicRule[]
+    rulesFromStationFlowLogic: FlowLogicRule[]
   ): Observable<unknown> {
-    if (!RulesFromStationFlowLogic) {
+    if (!rulesFromStationFlowLogic) {
       return throwError(
         () =>
           new HttpErrorResponse({
