@@ -377,7 +377,7 @@ describe('MapCanvasComponent', () => {
     const groups = stationGroupAddGroups.map(
       (e) => new StationGroupMapElement(e)
     );
-    const UpdatedStations = stations.map((e) => new StationMapElement(e));
+    const updatedStations = stations.map((e) => new StationMapElement(e));
     groups.map((e) => {
       const path = new Path2D();
       path.moveTo(e.boundaryPoints[0].x, e.boundaryPoints[0].y);
@@ -389,7 +389,7 @@ describe('MapCanvasComponent', () => {
     });
     component.mapMode = MapMode.StationGroupAdd;
     component.stationGroups = groups;
-    component.stations = UpdatedStations;
+    component.stations = updatedStations;
     service.stationGroupElements = groups;
     const contextPoint = { x: 606, y: 158 };
     component.checkStationGroupClick(contextPoint);
@@ -416,7 +416,7 @@ describe('MapCanvasComponent', () => {
     const groups = stationGroupAddGroups.map(
       (e) => new StationGroupMapElement(e)
     );
-    const UpdatedStations = stations.map((e) => new StationMapElement(e));
+    const updatedStations = stations.map((e) => new StationMapElement(e));
     groups.map((e) => {
       const path = new Path2D();
       path.moveTo(e.boundaryPoints[0].x, e.boundaryPoints[0].y);
@@ -429,7 +429,7 @@ describe('MapCanvasComponent', () => {
     });
     component.mapMode = MapMode.StationGroupAdd;
     component.stationGroups = groups;
-    component.stations = UpdatedStations;
+    component.stations = updatedStations;
     service.stationGroupElements = groups;
     const contextPoint = { x: 606, y: 158 };
     component.checkStationGroupClick(contextPoint);
