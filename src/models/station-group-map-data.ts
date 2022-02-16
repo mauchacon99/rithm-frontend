@@ -1,4 +1,4 @@
-import { MapItemStatus } from '.';
+import { MapItemStatus, StationGroupElementHoverItem } from '.';
 
 /**
  * Represents all info about a station group as returned from and to be sent to the API.
@@ -31,4 +31,14 @@ export interface StationGroupMapData {
 
   /** Whether this station group is the implicit, root station group for the whole map. This should not be sent to the API. */
   readonly isReadOnlyRootStationGroup: boolean;
+
+  /** The path of the station group buttons. */
+  pathButtons?: PathButton[];
+}
+
+export interface PathButton {
+  /** The type button is hovering. */
+  typeButton: StationGroupElementHoverItem;
+  /** The path of the station group button. */
+  path: Path2D;
 }
