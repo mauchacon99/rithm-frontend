@@ -6,25 +6,13 @@
   <p class="py-2 truncate">Loading</p>
   <app-loading-indicator></app-loading-indicator>
 </div>
-
-<div *ngIf="failedLoadWidget" class="h-full" id="card-error">
-  <div class="w-full h-full flex items-center justify-center">
-    <div class="w-full text-center">
-      <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
-      <h3 class="text-error-500 truncate">ERROR</h3>
-      <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
-      <button
-        mat-stroked-button
-        color="warn"
-        (click)="getStationWidgetDocuments()"
-        id="try-again"
-        data-testid="try-again"
-      >
-        Try Again
-      </button>
-    </div>
-  </div>
-</div>
+<app-error-widget
+  *ngIf="failedLoadWidget"
+  id="error-load-widget"
+  [errorMessage]="'Unable to retrieve station data'"
+  (tryAgain)="getStationWidgetDocuments()"
+>
+</app-error-widget>
 
 <!-- station widget -->
 <div
