@@ -153,10 +153,9 @@ export class StationComponent
     this.stationService.flowButtonText$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        this.flowButtonName = data;
-        this.stationForm.controls.generalInstructions.setValue(
-          this.flowButtonName
-        );
+        if (this.stationInformation) {
+          this.stationInformation.flowButton = data;
+        }
       });
   }
 
@@ -316,6 +315,10 @@ export class StationComponent
               stationInfo.instructions
             );
           }
+          this.stationInformation.flowButton = stationInfo.flowButton
+            ? stationInfo.flowButton
+            : 'Flow';
+          this.flowButtonName = this.stationInformation.flowButton;
           this.stationLoading = false;
         },
         error: (error: unknown) => {

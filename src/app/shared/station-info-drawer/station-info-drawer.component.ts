@@ -195,7 +195,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.stationService.flowButtonText$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        this.flowButtonName = data;
+        if (this.stationInformation) {
+          this.stationInformation.flowButton = data;
+        }
       });
   }
 
@@ -331,7 +333,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
-              this.flowButtonName = stationInfo.flowButton;
+              this.stationInformation.flowButton = stationInfo.flowButton
+                ? stationInfo.flowButton
+                : 'Flow';
+              this.flowButtonName = this.stationInformation.flowButton;
             }
             this.stationLoading = false;
           },
