@@ -19,6 +19,12 @@ export class DocumentWidgetComponent implements OnInit {
   /** Data to document list for widget. */
   dataDocumentWidget!: DocumentWidget;
 
+  /** Loading document widget. */
+  isLoading = false;
+
+  /** Show error if get documentWidget fail. */
+  failedLoadWidget = false;
+
   constructor(
     private errorService: ErrorService,
     private dashboardService: DashboardService
@@ -32,16 +38,24 @@ export class DocumentWidgetComponent implements OnInit {
     this.getDocumentWidget();
   }
 
-  /** Get document widget. */
+  /**
+   * Get document widget.
+   */
   getDocumentWidget(): void {
+    this.isLoading = true;
+    this.failedLoadWidget = false;
     this.dashboardService
       .getDocumentWidget(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (documentWidget) => {
           this.dataDocumentWidget = documentWidget;
+          this.isLoading = false;
+          this.failedLoadWidget = false;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.failedLoadWidget = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

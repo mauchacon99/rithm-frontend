@@ -5,6 +5,9 @@ import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
+import { MockComponent } from 'ng-mocks';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -14,7 +17,11 @@ describe('DocumentWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentWidgetComponent],
+      declarations: [
+        DocumentWidgetComponent,
+        MockComponent(LoadingWidgetComponent),
+        MockComponent(ErrorWidgetComponent),
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
@@ -78,5 +85,23 @@ describe('DocumentWidgetComponent', () => {
     expect(spyDocumentWidget).toHaveBeenCalledOnceWith(
       component.documentRithmId
     );
+  });
+
+  it('should rendered component loading for widget', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator'
+    );
+    expect(loadingIndicator).toBeTruthy();
+  });
+
+  it('should show error-widget in document-widget', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
   });
 });
