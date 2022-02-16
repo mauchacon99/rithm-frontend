@@ -1395,4 +1395,48 @@ export class MockDocumentService {
       return of(stationFlowLogic).pipe(delay(1000));
     }
   }
+
+  /**
+   * Update each station flow rules.
+   *
+   * @param flowsLogic Flow logic rules for each station.
+   * @returns Updated station logic flows rules.
+   */
+  updateStationFlowLogicRule(flowsLogic: FlowLogicRule[]): Observable<unknown> {
+    if (!flowsLogic) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot be updated flows logic rule.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationLogicFlows: FlowLogicRule[] = [
+        {
+          stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+          flowRule: {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Number,
+                  value: '102',
+                },
+                operatorType: OperatorType.GreaterOrEqual,
+                rightOperand: {
+                  type: OperandType.Number,
+                  value: '101',
+                },
+              },
+            ],
+            subRules: [],
+          },
+        },
+      ];
+      return of().pipe(delay(1000));
+    }
+  }
 }

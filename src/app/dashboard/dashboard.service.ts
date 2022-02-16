@@ -21,7 +21,7 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
   providedIn: 'root',
 })
 export class DashboardService {
-  /** Loading dashboard when generate new dashboard. */
+  /** Loading dashboard when generating new dashboard. */
   isLoadingDashboard$ = new Subject<boolean>();
 
   constructor(private http: HttpClient) {}
@@ -157,7 +157,7 @@ export class DashboardService {
   }
 
   /**
-   * Generates a new dashboard personal.
+   * Generates a new personal dashboard.
    *
    * @returns Returns a new default dashboard.
    */
@@ -196,7 +196,7 @@ export class DashboardService {
   }
 
   /**
-   * Delete organization dashboard`s.
+   * Delete organization dashboards.
    *
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
@@ -213,11 +213,10 @@ export class DashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId of the deleted dashboard.
    */
-  deletePersonalDashboard(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    rithmId: string
-  ): Observable<unknown> {
-    return of().pipe(delay(1000));
+  deletePersonalDashboard(rithmId: string): Observable<unknown> {
+    return this.http.delete<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
+    );
   }
 
   /**
@@ -228,11 +227,11 @@ export class DashboardService {
    */
   getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
     const response = {
-      documentName: 'Untitled Dashboard',
+      documentName: 'Untitled Document',
       documentRithmId: documentRithmId,
       questions: [
         {
-          rithmId: '',
+          rithmId: '1020-654684304-05060708-090100',
           prompt: 'Instructions',
           questionType: QuestionFieldType.Instructions,
           isReadOnly: false,
@@ -242,11 +241,11 @@ export class DashboardService {
           answer: {
             questionRithmId: '',
             referAttribute: '',
-            value: '',
+            value: 'Some value.',
           },
         },
         {
-          rithmId: '',
+          rithmId: '1020-65sdvsd4-05060708-090trhrth',
           prompt: 'Name your field',
           questionType: QuestionFieldType.ShortText,
           isReadOnly: false,

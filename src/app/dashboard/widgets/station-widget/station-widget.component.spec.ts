@@ -9,11 +9,12 @@ import {
 } from 'src/mocks';
 import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
-import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -25,9 +26,10 @@ describe('StationWidgetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationWidgetComponent,
-        MockComponent(LoadingIndicatorComponent),
+        MockComponent(LoadingWidgetComponent),
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
+        MockComponent(ErrorWidgetComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -94,22 +96,6 @@ describe('StationWidgetComponent', () => {
     component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
-  });
-
-  it('should try request again  listing documents if fails', () => {
-    component.failedLoadWidget = true;
-    fixture.detectChanges();
-
-    const card =
-      fixture.debugElement.nativeElement.querySelector('#card-error');
-    expect(card).toBeTruthy();
-
-    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
-    const tryAgain =
-      fixture.debugElement.nativeElement.querySelector('#try-again');
-    expect(tryAgain).toBeTruthy();
-    tryAgain.click();
-    expect(methodCalled).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
@@ -227,16 +213,13 @@ describe('StationWidgetComponent', () => {
     it('should be to show loading-indicator', () => {
       component.isLoading = true;
       fixture.detectChanges();
-      const loadingDocs =
-        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const loadingDocs = fixture.debugElement.nativeElement.querySelector(
+        '#app-loading-indicator'
+      );
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
-      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
-      );
 
       expect(loadingDocs).toBeTruthy();
-      expect(loadingIndicator).toBeTruthy();
       expect(showDocs).toBeNull();
     });
 
@@ -248,7 +231,7 @@ describe('StationWidgetComponent', () => {
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
       const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
+        '#app-loading-indicator'
       );
 
       expect(loadingDocs).toBeNull();
@@ -352,5 +335,24 @@ describe('StationWidgetComponent', () => {
     const noDocsMessage =
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
+  });
+
+  it('should show a gear icon in edit mode', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    const gearIcon =
+      fixture.debugElement.nativeElement.querySelector('#gear-icon');
+    expect(gearIcon).toBeTruthy();
+  });
+
+  it('should show error-widget in station-widget', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
   });
 });
