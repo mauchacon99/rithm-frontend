@@ -1,7 +1,11 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService, MockPopupService } from 'src/mocks';
-import { MapItemStatus, MapMode, Point } from 'src/models';
+import {
+  MapItemStatus,
+  MapMode,
+  Point,
+} from 'src/models';
 import { MapService } from '../map.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapCanvasComponent } from './map-canvas.component';
@@ -12,6 +16,177 @@ import { DEFAULT_SCALE } from '../map-constants';
 describe('MapCanvasComponent', () => {
   let component: MapCanvasComponent;
   let fixture: ComponentFixture<MapCanvasComponent>;
+  let service: MapService;
+
+  const stationGroupAddGroups = [
+    {
+      boundaryPoints: [
+        {
+          x: -164.85872329855573,
+          y: 306.0491896659986,
+        },
+        {
+          x: -164.85872329855573,
+          y: 306.0491896659986,
+        },
+      ],
+      dragging: false,
+      disabled: false,
+      selected: false,
+      hoverItem: 'none',
+      rithmId: '6BB87093-B9B9-4A96-9696-5F0CC31382EB',
+      title: 'RithmGroup',
+      organizationRithmId: '7D9854CF-1070-4F4C-81C1-7ACD433A2EE1',
+      stations: ['6D8976EF-F9A2-40E3-957E-CAAAE2AA2DA8'],
+      subStationGroups: ['6BB87093-B9B9-4A96-9696-5F0CC31382EA'],
+      isReadOnlyRootStationGroup: true,
+      status: 3,
+      isChained: false,
+      path: null,
+    },
+    {
+      boundaryPoints: [
+        {
+          x: -164.85872329855573,
+          y: 306.0491896659986,
+        },
+        {
+          x: 762.0246289113937,
+          y: 382.1039629583143,
+        },
+        {
+          x: 937.1147544764376,
+          y: 382.1039629583143,
+        },
+        {
+          x: 937.1147544764376,
+          y: 212.4854038171784,
+        },
+        {
+          x: 794.8540274548395,
+          y: 107.97848512054304,
+        },
+        {
+          x: 685.4226989766872,
+          y: 107.97848512054304,
+        },
+        {
+          x: 155.77506914243037,
+          y: 134.78916059769034,
+        },
+        {
+          x: -164.85872329855573,
+          y: 223.9756933073844,
+        },
+      ],
+      dragging: false,
+      disabled: false,
+      selected: false,
+      hoverItem: 'boundary',
+      rithmId: '6BB87093-B9B9-4A96-9696-5F0CC31382EA',
+      title: 'RithmGroup',
+      organizationRithmId: '7D9854CF-1070-4F4C-81C1-7ACD433A2EE1',
+      stations: ['247cf568-27a4-4968-9338-046ccfee24f3'],
+      subStationGroups: ['24b9accd-5d1c-4292-a723-a3f2ca80ceed'],
+      isReadOnlyRootStationGroup: false,
+      status: 3,
+      isChained: false,
+      path: null,
+    },
+    {
+      boundaryPoints: [
+        {
+          x: 599.5191061213377,
+          y: 310.9735994475154,
+        },
+        {
+          x: 762.0246289113937,
+          y: 371.1608301104991,
+        },
+        {
+          x: 926.1716216286223,
+          y: 371.1608301104991,
+        },
+        {
+          x: 926.1716216286223,
+          y: 212.4854038171784,
+        },
+        {
+          x: 762.0246289113937,
+          y: 212.4854038171784,
+        },
+        {
+          x: 599.5191061213377,
+          y: 228.90010308890126,
+        },
+      ],
+      dragging: false,
+      disabled: false,
+      selected: false,
+      hoverItem: 'none',
+      rithmId: '24b9accd-5d1c-4292-a723-a3f2ca80ceed',
+      title: 'SubRithmFlow',
+      organizationRithmId: '7D9854CF-1070-4F4C-81C1-7ACD433A2EE1',
+      stations: ['6D8976EF-F9A2-40E3-957E-CAAAE2AA2DA8'],
+      subStationGroups: [],
+      isReadOnlyRootStationGroup: false,
+      status: 3,
+      isChained: false,
+      path: null,
+    },
+  ];
+
+  const stationGroupAddStations = [
+    {
+      canvasPoint: {
+        x: 661.5835290871864,
+        y: 196.24212562782168,
+      },
+      dragging: false,
+      hoverItem: 'station',
+      isAddingConnected: false,
+      disabled: false,
+      selected: false,
+      drawerOpened: false,
+      rithmId: 'efe04642-37bf-4264-b303-ccd051ff0a0c',
+      status: 3,
+      stationName: 'Flow Test 4',
+      noOfDocuments: 4,
+      mapPoint: {
+        x: 720,
+        y: -1076,
+      },
+      previousStations: [],
+      nextStations: [],
+      notes: '',
+      isRestricted: true,
+    },
+    {
+      canvasPoint: {
+        x: 1799.6693452599698,
+        y: -176.91870448267747,
+      },
+      dragging: false,
+      hoverItem: 'none',
+      isAddingConnected: false,
+      disabled: false,
+      selected: false,
+      drawerOpened: false,
+      rithmId: '8b3b1a78-d66d-4b8b-a20d-0e925a45f3fe',
+      status: 3,
+      stationName: 'Vanessa FLOW / Candidate review',
+      noOfDocuments: 2,
+      mapPoint: {
+        x: 2800,
+        y: -1758,
+      },
+      previousStations: [],
+      nextStations: [],
+      notes: '',
+      isRestricted: true,
+    },
+  ];
+
   const stationGroups = [
     new StationGroupMapElement({
       isReadOnlyRootStationGroup: false,
@@ -106,6 +281,7 @@ describe('MapCanvasComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
+    service = TestBed.inject(MapService);
   });
 
   beforeEach(() => {
@@ -186,5 +362,155 @@ describe('MapCanvasComponent', () => {
     component.stations.forEach((station, index) => {
       expect(station.mapPoint).toEqual(expectMapPoints[index]);
     });
+  });
+
+  it('should be able to set station group as selected', () => {
+    const setStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setStationGroupStationStatus'
+    );
+    const setStationGroupStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setStationGroupStatus'
+    );
+    const updatePendingGroupStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'updatePendingStationGroup'
+    );
+
+    const groups = stationGroupAddGroups.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    const UpdatedStations = stations.map((e) => new StationMapElement(e));
+    groups.map((e) => {
+      const path = new Path2D();
+      path.moveTo(
+        e.boundaryPoints[0].x,
+        e.boundaryPoints[0].y
+      );
+      e.boundaryPoints = e.boundaryPoints.concat(e.boundaryPoints.splice(0, 1));
+      for (const boundaryPoint of e.boundaryPoints) {
+        path.lineTo(boundaryPoint.x, boundaryPoint.y);
+      }
+      e.path = path;
+    });
+    component.mapMode = MapMode.StationGroupAdd;
+    component.stationGroups = groups;
+    component.stations = UpdatedStations;
+    service.stationGroupElements = groups;
+    const contextPoint = { x: 606, y: 158 };
+    const point = { x: 485, y: 127 };
+    component.checkStationGroupClick(contextPoint, point);
+    expect(setStatusSpy).toHaveBeenCalled();
+    expect(groups[1].disabled).toBe(false);
+    expect(setStationGroupStatusSpy).toHaveBeenCalled();
+    expect(updatePendingGroupStatusSpy).toHaveBeenCalled();
+  });
+
+  it('should not be able to set disabled station group as selected', () => {
+    const setStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setStationGroupStationStatus'
+    );
+    const setStationGroupStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setStationGroupStatus'
+    );
+    const updatePendingGroupStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'updatePendingStationGroup'
+    );
+
+    const groups = stationGroupAddGroups.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    const UpdatedStations = stations.map((e) => new StationMapElement(e));
+    groups.map((e) => {
+      const path = new Path2D();
+      path.moveTo(
+        e.boundaryPoints[0].x,
+        e.boundaryPoints[0].y
+      );
+      e.boundaryPoints = e.boundaryPoints.concat(e.boundaryPoints.splice(0, 1));
+      for (const boundaryPoint of e.boundaryPoints) {
+        path.lineTo(boundaryPoint.x, boundaryPoint.y);
+      }
+      e.path = path;
+      e.disabled = true;
+    });
+    component.mapMode = MapMode.StationGroupAdd;
+    component.stationGroups = groups;
+    component.stations = UpdatedStations;
+    service.stationGroupElements = groups;
+    const contextPoint = { x: 606, y: 158 };
+    const point = { x: 485, y: 127 };
+    component.checkStationGroupClick(contextPoint, point);
+    expect(setStatusSpy).toHaveBeenCalledTimes(0);
+    expect(groups[1].disabled).toBe(true);
+    expect(setStationGroupStatusSpy).toHaveBeenCalledTimes(0);
+    expect(updatePendingGroupStatusSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('should be able to select station to create new group', () => {
+    const setStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setStationGroupStationStatus'
+    );
+    const setStationStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setSelectedStation'
+    );
+    const updatePendingGroupStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'updatePendingStationGroup'
+    );
+
+    const testStations = stationGroupAddStations.map(
+      (e) => new StationMapElement(e)
+    );
+    component.mapMode = MapMode.StationGroupAdd;
+    component['scale'] = 0.547;
+    component.stations = testStations;
+    service.stationElements = testStations;
+    const point = { x: 708, y: 236 };
+    const contextPoint = { x: 885, y: 295 };
+    component['clickEventHandler'](point, contextPoint);
+    expect(setStatusSpy).toHaveBeenCalled();
+    expect(testStations[0].disabled).toBe(false);
+    expect(setStationStatusSpy).toHaveBeenCalledWith(testStations[0]);
+    expect(updatePendingGroupStatusSpy).toHaveBeenCalled();
+  });
+
+  it('should be not be able to select any station as they are disabled', () => {
+    const setStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setStationGroupStationStatus'
+    );
+    const setStationStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'setSelectedStation'
+    );
+    const updatePendingGroupStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'updatePendingStationGroup'
+    );
+
+    const testStations = stationGroupAddStations.map(
+      (e) => new StationMapElement(e)
+    );
+    testStations.map((e) => {
+      e.disabled = true;
+    });
+    component.mapMode = MapMode.StationGroupAdd;
+    component['scale'] = 0.547;
+    component.stations = testStations;
+    service.stationElements = testStations;
+    const point = { x: 708, y: 236 };
+    const contextPoint = { x: 885, y: 295 };
+    component['clickEventHandler'](point, contextPoint);
+    expect(setStatusSpy).toHaveBeenCalledTimes(0);
+    expect(testStations[0].disabled).toBe(true);
+    expect(setStationStatusSpy).toHaveBeenCalledTimes(0);
+    expect(updatePendingGroupStatusSpy).toHaveBeenCalledTimes(0);
   });
 });
