@@ -392,8 +392,7 @@ describe('MapCanvasComponent', () => {
     component.stations = UpdatedStations;
     service.stationGroupElements = groups;
     const contextPoint = { x: 606, y: 158 };
-    const point = { x: 485, y: 127 };
-    component.checkStationGroupClick(contextPoint, point);
+    component.checkStationGroupClick(contextPoint);
     expect(setStatusSpy).toHaveBeenCalled();
     expect(groups[1].disabled).toBe(false);
     expect(setStationGroupStatusSpy).toHaveBeenCalled();
@@ -433,8 +432,7 @@ describe('MapCanvasComponent', () => {
     component.stations = UpdatedStations;
     service.stationGroupElements = groups;
     const contextPoint = { x: 606, y: 158 };
-    const point = { x: 485, y: 127 };
-    component.checkStationGroupClick(contextPoint, point);
+    component.checkStationGroupClick(contextPoint);
     expect(setStatusSpy).toHaveBeenCalledTimes(0);
     expect(groups[1].disabled).toBe(true);
     expect(setStationGroupStatusSpy).toHaveBeenCalledTimes(0);
