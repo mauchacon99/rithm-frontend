@@ -135,7 +135,7 @@ export class MapService {
   /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
   centerStationCount$ = new BehaviorSubject(0);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -838,20 +838,20 @@ export class MapService {
     return Array.isArray(source)
       ? source.map((item) => this.deepCopy(item))
       : source instanceof Date
-      ? new Date(source.getTime())
-      : source && typeof source === 'object'
-      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-          Object.defineProperty(
-            o,
-            prop,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Object.getOwnPropertyDescriptor(source, prop)!
-          );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-          return o;
-        }, Object.create(Object.getPrototypeOf(source)))
-      : (source as T);
+        ? new Date(source.getTime())
+        : source && typeof source === 'object'
+          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+            Object.defineProperty(
+              o,
+              prop,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              Object.getOwnPropertyDescriptor(source, prop)!
+            );
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+            return o;
+          }, Object.create(Object.getPrototypeOf(source)))
+          : (source as T);
   }
 
   /**
@@ -1107,7 +1107,7 @@ export class MapService {
           //current scale to new scale
           (zoomOrigin[coord] / this.mapScale$.value -
             zoomOrigin[coord] / newScale) *
-            translateDirection
+          translateDirection
         );
         //If zooming out.
       } else {
@@ -1116,7 +1116,7 @@ export class MapService {
           //new scale to current scale
           (zoomOrigin[coord] / newScale -
             zoomOrigin[coord] / this.mapScale$.value) *
-            translateDirection
+          translateDirection
         );
       }
     };
@@ -1751,6 +1751,21 @@ export class MapService {
       this.currentCanvasPoint$.next(adjustedCenter);
       //Cancel panning by setting panVelocity to 0,0.
       this.centerPanVelocity$.next({ x: 0, y: 0 });
+    }
+  }
+
+  /**
+   * Undo creation of a new group.
+   */
+  undoCreationStationGroup(): void {
+    if (
+      this.stationElements.some((station) => station.selected) ||
+      this.stationGroupElements.some(
+        (stationGroup) => stationGroup.selected
+      )
+    ) {
+      this.resetSelectedStationGroupStationStatus();
+      this.updatePendingStationGroup();
     }
   }
 }

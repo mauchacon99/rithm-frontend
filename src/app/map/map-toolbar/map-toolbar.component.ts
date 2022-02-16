@@ -95,15 +95,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
-      if (
-        this.mapService.stationElements.some((station) => station.selected) ||
-        this.mapService.stationGroupElements.some(
-          (stationGroup) => stationGroup.selected
-        )
-      ) {
-        this.mapService.resetSelectedStationGroupStationStatus();
-        this.mapService.updatePendingStationGroup();
-      }
+      this.mapService.undoCreationStationGroup();
     }
     // TODO: Implement add station group.
   }
