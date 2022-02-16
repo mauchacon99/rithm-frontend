@@ -84,9 +84,6 @@ export class StationComponent
   /** View new station. */
   viewNewStation = false;
 
-  /** Get flow button name from behaviour subject. */
-  flowButtonName = '';
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -154,7 +151,7 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         if (this.stationInformation) {
-          this.stationInformation.flowButton = data;
+          this.stationInformation.flowButton = data.length ? data : 'Flow';
         }
       });
   }
@@ -316,7 +313,6 @@ export class StationComponent
             );
           }
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
-          this.flowButtonName = this.stationInformation.flowButton;
           this.stationLoading = false;
         },
         error: (error: unknown) => {

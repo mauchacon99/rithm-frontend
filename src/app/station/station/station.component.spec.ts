@@ -301,11 +301,10 @@ describe('StationComponent', () => {
   });
 
   it('should update text of flow button', () => {
-    expect(component.flowButtonName).toBe('');
-    stationInject.flowButtonText$.next('test');
-    expect(component.flowButtonName).toBe('test');
-    expect(component.stationForm.controls.generalInstructions.value).toBe(
-      component.flowButtonName
-    );
+    const flowButtonName = '';
+    expect(flowButtonName).toBe('');
+    stationInject.flowButtonText$.next('Flow');
+    expect(flowButtonName).toBe('');
+    expect(component.stationInformation.flowButton).toBe('Flow');
   });
 });

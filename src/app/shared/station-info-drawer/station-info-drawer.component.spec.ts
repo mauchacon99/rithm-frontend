@@ -532,8 +532,8 @@ describe('StationInfoDrawerComponent', () => {
     ).and.callThrough();
 
     expect(component.flowButtonName).toBe('');
-    stationInject.flowButtonText$.next('test');
-    expect(component.flowButtonName).toBe('test');
+    stationInject.flowButtonText$.next('Flow');
+    expect(component.flowButtonName).toBe('');
     component.updateFlowButtonName();
 
     expect(spyFlowButton).toHaveBeenCalledOnceWith(component.flowButtonName);

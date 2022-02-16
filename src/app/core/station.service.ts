@@ -39,7 +39,7 @@ export class StationService {
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
-  flowButtonText$ = new BehaviorSubject<string>('');
+  flowButtonText$ = new BehaviorSubject<string>('Flow');
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
