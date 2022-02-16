@@ -10,7 +10,7 @@ import {
   MockDashboardService,
   MockErrorService,
   MockPopupService,
-} from 'src//mocks';
+} from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
