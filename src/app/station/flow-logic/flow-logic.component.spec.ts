@@ -478,7 +478,7 @@ describe('FlowLogicComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should open the modal after clicking on btn-edit-rule-all to edit the existing rule', () => {
+  it('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = flowLogicRule;
@@ -487,16 +487,16 @@ describe('FlowLogicComponent', () => {
     const spyFunc = spyOn(component, 'openModal').and.callThrough();
     const index = 0;
     const stationRithmId = component.nextStations[0].rithmId;
-    const btnEditRuleAll = fixture.nativeElement.querySelector(
-      `#btn-edit-rule-all-${index + stationRithmId}`
+    const editRuleBtnAll = fixture.nativeElement.querySelector(
+      `#edit-rule-button-all-${index + stationRithmId}`
     );
 
-    expect(btnEditRuleAll).toBeTruthy();
-    btnEditRuleAll.click();
+    expect(editRuleBtnAll).toBeTruthy();
+    editRuleBtnAll.click();
     expect(spyFunc).toHaveBeenCalled();
   });
 
-  it('should open the modal after clicking on btn-edit-rule-any to edit the existing rule', () => {
+  it('should open the modal when clicking on edit-rule-button-any to edit the existing rule', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = flowLogicRule;
@@ -505,12 +505,12 @@ describe('FlowLogicComponent', () => {
     const spyFunc = spyOn(component, 'openModal').and.callThrough();
     const index = 0;
     const stationRithmId = component.nextStations[0].rithmId;
-    const btnEditRuleAny = fixture.nativeElement.querySelector(
-      `#btn-edit-rule-any-${index + stationRithmId}`
+    const editRuleBtnAny = fixture.nativeElement.querySelector(
+      `#edit-rule-button-any-${index + stationRithmId}`
     );
 
-    expect(btnEditRuleAny).toBeTruthy();
-    btnEditRuleAny.click();
+    expect(editRuleBtnAny).toBeTruthy();
+    editRuleBtnAny.click();
     expect(spyFunc).toHaveBeenCalled();
   });
 });
