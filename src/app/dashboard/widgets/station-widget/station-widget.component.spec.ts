@@ -350,4 +350,15 @@ describe('StationWidgetComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
   });
+
+  it('should show a gear icon in edit mode', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    const gearIcon =
+      fixture.debugElement.nativeElement.querySelector('#gear-icon');
+    expect(gearIcon).toBeTruthy();
+  });
 });

@@ -571,6 +571,20 @@ describe('DashboardService', () => {
     httpTestingController.verify();
   });
 
+  it('should delete a personal dashboard', () => {
+    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    service.deletePersonalDashboard(rithmId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
+    );
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
   it('should call method getDocumentWidget', () => {
     const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const expectedResponse = {

@@ -33,11 +33,11 @@
   <div class="w-full p-2 flex flex-col h-full">
     <!--  Header Container  -->
     <div class="m-2">
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName }}
         </h3>
-        <div *ngIf="dataStationWidget">
+        <div *ngIf="dataStationWidget && !editMode">
           <button
             *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
             mat-stroked-button
@@ -56,6 +56,11 @@
           >
             Document not created!
           </div>
+        </div>
+        <div *ngIf="editMode" id="gear-icon">
+          <button mat-icon-button class="text-secondary-500">
+            <i class="fas fa-cog text-[16px]"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -126,6 +131,7 @@
               mat-icon-button
               data-testid="show-document-widget"
               id="show-document-widget"
+              [disabled]="editMode"
             >
               <i class="fas fa-angle-double-right"></i>
             </button>
