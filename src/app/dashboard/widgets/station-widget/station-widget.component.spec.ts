@@ -370,4 +370,24 @@ describe('StationWidgetComponent', () => {
     expect(component.viewDocument).toHaveBeenCalledOnceWith('', true);
     expect(component.toggleExpandWidget).toHaveBeenCalled();
   });
+
+  it('should click edit button and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+
+    const btnEdit = fixture.debugElement.nativeElement.querySelector(
+      '#toggle-edit-station'
+    );
+
+    expect(btnEdit).toBeTruthy();
+    btnEdit.disabled = false;
+    btnEdit.click();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
 });
