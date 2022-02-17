@@ -8,6 +8,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 
@@ -40,6 +41,7 @@ export class FlowLogicComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService
   ) {}
@@ -162,5 +164,16 @@ export class FlowLogicComponent implements OnInit {
       (station) => station.destinationStationRithmId === connectedStationId
     )?.flowRule;
     return rule ? rule : defaultRule;
+  }
+
+  /**
+   * Delete rule from station flow logic.
+   */
+  async deleteRuleFromStationFlowLogic(): Promise<void> {
+    await this.popupService.confirm({
+      title: 'Remove Rule',
+      message: `Are you sure to remove the selected rule from this station?`,
+      okButtonText: 'Remove',
+    });
   }
 }
