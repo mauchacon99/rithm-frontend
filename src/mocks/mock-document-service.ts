@@ -1231,7 +1231,7 @@ export class MockDocumentService {
    * Get document for station widgets.
    *
    * @param stationRithmId The Specific ID of station.
-   * @param columns The Specific ID of station.
+   * @param columns The Specifics id the questions for show.
    * @returns Returns data station widget.
    */
   getStationWidgetDocuments(
