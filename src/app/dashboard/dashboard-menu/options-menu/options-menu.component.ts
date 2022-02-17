@@ -1,4 +1,10 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { first } from 'rxjs';
@@ -30,6 +36,12 @@ export class OptionsMenuComponent {
 
   /** Show option. */
   @Input() isDashboardListOptions!: boolean;
+
+  /** Dashboard rithmId. */
+  @Input() rithmId!: string;
+
+  /** Update list dashboard.  */
+  @Output() updateDashboardList = new EventEmitter();
 
   /** Allows functionality of MatMenu to toggle the menu open. */
   @ViewChild(MatMenuTrigger)
@@ -82,52 +94,42 @@ export class OptionsMenuComponent {
   }
 
   /**
-   * Delete organization dashboard.
+   * Delete dashboard.
    *
    * @param rithmId The dashboard rithmId to delete.
    */
-  deleteOrganizationDashboard(rithmId: string): void {
-    this.dashboardService
-      .deleteOrganizationDashboard(rithmId)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
+  deleteDashboard(rithmId: string): void {
+    const deleteDashboard$ =
+      this.dashboardRole === this.roleDashboardMenu.Company
+        ? this.dashboardService.deleteOrganizationDashboard(rithmId)
+        : this.dashboardService.deletePersonalDashboard(rithmId);
 
-  /**
-   * Delete personal dashboard.
-   *
-   * @param rithmId The dashboard rithmId to delete.
-   */
-  deletePersonalDashboard(rithmId: string): void {
-    this.dashboardService
-      .deletePersonalDashboard(rithmId)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+    deleteDashboard$.pipe(first()).subscribe({
+      next: () => {
+        this.updateDashboardList.emit();
+        this.router.navigate(['/', 'dashboard']);
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
    * Initiate a confirmation popup for either dashboard delete methods.
    */
   async confirmDashboardDelete(): Promise<void> {
-    await this.popupService.confirm({
+    const response = await this.popupService.confirm({
       title: 'Delete dashboard?',
       message: 'This cannot be undone!',
       okButtonText: 'Yes',
       cancelButtonText: 'No',
+      important: true,
     });
+
+    if (response && this.rithmId) this.deleteDashboard(this.rithmId);
   }
 }
