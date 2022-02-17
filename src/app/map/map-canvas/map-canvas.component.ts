@@ -2032,6 +2032,45 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //Check if click was on a station group boundary.
     this.checkStationGroupClick(contextPoint);
+
+    // Accepted or Cancel a new station group.
+    if (
+      this.mapMode === MapMode.StationGroupAdd &&
+      this.mapService.stationGroupElements.some(
+        (stationGroup) => stationGroup.status === MapItemStatus.Pending
+      )
+    ) {
+      const stationGroupPending = this.mapService.stationGroupElements.find(
+        (stationGroup) => stationGroup.status === MapItemStatus.Pending
+      );
+
+      if (!stationGroupPending) {
+        throw new Error(`There is not any station group with status pending.`);
+      }
+
+      if (
+        stationGroupPending.hoverItem ===
+        StationGroupElementHoverItem.ButtonCancel
+      ) {
+        this.mapService.mapMode$.next(MapMode.Build);
+        if (
+          this.mapService.stationElements.some((station) => station.selected) ||
+          this.mapService.stationGroupElements.some(
+            (stationGroup) => stationGroup.selected
+          )
+        ) {
+          this.mapService.resetSelectedStationGroupStationStatus();
+          this.mapService.updatePendingStationGroup();
+        }
+      } else if (
+        stationGroupPending.hoverItem ===
+        StationGroupElementHoverItem.ButtonAccept
+      ) {
+        this.mapService.mapMode$.next(MapMode.Build);
+        this.mapService.updateCreatedStationGroup(stationGroupPending.rithmId);
+      }
+      return;
+    }
   }
 
   /**

@@ -2,9 +2,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { first, Subject } from 'rxjs';
@@ -26,7 +28,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class StationWidgetComponent implements OnInit, OnDestroy {
+export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
@@ -94,6 +96,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Detect changes of this component.
+   *
+   * @param changes Object of the properties in this component.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.editMode && this.isDocument) {
+      this.viewDocument('', true);
+    }
+  }
+
+  /**
    * Get document for station widgets.
    */
   getStationWidgetDocuments(): void {
@@ -155,6 +168,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     if (this.reloadDocumentList || reloadDocuments) {
       this.getStationWidgetDocuments();
       this.reloadDocumentList = false;
+      if (this.isExpandWidget) {
+        this.toggleExpandWidget();
+      }
     }
   }
 
