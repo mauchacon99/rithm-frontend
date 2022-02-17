@@ -14,7 +14,6 @@ import { MapService } from '../map.service';
   styleUrls: ['./map-search.component.scss'],
 })
 export class MapSearchComponent {
-
   /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
 
@@ -34,7 +33,7 @@ export class MapSearchComponent {
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService
-  ) { }
+  ) {}
 
   /**
    * Whether the drawer is open.
@@ -63,10 +62,10 @@ export class MapSearchComponent {
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
       : (this.filteredStations = this.mapService.stationElements.filter(
-        (item) => {
-          return item.stationName.toLowerCase().includes(this.searchText);
-        }
-      ));
+          (item) => {
+            return item.stationName.toLowerCase().includes(this.searchText);
+          }
+        ));
   }
 
   /**
@@ -119,8 +118,7 @@ export class MapSearchComponent {
       stationStatus: drawerItem.status,
       mapMode: this.mapService.mapMode$.value,
       openedFromMap: true,
-      notes: drawerItem.notes,
-      openedFromSearch: true,
+      notes: drawerItem.notes
     };
     //Pass dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);

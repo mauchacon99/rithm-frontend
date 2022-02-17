@@ -131,8 +131,7 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       stationRithmId: this.stationRithmId,
       stationName: this.stationName,
       editMode: this.stationEditMode,
-      openedFromMap: false,
-      openedFromSearch: false,
+      openedFromMap: false
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
     this.updateStationInfoDrawerName();

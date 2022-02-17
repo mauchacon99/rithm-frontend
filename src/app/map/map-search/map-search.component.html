@@ -8,7 +8,8 @@
     "
     (click)="returnSearchText()"
   ></i>
-  <i *ngIf="searchText !== '' || searchText.length !== 0"
+  <i
+    *ngIf="searchText !== '' || searchText.length !== 0"
     class="fas fa-times text-sm absolute right-3 top-3 z-40 cursor-pointer text-secondary-300"
     (click)="clearSearchText()"
   ></i>

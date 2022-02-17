@@ -2257,7 +2257,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       mapMode: this.mapMode,
       openedFromMap: true,
       notes: station.notes,
-      openedFromSearch: false,
     };
     //Use dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
