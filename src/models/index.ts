@@ -52,5 +52,6 @@ export * from './document-event';
 export * from './station-group-info-drawer-data';
 export * from './dashboard-data';
 export * from './document-widget-data';
+export * from './station-list-data';
 export * from './station-column-widget';
 export * from './widget-drawer-station-data';

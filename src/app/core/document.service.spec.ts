@@ -24,6 +24,7 @@ import {
   OperatorType,
   RuleType,
   DocumentEvent,
+  DocumentWidget,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -785,6 +786,63 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
+  it('should call method getDocumentWidget', () => {
+    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+    const expectedResponse: DocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: documentRithm,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: [
+            {
+              rithmId: '1020-654684304-05060708-090100',
+              prompt: 'Instructions',
+              questionType: QuestionFieldType.Instructions,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              answer: {
+                questionRithmId: '',
+                referAttribute: '',
+                value: 'Some value.',
+              },
+            },
+            {
+              rithmId: '1020-65sdvsd4-05060708-090trhrth',
+              prompt: 'Name your field',
+              questionType: QuestionFieldType.ShortText,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              value: '',
+            },
+          ],
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+
+    service.getDocumentWidget(documentRithm).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-widget?documentRithmId=${documentRithm}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toEqual(documentRithm);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
   it('should update each station flow rules', () => {
     service
       .updateStationFlowLogicRule([flowlogicRule])
