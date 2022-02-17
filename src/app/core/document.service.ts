@@ -545,17 +545,9 @@ export class DocumentService {
   deleteRuleFromStationFlowLogic(
     rulesFromStationFlowLogic: FlowLogicRule[]
   ): Observable<unknown> {
-    if (!rulesFromStationFlowLogic) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot be removed station flow logic rule.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return of().pipe(delay(1000));
-    }
+    return this.http.put<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
+      rulesFromStationFlowLogic
+    );
   }
 }
