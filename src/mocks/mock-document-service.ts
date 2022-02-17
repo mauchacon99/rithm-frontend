@@ -1231,10 +1231,12 @@ export class MockDocumentService {
    * Get document for station widgets.
    *
    * @param stationRithmId The Specific ID of station.
+   * @param columns The Specifics id the questions for show.
    * @returns Returns data station widget.
    */
   getStationWidgetDocuments(
-    stationRithmId: string
+    stationRithmId: string,
+    columns: string[]
   ): Observable<StationWidgetData> {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
@@ -1253,6 +1255,7 @@ export class MockDocumentService {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
         {
           rithmId: '321-123-123',
@@ -1267,6 +1270,7 @@ export class MockDocumentService {
             email: 'Jaime@mundo2.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
