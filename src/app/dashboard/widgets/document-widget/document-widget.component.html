@@ -20,6 +20,11 @@
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
+      <div *ngIf="numberOfStationsOnDocument === 1">
+        <button mat-button>
+          <i class="fas fa-external-link-alt text-xl text-secondary-500"></i>
+        </button>
+      </div>
     </div>
   </div>
   <!--List of the questions-->

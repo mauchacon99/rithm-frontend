@@ -31,6 +31,19 @@ export class DocumentWidgetComponent implements OnInit {
   ) {}
 
   /**
+   * Number of stations in the station array on dataDocumentWidget.
+   *
+   * @returns The number of stations.
+   */
+  get numberOfStationsOnDocument(): number {
+    if (this.dataDocumentWidget) {
+      return this.dataDocumentWidget.stations.length;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
    * Initial Method.
    */
   ngOnInit(): void {
