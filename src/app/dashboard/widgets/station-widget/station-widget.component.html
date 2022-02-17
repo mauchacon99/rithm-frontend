@@ -1,30 +1,17 @@
-<div
+<!--Loading the widget-->
+<app-loading-widget
   *ngIf="isLoading"
-  id="loading-docs"
-  class="h-full flex justify-center items-center flex-col"
->
-  <p class="py-2 truncate">Loading</p>
-  <app-loading-indicator></app-loading-indicator>
-</div>
+  id="app-loading-indicator"
+></app-loading-widget>
 
-<div *ngIf="failedLoadWidget" class="h-full" id="card-error">
-  <div class="w-full h-full flex items-center justify-center">
-    <div class="w-full text-center">
-      <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
-      <h3 class="text-error-500 truncate">ERROR</h3>
-      <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
-      <button
-        mat-stroked-button
-        color="warn"
-        (click)="getStationWidgetDocuments()"
-        id="try-again"
-        data-testid="try-again"
-      >
-        Try Again
-      </button>
-    </div>
-  </div>
-</div>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="failedLoadWidget"
+  id="error-load-widget"
+  [errorMessage]="'Unable to retrieve station data'"
+  (tryAgain)="getStationWidgetDocuments()"
+>
+</app-error-widget>
 
 <!-- station widget -->
 <div
@@ -36,11 +23,11 @@
   <div class="w-full p-2 flex flex-col h-full">
     <!--  Header Container  -->
     <div class="m-2">
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName }}
         </h3>
-        <div *ngIf="dataStationWidget">
+        <div *ngIf="dataStationWidget && !editMode">
           <button
             *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
             mat-stroked-button
@@ -59,6 +46,11 @@
           >
             Document not created!
           </div>
+        </div>
+        <div *ngIf="editMode" id="gear-icon">
+          <button mat-icon-button class="text-secondary-500">
+            <i class="fas fa-cog text-[16px]"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -129,6 +121,7 @@
               mat-icon-button
               data-testid="show-document-widget"
               id="show-document-widget"
+              [disabled]="editMode"
             >
               <i class="fas fa-angle-double-right"></i>
             </button>

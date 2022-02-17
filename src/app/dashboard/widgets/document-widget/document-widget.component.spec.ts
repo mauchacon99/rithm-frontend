@@ -5,6 +5,9 @@ import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 import { DocumentWidgetComponent } from './document-widget.component';
+import { MockComponent } from 'ng-mocks';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -14,7 +17,11 @@ describe('DocumentWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentWidgetComponent],
+      declarations: [
+        DocumentWidgetComponent,
+        MockComponent(LoadingWidgetComponent),
+        MockComponent(ErrorWidgetComponent),
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
@@ -34,19 +41,19 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should call method getDocumentWidget', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const methodGetDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
 
-    component.getDocumentWidget(documentRithm);
+    component.getDocumentWidget();
 
-    expect(methodGetDocumentWidget).toHaveBeenCalled();
+    expect(methodGetDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
   });
 
   it('should show error if the request getDocumentWidget fail', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
@@ -61,20 +68,40 @@ describe('DocumentWidgetComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.getDocumentWidget(documentRithm);
+    component.getDocumentWidget();
 
-    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
     expect(spyError).toHaveBeenCalled();
   });
 
   it('should call method getDocumentWidget', () => {
-    const testDocumentRithmId = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
-
     const spyDocumentWidget = spyOn(
       TestBed.inject(DashboardService),
       'getDocumentWidget'
     ).and.callThrough();
-    component.getDocumentWidget(testDocumentRithmId);
-    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(testDocumentRithmId);
+    component.getDocumentWidget();
+    expect(spyDocumentWidget).toHaveBeenCalledOnceWith(
+      component.documentRithmId
+    );
+  });
+
+  it('should rendered component loading for widget', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator'
+    );
+    expect(loadingIndicator).toBeTruthy();
+  });
+
+  it('should show error-widget in document-widget', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
   });
 });

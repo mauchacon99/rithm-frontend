@@ -155,6 +155,7 @@
                 *ngIf="item.widgetType === 'station'"
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [stationRithmId]="item.data"
+                [editMode]="editMode"
               >
               </app-station-widget>
               <app-document-widget
