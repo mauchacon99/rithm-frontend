@@ -667,4 +667,49 @@ describe('MapService', () => {
     service.openedDrawerType$.subscribe((res) => expect(res).toBe(''));
     service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
   });
+
+  it('should update the status to created for a new station group.', () => {
+    const stationGroupMapData: StationGroupMapData[] = [
+      {
+        rithmId: 'Root',
+        title: 'Root',
+        organizationRithmId: '',
+        stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: true,
+      },
+      {
+        rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        title: ' Sub RithmGroup',
+        organizationRithmId: '',
+        stations: [
+          'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+          'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+          'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+        ],
+        subStationGroups: [],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+    ];
+    service.stationGroupElements = stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    const rithmId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
+
+    const resetSelectedStationGroupStationStatusSpy = spyOn(
+      TestBed.inject(MapService),
+      'resetSelectedStationGroupStationStatus'
+    );
+
+    service.updateCreatedStationGroup(rithmId);
+    expect(service.stationGroupElements[1].title).toEqual('Untitled Group');
+    expect(service.stationGroupElements[1].status).toBe(MapItemStatus.Created);
+    expect(resetSelectedStationGroupStationStatusSpy).toHaveBeenCalled();
+
+    expect(service.stationGroupElements[0].status).not.toBe(
+      MapItemStatus.Created
+    );
+  });
 });
