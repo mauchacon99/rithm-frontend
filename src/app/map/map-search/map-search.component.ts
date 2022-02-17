@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationMapElement } from 'src/helpers';
@@ -15,8 +14,6 @@ import { MapService } from '../map.service';
   styleUrls: ['./map-search.component.scss'],
 })
 export class MapSearchComponent {
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
 
   /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
@@ -27,20 +24,17 @@ export class MapSearchComponent {
   /** Search text. */
   searchText = '';
 
+  /** Place-holder text for return to previous search. */
+  placeHolderText = '';
+
+  /** On false used to store previous search text before station drawer opens. */
+  searchInput = true;
+
   constructor(
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService
-  ) {
-    this.sidenavDrawerService.drawerData$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        const dataDrawer = data as StationInfoDrawerData;
-        if (dataDrawer.openedFromSearch) {
-          this.searchText;
-        }
-      });
-  }
+  ) { }
 
   /**
    * Whether the drawer is open.
@@ -69,10 +63,10 @@ export class MapSearchComponent {
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
       : (this.filteredStations = this.mapService.stationElements.filter(
-          (item) => {
-            return item.stationName.toLowerCase().includes(this.searchText);
-          }
-        ));
+        (item) => {
+          return item.stationName.toLowerCase().includes(this.searchText);
+        }
+      ));
   }
 
   /**
@@ -89,6 +83,17 @@ export class MapSearchComponent {
   }
 
   /**
+   * Input search text store.
+   *
+   */
+  onBlur(): void {
+    if (this.searchInput) {
+      this.placeHolderText = JSON.parse(JSON.stringify(this.searchText));
+      this.searchInput = false;
+    }
+  }
+
+  /**
    * Initiate previous search box text on click of arrow icon.
    *
    */
@@ -96,7 +101,9 @@ export class MapSearchComponent {
     if (this.searchText !== '' || this.searchText.length !== 0) {
       this.sidenavDrawerService.closeDrawer();
       this.mapService.handleDrawerClose('stationInfo');
+      this.searchInput = true;
     }
+    this.searchText = this.placeHolderText;
   }
 
   /**
