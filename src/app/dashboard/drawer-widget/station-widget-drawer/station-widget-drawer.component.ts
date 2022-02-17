@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -12,7 +12,7 @@ import { StationColumnWidget, WidgetDrawerStationData } from 'src/models';
   templateUrl: './station-widget-drawer.component.html',
   styleUrls: ['./station-widget-drawer.component.scss'],
 })
-export class StationWidgetDrawerComponent implements OnDestroy {
+export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Station RithmId. */
   stationRithmId!: string;
 
@@ -25,8 +25,13 @@ export class StationWidgetDrawerComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  constructor(private sidenavDrawerService: SidenavDrawerService) {
-    sidenavDrawerService.drawerData$
+  constructor(private sidenavDrawerService: SidenavDrawerService) {}
+
+  /**
+   * Initial Method.
+   */
+  ngOnInit(): void {
+    this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const dataDrawer = data as {

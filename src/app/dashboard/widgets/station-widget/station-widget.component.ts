@@ -78,18 +78,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private sidenavDrawerService: SidenavDrawerService
-  ) {
-    sidenavDrawerService.drawerContext$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((drawerContext) => {
-        this.drawerContext = drawerContext;
-      });
-  }
+  ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
     this.stationRithmId = JSON.parse(this.stationRithmId).stationRithmId;
     this.getStationWidgetDocuments();
   }
