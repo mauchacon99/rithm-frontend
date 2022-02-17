@@ -12,7 +12,7 @@ import {
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationWidgetData } from 'src/models';
+import { StationColumnWidget, StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
@@ -23,7 +23,7 @@ import { takeUntil } from 'rxjs/operators';
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[stationRithmId][editMode]',
+  selector: 'app-station-widget[dataWidget][editMode]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -33,8 +33,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
-  /** Station rithmId. */
-  @Input() stationRithmId = '';
+  /** Data for station widget. */
+  @Input() dataWidget = '';
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<void>();
@@ -44,6 +44,15 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** StationRithmId for station widget. */
+  stationRithmId = '';
+
+  /** Columns for list the widget. */
+  columnsAllField: StationColumnWidget[] = [];
+
+  /** Columns for petition. */
+  columnsFieldPetition: string[] = [];
 
   /** To set its expanded the widget. */
   isExpandWidget = false;
@@ -86,12 +95,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
+    this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
+    this.columnsAllField.filter((data: StationColumnWidget) => {
+      if (data.questionId !== undefined)
+        this.columnsFieldPetition.push(data.questionId);
+    });
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
-    this.stationRithmId = JSON.parse(this.stationRithmId).stationRithmId;
     this.getStationWidgetDocuments();
   }
 
@@ -113,7 +127,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
     this.failedLoadWidget = false;
     this.isLoading = true;
     this.documentService
-      .getStationWidgetDocuments(this.stationRithmId)
+      .getStationWidgetDocuments(this.stationRithmId, this.columnsFieldPetition)
       .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {

@@ -20,9 +20,10 @@ import { SimpleChange } from '@angular/core';
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
+  const dataWidget =
+    // eslint-disable-next-line max-len
+    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "priority"}, {"name": "name"}, {"name": "Field name 2"}]}';
 
-  const stationRithmId =
-    '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -43,7 +44,7 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    component.stationRithmId = stationRithmId;
+    component.dataWidget = dataWidget;
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
@@ -61,6 +62,7 @@ describe('StationWidgetComponent', () => {
             email: 'string',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -72,13 +74,17 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should call service that return station widget data', () => {
+    const columns = ['756-789-953'];
+    component.columnsFieldPetition = columns;
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
     ).and.callThrough();
-    component.stationRithmId = stationRithmId;
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalledOnceWith(component.stationRithmId);
+    expect(spyService).toHaveBeenCalledOnceWith(
+      component.stationRithmId,
+      component.columnsFieldPetition
+    );
   });
 
   it('should show error message when request station widget document  data', () => {
@@ -94,13 +100,11 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
-    component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
@@ -118,6 +122,7 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -139,7 +144,6 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should no show button if station is different to manual', () => {
-    component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.None,
@@ -157,6 +161,7 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };

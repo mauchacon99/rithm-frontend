@@ -166,7 +166,7 @@
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"
                 (expandWidget)="toggleExpandWidget(index, $event)"
-                [stationRithmId]="item.data"
+                [dataWidget]="item.data"
                 [editMode]="editMode"
                 (toggleDrawer)="toggleStationWidgetDrawer(item.data, index)"
               >
