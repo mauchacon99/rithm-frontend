@@ -21,6 +21,7 @@ import {
   OperatorType,
   RuleType,
   DocumentEvent,
+  DocumentWidget,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1397,7 +1398,57 @@ export class MockDocumentService {
   }
 
   /**
-   * Update each station flow rules.
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const response: DocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: documentRithmId,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: [
+            {
+              rithmId: '1020-654684304-05060708-090100',
+              prompt: 'Instructions',
+              questionType: QuestionFieldType.Instructions,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              answer: {
+                questionRithmId: '',
+                referAttribute: '',
+                value: 'Some value.',
+              },
+            },
+            {
+              rithmId: '1020-65sdvsd4-05060708-090trhrth',
+              prompt: 'Name your field',
+              questionType: QuestionFieldType.ShortText,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              value: '',
+            },
+          ],
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    return of(response).pipe(delay(1000));
+  }
+
+  /**Update each station flow rules.
    *
    * @param flowsLogic Flow logic rules for each station.
    * @returns Updated station logic flows rules.

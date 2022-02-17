@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDashboardService, MockErrorService } from 'src/mocks';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 
 import { DocumentWidgetComponent } from './document-widget.component';
+import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
@@ -24,7 +24,7 @@ describe('DocumentWidgetComponent', () => {
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DashboardService, useClass: MockDashboardService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -42,7 +42,7 @@ describe('DocumentWidgetComponent', () => {
 
   it('should call method getDocumentWidget', () => {
     const methodGetDocumentWidget = spyOn(
-      TestBed.inject(DashboardService),
+      TestBed.inject(DocumentService),
       'getDocumentWidget'
     ).and.callThrough();
 
@@ -55,7 +55,7 @@ describe('DocumentWidgetComponent', () => {
 
   it('should show error if the request getDocumentWidget fail', () => {
     const deleteCompanyDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      TestBed.inject(DocumentService),
       'getDocumentWidget'
     ).and.returnValue(
       throwError(() => {
@@ -78,7 +78,7 @@ describe('DocumentWidgetComponent', () => {
 
   it('should call method getDocumentWidget', () => {
     const spyDocumentWidget = spyOn(
-      TestBed.inject(DashboardService),
+      TestBed.inject(DocumentService),
       'getDocumentWidget'
     ).and.callThrough();
     component.getDocumentWidget();
