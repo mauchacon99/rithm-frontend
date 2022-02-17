@@ -24,5 +24,4 @@ export interface StationInfoDrawerData {
 
   /** Optional notes to station. */
   notes?: string;
-
 }

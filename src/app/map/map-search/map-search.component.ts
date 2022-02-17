@@ -118,7 +118,7 @@ export class MapSearchComponent {
       stationStatus: drawerItem.status,
       mapMode: this.mapService.mapMode$.value,
       openedFromMap: true,
-      notes: drawerItem.notes
+      notes: drawerItem.notes,
     };
     //Pass dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
