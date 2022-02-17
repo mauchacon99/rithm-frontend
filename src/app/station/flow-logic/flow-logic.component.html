@@ -35,18 +35,19 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).equations;
+                  let equation of getStationFlowRules(station.rithmId)
+                    .equations;
                   let j = index
                 "
               >
                 <p
                   class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                 >
-                  {{ rule.leftOperand.text | titlecase }}
+                  {{ equation.leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
-                    - {{ rule.operatorType }} -</span
+                    - {{ equation.operatorType }} -</span
                   >
-                  {{ rule.rightOperand.text | titlecase }}
+                  {{ equation.rightOperand.text | titlecase }}
                 </p>
                 <figure class="flex">
                   <button
@@ -98,18 +99,18 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).subRules;
+                  let subRule of getStationFlowRules(station.rithmId).subRules;
                   let k = index
                 "
               >
                 <p
                   class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                 >
-                  {{ rule.leftOperand.text | titlecase }}
+                  {{ subRule.equations[0].leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
-                    - {{ rule.operatorType }} -</span
+                    - {{ subRule.equations[0].operatorType }} -</span
                   >
-                  {{ rule.rightOperand.text | titlecase }}
+                  {{ subRule.equations[0].rightOperand.text | titlecase }}
                 </p>
                 <figure class="flex">
                   <button

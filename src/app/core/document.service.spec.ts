@@ -53,14 +53,14 @@ describe('DocumentService', () => {
             type: OperandType.Field,
             questionType: QuestionFieldType.ShortText,
             value: 'birthday',
-            text:'test'
+            text: 'test',
           },
           operatorType: OperatorType.Before,
           rightOperand: {
             type: OperandType.Date,
             questionType: QuestionFieldType.ShortText,
             value: '5/27/1982',
-            text:'test'
+            text: 'test',
           },
         },
       ],
