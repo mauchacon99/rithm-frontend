@@ -93,7 +93,7 @@ export class MapSearchComponent {
   }
 
   /**
-   * Initiate previous search box text on click of arrow icon.
+   * Returns to current search text on click of arrow icon & close the drawer.
    *
    */
   returnSearchText(): void {
