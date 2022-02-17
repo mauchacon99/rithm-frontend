@@ -12,7 +12,16 @@
   (tryAgain)="getDocumentWidget()"
 >
 </app-error-widget>
-
+  <!-- Header widget -->
+  <div class="w-full p-2 flex flex-col h-full">
+    <!--  Header Container -->
+    <div class="m-2">
+      <div class="flex justify-between">
+        <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
+          {{ dataDocumentWidget.documentName }}
+        </h3>
+      </div>
+    </div>
 <!--List of the questions-->
 <div class="w-full p-2 flex h-full" *ngIf="!failedLoadWidget && !isLoading">
   <div class="overflow-auto scrollbar h-full w-full" *ngIf="dataDocumentWidget">
