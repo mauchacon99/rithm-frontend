@@ -341,6 +341,28 @@ export class DocumentService {
   }
 
   /**
+   * Flow document from a current station to a previous station.
+   *
+   * @param document Document to be moved to a previous station.
+   * @returns Returns an empty observable.
+   */
+  flowDocumentToPreviousStation(document: MoveDocument): Observable<unknown> {
+    if (!document) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error:
+                'Invalid data, document cannot be moved to a previous station.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
    * Unassign a user to document via API.
    *
    * @param documentRithmId The Specific id of document.
