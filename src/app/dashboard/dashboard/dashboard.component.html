@@ -1,8 +1,20 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
-  <mat-drawer #drawer mode="over" class="w-[300px] md:w-[360px]">
+  <mat-drawer
+    #drawer
+    mode="over"
+    [position]="drawerContext === 'menuDashboard' ? 'start' : 'end'"
+    [ngClass]="
+      drawerContext === 'menuDashboard'
+        ? 'w-[300px] md:w-[360px]'
+        : 'w-[270px] md:w-[300px]'
+    "
+  >
     <app-menu
       *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
     ></app-menu>
+    <app-widget-drawer
+      *ngIf="drawerContext === 'stationWidget' && isDrawerOpen"
+    ></app-widget-drawer>
   </mat-drawer>
   <mat-drawer-content class="textured-bg h-calc">
     <ng-container *ngIf="!viewNewDashboard; else newDashboard">
@@ -35,7 +47,7 @@
           mat-button
           id="menu-button"
           class="transition ease-in-out bg-darkBlue w-[40px] h-[40px] rounded hover:scale-x-110 hover:translate-x-1 -left-1 top-36 z-10 shadow-lg"
-          (click)="toggleMenu('menuDashboard')"
+          (click)="toggleDrawer('menuDashboard')"
         >
           <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
         </button>
@@ -154,8 +166,9 @@
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"
                 (expandWidget)="toggleExpandWidget(index, $event)"
-                [stationRithmId]="item.data"
+                [dataWidget]="item.data"
                 [editMode]="editMode"
+                (toggleDrawer)="toggleStationWidgetDrawer(item.data, index)"
               >
               </app-station-widget>
               <app-document-widget
