@@ -48,45 +48,45 @@ describe('MapCanvasComponent', () => {
     {
       boundaryPoints: [
         {
-            x: 61.63740387995753,
-            y: 236.68595642892657
+          x: 61.63740387995753,
+          y: 236.68595642892657,
         },
         {
-            x: 126.74904432445813,
-            y: 313.8350430060239
+          x: 126.74904432445813,
+          y: 313.8350430060239,
         },
         {
-            x: 268.4626147036653,
-            y: 412.87039527875163
+          x: 268.4626147036653,
+          y: 412.87039527875163,
         },
         {
-            x: 377.8939431818175,
-            y: 412.87039527875163
+          x: 377.8939431818175,
+          y: 412.87039527875163,
         },
         {
-            x: 509.7586939979909,
-            y: 295.23171716473803
+          x: 509.7586939979909,
+          y: 295.23171716473803,
         },
         {
-            x: 509.7586939979909,
-            y: 213.15822080612384
+          x: 509.7586939979909,
+          y: 213.15822080612384,
         },
         {
-            x: 428.7795109241583,
-            y: 20.5590826845759
+          x: 428.7795109241583,
+          y: 20.5590826845759,
         },
         {
-            x: 319.3481824460061,
-            y: 20.5590826845759
+          x: 319.3481824460061,
+          y: 20.5590826845759,
         },
         {
-            x: 152.4654065168239,
-            y: 52.8413245856308
+          x: 152.4654065168239,
+          y: 52.8413245856308,
         },
         {
-            x: 61.63740387995753,
-            y: 154.61246007031238
-        }
+          x: 61.63740387995753,
+          y: 154.61246007031238,
+        },
       ],
       dragging: false,
       disabled: false,
@@ -375,9 +375,9 @@ describe('MapCanvasComponent', () => {
 
   it('should be able to set station group as selected', () => {
     spyOnProperty(window, 'innerWidth').and.returnValue(800);
-        window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event('resize'));
     spyOnProperty(window, 'innerHeight').and.returnValue(600);
-        window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event('resize'));
     const setStatusSpy = spyOn(
       TestBed.inject(MapService),
       'setStationGroupStationStatus'
