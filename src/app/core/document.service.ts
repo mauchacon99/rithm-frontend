@@ -28,6 +28,7 @@ import {
   FlowLogicRule,
   DocumentEvent,
   QuestionFieldType,
+  DocumentWidget,
   RuleType,
   OperandType,
   OperatorType,
@@ -499,6 +500,20 @@ export class DocumentService {
     return this.http.put<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       newFlowLogic
+    );
+  }
+
+  /**
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentWidget>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-widget`,
+      { params }
     );
   }
 
