@@ -132,16 +132,10 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should call the `toggle` method on the `SidenavService`', () => {
-    const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
-    component.toggleMenu('menuDashboard');
-    expect(spy).toHaveBeenCalledOnceWith('menuDashboard');
-  });
-
   it('should click the dashboard menu button ', () => {
     component.viewNewDashboard = true;
     fixture.detectChanges();
-    const spy = spyOn(component, 'toggleMenu');
+    const spy = spyOn(component, 'toggleDrawer');
     const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
@@ -274,6 +268,47 @@ describe('DashboardComponent', () => {
       const spySideNav = spyOn(sidenavDrawer, 'setDrawer').and.callThrough();
       component.ngOnInit();
       expect(spySideNav).toHaveBeenCalled();
+    });
+
+    it('should call the `toggle` method on the `SidenavService`', () => {
+      const spyProperty = spyOnProperty(
+        sidenavDrawer,
+        'isDrawerOpen',
+        'get'
+      ).and.returnValue(false);
+      const spy = spyOn(sidenavDrawer, 'toggleDrawer');
+      component.toggleDrawer('menuDashboard');
+      expect(spyProperty).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledOnceWith('menuDashboard', undefined);
+    });
+
+    it('should call twice the `toggle` method on the `SidenavService` if `isDrawerOpen` is true', async () => {
+      const spyService = spyOn(sidenavDrawer, 'toggleDrawer');
+      spyOn(component.drawer, 'close').and.callThrough();
+      const spyProperty = spyOnProperty(
+        sidenavDrawer,
+        'isDrawerOpen',
+        'get'
+      ).and.returnValue(true);
+      await component.toggleDrawer('menuDashboard');
+      expect(spyProperty).toHaveBeenCalled();
+      expect(spyService).toHaveBeenCalled();
+      expect(component.drawer.close).toHaveBeenCalled();
+    });
+
+    it('Should toggle drawer of the station widget', () => {
+      spyOn(sidenavDrawer, 'toggleDrawer');
+      const [stationData, widgetIndex] = [
+        // eslint-disable-next-line max-len
+        '{"stationRithmId":"21316c62-8a45-4e79-ba58-0927652569cc", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+        1,
+      ];
+      const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
+      component.toggleStationWidgetDrawer(stationData, widgetIndex);
+      expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
+        stationData,
+        widgetIndex,
+      });
     });
   });
 

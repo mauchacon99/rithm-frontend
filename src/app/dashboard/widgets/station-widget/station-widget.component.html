@@ -48,7 +48,14 @@
           </div>
         </div>
         <div *ngIf="editMode" id="gear-icon">
-          <button mat-icon-button class="text-secondary-500">
+          <button
+            mat-icon-button
+            [disabled]="isDrawerOpen && drawerContext === 'stationWidget'"
+            (click)="toggleEditStation()"
+            id="toggle-edit-station"
+            data-testid="toggle-edit-station"
+            class="text-secondary-500"
+          >
             <i class="fas fa-cog text-[16px]"></i>
           </button>
         </div>
