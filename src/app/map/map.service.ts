@@ -942,8 +942,7 @@ export class MapService {
     //Set pending group to new before publishing.
     this.stationGroupElements.map((stationGroup) => {
       if (stationGroup.status === MapItemStatus.Pending) {
-        stationGroup.status = MapItemStatus.Created;
-        stationGroup.title = 'Untitled Group';
+        this.updateCreatedStationGroup(stationGroup.rithmId);
       }
     });
 
