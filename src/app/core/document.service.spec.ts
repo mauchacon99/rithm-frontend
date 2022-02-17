@@ -843,44 +843,44 @@ describe('DocumentService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
-  it('should update each station flow rules', () => {
-    service
-      .updateStationFlowLogicRule([flowlogicRule])
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
-  });
+    it('should update each station flow rules', () => {
+      service
+        .updateStationFlowLogicRule([flowlogicRule])
+        .subscribe((response) => {
+          expect(response).toBeFalsy();
+        });
+    });
 
-  it('should make request to delete station flow logic rule', () => {
-    const bodyParameters: FlowLogicRule[] = [
-      {
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
+    it('should make request to delete station flow logic rule', () => {
+      const bodyParameters: FlowLogicRule[] = [
+        {
+          stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowRule: {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
               },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
+            ],
+            subRules: [],
+          },
         },
-      },
-    ];
+      ];
 
-    service
-      .deleteRuleFromStationFlowLogic(bodyParameters)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+      service
+        .deleteRuleFromStationFlowLogic(bodyParameters)
+        .subscribe((response) => {
+          expect(response).toBeFalsy();
+        });
+    });
   });
-});
 });
