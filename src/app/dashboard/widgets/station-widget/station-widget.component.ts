@@ -2,17 +2,20 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
-import { first } from 'rxjs';
+import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * Component for Station widget.
@@ -23,13 +26,16 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class StationWidgetComponent implements OnInit {
+export class StationWidgetComponent implements OnInit, OnDestroy {
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
   /** Station rithmId. */
   @Input() stationRithmId = '';
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<void>();
 
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
@@ -61,17 +67,28 @@ export class StationWidgetComponent implements OnInit {
   /** Variable to show if the error message should be displayed. */
   displayDocumentError = false;
 
+  private destroyed$ = new Subject<void>();
+
+  /** Type of drawer opened. */
+  drawerContext!: string;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
     this.stationRithmId = JSON.parse(this.stationRithmId).stationRithmId;
     this.getStationWidgetDocuments();
   }
@@ -171,9 +188,29 @@ export class StationWidgetComponent implements OnInit {
       });
   }
 
+  /** Toggle drawer when click on edit station widget. */
+  toggleEditStation(): void {
+    this.toggleDrawer.emit();
+  }
+
   /** Expand widget. */
   toggleExpandWidget(): void {
     this.isExpandWidget = !this.isExpandWidget;
     this.expandWidget.emit(this.isExpandWidget);
+  }
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
