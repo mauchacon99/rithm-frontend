@@ -2,8 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
-  STATION_HEIGHT,
-  STATION_WIDTH,
   ZOOM_VELOCITY,
   STATION_PAN_CENTER_HEIGHT,
   STATION_PAN_CENTER_WIDTH,
@@ -830,61 +828,6 @@ export class MockMapService {
     ) {
       this.resetSelectedStationGroupStationStatus();
     }
-  }
-
-  /**
-   * Gets the top-left canvasPoint.
-   *
-   * @returns A point.
-   */
-  getMinCanvasPoint(): Point {
-    return this.getEdgePoint('canvasPoint', false);
-  }
-
-  /**
-   * Gets the bottom-right canvasPoint.
-   *
-   * @returns A point.
-   */
-  getMaxCanvasPoint(): Point {
-    return this.getEdgePoint('canvasPoint', true);
-  }
-
-  /**
-   * Logic for finding top-left or bottom-right canvas or map points.
-   *
-   * @param pointType A mapPoint or a canvasPoint.
-   * @param isMax Is the point the top-left corner of the map or the bottom-right? Bottom-right is the max.
-   * @returns An object with the points.
-   */
-  private getEdgePoint(
-    pointType: 'mapPoint' | 'canvasPoint',
-    isMax: boolean
-  ): Point {
-    //An array of all station y coords in order from top to bottom.
-    const orderedYPoints = this.stationElements
-      .map((station) => station[pointType].y)
-      .sort((a, b) => a - b);
-    //An array of all station x coords in order from left to right.
-    const orderedXPoints = this.stationElements
-      .map((station) => station[pointType].x)
-      .sort((a, b) => a - b);
-
-    /* If isMax = true, set X to the last x coord in the array plus the width of a station, or the rightmost station.
-    Otherwise set it to the first x coord in the array, leftmost. */
-    const x = isMax
-      ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH
-      : orderedXPoints[0];
-    /* If isMax = true, set Y to the last y coord in the array plus the height of a station, or the bottommost station.
-    Otherwise set it to the first y coord in the array, or the topmost station. */
-    const y = isMax
-      ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT
-      : orderedYPoints[0];
-
-    return {
-      x: x,
-      y: y,
-    };
   }
 
   /**
