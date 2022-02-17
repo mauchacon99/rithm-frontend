@@ -538,12 +538,14 @@ export class DocumentService {
                 type: OperandType.Number,
                 questionType: QuestionFieldType.ShortText,
                 value: '102',
+                text:'test'
               },
               operatorType: OperatorType.GreaterOrEqual,
               rightOperand: {
                 type: OperandType.Number,
                 questionType: QuestionFieldType.ShortText,
                 value: '101',
+                text:'test'
               },
             },
           ],
