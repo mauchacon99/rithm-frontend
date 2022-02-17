@@ -366,6 +366,10 @@ describe('MapCanvasComponent', () => {
   });
 
   it('should be able to set station group as selected', () => {
+    spyOnProperty(window, 'innerWidth').and.returnValue(1920);
+    window.dispatchEvent(new Event('resize'));
+    spyOnProperty(window, 'innerHeight').and.returnValue(1080);
+    window.dispatchEvent(new Event('resize'));
     const setStatusSpy = spyOn(
       TestBed.inject(MapService),
       'setStationGroupStationStatus'

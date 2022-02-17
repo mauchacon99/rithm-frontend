@@ -9,6 +9,7 @@ import {
   delay,
   map,
   Observable,
+  of,
   Subject,
   throwError,
 } from 'rxjs';
@@ -27,6 +28,9 @@ import {
   FlowLogicRule,
   DocumentEvent,
   QuestionFieldType,
+  RuleType,
+  OperandType,
+  OperatorType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -496,5 +500,62 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       newFlowLogic
     );
+  }
+
+  /**
+   * Update each station flow rules.
+   *
+   * @param flowsLogic Flow logic rules for each station.
+   * @returns Updated station logic flows rules.
+   */
+  updateStationFlowLogicRule(flowsLogic: FlowLogicRule[]): Observable<unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    flowsLogic = [
+      {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Number,
+                value: '102',
+              },
+              operatorType: OperatorType.GreaterOrEqual,
+              rightOperand: {
+                type: OperandType.Number,
+                value: '101',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+    return of().pipe(delay(1000));
+  }
+
+  /**
+   * Delete rule from station flow logic.
+   *
+   * @param rulesFromStationFlowLogic The flow logic rule to be updated.
+   * @returns Station flow logic.
+   */
+  deleteRuleFromStationFlowLogic(
+    rulesFromStationFlowLogic: FlowLogicRule[]
+  ): Observable<unknown> {
+    if (!rulesFromStationFlowLogic) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot be removed station flow logic rule.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }
