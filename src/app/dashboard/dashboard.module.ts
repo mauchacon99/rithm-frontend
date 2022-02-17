@@ -72,6 +72,5 @@ import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.compon
     MatMenuModule,
     FormsModule,
   ],
-  exports: [StationWidgetDrawerComponent],
 })
 export class DashboardModule {}

@@ -33,9 +33,9 @@ export class WidgetDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  async toggleDrawer(drawerItem: 'stationWidget'): Promise<void> {
+  toggleDrawer(drawerItem: 'stationWidget'): void {
     if (drawerItem === 'stationWidget') {
-      await this.sidenavDrawerService.toggleDrawer(drawerItem);
+      this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
   }
 

@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { WidgetStation } from 'src/models';
+import { StationColumnWidget, WidgetDrawerStationData } from "src/models";
 
 /**
  * Component for Station widget drawer.
@@ -13,8 +13,11 @@ import { WidgetStation } from 'src/models';
   styleUrls: ['./station-widget-drawer.component.scss'],
 })
 export class StationWidgetDrawerComponent implements OnDestroy {
-  /** Station data. */
-  stationData!: WidgetStation;
+  /** Station RithmId. */
+  stationRithmId!: string;
+
+  /** Station columns. */
+  stationColumns!: StationColumnWidget[];
 
   /** Position of the widget. */
   widgetIndex!: number;
@@ -33,9 +36,11 @@ export class StationWidgetDrawerComponent implements OnDestroy {
           widgetIndex: number;
         };
         if (dataDrawer) {
-          this.stationData = JSON.parse(
+          const stationData = JSON.parse(
             dataDrawer.stationData
-          ) as WidgetStation;
+          ) as WidgetDrawerStationData;
+          this.stationRithmId = stationData.stationRithmId;
+          this.stationColumns = stationData.columns;
           this.widgetIndex = dataDrawer.widgetIndex;
         }
       });

@@ -3,7 +3,7 @@ import { StationColumnWidget } from './station-column-widget';
 /**
  * Represents the document that show in station-widget.
  */
-export interface WidgetStation {
+export interface WidgetDrawerStationData {
   /** Station Rithm Id. */
   stationRithmId: string;
 

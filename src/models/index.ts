@@ -53,4 +53,4 @@ export * from './station-group-info-drawer-data';
 export * from './dashboard-data';
 export * from './document-widget-data';
 export * from './station-column-widget';
-export * from './widget-station';
+export * from './widget-drawer-station-data';

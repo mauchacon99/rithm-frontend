@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StationWidgetDrawerComponent } from './station-widget-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { WidgetDrawerStationData } from 'src/models';
 
 describe('StationWidgetDrawerComponent', () => {
   let component: StationWidgetDrawerComponent;
@@ -36,8 +37,11 @@ describe('StationWidgetDrawerComponent', () => {
       stationData,
       widgetIndex,
     });
-
-    expect(component.stationData).toEqual(JSON.parse(stationData));
+    const expectStationData = JSON.parse(
+      stationData
+    ) as WidgetDrawerStationData;
+    expect(component.stationRithmId).toEqual(expectStationData.stationRithmId);
+    expect(component.stationColumns).toEqual(expectStationData.columns);
     expect(component.widgetIndex).toEqual(widgetIndex);
   });
 });

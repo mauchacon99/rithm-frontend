@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -25,7 +26,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class StationWidgetComponent implements OnInit {
+export class StationWidgetComponent implements OnInit, OnDestroy {
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
