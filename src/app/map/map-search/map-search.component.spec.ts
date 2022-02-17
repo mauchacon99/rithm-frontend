@@ -82,7 +82,10 @@ describe('MapSearchComponent', () => {
   });
 
   it('should clear search box text', () => {
-    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'handleDrawerClose');
+    const mapServiceSpy = spyOn(
+      TestBed.inject(MapService),
+      'handleDrawerClose'
+    );
     component.clearSearchText();
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
@@ -91,7 +94,10 @@ describe('MapSearchComponent', () => {
 
   it('should store Input search text', () => {
     component.onBlur();
-    localStorage.setItem('placeHolderText', JSON.stringify(component.searchText));
+    localStorage.setItem(
+      'placeHolderText',
+      JSON.stringify(component.searchText)
+    );
     expect(component.searchInput).toBeFalse();
   });
 
@@ -100,7 +106,6 @@ describe('MapSearchComponent', () => {
     expect(component.searchInput).toBeTrue();
     expect(component.searchText).toEqual(component.placeHolderText);
   });
-
 
   it('should open drawer when any autocomplete option is selected', fakeAsync(() => {
     const sideNavSpy = spyOn(
