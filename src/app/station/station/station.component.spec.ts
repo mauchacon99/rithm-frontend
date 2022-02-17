@@ -41,6 +41,7 @@ import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
+import { throwError } from 'rxjs';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -352,5 +353,32 @@ describe('StationComponent', () => {
     ).and.callThrough();
     component.addFlowLogicRule(stationFlowLogic);
     expect(spyNewRulesStation).toHaveBeenCalledWith(stationFlowLogic);
+  });
+
+  it('should saved the flow logic rules in current station', () => {
+    component.isFlowLogicTab = true;
+    const spySavedFlowLogicRules = spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogic'
+    ).and.callThrough();
+    component.saveFlowLogicRules();
+    expect(spySavedFlowLogicRules).toHaveBeenCalled();
+  });
+
+  it('should show error message when saved flow logic rules in current station', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogic'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.saveFlowLogicRules();
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 });

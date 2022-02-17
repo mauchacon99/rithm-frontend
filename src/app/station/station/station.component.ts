@@ -93,6 +93,9 @@ export class StationComponent
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
+  /** Index for station tabs. */
+  stationTabsIndex = 0;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -405,9 +408,6 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
-
-      //Save flow logic rules of current station.
-      this.documentService.saveStationFlowLogic(this.pendingFlowLogicRules),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -430,6 +430,31 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = data[3] as Question[];
           }
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save flow Logic Rules when is tab FlowLogic.
+   *
+   */
+  saveFlowLogicRules(): void {
+    this.stationLoading = true;
+    this.documentService
+      .saveStationFlowLogic(this.pendingFlowLogicRules)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.stationTabsIndex = 1;
+          this.pendingFlowLogicRules = [];
         },
         error: (error: unknown) => {
           this.stationLoading = false;

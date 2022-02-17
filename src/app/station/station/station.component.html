@@ -39,7 +39,9 @@
             [formGroup]="stationForm"
             autocomplete="off"
             class="station-base-form"
-            (ngSubmit)="saveStationInformation()"
+            (ngSubmit)="
+              !isFlowLogicTab ? saveStationInformation() : saveFlowLogicRules()
+            "
           >
             <app-station-info-header
               [stationInformation]="stationInformation"
@@ -51,6 +53,7 @@
             <mat-tab-group
               mat-align-tabs="center"
               class="mt-2 w-full pb-8"
+              [selectedIndex]="stationTabsIndex"
               (selectedTabChange)="tabSelectedChanged($event)"
             >
               <mat-tab>
