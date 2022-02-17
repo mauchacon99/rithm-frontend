@@ -942,8 +942,7 @@ export class MapService {
     //Set pending group to new before publishing.
     this.stationGroupElements.map((stationGroup) => {
       if (stationGroup.status === MapItemStatus.Pending) {
-        stationGroup.status = MapItemStatus.Created;
-        stationGroup.title = 'Untitled Group';
+        this.updateCreatedStationGroup(stationGroup.rithmId);
       }
     });
 
@@ -1728,5 +1727,23 @@ export class MapService {
       //Cancel panning by setting panVelocity to 0,0.
       this.centerPanVelocity$.next({ x: 0, y: 0 });
     }
+  }
+
+  /**
+   * Update the status to create for a new station group.
+   *
+   * @param rithmId The specific rithm Id of the station group.
+   */
+  updateCreatedStationGroup(rithmId: string): void {
+    const stationGroupIndex = this.stationGroupElements.findIndex(
+      (stationGroup) => stationGroup.rithmId === rithmId
+    );
+    if (stationGroupIndex === -1) {
+      throw new Error(`There is not any station group with this rithmId.`);
+    }
+    this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+    this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
+
+    this.resetSelectedStationGroupStationStatus();
   }
 }
