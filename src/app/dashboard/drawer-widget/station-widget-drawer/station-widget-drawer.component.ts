@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { StationColumnWidget, WidgetDrawerStationData } from "src/models";
+import { StationColumnWidget, WidgetDrawerStationData } from 'src/models';
 
 /**
  * Component for Station widget drawer.
