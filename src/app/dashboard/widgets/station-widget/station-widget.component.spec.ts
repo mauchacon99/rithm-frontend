@@ -15,6 +15,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { SimpleChange } from '@angular/core';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -354,5 +355,39 @@ describe('StationWidgetComponent', () => {
     const errorWidget =
       fixture.debugElement.nativeElement.querySelector('#error-load-widget');
     expect(errorWidget).toBeTruthy();
+  });
+
+  it('should detect change of editMode and return list of components', function () {
+    spyOn(component, 'viewDocument').and.callThrough();
+    spyOn(component, 'toggleExpandWidget').and.callThrough();
+    component.isDocument = true;
+    component.isExpandWidget = true;
+    component.editMode = true;
+    component.ngOnChanges({
+      editMode: new SimpleChange(false, component.editMode, true),
+    });
+    fixture.detectChanges();
+    expect(component.viewDocument).toHaveBeenCalledOnceWith('', true);
+    expect(component.toggleExpandWidget).toHaveBeenCalled();
+  });
+
+  it('should click edit button and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+
+    const btnEdit = fixture.debugElement.nativeElement.querySelector(
+      '#toggle-edit-station'
+    );
+
+    expect(btnEdit).toBeTruthy();
+    btnEdit.disabled = false;
+    btnEdit.click();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
   });
 });
