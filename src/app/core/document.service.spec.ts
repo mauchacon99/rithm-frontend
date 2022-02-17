@@ -24,6 +24,7 @@ import {
   OperatorType,
   RuleType,
   DocumentEvent,
+  DocumentWidget,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -41,6 +42,27 @@ describe('DocumentService', () => {
   let httpTestingController: HttpTestingController;
   const stationId = 'E204F369-386F-4E41';
   const documentId = 'E204F369-386F-4E41';
+  const flowlogicRule: FlowLogicRule = {
+    stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+    destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+    flowRule: {
+      ruleType: RuleType.Or,
+      equations: [
+        {
+          leftOperand: {
+            type: OperandType.Field,
+            value: 'birthday',
+          },
+          operatorType: OperatorType.Before,
+          rightOperand: {
+            type: OperandType.Date,
+            value: '5/27/1982',
+          },
+        },
+      ],
+      subRules: [],
+    },
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -674,29 +696,7 @@ describe('DocumentService', () => {
   it('should return the Station flow logic rule', () => {
     const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
 
-    const expectStationFlowLogic: FlowLogicRule[] = [
-      {
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
-              },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
-        },
-      },
-    ];
+    const expectStationFlowLogic: FlowLogicRule[] = [flowlogicRule];
 
     service
       .getStationFlowLogicRule(stationRithmId)
@@ -771,27 +771,7 @@ describe('DocumentService', () => {
   });
 
   it('should make request to save station flow logic', () => {
-    const parametersBody: FlowLogicRule = {
-      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRule: {
-        ruleType: RuleType.Or,
-        equations: [
-          {
-            leftOperand: {
-              type: OperandType.Field,
-              value: 'birthday',
-            },
-            operatorType: OperatorType.Before,
-            rightOperand: {
-              type: OperandType.Date,
-              value: '5/27/1982',
-            },
-          },
-        ],
-        subRules: [],
-      },
-    };
+    const parametersBody = flowlogicRule;
 
     service.saveStationFlowLogic(parametersBody).subscribe((response) => {
       expect(response).toBeFalsy();
@@ -805,5 +785,102 @@ describe('DocumentService', () => {
 
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should call method getDocumentWidget', () => {
+    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+    const expectedResponse: DocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: documentRithm,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: [
+            {
+              rithmId: '1020-654684304-05060708-090100',
+              prompt: 'Instructions',
+              questionType: QuestionFieldType.Instructions,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              answer: {
+                questionRithmId: '',
+                referAttribute: '',
+                value: 'Some value.',
+              },
+            },
+            {
+              rithmId: '1020-65sdvsd4-05060708-090trhrth',
+              prompt: 'Name your field',
+              questionType: QuestionFieldType.ShortText,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              value: '',
+            },
+          ],
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+
+    service.getDocumentWidget(documentRithm).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-widget?documentRithmId=${documentRithm}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toEqual(documentRithm);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+  it('should update each station flow rules', () => {
+    service
+      .updateStationFlowLogicRule([flowlogicRule])
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
+
+  it('should make request to delete station flow logic rule', () => {
+    const bodyParameters: FlowLogicRule[] = [
+      {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRule: {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
+
+    service
+      .deleteRuleFromStationFlowLogic(bodyParameters)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
   });
 });

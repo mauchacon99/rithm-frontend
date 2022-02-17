@@ -549,6 +549,13 @@ describe('DashboardService', () => {
     service.toggleLoadingDashboard(false);
   });
 
+  it('should delete a personal dashboard', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    service.deletePersonalDashboard(rithmId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+  });
+
   it('should delete a organization dashboard', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     service.deleteOrganizationDashboard(rithmId).subscribe((response) => {
@@ -557,6 +564,20 @@ describe('DashboardService', () => {
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
+    );
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  it('should delete a personal dashboard', () => {
+    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    service.deletePersonalDashboard(rithmId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
     );
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);

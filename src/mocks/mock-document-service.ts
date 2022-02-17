@@ -21,6 +21,7 @@ import {
   OperatorType,
   RuleType,
   DocumentEvent,
+  DocumentWidget,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1391,6 +1392,123 @@ export class MockDocumentService {
         },
       };
       return of(stationFlowLogic).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const response: DocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: documentRithmId,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: [
+            {
+              rithmId: '1020-654684304-05060708-090100',
+              prompt: 'Instructions',
+              questionType: QuestionFieldType.Instructions,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              answer: {
+                questionRithmId: '',
+                referAttribute: '',
+                value: 'Some value.',
+              },
+            },
+            {
+              rithmId: '1020-65sdvsd4-05060708-090trhrth',
+              prompt: 'Name your field',
+              questionType: QuestionFieldType.ShortText,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+              value: '',
+            },
+          ],
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    return of(response).pipe(delay(1000));
+  }
+
+  /**Update each station flow rules.
+   *
+   * @param flowsLogic Flow logic rules for each station.
+   * @returns Updated station logic flows rules.
+   */
+  updateStationFlowLogicRule(flowsLogic: FlowLogicRule[]): Observable<unknown> {
+    if (!flowsLogic) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot be updated flows logic rule.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationLogicFlows: FlowLogicRule[] = [
+        {
+          stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+          flowRule: {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Number,
+                  value: '102',
+                },
+                operatorType: OperatorType.GreaterOrEqual,
+                rightOperand: {
+                  type: OperandType.Number,
+                  value: '101',
+                },
+              },
+            ],
+            subRules: [],
+          },
+        },
+      ];
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Delete rule from station flow logic.
+   *
+   * @param rulesFromStationFlowLogic Delete flow logic rule for current station.
+   * @returns Station flow logic.
+   */
+  deleteRuleFromStationFlowLogic(
+    rulesFromStationFlowLogic: FlowLogicRule[]
+  ): Observable<unknown> {
+    if (!rulesFromStationFlowLogic) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot be removed station flow logic rule.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
     }
   }
 }

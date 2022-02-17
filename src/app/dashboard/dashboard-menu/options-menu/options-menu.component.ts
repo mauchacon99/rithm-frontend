@@ -6,6 +6,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -38,7 +39,8 @@ export class OptionsMenuComponent {
     private dashboardService: DashboardService,
     private errorService: ErrorService,
     private router: Router,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private popupService: PopupService
   ) {}
 
   /**
@@ -96,5 +98,36 @@ export class OptionsMenuComponent {
           );
         },
       });
+  }
+
+  /**
+   * Delete personal dashboard.
+   *
+   * @param rithmId The dashboard rithmId to delete.
+   */
+  deletePersonalDashboard(rithmId: string): void {
+    this.dashboardService
+      .deletePersonalDashboard(rithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Initiate a confirmation popup for either dashboard delete methods.
+   */
+  async confirmDashboardDelete(): Promise<void> {
+    await this.popupService.confirm({
+      title: 'Delete dashboard?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    });
   }
 }

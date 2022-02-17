@@ -19,7 +19,7 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
   providedIn: 'root',
 })
 export class DashboardService {
-  /** Loading dashboard when generate new dashboard. */
+  /** Loading dashboard when generating new dashboard. */
   isLoadingDashboard$ = new Subject<boolean>();
 
   constructor(private http: HttpClient) {}
@@ -155,7 +155,7 @@ export class DashboardService {
   }
 
   /**
-   * Generates a new dashboard personal.
+   * Generates a new personal dashboard.
    *
    * @returns Returns a new default dashboard.
    */
@@ -194,7 +194,7 @@ export class DashboardService {
   }
 
   /**
-   * Delete organization dashboard`s.
+   * Delete organization dashboards.
    *
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
@@ -202,6 +202,18 @@ export class DashboardService {
   deleteOrganizationDashboard(rithmId: string): Observable<DashboardData> {
     return this.http.delete<DashboardData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
+    );
+  }
+
+  /**
+   * Delete personal dashboards.
+   *
+   * @param rithmId The specific dashboard rithmId to delete.
+   * @returns The rithmId of the deleted dashboard.
+   */
+  deletePersonalDashboard(rithmId: string): Observable<unknown> {
+    return this.http.delete<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
     );
   }
 }
