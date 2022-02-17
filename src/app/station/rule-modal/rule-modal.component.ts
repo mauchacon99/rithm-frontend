@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StepperOrientation } from '@angular/material/stepper';
+import { MatStepper, StepperOrientation } from '@angular/material/stepper';
 import { Observable, Subject } from 'rxjs';
 import { first, map, takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
@@ -50,6 +50,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The component date-field to be updated for step 3. */
   @ViewChild('dateField', { static: false })
   dateField!: DateFieldComponent;
+
+  @ViewChild('stepper', { static: false }) stepper!: MatStepper;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -201,16 +203,25 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The rule to be returned and added to new rulesArray. */
   ruleToAdd!: RuleEquation;
 
+  /** Is modal rule in edit mode. */
+  editMode = false;
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public rithmId: string,
+    @Inject(MAT_DIALOG_DATA)
+    public modalData: {
+      /** The station rithmId. */
+      stationId: string;
+      /** The data of the equation of the rule to be edited. */
+      editRule: RuleEquation;
+    },
     breakpointObserver: BreakpointObserver,
     private stationService: StationService,
     private errorService: ErrorService,
     private readonly changeDetectorR: ChangeDetectorRef,
     private documentService: DocumentService
   ) {
-    this.stationRithmId = rithmId;
+    this.stationRithmId = modalData.stationId;
     this.stepperOrientation$ = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -222,6 +233,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.value = answer.value;
         this.secondOperand.type = this.firstOperand.type;
       });
+
+    //If it comes in the modal data it is in edit mode.
+    if (modalData.editRule) {
+      this.editMode = true;
+    }
   }
 
   /**
@@ -280,6 +296,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
             (question: Question) =>
               question.questionType !== QuestionFieldType.Instructions
           );
+          //If you are in edit mode we assign the values that come from the modal
+          if (this.editMode) {
+            this.setRuleModalEditData();
+          }
         },
         error: (error: unknown) => {
           this.questionStationError = true;
@@ -350,6 +370,62 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Set The value for the current Rule.
+   */
+  setEquationContent(): void {
+    this.ruleToAdd = {
+      leftOperand: {
+        type: this.firstOperand.type,
+        value: this.firstOperand.value,
+      },
+      operatorType: this.operatorSelected
+        ? this.operatorSelected.value
+        : OperatorType.EqualTo,
+      rightOperand: {
+        type: this.secondOperand.type,
+        value: this.secondOperand.value,
+      },
+    };
+    this.dialogRef.close(this.ruleToAdd);
+  }
+
+  /**
+   * Set The modal data to update the rule.
+   */
+  setRuleModalEditData(): void {
+    const rule: RuleEquation = this.modalData.editRule;
+
+    //Set the values to the first operand
+    this.firstOperand.type = rule.leftOperand.type;
+    this.firstOperand.value = rule.leftOperand.value;
+    const firstQuestionSelected: Question = this.questionStation.filter(
+      (question) => question.prompt === this.firstOperand.value
+    )[0];
+    this.firstOperandQuestionRithmId = firstQuestionSelected.rithmId;
+    this.setFirstOperandInformation(firstQuestionSelected);
+
+    //Set the values to the second operand
+    this.secondOperand.type = rule.rightOperand.type;
+    this.secondOperand.value = rule.rightOperand.value;
+
+    //If it does not come with questions for the second operand, the value is assigned to the component field.
+    if (!this.secondOperandQuestionList.length) {
+      this.secondOperandDefaultQuestion.value = rule.rightOperand.value;
+    }
+
+    //Set the value to the operator
+    const operator = this.operatorList.find(
+      (ope) => ope.value === rule.operatorType
+    );
+    this.operatorSelected = operator || null;
+
+    //Set the linear to refresh and index 3 to be in step 4.
+    this.stepper.linear = false;
+    this.stepper.selectedIndex = 3;
+    this.stepper.linear = true;
+  }
+
+  /**
    * Reset component field when a first operand is selected.
    */
   resetQuestionFieldComponent(): void {
@@ -391,26 +467,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     } else if (event.selectedIndex === 2) {
       this.resetQuestionFieldComponent();
     }
-  }
-
-  /**
-   * Set The value for the current Rule.
-   */
-  setEquationContent(): void {
-    this.ruleToAdd = {
-      leftOperand: {
-        type: this.firstOperand.type,
-        value: this.firstOperand.value,
-      },
-      operatorType: this.operatorSelected
-        ? this.operatorSelected.value
-        : OperatorType.EqualTo,
-      rightOperand: {
-        type: this.secondOperand.type,
-        value: this.secondOperand.value,
-      },
-    };
-    this.dialogRef.close(this.ruleToAdd);
   }
 
   /**
