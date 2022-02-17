@@ -27,8 +27,8 @@ export class FlowLogicComponent implements OnInit {
   /** Station Rithm id. */
   @Input() rithmId = '';
 
-  /** The list the new Rules to save. */
-  @Output() newRulesFlowLogic = new EventEmitter<FlowLogicRule>();
+  /** The modified Flow Logic Rule to send back to station. */
+  @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -96,7 +96,7 @@ export class FlowLogicComponent implements OnInit {
                 flowLogic.flowRule.subRules.push(rule);
               }
               this.flowLogicRules.push(flowLogic);
-              this.newRulesFlowLogic.emit(flowLogic);
+              this.modifiedFlowRules.emit(flowLogic);
             } else {
               // Update the flowRules if the station exists in the FlowLogicRule array
               if (type === 'all') {
@@ -104,7 +104,7 @@ export class FlowLogicComponent implements OnInit {
               } else {
                 flowLogicStation.flowRule.subRules.push(rule);
               }
-              this.newRulesFlowLogic.emit(flowLogicStation);
+              this.modifiedFlowRules.emit(flowLogicStation);
             }
           }
         });

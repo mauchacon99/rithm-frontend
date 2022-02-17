@@ -90,8 +90,8 @@ export class StationComponent
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
-  /** Contains the rules received of Flow Logic. */
-  flowLogicRules: FlowLogicRule[] = [];
+  /** Contains the rules received from Flow Logic to save them. */
+  pendingFlowLogicRules: FlowLogicRule[] = [];
 
   constructor(
     private stationService: StationService,
@@ -253,6 +253,22 @@ export class StationComponent
   }
 
   /**
+   * Validate the conditions to display the Save or Save Rules button.
+   *
+   * @returns If display the button, can be true or false.
+   */
+  get disableSaveButton(): boolean {
+    return (
+      (!this.stationForm.valid &&
+        !(
+          !this.stationForm.dirty ||
+          !this.stationForm.controls.stationTemplateForm.touched
+        )) ||
+      (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
+    );
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
@@ -391,7 +407,7 @@ export class StationComponent
       ),
 
       //Save flow logic rules of current station.
-      this.documentService.saveStationFlowLogic(this.flowLogicRules),
+      this.documentService.saveStationFlowLogic(this.pendingFlowLogicRules),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -554,16 +570,16 @@ export class StationComponent
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
   addFlowLogicRule(flowLogicRule: FlowLogicRule): void {
-    const flowLogicStation = this.flowLogicRules.findIndex(
+    const flowLogicStation = this.pendingFlowLogicRules.findIndex(
       (flowRule) =>
         flowRule.destinationStationRithmID ===
           flowLogicRule.destinationStationRithmID &&
         flowRule.stationRithmId === flowLogicRule.stationRithmId
     );
     if (flowLogicStation >= 0) {
-      this.flowLogicRules[flowLogicStation] = flowLogicRule;
+      this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
     } else {
-      this.flowLogicRules.push(flowLogicRule);
+      this.pendingFlowLogicRules.push(flowLogicRule);
     }
   }
 }

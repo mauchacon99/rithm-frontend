@@ -156,7 +156,7 @@
                   <app-flow-logic
                     [rithmId]="stationRithmId"
                     [nextStations]="forwardStations"
-                    (newRulesFlowLogic)="addFlowLogicRule($event)"
+                    (modifiedFlowRules)="addFlowLogicRule($event)"
                   ></app-flow-logic>
                 </ng-template>
               </mat-tab>
@@ -184,14 +184,7 @@
                     class="mx-2"
                     id="station-save"
                     type="submit"
-                    [disabled]="
-                      (!stationForm.valid &&
-                        !(
-                          !stationForm.dirty ||
-                          !stationForm.controls.stationTemplateForm.touched
-                        )) ||
-                      (flowLogicRules.length === 0 && isFlowLogicTab)
-                    "
+                    [disabled]="disableSaveButton"
                   >
                     {{ this.isFlowLogicTab ? 'Save Rules' : 'Save' }}
                   </button>

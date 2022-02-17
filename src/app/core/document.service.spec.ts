@@ -769,7 +769,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  fit('should make request to save station flow logic', () => {
+  it('should make request to save station flow logic', () => {
     const parametersBody = flowlogicRule;
     service.saveStationFlowLogic([parametersBody]).subscribe((response) => {
       expect(response).toBeFalsy();
@@ -794,30 +794,7 @@ describe('DocumentService', () => {
   });
 
   it('should make request to delete station flow logic rule', () => {
-    const bodyParameters: FlowLogicRule[] = [
-      {
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
-              },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
-        },
-      },
-    ];
-
+    const bodyParameters: FlowLogicRule[] = [flowlogicRule];
     service
       .deleteRuleFromStationFlowLogic(bodyParameters)
       .subscribe((response) => {
