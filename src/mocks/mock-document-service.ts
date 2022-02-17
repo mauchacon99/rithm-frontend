@@ -1439,4 +1439,27 @@ export class MockDocumentService {
       return of().pipe(delay(1000));
     }
   }
+
+  /**
+   * Delete rule from station flow logic.
+   *
+   * @param rulesFromStationFlowLogic Delete flow logic rule for current station.
+   * @returns Station flow logic.
+   */
+  deleteRuleFromStationFlowLogic(
+    rulesFromStationFlowLogic: FlowLogicRule[]
+  ): Observable<unknown> {
+    if (!rulesFromStationFlowLogic) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot be removed station flow logic rule.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
 }

@@ -20,8 +20,11 @@ import {
   MockErrorService,
   MockStationService,
   MockDocumentService,
+  MockPopupService,
 } from 'src/mocks';
+
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
@@ -107,6 +110,7 @@ describe('FlowLogicComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -203,29 +207,7 @@ describe('FlowLogicComponent', () => {
   it('should not display the red message when there are rules in each station.', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    component.flowLogicRules = [
-      {
-        stationRithmId: rithmId,
-        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
-        flowRule: {
-          ruleType: RuleType.And,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
-              },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
-        },
-      },
-    ];
+    component.flowLogicRules = flowLogicRule;
     fixture.detectChanges();
     const messageNotRules = fixture.debugElement.nativeElement.querySelector(
       '#there-are-not-rules-0'
@@ -512,5 +494,59 @@ describe('FlowLogicComponent', () => {
     expect(editRuleBtnAny).toBeTruthy();
     editRuleBtnAny.click();
     expect(spyFunc).toHaveBeenCalled();
+  });
+
+  it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+    const deleteRuleFromStationFlowLogicSpy = spyOn(
+      component,
+      'deleteRuleFromStationFlowLogic'
+    );
+    const { 0: station } = nextStations;
+    const btnDelete = fixture.nativeElement.querySelector(
+      `#delete-rule-button-all-${station.rithmId}-0`
+    );
+
+    expect(btnDelete).toBeTruthy();
+    btnDelete.click();
+
+    expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
+  });
+
+  it('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+    const deleteRuleFromStationFlowLogicSpy = spyOn(
+      component,
+      'deleteRuleFromStationFlowLogic'
+    );
+    const { 0: station } = nextStations;
+    const btnDelete = fixture.nativeElement.querySelector(
+      `#delete-rule-button-any-${station.rithmId}-0`
+    );
+
+    expect(btnDelete).toBeTruthy();
+    btnDelete.click();
+
+    expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
+  });
+
+  it('should open confirmation popup when call the method that deletes the rule', () => {
+    const dataToConfirmPopup = {
+      title: 'Remove Rule',
+      message: `Are you sure to remove the selected rule from this station?`,
+      okButtonText: 'Remove',
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    component.deleteRuleFromStationFlowLogic();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
 });
