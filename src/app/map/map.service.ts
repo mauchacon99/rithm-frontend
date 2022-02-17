@@ -956,13 +956,23 @@ export class MapService {
       ),
     };
 
+    //Make sure each station's mapPoint is an integer.
+    const mappedData: MapData = {
+      stations: filteredData.stations.map((e) => {
+        e.mapPoint.x = Math.floor(e.mapPoint.x);
+        e.mapPoint.y = Math.floor(e.mapPoint.y);
+        return e;
+      }),
+      stationGroups: filteredData.stationGroups,
+    };
+
     //Post an http call.
     return (
       this.http
         //Send the filtered data in the post.
         .post<void>(
           `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
-          filteredData
+          mappedData
         )
         .pipe(
           tap(() => {
