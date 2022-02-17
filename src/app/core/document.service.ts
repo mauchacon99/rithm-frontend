@@ -28,6 +28,7 @@ import {
   FlowLogicRule,
   DocumentEvent,
   QuestionFieldType,
+  DocumentWidget,
   RuleType,
   OperandType,
   OperatorType,
@@ -448,16 +449,17 @@ export class DocumentService {
    * Get document for station widgets.
    *
    * @param stationRithmId The Specific ID of station.
+   * @param columns The Specifics id the questions for show.
    * @returns Returns data station widget.
    */
   getStationWidgetDocuments(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    stationRithmId: string
+    stationRithmId: string,
+    columns: string[]
   ): Observable<StationWidgetData> {
-    const params = new HttpParams().set('stationRithmId', stationRithmId);
-    return this.http.get<StationWidgetData>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station`,
-      { params }
+    const columnParameter = { data: columns };
+    return this.http.post<StationWidgetData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station?stationRithmId=${stationRithmId}`,
+      columnParameter
     );
   }
 
@@ -499,6 +501,20 @@ export class DocumentService {
     return this.http.put<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       newFlowLogic
+    );
+  }
+
+  /**
+   * Get document widget.
+   *
+   * @param documentRithmId Rithm of document.
+   * @returns Returns DocumentWidget.
+   */
+  getDocumentWidget(documentRithmId: string): Observable<DocumentWidget> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentWidget>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-widget`,
+      { params }
     );
   }
 

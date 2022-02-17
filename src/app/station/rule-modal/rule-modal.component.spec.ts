@@ -266,7 +266,7 @@ describe('RuleModalComponent', () => {
     expect(component.firstOperandQuestionType).toBeUndefined();
     component.setFirstOperandInformation(question);
     expect(component.firstOperandQuestionType).toEqual(OperandType.Number);
-    expect(component.firstOperand.value).toBe('Fieldset #1');
+    expect(component.firstOperand.value).toBe('3j4k-3h2j-hj4j');
   });
 
   it('should call resetQuestionFieldComponent to refresh component field', () => {
