@@ -335,11 +335,13 @@ describe('StationComponent', () => {
           {
             leftOperand: {
               type: OperandType.Field,
+              questionType: QuestionFieldType.ShortText,
               value: 'birthday',
             },
             operatorType: OperatorType.Before,
             rightOperand: {
               type: OperandType.Date,
+              questionType: QuestionFieldType.ShortText,
               value: '5/27/1982',
             },
           },

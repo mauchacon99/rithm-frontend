@@ -9,6 +9,7 @@ import {
   ConnectedStationInfo,
   OperandType,
   OperatorType,
+  QuestionFieldType,
   Rule,
   RuleType,
 } from 'src/models';
@@ -59,11 +60,13 @@ describe('FlowLogicComponent', () => {
           {
             leftOperand: {
               type: OperandType.Field,
+              questionType: QuestionFieldType.ShortText,
               value: 'birthday',
             },
             operatorType: OperatorType.Before,
             rightOperand: {
               type: OperandType.Date,
+              questionType: QuestionFieldType.ShortText,
               value: '5/27/1982',
             },
           },
@@ -72,11 +75,13 @@ describe('FlowLogicComponent', () => {
           {
             leftOperand: {
               type: OperandType.Number,
+              questionType: QuestionFieldType.ShortText,
               value: '102',
             },
             operatorType: OperatorType.GreaterOrEqual,
             rightOperand: {
               type: OperandType.Number,
+              questionType: QuestionFieldType.ShortText,
               value: '101',
             },
           },
@@ -269,11 +274,13 @@ describe('FlowLogicComponent', () => {
     const ruleToAdd: RuleEquation = {
       leftOperand: {
         type: OperandType.String,
+        questionType: QuestionFieldType.ShortText,
         value: '',
       },
       operatorType: OperatorType.EqualTo,
       rightOperand: {
         type: OperandType.String,
+        questionType: QuestionFieldType.ShortText,
         value: '',
       },
     };
@@ -354,11 +361,13 @@ describe('FlowLogicComponent', () => {
             {
               leftOperand: {
                 type: OperandType.String,
+                questionType: QuestionFieldType.ShortText,
                 value: '',
               },
               operatorType: OperatorType.EqualTo,
               rightOperand: {
                 type: OperandType.String,
+                questionType: QuestionFieldType.ShortText,
                 value: '',
               },
             },
@@ -387,11 +396,13 @@ describe('FlowLogicComponent', () => {
             {
               leftOperand: {
                 type: OperandType.String,
+                questionType: QuestionFieldType.ShortText,
                 value: '',
               },
               operatorType: OperatorType.EqualTo,
               rightOperand: {
                 type: OperandType.String,
+                questionType: QuestionFieldType.ShortText,
                 value: '',
               },
             },
@@ -420,11 +431,13 @@ describe('FlowLogicComponent', () => {
             {
               leftOperand: {
                 type: OperandType.Number,
+                questionType: QuestionFieldType.ShortText,
                 value: '102',
               },
               operatorType: OperatorType.GreaterOrEqual,
               rightOperand: {
                 type: OperandType.Number,
+                questionType: QuestionFieldType.ShortText,
                 value: '101',
               },
             },

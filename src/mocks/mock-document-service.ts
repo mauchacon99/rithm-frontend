@@ -1303,11 +1303,13 @@ export class MockDocumentService {
             {
               leftOperand: {
                 type: OperandType.Field,
+                questionType: QuestionFieldType.ShortText,
                 value: 'birthday',
               },
               operatorType: OperatorType.Before,
               rightOperand: {
                 type: OperandType.Date,
+                questionType: QuestionFieldType.ShortText,
                 value: '5/27/1982',
               },
             },
@@ -1384,11 +1386,13 @@ export class MockDocumentService {
               {
                 leftOperand: {
                   type: OperandType.Field,
+                  questionType: QuestionFieldType.ShortText,
                   value: 'birthday',
                 },
                 operatorType: OperatorType.Before,
                 rightOperand: {
                   type: OperandType.Date,
+                  questionType: QuestionFieldType.ShortText,
                   value: '5/27/1982',
                 },
               },
@@ -1478,11 +1482,13 @@ export class MockDocumentService {
               {
                 leftOperand: {
                   type: OperandType.Number,
+                  questionType: QuestionFieldType.ShortText,
                   value: '102',
                 },
                 operatorType: OperatorType.GreaterOrEqual,
                 rightOperand: {
                   type: OperandType.Number,
+                  questionType: QuestionFieldType.ShortText,
                   value: '101',
                 },
               },
