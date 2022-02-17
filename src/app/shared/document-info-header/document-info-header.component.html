@@ -30,13 +30,10 @@
           </mat-chip-list>
         </div>
         <button
-          *ngIf="isStation"
           type="button"
           data-testid="document-info-drawer"
           id="info-drawer-button-document"
           mat-icon-button
-          matSuffix
-          class="icon icon-top"
           (click)="toggleDrawer('documentInfo')"
           [disabled]="isDrawerOpen"
         >
