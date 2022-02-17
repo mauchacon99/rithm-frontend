@@ -25,6 +25,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Whether the called widget-drawer. */
+  drawerMode: 'stationWidget' = 'stationWidget';
+
   constructor(private sidenavDrawerService: SidenavDrawerService) {}
 
   /**
@@ -49,6 +52,17 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.widgetIndex = dataDrawer.widgetIndex;
         }
       });
+  }
+
+  /**
+   * Toggles the open state for drawer mode.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+  toggleDrawer(drawerItem: 'stationWidget'): void {
+    if (drawerItem === 'stationWidget') {
+      this.sidenavDrawerService.toggleDrawer(drawerItem);
+    }
   }
 
   /**

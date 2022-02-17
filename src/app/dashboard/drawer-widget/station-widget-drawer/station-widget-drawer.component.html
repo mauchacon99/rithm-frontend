@@ -1,1 +1,17 @@
-<p>station-widget-drawer works!</p>
+<div class="my-4">
+  <!-- Button close sidebar. -->
+  <div class="flex justify-end">
+    <button
+      data-testid="close-station-widget-drawer"
+      id="close-station-widget-drawer"
+      mat-icon-button
+      (click)="toggleDrawer(drawerMode)"
+      class="text-secondary-500"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="font-semibold text-secondary-500 text-left px-3">
+    Table values
+  </div>
+</div>
