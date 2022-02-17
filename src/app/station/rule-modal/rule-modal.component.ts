@@ -93,6 +93,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The type of the first questions selected for the first operand. */
   firstOperandQuestionType!: QuestionFieldType;
 
+  /** The information of the operator selected. */
   operatorSelected: {
     /**Operator text. */
     text: string;
@@ -100,7 +101,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     value: OperatorType;
   } | null = null;
 
+  /** Contain all the operand Types. */
   operandType = OperandType;
+
+  /** Contain all the question Types. */
+  questionTypes = QuestionFieldType;
 
   /** Text group for the operator options. */
   textGroup = [
@@ -296,8 +301,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Set operator list for the comparison type and set first operand type.
    *
    * @param questionSelected The field type to show the options of the corresponding operator list.
+   * @param childIndex Optional value to be used in case of addressLine questions.
    */
-  setFirstOperandInformation(questionSelected: Question): void {
+  setFirstOperandInformation(questionSelected: Question, childIndex = 0): void {
     //Set first field type for options of the second operand
     this.firstOperandQuestionType = questionSelected.questionType;
     this.secondOperandDefaultQuestion.questionType =
@@ -308,7 +314,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
       case QuestionFieldType.Email:
-      case QuestionFieldType.AddressLine:
       case QuestionFieldType.Phone:
       case QuestionFieldType.MultiSelect:
         this.operatorList = this.textGroup;
@@ -334,6 +339,18 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       case QuestionFieldType.Select:
         this.operatorList = this.selectGroup;
         this.firstOperand.type = OperandType.String;
+        break;
+      case QuestionFieldType.AddressLine:
+        // eslint-disable-next-line no-case-declarations
+        const childType: QuestionFieldType = questionSelected.children[childIndex].questionType;
+        this.firstOperandQuestionType = childType;
+        this.firstOperand.value = questionSelected.prompt + ' / ' + questionSelected.children[childIndex].prompt;
+        this.firstOperand.type = OperandType.String;
+        if (childType === QuestionFieldType.State || childType === QuestionFieldType.Zip) {
+          this.operatorList = this.selectGroup;
+        } else {
+          this.operatorList = this.textGroup;
+        }
         break;
     }
     this.resetQuestionFieldComponent();

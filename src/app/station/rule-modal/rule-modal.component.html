@@ -36,9 +36,22 @@
             <mat-option
               *ngFor="let question of questionStation"
               [value]="question.rithmId"
-              (click)="setFirstOperandInformation(question)"
+              (click)="question.questionType !== questionTypes.AddressLine ? setFirstOperandInformation(question) : false"
             >
-              {{ question.prompt }}
+              <ng-container *ngIf="question.questionType !== questionTypes.AddressLine; else isAddressLine">
+                {{ question.prompt }}
+              </ng-container>
+              <ng-template #isAddressLine>
+                <mat-select [(value)]="firstOperandQuestionRithmId" [placeholder]="question.prompt">
+                  <mat-option
+                    *ngFor="let subquestion of question.children; let child = index"
+                    [value]="question.rithmId"
+                    (click)="setFirstOperandInformation(question, child)"
+                  >
+                   <span class="text-secondary-200">{{question.prompt}} /</span> {{ subquestion.prompt }}
+                  </mat-option>
+                </mat-select>
+              </ng-template>
             </mat-option>
           </mat-select>
         </mat-form-field>
