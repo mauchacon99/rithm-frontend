@@ -30,7 +30,7 @@ import {
   QuestionFieldType,
   StationRosterMember,
 } from 'src/models';
-import { of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
 import { MapComponent } from 'src/app/map/map/map.component';
@@ -648,7 +648,7 @@ describe('DocumentComponent', () => {
     const spyMethod = spyOn(
       TestBed.inject(DocumentService),
       'flowDocumentToPreviousStation'
-    ).and.callFake(() => of(dataExpect));
+    ).and.callThrough();
     component['flowDocumentToPreviousStation']();
     expect(spyMethod).toHaveBeenCalledOnceWith(dataExpect);
   });
