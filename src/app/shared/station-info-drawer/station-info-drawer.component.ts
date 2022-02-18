@@ -128,7 +128,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Get flow button name. */
   flowButtonName = '';
-  
+
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
 
