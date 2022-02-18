@@ -51,7 +51,8 @@ describe('StationWidgetDrawerComponent', () => {
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
     );
-    component['sidenavDrawerService'].toggleDrawer('stationWidget');
+    component.toggleDrawer();
+    expect(infoDrawerSpy).toHaveBeenCalled();
 
     const spyMethod = spyOn(component, 'toggleDrawer');
     const toggleButton = fixture.debugElement.nativeElement.querySelector(
@@ -60,6 +61,5 @@ describe('StationWidgetDrawerComponent', () => {
     expect(toggleButton).toBeTruthy();
     toggleButton.click();
     expect(spyMethod).toHaveBeenCalled();
-    expect(infoDrawerSpy).toHaveBeenCalled();
   });
 });
