@@ -40,7 +40,7 @@ import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.
 import { RuleEquation } from 'src/models/rule-equation';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-describe('FlowLogicComponent', () => {
+fdescribe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
@@ -76,7 +76,23 @@ describe('FlowLogicComponent', () => {
         subRules: [
           {
             ruleType: RuleType.Or,
-            equations: [],
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  questionType: QuestionFieldType.ShortText,
+                  value: 'birthday',
+                  text: 'test',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  questionType: QuestionFieldType.ShortText,
+                  value: '5/27/1982',
+                  text: 'test',
+                },
+              },
+            ],
             subRules: [],
           },
         ],
@@ -203,10 +219,36 @@ describe('FlowLogicComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  xit('should not display the red message when there are rules in each station.', () => {
+  it('should not display the red message when there are rules in each station.', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    component.flowLogicRules = flowLogicRule;
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                questionType: QuestionFieldType.ShortText,
+                value: 'birthday',
+                text: 'test',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                questionType: QuestionFieldType.ShortText,
+                value: '5/27/1982',
+                text: 'test',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
     fixture.detectChanges();
     const messageNotRules = fixture.debugElement.nativeElement.querySelector(
       '#there-are-not-rules-0'
@@ -214,10 +256,12 @@ describe('FlowLogicComponent', () => {
     expect(messageNotRules).toBeFalsy();
   });
 
-  xit('should display the red message when there are not rules in each station.', () => {
+  it('should display the red message when there are not rules in each station.', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    component.flowLogicRules = flowLogicRule;
+    component.flowLogicRules = [flowLogicRule[0]];
+    component.flowLogicRules[0].flowRule.equations = [];
+    component.flowLogicRules[0].flowRule.subRules = [];
     fixture.detectChanges();
     const messageNotRules = fixture.debugElement.nativeElement.querySelector(
       '#there-are-not-rules-0'
@@ -477,34 +521,32 @@ describe('FlowLogicComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  xit('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
-    component.flowLogicLoading = false;
-    component.flowRuleError = false;
-    component.flowLogicRules = flowLogicRule;
-    fixture.detectChanges();
-
-    const spyFunc = spyOn(component, 'openModal').and.callThrough();
-    const index = 0;
-    const stationRithmId = component.nextStations[0].rithmId;
-    const editRuleBtnAll = fixture.nativeElement.querySelector(
-      `#edit-rule-button-all-${index + stationRithmId}`
-    );
-
-    expect(editRuleBtnAll).toBeTruthy();
-    editRuleBtnAll.click();
-    expect(spyFunc).toHaveBeenCalled();
-  });
-
-  xit('should open the modal when clicking on edit-rule-button-any to edit the existing rule', () => {
+  it('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
-        destinationStationRithmID: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
         flowRule: {
           ruleType: RuleType.And,
-          equations: [],
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                questionType: QuestionFieldType.ShortText,
+                value: 'birthday',
+                text: 'test',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                questionType: QuestionFieldType.ShortText,
+                value: '5/27/1982',
+                text: 'test',
+              },
+            },
+          ],
           subRules: [],
         },
       },
@@ -514,8 +556,58 @@ describe('FlowLogicComponent', () => {
     const spyFunc = spyOn(component, 'openModal').and.callThrough();
     const index = 0;
     const stationRithmId = component.nextStations[0].rithmId;
+    const editRuleBtnAll = fixture.nativeElement.querySelector(
+      `#edit-rule-button-all-${stationRithmId}-${index}`
+    );
+
+    expect(editRuleBtnAll).toBeTruthy();
+    editRuleBtnAll.click();
+    expect(spyFunc).toHaveBeenCalled();
+  });
+
+  it('should open the modal when clicking on edit-rule-button-any to edit the existing rule', () => {
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [],
+          subRules: [
+            {
+              ruleType: RuleType.Or,
+              equations: [
+                {
+                  leftOperand: {
+                    type: OperandType.Field,
+                    questionType: QuestionFieldType.ShortText,
+                    value: 'birthday',
+                    text: 'test',
+                  },
+                  operatorType: OperatorType.Before,
+                  rightOperand: {
+                    type: OperandType.Date,
+                    questionType: QuestionFieldType.ShortText,
+                    value: '5/27/1982',
+                    text: 'test',
+                  },
+                },
+              ],
+              subRules: [],
+            },
+          ],
+        },
+      },
+    ];
+    fixture.detectChanges();
+
+    const spyFunc = spyOn(component, 'openModal').and.callThrough();
+    const index = 0;
+    const stationRithmId = component.nextStations[0].rithmId;
     const editRuleBtnAny = fixture.nativeElement.querySelector(
-      `#edit-rule-button-any-${index + stationRithmId}`
+      `#edit-rule-button-any-${stationRithmId}-${index}`
     );
 
     expect(editRuleBtnAny).toBeTruthy();
@@ -523,10 +615,36 @@ describe('FlowLogicComponent', () => {
     expect(spyFunc).toHaveBeenCalled();
   });
 
-  xit('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
+  it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    component.flowLogicRules = flowLogicRule;
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                questionType: QuestionFieldType.ShortText,
+                value: 'birthday',
+                text: 'test',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                questionType: QuestionFieldType.ShortText,
+                value: '5/27/1982',
+                text: 'test',
+              },
+            },
+          ],
+          subRules: [],
+        },
+      },
+    ];
     fixture.detectChanges();
     const deleteRuleFromStationFlowLogicSpy = spyOn(
       component,
@@ -543,10 +661,42 @@ describe('FlowLogicComponent', () => {
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 
-  xit('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
+  it('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
-    component.flowLogicRules = flowLogicRule;
+    component.flowLogicRules = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmID: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        flowRule: {
+          ruleType: RuleType.And,
+          equations: [],
+          subRules: [
+            {
+              ruleType: RuleType.And,
+              equations: [
+                {
+                  leftOperand: {
+                    type: OperandType.Field,
+                    questionType: QuestionFieldType.ShortText,
+                    value: 'birthday',
+                    text: 'test',
+                  },
+                  operatorType: OperatorType.Before,
+                  rightOperand: {
+                    type: OperandType.Date,
+                    questionType: QuestionFieldType.ShortText,
+                    value: '5/27/1982',
+                    text: 'test',
+                  },
+                },
+              ],
+              subRules: [],
+            },
+          ],
+        },
+      },
+    ];
     fixture.detectChanges();
     const deleteRuleFromStationFlowLogicSpy = spyOn(
       component,

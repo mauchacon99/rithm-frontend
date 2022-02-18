@@ -52,9 +52,9 @@
                 <figure class="flex">
                   <button
                     attr.data-testid="edit-rule-button-all-{{
-                      j + station.rithmId
-                    }}"
-                    id="edit-rule-button-all-{{ j + station.rithmId }}"
+                      station.rithmId
+                    }}-{{ j }}"
+                    id="edit-rule-button-all-{{ station.rithmId }}-{{ j }}"
                     type="button"
                     mat-icon-button
                     matSuffix
@@ -68,7 +68,9 @@
                     mat-icon-button
                     matSuffix
                     id="delete-rule-button-all-{{ station.rithmId }}-{{ j }}"
-                    data-testid="delete-rule-button-all"
+                    attr.data-testid="delete-rule-button-all-{{
+                      station.rithmId
+                    }}-{{ j }}"
                     matTooltip="Remove current rule"
                     (click)="deleteRuleFromStationFlowLogic()"
                   >
@@ -115,9 +117,9 @@
                 <figure class="flex">
                   <button
                     attr.data-testid="edit-rule-button-any-{{
-                      k + station.rithmId
-                    }}"
-                    id="edit-rule-button-any-{{ k + station.rithmId }}"
+                      station.rithmId
+                    }}-{{ k }}"
+                    id="edit-rule-button-any-{{ station.rithmId }}-{{ k }}"
                     type="button"
                     mat-icon-button
                     matSuffix
@@ -131,7 +133,9 @@
                     mat-icon-button
                     matSuffix
                     id="delete-rule-button-any-{{ station.rithmId }}-{{ k }}"
-                    data-testid="delete-rule-button-any"
+                    attr.data-testid="delete-rule-button-any-{{
+                      station.rithmId
+                    }}-{{ k }}"
                     matTooltip="Remove current rule"
                     (click)="deleteRuleFromStationFlowLogic()"
                   >
