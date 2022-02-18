@@ -20,13 +20,25 @@
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
-      <mat-menu>
-        <button mat-button>
+      <div *ngIf="numberOfStationsOnDocument">
+        <button mat-icon-button [matMenuTriggerFor]="stationMenu">
           <i class="fas fa-ellipsis-h"></i>
         </button>
-        <div mat-menu-item>Station 1 <i class="fas fa-external-link-alt text-xl text-secondary-500"></i></div>
-        <div mat-menu-item>Station 2 <i class="fas fa-external-link-alt text-xl text-secondary-500"></i></div>
-      </mat-menu>
+        <mat-menu #stationMenu>
+          <div *ngFor="let station of stationsOnDocument">
+            <div
+              mat-menu-item
+              (click)="goToDocument(station.stationRithmId)"
+              id="go-to-document"
+            >
+              {{ station.stationName }}
+              <i
+                class="fas fa-external-link-alt text-xl text-secondary-500"
+              ></i>
+            </div>
+          </div>
+        </mat-menu>
+      </div>
     </div>
   </div>
   <!--List of the questions-->
