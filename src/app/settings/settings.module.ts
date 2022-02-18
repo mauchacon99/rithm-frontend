@@ -18,7 +18,7 @@ import { UserFormModule } from 'src/app/shared/user-form/user-form.module';
     MatButtonModule,
     ReactiveFormsModule,
     LoadingIndicatorModule,
-    UserFormModule
+    UserFormModule,
   ],
 })
 export class SettingsModule {}
