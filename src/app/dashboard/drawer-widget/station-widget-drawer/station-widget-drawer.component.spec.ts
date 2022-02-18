@@ -47,6 +47,11 @@ describe('StationWidgetDrawerComponent', () => {
 
   it('should show/hide the station widget  drawer', () => {
     component.drawerMode = 'stationWidget';
+    const infoDrawerSpy = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+    component['sidenavDrawerService'].toggleDrawer('stationWidget');
 
     const spyMethod = spyOn(component, 'toggleDrawer');
     const toggleButton = fixture.debugElement.nativeElement.querySelector(
@@ -55,5 +60,6 @@ describe('StationWidgetDrawerComponent', () => {
     expect(toggleButton).toBeTruthy();
     toggleButton.click();
     expect(spyMethod).toHaveBeenCalled();
+    expect(infoDrawerSpy).toHaveBeenCalled();
   });
 });
