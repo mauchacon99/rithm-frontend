@@ -519,7 +519,7 @@ export class DocumentService {
    * @param newFlowLogic New flow logic rule for current station.
    * @returns Station flow logic.
    */
-  saveStationFlowLogic(newFlowLogic: FlowLogicRule): Observable<unknown> {
+  saveStationFlowLogic(newFlowLogic: FlowLogicRule[]): Observable<unknown> {
     return this.http.put<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       newFlowLogic
@@ -551,19 +551,23 @@ export class DocumentService {
     flowsLogic = [
       {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+        destinationStationRithmID: '63d47261-1932-4fcf-82bd-159eb1a7243g',
         flowRule: {
           ruleType: RuleType.Or,
           equations: [
             {
               leftOperand: {
                 type: OperandType.Number,
+                questionType: QuestionFieldType.ShortText,
                 value: '102',
+                text: 'test',
               },
               operatorType: OperatorType.GreaterOrEqual,
               rightOperand: {
                 type: OperandType.Number,
+                questionType: QuestionFieldType.ShortText,
                 value: '101',
+                text: 'test',
               },
             },
           ],
@@ -583,17 +587,9 @@ export class DocumentService {
   deleteRuleFromStationFlowLogic(
     rulesFromStationFlowLogic: FlowLogicRule[]
   ): Observable<unknown> {
-    if (!rulesFromStationFlowLogic) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot be removed station flow logic rule.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return of().pipe(delay(1000));
-    }
+    return this.http.put<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
+      rulesFromStationFlowLogic
+    );
   }
 }

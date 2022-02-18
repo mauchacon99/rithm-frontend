@@ -1318,19 +1318,23 @@ export class MockDocumentService {
     } else {
       const stationFlowLogic: FlowLogicRule = {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
         flowRule: {
           ruleType: RuleType.Or,
           equations: [
             {
               leftOperand: {
                 type: OperandType.Field,
+                questionType: QuestionFieldType.ShortText,
                 value: 'birthday',
+                text: 'test',
               },
               operatorType: OperatorType.Before,
               rightOperand: {
                 type: OperandType.Date,
+                questionType: QuestionFieldType.ShortText,
                 value: '5/27/1982',
+                text: 'test',
               },
             },
           ],
@@ -1385,7 +1389,7 @@ export class MockDocumentService {
    * @param newFlowLogic New flow logic rule for current station.
    * @returns Station flow logic.
    */
-  saveStationFlowLogic(newFlowLogic: FlowLogicRule): Observable<unknown> {
+  saveStationFlowLogic(newFlowLogic: FlowLogicRule[]): Observable<unknown> {
     if (!newFlowLogic) {
       return throwError(
         () =>
@@ -1396,27 +1400,33 @@ export class MockDocumentService {
           })
       ).pipe(delay(1000));
     } else {
-      const stationFlowLogic: FlowLogicRule = {
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
+      const stationFlowLogic: FlowLogicRule[] = [
+        {
+          stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowRule: {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  questionType: QuestionFieldType.ShortText,
+                  value: 'birthday',
+                  text: 'test',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  questionType: QuestionFieldType.ShortText,
+                  value: '5/27/1982',
+                  text: 'test',
+                },
               },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-          subRules: [],
+            ],
+            subRules: [],
+          },
         },
-      };
+      ];
       return of(stationFlowLogic).pipe(delay(1000));
     }
   }
@@ -1491,19 +1501,23 @@ export class MockDocumentService {
       const stationLogicFlows: FlowLogicRule[] = [
         {
           stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          destinationStationRithmId: '63d47261-1932-4fcf-82bd-159eb1a7243g',
+          destinationStationRithmID: '63d47261-1932-4fcf-82bd-159eb1a7243g',
           flowRule: {
             ruleType: RuleType.Or,
             equations: [
               {
                 leftOperand: {
                   type: OperandType.Number,
+                  questionType: QuestionFieldType.ShortText,
                   value: '102',
+                  text: 'test',
                 },
                 operatorType: OperatorType.GreaterOrEqual,
                 rightOperand: {
                   type: OperandType.Number,
+                  questionType: QuestionFieldType.ShortText,
                   value: '101',
+                  text: 'test',
                 },
               },
             ],

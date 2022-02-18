@@ -39,7 +39,9 @@
             [formGroup]="stationForm"
             autocomplete="off"
             class="station-base-form"
-            (ngSubmit)="saveStationInformation()"
+            (ngSubmit)="
+              !isFlowLogicTab ? saveStationInformation() : saveFlowLogicRules()
+            "
           >
             <app-station-info-header
               [stationInformation]="stationInformation"
@@ -48,7 +50,12 @@
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->
-            <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
+            <mat-tab-group
+              mat-align-tabs="center"
+              class="mt-2 w-full pb-8"
+              [selectedIndex]="stationTabsIndex"
+              (selectedTabChange)="tabSelectedChanged($event)"
+            >
               <mat-tab>
                 <ng-template mat-tab-label>
                   <span data-testid="document-tab">Document</span>
@@ -152,6 +159,7 @@
                   <app-flow-logic
                     [rithmId]="stationRithmId"
                     [nextStations]="forwardStations"
+                    (modifiedFlowRules)="addFlowLogicRule($event)"
                   ></app-flow-logic>
                 </ng-template>
               </mat-tab>
@@ -179,15 +187,9 @@
                     class="mx-2"
                     id="station-save"
                     type="submit"
-                    [disabled]="
-                      !stationForm.valid &&
-                      !(
-                        !stationForm.dirty ||
-                        !stationForm.controls.stationTemplateForm.touched
-                      )
-                    "
+                    [disabled]="disableSaveButton"
                   >
-                    Save
+                    {{ this.isFlowLogicTab ? 'Save Rules' : 'Save' }}
                   </button>
                 </div>
               </div>
