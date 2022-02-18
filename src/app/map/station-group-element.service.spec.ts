@@ -4,11 +4,102 @@ import { MockMapService } from 'src/mocks';
 
 import { StationGroupElementService } from './station-group-element.service';
 import { MapService } from './map.service';
-import { Point } from 'src/models';
-import { GROUP_CHARACTER_SIZE } from './map-constants';
+import {
+  Corner,
+  MapItemStatus,
+  Point,
+  StationGroupMapData,
+  StationMapData,
+} from 'src/models';
+import {
+  DEFAULT_SCALE,
+  GROUP_CHARACTER_SIZE,
+  SCALE_RENDER_STATION_ELEMENTS,
+  STATION_GROUP_PADDING,
+  STATION_HEIGHT,
+  STATION_WIDTH,
+} from './map-constants';
+import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 
 describe('StationGroupElementService', () => {
   let service: StationGroupElementService;
+  let mapService: MapService;
+  const stationGroupsMapData: StationGroupMapData[] = [
+    {
+      rithmId: 'Root',
+      title: 'Root',
+      organizationRithmId: '',
+      stations: [
+        'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+      ],
+      subStationGroups: [
+        'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+      ],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: true,
+    },
+    {
+      rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+      title: 'Rithm Group',
+      organizationRithmId: '',
+      stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+      subStationGroups: [],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: true,
+    },
+    {
+      rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+      title: ' Sub RithmGroup',
+      organizationRithmId: '',
+      stations: [],
+      subStationGroups: [],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: false,
+    },
+  ];
+  const stationsMapData: StationMapData[] = [
+    {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationName: 'Development',
+      noOfDocuments: 5,
+      mapPoint: {
+        x: 12,
+        y: 15,
+      },
+      previousStations: [],
+      nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
+      status: MapItemStatus.Normal,
+      notes: '',
+    },
+    {
+      rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+      stationName: 'Step 1',
+      noOfDocuments: 5,
+      mapPoint: {
+        x: 200,
+        y: 80,
+      },
+      previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+      nextStations: [],
+      status: MapItemStatus.Normal,
+      notes: '',
+    },
+    {
+      rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+      stationName: 'Step 2',
+      noOfDocuments: 5,
+      mapPoint: {
+        x: 500,
+        y: 400,
+      },
+      previousStations: [],
+      nextStations: [],
+      status: MapItemStatus.Normal,
+      notes: '',
+    },
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -16,6 +107,7 @@ describe('StationGroupElementService', () => {
       providers: [{ provide: MapService, useClass: MockMapService }],
     });
     service = TestBed.inject(StationGroupElementService);
+    mapService = TestBed.inject(MapService);
   });
 
   it('should be created', () => {
@@ -102,5 +194,253 @@ describe('StationGroupElementService', () => {
       service.distanceBetweenTwoPoints(pointStart, pointEnd).toFixed(2)
     );
     expect(distance).toEqual(distanceExpect);
+  });
+
+  it('should compare and sort the points', () => {
+    const points: Point[] = [
+      { x: 97, y: -216 },
+      { x: 125, y: 223 },
+      { x: 240, y: 129 },
+      { x: 74, y: 56 },
+      { x: 240, y: 87 },
+      { x: 219, y: -210 },
+      { x: -186, y: -3 },
+      { x: -91, y: 194 },
+      { x: -104, y: 299 },
+      { x: 222, y: -152 },
+    ];
+    const expectPoints: Point[] = [
+      { x: -186, y: -3 },
+      { x: -104, y: 299 },
+      { x: -91, y: 194 },
+      { x: 74, y: 56 },
+      { x: 97, y: -216 },
+      { x: 125, y: 223 },
+      { x: 219, y: -210 },
+      { x: 222, y: -152 },
+      { x: 240, y: 87 },
+      { x: 240, y: 129 },
+    ];
+    points.sort(service.comparePoints);
+    expect(points).toEqual(expectPoints);
+  });
+
+  it('should call method drawStationGroups', () => {
+    mapService.stationGroupElements = stationGroupsMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+
+    const drawStationGroupSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'drawStationGroup'
+    );
+    service.drawStationGroups();
+    expect(drawStationGroupSpy).toHaveBeenCalledOnceWith(
+      mapService.stationGroupElements[0]
+    );
+  });
+
+  it('should get the station points for a station group', () => {
+    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
+
+    mapService.stationElements = stationsMapData.map(
+      (e) => new StationMapElement(e)
+    );
+
+    const expectPositionStations = [0, 2];
+    const expectPoints: Point[] = [];
+    expectPositionStations.forEach((positionStation) => {
+      const scaledPadding = STATION_GROUP_PADDING * mapService.mapScale$.value;
+      const maxX =
+        mapService.stationElements[positionStation].canvasPoint.x +
+        STATION_WIDTH * mapService.mapScale$.value;
+      const maxY =
+        mapService.stationElements[positionStation].canvasPoint.y +
+        STATION_HEIGHT * mapService.mapScale$.value;
+      expectPoints.push(
+        {
+          x:
+            mapService.stationElements[positionStation].canvasPoint.x -
+            scaledPadding,
+          y:
+            mapService.stationElements[positionStation].canvasPoint.y -
+            scaledPadding,
+          corner: Corner.TopLeft,
+        },
+        {
+          x: maxX + scaledPadding,
+          y:
+            mapService.stationElements[positionStation].canvasPoint.y -
+            scaledPadding,
+          corner: Corner.TopRight,
+        },
+        {
+          x:
+            mapService.stationElements[positionStation].canvasPoint.x -
+            scaledPadding,
+          y: maxY + scaledPadding,
+          corner: Corner.BottomLeft,
+        },
+        {
+          x: maxX + scaledPadding,
+          y: maxY + scaledPadding,
+          corner: Corner.BottomRight,
+        }
+      );
+    });
+
+    const points = service.getStationPointsForStationGroup(stationGroup);
+    expect(points).toEqual(expectPoints);
+  });
+
+  it('should padding a station group', () => {
+    const points: Point[] = [
+      { x: -186, y: -3, corner: Corner.BottomLeft },
+      { x: -104, y: 299, corner: Corner.BottomLeft },
+      { x: -91, y: 194, corner: Corner.BottomRight },
+      { x: 74, y: 56, corner: Corner.BottomRight },
+      { x: 97, y: -216, corner: Corner.BottomRight },
+      { x: 125, y: 223, corner: Corner.TopRight },
+      { x: 219, y: -210, corner: Corner.TopRight },
+      { x: 222, y: -152, corner: Corner.BottomRight },
+      { x: 240, y: 87, corner: Corner.TopLeft },
+      { x: 240, y: 129, corner: Corner.TopLeft },
+    ];
+    const padding = STATION_GROUP_PADDING * mapService.mapScale$.value;
+    const expectPoints: Point[] = [
+      { x: -186 - padding, y: -3 + padding, corner: Corner.BottomLeft },
+      { x: -104 - padding, y: 299 + padding, corner: Corner.BottomLeft },
+      { x: -91 + padding, y: 194 + padding, corner: Corner.BottomRight },
+      { x: 74 + padding, y: 56 + padding, corner: Corner.BottomRight },
+      { x: 97 + padding, y: -216 + padding, corner: Corner.BottomRight },
+      { x: 125 + padding, y: 223 - padding, corner: Corner.TopRight },
+      { x: 219 + padding, y: -210 - padding, corner: Corner.TopRight },
+      { x: 222 + padding, y: -152 + padding, corner: Corner.BottomRight },
+      { x: 240 - padding, y: 87 - padding, corner: Corner.TopLeft },
+      { x: 240 - padding, y: 129 - padding, corner: Corner.TopLeft },
+    ];
+    const newPoints = service.getPaddedStationGroupBoundaryPoints(points);
+    expect(newPoints).toEqual(expectPoints);
+  });
+
+  it('should call method getPaddedStationGroupBoundaryPoints for a sub station group ', () => {
+    mapService.stationGroupElements = stationGroupsMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+
+    const getPaddedStationGroupBoundaryPointsSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'getPaddedStationGroupBoundaryPoints'
+    ).and.callFake(() => []);
+
+    service.getSubStationGroupPointsForStationGroup(
+      mapService.stationGroupElements[0]
+    );
+
+    expect(getPaddedStationGroupBoundaryPointsSpy).toHaveBeenCalled();
+    expect(getPaddedStationGroupBoundaryPointsSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('should get convex hull', () => {
+    const getConvexHullPresortedSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'getConvexHullPresorted'
+    ).and.callThrough();
+    const comparePointsSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'comparePoints'
+    ).and.callThrough();
+
+    const points: Point[] = [
+      { x: 97, y: -216 },
+      { x: 125, y: 223 },
+      { x: 240, y: 129 },
+      { x: 74, y: 56 },
+      { x: 240, y: 87 },
+      { x: 219, y: -210 },
+      { x: -186, y: -3 },
+      { x: -91, y: 194 },
+      { x: -104, y: 299 },
+      { x: 222, y: -152 },
+    ];
+    const expectPoints: Point[] = [
+      { x: -186, y: -3 },
+      { x: -104, y: 299 },
+      { x: 125, y: 223 },
+      { x: 240, y: 129 },
+      { x: 240, y: 87 },
+      { x: 219, y: -210 },
+      { x: 97, y: -216 },
+    ];
+    const convexPoints = service.getConvexHull(points);
+    expect(comparePointsSpy).toHaveBeenCalled();
+    expect(getConvexHullPresortedSpy).toHaveBeenCalled();
+    expect(convexPoints).toEqual(expectPoints);
+  });
+
+  it('should call animate pending group', () => {
+    service.animatePendingGroup();
+    expect(service.offset).toBe(1);
+    for (let i = 1; i < 15; i++) {
+      service.animatePendingGroup();
+    }
+    expect(service.offset).toBe(0);
+  });
+
+  it('should call all methods inside drawStationGroup', () => {
+    mapService.stationGroupElements = stationGroupsMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    const getStationPointsForStationGroupSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'getStationPointsForStationGroup'
+    ).and.callFake(() => []);
+    const getSubStationGroupPointsForStationGroupSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'getSubStationGroupPointsForStationGroup'
+    ).and.callFake(() => []);
+    const getConvexHullSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'getConvexHull'
+    ).and.callFake(() => [
+      { x: -186, y: -3 },
+      { x: -104, y: 299 },
+      { x: 125, y: 223 },
+      { x: 240, y: 129 },
+      { x: 240, y: 87 },
+      { x: 219, y: -210 },
+      { x: 97, y: -216 },
+    ]);
+    const setStationGroupBoundaryPathSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'setStationGroupBoundaryPath'
+    );
+    const drawStationGroupBoundaryLineSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'drawStationGroupBoundaryLine'
+    );
+    const drawStationGroupNameSpy = spyOn(
+      TestBed.inject(StationGroupElementService),
+      'drawStationGroupName'
+    );
+    mapService.mapScale$.next(SCALE_RENDER_STATION_ELEMENTS);
+    service.drawStationGroup(mapService.stationGroupElements[0]);
+    // When the station group name isn't visible.
+    expect(getStationPointsForStationGroupSpy).toHaveBeenCalled();
+    expect(getSubStationGroupPointsForStationGroupSpy).toHaveBeenCalled();
+    expect(getConvexHullSpy).toHaveBeenCalled();
+    expect(setStationGroupBoundaryPathSpy).toHaveBeenCalled();
+    expect(drawStationGroupBoundaryLineSpy).toHaveBeenCalled();
+    expect(drawStationGroupNameSpy).not.toHaveBeenCalled();
+
+    // When the station group name is visible.
+    mapService.mapScale$.next(DEFAULT_SCALE);
+    service.drawStationGroup(mapService.stationGroupElements[0]);
+    expect(getStationPointsForStationGroupSpy).toHaveBeenCalledTimes(2);
+    expect(getSubStationGroupPointsForStationGroupSpy).toHaveBeenCalledTimes(2);
+    expect(getConvexHullSpy).toHaveBeenCalledTimes(2);
+    expect(setStationGroupBoundaryPathSpy).toHaveBeenCalledTimes(2);
+    expect(drawStationGroupBoundaryLineSpy).toHaveBeenCalledTimes(2);
+    expect(drawStationGroupNameSpy).toHaveBeenCalled();
   });
 });
