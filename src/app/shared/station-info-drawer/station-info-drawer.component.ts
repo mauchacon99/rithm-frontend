@@ -329,7 +329,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
             this.stationLoading = false;
-            this.allowAllOrgLoading = false;
             this.lastUpdatedLoading = false;
           },
           // eslint-disable-next-line
