@@ -256,6 +256,7 @@ describe('OptionsMenuComponent', () => {
   it('should call deleteDashboard for delete dashboard company', () => {
     component.dashboardRole = RoleDashboardMenu.Company;
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    fixture.detectChanges();
 
     const deleteDashboard = spyOn(
       component,
@@ -271,20 +272,17 @@ describe('OptionsMenuComponent', () => {
       TestBed.inject(DashboardService),
       'deletePersonalDashboard'
     ).and.callThrough();
-
-    const emit = spyOn(component.updateDashboardList, 'emit');
-    fixture.detectChanges();
 
     component.deleteDashboard(rithmId);
     expect(deleteDashboard).toHaveBeenCalledOnceWith(rithmId);
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(deletePersonalDashboard).not.toHaveBeenCalledOnceWith(rithmId);
-    expect(emit).toHaveBeenCalledOnceWith();
   });
 
   it('should call deleteDashboard for delete dashboard personal', () => {
     component.dashboardRole = RoleDashboardMenu.Personal;
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    fixture.detectChanges();
 
     const deleteDashboard = spyOn(
       component,
@@ -301,13 +299,9 @@ describe('OptionsMenuComponent', () => {
       'deletePersonalDashboard'
     ).and.callThrough();
 
-    const emit = spyOn(component.updateDashboardList, 'emit');
-    fixture.detectChanges();
-
     component.deleteDashboard(rithmId);
     expect(deleteDashboard).toHaveBeenCalledOnceWith(rithmId);
     expect(deleteCompanyDashboard).not.toHaveBeenCalled();
     expect(deletePersonalDashboard).toHaveBeenCalledOnceWith(rithmId);
-    expect(emit).toHaveBeenCalledOnceWith();
   });
 });
