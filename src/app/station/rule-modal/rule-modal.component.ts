@@ -137,10 +137,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       text: 'contains',
       value: OperatorType.Contains,
     },
-    {
-      text: 'does not contain',
-      value: OperatorType.NotContains,
-    },
+    /** Not contain, not working. */
+    // {
+    //   text: 'does not contain',
+    //   value: OperatorType.NotContains,
+    // },
   ];
 
   /** Number group for the operator options. */
