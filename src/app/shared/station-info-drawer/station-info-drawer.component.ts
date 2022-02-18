@@ -128,6 +128,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Get flow button name. */
   flowButtonName = '';
+  
+  /** Use for catch error in update for permission of all org workers. */
+  allowAllOrgError = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -331,6 +334,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.flowButtonName = this.stationInformation.flowButton;
             }
             this.stationLoading = false;
+            this.lastUpdatedLoading = false;
           },
           // eslint-disable-next-line
           error: (error: any) => {
@@ -339,6 +343,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             } else {
               this.stationLoading = false;
             }
+            this.allowAllOrgError = true;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -678,6 +683,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.allowAllOrgLoading = false;
+          this.allowAllOrgError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
