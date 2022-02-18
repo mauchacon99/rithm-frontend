@@ -2,7 +2,7 @@
 <div class="modal-container">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
-    <h4 class="text-center">New Rule</h4>
+    <h4 class="text-center">New Rule {{ displayOperatorType }}</h4>
   </div>
   <!-- Stepper for new rule -->
   <mat-stepper
@@ -36,19 +36,37 @@
             <mat-option
               *ngFor="let question of questionStation"
               [value]="question.rithmId"
-              (click)="question.questionType !== questionTypes.AddressLine ? setFirstOperandInformation(question) : false"
+              (click)="
+                question.questionType !== questionTypes.AddressLine
+                  ? setFirstOperandInformation(question)
+                  : false
+              "
             >
-              <ng-container *ngIf="question.questionType !== questionTypes.AddressLine; else isAddressLine">
+              <ng-container
+                *ngIf="
+                  question.questionType !== questionTypes.AddressLine;
+                  else isAddressLine
+                "
+              >
                 {{ question.prompt }}
               </ng-container>
               <ng-template #isAddressLine>
-                <mat-select [(value)]="firstOperandQuestionRithmId" [placeholder]="question.prompt">
+                <mat-select
+                  [(value)]="firstOperandQuestionRithmId"
+                  [placeholder]="question.prompt"
+                >
                   <mat-option
-                    *ngFor="let subquestion of question.children; let child = index"
+                    *ngFor="
+                      let subquestion of question.children;
+                      let child = index
+                    "
                     [value]="question.rithmId"
                     (click)="setFirstOperandInformation(question, child)"
                   >
-                   <span class="text-secondary-200">{{question.prompt}} /</span> {{ subquestion.prompt }}
+                    <span class="text-secondary-200"
+                      >{{ question.prompt }} /</span
+                    >
+                    {{ subquestion.prompt }}
                   </mat-option>
                 </mat-select>
               </ng-template>

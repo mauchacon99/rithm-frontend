@@ -7,6 +7,7 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
+import { STATES } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
@@ -101,6 +102,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** The type of the first questions selected for the first operand. */
   firstOperandQuestionType!: QuestionFieldType;
+
+  /** The type of the second questions selected for the first operand. */
+  secondOperandQuestionType!: QuestionFieldType;
 
   /** The information of the operator selected. */
   operatorSelected: {
@@ -263,7 +267,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     const secondOperandQuestions: Question[] = this.questionStation.filter(
       (question: Question) =>
         question.rithmId !== this.firstOperandQuestionRithmId &&
-        question.questionType === this.firstOperandQuestionType
+        question.questionType === this.secondOperandQuestionType
     );
     return secondOperandQuestions;
   }
@@ -296,7 +300,13 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         ? 'select'
         : this.firstOperandQuestionType === this.questionTypes.MultiSelect
         ? 'multiselect'
-        : 'checklist'
+        : this.firstOperandQuestionType === this.questionTypes.CheckList
+        ? 'checklist'
+        : this.firstOperandQuestionType === this.questionTypes.State
+        ? 'select'
+        : this.firstOperandQuestionType === this.questionTypes.Zip
+        ? 'number'
+        : 'string'
       : 'string';
   }
 
@@ -337,6 +347,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   setFirstOperandInformation(questionSelected: Question, childIndex = 0): void {
     this.firstOperandQuestionType = questionSelected.questionType;
+    this.secondOperandQuestionType = questionSelected.questionType;
     this.secondOperandDefaultQuestion.questionType =
       questionSelected.questionType;
     this.firstOperand.value = questionSelected.rithmId;
@@ -391,11 +402,27 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         break;
       case QuestionFieldType.AddressLine:
         // eslint-disable-next-line no-case-declarations
-        const childType: QuestionFieldType = questionSelected.children[childIndex].questionType;
-        this.firstOperandQuestionType = childType;
-        this.firstOperand.value = questionSelected.prompt + ' / ' + questionSelected.children[childIndex].prompt;
-        this.firstOperand.type = OperandType.String;
-        if (childType === QuestionFieldType.State || childType === QuestionFieldType.Zip) {
+        const childType: QuestionFieldType =
+          questionSelected.children[childIndex].questionType;
+        this.secondOperandDefaultQuestion.children = questionSelected.children;
+        this.secondOperandDefaultQuestion.possibleAnswers =
+          childType === QuestionFieldType.State ? STATES : [];
+        this.secondOperandDefaultQuestion.questionType = childType;
+        this.firstOperand.value = questionSelected.children[childIndex].rithmId;
+        this.firstOperand.text =
+          questionSelected.prompt +
+          ' / ' +
+          questionSelected.children[childIndex].prompt;
+        this.firstOperand.type =
+          childType === QuestionFieldType.State
+            ? OperandType.Field
+            : childType === QuestionFieldType.Zip
+            ? OperandType.Number
+            : OperandType.String;
+        if (
+          childType === QuestionFieldType.State ||
+          childType === QuestionFieldType.Zip
+        ) {
           this.operatorList = this.selectGroup;
         } else {
           this.operatorList = this.textGroup;
