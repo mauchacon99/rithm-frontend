@@ -85,7 +85,7 @@
       >
         <ng-container *ngFor="let document of dataStationWidget.documents">
           <div
-            class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+            class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-primary-500"
           >
             {{ document.name || 'Untitled Document' }}
           </div>
@@ -116,7 +116,7 @@
             </div>
           </div>
           <div
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-primary-500"
           >
             {{ getElapsedTime(document.flowedTimeUTC) }}
           </div>
