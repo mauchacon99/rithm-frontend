@@ -413,6 +413,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
           questionSelected.prompt +
           ' / ' +
           questionSelected.children[childIndex].prompt;
+        this.firstOperandQuestionType = childType;
         this.firstOperand.type =
           childType === QuestionFieldType.State
             ? OperandType.Field
