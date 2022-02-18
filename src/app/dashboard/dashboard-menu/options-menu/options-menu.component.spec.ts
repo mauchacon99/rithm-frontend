@@ -235,7 +235,6 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should display a confirmation pop up', async () => {
-    fixture.detectChanges();
     const confirmationData = {
       title: 'Delete dashboard?',
       message: 'This cannot be undone!',
