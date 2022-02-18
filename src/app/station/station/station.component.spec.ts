@@ -321,7 +321,7 @@ describe('StationComponent', () => {
     expect(flowButtonName).toBe('');
     expect(component.stationInformation.flowButton).toBe('Flow');
   });
-  
+
   it('should call the method that detect change tabs.', () => {
     const tabsIndex = {
       index: 1,
