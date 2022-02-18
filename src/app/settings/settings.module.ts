@@ -6,7 +6,8 @@ import { NotificationSettingsComponent } from './notification-settings/notificat
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
+import { UserFormModule } from 'src/app/shared/user-form/user-form.module';
 
 @NgModule({
   declarations: [AccountSettingsComponent, NotificationSettingsComponent],
@@ -17,6 +18,7 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     MatButtonModule,
     ReactiveFormsModule,
     LoadingIndicatorModule,
+    UserFormModule
   ],
 })
 export class SettingsModule {}
