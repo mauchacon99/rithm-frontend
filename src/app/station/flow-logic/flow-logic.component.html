@@ -35,24 +35,31 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).equations
+                  let equation of getStationFlowRules(station.rithmId)
+                    .equations;
+                  let j = index
                 "
               >
                 <p
                   class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                 >
-                  {{ rule.leftOperand.value | titlecase }}
+                  {{ equation.leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
-                    - {{ rule.operatorType }} -</span
+                    - {{ equation.operatorType }} -</span
                   >
-                  {{ rule.rightOperand.value | titlecase }}
+                  {{ equation.rightOperand.text | titlecase }}
                 </p>
                 <figure class="flex">
                   <button
+                    attr.data-testid="edit-rule-button-all-{{
+                      station.rithmId
+                    }}-{{ j }}"
+                    id="edit-rule-button-all-{{ station.rithmId }}-{{ j }}"
                     type="button"
                     mat-icon-button
                     matSuffix
                     matTooltip="Edit current rule"
+                    (click)="openModal('all', station.rithmId)"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
                   </button>
@@ -60,7 +67,12 @@
                     type="button"
                     mat-icon-button
                     matSuffix
+                    id="delete-rule-button-all-{{ station.rithmId }}-{{ j }}"
+                    attr.data-testid="delete-rule-button-all-{{
+                      station.rithmId
+                    }}-{{ j }}"
                     matTooltip="Remove current rule"
+                    (click)="deleteRuleFromStationFlowLogic()"
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>
@@ -89,24 +101,30 @@
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
-                  let rule of getStationFlowRules(station.rithmId).subRules
+                  let subRule of getStationFlowRules(station.rithmId).subRules;
+                  let k = index
                 "
               >
                 <p
                   class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                 >
-                  {{ rule.leftOperand.value | titlecase }}
+                  {{ subRule.equations[0].leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
-                    - {{ rule.operatorType }} -</span
+                    - {{ subRule.equations[0].operatorType }} -</span
                   >
-                  {{ rule.rightOperand.value | titlecase }}
+                  {{ subRule.equations[0].rightOperand.text | titlecase }}
                 </p>
                 <figure class="flex">
                   <button
+                    attr.data-testid="edit-rule-button-any-{{
+                      station.rithmId
+                    }}-{{ k }}"
+                    id="edit-rule-button-any-{{ station.rithmId }}-{{ k }}"
                     type="button"
                     mat-icon-button
                     matSuffix
                     matTooltip="Edit current rule"
+                    (click)="openModal('any', station.rithmId)"
                   >
                     <i class="fas fa-pen text-secondary-300 text-base"></i>
                   </button>
@@ -114,7 +132,12 @@
                     type="button"
                     mat-icon-button
                     matSuffix
+                    id="delete-rule-button-any-{{ station.rithmId }}-{{ k }}"
+                    attr.data-testid="delete-rule-button-any-{{
+                      station.rithmId
+                    }}-{{ k }}"
                     matTooltip="Remove current rule"
+                    (click)="deleteRuleFromStationFlowLogic()"
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>

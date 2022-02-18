@@ -10,13 +10,11 @@
       >
         <span>{{ stationName }}</span>
         <button
+          type="button"
           data-testid="station-info-drawer"
           mat-icon-button
-          matSuffix
-          class="icon icon-top"
           (click)="toggleDrawer('stationInfo')"
           [disabled]="isDrawerOpen"
-          type="button"
         >
           <i
             class="fas fa-info-circle text-2xl"
@@ -44,10 +42,10 @@
           />
         </mat-form-field>
         <button
+          type="button"
           data-testid="station-info-drawer"
           id="info-drawer-button-station"
           mat-icon-button
-          class="icon icon-top pl-2"
           (click)="toggleDrawer('stationInfo')"
           [disabled]="isDrawerOpen"
         >

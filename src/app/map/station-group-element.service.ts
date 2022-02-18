@@ -5,6 +5,7 @@ import {
   Point,
   MapMode,
   MapItemStatus,
+  Corner,
 } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
@@ -351,11 +352,12 @@ export class StationGroupElementService {
 
     // Delete the line under the station group name.
     newTitle.forEach((title, index) => {
-      // If the new Position is greater than half of the number of points.
+      // If the point Start is Corner Bottom-left or Bottom-right.
       /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
       at the bottom of the group we delete from the lowest to the highest position. */
       if (
-        Math.round((stationGroup.boundaryPoints.length - 1) / 2) > newPosition
+        stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
+        stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
       ) {
         this.paintOrDeleteLineStationGroupName(
           title,
@@ -377,11 +379,12 @@ export class StationGroupElementService {
 
     // Paint the station group name.
     newTitle.forEach((title, index) => {
-      // If the new Position is greater than half of the number of points.
+      // If the point Start is Corner Bottom-left or Bottom-right.
       /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
       at the bottom of the group we paint from the lowest to the highest position. */
       if (
-        Math.round((stationGroup.boundaryPoints.length - 1) / 2) > newPosition
+        stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
+        stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
       ) {
         this.paintOrDeleteLineStationGroupName(
           title,
@@ -460,18 +463,22 @@ export class StationGroupElementService {
       stationPointsWithinStationGroup.push({
         x: station.canvasPoint.x - scaledPadding,
         y: station.canvasPoint.y - scaledPadding,
+        corner: Corner.TopLeft,
       }); // TL
       stationPointsWithinStationGroup.push({
         x: maxX + scaledPadding,
         y: station.canvasPoint.y - scaledPadding,
+        corner: Corner.TopRight,
       }); // TR
       stationPointsWithinStationGroup.push({
         x: station.canvasPoint.x - scaledPadding,
         y: maxY + scaledPadding,
+        corner: Corner.BottomLeft,
       }); // BL
       stationPointsWithinStationGroup.push({
         x: maxX + scaledPadding,
         y: maxY + scaledPadding,
+        corner: Corner.BottomRight,
       }); // BR
     }
     return stationPointsWithinStationGroup;
@@ -517,21 +524,20 @@ export class StationGroupElementService {
     boundaryPoints: Point[]
   ): Point[] {
     const updatedBoundaryPoints = [...boundaryPoints]; // Deep copy
-    const minX = Math.min(...updatedBoundaryPoints.map((point) => point.x));
-    const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
-    const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
-    const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
 
     for (const point of updatedBoundaryPoints) {
-      if (point.x === maxX) {
-        point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-      } else if (point.x === minX) {
+      if (point.corner === Corner.TopLeft) {
         point.x -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-      }
-      if (point.y === maxY) {
-        point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-      } else if (point.y === minY) {
         point.y -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+      } else if (point.corner === Corner.TopRight) {
+        point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.y -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+      } else if (point.corner === Corner.BottomLeft) {
+        point.x -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+      } else if (point.corner === Corner.BottomRight) {
+        point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       }
     }
 

@@ -74,6 +74,10 @@
                   "with": "src/environments/environment.uat.ts"
                 }
               ],
+              "index": {
+                "input": "src/index.uat.html",
+                "output": "index.html"
+              },
               "budgets": [
                 {
                   "type": "initial",

@@ -15,13 +15,15 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { SimpleChange } from '@angular/core';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
+  const dataWidget =
+    // eslint-disable-next-line max-len
+    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "priority"}, {"name": "name"}, {"name": "Field name 2"}]}';
 
-  const stationRithmId =
-    '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -42,7 +44,7 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    component.stationRithmId = stationRithmId;
+    component.dataWidget = dataWidget;
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
@@ -60,6 +62,7 @@ describe('StationWidgetComponent', () => {
             email: 'string',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -71,13 +74,17 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should call service that return station widget data', () => {
+    const columns = ['756-789-953'];
+    component.columnsFieldPetition = columns;
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
     ).and.callThrough();
-    component.stationRithmId = stationRithmId;
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalledOnceWith(component.stationRithmId);
+    expect(spyService).toHaveBeenCalledOnceWith(
+      component.stationRithmId,
+      component.columnsFieldPetition
+    );
   });
 
   it('should show error message when request station widget document  data', () => {
@@ -93,13 +100,11 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
-    component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
@@ -117,6 +122,7 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -138,7 +144,6 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should no show button if station is different to manual', () => {
-    component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.None,
@@ -156,6 +161,7 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -354,5 +360,39 @@ describe('StationWidgetComponent', () => {
     const errorWidget =
       fixture.debugElement.nativeElement.querySelector('#error-load-widget');
     expect(errorWidget).toBeTruthy();
+  });
+
+  it('should detect change of editMode and return list of components', function () {
+    spyOn(component, 'viewDocument').and.callThrough();
+    spyOn(component, 'toggleExpandWidget').and.callThrough();
+    component.isDocument = true;
+    component.isExpandWidget = true;
+    component.editMode = true;
+    component.ngOnChanges({
+      editMode: new SimpleChange(false, component.editMode, true),
+    });
+    fixture.detectChanges();
+    expect(component.viewDocument).toHaveBeenCalledOnceWith('', true);
+    expect(component.toggleExpandWidget).toHaveBeenCalled();
+  });
+
+  it('should click edit button and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+
+    const btnEdit = fixture.debugElement.nativeElement.querySelector(
+      '#toggle-edit-station'
+    );
+
+    expect(btnEdit).toBeTruthy();
+    btnEdit.disabled = false;
+    btnEdit.click();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
   });
 });

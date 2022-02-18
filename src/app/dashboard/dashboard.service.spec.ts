@@ -9,7 +9,6 @@ import {
   WidgetType,
   DashboardData,
   RoleDashboardMenu,
-  QuestionFieldType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -583,43 +582,5 @@ describe('DashboardService', () => {
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
-  });
-
-  it('should call method getDocumentWidget', () => {
-    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
-    const expectedResponse = {
-      documentName: 'Untitled Document',
-      documentRithmId: 'CDB317AA-A5FE-431D-B003-784A578B3FC2',
-      questions: [
-        {
-          rithmId: '1020-654684304-05060708-090100',
-          prompt: 'Instructions',
-          questionType: QuestionFieldType.Instructions,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-          answer: {
-            questionRithmId: '',
-            referAttribute: '',
-            value: 'Some value.',
-          },
-        },
-        {
-          rithmId: '1020-65sdvsd4-05060708-090trhrth',
-          prompt: 'Name your field',
-          questionType: QuestionFieldType.ShortText,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-          value: '',
-        },
-      ],
-    };
-
-    service.getDocumentWidget(documentRithm).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
   });
 });
