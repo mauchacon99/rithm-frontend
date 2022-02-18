@@ -44,19 +44,23 @@ describe('DocumentService', () => {
   const documentId = 'E204F369-386F-4E41';
   const flowLogicRule: FlowLogicRule = {
     stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-    destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+    destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
     flowRule: {
       ruleType: RuleType.Or,
       equations: [
         {
           leftOperand: {
             type: OperandType.Field,
+            questionType: QuestionFieldType.ShortText,
             value: 'birthday',
+            text: 'test',
           },
           operatorType: OperatorType.Before,
           rightOperand: {
             type: OperandType.Date,
+            questionType: QuestionFieldType.ShortText,
             value: '5/27/1982',
+            text: 'test',
           },
         },
       ],
@@ -776,7 +780,7 @@ describe('DocumentService', () => {
   });
 
   it('should make request to save station flow logic', () => {
-    const parametersBody = flowLogicRule;
+    const parametersBody = [flowLogicRule];
 
     service.saveStationFlowLogic(parametersBody).subscribe((response) => {
       expect(response).toBeFalsy();
@@ -786,7 +790,7 @@ describe('DocumentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`
     );
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(parametersBody);
+    expect(req.request.body).toEqual([parametersBody]);
 
     req.flush(null);
     httpTestingController.verify();
