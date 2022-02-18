@@ -40,7 +40,7 @@ export class OptionsMenuComponent {
   /** Dashboard rithmId. */
   @Input() rithmId!: string;
 
-  /** Update list dashboard.  */
+  /** Update dashboard list.  */
   @Output() updateDashboardList = new EventEmitter();
 
   /** Allows functionality of MatMenu to toggle the menu open. */
