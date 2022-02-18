@@ -713,23 +713,6 @@ fdescribe('FlowLogicComponent', () => {
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 
-  it('should show error message when delete logical flow rules for each station', async () => {
-    spyOn(
-      TestBed.inject(DocumentService),
-      'deleteRuleFromStationFlowLogic'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const displayErrorSpy = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    await component.deleteRuleFromStationFlowLogic();
-    expect(displayErrorSpy).toHaveBeenCalled();
-  });
-
   it('should open confirmation popup when call the method that deletes the rule', () => {
     const dataToConfirmPopup = {
       title: 'Remove Rule',

@@ -180,25 +180,10 @@ export class FlowLogicComponent implements OnInit {
    * Delete rule from station flow logic.
    */
   async deleteRuleFromStationFlowLogic(): Promise<void> {
-    const confirm: boolean = await this.popupService.confirm({
+    await this.popupService.confirm({
       title: 'Remove Rule',
       message: `Are you sure to remove the selected rule from this station?`,
       okButtonText: 'Remove',
     });
-    if (confirm) {
-      this.documentService
-        .deleteRuleFromStationFlowLogic(this.flowLogicRules)
-        .pipe(first())
-        .subscribe({
-          error: (error: unknown) => {
-            this.flowRuleError = true;
-            this.flowLogicLoading = false;
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          },
-        });
-    }
   }
 }
