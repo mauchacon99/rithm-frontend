@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -27,6 +27,9 @@ export class FlowLogicComponent implements OnInit {
 
   /** Station Rithm id. */
   @Input() rithmId = '';
+
+  /** The modified Flow Logic Rule to send back to station. */
+  @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -79,17 +82,22 @@ export class FlowLogicComponent implements OnInit {
       dialog
         .afterClosed()
         .pipe(first())
-        .subscribe((rule) => {
-          if (rule) {
+        .subscribe((equation) => {
+          if (equation) {
             const flowLogicStation = this.flowLogicRules.find(
               (station) =>
-                station.destinationStationRithmId === connectedStationId
+                station.destinationStationRithmID === connectedStationId
             );
+            const subRule: Rule = {
+              ruleType: RuleType.Or,
+              equations: [equation],
+              subRules: [],
+            };
             if (!flowLogicStation) {
               // add a flowLogicRule with this connectedStation to the FlowLogicRule array
               const flowLogic: FlowLogicRule = {
                 stationRithmId: this.rithmId,
-                destinationStationRithmId: connectedStationId,
+                destinationStationRithmID: connectedStationId,
                 flowRule: {
                   ruleType: RuleType.And,
                   equations: [],
@@ -97,18 +105,20 @@ export class FlowLogicComponent implements OnInit {
                 },
               };
               if (type === 'all') {
-                flowLogic.flowRule.equations.push(rule);
+                flowLogic.flowRule.equations.push(equation);
               } else {
-                flowLogic.flowRule.subRules.push(rule);
+                flowLogic.flowRule.subRules.push(subRule);
               }
               this.flowLogicRules.push(flowLogic);
+              this.modifiedFlowRules.emit(flowLogic);
             } else {
               // Update the flowRules if the station exists in the FlowLogicRule array
               if (type === 'all') {
-                flowLogicStation.flowRule.equations.push(rule);
+                flowLogicStation.flowRule.equations.push(equation);
               } else {
-                flowLogicStation.flowRule.subRules.push(rule);
+                flowLogicStation.flowRule.subRules.push(subRule);
               }
+              this.modifiedFlowRules.emit(flowLogicStation);
             }
           }
         });
@@ -170,7 +180,7 @@ export class FlowLogicComponent implements OnInit {
       subRules: [],
     };
     const rule = this.flowLogicRules.find(
-      (station) => station.destinationStationRithmId === connectedStationId
+      (station) => station.destinationStationRithmID === connectedStationId
     )?.flowRule;
     return rule ? rule : defaultRule;
   }

@@ -373,7 +373,7 @@ describe('MapCanvasComponent', () => {
     });
   });
 
-  it('should be able to set station group as selected', () => {
+  xit('should be able to set station group as selected', () => {
     spyOnProperty(window, 'innerWidth').and.returnValue(800);
     window.dispatchEvent(new Event('resize'));
     spyOnProperty(window, 'innerHeight').and.returnValue(600);
