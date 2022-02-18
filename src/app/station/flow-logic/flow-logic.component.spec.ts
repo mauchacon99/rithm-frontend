@@ -40,7 +40,7 @@ import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.
 import { RuleEquation } from 'src/models/rule-equation';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-fdescribe('FlowLogicComponent', () => {
+describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
