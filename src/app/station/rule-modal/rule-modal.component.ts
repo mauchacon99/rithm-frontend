@@ -28,6 +28,7 @@ import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-field.component';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -50,6 +51,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The component date-field to be updated for step 3. */
   @ViewChild('dateField', { static: false })
   dateField!: DateFieldComponent;
+
+  /** The component date-field to be updated for step 3. */
+  @ViewChild('selectField', { static: false })
+  selectField!: SelectFieldComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -74,8 +79,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** The value of the first operand. */
   firstOperand: RuleOperand = {
-    value: '',
     type: OperandType.String,
+    questionType: QuestionFieldType.ShortText,
+    value: '',
+    text: '',
   };
 
   /** The rithmId of the second selected question to be compared if needed. */
@@ -86,8 +93,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** The value of the second operand. */
   secondOperand: RuleOperand = {
-    value: '',
     type: OperandType.String,
+    questionType: QuestionFieldType.ShortText,
+    value: '',
+    text: '',
   };
 
   /** The type of the first questions selected for the first operand. */
@@ -129,10 +138,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       text: 'contains',
       value: OperatorType.Contains,
     },
-    {
-      text: 'does not contain',
-      value: OperatorType.NotContains,
-    },
+    /** Not contain, not working. */
+    // {
+    //   text: 'does not contain',
+    //   value: OperatorType.NotContains,
+    // },
   ];
 
   /** Number group for the operator options. */
@@ -201,6 +211,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     isPrivate: false,
     value: '',
     children: [],
+    possibleAnswers: [],
   };
 
   /** The rule to be returned and added to new rulesArray. */
@@ -224,8 +235,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((answer: DocumentAnswer) => {
+        this.secondOperand.text = answer.value;
         this.secondOperand.value = answer.value;
-        this.secondOperand.type = this.firstOperand.type;
       });
   }
 
@@ -269,6 +280,27 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Returns the second Operand to display in the las step.
+   *
+   * @returns A normal value or a rithmId to display.
+   */
+  get displayOperatorType(): string {
+    return this.firstOperand.type === this.operandType.String
+      ? 'string'
+      : this.firstOperand.type === this.operandType.Date
+      ? 'date'
+      : this.firstOperand.type === this.operandType.Number
+      ? 'number'
+      : this.firstOperand.type === this.operandType.Field
+      ? this.firstOperandQuestionType === this.questionTypes.Select
+        ? 'select'
+        : this.firstOperandQuestionType === this.questionTypes.MultiSelect
+        ? 'multiselect'
+        : 'checklist'
+      : 'string';
+  }
+
+  /**
    * Get current and previous questions.
    */
   getStationQuestions(): void {
@@ -304,41 +336,58 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param childIndex Optional value to be used in case of addressLine questions.
    */
   setFirstOperandInformation(questionSelected: Question, childIndex = 0): void {
-    //Set first field type for options of the second operand
     this.firstOperandQuestionType = questionSelected.questionType;
     this.secondOperandDefaultQuestion.questionType =
       questionSelected.questionType;
-    //Set first operand of text to show. */
-    this.firstOperand.value = questionSelected.prompt;
+    this.firstOperand.value = questionSelected.rithmId;
+    this.firstOperand.text = questionSelected.prompt;
     switch (questionSelected.questionType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
       case QuestionFieldType.Email:
       case QuestionFieldType.Phone:
-      case QuestionFieldType.MultiSelect:
         this.operatorList = this.textGroup;
         this.firstOperand.type =
           questionSelected.questionType !== QuestionFieldType.Phone
             ? OperandType.String
             : OperandType.Number;
+        this.secondOperand.type = this.firstOperand.type;
         break;
       case QuestionFieldType.LongText:
-      case QuestionFieldType.CheckList:
         this.operatorList = this.contentGroup;
         this.firstOperand.type = OperandType.String;
+        this.secondOperand.type = this.firstOperand.type;
         break;
+
       case QuestionFieldType.Number:
       case QuestionFieldType.Currency:
         this.operatorList = this.numberGroup;
         this.firstOperand.type = OperandType.Number;
+        this.secondOperand.type = this.firstOperand.type;
         break;
       case QuestionFieldType.Date:
         this.operatorList = this.dateGroup;
         this.firstOperand.type = OperandType.Date;
+        this.secondOperand.type = this.firstOperand.type;
         break;
+      case QuestionFieldType.MultiSelect:
       case QuestionFieldType.Select:
-        this.operatorList = this.selectGroup;
-        this.firstOperand.type = OperandType.String;
+        this.operatorList = this.textGroup;
+        this.firstOperand.type = OperandType.Field;
+        this.secondOperand.type = OperandType.String;
+        this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+        this.secondOperandDefaultQuestion.possibleAnswers =
+          questionSelected.possibleAnswers;
+        break;
+      case QuestionFieldType.CheckList:
+        this.operatorList = this.textGroup;
+        this.firstOperand.type = OperandType.Field;
+        this.secondOperand.type = OperandType.String;
+        this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+        this.secondOperandDefaultQuestion.questionType =
+          QuestionFieldType.MultiSelect;
+        this.secondOperandDefaultQuestion.possibleAnswers =
+          questionSelected.possibleAnswers;
         break;
       case QuestionFieldType.AddressLine:
         // eslint-disable-next-line no-case-declarations
@@ -370,15 +419,20 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Reset component field when a first operand is selected.
    */
   resetQuestionFieldComponent(): void {
-    switch (this.firstOperand.type) {
-      case OperandType.String:
+    switch (this.displayOperatorType) {
+      case 'string':
         this.textField?.ngOnInit();
         break;
-      case OperandType.Number:
+      case 'number':
         this.numberField?.ngOnInit();
         break;
-      case OperandType.Date:
+      case 'date':
         this.dateField?.ngOnInit();
+        break;
+      case 'select':
+      case 'multiselect':
+      case 'checklist':
+        this.selectField?.ngOnInit();
         break;
     }
   }
@@ -417,14 +471,18 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.ruleToAdd = {
       leftOperand: {
         type: this.firstOperand.type,
-        value: this.firstOperand.value,
+        questionType: QuestionFieldType.ShortText,
+        value: this.firstOperandQuestionRithmId,
+        text: this.firstOperand.text,
       },
       operatorType: this.operatorSelected
         ? this.operatorSelected.value
         : OperatorType.EqualTo,
       rightOperand: {
         type: this.secondOperand.type,
+        questionType: QuestionFieldType.ShortText,
         value: this.secondOperand.value,
+        text: this.secondOperandToShow,
       },
     };
     this.dialogRef.close(this.ruleToAdd);

@@ -6,7 +6,11 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { of, throwError } from 'rxjs';
 import { Location } from '@angular/common';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDashboardService, MockErrorService } from 'src//mocks';
+import {
+  MockDashboardService,
+  MockErrorService,
+  MockPopupService,
+} from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
@@ -14,6 +18,7 @@ import { MenuComponent } from '../menu/menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -47,6 +52,7 @@ describe('OptionsMenuComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
       imports: [
         MatMenuModule,
@@ -215,6 +221,7 @@ describe('OptionsMenuComponent', () => {
 
   it('should call method deletePersonalDashboard', () => {
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+
     const deleteIndividualDashboard = spyOn(
       TestBed.inject(DashboardService),
       'deletePersonalDashboard'
@@ -244,5 +251,22 @@ describe('OptionsMenuComponent', () => {
 
     expect(deleteIndividualDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should display a confirmation pop up', async () => {
+    const confirmationData = {
+      title: 'Delete dashboard?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    await component.confirmDashboardDelete();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
   });
 });

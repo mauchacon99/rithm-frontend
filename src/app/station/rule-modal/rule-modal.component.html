@@ -154,9 +154,18 @@
         class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2"
         *ngIf="firstOperand.value !== ''"
       >
-        <div [ngSwitch]="firstOperand.type">
+        <div [ngSwitch]="displayOperatorType">
           <app-text-field
-            *ngSwitchCase="operandType.String"
+            *ngSwitchDefault
+            #textField
+            [field]="secondOperandDefaultQuestion"
+            [labelTag]="secondOperandDefaultQuestion.prompt"
+            [isStation]="true"
+            [isInput]="true"
+          >
+          </app-text-field>
+          <app-text-field
+            *ngSwitchCase="'string'"
             #textField
             [field]="secondOperandDefaultQuestion"
             [labelTag]="secondOperandDefaultQuestion.prompt"
@@ -165,17 +174,35 @@
           >
           </app-text-field>
           <app-number-field
-            *ngSwitchCase="operandType.Number"
+            *ngSwitchCase="'number'"
             #numberField
             [field]="secondOperandDefaultQuestion"
           >
           </app-number-field>
           <app-date-field
-            *ngSwitchCase="operandType.Date"
+            *ngSwitchCase="'date'"
             #dateField
             [field]="secondOperandDefaultQuestion"
           >
           </app-date-field>
+          <app-select-field
+            *ngSwitchCase="'select'"
+            #selectField
+            [field]="secondOperandDefaultQuestion"
+          >
+          </app-select-field>
+          <app-select-field
+            *ngSwitchCase="'multiselect'"
+            #selectField
+            [field]="secondOperandDefaultQuestion"
+          >
+          </app-select-field>
+          <app-select-field
+            *ngSwitchCase="'checklist'"
+            #selectField
+            [field]="secondOperandDefaultQuestion"
+          >
+          </app-select-field>
         </div>
         <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
         <mat-form-field class="w-full" appearance="outline">
@@ -227,7 +254,7 @@
       </ng-template>
       <div class="flex flex-col">
         <p class="text-sm my-1">
-          {{ firstOperand.value }}
+          {{ firstOperand.text }}
           <span class="font-semibold">{{ operatorSelected?.text }} </span>
           {{ secondOperandToShow }}
         </p>
