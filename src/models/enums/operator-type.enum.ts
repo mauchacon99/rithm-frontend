@@ -30,7 +30,7 @@ export enum OperatorType {
   Contains = 'contains',
 
   /** Does Not Contain Field. */
-  NotContains = 'not contains',
+  NotContains = 'notContains',
 
   /** Date Field On. */
   On = 'on',
