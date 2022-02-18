@@ -314,7 +314,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   getStationInfo(): void {
     this.stationLoading = true;
-    this.allowAllOrgLoading = true;
     if (this.stationStatus !== MapItemStatus.Created) {
       this.stationService
         .getStationInfo(this.stationRithmId)
