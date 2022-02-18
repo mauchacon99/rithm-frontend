@@ -11,7 +11,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [StationInfoDrawerComponent],
@@ -26,8 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatTabsModule,
     MatSlideToggleModule,
-    MatTooltipModule,
-    MatNativeDateModule,
+    MatTooltipModule
   ],
   exports: [StationInfoDrawerComponent],
 })
