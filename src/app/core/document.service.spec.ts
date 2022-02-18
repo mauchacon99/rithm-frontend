@@ -790,7 +790,7 @@ describe('DocumentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`
     );
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual([parametersBody]);
+    expect(req.request.body).toEqual(parametersBody);
 
     req.flush(null);
     httpTestingController.verify();
