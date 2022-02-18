@@ -10,7 +10,7 @@
   *ngIf="!stationLoading"
   [selectedIndex]="selectedTabIndex"
 >
-  <mat-tab label="tab-station-info">
+  <mat-tab label="tab-station-info" aria-label="tab-station-info">
     <ng-template mat-tab-label>
       <i class="fas fa-cog fa-lg"></i>
     </ng-template>
@@ -175,7 +175,7 @@
     </ng-template>
   </mat-tab>
 
-  <mat-tab label="tab-document-info">
+  <mat-tab label="tab-document-info" aria-label="tab-document-info">
     <ng-template mat-tab-label>
       <i class="fas fa-file fa-lg"></i>
     </ng-template>
@@ -252,7 +252,7 @@
     </ng-template>
   </mat-tab>
 
-  <mat-tab label="tab-owner-info">
+  <mat-tab label="tab-owner-info" aria-label="tab-owner-info">
     <ng-template mat-tab-label>
       <i class="fas fa-users fa-lg"></i>
     </ng-template>
@@ -303,29 +303,35 @@
           class="flex flex-col w-full py-5 border-t border-secondary-200 border-solid"
         >
           <h6 class="pb-3">Station Roster</h6>
-          <section class="flex justify-between items-center pb-4">
-            <div>
-              <p class="text-secondary-400 pr-2 inline-block">Make Public</p>
-              <i
-                class="fas fa-question-circle fa-2x1 text-secondary-400"
-                matTooltip="Allow everyone in your organization to work on documents at this station"
-              ></i>
-            </div>
-            <div class="pr-2">
-              <app-loading-indicator
-                *ngIf="allowAllOrgLoading"
-                id="loading-indicator-allow-org-workers"
-                [inlineText]="'Loading...'"
-              ></app-loading-indicator>
+          <section class="items-center pb-4">
+            <div class="flex justify-between">
+              <div>
+                <p class="text-secondary-400 pr-2 inline-block">Make Public</p>
+                <i
+                  class="fas fa-question-circle fa-2x1 text-secondary-400"
+                  matTooltip="Allow everyone in your organization to work on documents at this station"
+                ></i>
+              </div>
+              <div class="pr-2">
+                <app-loading-indicator
+                  *ngIf="allowAllOrgLoading"
+                  id="loading-indicator-allow-org-workers"
+                  [inlineText]="'Loading...'"
+                ></app-loading-indicator>
 
-              <mat-slide-toggle
-                color="accent"
-                *ngIf="!allowAllOrgLoading"
-                (change)="updateAllOrgWorkersStation()"
-                [(ngModel)]="allowAllOrgWorkers"
-              >
-              </mat-slide-toggle>
+                <mat-slide-toggle
+                  color="accent"
+                  *ngIf="!allowAllOrgLoading"
+                  (change)="updateAllOrgWorkersStation()"
+                  [(ngModel)]="allowAllOrgWorkers"
+                >
+                </mat-slide-toggle>
+              </div>
             </div>
+            <p class="text-xs text-error-500" *ngIf="allowAllOrgError">
+              ERROR: Unable access permission to all workers in the
+              organization.
+            </p>
           </section>
           <section class="pb-4">
             <div class="flex justify-between items-center">

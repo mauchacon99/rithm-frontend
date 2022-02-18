@@ -126,6 +126,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** Use for catch error in update for permission of all org workers. */
+  allowAllOrgError = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -325,6 +328,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
             }
             this.stationLoading = false;
+            this.lastUpdatedLoading = false;
           },
           // eslint-disable-next-line
           error: (error: any) => {
@@ -333,6 +337,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             } else {
               this.stationLoading = false;
             }
+            this.allowAllOrgError = true;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -672,6 +677,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.allowAllOrgLoading = false;
+          this.allowAllOrgError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
