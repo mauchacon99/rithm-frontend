@@ -1,30 +1,17 @@
-<div
+<!--Loading the widget-->
+<app-loading-widget
   *ngIf="isLoading"
-  id="loading-docs"
-  class="h-full flex justify-center items-center flex-col"
->
-  <p class="py-2 truncate">Loading</p>
-  <app-loading-indicator></app-loading-indicator>
-</div>
+  id="app-loading-indicator"
+></app-loading-widget>
 
-<div *ngIf="failedLoadWidget" class="h-full" id="card-error">
-  <div class="w-full h-full flex items-center justify-center">
-    <div class="w-full text-center">
-      <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
-      <h3 class="text-error-500 truncate">ERROR</h3>
-      <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
-      <button
-        mat-stroked-button
-        color="warn"
-        (click)="getStationWidgetDocuments()"
-        id="try-again"
-        data-testid="try-again"
-      >
-        Try Again
-      </button>
-    </div>
-  </div>
-</div>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="failedLoadWidget"
+  id="error-load-widget"
+  [errorMessage]="'Unable to retrieve station data'"
+  (tryAgain)="getStationWidgetDocuments()"
+>
+</app-error-widget>
 
 <!-- station widget -->
 <div
@@ -61,7 +48,14 @@
           </div>
         </div>
         <div *ngIf="editMode" id="gear-icon">
-          <button mat-icon-button class="text-secondary-500">
+          <button
+            mat-icon-button
+            [disabled]="isDrawerOpen && drawerContext === 'stationWidget'"
+            (click)="toggleEditStation()"
+            id="toggle-edit-station"
+            data-testid="toggle-edit-station"
+            class="text-secondary-500"
+          >
             <i class="fas fa-cog text-[16px]"></i>
           </button>
         </div>
@@ -91,7 +85,7 @@
       >
         <ng-container *ngFor="let document of dataStationWidget.documents">
           <div
-            class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+            class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-primary-500"
           >
             {{ document.name || 'Untitled Document' }}
           </div>
@@ -122,7 +116,7 @@
             </div>
           </div>
           <div
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-primary-500"
           >
             {{ getElapsedTime(document.flowedTimeUTC) }}
           </div>

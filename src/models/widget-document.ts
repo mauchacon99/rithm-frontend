@@ -1,3 +1,4 @@
+import { QuestionList } from './question-list';
 import { StationRosterMember } from './station-roster-member';
 
 /**
@@ -16,4 +17,6 @@ export interface WidgetDocument {
   lastUpdatedUTC: string;
   /** User assigned. */
   assignedUser: StationRosterMember;
+  /** Fields for show in document widget. */
+  questions: QuestionList[];
 }
