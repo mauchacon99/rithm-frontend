@@ -9,4 +9,7 @@ export interface RuleOperand {
 
   /** The data value to operate. */
   value: string;
+
+  /** The text to show if the operand is fieldType. */
+  text?: string;
 }
