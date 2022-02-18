@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DocumentWidget } from 'src/models';
 
 /**
@@ -27,7 +27,7 @@ export class DocumentWidgetComponent implements OnInit {
 
   constructor(
     private errorService: ErrorService,
-    private dashboardService: DashboardService
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -44,7 +44,7 @@ export class DocumentWidgetComponent implements OnInit {
   getDocumentWidget(): void {
     this.isLoading = true;
     this.failedLoadWidget = false;
-    this.dashboardService
+    this.documentService
       .getDocumentWidget(this.documentRithmId)
       .pipe(first())
       .subscribe({
