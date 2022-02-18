@@ -9,25 +9,29 @@ import {
 } from 'src/mocks';
 import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
-import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { SimpleChange } from '@angular/core';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
+  const dataWidget =
+    // eslint-disable-next-line max-len
+    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "priority"}, {"name": "name"}, {"name": "Field name 2"}]}';
 
-  const stationRithmId =
-    '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationWidgetComponent,
-        MockComponent(LoadingIndicatorComponent),
+        MockComponent(LoadingWidgetComponent),
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
+        MockComponent(ErrorWidgetComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -40,7 +44,7 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    component.stationRithmId = stationRithmId;
+    component.dataWidget = dataWidget;
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
@@ -58,6 +62,7 @@ describe('StationWidgetComponent', () => {
             email: 'string',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -69,13 +74,17 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should call service that return station widget data', () => {
+    const columns = ['756-789-953'];
+    component.columnsFieldPetition = columns;
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
     ).and.callThrough();
-    component.stationRithmId = stationRithmId;
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalledOnceWith(component.stationRithmId);
+    expect(spyService).toHaveBeenCalledOnceWith(
+      component.stationRithmId,
+      component.columnsFieldPetition
+    );
   });
 
   it('should show error message when request station widget document  data', () => {
@@ -91,29 +100,11 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
 
-  it('should try request again  listing documents if fails', () => {
-    component.failedLoadWidget = true;
-    fixture.detectChanges();
-
-    const card =
-      fixture.debugElement.nativeElement.querySelector('#card-error');
-    expect(card).toBeTruthy();
-
-    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
-    const tryAgain =
-      fixture.debugElement.nativeElement.querySelector('#try-again');
-    expect(tryAgain).toBeTruthy();
-    tryAgain.click();
-    expect(methodCalled).toHaveBeenCalled();
-  });
-
   it('should show button if station is manual', () => {
-    component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
@@ -131,6 +122,7 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -152,7 +144,6 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should no show button if station is different to manual', () => {
-    component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.None,
@@ -170,6 +161,7 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
+          questions: [],
         },
       ],
     };
@@ -227,16 +219,13 @@ describe('StationWidgetComponent', () => {
     it('should be to show loading-indicator', () => {
       component.isLoading = true;
       fixture.detectChanges();
-      const loadingDocs =
-        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const loadingDocs = fixture.debugElement.nativeElement.querySelector(
+        '#app-loading-indicator'
+      );
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
-      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
-      );
 
       expect(loadingDocs).toBeTruthy();
-      expect(loadingIndicator).toBeTruthy();
       expect(showDocs).toBeNull();
     });
 
@@ -248,7 +237,7 @@ describe('StationWidgetComponent', () => {
       const showDocs =
         fixture.debugElement.nativeElement.querySelector('#show-docs');
       const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-        'app-loading-indicator'
+        '#app-loading-indicator'
       );
 
       expect(loadingDocs).toBeNull();
@@ -363,5 +352,47 @@ describe('StationWidgetComponent', () => {
     const gearIcon =
       fixture.debugElement.nativeElement.querySelector('#gear-icon');
     expect(gearIcon).toBeTruthy();
+  });
+
+  it('should show error-widget in station-widget', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+    const errorWidget =
+      fixture.debugElement.nativeElement.querySelector('#error-load-widget');
+    expect(errorWidget).toBeTruthy();
+  });
+
+  it('should detect change of editMode and return list of components', function () {
+    spyOn(component, 'viewDocument').and.callThrough();
+    spyOn(component, 'toggleExpandWidget').and.callThrough();
+    component.isDocument = true;
+    component.isExpandWidget = true;
+    component.editMode = true;
+    component.ngOnChanges({
+      editMode: new SimpleChange(false, component.editMode, true),
+    });
+    fixture.detectChanges();
+    expect(component.viewDocument).toHaveBeenCalledOnceWith('', true);
+    expect(component.toggleExpandWidget).toHaveBeenCalled();
+  });
+
+  it('should click edit button and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+
+    const btnEdit = fixture.debugElement.nativeElement.querySelector(
+      '#toggle-edit-station'
+    );
+
+    expect(btnEdit).toBeTruthy();
+    btnEdit.disabled = false;
+    btnEdit.click();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
   });
 });

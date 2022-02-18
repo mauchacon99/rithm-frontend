@@ -2,11 +2,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
+  ZOOM_VELOCITY,
   STATION_PAN_CENTER_HEIGHT,
   STATION_PAN_CENTER_WIDTH,
-  ZOOM_VELOCITY,
 } from 'src/app/map/map-constants';
-import { StationGroupMapElement, StationMapElement } from 'src/helpers';
+import {
+  ConnectionMapElement,
+  StationGroupMapElement,
+  StationMapElement,
+} from 'src/helpers';
 import {
   MapData,
   MapItemStatus,
@@ -32,6 +36,9 @@ export class MockMapService {
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
+
+  /** Data for connection line paths between stations. */
+  connectionElements: ConnectionMapElement[] = [];
 
   /** The station group elements displayed on the map. */
   stationGroupMapData: StationGroupMapData[] = [
@@ -115,6 +122,7 @@ export class MockMapService {
   /** Passes pan info to the map-canvas. */
   centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
 
+  /** Checks if there should be panning towards the center of the map. */
   /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
   centerStationCount$ = new BehaviorSubject(0);
 
@@ -488,6 +496,341 @@ export class MockMapService {
   }
 
   /**
+   * Set station group status of parent and child station group and respective stations.
+   *
+   * @param stationGroup The incoming station-group data.
+   */
+  setStationGroupStatus(stationGroup: StationGroupMapElement): void {
+    //Update parent station-group and respective stations status.
+    this.updateParentStationGroup(stationGroup.rithmId);
+    //Update descendent station-group and respective stations status.
+    this.updateChildStationGroup(stationGroup);
+    //Reset status of each station-group and station if nothing(station group or station) has been selected.
+    if (
+      !this.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus();
+    }
+  }
+
+  /**
+   * Update the selected status of all descendent station-group and stations of incoming station-group.
+   *
+   * @param stationGroup The incoming station-group data.
+   */
+  private updateChildStationGroup(stationGroup: StationGroupMapElement): void {
+    const isSelected = stationGroup.selected;
+    stationGroup.subStationGroups.forEach((subStationGroupId) => {
+      const subStationGroup = this.stationGroupElements.find(
+        (group) => group.rithmId === subStationGroupId
+      );
+      if (!subStationGroup) {
+        throw new Error(
+          `Couldn't find a sub-flow for which an id exists: ${subStationGroupId}`
+        );
+      }
+      subStationGroup.selected = isSelected ? true : false;
+      subStationGroup.stations.map((st) => {
+        const stationIndex = this.stationElements.findIndex(
+          (station) => station.rithmId === st
+        );
+        if (stationIndex >= 0) {
+          this.stationElements[stationIndex].selected = isSelected
+            ? true
+            : false;
+        }
+      });
+      this.updateChildStationGroup(subStationGroup);
+    });
+  }
+
+  /**
+   * Update the selected status of all parent station-group and stations of incoming station-group id.
+   *
+   * @param stationGroupId The incoming station-group id.
+   */
+  private updateParentStationGroup(stationGroupId: string): void {
+    const rootStationGroup = this.stationGroupElements.find(
+      (f) => f.rithmId === stationGroupId
+    );
+    if (rootStationGroup?.isReadOnlyRootStationGroup) {
+      return;
+    }
+    this.stationGroupElements.forEach((stationGroup) => {
+      if (
+        stationGroup.subStationGroups.includes(stationGroupId) &&
+        !stationGroup.isReadOnlyRootStationGroup
+      ) {
+        stationGroup.disabled = false;
+        this.updateParentStationGroup(stationGroup.rithmId);
+      }
+    });
+  }
+
+  /**
+   * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
+   */
+  setStationGroupStationStatus(): void {
+    this.stationGroupElements.map((stationGroup) => {
+      stationGroup.disabled = true;
+      stationGroup.stations.map((station) => {
+        const stationIndex = this.stationElements.findIndex(
+          (st) => st.rithmId === station
+        );
+        if (!this.stationElements[stationIndex].selected) {
+          this.stationElements[stationIndex].disabled = true;
+        }
+      });
+    });
+  }
+
+  /**
+   * Updates pendingStationGroup with the current selected stations and groups.
+   */
+  updatePendingStationGroup(): void {
+    //Set up blank pending group.
+    const newGroup = new StationGroupMapElement({
+      rithmId: uuidv4(),
+      title: 'Pending',
+      stations: [],
+      subStationGroups: [],
+      status: MapItemStatus.Pending,
+      isReadOnlyRootStationGroup: false,
+    });
+
+    /* There should only ever be one pending group in the stationGroupElements array,
+    recursively delete every pending group that already exists so we can add a new one. */
+    const deletePending = () => {
+      const pendingIndex = this.stationGroupElements.findIndex(
+        (pendingGroup) => {
+          return pendingGroup.status === MapItemStatus.Pending;
+        }
+      );
+      if (pendingIndex !== -1) {
+        this.removeStationGroup(
+          this.stationGroupElements[pendingIndex].rithmId
+        );
+        deletePending();
+      }
+      return;
+    };
+    deletePending();
+
+    //All stations currently selected.
+    const selectedStations = this.stationElements.filter(
+      (station) => station.selected
+    );
+
+    //All groups currently selected.
+    const selectedGroups = this.stationGroupElements.filter(
+      (group) => group.selected
+    );
+
+    //Filter the selected stations to only contain stations outside the selected groups.
+    const outsideStations = selectedStations.filter((station) => {
+      //Find index of group that contains station.
+      const groupIndex = selectedGroups.findIndex((group) => {
+        return group.stations.includes(station.rithmId);
+      });
+      //if index is -1 return true.
+      return groupIndex === -1;
+    });
+
+    //Filter the selected groups so that only parent groups are in the array.
+    const parentGroups = selectedGroups.filter((group) => {
+      const groupIndex = selectedGroups.findIndex((otherGroup) => {
+        return otherGroup.subStationGroups.includes(group.rithmId);
+      });
+      //if index is -1 return true.
+      return groupIndex === -1;
+    });
+
+    //Set inner stations as disabled.
+    this.stationElements.map((station) => {
+      if (
+        selectedStations.some((selected) => selected === station) &&
+        !outsideStations.some((outside) => outside === station)
+      ) {
+        return (station.disabled = true);
+      } else if (outsideStations.some((outside) => outside === station)) {
+        return (station.disabled = false);
+      } else {
+        return;
+      }
+    });
+
+    //Set child groups as disabled.
+    this.stationGroupElements.map((stationGroup) => {
+      if (
+        selectedGroups.some((selected) => selected === stationGroup) &&
+        !parentGroups.some((parent) => parent === stationGroup)
+      ) {
+        return (stationGroup.disabled = true);
+      } else if (parentGroups.some((parent) => parent === stationGroup)) {
+        return (stationGroup.disabled = false);
+      } else {
+        return;
+      }
+    });
+
+    //Get the rithmIds of the outsideStations.
+    const outsideStationIds = outsideStations.map((station) => station.rithmId);
+
+    //Get the rithmIds of the parentGroups.
+    const parentGroupIds = parentGroups.map((group) => group.rithmId);
+
+    //Add the station and group ids to the newGroup.
+    newGroup.stations = [...outsideStationIds];
+    newGroup.subStationGroups = [...parentGroupIds];
+
+    //If there are any selected stations or groups in newGroup, add it to the stationGroupElements array.
+    if (newGroup.stations.length > 0 || newGroup.subStationGroups.length > 0) {
+      //set up a boolean to check if an error needs to be thrown because there is no parent group.
+      let parentGroupFound = false;
+      /* Edit the group that will house newGroup to include it in it's list of subgroups,
+      and remove the stations and subgroups contained in newGroup from parent. */
+      this.stationGroupElements.forEach((group) => {
+        if (
+          //Find parent station group that houses stations or subgroups that will be added to newGroup.
+          group.stations.some((station) =>
+            newGroup.stations.includes(station)
+          ) ||
+          group.subStationGroups.some((subGroup) =>
+            newGroup.subStationGroups.includes(subGroup)
+          )
+        ) {
+          parentGroupFound = true;
+          //Remove every station from parent group that newGroup contains.
+          const remainingStations = group.stations.filter((stationId) => {
+            return !newGroup.stations.some(
+              (newGroupStation) => newGroupStation === stationId
+            );
+          });
+          group.stations = remainingStations;
+          //Remove every subGroup from parent group that newGroup contains.
+          const remainingSubGroups = group.subStationGroups.filter(
+            (groupId) => {
+              return !newGroup.subStationGroups.some(
+                (newGroupSubGroup) => newGroupSubGroup === groupId
+              );
+            }
+          );
+          group.subStationGroups = remainingSubGroups;
+          //Add newGroup to list of subgroups.
+          group.subStationGroups.push(newGroup.rithmId);
+          //Mark parent group as updated.
+          group.markAsUpdated();
+        }
+      });
+      if (!parentGroupFound) {
+        throw new Error(`No parent station group could be found.`);
+      }
+      this.stationGroupElements.push(newGroup);
+      //Note a change in map data.
+      this.mapDataReceived$.next(true);
+    }
+  }
+
+  /**
+   * Update the canvas points for each station.
+   */
+  updateStationCanvasPoints(): void {
+    this.stationElements.forEach((station) => {
+      station.canvasPoint = this.getCanvasPoint(station.mapPoint);
+      //Update the connection lines as the stations are updated.
+      this.updateConnection(station);
+    });
+  }
+
+  /**
+   * Update information used to draw a connection when a connection has changed.
+   *
+   * @param station The station that is being updated.
+   */
+  updateConnection(station: StationMapElement): void {
+    //Loop through the connectionElements array.
+    for (const connection of this.connectionElements) {
+      //If connection start is consistent with the station parameter, update the connections start point.
+      if (connection.startStationRithmId === station.rithmId) {
+        connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+      }
+      //If connection end is consistent with the station parameter, update the connections end point.
+      if (connection.endStationRithmId === station.rithmId) {
+        connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+      }
+      //Draw the connection using its startPoint and EndPoint.
+      connection.path = connection.getConnectionLine(
+        connection.startPoint,
+        connection.endPoint,
+        this.mapScale$.value
+      );
+    }
+  }
+
+  /**
+   * Based on incoming station selection, update the status of related stations and station group.
+   *
+   * @param station The incoming station.
+   */
+  setSelectedStation(station: StationMapElement): void {
+    this.stationGroupElements.map((stationGroup) => {
+      if (station.selected) {
+        if (stationGroup.stations.includes(station.rithmId)) {
+          stationGroup.stations.map((st) => {
+            const stationIndex = this.stationElements.findIndex(
+              (sta) => sta.rithmId === st
+            );
+            this.stationElements[stationIndex].disabled = false;
+          });
+          stationGroup.disabled = false;
+          stationGroup.subStationGroups.forEach((subStationGroupId) => {
+            const stationGroupIndex = this.stationGroupElements.findIndex(
+              (group) => group.rithmId === subStationGroupId
+            );
+            this.stationGroupElements[stationGroupIndex].disabled = false;
+          });
+          return;
+        }
+      } else {
+        //If removing a selected station need to find the group that pending group is inside.
+        if (stationGroup.status === MapItemStatus.Pending) {
+          //const to reference the parent of the pending group.
+          const parentGroup = this.stationGroupElements.find(
+            (parentStationGroup) => {
+              return parentStationGroup.subStationGroups.includes(
+                stationGroup.rithmId
+              );
+            }
+          );
+          if (parentGroup) {
+            parentGroup.stations.map((st) => {
+              const stationIndex = this.stationElements.findIndex(
+                (sta) => sta.rithmId === st
+              );
+              this.stationElements[stationIndex].disabled = false;
+            });
+            parentGroup.disabled = false;
+            parentGroup.subStationGroups.forEach((subStationGroupId) => {
+              const stationGroupIndex = this.stationGroupElements.findIndex(
+                (group) => group.rithmId === subStationGroupId
+              );
+              this.stationGroupElements[stationGroupIndex].disabled = false;
+            });
+            return;
+          }
+        }
+      }
+    });
+    if (
+      !this.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus();
+    }
+  }
+
+  /**
    * Smoothly sets the scale and pans the station to center.
    *
    * @param station Station which should be pan to center.
@@ -568,9 +911,9 @@ export class MockMapService {
     panAmount.y = totalPanNeeded.y * 0.1;
 
     /* In order to have a fade out animation effect we exponentially decrement the totalPanNeeded with each recursive call of centerPan().
-    This means that panAmount wil never reach 0, so we need to decide on a number thats close enough.
-    If we waited for 0 we'd get caught in an infinite loop.
-    The number settled on for now is .12. */
+   This means that panAmount wil never reach 0, so we need to decide on a number thats close enough.
+   If we waited for 0 we'd get caught in an infinite loop.
+   The number settled on for now is .12. */
     if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
       //nextPanVelocity on map canvas will be set to this.
       this.centerPanVelocity$.next(panAmount);

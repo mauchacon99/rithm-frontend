@@ -14,6 +14,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
@@ -119,6 +120,7 @@ describe('StationInfoHeaderComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         NoopAnimationsModule,
+        MatButtonModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
