@@ -21,7 +21,7 @@
         {{ dataDocumentWidget.documentName }}
       </h3>
       <div *ngIf="numberOfStationsOnDocument === 1">
-        <button mat-button>
+        <button mat-button (click)="goToDocument()">
           <i class="fas fa-external-link-alt text-xl text-secondary-500"></i>
         </button>
       </div>
