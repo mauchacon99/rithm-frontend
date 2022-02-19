@@ -3,7 +3,11 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { StationColumnWidget, WidgetDrawerStationData } from 'src/models';
+import {
+  Question,
+  StationColumnWidget,
+  WidgetDrawerStationData,
+} from 'src/models';
 import { ColumnsDocumentInfo } from 'src/models/enums/columns-document-info';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -43,6 +47,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Position of the widget. */
   widgetIndex!: number;
 
+  questions!: Question[];
+
   /** Loading document. */
   isLoading = false;
 
@@ -53,7 +59,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   columnsDocumentInfo = ColumnsDocumentInfo;
 
   /** Static columns. */
-  staticColumnsInfo: OptionsSelect[] = [];
+  documentInfo: OptionsSelect[] = [];
 
   /** Document fields. */
   documentFields: OptionsSelect[] = [];
@@ -96,13 +102,27 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       });
   }
 
-  /** Set enum values of ColumnsDocumentInfo to staticColumnsInfo. */
-  setColumnsInfo(): void {
+  /** Set document info static. */
+  setDocumentInfo(): void {
+    this.documentInfo = [];
     Object.values(this.columnsDocumentInfo).map((column) => {
-      this.staticColumnsInfo.push({
+      this.documentInfo.push({
         name: column,
         disabled: this.checkExistColumn(column, 'name'),
         value: column,
+      });
+    });
+  }
+
+  /** Set document fields dynamic. */
+  setDocumentFields(): void {
+    this.documentFields = [];
+    this.questions.map((question) => {
+      this.documentFields.push({
+        name: question.prompt,
+        value: question.rithmId,
+        disabled: this.checkExistColumn(question.rithmId, 'questionId'),
+        questionId: question.rithmId,
       });
     });
   }
@@ -166,6 +186,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Load list of selects. */
   loadColumnsSelect(): void {
+    this.setDocumentInfo();
+    this.setDocumentFields();
     this.getFormColumns.clear();
     this.stationColumns.map((column) => {
       this.addNewColumn(column.name, column.questionId);
@@ -180,15 +202,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (questions) => {
-          this.setColumnsInfo();
-          questions.map((question) => {
-            this.documentFields.push({
-              name: question.prompt,
-              value: question.rithmId,
-              disabled: this.checkExistColumn(question.rithmId, 'questionId'),
-              questionId: question.rithmId,
-            });
-          });
+          this.questions = questions;
           this.loadColumnsSelect();
           this.isLoading = false;
         },
@@ -210,17 +224,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    */
   optionSelected(value: OptionsSelect, indexColumn: number): void {
     if (!value.disabled) {
-      let dataColumn: StationColumnWidget;
-      if (value.questionId) {
-        dataColumn = {
-          name: value.name,
-          questionId: value.questionId,
-        };
-      } else {
-        dataColumn = {
-          name: value.value,
-        };
-      }
+      const dataColumn: StationColumnWidget = value.questionId
+        ? {
+            name: value.name,
+            questionId: value.questionId,
+          }
+        : {
+            name: value.value,
+          };
       if (this.stationColumns[indexColumn]) {
         this.stationColumns[indexColumn] = dataColumn;
       } else {
@@ -232,11 +243,25 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Update widget. */
   updateWidget(): void {
+    this.loadColumnsSelect();
     const dataWidget = JSON.stringify({
       stationRithmId: this.stationRithmId,
       columns: this.stationColumns,
     });
     this.dashboardService.updateDashboardWidgets(this.widgetIndex, dataWidget);
+  }
+
+  /**
+   * Disable button new column.
+   *
+   * @returns True if all options is selected.
+   */
+  get disabledNewColumn(): boolean {
+    const allSelects = [...this.documentInfo, ...this.documentFields];
+    const isDisabled = !allSelects.find((option) => !option.disabled);
+    const isAllInputs =
+      allSelects.length === this.getFormColumns.controls.length;
+    return isDisabled || isAllInputs;
   }
 
   /**
