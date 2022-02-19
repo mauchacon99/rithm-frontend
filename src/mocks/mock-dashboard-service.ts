@@ -19,6 +19,24 @@ export class MockDashboardService {
   /** Loading dashboard when generate new dashboard. */
   isLoadingDashboard$ = new Subject<boolean>();
 
+  /** Update specific widget and data. */
+  updateDataWidget$ = new Subject<{
+    /** Number of the position widget. */
+    indexWidget: number;
+    /** String, json stringify of data the widget. */
+    widgetData: string;
+  }>();
+
+  /**
+   * Update data of the widget since drawer station.
+   *
+   * @param indexWidget Number of the position widget.
+   * @param widgetData String, json stringify of data the widget.
+   */
+  updateDashboardWidgets(indexWidget: number, widgetData: string): void {
+    this.updateDataWidget$.next({ indexWidget, widgetData });
+  }
+
   /**
    * Toggle emit to loading dashboard.
    *

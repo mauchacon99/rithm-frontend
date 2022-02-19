@@ -131,6 +131,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
       });
+
+    this.dashboardService.updateDataWidget$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(({ indexWidget, widgetData }) => {
+        this.updateDashboardWidget(indexWidget, widgetData);
+      });
   }
 
   /**
@@ -367,7 +373,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Update dashboard.
    */
   updateDashboard(): void {
-    this.isLoading = true;
+    this.dashboardService.toggleLoadingDashboard(true);
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
@@ -377,20 +383,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
         this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
-        this.isLoading = false;
+        this.dashboardService.toggleLoadingDashboard(false);
         this.editMode = false;
         this.errorLoadingDashboard = false;
         this.configEditMode();
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
-        this.isLoading = false;
+        this.dashboardService.toggleLoadingDashboard(false);
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
         );
       },
     });
+  }
+
+  /**
+   * Update data of the widget since drawer station.
+   *
+   * @param indexWidget Number of the position widget.
+   * @param widgetData String, json stringify of data the widget.
+   */
+  updateDashboardWidget(indexWidget: number, widgetData: string): void {
+    this.dashboardData.widgets[indexWidget].data = widgetData;
+    this.updateDashboard();
   }
 
   /**

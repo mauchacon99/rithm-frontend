@@ -1,6 +1,12 @@
 //@import "src/styles";
 
-::ng-deep .mat-select-panel {
-  //@apply scrollbar;
-  max-height: 40vh !important;
+::ng-deep {
+  .mat-select-panel {
+    //@apply scrollbar;
+    max-height: 40vh !important;
+  }
+
+  .mat-form-field-wrapper {
+    padding: 0 !important;
+  }
 }

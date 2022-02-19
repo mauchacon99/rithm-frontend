@@ -3,7 +3,7 @@
  */
 export enum ColumnsDocumentInfo {
   /** Document name. */
-  DocumentName = 'documentName',
+  Name = 'name',
   /** Priority. */
   Priority = 'priority',
   /** Time in station. */
