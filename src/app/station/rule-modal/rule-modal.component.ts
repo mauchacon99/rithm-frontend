@@ -88,6 +88,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     text: '',
   };
 
+  /** The type of the first questions selected for the first operand. */
+  firstOperandQuestionType!: QuestionFieldType;
+
   /** The rithmId of the second selected question to be compared if needed. */
   secondOperandQuestionRithmId = '';
 
@@ -102,8 +105,18 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     text: '',
   };
 
-  /** The type of the first questions selected for the first operand. */
-  firstOperandQuestionType!: QuestionFieldType;
+  /** The default value for the second question if is needed.*/
+  secondOperandDefaultQuestion: Question = {
+    questionType: QuestionFieldType.ShortText,
+    rithmId: Math.random().toString(36).slice(2),
+    prompt: 'Custom',
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    value: '',
+    children: [],
+    possibleAnswers: [],
+  };
 
   operatorSelected: {
     /**Operator text. */
@@ -203,24 +216,14 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     value: OperatorType;
   }[] = [];
 
-  /** The default value for the second question if is needed.*/
-  secondOperandDefaultQuestion: Question = {
-    questionType: QuestionFieldType.ShortText,
-    rithmId: Math.random().toString(36).slice(2),
-    prompt: 'Custom',
-    isReadOnly: false,
-    isRequired: false,
-    isPrivate: false,
-    value: '',
-    children: [],
-    possibleAnswers: [],
-  };
-
   /** The rule to be returned and added to new rulesArray. */
   ruleToAdd!: RuleEquation;
 
   /** Is modal rule in edit mode. */
   editMode = false;
+
+  /** Edit mode to clear each step as a new rule. */
+  editModeCleanStep = false;
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -250,8 +253,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.value = answer.value;
       });
 
-    //If it comes in the modal data it is in edit mode.
-    if (modalData.editRule) {
+    if (this.modalData.editRule) {
       this.editMode = true;
     }
   }
@@ -285,7 +287,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Returns the second Operand to display in the las step.
+   * Returns the second Operand to display in the last step.
    *
    * @returns A normal value or a rithmId to display.
    */
@@ -296,7 +298,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Returns the second Operand to display in the las step.
+   * Returns the second Operand to display in the last step.
    *
    * @returns A normal value or a rithmId to display.
    */
@@ -409,6 +411,15 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
           questionSelected.possibleAnswers;
         break;
     }
+    // If it is edit mode and you have changed the first operand from options.
+    if (this.editMode && this.editModeCleanStep) {
+      this.operatorSelected = null;
+      this.secondOperand.value = '';
+      this.secondOperand.type = OperandType.String;
+      this.secondOperandQuestionPrompt = '';
+      this.editModeCleanStep = !this.editModeCleanStep;
+    }
+
     this.resetQuestionFieldComponent();
   }
 
@@ -429,14 +440,18 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.ruleToAdd = {
       leftOperand: {
         type: this.firstOperand.type,
-        value: this.firstOperand.value,
+        questionType: QuestionFieldType.ShortText,
+        value: this.firstOperandQuestionRithmId,
+        text: this.firstOperand.text,
       },
       operatorType: this.operatorSelected
         ? this.operatorSelected.value
         : OperatorType.EqualTo,
       rightOperand: {
         type: this.secondOperand.type,
+        questionType: QuestionFieldType.ShortText,
         value: this.secondOperand.value,
+        text: this.secondOperandToShow,
       },
     };
     this.dialogRef.close(this.ruleToAdd);
@@ -449,18 +464,14 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     const rule: RuleEquation = this.modalData.editRule;
 
     //Set the values to the first operand
-    this.firstOperand.type = rule.leftOperand.type;
-    this.firstOperand.value = rule.leftOperand.value;
     const firstQuestionSelected: Question = this.questionStation.filter(
-      (question) => question.prompt === this.firstOperand.value
+      (question) => question.rithmId === rule.leftOperand.value
     )[0];
     this.firstOperandQuestionRithmId = firstQuestionSelected.rithmId;
     this.setFirstOperandInformation(firstQuestionSelected);
 
     //Set the values to the second operand
-    this.secondOperand.type = rule.rightOperand.type;
     this.secondOperand.value = rule.rightOperand.value;
-
     //If it does not come with questions for the second operand, the value is assigned to the component field.
     if (!this.secondOperandQuestionList.length) {
       this.secondOperandDefaultQuestion.value = rule.rightOperand.value;
@@ -476,6 +487,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.stepper.linear = false;
     this.stepper.selectedIndex = 3;
     this.stepper.linear = true;
+
+    // Set true in editModeCleanStep for the method setFirstOperandInformation to clean operands and operator.
+    this.editModeCleanStep = true;
   }
 
   /**
@@ -506,24 +520,26 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param event The stepper selection event for all steps.
    */
   clearOnStepBack(event: StepperSelectionEvent): void {
-    if (event.selectedIndex < event.previouslySelectedIndex) {
-      switch (event.selectedIndex) {
-        case 0:
-          this.operatorSelected = null;
-          this.secondOperand.value = '';
-          this.secondOperand.type = OperandType.String;
-          this.secondOperandQuestionPrompt = '';
-          this.resetQuestionFieldComponent();
-          break;
-        case 1:
-          this.secondOperand.value = '';
-          this.secondOperand.type = OperandType.String;
-          this.secondOperandQuestionPrompt = '';
-          this.resetQuestionFieldComponent();
-          break;
+    if (!this.editModeCleanStep) {
+      if (event.selectedIndex < event.previouslySelectedIndex) {
+        switch (event.selectedIndex) {
+          case 0:
+            this.operatorSelected = null;
+            this.secondOperand.value = '';
+            this.secondOperand.type = OperandType.String;
+            this.secondOperandQuestionPrompt = '';
+            this.resetQuestionFieldComponent();
+            break;
+          case 1:
+            this.secondOperand.value = '';
+            this.secondOperand.type = OperandType.String;
+            this.secondOperandQuestionPrompt = '';
+            this.resetQuestionFieldComponent();
+            break;
+        }
+      } else if (event.selectedIndex === 2) {
+        this.resetQuestionFieldComponent();
       }
-    } else if (event.selectedIndex === 2) {
-      this.resetQuestionFieldComponent();
     }
   }
 
