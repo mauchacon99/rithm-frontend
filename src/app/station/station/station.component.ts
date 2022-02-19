@@ -159,6 +159,14 @@ export class StationComponent
           }
         }
       });
+
+    this.stationService.flowButtonText$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        if (this.stationInformation) {
+          this.stationInformation.flowButton = data.length ? data : 'Flow';
+        }
+      });
   }
 
   /**
@@ -333,6 +341,7 @@ export class StationComponent
               stationInfo.instructions
             );
           }
+          this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
         },
         error: (error: unknown) => {
