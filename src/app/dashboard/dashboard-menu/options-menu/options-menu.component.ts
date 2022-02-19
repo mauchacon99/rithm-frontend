@@ -1,13 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Router } from '@angular/router';
-import { first } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -22,7 +16,9 @@ import { PopupService } from 'src/app/core/popup.service';
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
-export class OptionsMenuComponent {
+export class OptionsMenuComponent implements OnDestroy {
+  private destroyed$ = new Subject<void>();
+
   /**
    * Dashboard type from expansion-menu.
    */
@@ -34,14 +30,17 @@ export class OptionsMenuComponent {
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
 
+  /** Rithm id get for params.*/
+  paramRithmId!: string | null;
+
   /** Show option. */
   @Input() isDashboardListOptions!: boolean;
 
   /** Dashboard rithmId. */
   @Input() rithmId!: string;
 
-  /** Update dashboard list.  */
-  @Output() updateDashboardList = new EventEmitter();
+  /** Index of dashboard . */
+  @Input() index!: number;
 
   /** Allows functionality of MatMenu to toggle the menu open. */
   @ViewChild(MatMenuTrigger)
@@ -52,8 +51,15 @@ export class OptionsMenuComponent {
     private errorService: ErrorService,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService,
-    private popupService: PopupService
-  ) {}
+    private popupService: PopupService,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (params) => {
+        this.paramRithmId = params.get('dashboardId');
+      },
+    });
+  }
 
   /**
    * Opens the option menu on the dashboard menu.
@@ -99,6 +105,25 @@ export class OptionsMenuComponent {
    * @param rithmId The dashboard rithmId to delete.
    */
   deleteDashboard(rithmId: string): void {
+    const isCurrentDashboard = rithmId === this.paramRithmId ? true : false;
+    const isCurrentPrincipalDashboard =
+      this.paramRithmId === null ? true : false;
+    /* Index is principal dashboard when is 0 this is specified in dashboard-component getOrganizationDashboard
+      if this value is modified should modified this condition. */
+    const isPrincipalDashboard =
+      this.index === 0 && this.dashboardRole === this.roleDashboardMenu.Company
+        ? true
+        : false;
+
+    if (
+      isCurrentDashboard ||
+      (isCurrentPrincipalDashboard && isPrincipalDashboard)
+    ) {
+      this.dashboardService.toggleLoadingDashboard(true); //this is to trigger isLoading on the dashboard component
+    }
+
+    this.sidenavDrawerService.toggleDrawer('menuDashboard');
+
     const deleteDashboard$ =
       this.dashboardRole === this.roleDashboardMenu.Company
         ? this.dashboardService.deleteOrganizationDashboard(rithmId)
@@ -106,10 +131,15 @@ export class OptionsMenuComponent {
 
     deleteDashboard$.pipe(first()).subscribe({
       next: () => {
-        this.updateDashboardList.emit();
-        this.router.navigate(['/', 'dashboard']);
+        if (isCurrentPrincipalDashboard && isPrincipalDashboard)
+          this.dashboardService.toggleLoadingDashboard(false);
+        //dashboardService.toggleLoadingDashboard is to reload dashboard component
+        else if (isCurrentDashboard) this.router.navigate(['/', 'dashboard']);
+
+        this.popupService.notify('Dashboard removed successfully');
       },
       error: (error: unknown) => {
+        this.sidenavDrawerService.toggleDrawer('menuDashboard');
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
@@ -131,5 +161,11 @@ export class OptionsMenuComponent {
     });
 
     if (response && this.rithmId) this.deleteDashboard(this.rithmId);
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
