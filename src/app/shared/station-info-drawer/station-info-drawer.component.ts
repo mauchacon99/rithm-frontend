@@ -126,6 +126,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** Get flow button name. */
+  flowButtonName = '';
+
+  /** Use for catch error in update for permission of all org workers. */
+  allowAllOrgError = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -323,8 +329,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.statusAllowPreviousButton = stationInfo.allowPreviousButton;
               this.allowExternal = stationInfo.allowExternalWorkers;
               this.allowAllOrgWorkers = stationInfo.allowAllOrgWorkers;
+              this.stationInformation.flowButton =
+                stationInfo.flowButton || 'Flow';
+              this.flowButtonName = this.stationInformation.flowButton;
             }
             this.stationLoading = false;
+            this.lastUpdatedLoading = false;
           },
           // eslint-disable-next-line
           error: (error: any) => {
@@ -333,6 +343,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             } else {
               this.stationLoading = false;
             }
+            this.allowAllOrgError = true;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -672,6 +683,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.allowAllOrgLoading = false;
+          this.allowAllOrgError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -711,6 +723,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationName);
+  }
+
+  /**
+   * Update flow button name.
+   */
+  updateFlowButtonName(): void {
+    this.stationService.updatedFlowButtonText(this.flowButtonName);
   }
 
   /**
