@@ -96,6 +96,9 @@ export class StationComponent
   /** Index for station tabs. */
   stationTabsIndex = 0;
 
+  /** Indicate error when saving flow rule. */
+  stationFlowRuleError = false;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -467,6 +470,7 @@ export class StationComponent
         },
         error: (error: unknown) => {
           this.stationLoading = false;
+          this.stationFlowRuleError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

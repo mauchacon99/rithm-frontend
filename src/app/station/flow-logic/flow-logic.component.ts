@@ -27,6 +27,9 @@ export class FlowLogicComponent implements OnInit {
   /** Station Rithm id. */
   @Input() rithmId = '';
 
+  /** Station Rithm id. */
+  @Input() savedRule = false;
+
   /** The modified Flow Logic Rule to send back to station. */
   @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule>();
 

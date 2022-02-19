@@ -159,6 +159,7 @@
                   <app-flow-logic
                     [rithmId]="stationRithmId"
                     [nextStations]="forwardStations"
+                    [savedRule]="stationFlowRuleError"
                     (modifiedFlowRules)="addFlowLogicRule($event)"
                   ></app-flow-logic>
                 </ng-template>
