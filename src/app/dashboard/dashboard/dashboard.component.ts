@@ -103,6 +103,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.drawerHasBackdrop;
   }
 
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
@@ -130,6 +139,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = status;
         this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
+      });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        if (
+          drawerContext === 'menuDashboard' ||
+          drawerContext === 'stationWidget'
+        ) {
+          this.drawerContext = drawerContext;
+        }
       });
   }
 
@@ -163,15 +183,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.errorService.logError(error);
       },
     });
-  }
-
-  /**
-   * Whether the drawer is open.
-   *
-   * @returns True if the drawer is open, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /**
@@ -235,6 +246,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.editMode = false;
         this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
         this.configEditMode();
+        if (this.isDrawerOpen && this.drawerContext !== 'menuDashboard') {
+          this.sidenavDrawerService.toggleDrawer(this.drawerContext);
+        }
       }
     } else {
       this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));

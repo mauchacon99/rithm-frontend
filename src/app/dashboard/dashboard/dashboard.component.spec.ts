@@ -37,6 +37,25 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const dashboardRithmId = '123-951-753-789';
+  const dataWidget = {
+    rithmId: '102030405060708090100',
+    name: 'Untitled Dashboard',
+    type: RoleDashboardMenu.Company,
+    widgets: [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ],
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -257,6 +276,30 @@ describe('DashboardComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should show alert confirm for change editMode the dashboard', async () => {
+    const dataExpect = {
+      title: 'Cancel?',
+      message: 'All unsaved changes will be lost',
+      important: true,
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
+    component.dashboardDataCopy = dataWidget;
+    const spyMethod = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.toggleEditMode(false);
+    expect(spyMethod).toHaveBeenCalledWith(dataExpect);
+  });
+
+  it('should call changedOptions how dashboard alert for activate edit mode', async () => {
+    component.dashboardDataCopy = dataWidget;
+    const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
+    await component.toggleEditMode(true);
+    expect(spyMethod).toHaveBeenCalledWith();
+  });
+
   describe('Test for SidenavDrawerService', () => {
     let sidenavDrawer: SidenavDrawerService;
 
@@ -309,6 +352,22 @@ describe('DashboardComponent', () => {
         stationData,
         widgetIndex,
       });
+    });
+
+    it('should call toggle drawer for close drawer the widgets how dashboard change a editMode false', async () => {
+      const drawerContext = 'stationWidget';
+      sidenavDrawer.drawerContext$.next(drawerContext);
+      expect(component.drawerContext).toBe(drawerContext);
+      component.dashboardDataCopy = dataWidget;
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
+      const spyDrawer = spyOn(
+        TestBed.inject(SidenavDrawerService),
+        'toggleDrawer'
+      );
+      await component.toggleEditMode(false);
+      expect(spyMethod).toHaveBeenCalledWith();
+      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
     });
   });
 
