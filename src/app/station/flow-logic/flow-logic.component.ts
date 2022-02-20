@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -20,15 +29,12 @@ import { DocumentService } from 'src/app/core/document.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit {
+export class FlowLogicComponent implements OnInit, AfterViewChecked {
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
   /** Station Rithm id. */
   @Input() rithmId = '';
-
-  /** Station Rithm id. */
-  @Input() savedRule = false;
 
   /** The modified Flow Logic Rule to send back to station. */
   @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule>();
@@ -45,11 +51,18 @@ export class FlowLogicComponent implements OnInit {
   /** Contains the new flow logic rule for saved . */
   newFlowLogic!: FlowLogicRule;
 
+  /* Loading the list of rules of flow logic*/
+  ruleLoading = true;
+
+  /** The error if rules fails . */
+  ruleError = false;
+
   constructor(
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    @Inject(ChangeDetectorRef) private ref: ChangeDetectorRef
   ) {}
 
   /**
@@ -188,5 +201,12 @@ export class FlowLogicComponent implements OnInit {
       message: `Are you sure to remove the selected rule from this station?`,
       okButtonText: 'Remove',
     });
+  }
+
+  /**
+   * Checks after the component views and child views.
+   */
+  ngAfterViewChecked(): void {
+    this.ref.detectChanges();
   }
 }
