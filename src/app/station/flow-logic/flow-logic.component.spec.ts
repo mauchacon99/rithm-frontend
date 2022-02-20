@@ -730,4 +730,24 @@ describe('FlowLogicComponent', () => {
     component.deleteRuleFromStationFlowLogic();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
+
+  it('should activate the loading in saved rules of flow logic', () => {
+    component.flowLogicLoading = false;
+    component.ruleLoading = true;
+    fixture.detectChanges();
+    const ruleLoading =
+      fixture.debugElement.nativeElement.querySelector('#rule-loading');
+    expect(component.ruleLoading).toBeTrue();
+    expect(ruleLoading).toBeTruthy();
+  });
+
+  it('should show error message when request for saved rules of flow logic fails.', () => {
+    component.flowLogicLoading = false;
+    component.ruleError = true;
+    fixture.detectChanges();
+    const ruleError =
+      fixture.debugElement.nativeElement.querySelector('#rules-error');
+    expect(component.ruleError).toBeTrue();
+    expect(ruleError).toBeTruthy();
+  });
 });

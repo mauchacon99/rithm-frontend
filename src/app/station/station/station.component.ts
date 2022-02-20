@@ -463,7 +463,7 @@ export class StationComponent
    */
   saveFlowLogicRules(): void {
     this.stationLoading = true;
-    if (this.flowRuleProcess){
+    if (this.flowRuleProcess) {
       this.flowRuleProcess.ruleLoading = true;
     }
     this.documentService
