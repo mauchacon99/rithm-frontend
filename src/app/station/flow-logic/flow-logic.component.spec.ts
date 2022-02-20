@@ -524,6 +524,8 @@ describe('FlowLogicComponent', () => {
   it('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
+    component.ruleLoading = false;
+    component.ruleError = false;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
@@ -618,6 +620,8 @@ describe('FlowLogicComponent', () => {
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
+    component.ruleLoading = false;
+    component.ruleError = false;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
