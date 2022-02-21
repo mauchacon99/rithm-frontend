@@ -13,7 +13,10 @@
 >
 </app-error-widget>
 <!-- Header widget -->
-<div class="w-full p-2 flex flex-col h-full">
+<div
+  class="w-full p-2 flex flex-col h-full"
+  *ngIf="!failedLoadWidget && !isLoading"
+>
   <!--  Header Container -->
   <div class="m-2">
     <div class="flex justify-between">
@@ -23,10 +26,7 @@
     </div>
   </div>
   <!--List of the questions-->
-  <div
-    class="w-full p-2 flex h-full overflow-auto scrollbar"
-    *ngIf="!failedLoadWidget && !isLoading"
-  >
+  <div class="w-full p-2 flex h-full overflow-auto scrollbar">
     <div class="h-full w-full" *ngIf="dataDocumentWidget">
       <ng-container
         class="h-full w-full"
