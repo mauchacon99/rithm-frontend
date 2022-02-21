@@ -19,6 +19,7 @@ import {
   DocumentNameField,
   Question,
   PossibleAnswer,
+  FlowLogicRule,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -26,6 +27,8 @@ import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Main component for viewing a station.
@@ -84,8 +87,18 @@ export class StationComponent
   /** View new station. */
   viewNewStation = false;
 
+  /** Flag that renames the save button when the selected tab is Flow Logic. */
+  isFlowLogicTab = false;
+
+  /** Contains the rules received from Flow Logic to save them. */
+  pendingFlowLogicRules: FlowLogicRule[] = [];
+
+  /** Index for station tabs. */
+  stationTabsIndex = 0;
+
   constructor(
     private stationService: StationService,
+    private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
@@ -144,6 +157,14 @@ export class StationComponent
               );
             }
           }
+        }
+      });
+
+    this.stationService.flowButtonText$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        if (this.stationInformation) {
+          this.stationInformation.flowButton = data.length ? data : 'Flow';
         }
       });
   }
@@ -243,6 +264,22 @@ export class StationComponent
   }
 
   /**
+   * Validate the conditions to display the Save or Save Rules button.
+   *
+   * @returns If display the button, can be true or false.
+   */
+  get disableSaveButton(): boolean {
+    return (
+      (!this.stationForm.valid &&
+        !(
+          !this.stationForm.dirty ||
+          !this.stationForm.controls.stationTemplateForm.touched
+        )) ||
+      (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
+    );
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
@@ -304,6 +341,7 @@ export class StationComponent
               stationInfo.instructions
             );
           }
+          this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
         },
         error: (error: unknown) => {
@@ -401,6 +439,31 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = data[3] as Question[];
           }
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save flow Logic Rules when is tab FlowLogic.
+   *
+   */
+  saveFlowLogicRules(): void {
+    this.stationLoading = true;
+    this.documentService
+      .saveStationFlowLogic(this.pendingFlowLogicRules)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.stationTabsIndex = 1;
+          this.pendingFlowLogicRules = [];
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -524,5 +587,33 @@ export class StationComponent
       addressChildren.push(child);
     });
     return addressChildren;
+  }
+
+  /**
+   * Detect tabs changed.
+   *
+   * @param tabChangeEvent Receives the detail from tab selected.
+   */
+  tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
+    this.isFlowLogicTab = tabChangeEvent.index === 1 ? true : false;
+  }
+
+  /**
+   * Receives a flow logic rule.
+   *
+   * @param flowLogicRule Contains a flow logic rules of the current station.
+   */
+  addFlowLogicRule(flowLogicRule: FlowLogicRule): void {
+    const flowLogicStation = this.pendingFlowLogicRules.findIndex(
+      (flowRule) =>
+        flowRule.destinationStationRithmID ===
+          flowLogicRule.destinationStationRithmID &&
+        flowRule.stationRithmId === flowLogicRule.stationRithmId
+    );
+    if (flowLogicStation >= 0) {
+      this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+    } else {
+      this.pendingFlowLogicRules.push(flowLogicRule);
+    }
   }
 }

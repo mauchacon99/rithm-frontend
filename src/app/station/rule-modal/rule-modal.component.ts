@@ -80,6 +80,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The value of the first operand. */
   firstOperand: RuleOperand = {
     type: OperandType.String,
+    questionType: QuestionFieldType.ShortText,
     value: '',
     text: '',
   };
@@ -93,6 +94,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The value of the second operand. */
   secondOperand: RuleOperand = {
     type: OperandType.String,
+    questionType: QuestionFieldType.ShortText,
     value: '',
     text: '',
   };
@@ -135,10 +137,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       text: 'contains',
       value: OperatorType.Contains,
     },
-    {
-      text: 'does not contain',
-      value: OperatorType.NotContains,
-    },
+    /** Not contain, not working. */
+    // {
+    //   text: 'does not contain',
+    //   value: OperatorType.NotContains,
+    // },
   ];
 
   /** Number group for the operator options. */
@@ -454,6 +457,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.ruleToAdd = {
       leftOperand: {
         type: this.firstOperand.type,
+        questionType: QuestionFieldType.ShortText,
         value: this.firstOperandQuestionRithmId,
         text: this.firstOperand.text,
       },
@@ -462,6 +466,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         : OperatorType.EqualTo,
       rightOperand: {
         type: this.secondOperand.type,
+        questionType: QuestionFieldType.ShortText,
         value: this.secondOperand.value,
         text: this.secondOperandToShow,
       },

@@ -1,4 +1,4 @@
-import { OperandType } from '.';
+import { OperandType, QuestionFieldType } from '.';
 
 /**
  * Represents the data to operate on the equation of the rules.
@@ -6,6 +6,9 @@ import { OperandType } from '.';
 export interface RuleOperand {
   /** The type of data to operate. */
   type: OperandType;
+
+  /** The type of question. */
+  questionType: QuestionFieldType;
 
   /** The data value to operate. */
   value: string;
