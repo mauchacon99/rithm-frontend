@@ -247,7 +247,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
       widgetIndex: this.widgetIndex,
-      isCloseDrawer: true,
+      isCloseDrawer: false,
     });
   }
 

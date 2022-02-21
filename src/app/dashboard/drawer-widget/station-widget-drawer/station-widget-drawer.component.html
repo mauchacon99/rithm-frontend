@@ -1,63 +1,41 @@
-<app-loading-widget
-  *ngIf="isLoading"
-  id="app-loading-indicator"
-></app-loading-widget>
+<div *ngIf="isLoading" id="loading-indicator">
+  <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+</div>
 
 <div *ngIf="!isLoading">
+  <div class="font-semibold text-secondary-500">Table Values</div>
   <form [formGroup]="formColumns">
     <div formArrayName="columns">
-      <div
-        *ngFor="let column of getFormColumns.controls; index as formChild"
-        [formGroupName]="formChild"
-        class="flex justify-between items-center mt-2"
-      >
+      <div *ngFor="let column of getFormColumns.controls; index as formChild" [formGroupName]="formChild"
+           class="flex justify-between items-center mt-2">
         <mat-form-field appearance="outline" class="w-full">
           <mat-select formControlName="name">
             <mat-optgroup [label]="'Document Info'">
-              <mat-option
-                *ngFor="let column of documentInfo"
-                [value]="column.value"
-                [disabled]="column.disabled"
-                (click)="optionSelected(column, formChild)"
-              >
+              <mat-option *ngFor="let column of documentInfo" [value]="column.value" [disabled]="column.disabled"
+                          (click)="optionSelected(column, formChild)">
                 {{ column.name }}
               </mat-option>
             </mat-optgroup>
             <mat-optgroup [label]="'Document Fields'">
-              <mat-option
-                *ngFor="let column of documentFields"
-                [value]="column.value"
-                [disabled]="column.disabled"
-                (click)="optionSelected(column, formChild)"
-              >
+              <mat-option *ngFor="let column of documentFields" [value]="column.value" [disabled]="column.disabled"
+                          (click)="optionSelected(column, formChild)">
                 {{ column.name }}
               </mat-option>
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
 
-        <button
-          *ngIf="formChild"
-          (click)="deleteColumn(formChild)"
-          mat-icon-button
-          data-testid="delete-column"
-          id="delete-column"
-        >
-          <i class="fas text-xl fa-times"></i>
+        <button *ngIf="formChild" (click)="deleteColumn(formChild)" mat-icon-button data-testid="delete-column"
+                id="delete-column">
+          <i class="fas text-lg text-secondary-400 fa-times"></i>
         </button>
       </div>
     </div>
   </form>
 
   <div class="mt-2">
-    <button
-      mat-stroked-button
-      color="accent"
-      data-testid="create-new-column"
-      id="create-new-column"
-      [disabled]="disabledNewColumn"
-      (click)="addNewColumn()"
-    >
+    <button mat-stroked-button color="accent" data-testid="create-new-column" id="create-new-column"
+            [disabled]="disabledNewColumn" (click)="addNewColumn()">
       Add Column
     </button>
   </div>
