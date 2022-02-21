@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationMapElement } from 'src/helpers';
@@ -16,6 +16,9 @@ import { MapService } from '../map.service';
 export class MapSearchComponent {
   /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
+
+  /** Search input ID used for return to current search. */
+  @ViewChild('inputText') search!: ElementRef;
 
   /** List of filtered stations based on search text. */
   filteredStations: StationMapElement[] = [];
@@ -79,10 +82,11 @@ export class MapSearchComponent {
     this.searchText = '';
     this.filteredStations = [];
     this.mapService.handleDrawerClose('stationInfo');
+    this.searchInput = true;
   }
 
   /**
-   * Input search text store.
+   * To get current search text words to store.
    *
    */
   onBlur(): void {
@@ -102,7 +106,14 @@ export class MapSearchComponent {
       this.mapService.handleDrawerClose('stationInfo');
       this.searchInput = true;
     }
-    this.searchText = this.placeHolderText;
+    this.filteredStations = [];
+    setTimeout(() => {
+      this.search.nativeElement.value = this.placeHolderText;
+      this.search.nativeElement.focus();
+      this.filteredStations = this.mapService.stationElements.filter((item) => {
+        return item.stationName.toLowerCase().includes(this.placeHolderText);
+      });
+    }, 100);
   }
 
   /**
