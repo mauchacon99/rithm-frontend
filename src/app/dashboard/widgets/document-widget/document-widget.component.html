@@ -37,13 +37,43 @@
           *ngFor="let questions of questionList.questions"
         >
           <div class="py-3 border-b border-b-secondary-200">
-            <p class="font-semibold text-sm">{{ questions.prompt }}</p>
-            <p class="pt-3 text-sm">
+            <p class="font-semibold text-sm">
               {{
-                questions.answer?.value ||
-                  "This question doesn't have an answer."
+                questions.questionType === 'instructions'
+                  ? 'Instructions'
+                  : questions.prompt
               }}
             </p>
+
+            <div [ngSwitch]="questions.questionType">
+              <p *ngSwitchCase="'checklist'" class="pt-3 text-sm">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  {{ answer.value }} -
+                  {{ answer.isChecked ? 'Selected' : 'No selected' }}<br />
+                </span>
+              </p>
+              <p *ngSwitchCase="'multiDropdown'" class="pt-3 text-sm">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  {{ answer.value }} -
+                  {{ answer.isChecked ? 'Selected' : 'No selected' }}<br />
+                </span>
+              </p>
+              <p *ngSwitchCase="'singleDropdown'" class="pt-3 text-sm">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  {{ answer.value }} -
+                  {{ answer.isChecked ? 'Selected' : 'No selected' }}<br />
+                </span>
+              </p>
+              <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
+                {{ questions.prompt }}
+              </p>
+              <p *ngSwitchDefault class="pt-3 text-sm">
+                {{
+                  questions.answer?.value ||
+                    "This question doesn't have an answer."
+                }}
+              </p>
+            </div>
           </div>
         </ng-container>
       </ng-container>
