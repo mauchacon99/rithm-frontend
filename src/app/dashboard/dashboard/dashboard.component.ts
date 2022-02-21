@@ -140,6 +140,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = status;
         this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
+        if (!status) this.getParams();
       });
 
     this.sidenavDrawerService.drawerContext$
