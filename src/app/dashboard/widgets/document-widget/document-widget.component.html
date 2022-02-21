@@ -52,7 +52,7 @@
               >
                 <span *ngFor="let answer of questions.answer?.asArray">
                   <i
-                    class="fas"
+                    class="fas text-secondary-500"
                     [ngClass]="
                       answer.isChecked ? 'fa-check-square' : 'fa-square'
                     "
@@ -66,7 +66,7 @@
               >
                 <span *ngFor="let answer of questions.answer?.asArray">
                   <i
-                    class="fas"
+                    class="fas text-secondary-500"
                     [ngClass]="
                       answer.isChecked ? 'fa-check-square' : 'fa-square'
                     "
@@ -79,7 +79,7 @@
               <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
                 <span *ngFor="let answer of questions.answer?.asArray">
                   <i
-                    class="fas"
+                    class="fas text-secondary-500"
                     [ngClass]="
                       answer.isChecked ? 'fa-check-square' : 'fa-square'
                     "
