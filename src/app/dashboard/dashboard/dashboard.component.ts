@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** View new dashboard. */
   viewNewDashboard = false;
 
+  /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /** If it needs to create new dashboard. */
@@ -103,6 +104,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.drawerHasBackdrop;
   }
 
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
@@ -131,6 +141,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
         if (!status) this.getParams();
+      });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        if (
+          drawerContext === 'menuDashboard' ||
+          drawerContext === 'stationWidget'
+        ) {
+          this.drawerContext = drawerContext;
+        }
       });
   }
 
@@ -164,15 +185,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.errorService.logError(error);
       },
     });
-  }
-
-  /**
-   * Whether the drawer is open.
-   *
-   * @returns True if the drawer is open, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /**
@@ -236,6 +248,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.editMode = false;
         this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
         this.configEditMode();
+        this.toggleDrawerOnlyForWidgets();
       }
     } else {
       this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
@@ -364,10 +377,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  /** Toggle drawer only for all widgets. */
+  private toggleDrawerOnlyForWidgets(): void {
+    if (this.isDrawerOpen && this.drawerContext !== 'menuDashboard') {
+      this.sidenavDrawerService.toggleDrawer(this.drawerContext);
+    }
+  }
+
   /**
    * Update dashboard.
    */
   updateDashboard(): void {
+    this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
