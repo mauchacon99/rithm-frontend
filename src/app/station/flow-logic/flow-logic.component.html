@@ -34,7 +34,7 @@
             <section
               *ngIf="
                 flowLogicLoadingByRuleType !== station.rithmId + '-all';
-                else elseLoading
+                else flowLogicRuleLoading
               "
             >
               <div
@@ -107,7 +107,7 @@
             <section
               *ngIf="
                 flowLogicLoadingByRuleType !== station.rithmId + '-any';
-                else elseLoading
+                else flowLogicRuleLoading
               "
             >
               <div
@@ -183,7 +183,7 @@
   </div>
 </div>
 
-<ng-template #elseLoading>
+<ng-template #flowLogicRuleLoading>
   <div class="flex justify-left" id="flow-logic-loading-rules">
     <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
   </div>
