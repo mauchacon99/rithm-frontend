@@ -15,6 +15,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import {
   DashboardData,
   DashboardItem,
+  EditDataWidget,
   RoleDashboardMenu,
   Station,
 } from 'src/models';
@@ -139,8 +140,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.dashboardService.updateDataWidget$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ indexWidget, widgetItem }) => {
-        this.updateDashboardWidget(indexWidget, widgetItem);
+      .subscribe((editDataWidget) => {
+        this.updateDashboardWidget(editDataWidget);
       });
   }
 
@@ -190,17 +191,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param drawerItem The information that will be displayed in the side drawer.
    * @param drawerData Data optional of the drawer.
-   * @param drawerData.widgetIndex Number of index of the widget.
-   * @param drawerData.widgetItem Comment.
    */
   toggleDrawer(
     drawerItem: 'menuDashboard' | 'stationWidget',
-    drawerData?: {
-      /** String of station widget data. */
-      widgetItem: DashboardItem;
-      /** Number of index of the widget. */
-      widgetIndex: number;
-    }
+    drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
       this.sidenavDrawerService.toggleDrawer(this.drawerContext);
@@ -220,10 +214,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    */
-  toggleStationWidgetDrawer(
-    widgetItem: DashboardItem,
-    widgetIndex: number
-  ): void {
+  toggleWidgetDrawer(widgetItem: DashboardItem, widgetIndex: number): void {
     this.toggleDrawer('stationWidget', {
       widgetItem,
       widgetIndex,
@@ -379,8 +370,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /**
    * Update dashboard.
+   *
+   * @param isCloseDrawer If close drawer, only used by drawer widgets.
    */
-  updateDashboard(): void {
+  updateDashboard(isCloseDrawer = true): void {
     this.dashboardService.toggleLoadingDashboard(true);
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
@@ -410,12 +403,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Update data of the widget since drawer station.
    *
-   * @param indexWidget Number of the position widget.
-   * @param widgetItem String, json stringify of data the widget.
+   * @param editDataWidget Data to edit widget.
    */
-  updateDashboardWidget(indexWidget: number, widgetItem: DashboardItem): void {
-    this.dashboardData.widgets[indexWidget] = widgetItem;
-    this.updateDashboard();
+  updateDashboardWidget(editDataWidget: EditDataWidget): void {
+    this.dashboardData.widgets[editDataWidget.widgetIndex] =
+      editDataWidget.widgetItem;
+    this.updateDashboard(editDataWidget.isCloseDrawer);
   }
 
   /**

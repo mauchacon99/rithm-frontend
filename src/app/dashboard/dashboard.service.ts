@@ -9,8 +9,9 @@ import {
   Document,
   DashboardData,
   DashboardItem,
+  EditDataWidget,
 } from 'src/models';
-import { ColumnsDocumentInfo } from '../../models/enums/columns-document-info';
+import { ColumnsDocumentInfo } from 'src/models/enums/columns-document-info';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -25,12 +26,7 @@ export class DashboardService {
   isLoadingDashboard$ = new Subject<boolean>();
 
   /** Update specific widget and data. */
-  updateDataWidget$ = new Subject<{
-    /** Number of the position widget. */
-    indexWidget: number;
-    /** String, json stringify of data the widget. */
-    widgetItem: DashboardItem;
-  }>();
+  updateDataWidget$ = new Subject<EditDataWidget>();
 
   columnsDocumentInfo: {
     /** Name to show in dom. */
@@ -85,11 +81,10 @@ export class DashboardService {
   /**
    * Update data of the widget since drawer station.
    *
-   * @param indexWidget Number of the position widget.
-   * @param widgetItem DashboardItem, all data of the widget.
+   * @param editDataWidget Data to edit widget.
    */
-  updateDashboardWidgets(indexWidget: number, widgetItem: DashboardItem): void {
-    this.updateDataWidget$.next({ indexWidget, widgetItem });
+  updateDashboardWidgets(editDataWidget: EditDataWidget): void {
+    this.updateDataWidget$.next(editDataWidget);
   }
 
   /**

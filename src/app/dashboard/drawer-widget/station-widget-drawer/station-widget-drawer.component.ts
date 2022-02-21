@@ -3,7 +3,12 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DashboardItem, Question, StationColumnWidget } from 'src/models';
+import {
+  DashboardItem,
+  Question,
+  ColumnFieldsWidget,
+  EditDataWidget,
+} from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -40,7 +45,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   stationRithmId!: string;
 
   /** Station columns. */
-  stationColumns!: StationColumnWidget[];
+  stationColumns!: ColumnFieldsWidget[];
 
   /** Position of the widget. */
   widgetIndex!: number;
@@ -73,16 +78,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const dataDrawer = data as {
-          /** Station data. */
-          widgetItem: DashboardItem;
-          /** Position of the widget. */
-          widgetIndex: number;
-        };
+        const dataDrawer = data as EditDataWidget;
         if (dataDrawer) {
           this.widgetItem = dataDrawer.widgetItem;
           const dataWidget = JSON.parse(this.widgetItem.data);
-          this.stationColumns = dataWidget.columns;
+          this.stationColumns = dataWidget.columns || [];
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.getDocumentFields();
@@ -186,6 +186,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.stationColumns.map((column) => {
       this.addNewColumn(column.name, column.questionId);
     });
+    if (!this.stationColumns.length) {
+      this.addNewColumn();
+    }
   }
 
   /** Get station questions. */
@@ -218,7 +221,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    */
   optionSelected(value: OptionsSelect, indexColumn: number): void {
     if (!value.disabled) {
-      const dataColumn: StationColumnWidget = value.questionId
+      const dataColumn: ColumnFieldsWidget = value.questionId
         ? {
             name: value.name,
             questionId: value.questionId,
@@ -241,10 +244,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       stationRithmId: this.stationRithmId,
       columns: this.stationColumns,
     });
-    this.dashboardService.updateDashboardWidgets(
-      this.widgetIndex,
-      this.widgetItem
-    );
+    this.dashboardService.updateDashboardWidgets({
+      widgetItem: this.widgetItem,
+      widgetIndex: this.widgetIndex,
+      isCloseDrawer: false,
+    });
   }
 
   /**
