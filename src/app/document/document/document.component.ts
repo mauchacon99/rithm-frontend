@@ -434,14 +434,15 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Flow document to a previous station.
+   * Move document flow from current station to previous station.
    */
   private flowDocumentToPreviousStation(): void {
-    const previousStation =
-      this.previousStations[this.previousStations.length - 1];
+    const previousStation: string[] = this.previousStations.map(
+      (item) => item.rithmId
+    );
     const moveDoc: MoveDocument = {
       fromStationRithmId: this.stationId,
-      toStationRithmIds: [previousStation.rithmId],
+      toStationRithmIds: previousStation,
       documentRithmId: this.documentId,
     };
 

@@ -1129,7 +1129,7 @@ export class MockDocumentService {
   }
 
   /**
-   * Flow document from a current station to a previous station.
+   * Changes the flow of the document a current station to a previous station.
    *
    * @param document Document to be moved to a previous station.
    * @returns Returns an empty observable.
@@ -1145,9 +1145,8 @@ export class MockDocumentService {
             },
           })
       ).pipe(delay(1000));
-    } else {
-      return of().pipe(delay(1000));
     }
+    return of().pipe(delay(1000));
   }
 
   /**

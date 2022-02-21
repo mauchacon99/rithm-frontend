@@ -347,7 +347,7 @@ describe('DocumentComponent', () => {
     component.previousStations = [
       {
         rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
-        name: 'Previou Station',
+        name: 'Previous Station',
       },
     ];
     fixture.detectChanges();
@@ -633,7 +633,7 @@ describe('DocumentComponent', () => {
     });
   });
 
-  it('should flow document to a previous station', () => {
+  it('should move flow document to a previous station', () => {
     const stationId = component.documentInformation.stationRithmId;
     const documentId = component.documentInformation.documentRithmId;
 
