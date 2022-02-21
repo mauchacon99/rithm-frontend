@@ -199,8 +199,8 @@ export class DashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
    */
-  deleteOrganizationDashboard(rithmId: string): Observable<DashboardData> {
-    return this.http.delete<DashboardData>(
+  deleteOrganizationDashboard(rithmId: string): Observable<unknown> {
+    return this.http.delete<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
     );
   }
@@ -212,7 +212,7 @@ export class DashboardService {
    * @returns The rithmId of the deleted dashboard.
    */
   deletePersonalDashboard(rithmId: string): Observable<unknown> {
-    return this.http.delete<DashboardData>(
+    return this.http.delete<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
     );
   }
