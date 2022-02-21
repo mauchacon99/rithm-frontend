@@ -46,7 +46,7 @@ export class StationComponent
   drawer!: MatDrawer;
 
   /** Indicate error when saving flow rule. */
-  @ViewChild(FlowLogicComponent, { static: true })
+  @ViewChild(FlowLogicComponent, { static: false })
   childFlowLogic!: FlowLogicComponent;
 
   /** Observable for when the component is destroyed. */
@@ -459,28 +459,20 @@ export class StationComponent
    *
    */
   saveFlowLogicRules(): void {
-    this.stationLoading = true;
-    if (this.childFlowLogic) {
-      this.childFlowLogic.ruleLoading = true;
-    }
+    this.childFlowLogic.ruleLoading = true;
     this.documentService
       .saveStationFlowLogic(this.pendingFlowLogicRules)
       .pipe(first())
       .subscribe({
         next: () => {
-          this.stationLoading = false;
           this.stationTabsIndex = 1;
           this.pendingFlowLogicRules = [];
-          if (this.childFlowLogic) {
-            this.childFlowLogic.ruleLoading = false;
-          }
+          this.childFlowLogic.ruleLoading = false;
         },
         error: (error: unknown) => {
           this.stationLoading = false;
           this.stationTabsIndex = 1;
-          if (this.childFlowLogic) {
-            this.childFlowLogic.ruleError = true;
-          }
+          this.childFlowLogic.ruleError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
