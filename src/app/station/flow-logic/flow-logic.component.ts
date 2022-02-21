@@ -36,6 +36,9 @@ export class FlowLogicComponent implements OnInit {
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
 
+  /* Loading the rules list  by type  */
+  flowLogicLoadingByRuleType: string | null = null;
+
   /** The error if rules fails . */
   flowRuleError = false;
 
@@ -194,16 +197,16 @@ export class FlowLogicComponent implements OnInit {
       okButtonText: 'Remove',
     });
     if (confirm) {
-      this.flowLogicLoading = true;
-      // with memomry
       const flowLogicRules = this.flowLogicRules.find(
         (station) => station.destinationStationRithmID === connectedStationId
       );
       if (flowLogicRules) {
-        // cloning variable flow logic rules
+        this.flowLogicLoadingByRuleType = `${connectedStationId}-${type}`;
+
+        // cloning variable without memory
         const flowLogicRulesCopy = JSON.parse(JSON.stringify(flowLogicRules));
 
-        // prepare the data to send the endpoint and later
+        // prepare the data to send the endpoint and for later
         // remove the rule from the  array  flowLogicRulesCopy when is 'any' or 'all'
         if (type === 'all')
           flowLogicRulesCopy?.flowRule.equations.splice(index, 1);
@@ -218,11 +221,13 @@ export class FlowLogicComponent implements OnInit {
               if (type === 'all')
                 flowLogicRules?.flowRule.equations.splice(index, 1);
               else flowLogicRules?.flowRule.subRules.splice(index, 1);
-              this.flowLogicLoading = false;
+              // hidden loading
+              this.flowLogicLoadingByRuleType = null;
             },
             error: (error: unknown) => {
               this.flowRuleError = true;
               this.flowLogicLoading = false;
+              this.flowLogicLoadingByRuleType = null;
               this.errorService.displayError(
                 "Something went wrong on our end and we're looking into it. Please try again in a little while.",
                 error
