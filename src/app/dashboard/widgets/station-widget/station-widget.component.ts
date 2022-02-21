@@ -133,6 +133,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
         next: (dataStationWidget) => {
           this.isLoading = false;
           this.failedLoadWidget = false;
+          console.log(dataStationWidget);
           this.dataStationWidget = dataStationWidget;
         },
         error: (error: unknown) => {

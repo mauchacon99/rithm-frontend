@@ -7,9 +7,9 @@ export enum ColumnsDocumentInfo {
   /** Priority. */
   Priority = 'priority',
   /** Time in station. */
-  TimeInStation = 'timeInStation',
+  TimeInStation = 'flowedTimeUTC',
   /** Last updated. */
-  LastUpdated = 'lastUpdated',
+  LastUpdated = 'lastUpdatedUTC',
   /** Assigned user. */
   AssignedUser = 'assignedUser',
 }

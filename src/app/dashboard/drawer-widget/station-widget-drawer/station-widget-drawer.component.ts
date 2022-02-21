@@ -2,13 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import {
-  Question,
-  StationColumnWidget,
-  WidgetDrawerStationData,
-} from 'src/models';
-import { ColumnsDocumentInfo } from 'src/models/enums/columns-document-info';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DashboardItem, Question, StationColumnWidget } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -38,6 +33,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     columns: new FormArray([]),
   });
 
+  /** All data of the widget. */
+  widgetItem!: DashboardItem;
+
   /** Station RithmId. */
   stationRithmId!: string;
 
@@ -54,9 +52,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
-
-  /** Enum of columns statics. */
-  columnsDocumentInfo = ColumnsDocumentInfo;
 
   /** Static columns. */
   documentInfo: OptionsSelect[] = [];
@@ -80,16 +75,15 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const dataDrawer = data as {
           /** Station data. */
-          stationData: string;
+          widgetItem: DashboardItem;
           /** Position of the widget. */
           widgetIndex: number;
         };
         if (dataDrawer) {
-          const stationData = JSON.parse(
-            dataDrawer.stationData
-          ) as WidgetDrawerStationData;
-          this.stationRithmId = stationData.stationRithmId;
-          this.stationColumns = stationData.columns;
+          this.widgetItem = dataDrawer.widgetItem;
+          const dataWidget = JSON.parse(this.widgetItem.data);
+          this.stationColumns = dataWidget.columns;
+          this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.getDocumentFields();
         }
@@ -105,11 +99,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Set document info static. */
   setDocumentInfo(): void {
     this.documentInfo = [];
-    Object.values(this.columnsDocumentInfo).map((column) => {
+    this.dashboardService.columnsDocumentInfo.map((column) => {
       this.documentInfo.push({
-        name: column,
-        disabled: this.checkExistColumn(column, 'name'),
-        value: column,
+        name: column.name,
+        disabled: this.checkExistColumn(column.key, 'name'),
+        value: column.key,
       });
     });
   }
@@ -168,7 +162,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     const value = questionId ? questionId : name;
     this.getFormColumns.push(
       new FormGroup({
-        name: new FormControl(value),
+        name: new FormControl(value, Validators.required),
       })
     );
   }
@@ -232,11 +226,10 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
         : {
             name: value.value,
           };
-      if (this.stationColumns[indexColumn]) {
-        this.stationColumns[indexColumn] = dataColumn;
-      } else {
-        this.stationColumns.push(dataColumn);
-      }
+      this.stationColumns[indexColumn]
+        ? (this.stationColumns[indexColumn] = dataColumn)
+        : this.stationColumns.push(dataColumn);
+
       this.updateWidget();
     }
   }
@@ -244,11 +237,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Update widget. */
   updateWidget(): void {
     this.loadColumnsSelect();
-    const dataWidget = JSON.stringify({
+    this.widgetItem.data = JSON.stringify({
       stationRithmId: this.stationRithmId,
       columns: this.stationColumns,
     });
-    this.dashboardService.updateDashboardWidgets(this.widgetIndex, dataWidget);
+    this.dashboardService.updateDashboardWidgets(
+      this.widgetIndex,
+      this.widgetItem
+    );
   }
 
   /**
@@ -261,7 +257,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     const isDisabled = !allSelects.find((option) => !option.disabled);
     const isAllInputs =
       allSelects.length === this.getFormColumns.controls.length;
-    return isDisabled || isAllInputs;
+    return isDisabled || isAllInputs || this.getFormColumns.invalid;
   }
 
   /**

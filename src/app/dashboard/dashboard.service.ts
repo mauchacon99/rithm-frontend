@@ -8,7 +8,9 @@ import {
   StationRosterMember,
   Document,
   DashboardData,
+  DashboardItem,
 } from 'src/models';
+import { ColumnsDocumentInfo } from '../../models/enums/columns-document-info';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -27,8 +29,36 @@ export class DashboardService {
     /** Number of the position widget. */
     indexWidget: number;
     /** String, json stringify of data the widget. */
-    widgetData: string;
+    widgetItem: DashboardItem;
   }>();
+
+  columnsDocumentInfo: {
+    /** Name to show in dom. */
+    name: string;
+    /** Key property to get value of the document. */
+    key: string;
+  }[] = [
+    {
+      name: 'Document',
+      key: ColumnsDocumentInfo.Name,
+    },
+    {
+      name: 'Assigned',
+      key: ColumnsDocumentInfo.AssignedUser,
+    },
+    {
+      name: 'Priority',
+      key: ColumnsDocumentInfo.Priority,
+    },
+    {
+      name: 'Time in station',
+      key: ColumnsDocumentInfo.TimeInStation,
+    },
+    {
+      name: 'Last updated',
+      key: ColumnsDocumentInfo.LastUpdated,
+    },
+  ];
 
   constructor(private http: HttpClient) {}
 
@@ -56,10 +86,10 @@ export class DashboardService {
    * Update data of the widget since drawer station.
    *
    * @param indexWidget Number of the position widget.
-   * @param widgetData String, json stringify of data the widget.
+   * @param widgetItem DashboardItem, all data of the widget.
    */
-  updateDashboardWidgets(indexWidget: number, widgetData: string): void {
-    this.updateDataWidget$.next({ indexWidget, widgetData });
+  updateDashboardWidgets(indexWidget: number, widgetItem: DashboardItem): void {
+    this.updateDataWidget$.next({ indexWidget, widgetItem });
   }
 
   /**

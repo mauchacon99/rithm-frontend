@@ -12,7 +12,12 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
+import {
+  DashboardData,
+  DashboardItem,
+  RoleDashboardMenu,
+  Station,
+} from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -134,8 +139,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.dashboardService.updateDataWidget$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ indexWidget, widgetData }) => {
-        this.updateDashboardWidget(indexWidget, widgetData);
+      .subscribe(({ indexWidget, widgetItem }) => {
+        this.updateDashboardWidget(indexWidget, widgetItem);
       });
   }
 
@@ -185,14 +190,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param drawerItem The information that will be displayed in the side drawer.
    * @param drawerData Data optional of the drawer.
-   * @param drawerData.stationData String of station widget data.
    * @param drawerData.widgetIndex Number of index of the widget.
+   * @param drawerData.widgetItem Comment.
    */
   toggleDrawer(
     drawerItem: 'menuDashboard' | 'stationWidget',
     drawerData?: {
       /** String of station widget data. */
-      stationData: string;
+      widgetItem: DashboardItem;
       /** Number of index of the widget. */
       widgetIndex: number;
     }
@@ -212,12 +217,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
-   * @param stationData String of the data station.
+   * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    */
-  toggleStationWidgetDrawer(stationData: string, widgetIndex: number): void {
+  toggleStationWidgetDrawer(
+    widgetItem: DashboardItem,
+    widgetIndex: number
+  ): void {
     this.toggleDrawer('stationWidget', {
-      stationData,
+      widgetItem,
       widgetIndex,
     });
   }
@@ -403,10 +411,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Update data of the widget since drawer station.
    *
    * @param indexWidget Number of the position widget.
-   * @param widgetData String, json stringify of data the widget.
+   * @param widgetItem String, json stringify of data the widget.
    */
-  updateDashboardWidget(indexWidget: number, widgetData: string): void {
-    this.dashboardData.widgets[indexWidget].data = widgetData;
+  updateDashboardWidget(indexWidget: number, widgetItem: DashboardItem): void {
+    this.dashboardData.widgets[indexWidget] = widgetItem;
     this.updateDashboard();
   }
 
