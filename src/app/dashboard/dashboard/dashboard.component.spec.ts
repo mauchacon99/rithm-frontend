@@ -164,18 +164,6 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should toggle drawer if drawer open is different a menuDashboard', () => {
-    component.drawerContext = 'stationWidget';
-    component.dashboardData = dataDashboard;
-    spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
-    const spyDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
-    component.updateDashboard();
-    expect(spyDrawer).toHaveBeenCalled();
-  });
-
   it('should call service to update a personal dashboard', () => {
     const dashboardData = {
       rithmId: 'ABC-123-BCA-321',
@@ -381,6 +369,15 @@ describe('DashboardComponent', () => {
       await component.toggleEditMode(false);
       expect(spyMethod).toHaveBeenCalledWith();
       expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+    });
+
+    it('should toggle drawer if drawer open is different a menuDashboard how update dashboard', () => {
+      component.drawerContext = 'stationWidget';
+      component.dashboardData = dataDashboard;
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      component.updateDashboard();
+      expect(spyDrawer).toHaveBeenCalled();
     });
   });
 
