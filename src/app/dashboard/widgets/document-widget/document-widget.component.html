@@ -46,7 +46,10 @@
             </p>
 
             <div [ngSwitch]="questions.questionType">
-              <p *ngSwitchCase="'checklist'" class="pt-3 text-sm">
+              <p
+                *ngSwitchCase="questionFieldType.CheckList"
+                class="pt-3 text-sm"
+              >
                 <span *ngFor="let answer of questions.answer?.asArray">
                   <i
                     class="fas"
@@ -57,7 +60,10 @@
                   - {{ answer.value }}<br />
                 </span>
               </p>
-              <p *ngSwitchCase="'multiDropdown'" class="pt-3 text-sm">
+              <p
+                *ngSwitchCase="questionFieldType.MultiSelect"
+                class="pt-3 text-sm"
+              >
                 <span *ngFor="let answer of questions.answer?.asArray">
                   <i
                     class="fas"
@@ -70,7 +76,7 @@
                   <br />
                 </span>
               </p>
-              <p *ngSwitchCase="'singleDropdown'" class="pt-3 text-sm">
+              <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
                 <span *ngFor="let answer of questions.answer?.asArray">
                   <i
                     class="fas"
