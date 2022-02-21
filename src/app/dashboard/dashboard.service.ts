@@ -8,7 +8,6 @@ import {
   StationRosterMember,
   Document,
   DashboardData,
-  DashboardItem,
   EditDataWidget,
 } from 'src/models';
 import { ColumnsDocumentInfo } from 'src/models/enums/columns-document-info';
