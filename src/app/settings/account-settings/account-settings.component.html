@@ -15,7 +15,11 @@
     >
       <h4 class="pb-3">General Account Settings</h4>
 
-      <app-user-form formControlName="userForm" class="w-full"></app-user-form>
+      <app-user-form
+        formControlName="userForm"
+        [accountCreate]="false"
+        class="w-full"
+      ></app-user-form>
 
       <div class="w-full">
         <a
