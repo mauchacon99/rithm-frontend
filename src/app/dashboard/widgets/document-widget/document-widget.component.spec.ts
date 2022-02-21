@@ -131,5 +131,11 @@ describe('DocumentWidgetComponent', () => {
     expect(button).toBeTruthy();
     button.click(component.dataDocumentWidget.stations[0].stationRithmId);
     expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(['/', 'document', JSON.parse(documentRithmId).documentRithmId], {
+      queryParams: {
+        documentId: JSON.parse(documentRithmId).documentRithmId,
+        stationId: component.dataDocumentWidget.stations[0].stationRithmId,
+      },
+    });
   });
 });
