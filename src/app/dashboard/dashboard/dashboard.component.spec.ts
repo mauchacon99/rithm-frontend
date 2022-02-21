@@ -297,7 +297,7 @@ describe('DashboardComponent', () => {
     expect(spyMethod).toHaveBeenCalledWith(dataExpect);
   });
 
-  it('should call changedOptions how dashboard alert for activate edit mode', async () => {
+  it('should call changedOptions when dashboard alert for activate edit mode', async () => {
     component.dashboardDataCopy = dataDashboard;
     const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
     await component.toggleEditMode(true);
@@ -371,7 +371,7 @@ describe('DashboardComponent', () => {
       expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
     });
 
-    it('should toggle drawer if drawer open is different a menuDashboard how update dashboard', () => {
+    it('should toggle drawer if drawer open is different a menuDashboard when update dashboard', () => {
       component.drawerContext = 'stationWidget';
       component.dashboardData = dataDashboard;
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
