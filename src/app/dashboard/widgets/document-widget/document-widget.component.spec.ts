@@ -126,7 +126,8 @@ describe('DocumentWidgetComponent', () => {
     const button = fixture.debugElement.nativeElement.querySelector(
       '#go-to-document-page-single'
     );
-    const navigateSpy = spyOn(component, 'goToDocument');
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const spyRoute = spyOn(TestBed.inject(Router), 'navigate').and.callThrough();
     expect(button).toBeTruthy();
     button.click(component.dataDocumentWidget.stations[0].stationRithmId);
     expect(navigateSpy).toHaveBeenCalled();
