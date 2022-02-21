@@ -9,6 +9,7 @@ import { MockComponent } from 'ng-mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 
 describe('DocumentWidgetComponent', () => {
@@ -111,7 +112,7 @@ describe('DocumentWidgetComponent', () => {
   it('should redirect to document page', () => {
     component.dataDocumentWidget = {
       documentName: 'Untitled Document',
-      documentRithmId: documentRithmId,
+      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
       questions: [],
       stations: [
         {
@@ -126,9 +127,22 @@ describe('DocumentWidgetComponent', () => {
     const button = fixture.debugElement.nativeElement.querySelector(
       '#go-to-document-page-single'
     );
-    const navigateSpy = spyOn(component, 'goToDocument');
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const spyRoute = spyOn(
+      TestBed.inject(Router),
+      'navigate'
+    ).and.callThrough();
     expect(button).toBeTruthy();
     button.click(component.dataDocumentWidget.stations[0].stationRithmId);
     expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(
+      ['/', 'document', JSON.parse(documentRithmId).documentRithmId],
+      {
+        queryParams: {
+          documentId: JSON.parse(documentRithmId).documentRithmId,
+          stationId: component.dataDocumentWidget.stations[0].stationRithmId,
+        },
+      }
+    );
   });
 });

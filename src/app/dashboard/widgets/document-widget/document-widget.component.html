@@ -19,17 +19,19 @@
 >
   <!--  Header Container -->
   <div class="m-2">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
       <div *ngIf="dataDocumentWidget.stations.length === 1">
         <button
-          mat-button
+          mat-icon-button
           id="go-to-document-page-single"
           (click)="goToDocument(dataDocumentWidget.stations[0].stationRithmId)"
         >
-          <i class="fas fa-external-link-alt text-xl text-secondary-500"></i>
+          <i
+            class="fas fa-external-link-alt text-[16px] text-secondary-500"
+          ></i>
         </button>
       </div>
       <div *ngIf="dataDocumentWidget.stations.length > 1">
