@@ -74,7 +74,7 @@ export class FlowLogicComponent implements OnInit {
       maxWidth: '1024px',
       data: {
         stationId: this.rithmId,
-        editRule: editRule ? editRule : null,
+        editRule: editRule || null,
       },
       disableClose: true,
     });
