@@ -38,6 +38,9 @@ export class StationService {
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
+  /** Contains the name of the Flow Button as BehaviorSubject. */
+  flowButtonText$ = new BehaviorSubject<string>('Flow');
+
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
 
@@ -303,6 +306,15 @@ export class StationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Returns the flow button name.
+   *
+   * @param flowButtonText The name of the flow button .
+   */
+  updatedFlowButtonText(flowButtonText: string): void {
+    this.flowButtonText$.next(flowButtonText);
   }
 
   /**
