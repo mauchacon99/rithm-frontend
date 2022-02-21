@@ -52,14 +52,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggles the open state for drawer mode.
-   *
-   */
-  toggleDrawer(): void {
-    this.sidenavDrawerService.toggleDrawer('stationWidget');
-  }
-
-  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
