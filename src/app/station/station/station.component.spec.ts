@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
@@ -14,12 +14,23 @@ import { DocumentTemplateComponent } from 'src/app/document/document-template/do
 import { StationInfoHeaderComponent } from 'src/app/shared/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockStationService,
+} from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { Question, QuestionFieldType } from 'src/models';
+import {
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
+  Question,
+  QuestionFieldType,
+  RuleType,
+} from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
@@ -29,10 +40,13 @@ import { MockPopupService } from 'src/mocks/mock-popup-service';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { DocumentService } from 'src/app/core/document.service';
+import { throwError } from 'rxjs';
 
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
+  let stationInject: StationService;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -64,6 +78,7 @@ describe('StationComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
+        { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
         {
@@ -77,6 +92,7 @@ describe('StationComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StationComponent);
+    stationInject = TestBed.inject(StationService);
     component = fixture.componentInstance;
     component.stationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -296,5 +312,87 @@ describe('StationComponent', () => {
     const fieldType: QuestionFieldType = QuestionFieldType.AddressLine;
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions[0].children).toHaveSize(5);
+  });
+
+  it('should update text of flow button', () => {
+    const flowButtonName = '';
+    expect(flowButtonName).toBe('');
+    stationInject.flowButtonText$.next('Flow');
+    expect(flowButtonName).toBe('');
+    expect(component.stationInformation.flowButton).toBe('Flow');
+  });
+
+  it('should call the method that detect change tabs.', () => {
+    const tabsIndex = {
+      index: 1,
+    } as MatTabChangeEvent;
+    const spyTabsChange = spyOn(
+      component,
+      'tabSelectedChanged'
+    ).and.callThrough();
+    component.tabSelectedChanged(tabsIndex);
+    expect(component.isFlowLogicTab).toBeTrue();
+    expect(spyTabsChange).toHaveBeenCalledWith(tabsIndex);
+  });
+
+  it('should call the method that returns new flow logic rules.', () => {
+    const stationFlowLogic: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRule: {
+        ruleType: RuleType.Or,
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              questionType: QuestionFieldType.ShortText,
+              value: 'birthday',
+              text: 'test',
+            },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              questionType: QuestionFieldType.ShortText,
+              value: '5/27/1982',
+              text: 'test',
+            },
+          },
+        ],
+        subRules: [],
+      },
+    };
+    const spyNewRulesStation = spyOn(
+      component,
+      'addFlowLogicRule'
+    ).and.callThrough();
+    component.addFlowLogicRule(stationFlowLogic);
+    expect(spyNewRulesStation).toHaveBeenCalledWith(stationFlowLogic);
+  });
+
+  it('should saved the flow logic rules in current station', () => {
+    component.isFlowLogicTab = true;
+    const spySavedFlowLogicRules = spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogic'
+    ).and.callThrough();
+    component.saveFlowLogicRules();
+    expect(spySavedFlowLogicRules).toHaveBeenCalled();
+  });
+
+  it('should show error message when saved flow logic rules in current station', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveStationFlowLogic'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.saveFlowLogicRules();
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 });

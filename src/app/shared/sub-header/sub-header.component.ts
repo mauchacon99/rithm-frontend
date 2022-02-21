@@ -1,4 +1,11 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation, StationInformation } from 'src/models';
 
@@ -15,10 +22,16 @@ export class SubHeaderComponent {
   /** Information about the item displayed on the page with the sub header. */
   @Input() itemInfo!: DocumentStationInformation | StationInformation;
 
+  /** Event to detect click comment outside. */
+  @Output() checkClickSubHeader: EventEmitter<boolean> = new EventEmitter();
+
   /** Current active icon. */
   activeItem = 'none';
 
-  constructor(private sidenavDrawerService: SidenavDrawerService) {}
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private elementRef: ElementRef
+  ) {}
 
   /**
    * The title to be displayed on the sub header.
@@ -47,5 +60,16 @@ export class SubHeaderComponent {
     } else {
       this.activeItem = 'none';
     }
+  }
+
+  /**
+   * Adds a newly posted comment to the list of comments.
+   *
+   * @param targetElement The comment that was newly added.
+   */
+  @HostListener('document:click', ['$event.target'])
+  onPageClick(targetElement: ElementRef): void {
+    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
+    this.checkClickSubHeader.emit(clickedInside);
   }
 }
