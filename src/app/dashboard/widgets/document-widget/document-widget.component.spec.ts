@@ -110,7 +110,7 @@ describe('DocumentWidgetComponent', () => {
   it('should redirect to document page', () => {
     component.dataDocumentWidget = {
       documentName: 'Untitled Document',
-      documentRithmId: documentRithmId,
+      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
       questions: [],
       stations: [
         {
