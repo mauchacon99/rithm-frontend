@@ -11,6 +11,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
+import { OperatorType } from 'src/models/enums/operator-type.enum';
 
 /**
  * Component for the flow logic tab on a station.
@@ -236,5 +237,51 @@ export class FlowLogicComponent implements OnInit {
           });
       }
     }
+  }
+
+  /**
+   * Translate the operator from Math to natural.
+   *
+   * @param operator The operator to be translated.
+   * @returns The translation for the current operator.
+   */
+  translateOperator(operator: string): string {
+    let operatorTranslated = '';
+    switch (operator) {
+      case OperatorType.GreaterThan:
+        operatorTranslated = 'Is Greater Than';
+        break;
+      case OperatorType.LesserThan:
+        operatorTranslated = 'Is Lesser Than';
+        break;
+      case OperatorType.GreaterOrEqual:
+        operatorTranslated = 'Is Greater or Equal to';
+        break;
+      case OperatorType.LesserOrEqual:
+        operatorTranslated = 'Is Lesser or Equal to';
+        break;
+      case OperatorType.EqualTo:
+        operatorTranslated = 'Is Equal To';
+        break;
+      case OperatorType.NotEqualTo:
+        operatorTranslated = 'Is Not Equal To';
+        break;
+      case OperatorType.Before:
+        operatorTranslated = 'Is Before';
+        break;
+      case OperatorType.After:
+        operatorTranslated = 'Is After';
+        break;
+      case OperatorType.Contains:
+        operatorTranslated = 'Contains';
+        break;
+      case OperatorType.NotContains:
+        operatorTranslated = 'Does not contains';
+        break;
+      case OperatorType.On:
+        operatorTranslated = 'Is On';
+        break;
+    }
+    return operatorTranslated;
   }
 }

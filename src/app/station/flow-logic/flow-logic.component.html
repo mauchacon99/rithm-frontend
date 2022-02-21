@@ -50,7 +50,7 @@
                 >
                   {{ equation.leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
-                    - {{ equation.operatorType }} -</span
+                    - {{ translateOperator(equation.operatorType) }} -</span
                   >
                   {{ equation.rightOperand.text | titlecase }}
                 </p>
@@ -122,7 +122,11 @@
                 >
                   {{ subRule.equations[0].leftOperand.text | titlecase }}
                   <span class="font-semibold px-2">
-                    - {{ subRule.equations[0].operatorType }} -</span
+                    -
+                    {{
+                      translateOperator(subRule.equations[0].operatorType)
+                    }}
+                    -</span
                   >
                   {{ subRule.equations[0].rightOperand.text | titlecase }}
                 </p>
