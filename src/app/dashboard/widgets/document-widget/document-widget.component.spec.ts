@@ -8,6 +8,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -26,6 +27,7 @@ describe('DocumentWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
       ],
+      imports: [RouterTestingModule],
     }).compileComponents();
   });
 

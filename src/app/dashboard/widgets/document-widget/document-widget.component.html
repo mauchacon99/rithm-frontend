@@ -23,6 +23,7 @@
       <div *ngIf="numberOfStationsOnDocument === 1">
         <button
           mat-button
+          id="go-to-document-page-single"
           (click)="goToDocument(dataDocumentWidget.stations[0].stationRithmId)"
         >
           <i class="fas fa-external-link-alt text-xl text-secondary-500"></i>
