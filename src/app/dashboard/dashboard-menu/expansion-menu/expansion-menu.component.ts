@@ -45,7 +45,7 @@ export class ExpansionMenuComponent implements OnInit {
   }
 
   /** Get list to dashboard in expansion menu. */
-  private getToListDashboards(): void {
+  getToListDashboards(): void {
     this.showError = false;
     this.isLoading = true;
     const petitionDashboard$ =
