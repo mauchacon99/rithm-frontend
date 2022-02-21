@@ -72,7 +72,9 @@
                       station.rithmId
                     }}-{{ j }}"
                     matTooltip="Remove current rule"
-                    (click)="deleteRuleFromStationFlowLogic()"
+                    (click)="
+                      deleteRuleFromStationFlowLogic(j, 'all', station.rithmId)
+                    "
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>
@@ -137,7 +139,9 @@
                       station.rithmId
                     }}-{{ k }}"
                     matTooltip="Remove current rule"
-                    (click)="deleteRuleFromStationFlowLogic()"
+                    (click)="
+                      deleteRuleFromStationFlowLogic(k, 'any', station.rithmId)
+                    "
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>

@@ -40,7 +40,7 @@ import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.
 import { RuleEquation } from 'src/models/rule-equation';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-fdescribe('FlowLogicComponent', () => {
+describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
@@ -615,7 +615,7 @@ fdescribe('FlowLogicComponent', () => {
     expect(spyFunc).toHaveBeenCalled();
   });
 
-  it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
+  fit('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
@@ -659,6 +659,38 @@ fdescribe('FlowLogicComponent', () => {
     btnDelete.click();
 
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
+  });
+
+  fit('should call the method to delete a rule  ', async () => {
+    component.flowLogicRules = flowLogicRule;
+    fixture.detectChanges();
+    const { 0: stationRules } = nextStations;
+    const index = 0;
+
+    await component.deleteRuleFromStationFlowLogic(
+      index,
+      'any',
+      stationRules.rithmId
+    );
+
+    const subStationFlowLogicRule = component.flowLogicRules.find(
+      (station) => station.destinationStationRithmID === stationRules.rithmId
+    );
+    expect(subStationFlowLogicRule).toBeTruthy();
+
+    expect(stationRules.rithmId).toEqual(
+      <string>subStationFlowLogicRule?.destinationStationRithmID
+    );
+
+    expect(subStationFlowLogicRule?.flowRule.equations).toBeTruthy();
+
+    const EquationsLength = subStationFlowLogicRule?.flowRule.equations.length;
+
+    subStationFlowLogicRule?.flowRule.equations.splice(index, 1);
+
+    expect(EquationsLength).toBeLessThan(
+      <number>subStationFlowLogicRule?.flowRule.equations.length
+    );
   });
 
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
@@ -713,7 +745,25 @@ fdescribe('FlowLogicComponent', () => {
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 
-  it('should open confirmation popup when call the method that deletes the rule', () => {
+  it('should show error message when delete logical flow rules for each station', async () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'deleteRuleFromStationFlowLogic'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    const { 0: station } = nextStations;
+    await component.deleteRuleFromStationFlowLogic(0, 'all', station.rithmId);
+    expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should open confirmation popup when call the method that deletes the rule', async () => {
     const dataToConfirmPopup = {
       title: 'Remove Rule',
       message: `Are you sure to remove the selected rule from this station?`,
@@ -723,7 +773,8 @@ fdescribe('FlowLogicComponent', () => {
       TestBed.inject(PopupService),
       'confirm'
     ).and.callThrough();
-    component.deleteRuleFromStationFlowLogic();
+    const { 0: station } = nextStations;
+    await component.deleteRuleFromStationFlowLogic(0, 'any', station.rithmId);
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
 });

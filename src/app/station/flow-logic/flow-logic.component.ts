@@ -178,12 +178,58 @@ export class FlowLogicComponent implements OnInit {
 
   /**
    * Delete rule from station flow logic.
+   *
+   * @param index The index of each rule.
+   * @param type If the rule to add is AND/OR type.
+   * @param connectedStationId The connected station to create the rule.
    */
-  async deleteRuleFromStationFlowLogic(): Promise<void> {
-    await this.popupService.confirm({
+  async deleteRuleFromStationFlowLogic(
+    index: number,
+    type: string,
+    connectedStationId: string
+  ): Promise<void> {
+    const confirm: boolean = await this.popupService.confirm({
       title: 'Remove Rule',
       message: `Are you sure to remove the selected rule from this station?`,
       okButtonText: 'Remove',
     });
+    if (confirm) {
+      this.flowLogicLoading = true;
+      // with memomry
+      const flowLogicRules = this.flowLogicRules.find(
+        (station) => station.destinationStationRithmID === connectedStationId
+      );
+      if (flowLogicRules) {
+        // cloning variable flow logic rules
+        const flowLogicRulesCopy = JSON.parse(JSON.stringify(flowLogicRules));
+
+        // prepare the data to send the endpoint and later
+        // remove the rule from the  array  flowLogicRulesCopy when is 'any' or 'all'
+        if (type === 'all')
+          flowLogicRulesCopy?.flowRule.equations.splice(index, 1);
+        else flowLogicRulesCopy?.flowRule.subRules.splice(index, 1);
+
+        this.documentService
+          .deleteRuleFromStationFlowLogic([flowLogicRulesCopy])
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              // remove the rule from the  array  flowLogicRules when is 'any' or 'all'
+              if (type === 'all')
+                flowLogicRules?.flowRule.equations.splice(index, 1);
+              else flowLogicRules?.flowRule.subRules.splice(index, 1);
+              this.flowLogicLoading = false;
+            },
+            error: (error: unknown) => {
+              this.flowRuleError = true;
+              this.flowLogicLoading = false;
+              this.errorService.displayError(
+                "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+                error
+              );
+            },
+          });
+      }
+    }
   }
 }
