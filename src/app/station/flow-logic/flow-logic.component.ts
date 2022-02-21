@@ -52,7 +52,7 @@ export class FlowLogicComponent implements OnInit, AfterViewChecked {
   newFlowLogic!: FlowLogicRule;
 
   /* Loading the list of rules of flow logic*/
-  ruleLoading = true;
+  ruleLoading = false;
 
   /** The error if rules fails . */
   ruleError = false;

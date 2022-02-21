@@ -372,7 +372,7 @@ describe('StationComponent', () => {
 
   it('should saved the flow logic rules in current station', () => {
     component.isFlowLogicTab = true;
-    component.flowRuleProcess = { ruleLoading: true } as FlowLogicComponent;
+    component.childFlowLogic = { ruleLoading: true } as FlowLogicComponent;
     const spySavedFlowLogicRules = spyOn(
       TestBed.inject(DocumentService),
       'saveStationFlowLogic'
@@ -382,7 +382,7 @@ describe('StationComponent', () => {
   });
 
   it('should show error message when saved flow logic rules in current station', () => {
-    component.flowRuleProcess = { ruleLoading: true } as FlowLogicComponent;
+    component.childFlowLogic = { ruleError: true } as FlowLogicComponent;
     spyOn(
       TestBed.inject(DocumentService),
       'saveStationFlowLogic'
