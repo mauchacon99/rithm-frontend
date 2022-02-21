@@ -37,13 +37,13 @@ export class DocumentWidgetComponent implements OnInit {
    *
    * @returns The number of stations.
    */
-  get numberOfStationsOnDocument(): number {
-    if (this.dataDocumentWidget) {
-      return this.dataDocumentWidget.stations.length;
-    } else {
-      return 0;
-    }
-  }
+  // get numberOfStationsOnDocument(): number {
+  //   if (this.dataDocumentWidget) {
+  //     return this.dataDocumentWidget.stations.length;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 
   /**
    * Initial Method.
