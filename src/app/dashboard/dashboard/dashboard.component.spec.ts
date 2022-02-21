@@ -21,10 +21,10 @@ import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MenuComponent } from '../dashboard-menu/menu/menu.component';
+import { MenuComponent } from 'src/app/dashboard/dashboard-menu/menu/menu.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
-import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
+import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
 import { RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
@@ -32,12 +32,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
+import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
+import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const dashboardRithmId = '123-951-753-789';
-  const dataWidget = {
+  const dataDashboard = {
     rithmId: '102030405060708090100',
     name: 'Untitled Dashboard',
     type: RoleDashboardMenu.Company,
@@ -68,6 +70,8 @@ describe('DashboardComponent', () => {
         MockComponent(MenuComponent),
         MockComponent(StationWidgetComponent),
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(DocumentWidgetComponent),
+        MockComponent(WidgetDrawerComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -158,6 +162,18 @@ describe('DashboardComponent', () => {
     const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should toggle drawer if drawer open is different a menuDashboard', () => {
+    component.drawerContext = 'stationWidget';
+    component.dashboardData = dataDashboard;
+    spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+    const spyDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+    component.updateDashboard();
+    expect(spyDrawer).toHaveBeenCalled();
   });
 
   it('should call service to update a personal dashboard', () => {
@@ -284,7 +300,7 @@ describe('DashboardComponent', () => {
       okButtonText: 'Yes',
       cancelButtonText: 'No',
     };
-    component.dashboardDataCopy = dataWidget;
+    component.dashboardDataCopy = dataDashboard;
     const spyMethod = spyOn(
       TestBed.inject(PopupService),
       'confirm'
@@ -294,7 +310,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should call changedOptions how dashboard alert for activate edit mode', async () => {
-    component.dashboardDataCopy = dataWidget;
+    component.dashboardDataCopy = dataDashboard;
     const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
     await component.toggleEditMode(true);
     expect(spyMethod).toHaveBeenCalledWith();
@@ -358,13 +374,10 @@ describe('DashboardComponent', () => {
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
-      component.dashboardDataCopy = dataWidget;
+      component.dashboardDataCopy = dataDashboard;
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
-      const spyDrawer = spyOn(
-        TestBed.inject(SidenavDrawerService),
-        'toggleDrawer'
-      );
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       await component.toggleEditMode(false);
       expect(spyMethod).toHaveBeenCalledWith();
       expect(spyDrawer).toHaveBeenCalledWith('stationWidget');

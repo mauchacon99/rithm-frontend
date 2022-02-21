@@ -381,6 +381,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Update dashboard.
    */
   updateDashboard(): void {
+    if (this.isDrawerOpen && this.drawerContext !== 'menuDashboard') {
+      this.sidenavDrawerService.toggleDrawer(this.drawerContext);
+    }
+
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
