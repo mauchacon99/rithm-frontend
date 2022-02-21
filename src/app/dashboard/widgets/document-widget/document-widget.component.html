@@ -48,20 +48,37 @@
             <div [ngSwitch]="questions.questionType">
               <p *ngSwitchCase="'checklist'" class="pt-3 text-sm">
                 <span *ngFor="let answer of questions.answer?.asArray">
-                  {{ answer.value }} -
-                  {{ answer.isChecked ? 'Selected' : 'No selected' }}<br />
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked ? 'fa-check-square' : 'fa-square'
+                    "
+                  ></i>
+                  - {{ answer.value }}<br />
                 </span>
               </p>
               <p *ngSwitchCase="'multiDropdown'" class="pt-3 text-sm">
                 <span *ngFor="let answer of questions.answer?.asArray">
-                  {{ answer.value }} -
-                  {{ answer.isChecked ? 'Selected' : 'No selected' }}<br />
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked ? 'fa-check-square' : 'fa-square'
+                    "
+                  ></i>
+                  -
+                  {{ answer.value }}
+                  <br />
                 </span>
               </p>
               <p *ngSwitchCase="'singleDropdown'" class="pt-3 text-sm">
                 <span *ngFor="let answer of questions.answer?.asArray">
-                  {{ answer.value }} -
-                  {{ answer.isChecked ? 'Selected' : 'No selected' }}<br />
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked ? 'fa-check-square' : 'fa-square'
+                    "
+                  ></i>
+                  - {{ answer.value }} <br />
                 </span>
               </p>
               <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
