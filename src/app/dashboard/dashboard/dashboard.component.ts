@@ -246,9 +246,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.editMode = false;
         this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
         this.configEditMode();
-        if (this.isDrawerOpen && this.drawerContext !== 'menuDashboard') {
-          this.sidenavDrawerService.toggleDrawer(this.drawerContext);
-        }
+        this.toggleDrawerOnlyForWidgets();
       }
     } else {
       this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
@@ -377,13 +375,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  /** Toggle drawer only for all widgets. */
+  private toggleDrawerOnlyForWidgets(): void {
+    if (this.isDrawerOpen && this.drawerContext !== 'menuDashboard') {
+      this.sidenavDrawerService.toggleDrawer(this.drawerContext);
+    }
+  }
+
   /**
    * Update dashboard.
    */
   updateDashboard(): void {
-    if (this.isDrawerOpen && this.drawerContext !== 'menuDashboard') {
-      this.sidenavDrawerService.toggleDrawer(this.drawerContext);
-    }
+    this.toggleDrawerOnlyForWidgets();
 
     this.isLoading = true;
     this.errorLoadingDashboard = false;
