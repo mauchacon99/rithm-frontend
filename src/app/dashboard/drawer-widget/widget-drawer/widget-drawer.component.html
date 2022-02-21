@@ -1,5 +1,19 @@
 <div class="flex flex-col justify-between h-full">
   <div class="overflow-y-auto">
+    <div class="my-4">
+      <!-- Button close sidebar. -->
+      <div class="flex justify-end">
+        <button
+          data-testid="close-station-widget-drawer"
+          id="close-station-widget-drawer"
+          mat-icon-button
+          (click)="toggleDrawer()"
+          class="text-secondary-500"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
     <app-station-widget-drawer *ngIf="drawerMode === 'stationWidget'">
     </app-station-widget-drawer>
     <div class="w-full py-2 px-2 text-left">
@@ -22,7 +36,7 @@
       mat-button
       mat-raised-button
       color="accent"
-      (click)="toggleDrawer(drawerMode)"
+      (click)="toggleDrawer()"
       data-testid="done-btn"
       id="done-btn"
     >
