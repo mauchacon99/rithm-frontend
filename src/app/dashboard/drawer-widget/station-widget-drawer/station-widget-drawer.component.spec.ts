@@ -51,12 +51,15 @@ describe('StationWidgetDrawerComponent', () => {
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
     );
-
     component.toggleDrawer();
+    expect(infoDrawerSpy).toHaveBeenCalled();
+
+    const spyMethod = spyOn(component, 'toggleDrawer');
     const toggleButton = fixture.debugElement.nativeElement.querySelector(
       '#close-station-widget-drawer'
     );
-    toggleButton.triggerEventHandler('click', null);
-    expect(infoDrawerSpy).toHaveBeenCalled();
+    expect(toggleButton).toBeTruthy();
+    toggleButton.click();
+    expect(spyMethod).toHaveBeenCalled();
   });
 });
