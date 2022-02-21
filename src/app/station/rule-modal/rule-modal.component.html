@@ -32,10 +32,7 @@
           *ngIf="!questionStationLoading; else selectFieldLoading"
         >
           <mat-label>Select Field</mat-label>
-          <mat-select
-            [(value)]="firstOperandQuestionRithmId"
-            class="first-operand-selector"
-          >
+          <mat-select [(value)]="firstOperandQuestionRithmId">
             <ng-container *ngFor="let question of questionStation">
               <mat-option
                 *ngIf="
