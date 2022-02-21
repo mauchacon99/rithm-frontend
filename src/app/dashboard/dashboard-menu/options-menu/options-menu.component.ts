@@ -141,6 +141,12 @@ export class OptionsMenuComponent implements OnDestroy {
       },
       error: (error: unknown) => {
         this.sidenavDrawerService.toggleDrawer('menuDashboard');
+        if (
+          isCurrentDashboard ||
+          (isCurrentPrincipalDashboard && isPrincipalDashboard)
+        )
+          this.dashboardService.toggleLoadingDashboard(false);
+
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
