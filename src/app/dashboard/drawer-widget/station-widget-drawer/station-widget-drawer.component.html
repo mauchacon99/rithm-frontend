@@ -15,7 +15,6 @@
       >
         <mat-form-field appearance="outline" class="w-full">
           <mat-select formControlName="name">
-            <mat-option [disabled]="true">Table values</mat-option>
             <mat-optgroup [label]="'Document Info'">
               <mat-option
                 *ngFor="let column of documentInfo"
