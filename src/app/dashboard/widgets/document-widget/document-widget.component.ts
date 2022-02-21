@@ -79,12 +79,15 @@ export class DocumentWidgetComponent implements OnInit {
       });
   }
 
-  /** Navigate the user to the document page. */
-  goToDocument(): void {
+  /** Navigate the user to the document page.
+   *
+   * @param stationId The Id of the station in which to view the document.
+   * */
+  goToDocument(stationId: string): void {
     this.router.navigate(['/', 'document', this.documentRithmId], {
       queryParams: {
         documentId: this.documentRithmId,
-        stationId: this.dataDocumentWidget.stations[0].stationRithmId,
+        stationId: stationId,
       },
     });
   }
