@@ -36,11 +36,10 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /**
    * Toggles the open state for drawer mode.
    *
-   * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawer(drawerItem: 'stationWidget'): void {
-    if (drawerItem === 'stationWidget') {
-      this.sidenavDrawerService.toggleDrawer(drawerItem);
+  toggleDrawer(): void {
+    if (this.drawerMode === 'stationWidget') {
+      this.sidenavDrawerService.toggleDrawer(this.drawerMode);
     }
   }
 
