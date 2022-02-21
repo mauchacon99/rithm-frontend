@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MockMapService } from 'src/mocks';
+import { MockMapService, MockPopupService } from 'src/mocks';
 
 import { StationGroupElementService } from './station-group-element.service';
 import { MapService } from './map.service';
@@ -8,18 +8,23 @@ import {
   Corner,
   MapItemStatus,
   Point,
+  StationGroupElementHoverItem,
   StationGroupMapData,
   StationMapData,
 } from 'src/models';
 import {
   DEFAULT_SCALE,
   GROUP_CHARACTER_SIZE,
+  ICON_STATION_GROUP_ACCEPT,
+  MAP_SELECTED,
   SCALE_RENDER_STATION_ELEMENTS,
   STATION_GROUP_PADDING,
   STATION_HEIGHT,
   STATION_WIDTH,
 } from './map-constants';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
+import { PopupService } from '../core/popup.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('StationGroupElementService', () => {
   let service: StationGroupElementService;
@@ -103,8 +108,11 @@ describe('StationGroupElementService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{ provide: MapService, useClass: MockMapService }],
+      imports: [HttpClientTestingModule, MatDialogModule],
+      providers: [
+        { provide: MapService, useClass: MockMapService },
+        { provide: PopupService, useClass: MockPopupService },
+      ],
     });
     service = TestBed.inject(StationGroupElementService);
     mapService = TestBed.inject(MapService);
@@ -196,7 +204,7 @@ describe('StationGroupElementService', () => {
     expect(distance).toEqual(distanceExpect);
   });
 
-  it('should compare and sort the points', () => {
+  it('should compare and order the points', () => {
     const points: Point[] = [
       { x: 97, y: -216 },
       { x: 125, y: 223 },
@@ -225,7 +233,7 @@ describe('StationGroupElementService', () => {
     expect(points).toEqual(expectPoints);
   });
 
-  it('should call method drawStationGroups', () => {
+  it('should call of the method drawStationGroups', () => {
     mapService.stationGroupElements = stationGroupsMapData.map(
       (e) => new StationGroupMapElement(e)
     );
@@ -293,7 +301,7 @@ describe('StationGroupElementService', () => {
     expect(points).toEqual(expectPoints);
   });
 
-  it('should padding a station group', () => {
+  it('should get padding a station group', () => {
     const points: Point[] = [
       { x: -186, y: -3, corner: Corner.BottomLeft },
       { x: -104, y: 299, corner: Corner.BottomLeft },
@@ -323,7 +331,7 @@ describe('StationGroupElementService', () => {
     expect(newPoints).toEqual(expectPoints);
   });
 
-  it('should call method getPaddedStationGroupBoundaryPoints for a sub station group ', () => {
+  it('should call method getPaddedStationGroupBoundaryPoints for a sub station group', () => {
     mapService.stationGroupElements = stationGroupsMapData.map(
       (e) => new StationGroupMapElement(e)
     );
@@ -341,7 +349,7 @@ describe('StationGroupElementService', () => {
     expect(getPaddedStationGroupBoundaryPointsSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('should get convex hull', () => {
+  it('should get convex hull for a station group', () => {
     const getConvexHullPresortedSpy = spyOn(
       TestBed.inject(StationGroupElementService),
       'getConvexHullPresorted'
@@ -378,13 +386,13 @@ describe('StationGroupElementService', () => {
     expect(convexPoints).toEqual(expectPoints);
   });
 
-  it('should call animate pending group', () => {
+  it('should call of the method animatePendingGroup', () => {
     service.animatePendingGroup();
-    expect(service.offset).toBe(1);
+    expect(service['offset']).toBe(1);
     for (let i = 1; i < 15; i++) {
       service.animatePendingGroup();
     }
-    expect(service.offset).toBe(0);
+    expect(service['offset']).toBe(0);
   });
 
   it('should call all methods inside drawStationGroup', () => {
@@ -442,5 +450,74 @@ describe('StationGroupElementService', () => {
     expect(setStationGroupBoundaryPathSpy).toHaveBeenCalledTimes(2);
     expect(drawStationGroupBoundaryLineSpy).toHaveBeenCalledTimes(2);
     expect(drawStationGroupNameSpy).toHaveBeenCalled();
+  });
+
+  it('should return Throw Error in the method drawStationGroupBoundaryLine', () => {
+    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
+    expect(() => service.drawStationGroupBoundaryLine(stationGroup)).toThrow(
+      new Error(
+        'Cannot draw station group boundary line if context is not defined'
+      )
+    );
+  });
+
+  it('should return Throw Error in the method paintOrDeleteLineStationGroupName', () => {
+    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
+    expect(() =>
+      service.paintOrDeleteLineStationGroupName(
+        'title',
+        { x: 20, y: 10 },
+        { x: 15, y: 5 },
+        stationGroup,
+        true
+      )
+    ).toThrow(
+      new Error(
+        'Cannot paint or delete station group name on line if context is not defined'
+      )
+    );
+  });
+
+  it('should return Throw Error in the method splitStationGroupName', () => {
+    expect(() =>
+      service.splitStationGroupName('title', 1, [
+        { x: 30, y: 10 },
+        { x: 20, y: 10 },
+        { x: 50, y: 6 },
+      ])
+    ).toThrow(
+      new Error('Cannot split station group name if context is not defined')
+    );
+  });
+
+  it('should return Throw Error in the method drawStationGroupIcon', () => {
+    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
+    expect(() =>
+      service.drawStationGroupIcon(
+        { x: 20, y: 10 },
+        { x: 15, y: 5 },
+        5,
+        StationGroupElementHoverItem.ButtonAccept,
+        ICON_STATION_GROUP_ACCEPT,
+        MAP_SELECTED,
+        stationGroup
+      )
+    ).toThrow(
+      new Error('Cannot draw station group icon if context is not defined')
+    );
+  });
+
+  it('should return Throw Error in the method drawStationGroupName', () => {
+    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
+    expect(() => service.drawStationGroupName(stationGroup)).toThrow(
+      new Error('Cannot draw station group name if context is not defined')
+    );
+  });
+
+  it('should return Throw Error in the method drawStationGroupToolTip', () => {
+    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
+    expect(() => service.drawStationGroupToolTip(stationGroup)).toThrow(
+      new Error('Cannot draw the tooltip if context is not defined')
+    );
   });
 });

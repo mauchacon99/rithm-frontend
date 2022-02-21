@@ -51,7 +51,7 @@ export class StationGroupElementService {
   private mapScale = DEFAULT_SCALE;
 
   /** The default offset value for the pending station group animation. */
-  offset = 0;
+  private offset = 0;
 
   /** The Dimensions of the canvas. */
   canvasDimensions: {
@@ -212,7 +212,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which to draw the tooltip.
    */
-  private drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
+  drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the tooltip if context is not defined');
     }
@@ -790,7 +790,7 @@ export class StationGroupElementService {
    * @param points The arrays points.
    * @returns The array with split title.
    */
-  private splitStationGroupName(
+  splitStationGroupName(
     title: string,
     position: number,
     points: Point[]
@@ -799,7 +799,7 @@ export class StationGroupElementService {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw station group boundary line if context is not defined'
+        'Cannot split station group name if context is not defined'
       );
     }
 
@@ -859,7 +859,7 @@ export class StationGroupElementService {
    * @param stationGroup The station group.
    * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
    */
-  private paintOrDeleteLineStationGroupName(
+  paintOrDeleteLineStationGroupName(
     title: string,
     pointStart: Point,
     pointEnd: Point,
@@ -870,7 +870,7 @@ export class StationGroupElementService {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw station group boundary line if context is not defined'
+        'Cannot paint or delete station group name on line if context is not defined'
       );
     }
     // Calculation of the slope of the line.
@@ -969,7 +969,7 @@ export class StationGroupElementService {
    * @param stationGroup The station group.
    * @param displacedMap If the map was moved to point Start.
    */
-  private drawStationGroupIcon(
+  drawStationGroupIcon(
     pointStart: Point,
     pointEnd: Point,
     displacement: number,
@@ -983,7 +983,7 @@ export class StationGroupElementService {
 
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw station group boundary line if context is not defined'
+        'Cannot draw station group icon if context is not defined'
       );
     }
     //Calculation of the slope of the line.
