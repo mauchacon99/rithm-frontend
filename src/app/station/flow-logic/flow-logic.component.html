@@ -31,7 +31,12 @@
             <p class="mt-3">
               Flow to {{ station.name }} if ALL of the following are true.
             </p>
-            <section>
+            <section
+              *ngIf="
+                flowLogicLoadingByRuleType !== station.rithmId + '-all';
+                else flowLogicRuleLoading
+              "
+            >
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
@@ -72,7 +77,9 @@
                       station.rithmId
                     }}-{{ j }}"
                     matTooltip="Remove current rule"
-                    (click)="deleteRuleFromStationFlowLogic()"
+                    (click)="
+                      deleteRuleFromStationFlowLogic(j, 'all', station.rithmId)
+                    "
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>
@@ -97,7 +104,12 @@
           </div>
           <section class="any-rules">
             <p>Flow to {{ station.name }} if ANY of the following are true.</p>
-            <section>
+            <section
+              *ngIf="
+                flowLogicLoadingByRuleType !== station.rithmId + '-any';
+                else flowLogicRuleLoading
+              "
+            >
               <div
                 class="flex justify-between items-center border-b border-secondary-100"
                 *ngFor="
@@ -137,7 +149,9 @@
                       station.rithmId
                     }}-{{ k }}"
                     matTooltip="Remove current rule"
-                    (click)="deleteRuleFromStationFlowLogic()"
+                    (click)="
+                      deleteRuleFromStationFlowLogic(k, 'any', station.rithmId)
+                    "
                   >
                     <i class="fas fa-trash text-secondary-300 text-base"></i>
                   </button>
@@ -168,6 +182,12 @@
     </div>
   </div>
 </div>
+
+<ng-template #flowLogicRuleLoading>
+  <div class="flex justify-left" id="flow-logic-loading-rules">
+    <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+  </div>
+</ng-template>
 <ng-template #notConnectedStations>
   <div class="w-100 mt-10">
     <p class="text-center text-error-500">
