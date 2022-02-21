@@ -4,8 +4,6 @@
 ></app-loading-widget>
 
 <div *ngIf="!isLoading">
-  <h3 class="text-lg font-semibold">Table values</h3>
-
   <form [formGroup]="formColumns">
     <div formArrayName="columns">
       <div
@@ -60,7 +58,7 @@
       [disabled]="disabledNewColumn"
       (click)="addNewColumn()"
     >
-      New Column <i class="fas fa-plus"></i>
+      Add Column
     </button>
   </div>
 </div>

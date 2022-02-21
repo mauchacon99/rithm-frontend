@@ -1053,6 +1053,13 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should test the behavior subject of flow button text', () => {
+    service.flowButtonText$.subscribe((flowButtonText) => {
+      expect(flowButtonText).toBe('Flow');
+    });
+    service.updatedFlowButtonText('Flow');
+  });
+
   it('should update the state of the allow-previous-button button for the station', () => {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
