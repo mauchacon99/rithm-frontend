@@ -211,6 +211,10 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'updateStationQuestions'
     ).and.callThrough();
+    const spyUpdateFlowButtonText = spyOn(
+      TestBed.inject(StationService),
+      'updateFlowButtonText'
+    ).and.callThrough();
     const spyFunctionSave = spyOn(
       component,
       'saveStationInformation'
@@ -226,6 +230,7 @@ describe('StationComponent', () => {
     expect(spyUpdateNameTemplate).toHaveBeenCalled();
     expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
+    expect(spyUpdateFlowButtonText).toHaveBeenCalled();
   });
 
   it('should validate the form controls initial value', () => {

@@ -992,4 +992,32 @@ export class MockStationService {
       return of(expectedResponse.data).pipe(delay(1000));
     }
   }
+
+  /**
+   * Update the flow button text.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param flowButtonText Contains the text of flow button for updated.
+   * @returns The status of update of flow button text.
+   */
+  updateFlowButtonText(
+    stationRithmId: string,
+    flowButtonText: string
+  ): Observable<StandardStringJSON> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the text of flow button.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardStringJSON = {
+        data: flowButtonText,
+      };
+      return of(expectedResponse).pipe(delay(1000));
+    }
+  }
 }

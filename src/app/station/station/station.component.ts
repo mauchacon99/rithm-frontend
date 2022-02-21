@@ -417,6 +417,12 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
+
+      // Update flow button text.
+      this.stationService.updateFlowButtonText(
+        this.stationInformation.rithmId,
+        this.stationInformation.flowButton
+      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {

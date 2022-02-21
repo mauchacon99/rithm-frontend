@@ -1075,4 +1075,16 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return the status when updated the flow button text', () => {
+    const expectedResponse: StandardStringJSON = {
+      data: 'test',
+    };
+    const flowButtonText = 'test';
+    service
+      .updateFlowButtonText(stationId, flowButtonText)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
 });
