@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -16,7 +16,7 @@ import { PopupService } from 'src/app/core/popup.service';
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
-export class OptionsMenuComponent implements OnDestroy {
+export class OptionsMenuComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /**
@@ -53,7 +53,12 @@ export class OptionsMenuComponent implements OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
     private activatedRoute: ActivatedRoute
-  ) {
+  ) {}
+
+  /**
+   * Initial Method.
+   */
+  ngOnInit(): void {
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
@@ -87,7 +92,7 @@ export class OptionsMenuComponent implements OnDestroy {
         this.isGenerateNewDashboard = false;
         this.dashboardService.toggleLoadingDashboard(false);
         this.router.navigate(['/', 'dashboard', newDashboard.rithmId]);
-        this.popupService.notify('Dashboard create successfully');
+        this.popupService.notify('Dashboard created successfully');
       },
       error: (error: unknown) => {
         this.dashboardService.toggleLoadingDashboard(false);
