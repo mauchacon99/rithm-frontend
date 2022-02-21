@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** View new dashboard. */
   viewNewDashboard = false;
 
+  /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /** If it needs to create new dashboard. */
@@ -387,7 +388,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   updateDashboard(): void {
     this.toggleDrawerOnlyForWidgets();
-
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
