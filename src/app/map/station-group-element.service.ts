@@ -731,7 +731,7 @@ export class StationGroupElementService {
       distance: number;
     }[] = [];
 
-    for (let i = points.length - 1; i > 1; i--) {
+    for (let i = points.length - 1; i > 0; i--) {
       // Calculate the slope between two points.
       const m = this.slopeLine(points[i], points[i - 1]);
       const distance = this.distanceBetweenTwoPoints(points[i], points[i - 1]);
@@ -839,11 +839,11 @@ export class StationGroupElementService {
           titleAux = title[i];
           // Moves to the next position in the array points.
           newPosition =
-            newPosition - 1 > 0 ? newPosition - 1 : points.length - 1;
+            newPosition - 1 >= 0 ? newPosition - 1 : points.length - 1;
           // The distance of the new line.
           distanceLine = this.distanceBetweenTwoPoints(
             points[newPosition],
-            points[newPosition - 1 > 0 ? newPosition - 1 : points.length - 1]
+            points[newPosition - 1 >= 0 ? newPosition - 1 : points.length - 1]
           );
         } else {
           titleAux = titleAux.concat(title[i]);
