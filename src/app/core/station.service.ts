@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -629,20 +629,12 @@ export class StationService {
     stationRithmId: string,
     flowButtonText: string
   ): Observable<StandardStringJSON> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update the text of flow button.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StandardStringJSON = {
-        data: flowButtonText,
-      };
-      return of(expectedResponse).pipe(delay(1000));
-    }
+    const standardBody: StandardStringJSON = { data: flowButtonText };
+    return this.http
+      .put<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationRithmId}`,
+        standardBody
+      )
+      .pipe(map((response) => response));
   }
 }

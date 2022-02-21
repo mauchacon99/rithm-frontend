@@ -1086,5 +1086,12 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
