@@ -6,7 +6,6 @@ import {
   WidgetType,
   DashboardData,
   RoleDashboardMenu,
-  DashboardItem,
   EditDataWidget,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
