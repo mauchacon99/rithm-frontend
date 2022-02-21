@@ -2,7 +2,7 @@
 <div class="modal-container">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
-    <h4 class="text-center">New Rule</h4>
+    <h4 class="text-center">New Rule {{ displayOperatorType }}</h4>
   </div>
   <!-- Stepper for new rule -->
   <mat-stepper
@@ -32,29 +32,29 @@
           *ngIf="!questionStationLoading; else selectFieldLoading"
         >
           <mat-label>Select Field</mat-label>
-          <mat-select [(value)]="firstOperandQuestionRithmId">
-            <mat-option
-              *ngFor="let question of questionStation"
-              [value]="question.rithmId"
-              (click)="
-                question.questionType !== questionTypes.AddressLine
-                  ? setFirstOperandInformation(question)
-                  : false
-              "
-            >
-              <ng-container
+          <mat-select
+            [(value)]="firstOperandQuestionRithmId"
+            class="first-operand-selector"
+          >
+            <ng-container *ngFor="let question of questionStation">
+              <mat-option
                 *ngIf="
                   question.questionType !== questionTypes.AddressLine;
                   else isAddressLine
                 "
+                [value]="question.rithmId"
+                (click)="setFirstOperandInformation(question)"
               >
                 {{ question.prompt }}
-              </ng-container>
+              </mat-option>
               <ng-template #isAddressLine>
-                <mat-select
-                  [(value)]="firstOperandQuestionRithmId"
-                  [placeholder]="question.prompt"
+                <mat-option
+                  [value]="question.rithmId"
+                  (click)="setFirstOperandInformation(question)"
                 >
+                  {{ question.prompt }}
+                </mat-option>
+                <mat-optgroup class="address-line-group">
                   <mat-option
                     *ngFor="
                       let subquestion of question.children;
@@ -68,9 +68,9 @@
                     >
                     {{ subquestion.prompt }}
                   </mat-option>
-                </mat-select>
+                </mat-optgroup>
               </ng-template>
-            </mat-option>
+            </ng-container>
           </mat-select>
         </mat-form-field>
         <ng-template #selectFieldLoading>

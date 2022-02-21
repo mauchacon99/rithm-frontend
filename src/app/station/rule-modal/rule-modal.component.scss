@@ -1,1 +1,4 @@
 @import 'src/app/shared/fields/custom-fields.scss';
+.address-line-group::ng-deep .mat-optgroup-label {
+  display: none;
+}
