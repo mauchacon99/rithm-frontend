@@ -19,12 +19,14 @@ import {
   DocumentStationInformation,
   ConnectedStationInfo,
   DocumentAutoFlow,
+  MoveDocument,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
 import { Input } from '@angular/core';
 import { UserService } from 'src/app/core/user.service';
+import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 
 /**
  * Main component for viewing a document.
@@ -53,6 +55,10 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
+
+  /** The component for the subheader component. */
+  @ViewChild('subHeaderComponent')
+  subHeaderComponent!: SubHeaderComponent;
 
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
@@ -89,6 +95,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Show or hidden accordion for all field. */
   accordionFieldAllExpanded = false;
+
+  /** To check click SubHeader. */
+  clickSubHeader = false;
+
+  /** To check click comment. */
+  clickComment = false;
 
   constructor(
     private documentService: DocumentService,
@@ -307,6 +319,31 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Check Click Outside Comment.
+   *
+   * @param clickInside To catch event that verify click comment drawer outside.
+   */
+  checkClickOutsideComment(clickInside: boolean): void {
+    if (
+      !clickInside &&
+      !this.clickSubHeader &&
+      this.sidenavDrawerService.isDrawerOpen
+    ) {
+      this.sidenavDrawerService.closeDrawer();
+      this.subHeaderComponent.activeItem = 'none';
+    }
+  }
+
+  /**
+   * Check click outside sub header.
+   *
+   * @param clickInside To catch event that verify click comment drawer outside.
+   */
+  checkClickSubHeader(clickInside: boolean): void {
+    this.clickSubHeader = clickInside;
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -391,6 +428,33 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
+          );
+        },
+      });
+  }
+
+  /**
+   * Move document flow from current station to previous station.
+   */
+  private flowDocumentToPreviousStation(): void {
+    const previousStation: string[] = this.previousStations.map(
+      (item) => item.rithmId
+    );
+    const moveDoc: MoveDocument = {
+      fromStationRithmId: this.stationId,
+      toStationRithmIds: previousStation,
+      documentRithmId: this.documentId,
+    };
+
+    this.documentService
+      .flowDocumentToPreviousStation(moveDoc)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error,
+            false
           );
         },
       });

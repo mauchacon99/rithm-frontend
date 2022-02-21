@@ -26,6 +26,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import {
   DocumentAutoFlow,
+  MoveDocument,
   QuestionFieldType,
   StationRosterMember,
 } from 'src/models';
@@ -343,6 +344,12 @@ describe('DocumentComponent', () => {
       ],
       instructions: 'General instructions',
     };
+    component.previousStations = [
+      {
+        rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        name: 'Previous Station',
+      },
+    ];
     fixture.detectChanges();
   });
 
@@ -624,5 +631,42 @@ describe('DocumentComponent', () => {
       expect(btnSave.disabled).toBeFalse();
       expect(component.isUserAdminOrOwner).toBeTrue();
     });
+  });
+
+  it('should move flow document to a previous station', () => {
+    const stationId = component.documentInformation.stationRithmId;
+    const documentId = component.documentInformation.documentRithmId;
+
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: [component.previousStations[0].rithmId],
+      documentRithmId: documentId,
+    };
+    component['stationId'] = stationId;
+    component['documentId'] = documentId;
+
+    const spyMethod = spyOn(
+      TestBed.inject(DocumentService),
+      'flowDocumentToPreviousStation'
+    ).and.callThrough();
+    component['flowDocumentToPreviousStation']();
+    expect(spyMethod).toHaveBeenCalledOnceWith(dataExpect);
+  });
+
+  it('should catch an error when moving document to previous station fails', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'flowDocumentToPreviousStation'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['flowDocumentToPreviousStation']();
+    expect(spyError).toHaveBeenCalled();
   });
 });

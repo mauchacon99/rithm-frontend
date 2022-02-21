@@ -42,7 +42,7 @@ describe('DocumentService', () => {
   let httpTestingController: HttpTestingController;
   const stationId = 'E204F369-386F-4E41';
   const documentId = 'E204F369-386F-4E41';
-  const flowlogicRule: FlowLogicRule = {
+  const flowLogicRule: FlowLogicRule = {
     stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
     destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
     flowRule: {
@@ -558,6 +558,18 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
+  it('should flow a document to previous station', () => {
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789'],
+      documentRithmId: documentId,
+    };
+
+    service.flowDocumentToPreviousStation(dataExpect).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+  });
+
   it('should unassign a user to document via API', () => {
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const documentRithmId = 'E204F369-386F-4E41';
@@ -705,7 +717,7 @@ describe('DocumentService', () => {
   it('should return the Station flow logic rule', () => {
     const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
 
-    const expectStationFlowLogic: FlowLogicRule[] = [flowlogicRule];
+    const expectStationFlowLogic: FlowLogicRule[] = [flowLogicRule];
 
     service
       .getStationFlowLogicRule(stationRithmId)
@@ -780,8 +792,9 @@ describe('DocumentService', () => {
   });
 
   it('should make request to save station flow logic', () => {
-    const parametersBody = flowlogicRule;
-    service.saveStationFlowLogic([parametersBody]).subscribe((response) => {
+    const parametersBody = [flowLogicRule];
+
+    service.saveStationFlowLogic(parametersBody).subscribe((response) => {
       expect(response).toBeFalsy();
     });
 
@@ -789,7 +802,7 @@ describe('DocumentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`
     );
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual([parametersBody]);
+    expect(req.request.body).toEqual(parametersBody);
 
     req.flush(null);
     httpTestingController.verify();
@@ -852,20 +865,31 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
   it('should update each station flow rules', () => {
     service
-      .updateStationFlowLogicRule([flowlogicRule])
+      .updateStationFlowLogicRule([flowLogicRule])
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
   });
 
   it('should make request to delete station flow logic rule', () => {
-    const bodyParameters: FlowLogicRule[] = [flowlogicRule];
+    const bodyParameters: FlowLogicRule[] = [flowLogicRule];
+
     service
       .deleteRuleFromStationFlowLogic(bodyParameters)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(bodyParameters);
+
+    req.flush(null);
+    httpTestingController.verify();
   });
 });
