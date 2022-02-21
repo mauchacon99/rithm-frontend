@@ -9,6 +9,7 @@ import { MockComponent } from 'ng-mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
