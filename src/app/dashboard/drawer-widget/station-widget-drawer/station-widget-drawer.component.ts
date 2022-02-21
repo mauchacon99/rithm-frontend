@@ -25,9 +25,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** Whether the called widget-drawer. */
-  drawerMode: 'stationWidget' = 'stationWidget';
-
   constructor(private sidenavDrawerService: SidenavDrawerService) {}
 
   /**
@@ -59,7 +56,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    *
    */
   toggleDrawer(): void {
-    this.sidenavDrawerService.toggleDrawer(this.drawerMode);
+    this.sidenavDrawerService.toggleDrawer('stationWidget');
   }
 
   /**

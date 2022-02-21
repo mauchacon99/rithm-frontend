@@ -44,22 +44,4 @@ describe('StationWidgetDrawerComponent', () => {
     expect(component.stationColumns).toEqual(expectStationData.columns);
     expect(component.widgetIndex).toEqual(widgetIndex);
   });
-
-  it('should show/hide the station widget  drawer', () => {
-    component.drawerMode = 'stationWidget';
-    const infoDrawerSpy = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
-    component.toggleDrawer();
-    expect(infoDrawerSpy).toHaveBeenCalled();
-
-    const spyMethod = spyOn(component, 'toggleDrawer');
-    const toggleButton = fixture.debugElement.nativeElement.querySelector(
-      '#close-station-widget-drawer'
-    );
-    expect(toggleButton).toBeTruthy();
-    toggleButton.click();
-    expect(spyMethod).toHaveBeenCalled();
-  });
 });
