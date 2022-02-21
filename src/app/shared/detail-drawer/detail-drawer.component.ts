@@ -1,4 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -12,6 +19,10 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   styleUrls: ['./detail-drawer.component.scss'],
 })
 export class DetailDrawerComponent implements OnDestroy {
+  /** Event to detect click comment outside. */
+  @Output() checkClickOutsideComment: EventEmitter<boolean> =
+    new EventEmitter();
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -26,7 +37,10 @@ export class DetailDrawerComponent implements OnDestroy {
   /** The id of the document for which this drawer was opened. */
   documentId = '';
 
-  constructor(private sidenavDrawerService: SidenavDrawerService) {
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private elementRef: ElementRef
+  ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
@@ -44,6 +58,17 @@ export class DetailDrawerComponent implements OnDestroy {
           this.documentId = context.documentRithmId;
         }
       });
+  }
+
+  /**
+   * Adds a newly posted comment to the list of comments.
+   *
+   * @param targetElement The comment that was newly added.
+   */
+  @HostListener('document:click', ['$event.target'])
+  onPageClick(targetElement: ElementRef): void {
+    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
+    this.checkClickOutsideComment.emit(clickedInside);
   }
 
   /**
