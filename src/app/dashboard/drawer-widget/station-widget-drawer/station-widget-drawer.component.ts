@@ -97,7 +97,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** Set document info static. */
-  setDocumentInfo(): void {
+  private setDocumentInfo(): void {
     this.documentInfo = [];
     this.dashboardService.columnsDocumentInfo.map((column) => {
       this.documentInfo.push({
@@ -109,7 +109,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** Set document fields dynamic. */
-  setDocumentFields(): void {
+  private setDocumentFields(): void {
     this.documentFields = [];
     this.questions.map((question) => {
       this.documentFields.push({
@@ -128,7 +128,10 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * @param type Column to check.
    * @returns Boolean If its true disabled option.
    */
-  checkExistColumn(column: string, type: 'name' | 'questionId'): boolean {
+  private checkExistColumn(
+    column: string,
+    type: 'name' | 'questionId'
+  ): boolean {
     let check;
     if (type === 'name') {
       check = !!this.stationColumns.find(
@@ -179,7 +182,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** Load list of selects. */
-  loadColumnsSelect(): void {
+  private loadColumnsSelect(): void {
     this.setDocumentInfo();
     this.setDocumentFields();
     this.getFormColumns.clear();
@@ -192,7 +195,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** Get station questions. */
-  getDocumentFields(): void {
+  private getDocumentFields(): void {
     this.isLoading = true;
     this.stationService
       .getStationQuestions(this.stationRithmId)
@@ -238,7 +241,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** Update widget. */
-  updateWidget(): void {
+  private updateWidget(): void {
     this.loadColumnsSelect();
     this.widgetItem.data = JSON.stringify({
       stationRithmId: this.stationRithmId,

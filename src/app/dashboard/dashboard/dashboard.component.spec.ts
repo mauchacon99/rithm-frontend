@@ -50,7 +50,7 @@ describe('DashboardComponent', () => {
         x: 0,
         y: 0,
         widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
         minItemCols: 4,
         minItemRows: 4,
         maxItemCols: 12,
@@ -343,20 +343,28 @@ describe('DashboardComponent', () => {
       expect(component.drawer.close).toHaveBeenCalled();
     });
 
-    // it('Should toggle drawer of the station widget', () => {
-    //   spyOn(sidenavDrawer, 'toggleDrawer');
-    //   const [stationData, widgetIndex] = [
-    // eslint-disable-next-line max-len
-    //     '{"stationRithmId":"21316c62-8a45-4e79-ba58-0927652569cc", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
-    //     1,
-    //   ];
-    //   // const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-    //   // component.toggleStationWidgetDrawer(stationData, widgetIndex);
-    //   // expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
-    //   //   stationData,
-    //   //   widgetIndex,
-    //   // });
-    // });
+    it('Should toggle drawer of the widgets', () => {
+      spyOn(sidenavDrawer, 'toggleDrawer');
+      const widgetItem = {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      };
+      const widgetIndex = 1;
+      const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
+      component.toggleWidgetDrawer(widgetItem, widgetIndex);
+      expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
+        widgetItem,
+        widgetIndex,
+      });
+    });
 
     it('should call toggle drawer for close drawer the widgets how dashboard change a editMode false', async () => {
       const drawerContext = 'stationWidget';
@@ -419,5 +427,50 @@ describe('DashboardComponent', () => {
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
     });
+  });
+
+  it('should subscribe to DashboardService.updateDataWidget$', function () {
+    const spyMethod = spyOn(
+      component,
+      'updateDashboardWidget'
+    ).and.callThrough();
+    const expectEditDataWidget = {
+      widgetItem: dataDashboard.widgets[0],
+      widgetIndex: 1,
+      isCloseDrawer: false,
+    };
+
+    TestBed.inject(DashboardService).updateDashboardWidgets(
+      expectEditDataWidget
+    );
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
+  });
+
+  it('should update dashboard widgets', () => {
+    component.dashboardData = dataDashboard;
+    const spyMethod = spyOn(component, 'updateDashboard').and.callThrough();
+    const editDataWidget = {
+      widgetItem: {
+        cols: 4,
+        // eslint-disable-next-line max-len
+        data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+        maxItemCols: 0,
+        maxItemRows: 0,
+        minItemCols: 0,
+        minItemRows: 0,
+        rows: 2,
+        widgetType: WidgetType.Station,
+        x: 0,
+        y: 0,
+      },
+      widgetIndex: 0,
+      isCloseDrawer: false,
+    };
+    const expectDashboardData = dataDashboard;
+    expectDashboardData.widgets[0] = editDataWidget.widgetItem;
+    component.updateDashboardWidget(editDataWidget);
+    expect(component.dashboardData).toEqual(expectDashboardData);
+    expect(spyMethod).toHaveBeenCalledOnceWith(editDataWidget.isCloseDrawer);
   });
 });

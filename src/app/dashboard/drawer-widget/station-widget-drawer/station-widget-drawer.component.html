@@ -2,7 +2,7 @@
   <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
 </div>
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" id="content-drawer-station-widget">
   <div class="font-semibold text-secondary-500">Table Values</div>
   <form [formGroup]="formColumns">
     <div formArrayName="columns">
@@ -40,8 +40,8 @@
           *ngIf="formChild"
           (click)="deleteColumn(formChild)"
           mat-icon-button
-          data-testid="delete-column"
-          id="delete-column"
+          [attr.data-testid]="'delete-column-' + formChild"
+          [id]="'delete-column-' + formChild"
         >
           <i class="fas text-lg text-secondary-400 fa-times"></i>
         </button>
@@ -53,8 +53,8 @@
     <button
       mat-stroked-button
       color="accent"
-      data-testid="create-new-column"
-      id="create-new-column"
+      data-testid="add-new-column"
+      id="add-new-column"
       [disabled]="disabledNewColumn"
       (click)="addNewColumn()"
     >
