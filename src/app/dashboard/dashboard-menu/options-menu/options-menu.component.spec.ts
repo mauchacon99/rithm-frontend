@@ -358,7 +358,7 @@ describe('OptionsMenuComponent', () => {
     );
 
     component.deleteDashboard(rithmId);
-    expect(deletePersonalDashboard).toHaveBeenCalledOnceWith(true);
+    expect(deletePersonalDashboard).toHaveBeenCalled();
     expect(toggleDrawer).toHaveBeenCalled();
   });
 });
