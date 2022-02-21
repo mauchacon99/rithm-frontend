@@ -1,13 +1,4 @@
-import {
-  AfterViewChecked,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -29,7 +20,7 @@ import { DocumentService } from 'src/app/core/document.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit, AfterViewChecked {
+export class FlowLogicComponent implements OnInit {
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
@@ -61,8 +52,7 @@ export class FlowLogicComponent implements OnInit, AfterViewChecked {
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
-    private documentService: DocumentService,
-    @Inject(ChangeDetectorRef) private ref: ChangeDetectorRef
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -201,12 +191,5 @@ export class FlowLogicComponent implements OnInit, AfterViewChecked {
       message: `Are you sure to remove the selected rule from this station?`,
       okButtonText: 'Remove',
     });
-  }
-
-  /**
-   * Checks after the component views and child views.
-   */
-  ngAfterViewChecked(): void {
-    this.ref.detectChanges();
   }
 }
