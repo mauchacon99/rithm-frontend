@@ -113,9 +113,9 @@ export class StationComponent
       enabled: false,
     },
     margin: 12,
-    minCols: 16,
-    maxCols: 16,
-    minRows: 16,
+    minCols: 24,
+    maxCols: 24,
+    minRows: 24,
   };
 
   constructor(
