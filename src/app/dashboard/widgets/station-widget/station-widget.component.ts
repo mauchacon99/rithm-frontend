@@ -12,7 +12,7 @@ import {
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationColumnWidget, StationWidgetData } from 'src/models';
+import { Question, StationColumnWidget, StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
@@ -106,7 +106,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
-    this.getStationWidgetDocuments();
+
+    if (this.columnsFieldPetition.length) {
+      this.getStationWidgetDocuments();
+    } else {
+      this.setColumnsDocument();
+    }
   }
 
   /**
@@ -134,6 +139,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
           this.isLoading = false;
           this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
+          this.setColumnsDocument();
+          console.log(this.columnsFieldPetition, dataStationWidget);
         },
         error: (error: unknown) => {
           this.failedLoadWidget = true;
@@ -144,6 +151,21 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
           );
         },
       });
+  }
+
+  /** Filter columns to show in dom. */
+  setColumnsDocument(): void {
+    const data1: Question[] = [];
+    this.dataStationWidget.documents.map((document) => {
+      document.questions.map((question, index) => {
+        if (
+          this.columnsFieldPetition.includes(question.questions[index].rithmId)
+        ) {
+          data1.push(question.questions[index]);
+        }
+      });
+    });
+    console.log('data1', data1);
   }
 
   /**
