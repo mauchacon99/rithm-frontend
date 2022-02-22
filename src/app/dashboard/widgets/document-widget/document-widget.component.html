@@ -15,14 +15,25 @@
 <!-- Header widget -->
 <div
   class="w-full p-2 flex flex-col h-full"
-  *ngIf="!failedLoadWidget && !isLoading"
+  *ngIf="!isLoading && !failedLoadWidget"
 >
   <!--  Header Container -->
   <div class="m-2">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
+      <div *ngIf="dataDocumentWidget.stations.length === 1">
+        <button
+          mat-icon-button
+          id="go-to-document-page-single"
+          (click)="goToDocument(dataDocumentWidget.stations[0].stationRithmId)"
+        >
+          <i
+            class="fas fa-external-link-alt text-[16px] text-secondary-500"
+          ></i>
+        </button>
+      </div>
     </div>
   </div>
   <!--List of the questions-->

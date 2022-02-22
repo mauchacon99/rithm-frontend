@@ -3,6 +3,7 @@ import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentWidget, QuestionFieldType } from 'src/models';
+import { Router } from '@angular/router';
 
 /**
  * Component for list field the document how widget.
@@ -22,7 +23,7 @@ export class DocumentWidgetComponent implements OnInit {
   /** Loading document widget. */
   isLoading = false;
 
-  /** Show error if get documentWidget fail. */
+  /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
 
   /** The question field type. */
@@ -30,7 +31,8 @@ export class DocumentWidgetComponent implements OnInit {
 
   constructor(
     private errorService: ErrorService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private router: Router
   ) {}
 
   /**
@@ -65,5 +67,18 @@ export class DocumentWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  /** Navigate the user to the document page.
+   *
+   * @param stationId The Id of the station in which to view the document.
+   */
+  goToDocument(stationId: string): void {
+    this.router.navigate(['/', 'document', this.documentRithmId], {
+      queryParams: {
+        documentId: this.documentRithmId,
+        stationId: stationId,
+      },
+    });
   }
 }
