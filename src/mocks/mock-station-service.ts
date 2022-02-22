@@ -1009,7 +1009,7 @@ export class MockStationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update the text of flow button.',
+              error: 'Cannot update the flow button text.',
             },
           })
       ).pipe(delay(1000));
