@@ -66,7 +66,8 @@ export class DocumentWidgetComponent implements OnInit {
       });
   }
 
-  /** Navigate the user to the document page.
+  /**
+   * Navigate the user to the document page.
    *
    * @param stationId The Id of the station in which to view the document.
    */
