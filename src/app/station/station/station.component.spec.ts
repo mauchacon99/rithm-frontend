@@ -42,6 +42,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
+import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -376,6 +377,7 @@ describe('StationComponent', () => {
 
   it('should saved the flow logic rules in current station', () => {
     component.isFlowLogicTab = true;
+    component.childFlowLogic = { ruleLoading: true } as FlowLogicComponent;
     const spySavedFlowLogicRules = spyOn(
       TestBed.inject(DocumentService),
       'saveStationFlowLogic'
@@ -385,6 +387,7 @@ describe('StationComponent', () => {
   });
 
   it('should show error message when saved flow logic rules in current station', () => {
+    component.childFlowLogic = { ruleError: true } as FlowLogicComponent;
     spyOn(
       TestBed.inject(DocumentService),
       'saveStationFlowLogic'

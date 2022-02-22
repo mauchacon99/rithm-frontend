@@ -1,14 +1,4 @@
 <ng-container [formGroup]="userForm">
-  <app-password-requirements
-    class="mat-elevation-z8 w-full"
-    *ngIf="
-      passwordRequirementsVisible &&
-      (userForm.controls['password'].value.length > 0 ||
-        userForm.controls['confirmPassword'].value.length > 0)
-    "
-    [passReq]="userForm.get(errorsToGet)?.errors"
-    [match]="showMatch"
-  ></app-password-requirements>
   <div
     class="grid gap-x-4"
     [ngClass]="{ 'grid-cols-1 md:grid-cols-2': accountCreate }"
@@ -84,10 +74,13 @@
       />
     </mat-form-field>
   </div>
-
   <app-password-requirements
     class="mat-elevation-z8 w-full"
-    *ngIf="passwordRequirementsVisible"
+    *ngIf="
+      passwordRequirementsVisible &&
+      (userForm.controls['password'].value.length > 0 ||
+        userForm.controls['confirmPassword'].value.length > 0)
+    "
     [passReq]="userForm.get(errorsToGet)?.errors"
     [match]="showMatch"
   ></app-password-requirements>
