@@ -27,11 +27,18 @@
         (click)="openDrawer(option)"
       >
         <span
+          *ngIf="option.stationName"
           class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
+        <span
+          *ngIf="option.title"
+          class="group bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
+        ></span>
         <span class="inlin-block w-44">
-          {{ option.stationName }}
-          <span class="block text-secondary-300 text-xs">Station</span>
+          {{ option.title ? option.title : option.stationName }}
+          <span class="block text-secondary-300 text-xs">{{
+            option.title ? 'Group' : 'Station'
+          }}</span>
         </span>
       </mat-option>
     </mat-autocomplete>
