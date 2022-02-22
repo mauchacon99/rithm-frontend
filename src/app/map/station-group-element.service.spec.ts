@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MockMapService, MockPopupService } from 'src/mocks';
+import { MockMapService } from 'src/mocks';
 
 import { StationGroupElementService } from './station-group-element.service';
 import { MapService } from './map.service';
@@ -23,8 +23,6 @@ import {
   STATION_WIDTH,
 } from './map-constants';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
-import { PopupService } from '../core/popup.service';
-import { MatDialogModule } from '@angular/material/dialog';
 
 describe('StationGroupElementService', () => {
   let service: StationGroupElementService;
@@ -108,11 +106,8 @@ describe('StationGroupElementService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MatDialogModule],
-      providers: [
-        { provide: MapService, useClass: MockMapService },
-        { provide: PopupService, useClass: MockPopupService },
-      ],
+      imports: [HttpClientTestingModule],
+      providers: [{ provide: MapService, useClass: MockMapService }],
     });
     service = TestBed.inject(StationGroupElementService);
     mapService = TestBed.inject(MapService);
