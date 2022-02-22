@@ -10,6 +10,7 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -28,7 +29,7 @@ describe('DocumentWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
       ],
-      imports: [RouterTestingModule],
+      imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
   });
 
