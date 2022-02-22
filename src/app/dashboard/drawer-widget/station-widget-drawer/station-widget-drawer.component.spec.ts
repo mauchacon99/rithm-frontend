@@ -372,4 +372,44 @@ describe('StationWidgetDrawerComponent', () => {
       expect(spyService).toHaveBeenCalledOnceWith(expectData);
     });
   });
+
+  it('should check  if stationColumns questionId exists in question.rithmId.', () => {
+    component.stationColumns = [
+      {
+        name: 'name',
+      },
+      {
+        name: 'name',
+        questionId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
+      },
+      {
+        name: 'name',
+        questionId: 'd17f6f7a-9642-45e0-8221-e482436rfhbhrte',
+      },
+    ];
+    component.questions = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+        value: '1',
+      },
+      {
+        prompt: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+        value: '2',
+      },
+    ];
+    component['checkStationColumns']();
+    expect(component.stationColumns.length).toEqual(2);
+  });
 });

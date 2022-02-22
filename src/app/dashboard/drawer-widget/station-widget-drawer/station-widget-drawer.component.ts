@@ -184,6 +184,23 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Check if questionId exists in question.rithmId. */
+  private checkStationColumns(): void {
+    const newStationColumn: ColumnFieldsWidget[] = [];
+    this.stationColumns.map((column) => {
+      if (column.questionId) {
+        this.questions.map((question) => {
+          if (column.questionId === question.rithmId) {
+            newStationColumn.push(column);
+          }
+        });
+      } else {
+        newStationColumn.push(column);
+      }
+    });
+    this.stationColumns = newStationColumn;
+  }
+
   /** Get station questions. */
   private getDocumentFields(): void {
     this.isLoading = true;
@@ -193,6 +210,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (questions) => {
           this.questions = questions;
+          this.checkStationColumns();
           this.loadColumnsSelect();
           this.isLoading = false;
         },
