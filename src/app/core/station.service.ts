@@ -617,4 +617,24 @@ export class StationService {
       )
       .pipe(map((response) => response.data));
   }
+
+  /**
+   * Update the flow button text.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param flowButtonText Contains the text of flow button for updated.
+   * @returns The status of update of flow button text.
+   */
+  updateFlowButtonText(
+    stationRithmId: string,
+    flowButtonText: string
+  ): Observable<StandardStringJSON> {
+    const standardBody: StandardStringJSON = { data: flowButtonText };
+    return this.http
+      .put<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationRithmId}`,
+        standardBody
+      )
+      .pipe(map((response) => response));
+  }
 }

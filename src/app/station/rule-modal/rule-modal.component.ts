@@ -7,6 +7,7 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
+import { STATES } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
@@ -102,6 +103,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The type of the first questions selected for the first operand. */
   firstOperandQuestionType!: QuestionFieldType;
 
+  /** The type of the second questions selected for the first operand. */
+  secondOperandQuestionType!: QuestionFieldType;
+
+  /** The information of the operator selected. */
   operatorSelected: {
     /**Operator text. */
     text: string;
@@ -109,11 +114,11 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     value: OperatorType;
   } | null = null;
 
-  /** Get all the existing Operand types. */
+  /** Contain all the operand Types. */
   operandType = OperandType;
 
-  /** Get all the existing question fields types. */
-  fieldTypes = QuestionFieldType;
+  /** Contain all the question Types. */
+  questionTypes = QuestionFieldType;
 
   /** Text group for the operator options. */
   textGroup = [
@@ -236,6 +241,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe((answer: DocumentAnswer) => {
         this.secondOperand.text = answer.value;
         this.secondOperand.value = answer.value;
+        this.secondOperand.questionType = this.firstOperand.questionType;
+        this.secondOperand.type = this.firstOperand.type;
       });
   }
 
@@ -262,7 +269,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     const secondOperandQuestions: Question[] = this.questionStation.filter(
       (question: Question) =>
         question.rithmId !== this.firstOperandQuestionRithmId &&
-        question.questionType === this.firstOperandQuestionType
+        question.questionType === this.secondOperandQuestionType
     );
     return secondOperandQuestions;
   }
@@ -291,11 +298,17 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       : this.firstOperand.type === this.operandType.Number
       ? 'number'
       : this.firstOperand.type === this.operandType.Field
-      ? this.firstOperandQuestionType === this.fieldTypes.Select
+      ? this.firstOperandQuestionType === this.questionTypes.Select
         ? 'select'
-        : this.firstOperandQuestionType === this.fieldTypes.MultiSelect
+        : this.firstOperandQuestionType === this.questionTypes.MultiSelect
         ? 'multiselect'
-        : 'checklist'
+        : this.firstOperandQuestionType === this.questionTypes.CheckList
+        ? 'checklist'
+        : this.firstOperandQuestionType === this.questionTypes.State
+        ? 'select'
+        : this.firstOperandQuestionType === this.questionTypes.Zip
+        ? 'number'
+        : 'string'
       : 'string';
   }
 
@@ -332,61 +345,105 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Set operator list for the comparison type and set first operand type.
    *
    * @param questionSelected The field type to show the options of the corresponding operator list.
+   * @param childIndex Optional value to be used in case of addressLine questions.
    */
-  setFirstOperandInformation(questionSelected: Question): void {
+  setFirstOperandInformation(
+    questionSelected: Question,
+    childIndex = -1
+  ): void {
     this.firstOperandQuestionType = questionSelected.questionType;
+    this.secondOperandQuestionType = questionSelected.questionType;
+    this.firstOperand.questionType = questionSelected.questionType;
     this.secondOperandDefaultQuestion.questionType =
       questionSelected.questionType;
     this.firstOperand.value = questionSelected.rithmId;
     this.firstOperand.text = questionSelected.prompt;
-    switch (questionSelected.questionType) {
-      case QuestionFieldType.ShortText:
-      case QuestionFieldType.URL:
-      case QuestionFieldType.Email:
-      case QuestionFieldType.Phone:
-        this.operatorList = this.textGroup;
-        this.firstOperand.type =
-          questionSelected.questionType !== QuestionFieldType.Phone
-            ? OperandType.String
-            : OperandType.Number;
-        this.secondOperand.type = this.firstOperand.type;
-        break;
-      case QuestionFieldType.LongText:
-        this.operatorList = this.contentGroup;
-        this.firstOperand.type = OperandType.String;
-        this.secondOperand.type = this.firstOperand.type;
-        break;
+    if (childIndex < 0) {
+      switch (questionSelected.questionType) {
+        case QuestionFieldType.ShortText:
+        case QuestionFieldType.URL:
+        case QuestionFieldType.Email:
+        case QuestionFieldType.Phone:
+          this.operatorList = this.textGroup;
+          this.firstOperand.type =
+            questionSelected.questionType !== QuestionFieldType.Phone
+              ? OperandType.String
+              : OperandType.Number;
+          this.secondOperand.type = this.firstOperand.type;
+          break;
+        case QuestionFieldType.LongText:
+          this.operatorList = this.contentGroup;
+          this.firstOperand.type = OperandType.String;
+          this.secondOperand.type = this.firstOperand.type;
+          break;
 
-      case QuestionFieldType.Number:
-      case QuestionFieldType.Currency:
-        this.operatorList = this.numberGroup;
-        this.firstOperand.type = OperandType.Number;
-        this.secondOperand.type = this.firstOperand.type;
-        break;
-      case QuestionFieldType.Date:
-        this.operatorList = this.dateGroup;
-        this.firstOperand.type = OperandType.Date;
-        this.secondOperand.type = this.firstOperand.type;
-        break;
-      case QuestionFieldType.MultiSelect:
-      case QuestionFieldType.Select:
+        case QuestionFieldType.Number:
+        case QuestionFieldType.Currency:
+          this.operatorList = this.numberGroup;
+          this.firstOperand.type = OperandType.Number;
+          this.secondOperand.type = this.firstOperand.type;
+          break;
+        case QuestionFieldType.Date:
+          this.operatorList = this.dateGroup;
+          this.firstOperand.type = OperandType.Date;
+          this.secondOperand.type = this.firstOperand.type;
+          break;
+        case QuestionFieldType.MultiSelect:
+        case QuestionFieldType.Select:
+          this.operatorList = this.textGroup;
+          this.firstOperand.type = OperandType.Field;
+          this.secondOperand.type = OperandType.String;
+          this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+          this.secondOperandDefaultQuestion.possibleAnswers =
+            questionSelected.possibleAnswers;
+          break;
+        case QuestionFieldType.CheckList:
+          this.operatorList = this.textGroup;
+          this.firstOperand.type = OperandType.Field;
+          this.secondOperand.type = OperandType.String;
+          this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
+          this.secondOperandDefaultQuestion.questionType =
+            QuestionFieldType.MultiSelect;
+          this.secondOperandDefaultQuestion.possibleAnswers =
+            questionSelected.possibleAnswers;
+          break;
+        case QuestionFieldType.AddressLine:
+          this.firstOperand.type = OperandType.Field;
+          this.operatorList = this.selectGroup;
+          break;
+      }
+    } else {
+      const childType: QuestionFieldType =
+        questionSelected.children[childIndex].questionType;
+
+      /** Set SecondOperand field type selector and initial data. */
+      this.secondOperandQuestionType = childType;
+      this.secondOperandDefaultQuestion.children = questionSelected.children;
+      this.secondOperandDefaultQuestion.possibleAnswers =
+        childType === QuestionFieldType.State ? STATES : [];
+      this.secondOperandDefaultQuestion.questionType = childType;
+
+      this.firstOperand.value = questionSelected.children[childIndex].rithmId;
+      this.firstOperand.text =
+        questionSelected.prompt +
+        ' / ' +
+        questionSelected.children[childIndex].prompt;
+      this.firstOperand.questionType = childType;
+      this.firstOperandQuestionType = childType;
+      this.firstOperand.type =
+        childType === QuestionFieldType.State
+          ? OperandType.Field
+          : childType === QuestionFieldType.Zip
+          ? OperandType.Number
+          : OperandType.String;
+      if (
+        childType === QuestionFieldType.State ||
+        childType === QuestionFieldType.Zip
+      ) {
+        this.operatorList = this.selectGroup;
+      } else {
         this.operatorList = this.textGroup;
-        this.firstOperand.type = OperandType.Field;
-        this.secondOperand.type = OperandType.String;
-        this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
-        this.secondOperandDefaultQuestion.possibleAnswers =
-          questionSelected.possibleAnswers;
-        break;
-      case QuestionFieldType.CheckList:
-        this.operatorList = this.textGroup;
-        this.firstOperand.type = OperandType.Field;
-        this.secondOperand.type = OperandType.String;
-        this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
-        this.secondOperandDefaultQuestion.questionType =
-          QuestionFieldType.MultiSelect;
-        this.secondOperandDefaultQuestion.possibleAnswers =
-          questionSelected.possibleAnswers;
-        break;
+      }
     }
     this.resetQuestionFieldComponent();
   }
@@ -398,7 +455,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   setSecondOperandInformation(questionSelected: Question): void {
     this.secondOperandQuestionPrompt = questionSelected.prompt;
+    this.secondOperand.questionType = questionSelected.questionType;
     this.secondOperand.type = OperandType.Field;
+    /** When selecting the second operand from the field, we wanna compare field-to-field. */
+    this.firstOperand.type = OperandType.Field;
   }
 
   /**
@@ -457,7 +517,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.ruleToAdd = {
       leftOperand: {
         type: this.firstOperand.type,
-        questionType: QuestionFieldType.ShortText,
+        questionType: this.firstOperand.questionType,
         value: this.firstOperandQuestionRithmId,
         text: this.firstOperand.text,
       },
@@ -466,7 +526,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         : OperatorType.EqualTo,
       rightOperand: {
         type: this.secondOperand.type,
-        questionType: QuestionFieldType.ShortText,
+        questionType: this.secondOperand.questionType,
         value: this.secondOperand.value,
         text: this.secondOperandToShow,
       },

@@ -8,6 +8,9 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -26,6 +29,7 @@ describe('DocumentWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
       ],
+      imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
   });
 
@@ -103,5 +107,42 @@ describe('DocumentWidgetComponent', () => {
     const errorWidget =
       fixture.debugElement.nativeElement.querySelector('#error-load-widget');
     expect(errorWidget).toBeTruthy();
+  });
+
+  it('should redirect to document page', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+      questions: [],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#go-to-document-page-single'
+    );
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const spyRoute = spyOn(
+      TestBed.inject(Router),
+      'navigate'
+    ).and.callThrough();
+    expect(button).toBeTruthy();
+    button.click(component.dataDocumentWidget.stations[0].stationRithmId);
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(
+      ['/', 'document', JSON.parse(documentRithmId).documentRithmId],
+      {
+        queryParams: {
+          documentId: JSON.parse(documentRithmId).documentRithmId,
+          stationId: component.dataDocumentWidget.stations[0].stationRithmId,
+        },
+      }
+    );
   });
 });
