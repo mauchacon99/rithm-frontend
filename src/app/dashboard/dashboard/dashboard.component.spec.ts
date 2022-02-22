@@ -126,7 +126,7 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should show error message when return error dashboard', function () {
+  it('should show error message when return error dashboard', () => {
     component.viewNewDashboard = true;
     component.errorLoadingDashboard = true;
     fixture.detectChanges();
@@ -141,7 +141,7 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should show message when dashboard its empty', function () {
+  it('should show message when dashboard its empty', () => {
     component.viewNewDashboard = true;
     component.isCreateNewDashboard = true;
     fixture.detectChanges();
@@ -429,7 +429,7 @@ describe('DashboardComponent', () => {
     });
   });
 
-  it('should subscribe to DashboardService.updateDataWidget$', function () {
+  it('should subscribe to DashboardService.updateDataWidget$', () => {
     const spyMethod = spyOn(
       component,
       'updateDashboardWidget'

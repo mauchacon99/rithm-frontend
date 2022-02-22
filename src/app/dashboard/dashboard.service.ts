@@ -9,8 +9,8 @@ import {
   Document,
   DashboardData,
   EditDataWidget,
+  ColumnsDocumentInfo,
 } from 'src/models';
-import { ColumnsDocumentInfo } from 'src/models/enums/columns-document-info';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 

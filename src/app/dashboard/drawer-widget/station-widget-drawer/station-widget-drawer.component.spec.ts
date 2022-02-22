@@ -3,7 +3,12 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { StationWidgetDrawerComponent } from './station-widget-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Question, QuestionFieldType, WidgetType } from 'src/models';
+import {
+  Question,
+  QuestionFieldType,
+  WidgetType,
+  OptionsSelectWidgetDrawer,
+} from 'src/models';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
@@ -17,17 +22,6 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-interface OptionsSelect {
-  /** If disabled option in select. */
-  disabled: boolean;
-  /** Name option. */
-  name: string;
-  /** Value option. */
-  value: string;
-  /** QuestionId option. */
-  questionId?: string;
-}
 
 describe('StationWidgetDrawerComponent', () => {
   let component: StationWidgetDrawerComponent;
@@ -126,7 +120,7 @@ describe('StationWidgetDrawerComponent', () => {
     expect(body).toBeTruthy();
   });
 
-  it('should show loading indicator', function () {
+  it('should show loading indicator', () => {
     component.isLoading = true;
     fixture.detectChanges();
     const body = fixture.nativeElement.querySelector(
@@ -188,7 +182,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should set documentInfo', () => {
-      const documentInfo: OptionsSelect[] = [];
+      const documentInfo: OptionsSelectWidgetDrawer[] = [];
       TestBed.inject(DashboardService).columnsDocumentInfo.map((column) => {
         documentInfo.push({
           name: column.name,
@@ -201,7 +195,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should set documentFields', () => {
-      const documentFields: OptionsSelect[] = [];
+      const documentFields: OptionsSelectWidgetDrawer[] = [];
       questions.map((question) => {
         documentFields.push({
           name: question.prompt,
@@ -330,7 +324,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should select option only with name and push column to update columns widget', () => {
-      const optionSelected: OptionsSelect = {
+      const optionSelected: OptionsSelectWidgetDrawer = {
         name: 'Document',
         disabled: false,
         value: 'name',
@@ -346,7 +340,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should select option only with name and update column to update columns widget', () => {
-      const optionSelected: OptionsSelect = {
+      const optionSelected: OptionsSelectWidgetDrawer = {
         name: 'Test',
         disabled: false,
         value: 'test',

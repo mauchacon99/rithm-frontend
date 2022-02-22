@@ -1,9 +1,10 @@
-<div *ngIf="isLoading" id="loading-indicator">
+<div class="font-semibold text-secondary-500">Table Values</div>
+
+<div *ngIf="isLoading" id="loading-indicator" class="mt-3">
   <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
 </div>
 
 <div *ngIf="!isLoading" id="content-drawer-station-widget">
-  <div class="font-semibold text-secondary-500">Table Values</div>
   <form [formGroup]="formColumns">
     <div formArrayName="columns">
       <div

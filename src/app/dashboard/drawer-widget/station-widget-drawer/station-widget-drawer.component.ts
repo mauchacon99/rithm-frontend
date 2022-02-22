@@ -8,21 +8,11 @@ import {
   Question,
   ColumnFieldsWidget,
   EditDataWidget,
+  OptionsSelectWidgetDrawer,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
-
-interface OptionsSelect {
-  /** If disabled option in select. */
-  disabled: boolean;
-  /** Name option. */
-  name: string;
-  /** Value option. */
-  value: string;
-  /** QuestionId option. */
-  questionId?: string;
-}
 
 /**
  * Component for Station widget drawer.
@@ -59,10 +49,10 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Static columns. */
-  documentInfo: OptionsSelect[] = [];
+  documentInfo: OptionsSelectWidgetDrawer[] = [];
 
   /** Document fields. */
-  documentFields: OptionsSelect[] = [];
+  documentFields: OptionsSelectWidgetDrawer[] = [];
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -222,7 +212,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * @param value Data selected.
    * @param indexColumn Number of the column to delete.
    */
-  optionSelected(value: OptionsSelect, indexColumn: number): void {
+  optionSelected(value: OptionsSelectWidgetDrawer, indexColumn: number): void {
     if (!value.disabled) {
       const dataColumn: ColumnFieldsWidget = value.questionId
         ? {

@@ -7,10 +7,10 @@ import {
   DashboardData,
   RoleDashboardMenu,
   EditDataWidget,
+  ColumnsDocumentInfo,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
-import { ColumnsDocumentInfo } from '../models/enums/columns-document-info';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
