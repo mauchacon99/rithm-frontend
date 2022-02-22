@@ -56,3 +56,4 @@ export * from './station-list-data';
 export * from './column-fields-widget';
 export * from './edit-data-widget';
 export * from './options-select-widget-drawer';
+export * from './input-frame-widget';
