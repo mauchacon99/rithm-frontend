@@ -38,6 +38,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
 
+  /** Dashboard id when is by params. */
+  dashboardIdParams!: string;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'stationWidget' = 'menuDashboard';
 
@@ -284,16 +287,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get dashboard by rithmId.
-   *
-   * @param dashboardRithmId String of rithmId of dashboard.
-   */
-  private getDashboardByRithmId(dashboardRithmId: string): void {
+  /** Get dashboard by rithmId. */
+  private getDashboardByRithmId(): void {
+    this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
     this.dashboardService
-      .getDashboardWidgets(dashboardRithmId)
+      .getDashboardWidgets(this.dashboardIdParams)
       .pipe(first())
       .subscribe({
         next: (dashboardByRithmId) => {
@@ -302,6 +302,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             JSON.stringify(this.dashboardData)
           );
           this.isLoading = false;
+          this.configEditMode();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -332,8 +333,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         const dashboardId = params.get('dashboardId');
-        if (dashboardId) {
-          this.getDashboardByRithmId(dashboardId);
+        if (dashboardId && dashboardId !== this.dashboardIdParams) {
+          this.dashboardIdParams = dashboardId as string;
+          this.getDashboardByRithmId();
         } else {
           this.getOrganizationDashboard();
         }
