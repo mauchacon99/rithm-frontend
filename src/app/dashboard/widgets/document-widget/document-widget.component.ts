@@ -17,7 +17,7 @@ export class DocumentWidgetComponent implements OnInit {
   /** Document rithmId. */
   @Input() documentRithmId = '';
 
-  /** Data to document list for widget. */
+  /** Data document list for widget. */
   dataDocumentWidget!: DocumentWidget;
 
   /** Loading document widget. */

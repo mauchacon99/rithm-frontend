@@ -23,7 +23,36 @@
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
-      <div *ngIf="dataDocumentWidget.stations.length === 1">
+      <div
+        *ngIf="dataDocumentWidget.stations.length > 1; else singleStationLink"
+      >
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="stationMenu"
+          id="show-more-stations"
+          data-testid="show-more-stations"
+        >
+          <i class="fas fa-ellipsis-h text-secondary-500 text-[16px]"></i>
+        </button>
+        <mat-menu #stationMenu>
+          <div
+            *ngFor="let station of dataDocumentWidget.stations; let i = index"
+          >
+            <div
+              mat-menu-item
+              [id]="'go-to-document-station-' + i"
+              [attr.data-testid]="'go-to-document-station-' + i"
+              (click)="goToDocument(station.stationRithmId)"
+            >
+              <i
+                class="fas fa-external-link-alt text-[16px] text-secondary-500"
+              ></i>
+              {{ station.stationName }}
+            </div>
+          </div>
+        </mat-menu>
+      </div>
+      <ng-template #singleStationLink>
         <button
           mat-icon-button
           id="go-to-document-page-single"
@@ -33,7 +62,7 @@
             class="fas fa-external-link-alt text-[16px] text-secondary-500"
           ></i>
         </button>
-      </div>
+      </ng-template>
     </div>
   </div>
   <!--List of the questions-->
