@@ -260,7 +260,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.type = this.firstOperand.type;
       });
 
-    if (this.modalData.editRule) {
+    if (modalData.editRule) {
       this.editMode = true;
     }
   }
@@ -536,6 +536,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (!this.secondOperandQuestionList.length) {
       this.secondOperandDefaultQuestion.value = rule.rightOperand.value;
     }
+    this.secondOperand.questionType = rule.rightOperand.questionType;
 
     //Set the value to the operator
     const operator = this.operatorList.find(
