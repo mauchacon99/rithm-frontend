@@ -2,4 +2,8 @@
   .mat-select-panel {
     max-height: 40vh !important;
   }
+
+  .mat-form-field-wrapper {
+    @apply p-0;
+  }
 }
