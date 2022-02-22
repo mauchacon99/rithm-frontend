@@ -122,7 +122,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
       isCurrentDashboard ||
       (isCurrentPrincipalDashboard && isPrincipalDashboard)
     ) {
-      this.dashboardService.toggleLoadingDashboard(true, true);
+      this.dashboardService.toggleLoadingDashboard(true);
     }
 
     this.sidenavDrawerService.toggleDrawer('menuDashboard');
@@ -135,7 +135,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     deleteDashboard$.pipe(first()).subscribe({
       next: () => {
         if (isCurrentPrincipalDashboard && isPrincipalDashboard)
-          this.dashboardService.toggleLoadingDashboard(false);
+          this.dashboardService.toggleLoadingDashboard(false, true);
         //dashboardService.toggleLoadingDashboard is to reload dashboard component
         else if (isCurrentDashboard) this.router.navigate(['/', 'dashboard']);
 
@@ -147,7 +147,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
           isCurrentDashboard ||
           (isCurrentPrincipalDashboard && isPrincipalDashboard)
         )
-          this.dashboardService.toggleLoadingDashboard(false);
+          this.dashboardService.toggleLoadingDashboard(false, true);
 
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
