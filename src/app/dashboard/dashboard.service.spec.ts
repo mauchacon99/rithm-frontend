@@ -535,16 +535,18 @@ describe('DashboardService', () => {
   });
 
   it('should be true the emit and subscribe to subject isLoadingDashboard$', () => {
-    service.isLoadingDashboard$.subscribe((status) => {
-      expect(status).toBeTrue();
+    service.isLoadingDashboard$.subscribe(({ statusLoading, getParams }) => {
+      expect(statusLoading).toBeTrue();
+      expect(getParams).toBeFalse();
     });
 
     service.toggleLoadingDashboard(true);
   });
 
   it('should be false the emit and subscribe to subject isLoadingDashboard$', () => {
-    service.isLoadingDashboard$.subscribe((status) => {
-      expect(status).toBeFalse();
+    service.isLoadingDashboard$.subscribe(({ statusLoading, getParams }) => {
+      expect(statusLoading).toBeFalse();
+      expect(getParams).toBeFalse();
     });
 
     service.toggleLoadingDashboard(false);

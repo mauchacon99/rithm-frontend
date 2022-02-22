@@ -18,8 +18,13 @@ import { Document } from 'src/models';
  * Mocks methods of the `DashboardService`.
  */
 export class MockDashboardService {
-  /** Loading dashboard when generate new dashboard. */
-  isLoadingDashboard$ = new Subject<boolean>();
+  /** Loading dashboard when generating new dashboard. */
+  isLoadingDashboard$ = new Subject<{
+    /** To toggle loading dashboard. */
+    statusLoading: boolean;
+    /** True to load getParams in dashboard. */
+    getParams: boolean;
+  }>();
 
   /** Update specific widget and data. */
   updateDataWidget$ = new Subject<EditDataWidget>();
@@ -64,10 +69,11 @@ export class MockDashboardService {
   /**
    * Toggle emit to loading dashboard.
    *
-   * @param status Boolean true to loading and false not loading.
+   * @param statusLoading To toggle loading dashboard.
+   * @param getParams True to load getParams in dashboard.
    */
-  toggleLoadingDashboard(status: boolean): void {
-    this.isLoadingDashboard$.next(status);
+  toggleLoadingDashboard(statusLoading: boolean, getParams = false): void {
+    this.isLoadingDashboard$.next({ statusLoading, getParams });
   }
 
   /**

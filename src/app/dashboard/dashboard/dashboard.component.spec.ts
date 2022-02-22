@@ -236,7 +236,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
-    component.dashboardIdParams = dashboardRithmId;
     spyOn(
       TestBed.inject(DashboardService),
       'getOrganizationDashboard'
@@ -254,13 +253,12 @@ describe('DashboardComponent', () => {
   });
 
   it('should call service dashboard for id', () => {
-    component.dashboardIdParams = dashboardRithmId;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'getDashboardWidgets'
     ).and.callThrough();
 
-    component['getDashboardByRithmId']();
+    component['getDashboardByRithmId'](dashboardRithmId);
 
     expect(spyService).toHaveBeenCalled();
   });
@@ -278,7 +276,7 @@ describe('DashboardComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['getDashboardByRithmId']();
+    component['getDashboardByRithmId'](dashboardRithmId);
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -431,24 +429,6 @@ describe('DashboardComponent', () => {
     });
   });
 
-  it('should subscribe to DashboardService.updateDataWidget$', () => {
-    const spyMethod = spyOn(
-      component,
-      'updateDashboardWidget'
-    ).and.callThrough();
-    const expectEditDataWidget = {
-      widgetItem: dataDashboard.widgets[0],
-      widgetIndex: 1,
-      isCloseDrawer: false,
-    };
-
-    TestBed.inject(DashboardService).updateDashboardWidgets(
-      expectEditDataWidget
-    );
-
-    expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
-  });
-
   it('should update dashboard widgets', () => {
     component.dashboardData = dataDashboard;
     const spyMethod = spyOn(component, 'updateDashboard').and.callThrough();
@@ -474,5 +454,21 @@ describe('DashboardComponent', () => {
     component.updateDashboardWidget(editDataWidget);
     expect(component.dashboardData).toEqual(expectDashboardData);
     expect(spyMethod).toHaveBeenCalledOnceWith(editDataWidget.isCloseDrawer);
+  });
+
+  it('should subscribe to DashboardService.updateDataWidget$', () => {
+    component.dashboardData = dataDashboard;
+    const spyMethod = spyOn(component, 'updateDashboardWidget');
+    const expectEditDataWidget = {
+      widgetItem: dataDashboard.widgets[0],
+      widgetIndex: 1,
+      isCloseDrawer: false,
+    };
+
+    TestBed.inject(DashboardService).updateDashboardWidgets(
+      expectEditDataWidget
+    );
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
   });
 });

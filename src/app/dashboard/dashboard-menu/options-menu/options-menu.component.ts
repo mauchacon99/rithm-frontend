@@ -111,21 +111,18 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * @param rithmId The dashboard rithmId to delete.
    */
   deleteDashboard(rithmId: string): void {
-    const isCurrentDashboard = rithmId === this.paramRithmId ? true : false;
-    const isCurrentPrincipalDashboard =
-      this.paramRithmId === null ? true : false;
+    const isCurrentDashboard = rithmId === this.paramRithmId;
+    const isCurrentPrincipalDashboard = this.paramRithmId === null;
     /* Index is principal dashboard when is 0 this is specified in dashboard-component getOrganizationDashboard
       if this value is modified should modified this condition. */
     const isPrincipalDashboard =
-      this.index === 0 && this.dashboardRole === this.roleDashboardMenu.Company
-        ? true
-        : false;
+      this.index === 0 && this.dashboardRole === this.roleDashboardMenu.Company;
 
     if (
       isCurrentDashboard ||
       (isCurrentPrincipalDashboard && isPrincipalDashboard)
     ) {
-      this.dashboardService.toggleLoadingDashboard(true); //this is to trigger isLoading on the dashboard component
+      this.dashboardService.toggleLoadingDashboard(true, true);
     }
 
     this.sidenavDrawerService.toggleDrawer('menuDashboard');

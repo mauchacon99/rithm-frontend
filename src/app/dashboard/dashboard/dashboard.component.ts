@@ -38,9 +38,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
 
-  /** Dashboard id when is by params. */
-  dashboardIdParams!: string;
-
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'stationWidget' = 'menuDashboard';
 
@@ -145,11 +142,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.dashboardService.isLoadingDashboard$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((status) => {
-        this.isLoading = status;
+      .subscribe(({ statusLoading, getParams }) => {
+        this.isLoading = statusLoading;
         this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
-        if (!status) this.getParams();
+        if (getParams) {
+          this.getParams();
+        }
       });
 
     this.sidenavDrawerService.drawerContext$
@@ -287,13 +286,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Get dashboard by rithmId. */
-  private getDashboardByRithmId(): void {
+  /**
+   * Get dashboard by rithmId.
+   *
+   * @param dashboardRithmId String of rithmId of dashboard.
+   */
+  private getDashboardByRithmId(dashboardRithmId: string): void {
     this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
     this.dashboardService
-      .getDashboardWidgets(this.dashboardIdParams)
+      .getDashboardWidgets(dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (dashboardByRithmId) => {
@@ -330,12 +333,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
-        const dashboardId = params.get('dashboardId');
-        if (dashboardId && dashboardId !== this.dashboardIdParams) {
-          this.dashboardIdParams = dashboardId as string;
-          this.getDashboardByRithmId();
+        const dashboardId = params['dashboardId'];
+        if (dashboardId) {
+          this.getDashboardByRithmId(dashboardId);
         } else {
           this.getOrganizationDashboard();
         }

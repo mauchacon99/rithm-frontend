@@ -81,8 +81,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
     this.dashboardService.isLoadingDashboard$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((status) => {
-        this.isLoading = status;
+      .subscribe(({ statusLoading }) => {
+        this.isLoading = statusLoading;
       });
   }
 
