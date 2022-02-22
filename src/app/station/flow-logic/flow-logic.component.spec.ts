@@ -12,6 +12,7 @@ import {
   QuestionFieldType,
   Rule,
   RuleType,
+  FlowLogicRule,
 } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -173,6 +174,7 @@ describe('FlowLogicComponent', () => {
 
     it('should to call method openModal after clicked in button with id: all-new-rule', () => {
       component.flowLogicLoading = false;
+      component.ruleLoading = false;
       fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#all-new-rule');
@@ -183,6 +185,7 @@ describe('FlowLogicComponent', () => {
 
     it('should to call method openModal after clicked in button with id: any-new-rule', () => {
       component.flowLogicLoading = false;
+      component.ruleLoading = false;
       fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#any-new-rule');
@@ -221,6 +224,7 @@ describe('FlowLogicComponent', () => {
 
   it('should not display the red message when there are rules in each station.', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
       {
@@ -258,6 +262,7 @@ describe('FlowLogicComponent', () => {
 
   it('should display the red message when there are not rules in each station.', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [flowLogicRule[0]];
     component.flowLogicRules[0].flowRule.equations = [];
@@ -270,6 +275,7 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should activate the loading in flow logic station', () => {
+    component.ruleLoading = false;
     component.flowLogicLoading = true;
     fixture.detectChanges();
     const flowLogicLoading = fixture.debugElement.nativeElement.querySelector(
@@ -280,6 +286,7 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show error if petition rules fails', () => {
+    component.ruleLoading = false;
     component.flowLogicLoading = false;
     spyOn(
       TestBed.inject(DocumentService),
@@ -524,6 +531,8 @@ describe('FlowLogicComponent', () => {
   it('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
+    component.ruleLoading = false;
+    component.ruleError = false;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
@@ -567,6 +576,7 @@ describe('FlowLogicComponent', () => {
 
   it('should open the modal when clicking on edit-rule-button-any to edit the existing rule', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
       {
@@ -617,7 +627,10 @@ describe('FlowLogicComponent', () => {
 
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
+    component.ruleError = false;
+    component.flowLogicLoadingByRuleType = null;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
@@ -661,9 +674,88 @@ describe('FlowLogicComponent', () => {
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 
+  it('should call the method to delete the rule of type ALL from the array ', async () => {
+    component.flowLogicRules = flowLogicRule;
+    component.flowLogicLoadingByRuleType = null;
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'deleteRuleFromStationFlowLogic'
+    ).and.callThrough();
+
+    const { 0: stationRules } = nextStations;
+    const index = 0;
+    await component.deleteRuleFromStationFlowLogic(
+      index,
+      'all',
+      stationRules.rithmId
+    );
+    component.flowLogicLoadingByRuleType = `${stationRules.rithmId}-all`;
+
+    const subStationFlowLogicRule = component.flowLogicRules.find(
+      (station) => station.destinationStationRithmID === stationRules.rithmId
+    );
+    expect(subStationFlowLogicRule).toBeTruthy();
+    expect(component.flowLogicLoadingByRuleType).toBeTruthy();
+    expect(stationRules.rithmId).toEqual(
+      <string>subStationFlowLogicRule?.destinationStationRithmID
+    );
+
+    expect(subStationFlowLogicRule?.flowRule.equations).toBeTruthy();
+
+    subStationFlowLogicRule?.flowRule.equations.splice(index, 1);
+
+    expect(spyService).toHaveBeenCalledOnceWith([
+      <FlowLogicRule>subStationFlowLogicRule,
+    ]);
+  });
+
+  it('should call the method to delete the rule of type ANY from the array ', async () => {
+    component.flowLogicRules = flowLogicRule;
+    component.flowLogicLoadingByRuleType = null;
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'deleteRuleFromStationFlowLogic'
+    ).and.callThrough();
+
+    const { 0: stationRules } = nextStations;
+    const index = 0;
+    await component.deleteRuleFromStationFlowLogic(
+      index,
+      'any',
+      stationRules.rithmId
+    );
+    component.flowLogicLoadingByRuleType = `${stationRules.rithmId}-any`;
+    const subStationFlowLogicRule = component.flowLogicRules.find(
+      (station) => station.destinationStationRithmID === stationRules.rithmId
+    );
+    expect(subStationFlowLogicRule).toBeTruthy();
+
+    expect(stationRules.rithmId).toEqual(
+      <string>subStationFlowLogicRule?.destinationStationRithmID
+    );
+
+    expect(subStationFlowLogicRule?.flowRule.subRules).toBeTruthy();
+
+    subStationFlowLogicRule?.flowRule.subRules.splice(index, 1);
+
+    expect(spyService).toHaveBeenCalledOnceWith([
+      <FlowLogicRule>subStationFlowLogicRule,
+    ]);
+  });
+
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
+    component.flowLogicLoadingByRuleType = null;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
@@ -713,7 +805,32 @@ describe('FlowLogicComponent', () => {
     expect(deleteRuleFromStationFlowLogicSpy).toHaveBeenCalled();
   });
 
-  it('should open confirmation popup when call the method that deletes the rule', () => {
+  it('should show error message when delete logical flow rules for each station', async () => {
+    component.flowLogicRules = flowLogicRule;
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+    spyOn(
+      TestBed.inject(DocumentService),
+      'deleteRuleFromStationFlowLogic'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    const { 0: station } = nextStations;
+    await component.deleteRuleFromStationFlowLogic(0, 'any', station.rithmId);
+    expect(displayErrorSpy).toHaveBeenCalled();
+    expect(component.flowRuleError).toBeTruthy();
+    expect(component.flowLogicLoading).toBeFalsy();
+    expect(component.flowLogicLoadingByRuleType).toBeNull();
+  });
+
+  it('should open confirmation popup when call the method that deletes the rule', async () => {
     const dataToConfirmPopup = {
       title: 'Remove Rule',
       message: `Are you sure to remove the selected rule from this station?`,
@@ -723,7 +840,67 @@ describe('FlowLogicComponent', () => {
       TestBed.inject(PopupService),
       'confirm'
     ).and.callThrough();
-    component.deleteRuleFromStationFlowLogic();
+    const { 0: station } = nextStations;
+    await component.deleteRuleFromStationFlowLogic(0, 'any', station.rithmId);
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+  });
+
+  it('should activate the loading in saved rules of flow logic', () => {
+    component.flowLogicLoading = false;
+    component.ruleLoading = true;
+    fixture.detectChanges();
+    const ruleLoading =
+      fixture.debugElement.nativeElement.querySelector('#rule-loading');
+    expect(component.ruleLoading).toBeTrue();
+    expect(ruleLoading).toBeTruthy();
+  });
+
+  it('should show error message when request for saved rules of flow logic fails.', () => {
+    component.flowLogicLoading = false;
+    component.ruleError = true;
+    fixture.detectChanges();
+    const ruleError =
+      fixture.debugElement.nativeElement.querySelector('#rules-error');
+    expect(component.ruleError).toBeTrue();
+    expect(ruleError).toBeTruthy();
+  });
+  describe('Loading rules ', () => {
+    it('should not be to show flow-logic-loading-rules', () => {
+      component.flowLogicLoading = false;
+      component.flowRuleError = false;
+      component.flowLogicRules = flowLogicRule;
+      component.flowLogicLoadingByRuleType = null;
+      fixture.detectChanges();
+      const loadingRules = fixture.debugElement.nativeElement.querySelector(
+        '#flow-logic-loading-rules'
+      );
+      expect(loadingRules).toBeNull();
+    });
+
+    it('should be to show flow-logic-loading-rules type ANY', () => {
+      component.flowLogicLoading = false;
+      component.flowRuleError = false;
+      component.flowLogicRules = flowLogicRule;
+      const { 0: stationRules } = nextStations;
+      component.flowLogicLoadingByRuleType = `${stationRules.rithmId}-any`;
+      fixture.detectChanges();
+      const loadingRules = fixture.debugElement.nativeElement.querySelector(
+        '#flow-logic-loading-rules'
+      );
+      expect(loadingRules).toBeTruthy();
+    });
+
+    it('should be to show flow-logic-loading-rules type ALL', () => {
+      component.flowLogicLoading = false;
+      component.flowRuleError = false;
+      component.flowLogicRules = flowLogicRule;
+      const { 0: stationRules } = nextStations;
+      component.flowLogicLoadingByRuleType = `${stationRules.rithmId}-all`;
+      fixture.detectChanges();
+      const loadingRules = fixture.debugElement.nativeElement.querySelector(
+        '#flow-logic-loading-rules'
+      );
+      expect(loadingRules).toBeTruthy();
+    });
   });
 });
