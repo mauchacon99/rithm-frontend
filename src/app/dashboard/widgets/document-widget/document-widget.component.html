@@ -35,20 +35,28 @@
         </button>
       </div>
       <div *ngIf="dataDocumentWidget.stations.length > 1">
-        <button mat-icon-button [matMenuTriggerFor]="stationMenu">
-          <i class="fas fa-ellipsis-h"></i>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="stationMenu"
+          id="show-more-stations"
+          data-testid="show-more-stations"
+        >
+          <i class="fas fa-ellipsis-h text-secondary-500 text-[16px]"></i>
         </button>
         <mat-menu #stationMenu>
-          <div *ngFor="let station of stationsOnDocument">
+          <div
+            *ngFor="let station of dataDocumentWidget.stations; let i = index"
+          >
             <div
               mat-menu-item
+              [id]="'go-to-document-station-' + i"
+              [attr.data-testid]="'go-to-document-station-' + i"
               (click)="goToDocument(station.stationRithmId)"
-              id="go-to-document"
             >
-              {{ station.stationName }}
               <i
-                class="fas fa-external-link-alt text-xl text-secondary-500"
+                class="fas fa-external-link-alt text-[16px] text-secondary-500"
               ></i>
+              {{ station.stationName }}
             </div>
           </div>
         </mat-menu>
