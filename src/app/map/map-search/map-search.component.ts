@@ -54,8 +54,8 @@ export class MapSearchComponent {
   searchStations(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const stationsStationGroups: any[] = [
-      ...this.mapService.stationGroupElements,
       ...this.mapService.stationElements,
+      ...this.mapService.stationGroupElements,
     ];
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
