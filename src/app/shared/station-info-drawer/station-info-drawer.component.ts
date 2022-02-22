@@ -178,9 +178,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                 this.mapService.stationElements.findIndex(
                   (e) => e.rithmId === this.stationRithmId
                 );
-              this.mapService.stationElements[
-                currentStationIndex
-              ].drawerOpened = true;
+              if (this.mapService.stationElements[currentStationIndex]) {
+                this.mapService.stationElements[
+                  currentStationIndex
+                ].drawerOpened = true;
+              }
               this.mapService.mapDataReceived$.next(true);
             }
             if (
@@ -254,7 +256,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   get displayCreateDocumentButton(): boolean {
     return (
       this.stationDocumentGenerationStatus ===
-        DocumentGenerationStatus.Manual &&
+      DocumentGenerationStatus.Manual &&
       (this.mapMode === 0 || this.mapMode === undefined) &&
       !this.locallyCreated &&
       (this.isUserAdminOrOwner || this.isWorker)
@@ -289,10 +291,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       status === 'None' && statusNew.checked
         ? DocumentGenerationStatus.None
         : status === 'None' && !statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : status === 'Manual' && statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : DocumentGenerationStatus.None;
+          ? DocumentGenerationStatus.Manual
+          : status === 'Manual' && statusNew.checked
+            ? DocumentGenerationStatus.Manual
+            : DocumentGenerationStatus.None;
 
     this.updateStationDocumentGenerationStatus(this.stationRithmId, value);
   }
