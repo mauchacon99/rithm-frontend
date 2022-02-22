@@ -174,6 +174,7 @@ describe('FlowLogicComponent', () => {
 
     it('should to call method openModal after clicked in button with id: all-new-rule', () => {
       component.flowLogicLoading = false;
+      component.ruleLoading = false;
       fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#all-new-rule');
@@ -184,6 +185,7 @@ describe('FlowLogicComponent', () => {
 
     it('should to call method openModal after clicked in button with id: any-new-rule', () => {
       component.flowLogicLoading = false;
+      component.ruleLoading = false;
       fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#any-new-rule');
@@ -222,6 +224,7 @@ describe('FlowLogicComponent', () => {
 
   it('should not display the red message when there are rules in each station.', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
       {
@@ -259,6 +262,7 @@ describe('FlowLogicComponent', () => {
 
   it('should display the red message when there are not rules in each station.', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [flowLogicRule[0]];
     component.flowLogicRules[0].flowRule.equations = [];
@@ -271,6 +275,7 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should activate the loading in flow logic station', () => {
+    component.ruleLoading = false;
     component.flowLogicLoading = true;
     fixture.detectChanges();
     const flowLogicLoading = fixture.debugElement.nativeElement.querySelector(
@@ -281,6 +286,7 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show error if petition rules fails', () => {
+    component.ruleLoading = false;
     component.flowLogicLoading = false;
     spyOn(
       TestBed.inject(DocumentService),
@@ -525,6 +531,8 @@ describe('FlowLogicComponent', () => {
   it('should open the modal when clicking on edit-rule-button-all to edit the existing rule', () => {
     component.flowLogicLoading = false;
     component.flowRuleError = false;
+    component.ruleLoading = false;
+    component.ruleError = false;
     component.flowLogicRules = [
       {
         stationRithmId: rithmId,
@@ -568,6 +576,7 @@ describe('FlowLogicComponent', () => {
 
   it('should open the modal when clicking on edit-rule-button-any to edit the existing rule', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicRules = [
       {
@@ -618,7 +627,9 @@ describe('FlowLogicComponent', () => {
 
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ALL section', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
+    component.ruleError = false;
     component.flowLogicLoadingByRuleType = null;
     component.flowLogicRules = [
       {
@@ -742,6 +753,7 @@ describe('FlowLogicComponent', () => {
 
   it('should call the method to delete a rule from a connected station when clicking the delete button in the ANY section', () => {
     component.flowLogicLoading = false;
+    component.ruleLoading = false;
     component.flowRuleError = false;
     component.flowLogicLoadingByRuleType = null;
     component.flowLogicRules = [
@@ -833,6 +845,25 @@ describe('FlowLogicComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
 
+  it('should activate the loading in saved rules of flow logic', () => {
+    component.flowLogicLoading = false;
+    component.ruleLoading = true;
+    fixture.detectChanges();
+    const ruleLoading =
+      fixture.debugElement.nativeElement.querySelector('#rule-loading');
+    expect(component.ruleLoading).toBeTrue();
+    expect(ruleLoading).toBeTruthy();
+  });
+
+  it('should show error message when request for saved rules of flow logic fails.', () => {
+    component.flowLogicLoading = false;
+    component.ruleError = true;
+    fixture.detectChanges();
+    const ruleError =
+      fixture.debugElement.nativeElement.querySelector('#rules-error');
+    expect(component.ruleError).toBeTrue();
+    expect(ruleError).toBeTruthy();
+  });
   describe('Loading rules ', () => {
     it('should not be to show flow-logic-loading-rules', () => {
       component.flowLogicLoading = false;
