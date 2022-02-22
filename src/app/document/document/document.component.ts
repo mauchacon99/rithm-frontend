@@ -437,12 +437,13 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Move document flow from current station to previous station.
    */
   private flowDocumentToPreviousStation(): void {
-    const previousStation: string[] = this.previousStations.map(
+    this.documentLoading = true;
+    const previousStations: string[] = this.previousStations.map(
       (item) => item.rithmId
     );
     const moveDoc: MoveDocument = {
       fromStationRithmId: this.stationId,
-      toStationRithmIds: previousStation,
+      toStationRithmIds: previousStations,
       documentRithmId: this.documentId,
     };
 
@@ -450,7 +451,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .flowDocumentToPreviousStation(moveDoc)
       .pipe(first())
       .subscribe({
+        next: () => {
+          // Functionality in RTM-2201 branch.
+          this.documentLoading = false;
+        },
         error: (error: unknown) => {
+          this.documentLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error,
