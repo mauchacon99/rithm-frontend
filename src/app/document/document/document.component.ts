@@ -19,6 +19,7 @@ import {
   DocumentStationInformation,
   ConnectedStationInfo,
   DocumentAutoFlow,
+  MoveDocument,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
@@ -427,6 +428,33 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
+          );
+        },
+      });
+  }
+
+  /**
+   * Move document flow from current station to previous station.
+   */
+  private flowDocumentToPreviousStation(): void {
+    const previousStation: string[] = this.previousStations.map(
+      (item) => item.rithmId
+    );
+    const moveDoc: MoveDocument = {
+      fromStationRithmId: this.stationId,
+      toStationRithmIds: previousStation,
+      documentRithmId: this.documentId,
+    };
+
+    this.documentService
+      .flowDocumentToPreviousStation(moveDoc)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error,
+            false
           );
         },
       });

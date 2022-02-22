@@ -23,7 +23,7 @@ export class DocumentWidgetComponent implements OnInit {
   /** Loading document widget. */
   isLoading = false;
 
-  /** Show error if get documentWidget fail. */
+  /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
 
   constructor(
