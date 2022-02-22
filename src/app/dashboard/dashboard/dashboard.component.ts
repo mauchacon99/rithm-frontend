@@ -290,7 +290,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param dashboardRithmId String of rithmId of dashboard.
    */
   private getDashboardByRithmId(dashboardRithmId: string): void {
-    this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
     this.dashboardService
@@ -303,7 +302,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             JSON.stringify(this.dashboardData)
           );
           this.isLoading = false;
-          this.configEditMode();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -412,9 +410,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.dashboardService.toggleLoadingDashboard(false);
         if (isCloseDrawer) {
           this.editMode = false;
+          this.configEditMode();
         }
         this.errorLoadingDashboard = false;
-        this.configEditMode();
       },
       error: (error: unknown) => {
         this.errorLoadingDashboard = true;
