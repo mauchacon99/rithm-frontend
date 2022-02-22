@@ -29,7 +29,8 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
+import { GridsterConfig } from 'angular-gridster2';
 /**
  * Main component for viewing a station.
  */
@@ -99,6 +100,23 @@ export class StationComponent
 
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** Grid initial values. */
+  options: GridsterConfig = {
+    gridType: 'fit',
+    displayGrid: 'always',
+    pushItems: true,
+    draggable: {
+      enabled: false,
+    },
+    resizable: {
+      enabled: false,
+    },
+    margin: 12,
+    minCols: 12,
+    maxCols: 12,
+    minRows: 16,
+  };
 
   constructor(
     private stationService: StationService,
