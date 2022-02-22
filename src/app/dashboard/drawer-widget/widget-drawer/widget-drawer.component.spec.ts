@@ -63,7 +63,7 @@ describe('WidgetDrawerComponent', () => {
 
     const spyMethod = spyOn(component, 'toggleDrawer');
     const toggleButton = fixture.debugElement.nativeElement.querySelector(
-      '#close-station-widget-drawer'
+      '#close-widget-drawer'
     );
     expect(toggleButton).toBeTruthy();
     toggleButton.click();

@@ -23,7 +23,36 @@
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
-      <div *ngIf="dataDocumentWidget.stations.length === 1">
+      <div
+        *ngIf="dataDocumentWidget.stations.length > 1; else singleStationLink"
+      >
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="stationMenu"
+          id="show-more-stations"
+          data-testid="show-more-stations"
+        >
+          <i class="fas fa-ellipsis-h text-secondary-500 text-[16px]"></i>
+        </button>
+        <mat-menu #stationMenu>
+          <div
+            *ngFor="let station of dataDocumentWidget.stations; let i = index"
+          >
+            <div
+              mat-menu-item
+              [id]="'go-to-document-station-' + i"
+              [attr.data-testid]="'go-to-document-station-' + i"
+              (click)="goToDocument(station.stationRithmId)"
+            >
+              <i
+                class="fas fa-external-link-alt text-[16px] text-secondary-500"
+              ></i>
+              {{ station.stationName }}
+            </div>
+          </div>
+        </mat-menu>
+      </div>
+      <ng-template #singleStationLink>
         <button
           mat-icon-button
           id="go-to-document-page-single"
@@ -33,14 +62,11 @@
             class="fas fa-external-link-alt text-[16px] text-secondary-500"
           ></i>
         </button>
-      </div>
+      </ng-template>
     </div>
   </div>
   <!--List of the questions-->
-  <div
-    class="w-full p-2 flex h-full overflow-auto scrollbar"
-    *ngIf="!failedLoadWidget && !isLoading"
-  >
+  <div class="w-full p-2 flex h-full overflow-auto scrollbar">
     <div class="h-full w-full" *ngIf="dataDocumentWidget">
       <ng-container
         class="h-full w-full"
@@ -51,13 +77,72 @@
           *ngFor="let questions of questionList.questions"
         >
           <div class="py-3 border-b border-b-secondary-200">
-            <p class="font-semibold text-sm">{{ questions.prompt }}</p>
-            <p class="pt-3 text-sm">
+            <p class="font-semibold text-sm">
               {{
-                questions.answer?.value ||
-                  "This question doesn't have an answer."
+                questions.questionType === 'instructions'
+                  ? 'Instruction'
+                  : questions.prompt
               }}
             </p>
+
+            <div [ngSwitch]="questions.questionType">
+              <p
+                *ngSwitchCase="questionFieldType.CheckList"
+                class="pt-3 text-sm"
+              >
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked
+                        ? 'fa-check-square text-accent-500'
+                        : 'fa-square text-secondary-500'
+                    "
+                  ></i>
+                  - {{ answer.value }}<br />
+                </span>
+              </p>
+              <p
+                *ngSwitchCase="questionFieldType.MultiSelect"
+                class="pt-3 text-sm"
+              >
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked
+                        ? 'fa-check-square text-accent-500'
+                        : 'fa-square text-secondary-500'
+                    "
+                  ></i>
+                  -
+                  {{ answer.value }}
+                  <br />
+                </span>
+              </p>
+              <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked
+                        ? 'fa-check-square text-accent-500'
+                        : 'fa-square text-secondary-500'
+                    "
+                  ></i>
+                  - {{ answer.value }} <br />
+                </span>
+              </p>
+              <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
+                {{ questions.prompt }}
+              </p>
+              <p *ngSwitchDefault class="pt-3 text-sm">
+                {{
+                  questions.answer?.value ||
+                    "This question doesn't have an answer."
+                }}
+              </p>
+            </div>
           </div>
         </ng-container>
       </ng-container>

@@ -2,7 +2,7 @@
  * Represents the columns to display in the station-widget.
  */
 
-export interface StationColumnWidget {
+export interface ColumnFieldsWidget {
   /** Id the question. */
   questionId?: string;
 
