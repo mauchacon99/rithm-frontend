@@ -113,8 +113,8 @@ export class StationComponent
       enabled: false,
     },
     margin: 12,
-    minCols: 12,
-    maxCols: 12,
+    minCols: 16,
+    maxCols: 16,
     minRows: 16,
   };
 

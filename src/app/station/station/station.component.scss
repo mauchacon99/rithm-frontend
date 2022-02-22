@@ -45,9 +45,9 @@ textarea {
   align-self: center;
 }
 
-gridster ::ng-deep {
+.gridster-container ::ng-deep {
   .gridster-column,
   .gridster-row {
-    @apply border-secondary-200;
+    @apply border-secondary-50;
   }
 }

@@ -210,7 +210,7 @@
         <div class="hidden lg:inline-block col-span-2">left column</div>
         <!-- center column -->
         <div
-          class="flex flex-col col-span-12 lg:col-span-8 bg-white h-full px-4 w-full"
+          class="flex flex-col col-span-12 lg:col-span-8 bg-white h-full w-full"
         >
           <form
             *ngIf="!stationLoading"
@@ -258,7 +258,7 @@
             </mat-tab-group>
           </form>
           <div class="gridster-container flex flex-grow pb-4 w-full">
-            <gridster class="bg-transparent" [options]="options"></gridster>
+            <gridster class="p-0 bg-transparent" [options]="options"></gridster>
           </div>
         </div>
         <!-- right column -->
