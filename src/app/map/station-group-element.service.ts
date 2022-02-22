@@ -340,7 +340,7 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING
+        STATION_GROUP_PADDING * this.mapScale
     );
 
     // Split station group name.
@@ -735,19 +735,39 @@ export class StationGroupElementService {
       // Calculate the slope between two points.
       const m = this.slopeLine(points[i], points[i - 1]);
       const distance = this.distanceBetweenTwoPoints(points[i], points[i - 1]);
-      // If is visible on the canvas.
+      const padding = STATION_GROUP_PADDING * this.mapScale;
+      // If the point Start is Corner Bottom-left or Bottom-right.
       if (
-        points[i].x >= STATION_GROUP_PADDING &&
-        points[i - 1].x >= STATION_GROUP_PADDING &&
-        points[i].x + titleWidth <= this.canvasDimensions.width &&
-        points[i].y >= STATION_GROUP_PADDING &&
-        points[i].y <= this.canvasDimensions.height
+        points[i].corner === Corner.BottomLeft ||
+        points[i].corner === Corner.BottomRight
       ) {
-        memoryPosition.push({
-          position: i,
-          slope: m,
-          distance: distance,
-        });
+        // If is visible on the canvas.
+        if (
+          points[i - 1].x >= padding &&
+          points[i - 1].x + titleWidth <= this.canvasDimensions.width &&
+          points[i - 1].y >= padding &&
+          points[i - 1].y <= this.canvasDimensions.height
+        ) {
+          memoryPosition.push({
+            position: i,
+            slope: m,
+            distance: distance,
+          });
+        }
+      } else {
+        // If is visible on the canvas.
+        if (
+          points[i].x >= padding &&
+          points[i].x + titleWidth <= this.canvasDimensions.width &&
+          points[i].y >= padding &&
+          points[i].y <= this.canvasDimensions.height
+        ) {
+          memoryPosition.push({
+            position: i,
+            slope: m,
+            distance: distance,
+          });
+        }
       }
     }
     // The first position is assigned.
@@ -1009,12 +1029,12 @@ export class StationGroupElementService {
     );
 
     // Calculation of the new displacement as a function of the slope of the line.
-    // If the slope is greater than pi/4 we adjust the icon multiplied by 3.
+    // If the slope is greater than pi/3 we adjust the icon multiplied by 3.
     const newDisplacement =
       displacement +
       (Math.abs(m) === Math.PI / 2
         ? 0
-        : Math.abs(m) < Math.PI / 4
+        : Math.abs(m) < Math.PI / 3
         ? -STATION_GROUP_DISPLACEMENT * this.mapScale
         : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
 
@@ -1029,7 +1049,7 @@ export class StationGroupElementService {
         y: pointEnd.y,
       },
       newDisplacement,
-      Math.abs(m) < Math.PI / 4
+      Math.abs(m) < Math.PI / 3
     );
 
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
