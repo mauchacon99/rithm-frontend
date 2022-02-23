@@ -616,9 +616,9 @@ export class StationComponent
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
   addFlowLogicRule(flowLogicRule: FlowLogicRule | null): void {
-    if (flowLogicRule){
-        const flowLogicStation = this.pendingFlowLogicRules.findIndex(
-          (flowRule) =>
+    if (flowLogicRule) {
+      const flowLogicStation = this.pendingFlowLogicRules.findIndex(
+        (flowRule) =>
           flowRule.destinationStationRithmID ===
             flowLogicRule.destinationStationRithmID &&
           flowRule.stationRithmId === flowLogicRule.stationRithmId
