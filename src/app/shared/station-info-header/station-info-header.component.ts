@@ -40,9 +40,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
   /** Field to change station name. */
   nameField!: Question;
 
-  /** Contains the name of current station. */
-  nameStation = '';
-
   /** Part of the new station ui. */
   @Input() viewNewStation = false;
 
@@ -78,7 +75,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const stationName = data.length > 0 ? data : 'Untitled Station';
         this.stationNameForm.controls['name'].setValue(stationName);
-        this.nameStation = data || this.stationName;
       });
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
