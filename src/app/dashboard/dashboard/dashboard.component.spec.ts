@@ -34,6 +34,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
+import { AddWidgetModalComponent } from '../widget-modal/add-widget-modal/add-widget-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -72,6 +74,7 @@ describe('DashboardComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(DocumentWidgetComponent),
         MockComponent(WidgetDrawerComponent),
+        MockComponent(AddWidgetModalComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -88,6 +91,7 @@ describe('DashboardComponent', () => {
         GridsterModule,
         FormsModule,
         MatInputModule,
+        MatDialogModule,
         RouterTestingModule.withRoutes([
           {
             path: 'dashboard/:dashboardId',
@@ -470,5 +474,36 @@ describe('DashboardComponent', () => {
     );
 
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
+  });
+
+  it('should call openDialog', () => {
+    component.viewNewDashboard = true;
+    component.editMode = true;
+    component.dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+    fixture.detectChanges();
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+
+    const btn = fixture.nativeElement.querySelector('#add-widget-button');
+    expect(btn).toBeTruthy();
+    btn.click();
+    expect(spyDialog).toHaveBeenCalledOnceWith(AddWidgetModalComponent);
   });
 });
