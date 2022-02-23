@@ -91,6 +91,7 @@ describe('StationWidgetDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetDrawerComponent);
     component = fixture.componentInstance;
+    component.questions = questions;
     fixture.detectChanges();
   });
 
@@ -411,5 +412,14 @@ describe('StationWidgetDrawerComponent', () => {
     ];
     component['checkStationColumns']();
     expect(component.stationColumns.length).toEqual(2);
+  });
+
+  it('should render message for show user this station not documents assigned', () => {
+    component.questions = [];
+    fixture.detectChanges();
+    const renderMessage = fixture.nativeElement.querySelector(
+      '#message-drawer-not-document-assigned'
+    );
+    expect(renderMessage).toBeTruthy();
   });
 });
