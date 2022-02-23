@@ -63,7 +63,7 @@
           id="error-loading-dashboard"
           *ngIf="errorLoadingDashboard"
         >
-          Unable to retrieve dashboard
+          Unable to retrieve dashboard.
         </div>
         <div
           class="text-center my-4"
@@ -141,7 +141,7 @@
               id="add-widget-button"
               data-testid="add-widget-button"
               class="bg-accent-800 text-secondary-50 drop-shadow-md"
-              style="margin-top: 1em"
+              style="margin-top: 0.5em; margin-bottom: 0.5em"
             >
               <i class="fas fa-plus"></i> Add Widget
             </button>
@@ -151,7 +151,7 @@
             id="error-loading-widgets"
             *ngIf="!dashboardData.widgets.length"
           >
-            Current dashboard has no widgets to display
+            Current dashboard has no widgets to display.
           </div>
           <gridster
             class="h-screen bg-transparent px-0 scrollbar"
