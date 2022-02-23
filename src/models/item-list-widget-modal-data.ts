@@ -1,19 +1,23 @@
-import { itemTypeWidgetModal } from './enums/item-type-widget-modal';
-
 /**
  * Represents the items of the documents, stations, groups tab in modal to add widgets.
  */
 export interface ItemListWidgetModal {
-  /** Id of the element according to the list type. */
-  rithmId: string;
-  /** Title. */
-  title: string;
-  /** Subtitle. */
-  subTitle: string;
-  /** Group. */
-  group: string;
-  /** Group type. */
-  groupType: string;
-  /** Item type to identify element (documents, stations or groups). */
-  itemType: itemTypeWidgetModal;
+  /** Document rithmId. */
+  documentRithmId?: string;
+  /** Station rithmId. */
+  stationRithmId?: string;
+  /** Group rithmId. */
+  groupRithmId?: string;
+  /** Station name. */
+  stationName?: string;
+  /** Group name. */
+  groupName?: string;
+  /** Whether the group is chained. */
+  isChainedGroup?: boolean;
+  /** Total documents. */
+  totalDocuments?: number;
+  /** Total station. */
+  totalStations?: number;
+  /** Total sub groups. */
+  totalSubGroups?: number;
 }
