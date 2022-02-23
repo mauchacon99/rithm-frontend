@@ -174,6 +174,7 @@
               <app-document-widget
                 *ngIf="item.widgetType === 'document-list'"
                 [documentRithmId]="item.data"
+                [editMode]="editMode"
               >
               </app-document-widget>
             </gridster-item>
