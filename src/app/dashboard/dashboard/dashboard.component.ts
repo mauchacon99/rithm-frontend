@@ -66,6 +66,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
 
+  /** Widget index of opened widget-drawer. */
+  widgetIndex!: number;
+
   /** Config grid. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
@@ -442,7 +445,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @returns Item id of the GridsterItem.
    */
   trackBy(index: number, item: GridsterItem): number {
-    return item.id;
+    return item.rithmId;
+  }
+
+  /**
+   * Set widgetIndex of widget-drawer.
+   *
+   * @param widgetIndex Index of widget that opened widget-drawer.
+   */
+  setWidgetIndex(widgetIndex: number): void {
+    this.widgetIndex = widgetIndex;
+  }
+
+  /** Remove widget on dashboardData for the index. */
+  removeWidgetIndex(): void {
+    this.dashboardData.widgets.splice(this.widgetIndex, 1);
   }
 
   /** Clean subscriptions. */

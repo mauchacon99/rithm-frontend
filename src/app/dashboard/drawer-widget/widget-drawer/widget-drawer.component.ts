@@ -1,7 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for widget drawer.
@@ -15,10 +22,19 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Emit widgetIndex to dashboard.component. */
+  @Output() setWidgetIndex = new EventEmitter<number>();
+
+  /** Emit event for delete widget in dashboard. */
+  @Output() deleteWidget = new EventEmitter();
+
   /** Whether the called widget-drawer. */
   drawerMode: 'stationWidget' = 'stationWidget';
 
-  constructor(private sidenavDrawerService: SidenavDrawerService) {}
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private popupService: PopupService
+  ) {}
 
   /**
    * Initial Method.
@@ -41,6 +57,33 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     if (this.drawerMode === 'stationWidget') {
       this.sidenavDrawerService.toggleDrawer(this.drawerMode);
     }
+  }
+
+  /**
+   * Show alert confirm widget delete.
+   *
+   */
+  async confirmWidgetDelete(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Delete Widget?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+    if (response) {
+      this.toggleDrawer();
+      this.deleteWidget.emit();
+    }
+  }
+
+  /**
+   * Event emit widgetIndex to dashboard.
+   *
+   * @param widgetIndex Widget index from station-widget-drawer.
+   */
+  eventWidgetIndex(widgetIndex: number): void {
+    this.setWidgetIndex.emit(widgetIndex);
   }
 
   /**

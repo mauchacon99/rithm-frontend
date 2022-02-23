@@ -14,7 +14,10 @@
         </button>
       </div>
     </div>
-    <app-station-widget-drawer *ngIf="drawerMode === 'stationWidget'">
+    <app-station-widget-drawer
+      *ngIf="drawerMode === 'stationWidget'"
+      (setWidgetIndex)="eventWidgetIndex($event)"
+    >
     </app-station-widget-drawer>
     <div class="w-full py-2 px-2 text-left">
       <button
@@ -24,6 +27,7 @@
         class="priority"
         id="delete-widget-button"
         data-testid="delete-widget-button"
+        (click)="confirmWidgetDelete()"
       >
         Delete Widget
       </button>

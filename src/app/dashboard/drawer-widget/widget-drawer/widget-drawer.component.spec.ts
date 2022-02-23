@@ -4,6 +4,8 @@ import { WidgetDrawerComponent } from './widget-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MockComponent } from 'ng-mocks';
 import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-widget-drawer.component';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -17,6 +19,7 @@ describe('WidgetDrawerComponent', () => {
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -68,5 +71,41 @@ describe('WidgetDrawerComponent', () => {
     expect(toggleButton).toBeTruthy();
     toggleButton.click();
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should display a confirmation pop up', async () => {
+    const confirmationData = {
+      title: 'Delete Widget?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    const btnDelete = fixture.nativeElement.querySelector(
+      '#delete-widget-button'
+    );
+    expect(btnDelete).toBeTruthy();
+    btnDelete.click();
+
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+  });
+
+  it('should call eventWidgetIndex and emit widgetIndex', async () => {
+    const spySetWidgetIndex = spyOn(component.setWidgetIndex, 'emit');
+    const spyEventWidgetIndex = spyOn(
+      component,
+      'eventWidgetIndex'
+    ).and.callThrough();
+    const widgetIndex = 1;
+
+    component.eventWidgetIndex(widgetIndex);
+    expect(spyEventWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
   });
 });

@@ -37,11 +37,18 @@ describe('StationWidgetDrawerComponent', () => {
       stationData,
       widgetIndex,
     });
+
+    const spySetWidgetIndex = spyOn(component.setWidgetIndex, 'emit');
+
     const expectStationData = JSON.parse(
       stationData
     ) as WidgetDrawerStationData;
+
+    component.ngOnInit();
+
     expect(component.stationRithmId).toEqual(expectStationData.stationRithmId);
     expect(component.stationColumns).toEqual(expectStationData.columns);
     expect(component.widgetIndex).toEqual(widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
   });
 });

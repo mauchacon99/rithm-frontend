@@ -26,7 +26,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { RoleDashboardMenu, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -419,5 +419,68 @@ describe('DashboardComponent', () => {
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
     });
+  });
+
+  it('should call setWidgetIndex', async () => {
+    const spySetWidgetIndex = spyOn(
+      component,
+      'setWidgetIndex'
+    ).and.callThrough();
+    const widgetIndex = 1;
+    component.setWidgetIndex(widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(component.widgetIndex).toBe(widgetIndex);
+  });
+
+  it('should remove a widget in dashboard', async () => {
+    const spyRemoveWidgetIndex = spyOn(
+      component,
+      'removeWidgetIndex'
+    ).and.callThrough();
+    const spySetWidgetIndex = spyOn(
+      component,
+      'setWidgetIndex'
+    ).and.callThrough();
+    const widgetIndex = 1;
+    const dashboardData: DashboardData = {
+      rithmId: 'DF362D34-25E0-49B8-9FA8-2B1349E9A42D',
+      name: 'Company Dashboard no delete!',
+      widgets: [
+        {
+          cols: 4,
+          rows: 2,
+          x: 8,
+          y: 0,
+          widgetType: WidgetType.StationGroup,
+          data: '{"documentRithmId":"07ce2489-b07e-48e2-a378-99e7f487aa0f"}',
+          minItemRows: 1,
+          maxItemRows: 1,
+          minItemCols: 3,
+          maxItemCols: 1,
+        },
+        {
+          cols: 4,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '',
+          minItemRows: 1,
+          maxItemRows: 1,
+          minItemCols: 3,
+          maxItemCols: 1,
+        },
+      ],
+      type: RoleDashboardMenu.Company,
+    };
+
+    component.dashboardData = dashboardData;
+    fixture.detectChanges();
+    expect(component.dashboardData.widgets.length).toEqual(2);
+    component.setWidgetIndex(widgetIndex);
+    component.removeWidgetIndex();
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(spyRemoveWidgetIndex).toHaveBeenCalledOnceWith();
+    expect(component.dashboardData.widgets.length).toEqual(1);
   });
 });
