@@ -1182,6 +1182,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
+    //Always allow movement when centerStationCount is greater than 0.
+    if (this.mapService.centerStationCount$.value > 0) {
+      return true;
+    }
+
     //Allow movement based on the axis being checked.
     if (isXAxis) {
       //If user is attempting to move left and is already outside the left edge.
