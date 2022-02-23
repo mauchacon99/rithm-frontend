@@ -110,8 +110,6 @@ export class MapSearchComponent {
       const drawer = document.getElementsByTagName('mat-drawer');
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
-      this.searchText = '';
-      this.filteredStations = [];
       //Close any open station option menus.
       this.mapService.matMenuStatus$.next(true);
       //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
@@ -126,8 +124,6 @@ export class MapSearchComponent {
         );
       }, 1);
     } else if (drawerItem instanceof Object && 'title' in drawerItem) {
-      this.searchText = '';
-      this.filteredStations = [];
       const dataInformationDrawer: StationGroupInfoDrawerData = {
         stationGroupRithmId: drawerItem.rithmId,
         stationGroupName: drawerItem.title,
@@ -143,5 +139,7 @@ export class MapSearchComponent {
         dataInformationDrawer
       );
     }
+    this.searchText = '';
+    this.filteredStations = [];
   }
 }

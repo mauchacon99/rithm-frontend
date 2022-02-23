@@ -17,3 +17,4 @@ export * from './rule-type.enum';
 export * from './role-dashboard-menu.enum';
 export * from './matMenu-type-enum';
 export * from './corner';
+export * from './columns-document-info';
