@@ -558,6 +558,26 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
+  it('should flow a document to previous stations', () => {
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789', '222-654-789', '321-456-987'],
+      documentRithmId: documentId,
+    };
+
+    service.flowDocumentToPreviousStation(dataExpect).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`;
+    const req = httpTestingController.expectOne(router);
+
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.url).toEqual(router);
+    expect(req.request.body).toEqual(dataExpect);
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
   it('should unassign a user to document via API', () => {
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const documentRithmId = 'E204F369-386F-4E41';
@@ -853,6 +873,7 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
   it('should update each station flow rules', () => {
     service
       .updateStationFlowLogicRule([flowLogicRule])

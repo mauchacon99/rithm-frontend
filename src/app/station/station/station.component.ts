@@ -29,7 +29,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
-
+import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
 /**
  * Main component for viewing a station.
  */
@@ -44,6 +44,10 @@ export class StationComponent
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
+
+  /** Indicate error when saving flow rule. */
+  @ViewChild(FlowLogicComponent, { static: false })
+  childFlowLogic!: FlowLogicComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -417,6 +421,12 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
+
+      // Update flow button text.
+      this.stationService.updateFlowButtonText(
+        this.stationInformation.rithmId,
+        this.stationInformation.flowButton
+      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -455,18 +465,20 @@ export class StationComponent
    *
    */
   saveFlowLogicRules(): void {
-    this.stationLoading = true;
+    this.childFlowLogic.ruleLoading = true;
     this.documentService
       .saveStationFlowLogic(this.pendingFlowLogicRules)
       .pipe(first())
       .subscribe({
         next: () => {
-          this.stationLoading = false;
           this.stationTabsIndex = 1;
           this.pendingFlowLogicRules = [];
+          this.childFlowLogic.ruleLoading = false;
         },
         error: (error: unknown) => {
           this.stationLoading = false;
+          this.stationTabsIndex = 1;
+          this.childFlowLogic.ruleError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
