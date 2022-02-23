@@ -2291,6 +2291,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
     //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.
     const dataInformationDrawer: StationInfoDrawerData = {
