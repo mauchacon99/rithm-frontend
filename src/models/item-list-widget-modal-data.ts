@@ -1,8 +1,10 @@
+import { itemTypeWidgetModal } from './enums/item-type-widget-modal';
+
 /**
  * Represents the items of the documents, stations, groups tab.
  */
 export interface ItemListWidgetModal {
-  /** Station rithm id. */
+  /** Id of the element according to the list type. */
   rithmId: string;
   /** Title. */
   title: string;
@@ -14,10 +16,4 @@ export interface ItemListWidgetModal {
   groupType: string;
   /** Item type. */
   itemType: itemTypeWidgetModal;
-}
-
-enum itemTypeWidgetModal {
-  Document = 'document',
-  Station = 'station',
-  Group = 'group',
 }
