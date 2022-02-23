@@ -387,6 +387,15 @@ describe('DashboardComponent', () => {
       component.updateDashboard();
       expect(spyDrawer).toHaveBeenCalled();
     });
+
+    it('should call toggleDrawerOnlyForWidgets', () => {
+      component.drawerContext = 'stationWidget';
+      component.dashboardData = dataDashboard;
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyMethod = spyOn(sidenavDrawer, 'toggleDrawer');
+      component['toggleDrawerOnlyForWidgets']();
+      expect(spyMethod).toHaveBeenCalled();
+    });
   });
 
   describe('Expand widget', () => {
