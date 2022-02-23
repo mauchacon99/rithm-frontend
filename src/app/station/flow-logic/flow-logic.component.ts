@@ -3,6 +3,7 @@ import {
   ConnectedStationInfo,
   FlowLogicRule,
   Rule,
+  RuleEquation,
   RuleType,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
@@ -71,12 +72,20 @@ export class FlowLogicComponent implements OnInit {
    *
    * @param type If the rule to add is AND/OR type.
    * @param connectedStationId The connected station to create the rule.
+   * @param editRule The rule to be edited, optional value.
    */
-  async openModal(type: string, connectedStationId: string): Promise<void> {
+  async openModal(
+    type: string,
+    connectedStationId: string,
+    editRule?: RuleEquation
+  ): Promise<void> {
     const dialog = await this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      data: this.rithmId,
+      data: {
+        stationId: this.rithmId,
+        editRule: editRule || null,
+      },
       disableClose: true,
     });
     if (dialog) {
