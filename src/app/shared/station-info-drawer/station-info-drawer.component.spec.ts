@@ -540,4 +540,15 @@ describe('StationInfoDrawerComponent', () => {
 
     expect(spyFlowButton).toHaveBeenCalledOnceWith(component.flowButtonName);
   });
+
+  it('should show status-allow-previous-loading when calling updateAllowPreviousButton', () => {
+    component.stationLoading = false;
+    component.updateAllowPreviousButton();
+    fixture.detectChanges();
+    expect(component.statusAllowPreviousLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#status-allow-previous-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
 });
