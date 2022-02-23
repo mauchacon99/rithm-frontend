@@ -70,24 +70,27 @@ export class MapSearchComponent {
    *
    */
   searchStations(): void {
-    const stationsStationGroups: (StationMapElement | StationGroupMapElement)[] = [
+    const stationsStationGroups: (
+      | StationMapElement
+      | StationGroupMapElement
+    )[] = [
       ...this.mapService.stationElements,
       ...this.mapService.stationGroupElements,
     ];
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
       : (this.filteredStations = stationsStationGroups.filter((item) => {
-          //If the item is a station
+          // If the item is a station
           if (item instanceof StationMapElement) {
             return item.stationName
-                .toLowerCase()
-                .includes(this.searchText.toString().toLowerCase());
-          //If the item is a station group.
+              .toLowerCase()
+              .includes(this.searchText.toString().toLowerCase());
+            // If the item is a station group.
           } else if (item instanceof StationGroupMapElement) {
             if (item.title) {
               return item.title
-                  .toLowerCase()
-                  .includes(this.searchText.toString().toLowerCase());
+                .toLowerCase()
+                .includes(this.searchText.toString().toLowerCase());
             } else {
               return;
             }
