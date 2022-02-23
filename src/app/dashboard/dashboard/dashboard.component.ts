@@ -25,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddWidgetModalComponent } from '../widget-modal/add-widget-modal/add-widget-modal.component';
+import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 
 /**
  * Main component for the dashboard screens.
@@ -477,7 +477,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Open dialog.
    */
   openDialog(): void {
-    this.dialog.open(AddWidgetModalComponent);
+    this.dialog.open(AddWidgetModalComponent, {
+      panelClass: ['w-11/12', 'sm:w-4/5'],
+      maxWidth: '1024px',
+    });
   }
 
   /** Clean subscriptions. */

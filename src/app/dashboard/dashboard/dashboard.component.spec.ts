@@ -34,7 +34,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
-import { AddWidgetModalComponent } from '../widget-modal/add-widget-modal/add-widget-modal.component';
+import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 describe('DashboardComponent', () => {
@@ -504,6 +504,6 @@ describe('DashboardComponent', () => {
     const btn = fixture.nativeElement.querySelector('#add-widget-button');
     expect(btn).toBeTruthy();
     btn.click();
-    expect(spyDialog).toHaveBeenCalledOnceWith(AddWidgetModalComponent);
+    expect(spyDialog).toHaveBeenCalled();
   });
 });
