@@ -68,10 +68,10 @@ export class MapSearchComponent {
             return item.stationName
               ? item.stationName
                   .toLowerCase()
-                  .includes(this.searchText.toLowerCase())
+                  .includes(this.searchText.toString().toLowerCase())
               : item.title
                   .toLowerCase()
-                  .includes(this.searchText.toLowerCase());
+                  .includes(this.searchText.toString().toLowerCase());
           }
         }));
   }
