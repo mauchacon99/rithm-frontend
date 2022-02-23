@@ -145,4 +145,26 @@ describe('DocumentWidgetComponent', () => {
       }
     );
   });
+
+  it('should show a gear icon in edit mode', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+      questions: [],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    const gearIcon = fixture.debugElement.nativeElement.querySelector(
+      '#gear-icon-document'
+    );
+    expect(gearIcon).toBeTruthy();
+  });
 });
