@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget[documentRithmId]',
+  selector: 'app-document-widget[documentRithmId][editMode]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
