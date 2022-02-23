@@ -14,6 +14,6 @@ export interface ItemListWidgetModal {
   group: string;
   /** Group type. */
   groupType: string;
-  /** Item type. */
+  /** Item type to identify element (documents, stations or groups). */
   itemType: itemTypeWidgetModal;
 }
