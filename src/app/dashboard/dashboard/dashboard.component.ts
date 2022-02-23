@@ -466,7 +466,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param item Item of the interface GridsterItem.
    * @returns Item id of the GridsterItem.
    */
-  trackBy(index: number, item: GridsterItem): number {
+  trackBy(index: number, item: GridsterItem): string {
     return item.rithmId;
   }
 

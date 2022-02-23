@@ -73,7 +73,7 @@ describe('WidgetDrawerComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
   });
 
-  it('should display a confirmation pop up', () => {
+  it('should display a confirmation Popup', () => {
     const confirmationData = {
       title: 'Delete Widget?',
       message: 'This cannot be undone!',
@@ -90,9 +90,45 @@ describe('WidgetDrawerComponent', () => {
     const btnDelete = fixture.nativeElement.querySelector(
       '#delete-widget-button'
     );
+
     expect(btnDelete).toBeTruthy();
     btnDelete.click();
-
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+  });
+
+  it('should emit event deleteWidget', async () => {
+    const widgetIndex = 1;
+    component.widgetIndex = widgetIndex;
+    component.drawerMode = 'stationWidget';
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    const infoDrawerSpy = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    const spyDeleteWidget = spyOn(component.deleteWidget, 'emit');
+
+    await component.confirmWidgetDelete();
+    expect(infoDrawerSpy).toHaveBeenCalled();
+    expect(popUpConfirmSpy).toHaveBeenCalled();
+    expect(spyDeleteWidget).toHaveBeenCalledOnceWith(widgetIndex);
+  });
+
+  it('should call setWidgetIndex', () => {
+    const widgetIndex = 1;
+
+    const spySetWidgetIndex = spyOn(
+      component,
+      'eventWidgetIndex'
+    ).and.callThrough();
+
+    component.eventWidgetIndex(widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(component.widgetIndex).toBe(widgetIndex);
   });
 });
