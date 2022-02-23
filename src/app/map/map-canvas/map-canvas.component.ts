@@ -2179,7 +2179,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               numberOfStations: stationGroup.stations.length,
               numberOfSubgroups: stationGroup.subStationGroups.length,
               stationGroupStatus: stationGroup.status,
-              isChained: false,
+              isChained: stationGroup.isChained,
             };
             //Open station group info drawer when clicked on station group boundary or name.
             this.sidenavDrawerService.openDrawer(
