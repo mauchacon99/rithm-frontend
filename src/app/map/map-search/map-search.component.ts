@@ -70,22 +70,31 @@ export class MapSearchComponent {
    *
    */
   searchStations(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const stationsStationGroups: any[] = [
+    const stationsStationGroups: (StationMapElement | StationGroupMapElement)[] = [
       ...this.mapService.stationElements,
       ...this.mapService.stationGroupElements,
     ];
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
       : (this.filteredStations = stationsStationGroups.filter((item) => {
-          if (item && (item.stationName || item.title)) {
+          //If the item is a station
+          if (item instanceof StationMapElement) {
             return item.stationName
-              ? item.stationName
+                .toLowerCase()
+                .includes(this.searchText.toString().toLowerCase());
+          //If the item is a station group.
+          } else if (item instanceof StationGroupMapElement) {
+            if (item.title) {
+              return item.title
                   .toLowerCase()
-                  .includes(this.searchText.toLowerCase())
-              : item.title
-                  .toLowerCase()
-                  .includes(this.searchText.toLowerCase());
+                  .includes(this.searchText.toString().toLowerCase());
+            } else {
+              return;
+            }
+          } else {
+            throw new Error(
+              'Item is not defined as a station or station group.'
+            );
           }
         }));
   }
