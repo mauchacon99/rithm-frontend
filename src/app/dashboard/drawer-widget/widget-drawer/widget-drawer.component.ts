@@ -22,11 +22,11 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** Emit widgetIndex to dashboard.component. */
-  @Output() setWidgetIndex = new EventEmitter<number>();
-
   /** Emit event for delete widget in dashboard. */
-  @Output() deleteWidget = new EventEmitter();
+  @Output() deleteWidget = new EventEmitter<number>();
+
+  /** Widget index of opened widget-drawer. */
+  widgetIndex!: number;
 
   /** Whether the called widget-drawer. */
   drawerMode: 'stationWidget' = 'stationWidget';
@@ -73,7 +73,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     });
     if (response) {
       this.toggleDrawer();
-      this.deleteWidget.emit();
+      this.deleteWidget.emit(this.widgetIndex);
     }
   }
 
@@ -83,7 +83,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    * @param widgetIndex Widget index from station-widget-drawer.
    */
   eventWidgetIndex(widgetIndex: number): void {
-    this.setWidgetIndex.emit(widgetIndex);
+    this.widgetIndex = widgetIndex;
   }
 
   /**

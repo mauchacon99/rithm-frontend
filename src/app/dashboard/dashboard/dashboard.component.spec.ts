@@ -472,26 +472,12 @@ describe('DashboardComponent', () => {
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
   });
 
-  it('should call setWidgetIndex', () => {
-    const spySetWidgetIndex = spyOn(
-      component,
-      'setWidgetIndex'
-    ).and.callThrough();
-    const widgetIndex = 1;
-    component.setWidgetIndex(widgetIndex);
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-    expect(component.widgetIndex).toBe(widgetIndex);
-  });
-
   it('should remove a widget in dashboard', () => {
     const spyRemoveWidgetIndex = spyOn(
       component,
       'removeWidgetIndex'
     ).and.callThrough();
-    const spySetWidgetIndex = spyOn(
-      component,
-      'setWidgetIndex'
-    ).and.callThrough();
+
     const widgetIndex = 1;
     const dashboardData: DashboardData = {
       rithmId: 'DF362D34-25E0-49B8-9FA8-2B1349E9A42D',
@@ -528,10 +514,8 @@ describe('DashboardComponent', () => {
     component.dashboardData = dashboardData;
     fixture.detectChanges();
     expect(component.dashboardData.widgets.length).toEqual(2);
-    component.setWidgetIndex(widgetIndex);
-    component.removeWidgetIndex();
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-    expect(spyRemoveWidgetIndex).toHaveBeenCalledOnceWith();
+    component.removeWidgetIndex(widgetIndex);
+    expect(spyRemoveWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
     expect(component.dashboardData.widgets.length).toEqual(1);
   });
 });

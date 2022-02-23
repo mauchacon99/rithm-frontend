@@ -95,17 +95,4 @@ describe('WidgetDrawerComponent', () => {
 
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
   });
-
-  it('should call eventWidgetIndex and emit widgetIndex', () => {
-    const spySetWidgetIndex = spyOn(component.setWidgetIndex, 'emit');
-    const spyEventWidgetIndex = spyOn(
-      component,
-      'eventWidgetIndex'
-    ).and.callThrough();
-    const widgetIndex = 1;
-
-    component.eventWidgetIndex(widgetIndex);
-    expect(spyEventWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-  });
 });
