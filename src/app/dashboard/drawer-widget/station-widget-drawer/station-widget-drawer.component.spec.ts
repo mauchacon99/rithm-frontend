@@ -418,8 +418,15 @@ describe('StationWidgetDrawerComponent', () => {
     component.questions = [];
     fixture.detectChanges();
     const renderMessage = fixture.nativeElement.querySelector(
-      '#message-drawer-not-document-assigned'
+      '#message-not-documents-assigned-to-station'
     );
     expect(renderMessage).toBeTruthy();
+  });
+
+  it('should no render message for show user this station not documents assigned', () => {
+    const renderMessage = fixture.nativeElement.querySelector(
+      '#message-not-documents-assigned-to-station'
+    );
+    expect(renderMessage).toBeFalsy();
   });
 });
