@@ -31,7 +31,7 @@
         class="priority"
         id="delete-widget-button"
         data-testid="delete-widget-button"
-        [disabled]="widgetIndex < 0"
+        [disabled]="widgetIndex === null"
         (click)="confirmWidgetDelete()"
       >
         Delete Widget

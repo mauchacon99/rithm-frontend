@@ -519,7 +519,7 @@ describe('DashboardComponent', () => {
     expect(component.dashboardData.widgets.length).toEqual(1);
   });
 
-  fit('should call trackBy and return id', () => {
+  it('should call trackBy and return id', () => {
     const rithmId = 'DF362D34-25E0-49B8-9FA8-2B1349E9A42D';
     const item = {
       rithmId,
