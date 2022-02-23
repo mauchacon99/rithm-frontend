@@ -475,7 +475,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param widgetIndex Index of widget that opened widget-drawer.
    */
-  removeWidgetIndex(widgetIndex:number): void {
+  removeWidgetIndex(widgetIndex: number): void {
     this.dashboardData.widgets.splice(widgetIndex, 1);
   }
 
