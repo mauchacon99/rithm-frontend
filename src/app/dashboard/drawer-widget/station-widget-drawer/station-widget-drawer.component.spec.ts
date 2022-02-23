@@ -412,4 +412,22 @@ describe('StationWidgetDrawerComponent', () => {
     component['checkStationColumns']();
     expect(component.stationColumns.length).toEqual(2);
   });
+
+  it('should show error in getStationQuestions', () => {
+    const spyError = spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component['getDocumentFields']();
+    fixture.detectChanges();
+    const error = fixture.debugElement.nativeElement.querySelector(
+      '#error-loading-columns'
+    );
+    expect(error).toBeTruthy();
+    expect(spyError).toHaveBeenCalled();
+  });
 });

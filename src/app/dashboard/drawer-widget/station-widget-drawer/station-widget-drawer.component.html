@@ -3,8 +3,14 @@
 <div *ngIf="isLoading" id="loading-indicator" class="mt-3">
   <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
 </div>
-
-<div *ngIf="!isLoading" id="content-drawer-station-widget">
+<div
+  class="text-error-500 text-center my-4"
+  id="error-loading-columns"
+  *ngIf="loadingError"
+>
+  Unable to retrieve data.
+</div>
+<div *ngIf="!isLoading && !loadingError" id="content-drawer-station-widget">
   <form [formGroup]="formColumns">
     <div formArrayName="columns">
       <div
