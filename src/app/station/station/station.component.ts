@@ -94,6 +94,9 @@ export class StationComponent
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
+  /** Edit mode toggle for station. */
+  editMode = false;
+
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
