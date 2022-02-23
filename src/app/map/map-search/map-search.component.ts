@@ -110,7 +110,7 @@ export class MapSearchComponent {
    */
   onBlur(): void {
     if (this.searchInput) {
-      this.placeHolderText = JSON.parse(JSON.stringify(this.searchText));
+      this.placeHolderText = JSON.parse(JSON.stringify(this.search.nativeElement.value));
       this.searchInput = false;
     }
   }
