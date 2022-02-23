@@ -431,7 +431,6 @@ describe('DashboardComponent', () => {
 
   it('should update dashboard widgets', () => {
     component.dashboardData = dataDashboard;
-    const spyMethod = spyOn(component, 'updateDashboard').and.callThrough();
     const editDataWidget = {
       widgetItem: {
         cols: 4,
@@ -453,7 +452,6 @@ describe('DashboardComponent', () => {
     expectDashboardData.widgets[0] = editDataWidget.widgetItem;
     component.updateDashboardWidget(editDataWidget);
     expect(component.dashboardData).toEqual(expectDashboardData);
-    expect(spyMethod).toHaveBeenCalledOnceWith();
   });
 
   it('should subscribe to DashboardService.updateDataWidget$', () => {

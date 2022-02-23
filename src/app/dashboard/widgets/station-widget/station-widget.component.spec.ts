@@ -3,11 +3,16 @@ import { of, throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import {
+  MockDashboardService,
   MockDocumentService,
   MockErrorService,
   MockPopupService,
 } from 'src/mocks';
-import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
+import {
+  ColumnsDocumentInfo,
+  DocumentGenerationStatus,
+  StationWidgetData,
+} from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
@@ -16,13 +21,15 @@ import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { SimpleChange } from '@angular/core';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MatTableModule } from '@angular/material/table';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
   const dataWidget =
     // eslint-disable-next-line max-len
-    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "priority"}, {"name": "name"}, {"name": "Field name 2"}]}';
+    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "name"}, {"name":"Test QuestionId","questionId":"37534-453543-453453"}]}';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -33,9 +40,11 @@ describe('StationWidgetComponent', () => {
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
       ],
+      imports: [MatTableModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
@@ -394,5 +403,36 @@ describe('StationWidgetComponent', () => {
     btnEdit.click();
     expect(component.toggleEditStation).toHaveBeenCalled();
     expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
+
+  it('should get name of the column', () => {
+    expect(component.getColumnBasicName(ColumnsDocumentInfo.Name)).toEqual(
+      'Document'
+    );
+  });
+
+  it('should be parse data of the columns widget', () => {
+    spyOnProperty(component, 'dataWidget').and.returnValue(dataWidget);
+    const expectColumnsWidget = JSON.parse(dataWidget)?.columns;
+    component.parseDataColumnsWidget();
+    expect(component.columnsAllField).toEqual(expectColumnsWidget);
+    expect(component.columnsFieldPetition).toEqual([
+      expectColumnsWidget[1]?.questionId,
+    ]);
+    expect(component.columnsToDisplayTable).toEqual([
+      expectColumnsWidget[0]?.name,
+      expectColumnsWidget[1]?.questionId,
+      'viewDocument',
+    ]);
+  });
+
+  it('should be parse data of the columns widget when columns is empty', () => {
+    const jsonStringData =
+      '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": []}';
+    spyOnProperty(component, 'dataWidget').and.returnValue(jsonStringData);
+    component.parseDataColumnsWidget();
+    expect(component.columnsFieldPetition.length).toEqual(0);
+    expect(component.columnsAllField.length).toEqual(0);
+    expect(component.columnsToDisplayTable).toEqual(['name', 'viewDocument']);
   });
 });

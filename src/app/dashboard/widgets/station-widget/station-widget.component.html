@@ -137,25 +137,25 @@
 <!--Table documents-->
 <ng-template #tableDocuments let-documents="documents">
   <table mat-table [dataSource]="documents" class="mat-elevation-z8 w-full">
-    <ng-container [matColumnDef]="column.questionId ? column.questionId : column.name"
+    <ng-container [matColumnDef]="column.questionId ? column?.questionId : column?.name"
                   *ngFor="let column of columnsAllField">
-      <ng-container *ngIf="!column.questionId">
+      <ng-container *ngIf="!column?.questionId">
         <th mat-header-cell *matHeaderCellDef>
-          <span class="font-semibold truncate">{{getColumnBasicName(column.name) | uppercase}}</span>
+          <span class="font-semibold truncate">{{getColumnBasicName(column?.name) | uppercase}}</span>
         </th>
         <td mat-cell *matCellDef="let element" class="min-w-[150px] px-2">
           <ng-container *ngTemplateOutlet="tableColumnBasic;
-          context: { column: column.name, document: element}">
+          context: { column: column?.name, document: element}">
           </ng-container>
         </td>
       </ng-container>
-      <ng-container *ngIf="column.questionId">
+      <ng-container *ngIf="column?.questionId">
         <th mat-header-cell *matHeaderCellDef>
-          <span class="font-semibold truncate">{{column.name | uppercase}}</span>
+          <span class="font-semibold truncate">{{column?.name | uppercase}}</span>
         </th>
         <td mat-cell *matCellDef="let element" class="min-w-[150px] px-2">
           <ng-container *ngTemplateOutlet="tableColumnQuestion;
-          context: { column: column.questionId, document: element}">
+          context: { column: column?.questionId, document: element}">
           </ng-container>
         </td>
       </ng-container>
@@ -163,7 +163,7 @@
 
     <ng-container *ngIf="!columnsAllField.length" [matColumnDef]="'name'">
       <th mat-header-cell *matHeaderCellDef class="font-semibold truncate">DOCUMENT</th>
-      <td mat-cell class="min-w-[150px]" *matCellDef="let element"> {{element.name}} </td>
+      <td mat-cell class="min-w-[150px]" *matCellDef="let element"> {{element?.name}} </td>
     </ng-container>
 
     <ng-container [matColumnDef]="'viewDocument'">
@@ -171,7 +171,7 @@
       <td mat-cell *matCellDef="let element">
         <div class="text-right w-full">
           <button
-            (click)="viewDocument(element.rithmId)"
+            (click)="viewDocument(element?.rithmId)"
             mat-icon-button
             data-testid="show-document-widget"
             id="show-document-widget"
@@ -193,24 +193,24 @@
 <ng-template #tableColumnBasic let-column="column" let-document="document">
   <div [ngSwitch]="column">
     <div *ngSwitchCase="columnsDocumentInfo.AssignedUser">
-      <div *ngIf="document.assignedUser">
+      <div *ngIf="document?.assignedUser">
         <div class="flex flex-col justify-center">
           <app-user-avatar
-            [firstName]="document.assignedUser.firstName"
-            [lastName]="document.assignedUser.lastName"
+            [firstName]="document?.assignedUser?.firstName"
+            [lastName]="document?.assignedUser?.lastName"
           >
           </app-user-avatar>
         </div>
       </div>
-      <div *ngIf="!document.assignedUser" class="text-xs">
+      <div *ngIf="!document?.assignedUser" class="text-xs">
         None
       </div>
     </div>
     <div *ngSwitchCase="columnsDocumentInfo.TimeInStation" class="text-xs">
-      {{ getElapsedTime(document.flowedTimeUTC) }}
+      {{ getElapsedTime(document?.flowedTimeUTC) }}
     </div>
     <div *ngSwitchCase="columnsDocumentInfo.LastUpdated" class="text-xs">
-      {{ getElapsedTime(document.lastUpdatedUTC) }}
+      {{ getElapsedTime(document?.lastUpdatedUTC) }}
     </div>
     <div *ngSwitchCase="columnsDocumentInfo.Priority" class="text-xs">
       <i class="fas text-lg text-secondary-400 fa-exclamation-triangle"></i>
@@ -223,56 +223,56 @@
 
 <!--Template for show questions columns of the document-->
 <ng-template #tableColumnQuestion let-column="column" let-document="document">
-  <ng-container *ngFor="let questions of document.questions[0].questions">
-    <div *ngIf="questions.rithmId === column">
-      <div [ngSwitch]="questions.questionType">
+  <ng-container *ngFor="let questions of document?.questions[0]?.questions">
+    <div *ngIf="questions?.rithmId === column">
+      <div [ngSwitch]="questions?.questionType">
         <p *ngSwitchCase="questionFieldType.CheckList" class="text-xs">
-                <span *ngFor="let answer of questions.answer?.asArray">
+                <span *ngFor="let answer of questions?.answer?.asArray">
                   <i
                     class="fas"
                     [ngClass]="
-                      answer.isChecked
+                      answer?.isChecked
                         ? 'fa-check-square text-accent-500'
                         : 'fa-square text-secondary-500'
                     "
                   ></i>
-                  - {{ answer.value }}<br />
+                  - {{ answer?.value }}<br />
                 </span>
         </p>
         <p *ngSwitchCase="questionFieldType.MultiSelect" class="text-xs">
-                <span *ngFor="let answer of questions.answer?.asArray">
+                <span *ngFor="let answer of questions?.answer?.asArray">
                   <i
                     class="fas"
                     [ngClass]="
-                      answer.isChecked
+                      answer?.isChecked
                         ? 'fa-check-square text-accent-500'
                         : 'fa-square text-secondary-500'
                     "
                   ></i>
                   -
-                  {{ answer.value }}
+                  {{ answer?.value }}
                   <br />
                 </span>
         </p>
         <p *ngSwitchCase="questionFieldType.Select" class="text-xs">
-                <span *ngFor="let answer of questions.answer?.asArray">
+                <span *ngFor="let answer of questions?.answer?.asArray">
                   <i
                     class="fas"
                     [ngClass]="
-                      answer.isChecked
+                      answer?.isChecked
                         ? 'fa-check-square text-accent-500'
                         : 'fa-square text-secondary-500'
                     "
                   ></i>
-                  - {{ answer.value }} <br />
+                  - {{ answer?.value }} <br />
                 </span>
         </p>
         <p *ngSwitchCase="'instructions'" class="text-xs">
-          {{ questions.prompt }}
+          {{ questions?.prompt }}
         </p>
         <p *ngSwitchDefault class="text-xs">
           {{
-          questions.answer?.value ||
+          questions?.answer?.value ||
           "NA"
           }}
         </p>

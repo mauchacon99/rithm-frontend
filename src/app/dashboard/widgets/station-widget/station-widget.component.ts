@@ -18,7 +18,6 @@ import {
   ColumnsLogicDocument,
   ColumnsDocumentInfo,
   QuestionFieldType,
-  Question,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -143,9 +142,21 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
     this.getStationWidgetDocuments();
   }
 
+  /**
+   * Detect changes of this component.
+   *
+   * @param changes Object of the properties in this component.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.editMode && this.isDocument) {
+      this.viewDocument('', true);
+    }
+  }
+
   /** Parse data of columns widget. */
   parseDataColumnsWidget(): void {
     this.columnsToDisplayTable = [];
+    this.columnsFieldPetition = [];
     this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
     this.columnsAllField.filter((data: ColumnFieldsWidget) => {
       if (data.questionId) {
@@ -159,17 +170,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
       this.columnsToDisplayTable.push('name');
     }
     this.columnsToDisplayTable.push('viewDocument');
-  }
-
-  /**
-   * Detect changes of this component.
-   *
-   * @param changes Object of the properties in this component.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.editMode && this.isDocument) {
-      this.viewDocument('', true);
-    }
   }
 
   /**
@@ -300,7 +300,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
     const nameDom = this.dashboardService.columnsDocumentInfo.find(
       (column) => column.key === name
     ) as ColumnsLogicDocument;
-    return nameDom.name;
+    return nameDom?.name;
   }
 
   /** Clean subscriptions. */
