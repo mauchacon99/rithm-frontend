@@ -12,7 +12,7 @@ import {
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationColumnWidget, StationWidgetData } from 'src/models';
+import { ColumnFieldsWidget, StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
@@ -49,7 +49,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   stationRithmId = '';
 
   /** Columns for list the widget. */
-  columnsAllField: StationColumnWidget[] = [];
+  columnsAllField: ColumnFieldsWidget[] = [];
 
   /** Columns for petition. */
   columnsFieldPetition: string[] = [];
@@ -97,7 +97,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit(): void {
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
     this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
-    this.columnsAllField.filter((data: StationColumnWidget) => {
+    this.columnsAllField.filter((data: ColumnFieldsWidget) => {
       if (data.questionId !== undefined)
         this.columnsFieldPetition.push(data.questionId);
     });
