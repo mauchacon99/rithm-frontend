@@ -906,4 +906,81 @@ describe('FlowLogicComponent', () => {
       expect(loadingRules).toBeTruthy();
     });
   });
+
+  describe('Translate operators', () => {
+    it('should translate the operator GreaterThan', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.GreaterThan
+      );
+      expect(translatorResponse).toEqual('Is Greater Than');
+    });
+
+    it('should translate the operator LesserThan', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.LesserThan
+      );
+      expect(translatorResponse).toEqual('Is Lesser Than');
+    });
+
+    it('should translate the operator GreaterOrEqual', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.GreaterOrEqual
+      );
+      expect(translatorResponse).toEqual('Is Greater or Equal to');
+    });
+
+    it('should translate the operator LesserOrEqual', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.LesserOrEqual
+      );
+      expect(translatorResponse).toEqual('Is Lesser or Equal to');
+    });
+
+    it('should translate the operator EqualTo', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.EqualTo
+      );
+      expect(translatorResponse).toEqual('Is Equal To');
+    });
+
+    it('should translate the operator NotEqualTo', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.NotEqualTo
+      );
+      expect(translatorResponse).toEqual('Is Not Equal To');
+    });
+
+    it('should translate the operator Before', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.Before
+      );
+      expect(translatorResponse).toEqual('Is Before');
+    });
+
+    it('should translate the operator After', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.After
+      );
+      expect(translatorResponse).toEqual('Is After');
+    });
+
+    it('should translate the operator Contains', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.Contains
+      );
+      expect(translatorResponse).toEqual('Contains');
+    });
+
+    it('should translate the operator NotContains', () => {
+      const translatorResponse = component.translateOperator(
+        OperatorType.NotContains
+      );
+      expect(translatorResponse).toEqual('Does not contains');
+    });
+
+    it('should translate the operator On', () => {
+      const translatorResponse = component.translateOperator(OperatorType.On);
+      expect(translatorResponse).toEqual('Is On');
+    });
+  });
 });
