@@ -36,7 +36,13 @@ import { DocumentService } from 'src/app/core/document.service';
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
-  const DIALOG_TEST_DATA = '34904ac2-6bdd-4157-a818-50ffb37fdfbc';
+
+  const DIALOG_TEST_DATA = {
+    /** The station rithmId. */
+    stationId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+    /** The data of the equation of the rule to be edited. */
+    editRule: null,
+  };
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
@@ -79,7 +85,7 @@ describe('RuleModalComponent', () => {
   });
 
   it('should be stationRithmId to equal MAT_DIALOG_DATA', () => {
-    expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA);
+    expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA.stationId);
   });
 
   it('should call the method that returns the questions of a station.', () => {
