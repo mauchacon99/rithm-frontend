@@ -472,7 +472,7 @@ describe('DashboardComponent', () => {
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
   });
 
-  it('should call setWidgetIndex', async () => {
+  it('should call setWidgetIndex', () => {
     const spySetWidgetIndex = spyOn(
       component,
       'setWidgetIndex'
@@ -483,7 +483,7 @@ describe('DashboardComponent', () => {
     expect(component.widgetIndex).toBe(widgetIndex);
   });
 
-  it('should remove a widget in dashboard', async () => {
+  it('should remove a widget in dashboard', () => {
     const spyRemoveWidgetIndex = spyOn(
       component,
       'removeWidgetIndex'

@@ -73,7 +73,7 @@ describe('WidgetDrawerComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
   });
 
-  it('should display a confirmation pop up', async () => {
+  it('should display a confirmation pop up', () => {
     const confirmationData = {
       title: 'Delete Widget?',
       message: 'This cannot be undone!',
@@ -96,7 +96,7 @@ describe('WidgetDrawerComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
   });
 
-  it('should call eventWidgetIndex and emit widgetIndex', async () => {
+  it('should call eventWidgetIndex and emit widgetIndex', () => {
     const spySetWidgetIndex = spyOn(component.setWidgetIndex, 'emit');
     const spyEventWidgetIndex = spyOn(
       component,
