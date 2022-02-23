@@ -389,11 +389,19 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggleDrawerOnlyForWidgets', () => {
-      component.drawerContext = 'stationWidget';
       component.dashboardData = dataDashboard;
+      component.drawerContext = 'stationWidget';
+      spyOn(
+        TestBed.inject(DashboardService),
+        'updateOrganizationDashboard'
+      ).and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyMethod = spyOn(sidenavDrawer, 'toggleDrawer');
-      component['toggleDrawerOnlyForWidgets']();
+      component.updateDashboard(false);
       expect(spyMethod).toHaveBeenCalled();
     });
   });
