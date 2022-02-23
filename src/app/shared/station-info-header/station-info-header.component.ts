@@ -78,7 +78,7 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const stationName = data.length > 0 ? data : 'Untitled Station';
         this.stationNameForm.controls['name'].setValue(stationName);
-        this.nameStation = data.length > 0 ? data : this.stationName;
+        this.nameStation = data || this.stationName;
       });
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
