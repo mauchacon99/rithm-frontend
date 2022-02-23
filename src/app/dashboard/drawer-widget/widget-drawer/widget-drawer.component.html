@@ -16,8 +16,10 @@
     </div>
     <!--     body drawer-->
     <div class="px-3 pb-4">
-      <app-station-widget-drawer *ngIf="drawerMode === 'stationWidget'"
-      (setWidgetIndex)="eventWidgetIndex($event)">
+      <app-station-widget-drawer
+        *ngIf="drawerMode === 'stationWidget'"
+        (setWidgetIndex)="eventWidgetIndex($event)"
+      >
       </app-station-widget-drawer>
     </div>
 

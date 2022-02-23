@@ -7,7 +7,7 @@ import {
   Question,
   QuestionFieldType,
   WidgetType,
-  OptionsSelectWidgetDrawer
+  OptionsSelectWidgetDrawer,
 } from 'src/models';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
@@ -417,6 +417,8 @@ describe('StationWidgetDrawerComponent', () => {
     TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
     const spySetWidgetIndex = spyOn(component.setWidgetIndex, 'emit');
     component.ngOnInit();
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(dataEditWidget.widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(
+      dataEditWidget.widgetIndex
+    );
   });
 });
