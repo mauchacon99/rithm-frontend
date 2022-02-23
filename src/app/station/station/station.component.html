@@ -242,6 +242,13 @@
                     [viewNewStation]="viewNewStation"
                     *ngIf="!stationLoading"
                   ></app-document-info-header>
+
+                  <div class="gridster-container pb-4 w-full">
+                    <gridster
+                      class="p-0 bg-transparent h-screen"
+                      [options]="options"
+                    ></gridster>
+                  </div>
                 </ng-template>
               </mat-tab>
               <!-- Flow Logic Tab -->
@@ -258,9 +265,6 @@
               </mat-tab>
             </mat-tab-group>
           </form>
-          <div class="gridster-container flex flex-grow pb-4 w-full">
-            <gridster class="p-0 bg-transparent" [options]="options"></gridster>
-          </div>
         </div>
         <!-- right column -->
         <div class="hidden lg:inline-block col-span-2">right column</div>
