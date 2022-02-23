@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { DocumentWidget } from 'src/models';
+import { DocumentWidget, QuestionFieldType } from 'src/models';
 import { Router } from '@angular/router';
 
 /**
@@ -17,7 +17,7 @@ export class DocumentWidgetComponent implements OnInit {
   /** Document rithmId. */
   @Input() documentRithmId = '';
 
-  /** Data to document list for widget. */
+  /** Data document list for widget. */
   dataDocumentWidget!: DocumentWidget;
 
   /** Loading document widget. */
@@ -25,6 +25,9 @@ export class DocumentWidgetComponent implements OnInit {
 
   /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
+
+  /** The question field type. */
+  questionFieldType = QuestionFieldType;
 
   constructor(
     private errorService: ErrorService,
@@ -66,7 +69,8 @@ export class DocumentWidgetComponent implements OnInit {
       });
   }
 
-  /** Navigate the user to the document page.
+  /**
+   * Navigate the user to the document page.
    *
    * @param stationId The Id of the station in which to view the document.
    */

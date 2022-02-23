@@ -61,79 +61,19 @@
         </div>
       </div>
     </div>
-    <!--    Column Headers-->
-    <div class="grid grid-cols-12 text-xs text-secondary-500 py-2">
-      <p class="col-span-5 overline-font truncate">Document</p>
-      <p class="col-span-2 overline-font truncate text-center">Assigned</p>
-      <p class="col-span-2 overline-font truncate text-center">Priority</p>
-      <p class="col-span-3 sm:col-span-2 overline-font truncate">
-        Time in Station
-      </p>
-    </div>
-    <!--    Row Container-->
     <div class="flex-grow overflow-auto scrollbar">
-      <div
-        *ngIf="!dataStationWidget.documents.length"
-        class="text-center my-4"
-        id="no-docs-message"
-      >
-        No documents found in station.
-      </div>
-      <div
-        *ngIf="dataStationWidget"
-        class="grid grid-cols-12 text-secondary-500 items-center"
-      >
-        <ng-container *ngFor="let document of dataStationWidget.documents">
-          <div
-            class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-primary-500"
-          >
-            {{ document.name || 'Untitled Document' }}
-          </div>
-          <div
-            *ngIf="document.assignedUser"
-            class="col-span-2 h-[49px] border-solid border-b border-b-primary-100"
-          >
-            <div class="flex justify-center mt-2">
-              <app-user-avatar
-                [firstName]="document.assignedUser.firstName"
-                [lastName]="document.assignedUser.lastName"
-              >
-              </app-user-avatar>
-            </div>
-          </div>
-          <div
-            *ngIf="!document.assignedUser"
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-center"
-          >
-            None
-          </div>
-          <div
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs justify-center"
-          >
-            <div class="flex justify-center">
-              <i class="fas fa-exclamation-triangle"></i>
-              <!--      {{ document.priority }}-->
-            </div>
-          </div>
-          <div
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate text-primary-500"
-          >
-            {{ getElapsedTime(document.flowedTimeUTC) }}
-          </div>
-          <div
-            class="col-span-1 border-solid border-b border-b-primary-100 pb-2 text-center"
-          >
-            <button
-              (click)="viewDocument(document.rithmId)"
-              mat-icon-button
-              data-testid="show-document-widget"
-              id="show-document-widget"
-              [disabled]="editMode"
-            >
-              <i class="fas fa-angle-double-right"></i>
-            </button>
-          </div>
+      <div *ngIf="dataStationWidget">
+        <div
+          *ngIf="!dataStationWidget.documents.length"
+          class="text-center my-4"
+          id="no-docs-message"
+        >
+          No documents found in station.
+        </div>
+        <ng-container *ngIf="dataStationWidget.documents.length">
+          <ng-container *ngTemplateOutlet="tableDocuments; context: dataStationWidget"></ng-container>
         </ng-container>
+
       </div>
     </div>
   </div>
@@ -193,3 +133,150 @@
     ></app-document>
   </div>
 </div>
+
+<!--Table documents-->
+<ng-template #tableDocuments let-documents="documents">
+  <table mat-table [dataSource]="documents" class="mat-elevation-z8 w-full">
+    <ng-container [matColumnDef]="column.questionId ? column.questionId : column.name"
+                  *ngFor="let column of columnsAllField">
+      <ng-container *ngIf="!column.questionId">
+        <th mat-header-cell *matHeaderCellDef>
+          <span class="font-semibold truncate">{{getColumnBasicName(column.name) | uppercase}}</span>
+        </th>
+        <td mat-cell *matCellDef="let element" class="min-w-[150px] px-2">
+          <ng-container *ngTemplateOutlet="tableColumnBasic;
+          context: { column: column.name, document: element}">
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container *ngIf="column.questionId">
+        <th mat-header-cell *matHeaderCellDef>
+          <span class="font-semibold truncate">{{column.name | uppercase}}</span>
+        </th>
+        <td mat-cell *matCellDef="let element" class="min-w-[150px] px-2">
+          <ng-container *ngTemplateOutlet="tableColumnQuestion;
+          context: { column: column.questionId, document: element}">
+          </ng-container>
+        </td>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!columnsAllField.length" [matColumnDef]="'name'">
+      <th mat-header-cell *matHeaderCellDef class="font-semibold truncate">DOCUMENT</th>
+      <td mat-cell class="min-w-[150px]" *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="'viewDocument'">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <div class="text-right w-full">
+          <button
+            (click)="viewDocument(element.rithmId)"
+            mat-icon-button
+            data-testid="show-document-widget"
+            id="show-document-widget"
+            [disabled]="editMode"
+          >
+            <i class="fas text-lg text-secondary-400 fa-angle-double-right"></i>
+          </button>
+        </div>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayTable"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplayTable;"></tr>
+  </table>
+</ng-template>
+
+<!--template for show columns basic of the document-->
+<ng-template #tableColumnBasic let-column="column" let-document="document">
+  <div [ngSwitch]="column">
+    <div *ngSwitchCase="columnsDocumentInfo.AssignedUser">
+      <div *ngIf="document.assignedUser">
+        <div class="flex flex-col justify-center">
+          <app-user-avatar
+            [firstName]="document.assignedUser.firstName"
+            [lastName]="document.assignedUser.lastName"
+          >
+          </app-user-avatar>
+        </div>
+      </div>
+      <div *ngIf="!document.assignedUser" class="text-xs">
+        None
+      </div>
+    </div>
+    <div *ngSwitchCase="columnsDocumentInfo.TimeInStation" class="text-xs">
+      {{ getElapsedTime(document.flowedTimeUTC) }}
+    </div>
+    <div *ngSwitchCase="columnsDocumentInfo.LastUpdated" class="text-xs">
+      {{ getElapsedTime(document.lastUpdatedUTC) }}
+    </div>
+    <div *ngSwitchCase="columnsDocumentInfo.Priority" class="text-xs">
+      <i class="fas text-lg text-secondary-400 fa-exclamation-triangle"></i>
+    </div>
+    <div *ngSwitchDefault class="text-xs">
+      {{document[column]}}
+    </div>
+  </div>
+</ng-template>
+
+<!--Template for show questions columns of the document-->
+<ng-template #tableColumnQuestion let-column="column" let-document="document">
+  <ng-container *ngFor="let questions of document.questions[0].questions">
+    <div *ngIf="questions.rithmId === column">
+      <div [ngSwitch]="questions.questionType">
+        <p *ngSwitchCase="questionFieldType.CheckList" class="text-xs">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked
+                        ? 'fa-check-square text-accent-500'
+                        : 'fa-square text-secondary-500'
+                    "
+                  ></i>
+                  - {{ answer.value }}<br />
+                </span>
+        </p>
+        <p *ngSwitchCase="questionFieldType.MultiSelect" class="text-xs">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked
+                        ? 'fa-check-square text-accent-500'
+                        : 'fa-square text-secondary-500'
+                    "
+                  ></i>
+                  -
+                  {{ answer.value }}
+                  <br />
+                </span>
+        </p>
+        <p *ngSwitchCase="questionFieldType.Select" class="text-xs">
+                <span *ngFor="let answer of questions.answer?.asArray">
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      answer.isChecked
+                        ? 'fa-check-square text-accent-500'
+                        : 'fa-square text-secondary-500'
+                    "
+                  ></i>
+                  - {{ answer.value }} <br />
+                </span>
+        </p>
+        <p *ngSwitchCase="'instructions'" class="text-xs">
+          {{ questions.prompt }}
+        </p>
+        <p *ngSwitchDefault class="text-xs">
+          {{
+          questions.answer?.value ||
+          "NA"
+          }}
+        </p>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

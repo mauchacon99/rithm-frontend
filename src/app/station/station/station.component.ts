@@ -29,7 +29,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 /**
  * Main component for viewing a station.
  */
@@ -420,6 +420,12 @@ export class StationComponent
       this.stationService.updateStationGeneralInstructions(
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
+      ),
+
+      // Update flow button text.
+      this.stationService.updateFlowButtonText(
+        this.stationInformation.rithmId,
+        this.stationInformation.flowButton
       ),
     ];
 

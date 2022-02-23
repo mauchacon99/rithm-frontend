@@ -12,12 +12,20 @@ import {
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { Question, StationColumnWidget, StationWidgetData } from 'src/models';
+import {
+  ColumnFieldsWidget,
+  StationWidgetData,
+  ColumnsLogicDocument,
+  ColumnsDocumentInfo,
+  QuestionFieldType,
+  Question,
+} from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
+import { DashboardService } from '../../dashboard.service';
 
 /**
  * Component for Station widget.
@@ -33,8 +41,27 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
-  /** Data for station widget. */
-  @Input() dataWidget = '';
+  private _dataWidget = '';
+
+  /**
+   * Set data for station widget.
+   */
+  @Input() set dataWidget(value: string) {
+    this._dataWidget = value;
+    if (this.stationRithmId) {
+      this.parseDataColumnsWidget();
+      this.getStationWidgetDocuments();
+    }
+  }
+
+  /**
+   * Get data for station widget.
+   *
+   * @returns Data for station widget.
+   */
+  get dataWidget(): string {
+    return this._dataWidget;
+  }
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<void>();
@@ -49,13 +76,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   stationRithmId = '';
 
   /** Columns for list the widget. */
-  columnsAllField: StationColumnWidget[] = [];
+  columnsAllField: ColumnFieldsWidget[] = [];
 
   /** Columns for petition. */
   columnsFieldPetition: string[] = [];
 
   /** To set its expanded the widget. */
   isExpandWidget = false;
+
+  /** Key names of the columns to mat-table. */
+  columnsToDisplayTable: string[] = [];
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
@@ -83,12 +113,19 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   /** Type of drawer opened. */
   drawerContext!: string;
 
+  /** The enum question field type. */
+  questionFieldType = QuestionFieldType;
+
+  /** The enum document columns info. */
+  columnsDocumentInfo = ColumnsDocumentInfo;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private dashboardService: DashboardService
   ) {}
 
   /**
@@ -96,22 +133,32 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    */
   ngOnInit(): void {
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
-    this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
-    this.columnsAllField.filter((data: StationColumnWidget) => {
-      if (data.questionId !== undefined)
-        this.columnsFieldPetition.push(data.questionId);
-    });
+    this.parseDataColumnsWidget();
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
 
-    if (this.columnsFieldPetition.length) {
-      this.getStationWidgetDocuments();
-    } else {
-      this.setColumnsDocument();
+    this.getStationWidgetDocuments();
+  }
+
+  /** Parse data of columns widget. */
+  parseDataColumnsWidget(): void {
+    this.columnsToDisplayTable = [];
+    this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
+    this.columnsAllField.filter((data: ColumnFieldsWidget) => {
+      if (data.questionId) {
+        this.columnsFieldPetition.push(data.questionId);
+        this.columnsToDisplayTable.push(data.questionId);
+      } else {
+        this.columnsToDisplayTable.push(data.name);
+      }
+    });
+    if (!this.columnsAllField.length) {
+      this.columnsToDisplayTable.push('name');
     }
+    this.columnsToDisplayTable.push('viewDocument');
   }
 
   /**
@@ -139,8 +186,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
           this.isLoading = false;
           this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
-          this.setColumnsDocument();
-          console.log(this.columnsFieldPetition, dataStationWidget);
         },
         error: (error: unknown) => {
           this.failedLoadWidget = true;
@@ -151,21 +196,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
           );
         },
       });
-  }
-
-  /** Filter columns to show in dom. */
-  setColumnsDocument(): void {
-    const data1: Question[] = [];
-    this.dataStationWidget.documents.map((document) => {
-      document.questions.map((question, index) => {
-        if (
-          this.columnsFieldPetition.includes(question.questions[index].rithmId)
-        ) {
-          data1.push(question.questions[index]);
-        }
-      });
-    });
-    console.log('data1', data1);
   }
 
   /**
@@ -258,6 +288,19 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    */
   get isDrawerOpen(): boolean {
     return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
+   * Get specific name of column document when is not have questionId.
+   *
+   * @param name String, name of the column to search specific value.
+   * @returns String to show name of the document in dom.
+   */
+  getColumnBasicName(name: string): string {
+    const nameDom = this.dashboardService.columnsDocumentInfo.find(
+      (column) => column.key === name
+    ) as ColumnsLogicDocument;
+    return nameDom.name;
   }
 
   /** Clean subscriptions. */
