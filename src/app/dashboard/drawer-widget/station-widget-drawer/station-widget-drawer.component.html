@@ -5,7 +5,10 @@
 </div>
 
 <div *ngIf="!isLoading" id="content-drawer-station-widget">
-  <div *ngIf="!questions.length; else selectDrawer" id="message-not-documents-assigned-to-station">
+  <div
+    *ngIf="!questions.length; else selectDrawer"
+    id="message-not-documents-assigned-to-station"
+  >
     <p class="text-sm">
       This station has no documents and therefore the fields to be assigned
       cannot be displayed.
