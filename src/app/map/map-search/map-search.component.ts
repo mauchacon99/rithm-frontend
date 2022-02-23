@@ -80,7 +80,7 @@ export class MapSearchComponent {
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
       : (this.filteredStations = stationsStationGroups.filter((item) => {
-          // If the item is a station
+          // If the item is a station.
           if (item instanceof StationMapElement) {
             return item.stationName
               .toLowerCase()
