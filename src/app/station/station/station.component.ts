@@ -29,7 +29,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 /**
  * Main component for viewing a station.
  */

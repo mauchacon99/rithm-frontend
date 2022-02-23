@@ -9,6 +9,7 @@
     [linear]="true"
     (selectionChange)="clearOnStepBack($event)"
     [orientation]="(stepperOrientation$ | async)!"
+    #stepper
   >
     <ng-template matStepperIcon="edit">
       <i class="fas fa-check"></i>

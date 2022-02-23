@@ -210,7 +210,7 @@
         <!-- left column -->
         <div class="hidden lg:inline-block col-span-2">left column</div>
         <!-- center column -->
-        <div class="col-span-12 lg:col-span-8 bg-white h-full px-5">
+        <div class="col-span-12 lg:col-span-8 bg-white h-full">
           <form
             *ngIf="!stationLoading"
             [formGroup]="stationForm"
@@ -240,6 +240,19 @@
                     [viewNewStation]="viewNewStation"
                     *ngIf="!stationLoading"
                   ></app-document-info-header>
+                  <div
+                    class="w-full flex bg-secondary-50 justify-end items-center p-2"
+                  >
+                    <button
+                      type="button"
+                      mat-stroked-button
+                      class="md:w-auto w-full font-semibold text-sm"
+                      color="accent"
+                      id="station-edit-mode-button"
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </ng-template>
               </mat-tab>
               <!-- Flow Logic Tab -->
