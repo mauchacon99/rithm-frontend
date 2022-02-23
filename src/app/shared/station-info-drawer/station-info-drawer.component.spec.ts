@@ -551,4 +551,14 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(loadingComponent).toBeTruthy();
   });
+
+  it('should not show status-allow-previous-loading', () => {
+    component.stationLoading = false;
+    expect(component.statusAllowPreviousLoading).toBe(false);
+    fixture.detectChanges();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#status-allow-previous-loading'
+    );
+    expect(loadingComponent).toBeNull();
+  });
 });
