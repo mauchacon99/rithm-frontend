@@ -21,10 +21,10 @@ import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MenuComponent } from '../dashboard-menu/menu/menu.component';
+import { MenuComponent } from 'src/app/dashboard/dashboard-menu/menu/menu.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
-import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
+import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
 import { RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
@@ -32,11 +32,32 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
+import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
+import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const dashboardRithmId = '123-951-753-789';
+  const dataDashboard = {
+    rithmId: '102030405060708090100',
+    name: 'Untitled Dashboard',
+    type: RoleDashboardMenu.Company,
+    widgets: [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ],
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -49,6 +70,8 @@ describe('DashboardComponent', () => {
         MockComponent(MenuComponent),
         MockComponent(StationWidgetComponent),
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(DocumentWidgetComponent),
+        MockComponent(WidgetDrawerComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -103,7 +126,7 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should show error message when return error dashboard', function () {
+  it('should show error message when return error dashboard', () => {
     component.viewNewDashboard = true;
     component.errorLoadingDashboard = true;
     fixture.detectChanges();
@@ -118,7 +141,7 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should show message when dashboard its empty', function () {
+  it('should show message when dashboard its empty', () => {
     component.viewNewDashboard = true;
     component.isCreateNewDashboard = true;
     fixture.detectChanges();
@@ -257,6 +280,30 @@ describe('DashboardComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should show alert confirm for change editMode the dashboard', async () => {
+    const dataExpect = {
+      title: 'Cancel?',
+      message: 'All unsaved changes will be lost',
+      important: true,
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
+    component.dashboardDataCopy = dataDashboard;
+    const spyMethod = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.toggleEditMode(false);
+    expect(spyMethod).toHaveBeenCalledWith(dataExpect);
+  });
+
+  it('should call changedOptions when dashboard alert for activate edit mode', async () => {
+    component.dashboardDataCopy = dataDashboard;
+    const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
+    await component.toggleEditMode(true);
+    expect(spyMethod).toHaveBeenCalledWith();
+  });
+
   describe('Test for SidenavDrawerService', () => {
     let sidenavDrawer: SidenavDrawerService;
 
@@ -296,19 +343,49 @@ describe('DashboardComponent', () => {
       expect(component.drawer.close).toHaveBeenCalled();
     });
 
-    it('Should toggle drawer of the station widget', () => {
+    it('Should toggle drawer of the widgets', () => {
       spyOn(sidenavDrawer, 'toggleDrawer');
-      const [stationData, widgetIndex] = [
-        // eslint-disable-next-line max-len
-        '{"stationRithmId":"21316c62-8a45-4e79-ba58-0927652569cc", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
-        1,
-      ];
+      const widgetItem = {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      };
+      const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-      component.toggleStationWidgetDrawer(stationData, widgetIndex);
+      component.toggleWidgetDrawer(widgetItem, widgetIndex);
       expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
-        stationData,
+        widgetItem,
         widgetIndex,
       });
+    });
+
+    it('should call toggle drawer for close drawer the widgets how dashboard change a editMode false', async () => {
+      const drawerContext = 'stationWidget';
+      sidenavDrawer.drawerContext$.next(drawerContext);
+      expect(component.drawerContext).toBe(drawerContext);
+      component.dashboardDataCopy = dataDashboard;
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      await component.toggleEditMode(false);
+      expect(spyMethod).toHaveBeenCalledWith();
+      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+    });
+
+    it('should toggle drawer if drawer open is different a menuDashboard when update dashboard', () => {
+      component.drawerContext = 'stationWidget';
+      component.dashboardData = dataDashboard;
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      component.updateDashboard();
+      expect(spyDrawer).toHaveBeenCalled();
     });
   });
 
@@ -350,5 +427,48 @@ describe('DashboardComponent', () => {
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
     });
+  });
+
+  it('should update dashboard widgets', () => {
+    component.dashboardData = dataDashboard;
+    const spyMethod = spyOn(component, 'updateDashboard').and.callThrough();
+    const editDataWidget = {
+      widgetItem: {
+        cols: 4,
+        // eslint-disable-next-line max-len
+        data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+        maxItemCols: 0,
+        maxItemRows: 0,
+        minItemCols: 0,
+        minItemRows: 0,
+        rows: 2,
+        widgetType: WidgetType.Station,
+        x: 0,
+        y: 0,
+      },
+      widgetIndex: 0,
+      isCloseDrawer: false,
+    };
+    const expectDashboardData = dataDashboard;
+    expectDashboardData.widgets[0] = editDataWidget.widgetItem;
+    component.updateDashboardWidget(editDataWidget);
+    expect(component.dashboardData).toEqual(expectDashboardData);
+    expect(spyMethod).toHaveBeenCalledOnceWith(editDataWidget.isCloseDrawer);
+  });
+
+  it('should subscribe to DashboardService.updateDataWidget$', () => {
+    component.dashboardData = dataDashboard;
+    const spyMethod = spyOn(component, 'updateDashboardWidget');
+    const expectEditDataWidget = {
+      widgetItem: dataDashboard.widgets[0],
+      widgetIndex: 1,
+      isCloseDrawer: false,
+    };
+
+    TestBed.inject(DashboardService).updateDashboardWidgets(
+      expectEditDataWidget
+    );
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
   });
 });

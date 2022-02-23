@@ -49,6 +49,24 @@ describe('WidgetDrawerComponent', () => {
     expect(btnDone).toBeTruthy();
     btnDone.click();
     expect(spyService).toHaveBeenCalled();
-    expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget');
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should show/hide the station widget  drawer', () => {
+    component.drawerMode = 'stationWidget';
+    const infoDrawerSpy = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+    component.toggleDrawer();
+    expect(infoDrawerSpy).toHaveBeenCalled();
+
+    const spyMethod = spyOn(component, 'toggleDrawer');
+    const toggleButton = fixture.debugElement.nativeElement.querySelector(
+      '#close-widget-drawer'
+    );
+    expect(toggleButton).toBeTruthy();
+    toggleButton.click();
+    expect(spyMethod).toHaveBeenCalled();
   });
 });

@@ -8,6 +8,8 @@ import {
   StationRosterMember,
   Document,
   DashboardData,
+  EditDataWidget,
+  ColumnsDocumentInfo,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -20,7 +22,43 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 })
 export class DashboardService {
   /** Loading dashboard when generating new dashboard. */
-  isLoadingDashboard$ = new Subject<boolean>();
+  isLoadingDashboard$ = new Subject<{
+    /** To toggle loading dashboard. */
+    statusLoading: boolean;
+    /** True to load getParams in dashboard. */
+    getParams: boolean;
+  }>();
+
+  /** Update specific widget and data. */
+  updateDataWidget$ = new Subject<EditDataWidget>();
+
+  columnsDocumentInfo: {
+    /** Name to show in dom. */
+    name: string;
+    /** Key property to get value of the document. */
+    key: string;
+  }[] = [
+    {
+      name: 'Document',
+      key: ColumnsDocumentInfo.Name,
+    },
+    {
+      name: 'Assigned',
+      key: ColumnsDocumentInfo.AssignedUser,
+    },
+    {
+      name: 'Priority',
+      key: ColumnsDocumentInfo.Priority,
+    },
+    {
+      name: 'Time in station',
+      key: ColumnsDocumentInfo.TimeInStation,
+    },
+    {
+      name: 'Last updated',
+      key: ColumnsDocumentInfo.LastUpdated,
+    },
+  ];
 
   constructor(private http: HttpClient) {}
 
@@ -38,10 +76,20 @@ export class DashboardService {
   /**
    * Toggle emit to loading dashboard.
    *
-   * @param status Boolean true to loading and false not loading.
+   * @param statusLoading To toggle loading dashboard.
+   * @param getParams True to load getParams in dashboard.
    */
-  toggleLoadingDashboard(status: boolean): void {
-    this.isLoadingDashboard$.next(status);
+  toggleLoadingDashboard(statusLoading: boolean, getParams = false): void {
+    this.isLoadingDashboard$.next({ statusLoading, getParams });
+  }
+
+  /**
+   * Update data of the widget since drawer station.
+   *
+   * @param editDataWidget Data to edit widget.
+   */
+  updateDashboardWidgets(editDataWidget: EditDataWidget): void {
+    this.updateDataWidget$.next(editDataWidget);
   }
 
   /**
@@ -199,8 +247,8 @@ export class DashboardService {
    * @param rithmId The specific dashboard rithmId to delete.
    * @returns The rithmId deleted dashboard.
    */
-  deleteOrganizationDashboard(rithmId: string): Observable<DashboardData> {
-    return this.http.delete<DashboardData>(
+  deleteOrganizationDashboard(rithmId: string): Observable<unknown> {
+    return this.http.delete<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company?rithmId=${rithmId}`
     );
   }
@@ -212,7 +260,7 @@ export class DashboardService {
    * @returns The rithmId of the deleted dashboard.
    */
   deletePersonalDashboard(rithmId: string): Observable<unknown> {
-    return this.http.delete<DashboardData>(
+    return this.http.delete<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
     );
   }

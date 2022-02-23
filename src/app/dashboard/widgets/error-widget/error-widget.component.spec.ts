@@ -23,7 +23,7 @@ describe('ErrorWidgetComponent', () => {
   });
 
   it('should emit ', () => {
-    spyOn(component.tryAgain, 'emit');
+    const emit = spyOn(component.tryAgain, 'emit');
     const reloadRequest = spyOn(component, 'reloadRequest').and.callThrough();
     fixture.detectChanges();
 
@@ -33,6 +33,6 @@ describe('ErrorWidgetComponent', () => {
     tryAgain.click();
 
     expect(reloadRequest).toHaveBeenCalled();
-    expect(component.tryAgain.emit).toHaveBeenCalledOnceWith();
+    expect(emit).toHaveBeenCalledOnceWith();
   });
 });

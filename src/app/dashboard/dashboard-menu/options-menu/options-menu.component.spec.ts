@@ -186,18 +186,9 @@ describe('OptionsMenuComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call method deleteOrganizationDashboard', () => {
-    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
-    const deleteCompanyDashboard = spyOn(
-      TestBed.inject(DashboardService),
-      'deleteOrganizationDashboard'
-    ).and.callThrough();
-
-    component.deleteOrganizationDashboard(rithmId);
-    expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(rithmId);
-  });
-
   it('should show error if the request deleteOrganizationDashboard fail', () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
+    fixture.detectChanges();
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const deleteCompanyDashboard = spyOn(
       TestBed.inject(DashboardService),
@@ -213,25 +204,21 @@ describe('OptionsMenuComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.deleteOrganizationDashboard(rithmId);
+    const toggleDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    component.deleteDashboard(rithmId);
 
     expect(deleteCompanyDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
+    expect(toggleDrawer).toHaveBeenCalled();
   });
 
-  it('should call method deletePersonalDashboard', () => {
-    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
-
-    const deleteIndividualDashboard = spyOn(
-      TestBed.inject(DashboardService),
-      'deletePersonalDashboard'
-    ).and.callThrough();
-
-    component.deletePersonalDashboard(rithmId);
-    expect(deleteIndividualDashboard).toHaveBeenCalledOnceWith(rithmId);
-  });
-
-  it('should show error if the request deletePersonalDashboard fails', () => {
+  it('should show error if the request deletePersonalDashboard fail', () => {
+    component.dashboardRole = RoleDashboardMenu.Personal;
+    fixture.detectChanges();
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const deleteIndividualDashboard = spyOn(
       TestBed.inject(DashboardService),
@@ -247,10 +234,16 @@ describe('OptionsMenuComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.deletePersonalDashboard(rithmId);
+    const toggleDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    component.deleteDashboard(rithmId);
 
     expect(deleteIndividualDashboard).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
+    expect(toggleDrawer).toHaveBeenCalled();
   });
 
   it('should display a confirmation pop up', async () => {
@@ -259,6 +252,7 @@ describe('OptionsMenuComponent', () => {
       message: 'This cannot be undone!',
       okButtonText: 'Yes',
       cancelButtonText: 'No',
+      important: true,
     };
 
     const popUpConfirmSpy = spyOn(
@@ -268,5 +262,103 @@ describe('OptionsMenuComponent', () => {
 
     await component.confirmDashboardDelete();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+  });
+
+  it('should call deleteDashboard for delete dashboard company', () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    fixture.detectChanges();
+
+    const deleteDashboard = spyOn(
+      component,
+      'deleteDashboard'
+    ).and.callThrough();
+
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deleteOrganizationDashboard'
+    ).and.returnValue(of('rithmId'));
+
+    const deletePersonalDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deletePersonalDashboard'
+    ).and.returnValue(of('rithmId'));
+
+    const popUpNotifySpy = spyOn(
+      TestBed.inject(PopupService),
+      'notify'
+    ).and.callThrough();
+
+    const toggleDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    component.deleteDashboard(rithmId);
+    expect(deleteDashboard).toHaveBeenCalledOnceWith(rithmId);
+    expect(deleteCompanyDashboard).toHaveBeenCalled();
+    expect(deletePersonalDashboard).not.toHaveBeenCalledOnceWith(rithmId);
+    expect(popUpNotifySpy).toHaveBeenCalled();
+    expect(toggleDrawer).toHaveBeenCalled();
+  });
+
+  it('should call deleteDashboard for delete dashboard personal', () => {
+    component.dashboardRole = RoleDashboardMenu.Personal;
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    fixture.detectChanges();
+
+    const deleteDashboard = spyOn(
+      component,
+      'deleteDashboard'
+    ).and.callThrough();
+
+    const deleteCompanyDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deleteOrganizationDashboard'
+    ).and.returnValue(of('rithmId'));
+
+    const deletePersonalDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'deletePersonalDashboard'
+    ).and.returnValue(of('rithmId'));
+
+    const popUpNotifySpy = spyOn(
+      TestBed.inject(PopupService),
+      'notify'
+    ).and.callThrough();
+
+    const toggleDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    component.deleteDashboard(rithmId);
+
+    expect(deleteDashboard).toHaveBeenCalledOnceWith(rithmId);
+    expect(deleteCompanyDashboard).not.toHaveBeenCalled();
+    expect(deletePersonalDashboard).toHaveBeenCalledOnceWith(rithmId);
+    expect(popUpNotifySpy).toHaveBeenCalled();
+    expect(toggleDrawer).toHaveBeenCalled();
+  });
+
+  it('should call dashboardService.toggleLoadingDashboard for update dashboard when is deleted', () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
+    component.index = 0;
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    fixture.detectChanges();
+
+    const deletePersonalDashboard = spyOn(
+      TestBed.inject(DashboardService),
+      'toggleLoadingDashboard'
+    ).and.callThrough();
+
+    const toggleDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    component.deleteDashboard(rithmId);
+    expect(deletePersonalDashboard).toHaveBeenCalled();
+    expect(toggleDrawer).toHaveBeenCalled();
   });
 });

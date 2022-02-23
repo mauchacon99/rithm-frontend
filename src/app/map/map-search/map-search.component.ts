@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationMapElement } from 'src/helpers';
+import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import { MapMode, StationInfoDrawerData } from 'src/models';
 import { MapService } from '../map.service';
 
@@ -21,7 +21,8 @@ export class MapSearchComponent {
   @ViewChild('inputText') search!: ElementRef;
 
   /** List of filtered stations based on search text. */
-  filteredStations: StationMapElement[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  filteredStations: any[] = [];
 
   /** Search text. */
   searchText = '';
@@ -53,8 +54,15 @@ export class MapSearchComponent {
    * @param displayItem The selected item.
    * @returns Returns station name.
    */
-  displayStationName(displayItem: StationMapElement): string {
-    return displayItem?.stationName;
+  displayStationName(
+    displayItem: StationMapElement | StationGroupMapElement
+  ): string {
+    if (!displayItem) {
+      return '';
+    }
+    return 'stationName' in displayItem
+      ? displayItem?.stationName
+      : displayItem?.title;
   }
 
   /**
@@ -62,13 +70,24 @@ export class MapSearchComponent {
    *
    */
   searchStations(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const stationsStationGroups: any[] = [
+      ...this.mapService.stationElements,
+      ...this.mapService.stationGroupElements,
+    ];
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
-      : (this.filteredStations = this.mapService.stationElements.filter(
-          (item) => {
-            return item.stationName.toLowerCase().includes(this.searchText);
+      : (this.filteredStations = stationsStationGroups.filter((item) => {
+          if (item && (item.stationName || item.title)) {
+            return item.stationName
+              ? item.stationName
+                  .toLowerCase()
+                  .includes(this.searchText.toLowerCase())
+              : item.title
+                  .toLowerCase()
+                  .includes(this.searchText.toLowerCase());
           }
-        ));
+        }));
   }
 
   /**
@@ -122,6 +141,11 @@ export class MapSearchComponent {
    * @param drawerItem The selected item.
    */
   openDrawer(drawerItem: StationMapElement): void {
+    //TODO: Needs to be remove once RTM-2243 is done.
+    // eslint-disable-next-line no-prototype-builtins
+    if (drawerItem.hasOwnProperty('title')) {
+      return;
+    }
     const dataInformationDrawer: StationInfoDrawerData = {
       stationRithmId: drawerItem.rithmId,
       stationName: drawerItem.stationName,

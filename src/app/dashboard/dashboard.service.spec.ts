@@ -9,6 +9,7 @@ import {
   WidgetType,
   DashboardData,
   RoleDashboardMenu,
+  EditDataWidget,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -534,16 +535,18 @@ describe('DashboardService', () => {
   });
 
   it('should be true the emit and subscribe to subject isLoadingDashboard$', () => {
-    service.isLoadingDashboard$.subscribe((status) => {
-      expect(status).toBeTrue();
+    service.isLoadingDashboard$.subscribe(({ statusLoading, getParams }) => {
+      expect(statusLoading).toBeTrue();
+      expect(getParams).toBeFalse();
     });
 
     service.toggleLoadingDashboard(true);
   });
 
   it('should be false the emit and subscribe to subject isLoadingDashboard$', () => {
-    service.isLoadingDashboard$.subscribe((status) => {
-      expect(status).toBeFalse();
+    service.isLoadingDashboard$.subscribe(({ statusLoading, getParams }) => {
+      expect(statusLoading).toBeFalse();
+      expect(getParams).toBeFalse();
     });
 
     service.toggleLoadingDashboard(false);
@@ -582,5 +585,28 @@ describe('DashboardService', () => {
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should emit updateDataWidget$', () => {
+    const expectEditDataWidget: EditDataWidget = {
+      widgetIndex: 1,
+      widgetItem: {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+      isCloseDrawer: false,
+    };
+    service.updateDataWidget$.subscribe((editDataWidget) => {
+      expect(editDataWidget).toEqual(expectEditDataWidget);
+    });
+    service.updateDashboardWidgets(expectEditDataWidget);
   });
 });

@@ -1,7 +1,7 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Router } from '@angular/router';
-import { first } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -16,7 +16,9 @@ import { PopupService } from 'src/app/core/popup.service';
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
-export class OptionsMenuComponent {
+export class OptionsMenuComponent implements OnInit, OnDestroy {
+  private destroyed$ = new Subject<void>();
+
   /**
    * Dashboard type from expansion-menu.
    */
@@ -28,8 +30,17 @@ export class OptionsMenuComponent {
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
 
+  /** Rithm id get for params.*/
+  paramRithmId!: string | null;
+
   /** Show option. */
   @Input() isDashboardListOptions!: boolean;
+
+  /** Dashboard rithmId. */
+  @Input() rithmId!: string;
+
+  /** Index of dashboard . */
+  @Input() index!: number;
 
   /** Allows functionality of MatMenu to toggle the menu open. */
   @ViewChild(MatMenuTrigger)
@@ -40,8 +51,20 @@ export class OptionsMenuComponent {
     private errorService: ErrorService,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private activatedRoute: ActivatedRoute
   ) {}
+
+  /**
+   * Initial Method.
+   */
+  ngOnInit(): void {
+    this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (params) => {
+        this.paramRithmId = params.get('dashboardId');
+      },
+    });
+  }
 
   /**
    * Opens the option menu on the dashboard menu.
@@ -69,6 +92,7 @@ export class OptionsMenuComponent {
         this.isGenerateNewDashboard = false;
         this.dashboardService.toggleLoadingDashboard(false);
         this.router.navigate(['/', 'dashboard', newDashboard.rithmId]);
+        this.popupService.notify('Dashboard created successfully');
       },
       error: (error: unknown) => {
         this.dashboardService.toggleLoadingDashboard(false);
@@ -82,52 +106,75 @@ export class OptionsMenuComponent {
   }
 
   /**
-   * Delete organization dashboard.
+   * Delete dashboard.
    *
    * @param rithmId The dashboard rithmId to delete.
    */
-  deleteOrganizationDashboard(rithmId: string): void {
-    this.dashboardService
-      .deleteOrganizationDashboard(rithmId)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
+  deleteDashboard(rithmId: string): void {
+    const isCurrentDashboard = rithmId === this.paramRithmId;
+    const isCurrentPrincipalDashboard = this.paramRithmId === null;
+    /* Index is principal dashboard when is 0 this is specified in dashboard-component getOrganizationDashboard
+      if this value is modified should modified this condition. */
+    const isPrincipalDashboard =
+      this.index === 0 && this.dashboardRole === this.roleDashboardMenu.Company;
 
-  /**
-   * Delete personal dashboard.
-   *
-   * @param rithmId The dashboard rithmId to delete.
-   */
-  deletePersonalDashboard(rithmId: string): void {
-    this.dashboardService
-      .deletePersonalDashboard(rithmId)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+    if (
+      isCurrentDashboard ||
+      (isCurrentPrincipalDashboard && isPrincipalDashboard)
+    ) {
+      this.dashboardService.toggleLoadingDashboard(true);
+    }
+
+    this.sidenavDrawerService.toggleDrawer('menuDashboard');
+
+    const deleteDashboard$ =
+      this.dashboardRole === this.roleDashboardMenu.Company
+        ? this.dashboardService.deleteOrganizationDashboard(rithmId)
+        : this.dashboardService.deletePersonalDashboard(rithmId);
+
+    deleteDashboard$.pipe(first()).subscribe({
+      next: () => {
+        if (isCurrentPrincipalDashboard && isPrincipalDashboard)
+          this.dashboardService.toggleLoadingDashboard(false, true);
+        //dashboardService.toggleLoadingDashboard is to reload dashboard component
+        else if (isCurrentDashboard) this.router.navigate(['/', 'dashboard']);
+
+        this.popupService.notify('Dashboard removed successfully');
+      },
+      error: (error: unknown) => {
+        this.sidenavDrawerService.toggleDrawer('menuDashboard');
+        if (
+          isCurrentDashboard ||
+          (isCurrentPrincipalDashboard && isPrincipalDashboard)
+        )
+          this.dashboardService.toggleLoadingDashboard(false, true);
+
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
    * Initiate a confirmation popup for either dashboard delete methods.
    */
   async confirmDashboardDelete(): Promise<void> {
-    await this.popupService.confirm({
+    const response = await this.popupService.confirm({
       title: 'Delete dashboard?',
       message: 'This cannot be undone!',
       okButtonText: 'Yes',
       cancelButtonText: 'No',
+      important: true,
     });
+
+    if (response && this.rithmId) this.deleteDashboard(this.rithmId);
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

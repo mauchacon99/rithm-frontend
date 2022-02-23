@@ -90,7 +90,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group to be drawn on the map.
    */
-  private drawStationGroup(stationGroup: StationGroupMapElement): void {
+  drawStationGroup(stationGroup: StationGroupMapElement): void {
     // If station group has a sub-station-group, draw that first
     stationGroup.subStationGroups.forEach((subStationGroupId) => {
       //store the subStationGroup so we can recursively call this method for said station group.
@@ -150,9 +150,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which to draw the station group boundary line.
    */
-  private drawStationGroupBoundaryLine(
-    stationGroup: StationGroupMapElement
-  ): void {
+  drawStationGroupBoundaryLine(stationGroup: StationGroupMapElement): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
@@ -214,7 +212,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which to draw the tooltip.
    */
-  private drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
+  drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the tooltip if context is not defined');
     }
@@ -301,7 +299,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which to draw the name.
    */
-  private drawStationGroupName(stationGroup: StationGroupMapElement): void {
+  drawStationGroupName(stationGroup: StationGroupMapElement): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
@@ -340,7 +338,7 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING
+        STATION_GROUP_PADDING * this.mapScale
     );
 
     // Split station group name.
@@ -410,9 +408,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which path needs to be set.
    */
-  private setStationGroupBoundaryPath(
-    stationGroup: StationGroupMapElement
-  ): void {
+  setStationGroupBoundaryPath(stationGroup: StationGroupMapElement): void {
     const path = new Path2D();
 
     //draws a path based on the boundary points of the station group.
@@ -436,7 +432,7 @@ export class StationGroupElementService {
    * @param stationGroup The station group for which to get the points.
    * @returns A list of contained points representing the stations.
    */
-  private getStationPointsForStationGroup(
+  getStationPointsForStationGroup(
     stationGroup: StationGroupMapElement
   ): Point[] {
     //If a station group has no stations inside it.
@@ -490,7 +486,7 @@ export class StationGroupElementService {
    * @param stationGroup The station group for which to get the points.
    * @returns A list of contained points representing the station group boundary of the sub-station-groups.
    */
-  private getSubStationGroupPointsForStationGroup(
+  getSubStationGroupPointsForStationGroup(
     stationGroup: StationGroupMapElement
   ): Point[] {
     if (!stationGroup.subStationGroups.length) {
@@ -520,24 +516,22 @@ export class StationGroupElementService {
    * @param boundaryPoints The existing station group boundary points for which to add padding.
    * @returns The padded station group boundary points.
    */
-  private getPaddedStationGroupBoundaryPoints(
-    boundaryPoints: Point[]
-  ): Point[] {
+  getPaddedStationGroupBoundaryPoints(boundaryPoints: Point[]): Point[] {
     const updatedBoundaryPoints = [...boundaryPoints]; // Deep copy
-
+    const padding = STATION_GROUP_PADDING * this.mapService.mapScale$.value;
     for (const point of updatedBoundaryPoints) {
       if (point.corner === Corner.TopLeft) {
-        point.x -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-        point.y -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.x -= padding;
+        point.y -= padding;
       } else if (point.corner === Corner.TopRight) {
-        point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-        point.y -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.x += padding;
+        point.y -= padding;
       } else if (point.corner === Corner.BottomLeft) {
-        point.x -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-        point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.x -= padding;
+        point.y += padding;
       } else if (point.corner === Corner.BottomRight) {
-        point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-        point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+        point.x += padding;
+        point.y += padding;
       }
     }
 
@@ -551,7 +545,7 @@ export class StationGroupElementService {
    * @param points The unsorted points for which to get the points.
    * @returns The convex hull for the points.
    */
-  private getConvexHull(points: Point[]): Point[] {
+  getConvexHull(points: Point[]): Point[] {
     const newPoints = points.slice();
     newPoints.sort(this.comparePoints);
     return this.getConvexHullPresorted(newPoints);
@@ -563,7 +557,7 @@ export class StationGroupElementService {
    * @param points The sorted points to be contained in the convex hull.
    * @returns The convex hull for the points.
    */
-  private getConvexHullPresorted(points: Point[]): Point[] {
+  getConvexHullPresorted(points: Point[]): Point[] {
     if (points.length <= 1) {
       return points.slice();
     }
@@ -624,7 +618,7 @@ export class StationGroupElementService {
    * @param pointB The second point to compare.
    * @returns A number indicating the position of `pointA` in relation to `pointB`.
    */
-  private comparePoints(pointA: Point, pointB: Point): number {
+  comparePoints(pointA: Point, pointB: Point): number {
     if (pointA.x < pointB.x) {
       return -1;
     } else if (pointA.x > pointB.x) {
@@ -731,23 +725,43 @@ export class StationGroupElementService {
       distance: number;
     }[] = [];
 
-    for (let i = points.length - 1; i > 1; i--) {
+    for (let i = points.length - 1; i > 0; i--) {
       // Calculate the slope between two points.
       const m = this.slopeLine(points[i], points[i - 1]);
       const distance = this.distanceBetweenTwoPoints(points[i], points[i - 1]);
-      // If is visible on the canvas.
+      const padding = STATION_GROUP_PADDING * this.mapScale;
+      // If the point Start is Corner Bottom-left or Bottom-right.
       if (
-        points[i].x >= STATION_GROUP_PADDING &&
-        points[i - 1].x >= STATION_GROUP_PADDING &&
-        points[i].x + titleWidth <= this.canvasDimensions.width &&
-        points[i].y >= STATION_GROUP_PADDING &&
-        points[i].y <= this.canvasDimensions.height
+        points[i].corner === Corner.BottomLeft ||
+        points[i].corner === Corner.BottomRight
       ) {
-        memoryPosition.push({
-          position: i,
-          slope: m,
-          distance: distance,
-        });
+        // If is visible on the canvas.
+        if (
+          points[i - 1].x >= padding &&
+          points[i - 1].x + titleWidth <= this.canvasDimensions.width &&
+          points[i - 1].y >= padding &&
+          points[i - 1].y <= this.canvasDimensions.height
+        ) {
+          memoryPosition.push({
+            position: i,
+            slope: m,
+            distance: distance,
+          });
+        }
+      } else {
+        // If is visible on the canvas.
+        if (
+          points[i].x >= padding &&
+          points[i].x + titleWidth <= this.canvasDimensions.width &&
+          points[i].y >= padding &&
+          points[i].y <= this.canvasDimensions.height
+        ) {
+          memoryPosition.push({
+            position: i,
+            slope: m,
+            distance: distance,
+          });
+        }
       }
     }
     // The first position is assigned.
@@ -796,7 +810,7 @@ export class StationGroupElementService {
    * @param points The arrays points.
    * @returns The array with split title.
    */
-  private splitStationGroupName(
+  splitStationGroupName(
     title: string,
     position: number,
     points: Point[]
@@ -805,7 +819,7 @@ export class StationGroupElementService {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw station group boundary line if context is not defined'
+        'Cannot split station group name if context is not defined'
       );
     }
 
@@ -839,11 +853,11 @@ export class StationGroupElementService {
           titleAux = title[i];
           // Moves to the next position in the array points.
           newPosition =
-            newPosition - 1 > 0 ? newPosition - 1 : points.length - 1;
+            newPosition - 1 >= 0 ? newPosition - 1 : points.length - 1;
           // The distance of the new line.
           distanceLine = this.distanceBetweenTwoPoints(
             points[newPosition],
-            points[newPosition - 1 > 0 ? newPosition - 1 : points.length - 1]
+            points[newPosition - 1 >= 0 ? newPosition - 1 : points.length - 1]
           );
         } else {
           titleAux = titleAux.concat(title[i]);
@@ -865,7 +879,7 @@ export class StationGroupElementService {
    * @param stationGroup The station group.
    * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
    */
-  private paintOrDeleteLineStationGroupName(
+  paintOrDeleteLineStationGroupName(
     title: string,
     pointStart: Point,
     pointEnd: Point,
@@ -876,7 +890,7 @@ export class StationGroupElementService {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw station group boundary line if context is not defined'
+        'Cannot paint or delete station group name on line if context is not defined'
       );
     }
     // Calculation of the slope of the line.
@@ -975,7 +989,7 @@ export class StationGroupElementService {
    * @param stationGroup The station group.
    * @param displacedMap If the map was moved to point Start.
    */
-  private drawStationGroupIcon(
+  drawStationGroupIcon(
     pointStart: Point,
     pointEnd: Point,
     displacement: number,
@@ -989,7 +1003,7 @@ export class StationGroupElementService {
 
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw station group boundary line if context is not defined'
+        'Cannot draw station group icon if context is not defined'
       );
     }
     //Calculation of the slope of the line.
@@ -1009,12 +1023,12 @@ export class StationGroupElementService {
     );
 
     // Calculation of the new displacement as a function of the slope of the line.
-    // If the slope is greater than pi/4 we adjust the icon multiplied by 3.
+    // If the slope is greater than pi/3 we adjust the icon multiplied by 3.
     const newDisplacement =
       displacement +
       (Math.abs(m) === Math.PI / 2
         ? 0
-        : Math.abs(m) < Math.PI / 4
+        : Math.abs(m) < Math.PI / 3
         ? -STATION_GROUP_DISPLACEMENT * this.mapScale
         : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
 
@@ -1029,7 +1043,7 @@ export class StationGroupElementService {
         y: pointEnd.y,
       },
       newDisplacement,
-      Math.abs(m) < Math.PI / 4
+      Math.abs(m) < Math.PI / 3
     );
 
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
