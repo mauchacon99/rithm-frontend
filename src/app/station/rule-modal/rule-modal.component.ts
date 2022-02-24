@@ -466,12 +466,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.type === OperandType.String
           ? this.secondOperand.value
           : '';
-      // eslint-disable-next-line max-len
       this.secondOperandDefaultQuestion.answer.asInt =
         this.secondOperand.type === OperandType.Number
           ? parseInt(this.secondOperand.value)
           : 0;
-      // eslint-disable-next-line max-len
       this.secondOperandDefaultQuestion.answer.asDecimal =
         this.secondOperand.type === OperandType.Number
           ? parseFloat(this.secondOperand.value)
