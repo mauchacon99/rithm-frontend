@@ -59,6 +59,8 @@ export const ICON_STATION_GROUP_HOVER_COLOR_CANCEL = '#91372C';
 export const ICON_STATION_GROUP_CANCEL = '\uf00d';
 // Fa-check-circle icon in Unicode Format from FontAwesome.
 export const ICON_STATION_GROUP_ACCEPT = '\uf058';
+// Fa-times icon in Unicode Format from FontAwesome.
+export const ICON_STATION_GROUP_OPTION = '\uf142';
 // The radius of the hover icon area.
 export const ICON_STATION_GROUP_PATH_RADIUS = 30;
 

@@ -34,6 +34,7 @@ import {
   ICON_STATION_GROUP_PATH_RADIUS,
   GROUP_CHARACTER_SIZE,
   STATION_GROUP_DISPLACEMENT,
+  ICON_STATION_GROUP_OPTION,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -910,6 +911,14 @@ export class StationGroupElementService {
         STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
+      if (this.mapService.mapMode$.value !== MapMode.View && stationGroup.status !== MapItemStatus.Pending) {
+        // If status of the station group option button.
+        const titleWidth = this.canvasContext.measureText(title).width + GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+        // Paint the Cancel Icon on the map.
+        this.drawStationGroupIcon(pointStart, pointEnd, titleWidth, StationGroupElementHoverItem.ButtonOption,
+          ICON_STATION_GROUP_OPTION, ICON_STATION_GROUP_HOVER_COLOR_CANCEL, stationGroup
+        );
+      }
       // If status of the station group is pending.
       if (stationGroup.status === MapItemStatus.Pending) {
         const titleWidth =
@@ -1032,7 +1041,9 @@ export class StationGroupElementService {
       Math.abs(m) < Math.PI / 4
     );
 
-    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+  const IconfontSize = icon === ICON_STATION_GROUP_OPTION ? 8 : FONT_SIZE_MODIFIER;
+
+    const fontSize = Math.ceil(IconfontSize * this.mapScale);
 
     // Font selected to paint the icon.
     // If the icon is hover we increase the font by 0.5.
