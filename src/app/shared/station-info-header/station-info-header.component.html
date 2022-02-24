@@ -59,13 +59,13 @@
   </section>
 </ng-container>
 <ng-template #newStationHeader>
-  <section class="grid grid-cols-12 pt-8">
+  <section class="grid grid-cols-12 pt-8 px-4">
     <div class="col-span-12">
       <div
         *ngIf="!stationEditMode"
         class="flex justify-between items-center w-full"
       >
-        <span>{{ stationName }}</span>
+        <p>{{ stationName }}</p>
         <button
           type="button"
           data-testid="station-info-drawer"
@@ -95,8 +95,8 @@
           [disabled]="isDrawerOpen"
         >
           <i
-            class="fas fa-info-circle text-2xl"
-            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
+            class="fas fa-cog text-2xl"
+            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-secondary-500'"
           ></i>
         </button>
       </div>

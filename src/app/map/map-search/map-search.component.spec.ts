@@ -71,13 +71,13 @@ describe('MapSearchComponent', () => {
 
   it('should return 0 stations when search text is empty', () => {
     component.searchText = '';
-    component.searchStations();
+    component.searchStationsStationGroups();
     expect(component.filteredStations.length).toEqual(0);
   });
 
   it('should return filtered stations when search text is not empty', () => {
     component.searchText = 'untitled';
-    component.searchStations();
+    component.searchStationsStationGroups();
     expect(component.filteredStations.length).toBeGreaterThanOrEqual(1);
   });
 
