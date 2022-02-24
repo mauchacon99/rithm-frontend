@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-
 import { DocumentWidgetComponent } from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';

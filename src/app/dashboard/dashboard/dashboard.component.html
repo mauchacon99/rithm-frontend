@@ -167,7 +167,7 @@
               "
             >
               <app-station-widget
-                *ngIf="item.widgetType === 'station'"
+                *ngIf="item.widgetType === widgetType.Station"
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [dataWidget]="item.data"
                 [editMode]="editMode"
@@ -175,7 +175,7 @@
               >
               </app-station-widget>
               <app-document-widget
-                *ngIf="item.widgetType === 'document-list'"
+                *ngIf="item.widgetType === widgetType.Document"
                 [documentRithmId]="item.data"
                 [editMode]="editMode"
               >
