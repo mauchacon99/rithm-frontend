@@ -328,17 +328,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    *
    * @returns A normal value or a rithmId to display.
    */
-  get secondOperandToShow(): string {
-    return this.secondOperand.type === OperandType.Field
-      ? this.secondOperandQuestionPrompt
-      : this.secondOperand.value;
-  }
-
-  /**
-   * Returns the second Operand to display in the last step.
-   *
-   * @returns A normal value or a rithmId to display.
-   */
   get displayOperatorType(): string {
     let display = 'string';
     switch (this.firstOperandQuestionType) {
@@ -657,7 +646,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         type: this.secondOperand.type,
         questionType: this.secondOperand.questionType,
         value: this.secondOperand.value,
-        text: this.secondOperandToShow,
+        text: this.secondOperand.text,
       },
     };
     this.dialogRef.close({ rule: this.ruleToAdd, editMode: this.editRuleMode });

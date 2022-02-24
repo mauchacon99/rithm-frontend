@@ -247,11 +247,12 @@ export class FlowLogicComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: () => {
-              // remove the rule from the  array  flowLogicRules when is 'any' or 'all'
-              if (type === 'all')
+              // remove the rule from the  array flowLogicRules when is 'any' or 'all'
+              if (type === 'all') {
                 flowLogicRules?.flowRule.equations.splice(index, 1);
-              else flowLogicRules?.flowRule.subRules.splice(index, 1);
-              // hidden loading
+              } else {
+                flowLogicRules?.flowRule.subRules.splice(index, 1);
+              }
               this.flowLogicLoadingByRuleType = null;
               this.modifiedFlowRules.emit(null);
             },
