@@ -105,6 +105,7 @@ describe('MapService', () => {
           subStationGroups: [],
           status: MapItemStatus.Normal,
           isReadOnlyRootStationGroup: false,
+          isChained: false,
         },
         {
           rithmId: '',
@@ -113,6 +114,7 @@ describe('MapService', () => {
           subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
           status: MapItemStatus.Normal,
           isReadOnlyRootStationGroup: true,
+          isChained: false,
         },
       ],
     };
@@ -345,6 +347,7 @@ describe('MapService', () => {
         subStationGroups: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: true,
+        isChained: false,
       },
       {
         rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -354,6 +357,7 @@ describe('MapService', () => {
         subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
       {
         rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -363,6 +367,7 @@ describe('MapService', () => {
         subStationGroups: [],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
     ];
     service.stationGroupElements = stationGroupMapData.map(
@@ -399,6 +404,7 @@ describe('MapService', () => {
         subStationGroups: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: true,
+        isChained: false,
       },
       {
         rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -408,6 +414,7 @@ describe('MapService', () => {
         subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
       {
         rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -417,6 +424,7 @@ describe('MapService', () => {
         subStationGroups: [],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
     ];
     service.stationGroupElements = stationGroupMapData.map(
@@ -511,6 +519,7 @@ describe('MapService', () => {
         subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: true,
+        isChained: false,
       },
       {
         rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -524,6 +533,7 @@ describe('MapService', () => {
         subStationGroups: [],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
     ];
     service.stationGroupElements = stationGroupMapData.map(
@@ -584,6 +594,7 @@ describe('MapService', () => {
         subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: true,
+        isChained: false,
       },
       {
         rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -597,6 +608,7 @@ describe('MapService', () => {
         subStationGroups: [],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
     ];
     service.stationGroupElements = stationGroupMapData.map(
@@ -678,6 +690,7 @@ describe('MapService', () => {
         subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: true,
+        isChained: false,
       },
       {
         rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -691,6 +704,7 @@ describe('MapService', () => {
         subStationGroups: [],
         status: MapItemStatus.Normal,
         isReadOnlyRootStationGroup: false,
+        isChained: false,
       },
     ];
     service.stationGroupElements = stationGroupMapData.map(
