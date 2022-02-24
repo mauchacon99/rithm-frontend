@@ -34,6 +34,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -467,5 +468,15 @@ describe('DashboardComponent', () => {
     );
 
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
+  });
+
+  it('should emit DashboardService.isLoadingDashboard$ and call getParams', () => {
+    const spyRoute = spyOn(TestBed.inject(ActivatedRoute).params, 'subscribe');
+    TestBed.inject(DashboardService).toggleLoadingDashboard(true, true);
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    expect(component.errorLoadingDashboard).toBeFalse();
+    expect(component.isCreateNewDashboard).toBeFalse();
+    expect(spyRoute).toHaveBeenCalled();
   });
 });
