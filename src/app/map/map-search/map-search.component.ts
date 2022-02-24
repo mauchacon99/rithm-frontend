@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
@@ -17,7 +24,10 @@ import { MapService } from '../map.service';
   templateUrl: './map-search.component.html',
   styleUrls: ['./map-search.component.scss'],
 })
-export class MapSearchComponent {
+export class MapSearchComponent implements OnDestroy {
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
 
@@ -41,7 +51,24 @@ export class MapSearchComponent {
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService
-  ) {}
+  ) {
+    //This subscribe shows if there are any drawers open.
+    this.mapService.isDrawerOpened$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerOpened) => {
+        if (!drawerOpened) {
+          this.searchText = '';
+        }
+      });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   /**
    * Whether the drawer is open.
@@ -91,7 +118,7 @@ export class MapSearchComponent {
     }
     this.searchText = '';
     this.filteredStations = [];
-    this.mapService.handleDrawerClose('stationInfo');
+    this.mapService.handleDrawerClose();
     this.searchInput = true;
   }
 
@@ -149,7 +176,7 @@ export class MapSearchComponent {
   returnSearchText(): void {
     if (this.searchText !== '' || this.searchText.length !== 0) {
       this.sidenavDrawerService.closeDrawer();
-      this.mapService.handleDrawerClose('stationInfo');
+      this.mapService.handleDrawerClose();
       this.searchInput = true;
     }
     this.filteredStations = [];
@@ -168,6 +195,13 @@ export class MapSearchComponent {
    * @param drawerItem The selected item.
    */
   openDrawer(drawerItem: StationMapElement | StationGroupMapElement): void {
+    this.mapService.isDrawerOpened$.next(true);
+    //Close any open station option menus.
+    this.mapService.matMenuStatus$.next(true);
+    //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+    this.mapService.centerActive$.next(true);
+    //Get the map drawer element.
+    const drawer = document.getElementsByTagName('mat-drawer');
     if (drawerItem instanceof StationMapElement) {
       const dataInformationDrawer: StationInfoDrawerData = {
         stationRithmId: drawerItem.rithmId,
@@ -183,13 +217,8 @@ export class MapSearchComponent {
         'stationInfo',
         dataInformationDrawer
       );
-      const drawer = document.getElementsByTagName('mat-drawer');
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
-      //Close any open station option menus.
-      this.mapService.matMenuStatus$.next(true);
-      //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-      this.mapService.centerActive$.next(true);
       //Increment centerStationCount to show that more centering of station needs to be done.
       this.mapService.centerStationCount$.next(1);
       //Call method to run logic for centering of the station.
@@ -214,6 +243,16 @@ export class MapSearchComponent {
         'stationGroupInfo',
         dataInformationDrawer
       );
+      drawerItem.drawerOpened = true;
+      //Increment centerStationGroupCount to show that more centering of station needs to be done.
+      this.mapService.centerStationGroupCount$.next(1);
+      //Call method to run logic for centering of the station group.
+      setTimeout(() => {
+        this.mapService.centerStationGroup(
+          drawerItem,
+          drawer[0] ? drawer[0].clientWidth : 0
+        );
+      }, 1);
     } else {
       throw new Error('Item is not defined as a station or station group.');
     }

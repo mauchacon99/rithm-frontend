@@ -233,11 +233,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe shows if there are any drawers open.
-    this.mapService.openedDrawerType$
+    this.mapService.isDrawerOpened$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((drawerType) => {
-        if (this.sidenavDrawerService.isDrawerOpen) {
-          this.mapService.handleDrawerClose(drawerType);
+      .subscribe((drawerOpened) => {
+        if (!drawerOpened) {
+          this.mapService.handleDrawerClose();
         }
       });
 
@@ -2186,6 +2186,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               'stationGroupInfo',
               dataInformationDrawer
             );
+            this.mapService.isDrawerOpened$.next(true);
             break;
           }
         }
@@ -2307,6 +2308,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
+    this.mapService.isDrawerOpened$.next(true);
   }
 
   /**
