@@ -246,66 +246,70 @@
                     class="w-full flex bg-secondary-50 justify-end items-center p-2"
                   >
                     <button
-                      type="button"
-                      (click)="editMode = !editMode"
                       mat-stroked-button
-                      class="md:w-auto w-full font-semibold text-sm"
+                      type="button"
                       color="accent"
+                      class="font-semibold text-sm"
                       id="station-edit-mode-button"
+                      (click)="editMode = !editMode"
                     >
                       Edit
                     </button>
                   </div>
                   <ng-template #toolbarEditStation>
                     <div
-                      class="w-full flex bg-secondary-50 items-center justify-between h-16 p-2"
+                      class="w-full flex bg-secondary-50 items-center justify-between p-2"
                     >
-                      <div class="flex space-x-4">
-                        <div
-                          class="flex h-10 border-r border-primary-100 items-center"
-                        >
-                          <i
-                            class="fas fa-tools text-secondary-300 fa-lg pr-5"
-                          ></i>
-                        </div>
-                        <div class="flex h-10 items-center">
-                          <span class="text-brightBlue text-sm font-semibold">
-                            Layout
-                          </span>
-                        </div>
-                        <div class="flex h-10 items-center">
+                      <div class="flex">
+                        <button type="button" class="px-2">
                           <span
-                            class="text-primary-300 text-center text-sm font-semibold"
-                          >
-                            Settings
-                          </span>
-                        </div>
-                      </div>
-                      <div class="flex space-x-4">
-                        <div
-                          class="flex h-10 border-r-2 border-primary-100 items-center"
-                        >
-                          <span
-                            class="fas fa-trash text-secondary-300 fa-lg pr-5"
+                            class="fas fa-tools text-secondary-500 fa-lg"
                           ></span>
-                        </div>
-                        <div class="flex h-10 items-center">
-                          <span class="text-brightBlue text-sm font-semibold">
-                            Cancel
-                          </span>
-                        </div>
-                        <div class="flex h-10 items-center">
-                          <button
-                            type="button"
-                            mat-raised-button
-                            class="md:w-auto w-full font-semibold text-sm"
-                            color="accent"
-                            (click)="editMode = !editMode"
-                            id="station-save-mode-button"
-                          >
-                            Save
-                          </button>
-                        </div>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                        <button
+                          mat-button
+                          type="button"
+                          color="accent"
+                          class="text-sm font-semibold"
+                        >
+                          Layout
+                        </button>
+                        <button
+                          mat-button
+                          color="accent"
+                          [disabled]="true"
+                          type="button"
+                          class="text-sm font-semibold"
+                        >
+                          Setting
+                        </button>
+                      </div>
+                      <div class="flex">
+                        <button type="button" class="px-2">
+                          <span
+                            class="fas fa-trash text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                        <button
+                          mat-button
+                          type="button"
+                          color="accent"
+                          class="font-semibold text-sm"
+                          (click)="editMode = !editMode"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="accent"
+                          class="font-semibold text-sm"
+                          (click)="editMode = !editMode"
+                        >
+                          Save
+                        </button>
                       </div>
                     </div>
                   </ng-template>
