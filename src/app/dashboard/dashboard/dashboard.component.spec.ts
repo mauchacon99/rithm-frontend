@@ -402,7 +402,7 @@ describe('DashboardComponent', () => {
       );
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyMethod = spyOn(sidenavDrawer, 'toggleDrawer');
-      component.updateDashboard(false);
+      component.updateDashboard();
       expect(spyMethod).toHaveBeenCalled();
     });
   });
