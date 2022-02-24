@@ -161,6 +161,7 @@ describe('StationComponent', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     fixture.detectChanges();
