@@ -911,12 +911,23 @@ export class StationGroupElementService {
         STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
-      if (this.mapService.mapMode$.value !== MapMode.View && stationGroup.status !== MapItemStatus.Pending) {
+      if (
+        this.mapService.mapMode$.value !== MapMode.View &&
+        stationGroup.status !== MapItemStatus.Pending
+      ) {
         // If status of the station group option button.
-        const titleWidth = this.canvasContext.measureText(title).width + GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+        const titleWidth =
+          this.canvasContext.measureText(title).width +
+          GROUP_CHARACTER_SIZE * 1 * this.mapScale;
         // Paint the Cancel Icon on the map.
-        this.drawStationGroupIcon(pointStart, pointEnd, titleWidth, StationGroupElementHoverItem.ButtonOption,
-          ICON_STATION_GROUP_OPTION, ICON_STATION_GROUP_HOVER_COLOR_CANCEL, stationGroup
+        this.drawStationGroupIcon(
+          pointStart,
+          pointEnd,
+          titleWidth,
+          StationGroupElementHoverItem.ButtonOption,
+          ICON_STATION_GROUP_OPTION,
+          ICON_STATION_GROUP_HOVER_COLOR_CANCEL,
+          stationGroup
         );
       }
       // If status of the station group is pending.
@@ -1041,7 +1052,8 @@ export class StationGroupElementService {
       Math.abs(m) < Math.PI / 4
     );
 
-  const IconfontSize = icon === ICON_STATION_GROUP_OPTION ? 8 : FONT_SIZE_MODIFIER;
+    const IconfontSize =
+      icon === ICON_STATION_GROUP_OPTION ? 8 : FONT_SIZE_MODIFIER;
 
     const fontSize = Math.ceil(IconfontSize * this.mapScale);
 
