@@ -135,7 +135,7 @@
         </div>
       </th>
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-[13px] text-secondary-500">{{ element.name }}</span>
+        <span class="text-xs text-secondary-500">{{ element.name }}</span>
       </td>
     </ng-container>
 
@@ -181,30 +181,30 @@
       </div>
       <div
         *ngIf="!document.assignedUser"
-        class="text-[13px] text-secondary-500"
+        class="text-xs text-secondary-500"
       >
         None
       </div>
     </div>
     <div
       *ngSwitchCase="columnsDocumentInfo.TimeInStation"
-      class="text-[13px] text-secondary-500"
+      class="text-xs text-secondary-500"
     >
       {{ getElapsedTime(document.flowedTimeUTC) }}
     </div>
     <div
       *ngSwitchCase="columnsDocumentInfo.LastUpdated"
-      class="text-[13px] text-secondary-500"
+      class="text-xs text-secondary-500"
     >
       {{ getElapsedTime(document.lastUpdatedUTC) }}
     </div>
     <div
       *ngSwitchCase="columnsDocumentInfo.Priority"
-      class="text-[13px] text-secondary-500"
+      class="text-xs text-secondary-500"
     >
       <i class="fas text-lg text-secondary-400 fa-exclamation-triangle"></i>
     </div>
-    <div *ngSwitchDefault class="text-[13px] text-secondary-500">
+    <div *ngSwitchDefault class="text-xs text-secondary-500">
       {{ document[column] }}
     </div>
   </div>
@@ -220,7 +220,7 @@
       <div [ngSwitch]="questions.questionType">
         <p
           *ngSwitchCase="questionFieldType.CheckList"
-          class="text-[13px] text-secondary-500"
+          class="text-xs text-secondary-500"
         >
           <span *ngFor="let answer of questions.answer?.asArray">
             <i
@@ -236,7 +236,7 @@
         </p>
         <p
           *ngSwitchCase="questionFieldType.MultiSelect"
-          class="text-[13px] text-secondary-500"
+          class="text-xs text-secondary-500"
         >
           <span *ngFor="let answer of questions.answer?.asArray">
             <i
@@ -254,7 +254,7 @@
         </p>
         <p
           *ngSwitchCase="questionFieldType.Select"
-          class="text-[13px] text-secondary-500"
+          class="text-xs text-secondary-500"
         >
           <span *ngFor="let answer of questions.answer?.asArray">
             <i
@@ -270,11 +270,11 @@
         </p>
         <p
           *ngSwitchCase="'instructions'"
-          class="text-[13px] text-secondary-500"
+          class="text-xs text-secondary-500"
         >
           {{ questions.prompt }}
         </p>
-        <p *ngSwitchDefault class="text-[13px] text-secondary-500">
+        <p *ngSwitchDefault class="text-xs text-secondary-500">
           {{ questions.answer?.value || 'N/A' }}
         </p>
       </div>
