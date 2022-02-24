@@ -109,6 +109,7 @@ describe('StationInfoHeaderComponent', () => {
     workers: [],
     questions: [],
     instructions: 'General instructions',
+    isChained: false,
   };
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;

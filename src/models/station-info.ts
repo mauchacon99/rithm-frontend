@@ -57,4 +57,7 @@ export interface StationInformation {
 
   /** Customize the name of the flow button. */
   flowButton: string;
+
+  /** The station has chained flow or not. */
+  isChained?: boolean;
 }

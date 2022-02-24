@@ -111,6 +111,7 @@ export class MockStationService {
       allowAllOrgWorkers: true,
       allowExternalWorkers: false,
       flowButton: 'Flow',
+      isChained: false,
     };
     return of(data).pipe(delay(1000));
   }
@@ -214,6 +215,7 @@ export class MockStationService {
         allowAllOrgWorkers: false,
         allowExternalWorkers: true,
         flowButton: 'Flow',
+        isChained: false,
       };
       return of(data).pipe(delay(1000));
     }
@@ -879,6 +881,19 @@ export class MockStationService {
    * @returns Allow external workers to be assigned to station documents.
    */
   getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
+  }
+
+  /**
+   * Get the allow previous button for the document.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow previous button to be assigned to document.
+   */
+  getAllowPreviousButton(stationRithmId: string): Observable<boolean> {
     const expectedResponse: StandardBooleanJSON = {
       data: true,
     };

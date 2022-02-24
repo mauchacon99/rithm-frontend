@@ -84,6 +84,7 @@ describe('DocumentInfoHeaderComponent', () => {
       workers: [],
       questions: [],
       instructions: 'General instructions',
+      isChained: false,
     };
     formGroup = component.documentNameForm;
     fixture.detectChanges();

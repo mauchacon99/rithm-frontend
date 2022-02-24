@@ -332,6 +332,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationInformation.flowButton =
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
+              this.isChained = stationInfo.isChained || false;
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
@@ -371,6 +372,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         allowAllOrgWorkers: false,
         allowExternalWorkers: true,
         flowButton: 'Flow',
+        isChained: false,
       };
     }
   }
