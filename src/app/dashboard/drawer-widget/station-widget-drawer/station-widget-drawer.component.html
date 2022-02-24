@@ -4,74 +4,82 @@
   <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
 </div>
 
-<div *ngIf="!isLoading" id="content-drawer-station-widget">
-  <div
-    *ngIf="!questions.length; else selectDrawer"
-    id="message-not-documents-assigned-to-station"
-  >
-    <p class="text-sm">
-      This station has no documents and therefore the fields to be assigned
-      cannot be displayed.
-    </p>
-  </div>
-
-  <ng-template #selectDrawer>
-    <form [formGroup]="formColumns">
-      <div formArrayName="columns">
-        <div
-          *ngFor="let column of getFormColumns.controls; index as formChild"
-          [formGroupName]="formChild"
-          class="flex justify-between items-center mt-2"
-        >
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-select formControlName="name">
-              <mat-optgroup [label]="'Document Info'">
-                <mat-option
-                  *ngFor="let column of documentInfo"
-                  [value]="column.value"
-                  [disabled]="column.disabled"
-                  (click)="optionSelected(column, formChild)"
-                >
-                  {{ column.name }}
-                </mat-option>
-              </mat-optgroup>
-              <mat-optgroup [label]="'Document Fields'">
-                <mat-option
-                  *ngFor="let column of documentFields"
-                  [value]="column.value"
-                  [disabled]="column.disabled"
-                  (click)="optionSelected(column, formChild)"
-                >
-                  {{ column.name }}
-                </mat-option>
-              </mat-optgroup>
-            </mat-select>
-          </mat-form-field>
-
-          <button
-            *ngIf="formChild"
-            (click)="deleteColumn(formChild)"
-            mat-icon-button
-            [attr.data-testid]="'delete-column-' + formChild"
-            [id]="'delete-column-' + formChild"
-          >
-            <i class="fas text-base text-secondary-400 fa-times"></i>
-          </button>
-        </div>
-      </div>
-    </form>
-
-    <div class="mt-2">
-      <button
-        mat-stroked-button
-        color="accent"
-        data-testid="add-new-column"
-        id="add-new-column"
-        [disabled]="disabledNewColumn"
-        (click)="addNewColumn()"
-      >
-        Add Column
-      </button>
+<div
+  class="text-error-500 text-center my-4"
+  id="error-loading-columns"
+  *ngIf="failedLoadDrawer"
+>
+  Unable to retrieve data.
+</div>
+<div *ngIf="!isLoading && !failedLoadDrawer" id="content-drawer-station-widget">
+  <div *ngIf="!isLoading" id="content-drawer-station-widget">
+    <div
+      *ngIf="!questions.length; else selectDrawer"
+      id="message-not-documents-assigned-to-station"
+    >
+      <p class="text-sm">
+        This station has no documents and therefore the fields to be assigned
+        cannot be displayed.
+      </p>
     </div>
-  </ng-template>
+    <ng-template #selectDrawer>
+      <form [formGroup]="formColumns">
+        <div formArrayName="columns">
+          <div
+            *ngFor="let column of getFormColumns.controls; index as formChild"
+            [formGroupName]="formChild"
+            class="flex justify-between items-center mt-2"
+          >
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-select formControlName="name">
+                <mat-optgroup [label]="'Document Info'">
+                  <mat-option
+                    *ngFor="let column of documentInfo"
+                    [value]="column.value"
+                    [disabled]="column.disabled"
+                    (click)="optionSelected(column, formChild)"
+                  >
+                    {{ column.name }}
+                  </mat-option>
+                </mat-optgroup>
+                <mat-optgroup [label]="'Document Fields'">
+                  <mat-option
+                    *ngFor="let column of documentFields"
+                    [value]="column.value"
+                    [disabled]="column.disabled"
+                    (click)="optionSelected(column, formChild)"
+                  >
+                    {{ column.name }}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+
+            <button
+              *ngIf="formChild"
+              (click)="deleteColumn(formChild)"
+              mat-icon-button
+              [attr.data-testid]="'delete-column-' + formChild"
+              [id]="'delete-column-' + formChild"
+            >
+              <i class="fas text-base text-secondary-400 fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="mt-2">
+        <button
+          mat-stroked-button
+          color="accent"
+          data-testid="add-new-column"
+          id="add-new-column"
+          [disabled]="disabledNewColumn"
+          (click)="addNewColumn()"
+        >
+          Add Column
+        </button>
+      </div>
+    </ng-template>
+  </div>
 </div>

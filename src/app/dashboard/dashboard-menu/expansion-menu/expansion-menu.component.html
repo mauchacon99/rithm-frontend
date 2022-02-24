@@ -4,7 +4,7 @@
   (closed)="panelOpenState = false"
   class="mat-elevation-z0 expansion-dashboards"
 >
-  <mat-expansion-panel-header>
+  <mat-expansion-panel-header matRipple>
     <mat-panel-title
       class="flex justify-between items-center p-3"
       [attr.data-testid]="'expansion-menu-' + dashboardRole"
@@ -51,6 +51,7 @@
     <div *ngIf="!isLoading && !showError && dashboardsList.length">
       <div *ngFor="let dashboard of dashboardsList; let i = index">
         <mat-list-item
+          matRipple
           class="color-hover cursor-pointer"
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
