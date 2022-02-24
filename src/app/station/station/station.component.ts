@@ -131,6 +131,7 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
+        this.stationInformation.name = stationName;
       });
 
     this.stationService.documentStationNameFields$
