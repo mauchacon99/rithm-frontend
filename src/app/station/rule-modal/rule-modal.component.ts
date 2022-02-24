@@ -115,7 +115,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     isReadOnly: false,
     isRequired: false,
     isPrivate: false,
-    value: '2022-02-23',
+    value: '',
     children: [],
     possibleAnswers: [],
     answer: {
