@@ -2,7 +2,11 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
-import { MapMode, StationInfoDrawerData } from 'src/models';
+import {
+  MapMode,
+  StationGroupInfoDrawerData,
+  StationInfoDrawerData,
+} from 'src/models';
 import { MapService } from '../map.service';
 
 /**
@@ -66,40 +70,15 @@ export class MapSearchComponent {
   }
 
   /**
-   * Search for the stations based on search text.
+   * Search for the stations and station groups based on search text.
    *
    */
-  searchStations(): void {
-    const stationsStationGroups: (
-      | StationMapElement
-      | StationGroupMapElement
-    )[] = [
-      ...this.mapService.stationElements,
-      ...this.mapService.stationGroupElements,
-    ];
+  searchStationsStationGroups(): void {
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
-      : (this.filteredStations = stationsStationGroups.filter((item) => {
-          // If the item is a station.
-          if (item instanceof StationMapElement) {
-            return item.stationName
-              .toLowerCase()
-              .includes(this.searchText.toString().toLowerCase());
-            // If the item is a station group.
-          } else if (item instanceof StationGroupMapElement) {
-            if (item.title) {
-              return item.title
-                .toLowerCase()
-                .includes(this.searchText.toString().toLowerCase());
-            } else {
-              return;
-            }
-          } else {
-            throw new Error(
-              'Item is not defined as a station or station group.'
-            );
-          }
-        }));
+      : this.filterStationsStationGroups(
+          this.searchText.toString().toLowerCase()
+        );
   }
 
   /**
@@ -114,6 +93,40 @@ export class MapSearchComponent {
     this.filteredStations = [];
     this.mapService.handleDrawerClose('stationInfo');
     this.searchInput = true;
+  }
+
+  /**
+   * Filter stations and station groups based on search text.
+   *
+   * @param searchText Text to filter station and station group.
+   */
+  private filterStationsStationGroups(searchText: string): void {
+    const stationsStationGroups: (
+      | StationMapElement
+      | StationGroupMapElement
+    )[] = [
+      ...this.mapService.stationElements,
+      ...this.mapService.stationGroupElements,
+    ];
+    this.filteredStations = stationsStationGroups.filter((item) => {
+      // If the item is a station.
+      if (item instanceof StationMapElement) {
+        return item.stationName
+          .toLowerCase()
+          .includes(searchText.toString().toLowerCase());
+        // If the item is a station group.
+      } else if (item instanceof StationGroupMapElement) {
+        if (item.title) {
+          return item.title
+            .toLowerCase()
+            .includes(searchText.toString().toLowerCase());
+        } else {
+          return;
+        }
+      } else {
+        throw new Error('Item is not defined as a station or station group.');
+      }
+    });
   }
 
   /**
@@ -143,9 +156,9 @@ export class MapSearchComponent {
     setTimeout(() => {
       this.search.nativeElement.value = this.placeHolderText;
       this.search.nativeElement.focus();
-      this.filteredStations = this.mapService.stationElements.filter((item) => {
-        return item.stationName.toLowerCase().includes(this.placeHolderText);
-      });
+      this.filterStationsStationGroups(
+        this.placeHolderText.toString().toLowerCase()
+      );
     }, 100);
   }
 
@@ -154,39 +167,55 @@ export class MapSearchComponent {
    *
    * @param drawerItem The selected item.
    */
-  openDrawer(drawerItem: StationMapElement): void {
-    //TODO: Needs to be remove once RTM-2243 is done.
-    // eslint-disable-next-line no-prototype-builtins
-    if (drawerItem.hasOwnProperty('title')) {
-      return;
-    }
-    const dataInformationDrawer: StationInfoDrawerData = {
-      stationRithmId: drawerItem.rithmId,
-      stationName: drawerItem.stationName,
-      editMode: this.mapService.mapMode$.value === MapMode.Build,
-      stationStatus: drawerItem.status,
-      mapMode: this.mapService.mapMode$.value,
-      openedFromMap: true,
-      notes: drawerItem.notes,
-    };
-    //Pass dataInformationDrawer to open the station info drawer.
-    this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-    const drawer = document.getElementsByTagName('mat-drawer');
-    this.stationService.updatedStationNameText(drawerItem.stationName);
-    drawerItem.drawerOpened = true;
-
-    //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
-    //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
-    //Increment centerStationCount to show that more centering of station needs to be done.
-    this.mapService.centerStationCount$.next(1);
-    //Call method to run logic for centering of the station.
-    setTimeout(() => {
-      this.mapService.centerStation(
-        drawerItem,
-        drawer[0] ? drawer[0].clientWidth : 0
+  openDrawer(drawerItem: StationMapElement | StationGroupMapElement): void {
+    if (drawerItem instanceof StationMapElement) {
+      const dataInformationDrawer: StationInfoDrawerData = {
+        stationRithmId: drawerItem.rithmId,
+        stationName: drawerItem.stationName,
+        editMode: this.mapService.mapMode$.value === MapMode.Build,
+        stationStatus: drawerItem.status,
+        mapMode: this.mapService.mapMode$.value,
+        openedFromMap: true,
+        notes: drawerItem.notes,
+      };
+      //Pass dataInformationDrawer to open the station info drawer.
+      this.sidenavDrawerService.openDrawer(
+        'stationInfo',
+        dataInformationDrawer
       );
-    }, 1);
+      const drawer = document.getElementsByTagName('mat-drawer');
+      this.stationService.updatedStationNameText(drawerItem.stationName);
+      drawerItem.drawerOpened = true;
+      //Close any open station option menus.
+      this.mapService.matMenuStatus$.next(true);
+      //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+      this.mapService.centerActive$.next(true);
+      //Increment centerStationCount to show that more centering of station needs to be done.
+      this.mapService.centerStationCount$.next(1);
+      //Call method to run logic for centering of the station.
+      setTimeout(() => {
+        this.mapService.centerStation(
+          drawerItem,
+          drawer[0] ? drawer[0].clientWidth : 0
+        );
+      }, 1);
+    } else if (drawerItem instanceof StationGroupMapElement) {
+      const dataInformationDrawer: StationGroupInfoDrawerData = {
+        stationGroupRithmId: drawerItem.rithmId,
+        stationGroupName: drawerItem.title,
+        editMode: this.mapService.mapMode$.value === MapMode.Build,
+        numberOfStations: drawerItem.stations.length,
+        numberOfSubgroups: drawerItem.subStationGroups.length,
+        stationGroupStatus: drawerItem.status,
+        isChained: false,
+      };
+      //Open station group info drawer when clicked on station group boundary or name.
+      this.sidenavDrawerService.openDrawer(
+        'stationGroupInfo',
+        dataInformationDrawer
+      );
+    } else {
+      throw new Error('Item is not defined as a station or station group.');
+    }
   }
 }
