@@ -645,7 +645,6 @@ describe('MapService', () => {
   });
 
   it('should set drawerOpened property of respective map element to false when any drawer is closed', () => {
-    const drawerItem = 'stationInfo';
     const station = new StationMapElement({
       rithmId: uuidv4(),
       stationName: 'Untitled Station',
@@ -663,8 +662,7 @@ describe('MapService', () => {
     service.stationElements.map((e) => {
       e.drawerOpened = true;
     });
-    service.handleDrawerClose(drawerItem);
-    service.openedDrawerType$.subscribe((res) => expect(res).toBe(''));
+    service.handleDrawerClose();
     service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
   });
 

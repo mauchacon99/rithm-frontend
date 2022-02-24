@@ -129,6 +129,9 @@ export class MockMapService {
   /** Checks if there should be panning towards the center of any station. */
   centerActive$ = new BehaviorSubject(false);
 
+  /** Informs the map that which drawer is opened. */
+  isDrawerOpened$ = new BehaviorSubject(false);
+
   /**
    * Creates a new `MockMapService`.
    *
