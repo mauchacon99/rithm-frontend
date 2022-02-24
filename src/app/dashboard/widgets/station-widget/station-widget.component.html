@@ -72,7 +72,7 @@
         </div>
         <ng-container *ngIf="dataStationWidget.documents.length">
           <ng-container
-            *ngTemplateOutlet="tableDocuments; context: dataStationWidget"
+            *ngTemplateOutlet="tableDocuments"
           ></ng-container>
         </ng-container>
       </div>
@@ -81,8 +81,8 @@
 </div>
 
 <!--Table documents-->
-<ng-template #tableDocuments let-documents="documents">
-  <table mat-table [dataSource]="documents" class="w-full">
+<ng-template #tableDocuments>
+  <table mat-table [dataSource]="dataSourceTable" class="w-full">
     <!--    Loop of the columns the widget-->
     <ng-container
       [matColumnDef]="

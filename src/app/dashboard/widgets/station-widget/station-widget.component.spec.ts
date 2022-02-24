@@ -11,6 +11,7 @@ import {
 import {
   ColumnsDocumentInfo,
   DocumentGenerationStatus,
+  QuestionFieldType,
   StationWidgetData,
 } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
@@ -70,7 +71,37 @@ describe('StationWidgetComponent', () => {
             email: 'string',
             isAssigned: true,
           },
-          questions: [],
+          questions: [
+            {
+              questions: [
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Instructions,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+                },
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Number,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28186',
+                },
+              ],
+              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+            },
+          ],
         },
       ],
     };
@@ -130,7 +161,25 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
-          questions: [],
+          questions: [
+            {
+              questions: [
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Instructions,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+                },
+              ],
+              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+            },
+          ],
         },
       ],
     };
@@ -169,7 +218,25 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
-          questions: [],
+          questions: [
+            {
+              questions: [
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Instructions,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+                },
+              ],
+              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+            },
+          ],
         },
       ],
     };
@@ -281,12 +348,7 @@ describe('StationWidgetComponent', () => {
     it('should show detail of the document', () => {
       const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
       component.isLoading = false;
-      fixture.detectChanges();
-      const btnDisplayDocument =
-        fixture.debugElement.nativeElement.querySelector(
-          '#show-document-widget'
-        );
-      btnDisplayDocument.click();
+      component.viewDocument(component.dataStationWidget.documents[0].rithmId);
       fixture.detectChanges();
       const documentDetail =
         fixture.debugElement.nativeElement.querySelector('#document-detail');
@@ -419,5 +481,37 @@ describe('StationWidgetComponent', () => {
     expect(component.columnsFieldPetition.length).toEqual(0);
     expect(component.columnsAllField.length).toEqual(0);
     expect(component.columnsToDisplayTable).toEqual(['name', 'viewDocument']);
+  });
+
+  it('should get name of question to table column when questionType id instructions', () => {
+    const expectDataValue = 'Instruction';
+    const expectDataReturn = component.getColumnQuestionPrompt({
+      name: 'Value Test',
+      questionId:
+        component.dataStationWidget.documents[0].questions[0].questions[0]
+          .rithmId,
+    });
+    expect(expectDataReturn).toEqual(expectDataValue);
+  });
+
+  it('should get name of question to table column when not found questionId', () => {
+    const expectDataValue = 'Value Test';
+    const expectDataReturn = component.getColumnQuestionPrompt({
+      name: expectDataValue,
+      questionId: '5f652ab1-6870-4b78-881-b5e4a6e2818',
+    });
+    expect(expectDataReturn).toEqual(expectDataValue);
+  });
+
+  it('should get name of question to table column when found questionId and its different to instructions', () => {
+    const expectDataValue =
+      component.dataStationWidget.documents[0].questions[0].questions[1].prompt;
+    const expectDataReturn = component.getColumnQuestionPrompt({
+      name: expectDataValue,
+      questionId:
+        component.dataStationWidget.documents[0].questions[0].questions[1]
+          .rithmId,
+    });
+    expect(expectDataReturn).toEqual(expectDataValue);
   });
 });

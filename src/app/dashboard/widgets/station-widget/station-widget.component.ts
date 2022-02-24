@@ -13,9 +13,10 @@ import { ErrorService } from 'src/app/core/error.service';
 import {
   ColumnFieldsWidget,
   StationWidgetData,
-  ColumnsLogicWidget,
   ColumnsDocumentInfo,
   QuestionFieldType,
+  ColumnsLogicWidget,
+  WidgetDocument,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -23,6 +24,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 /**
  * Component for Station widget.
@@ -39,6 +41,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   documentComponent!: DocumentComponent;
 
   private _dataWidget = '';
+
+  dataSourceTable!: MatTableDataSource<WidgetDocument>;
 
   /** Set data for station widget. */
   @Input() set dataWidget(value: string) {
@@ -187,6 +191,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
+          this.dataSourceTable = new MatTableDataSource(
+            this.dataStationWidget.documents
+          );
         },
         error: (error: unknown) => {
           this.failedLoadWidget = true;
@@ -314,7 +321,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.dataStationWidget.documents.length; i++) {
       const questionData = this.dataStationWidget.documents[
         i
-      ].questions[0].questions.find(
+      ].questions[0]?.questions?.find(
         (question) => question.rithmId === columnFieldsWidget.questionId
       );
       if (questionData) {
