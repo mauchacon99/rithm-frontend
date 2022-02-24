@@ -55,6 +55,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
 
+  /** Loading error. */
+  failedLoadDrawer = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService,
@@ -199,6 +202,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Get station questions. */
   private getDocumentFields(): void {
     this.isLoading = true;
+    this.failedLoadDrawer = false;
     this.stationService
       .getStationQuestions(this.stationRithmId)
       .pipe(first())
@@ -211,6 +215,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.isLoading = false;
+          this.failedLoadDrawer = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
