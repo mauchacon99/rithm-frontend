@@ -10,6 +10,7 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
+import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -165,5 +166,20 @@ describe('DocumentWidgetComponent', () => {
       '#gear-icon-document'
     );
     expect(gearIcon).toBeTruthy();
+  });
+
+  describe('testing sidenavDrawerService', () => {
+    let sidenavDrawer: SidenavDrawerService;
+    beforeEach(() => {
+      sidenavDrawer = TestBed.inject(SidenavDrawerService);
+    });
+
+    it('should ', function () {
+      expect(component.drawerContext).not.toBe('stationWidget');
+      sidenavDrawer.drawerContext$.next('stationWidget');
+      sidenavDrawer.drawerContext$.subscribe((data) => {
+        expect(component.drawerContext).toBe(data);
+      });
+    });
   });
 });
