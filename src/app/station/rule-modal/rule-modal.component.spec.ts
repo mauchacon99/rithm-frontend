@@ -27,20 +27,27 @@ import {
   Question,
   QuestionFieldType,
   OperatorType,
+  Rule,
+  RuleType,
 } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { DocumentService } from 'src/app/core/document.service';
 
+interface ModalData {
+  /** The station rithmId. */
+  stationId: string;
+  /** The data of the equation of the rule to be edited. */
+  editRule: Rule | null;
+}
+
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
 
-  const DIALOG_TEST_DATA = {
-    /** The station rithmId. */
+  const DIALOG_TEST_DATA: ModalData = {
     stationId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
-    /** The data of the equation of the rule to be edited. */
     editRule: null,
   };
 
@@ -316,5 +323,36 @@ describe('RuleModalComponent', () => {
     );
     const valueExpected = component.secondOperandQuestionList;
     expect(valueExpected).toBe(expectedResponse);
+  });
+
+  it('should open the stepper with the first step as selected if is not editMode', () => {
+    const stepperComponent: MatStepper = fixture.debugElement.query(
+      By.css('mat-stepper')
+    )?.componentInstance;
+
+    expect(stepperComponent.selectedIndex).toBe(0);
+  });
+
+  describe('Rule Modal Edit Mode', () => {
+    beforeEach(() => {
+      DIALOG_TEST_DATA.editRule = {
+        ruleType: RuleType.And,
+        equations: [],
+        subRules: [],
+      };
+      fixture = TestBed.createComponent(RuleModalComponent);
+      component = fixture.componentInstance;
+      component.ruleModalLoading = false;
+      fixture.detectChanges();
+    });
+    it('should open the stepper with the fourth step as selected if is editMode', () => {
+      component.editRuleMode = true;
+      fixture.detectChanges();
+      const stepperComponent: MatStepper = fixture.debugElement.query(
+        By.css('mat-stepper')
+      )?.componentInstance;
+
+      expect(stepperComponent.selectedIndex).toBe(3);
+    });
   });
 });
