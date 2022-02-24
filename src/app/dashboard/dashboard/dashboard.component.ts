@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
 
-  /** Value used to compare widgets. */
+  /** Value used to compare the widgets. */
   widgetType = WidgetType;
 
   /** Config grid. */
