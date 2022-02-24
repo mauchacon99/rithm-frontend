@@ -23,7 +23,7 @@ import { ErrorService } from 'src/app/core/error.service';
   styleUrls: ['./station-widget-drawer.component.scss'],
 })
 export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
-  /** Form. */
+  /** Form for fields the select. */
   formColumns: FormGroup = new FormGroup({
     columns: new FormArray([]),
   });
@@ -40,6 +40,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Position of the widget. */
   widgetIndex!: number;
 
+  /** Questions the station. */
   questions!: Question[];
 
   /** Loading document. */

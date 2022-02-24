@@ -71,9 +71,7 @@
           No documents found in station.
         </div>
         <ng-container *ngIf="dataStationWidget.documents.length">
-          <ng-container
-            *ngTemplateOutlet="tableDocuments"
-          ></ng-container>
+          <ng-container *ngTemplateOutlet="tableDocuments"></ng-container>
         </ng-container>
       </div>
     </div>
@@ -85,19 +83,16 @@
   <table mat-table [dataSource]="dataSourceTable" class="w-full">
     <!--    Loop of the columns the widget-->
     <ng-container
-      [matColumnDef]="
-        column.questionId ? column.questionId || '' : column.name
-      "
+      [matColumnDef]="column.questionId ? column.questionId || '' : column.name"
       *ngFor="let column of columnsAllField"
     >
       <!--      Render list of columns statics-->
       <ng-container *ngIf="!column.questionId">
         <!--        Title header-->
         <th mat-header-cell *matHeaderCellDef>
-          <div class="font-semibold truncate pr-2 max-w-[150px] text-xs">{{
-            getColumnBasicName(column.name) | uppercase
-            }}</div>
-
+          <div class="font-semibold truncate pr-2 max-w-[150px] text-xs">
+            {{ getColumnBasicName(column.name) | uppercase }}
+          </div>
         </th>
         <!--        Value of column-->
         <td mat-cell *matCellDef="let element" class="min-w-[150px] px-2">
@@ -163,7 +158,10 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplayTable; sticky: true"></tr>
+    <tr
+      mat-header-row
+      *matHeaderRowDef="columnsToDisplayTable; sticky: true"
+    ></tr>
     <tr mat-row *matRowDef="let row; columns: columnsToDisplayTable"></tr>
   </table>
 </ng-template>
@@ -201,7 +199,10 @@
 <!--Template for show questions columns of the document-->
 <ng-template #tableColumnQuestion let-column="column" let-document="document">
   <ng-container *ngFor="let questions of document.questions[0].questions">
-    <div *ngIf="questions.rithmId === column.questionId" class="text-secondary-500">
+    <div
+      *ngIf="questions.rithmId === column.questionId"
+      class="text-secondary-500"
+    >
       <div [ngSwitch]="questions.questionType">
         <p *ngSwitchCase="questionFieldType.CheckList" class="text-xs">
           <span *ngFor="let answer of questions.answer?.asArray">
