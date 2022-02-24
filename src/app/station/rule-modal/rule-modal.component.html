@@ -259,6 +259,7 @@
           class="w-1/12 text-accent-500"
           data-testid="next-step-3"
           id="next-step-3"
+          (click)="setSecondOperandType(isCustomValue)"
           [disabled]="secondOperand.value === ''"
         >
           Next

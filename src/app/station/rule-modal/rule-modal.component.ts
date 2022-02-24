@@ -132,6 +132,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     },
   };
 
+  /** Whether the second operand is a custom value or a field value. */
+  isCustomValue = false;
+
   /** The information of the operator selected. */
   operatorSelected: Operator | null = null;
 
@@ -264,13 +267,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.text = answer.value;
         this.secondOperand.value = answer.value;
         this.secondOperand.questionType = this.firstOperand.questionType;
-        if (
-          this.secondOperandQuestionType === QuestionFieldType.Select ||
-          this.secondOperandQuestionType === QuestionFieldType.MultiSelect ||
-          this.secondOperandQuestionType === QuestionFieldType.CheckList
-        ) {
-          this.secondOperand.type = OperandType.String;
-        }
       });
   }
 
@@ -589,9 +585,26 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   setSecondOperandInformation(questionSelected: Question): void {
     this.secondOperandQuestionPrompt = questionSelected.prompt;
     this.secondOperand.questionType = questionSelected.questionType;
-    this.secondOperand.type = OperandType.Field;
-    /** When selecting the second operand from the field, we wanna compare field-to-field. */
-    this.firstOperand.type = OperandType.Field;
+    this.isCustomValue = false;
+  }
+
+  /**
+   * Set Second Operand type for Custom Values.
+   *
+   * @param customValue Whether the value comes from the custom value field or a previous question.
+   */
+   setSecondOperandType(customValue: boolean): void {
+    if (customValue) {
+      if (
+        this.secondOperandQuestionType === QuestionFieldType.Select ||
+        this.secondOperandQuestionType === QuestionFieldType.MultiSelect ||
+        this.secondOperandQuestionType === QuestionFieldType.CheckList
+        ) {
+          this.secondOperand.type = OperandType.String;
+        }
+    } else {
+      this.secondOperand.type = OperandType.Field;
+    }
   }
 
   /**
