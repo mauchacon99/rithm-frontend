@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
@@ -21,6 +21,9 @@ export class MapSearchComponent {
   /** Search should be disabled when the map is loading. */
   @Input() isLoading = false;
 
+  /** Search input ID used for return to current search. */
+  @ViewChild('inputText') search!: ElementRef;
+
   /** List of filtered stations based on search text. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filteredStations: any[] = [];
@@ -28,11 +31,26 @@ export class MapSearchComponent {
   /** Search text. */
   searchText = '';
 
+  /** Place-holder text for return to previous search. */
+  placeHolderText = '';
+
+  /** On false used to store previous search text before station drawer opens. */
+  searchInput = true;
+
   constructor(
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService
   ) {}
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return !!this.sidenavDrawerService.isDrawerOpen;
+  }
 
   /**
    * Display station name when it's selected.
@@ -52,28 +70,15 @@ export class MapSearchComponent {
   }
 
   /**
-   * Search for the stations based on search text.
+   * Search for the stations and station groups based on search text.
    *
    */
-  searchStations(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const stationsStationGroups: any[] = [
-      ...this.mapService.stationElements,
-      ...this.mapService.stationGroupElements,
-    ];
+  searchStationsStationGroups(): void {
     this.searchText === '' || this.searchText.length === 0
       ? (this.filteredStations = [])
-      : (this.filteredStations = stationsStationGroups.filter((item) => {
-          if (item && (item.stationName || item.title)) {
-            return item.stationName
-              ? item.stationName
-                  .toLowerCase()
-                  .includes(this.searchText.toString().toLowerCase())
-              : item.title
-                  .toLowerCase()
-                  .includes(this.searchText.toString().toLowerCase());
-          }
-        }));
+      : this.filterStationsStationGroups(
+          this.searchText.toString().toLowerCase()
+        );
   }
 
   /**
@@ -81,8 +86,80 @@ export class MapSearchComponent {
    *
    */
   clearSearchText(): void {
+    if (this.searchText !== '' || this.searchText.length !== 0) {
+      this.sidenavDrawerService.closeDrawer();
+    }
     this.searchText = '';
     this.filteredStations = [];
+    this.mapService.handleDrawerClose('stationInfo');
+    this.searchInput = true;
+  }
+
+  /**
+   * Filter stations and station groups based on search text.
+   *
+   * @param searchText Text to filter station and station group.
+   */
+  private filterStationsStationGroups(searchText: string): void {
+    const stationsStationGroups: (
+      | StationMapElement
+      | StationGroupMapElement
+    )[] = [
+      ...this.mapService.stationElements,
+      ...this.mapService.stationGroupElements,
+    ];
+    this.filteredStations = stationsStationGroups.filter((item) => {
+      // If the item is a station.
+      if (item instanceof StationMapElement) {
+        return item.stationName
+          .toLowerCase()
+          .includes(searchText.toString().toLowerCase());
+        // If the item is a station group.
+      } else if (item instanceof StationGroupMapElement) {
+        if (item.title) {
+          return item.title
+            .toLowerCase()
+            .includes(searchText.toString().toLowerCase());
+        } else {
+          return;
+        }
+      } else {
+        throw new Error('Item is not defined as a station or station group.');
+      }
+    });
+  }
+
+  /**
+   * To get current search text words to store.
+   *
+   */
+  onBlur(): void {
+    if (this.searchInput) {
+      this.placeHolderText = JSON.parse(
+        JSON.stringify(this.search.nativeElement.value)
+      );
+      this.searchInput = false;
+    }
+  }
+
+  /**
+   * Returns to current search text on click of arrow icon & close the drawer.
+   *
+   */
+  returnSearchText(): void {
+    if (this.searchText !== '' || this.searchText.length !== 0) {
+      this.sidenavDrawerService.closeDrawer();
+      this.mapService.handleDrawerClose('stationInfo');
+      this.searchInput = true;
+    }
+    this.filteredStations = [];
+    setTimeout(() => {
+      this.search.nativeElement.value = this.placeHolderText;
+      this.search.nativeElement.focus();
+      this.filterStationsStationGroups(
+        this.placeHolderText.toString().toLowerCase()
+      );
+    }, 100);
   }
 
   /**
@@ -90,9 +167,8 @@ export class MapSearchComponent {
    *
    * @param drawerItem The selected item.
    */
-  // eslint-disable-next-line
-  openDrawer(drawerItem: any): void {
-    if (drawerItem instanceof Object && 'stationName' in drawerItem) {
+  openDrawer(drawerItem: StationMapElement | StationGroupMapElement): void {
+    if (drawerItem instanceof StationMapElement) {
       const dataInformationDrawer: StationInfoDrawerData = {
         stationRithmId: drawerItem.rithmId,
         stationName: drawerItem.stationName,
@@ -123,7 +199,7 @@ export class MapSearchComponent {
           drawer[0] ? drawer[0].clientWidth : 0
         );
       }, 1);
-    } else if (drawerItem instanceof Object && 'title' in drawerItem) {
+    } else if (drawerItem instanceof StationGroupMapElement) {
       const dataInformationDrawer: StationGroupInfoDrawerData = {
         stationGroupRithmId: drawerItem.rithmId,
         stationGroupName: drawerItem.title,
@@ -138,8 +214,8 @@ export class MapSearchComponent {
         'stationGroupInfo',
         dataInformationDrawer
       );
+    } else {
+      throw new Error('Item is not defined as a station or station group.');
     }
-    this.searchText = '';
-    this.filteredStations = [];
   }
 }
