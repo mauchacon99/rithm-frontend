@@ -430,7 +430,6 @@ describe('StationWidgetDrawerComponent', () => {
       );
       expect(error).toBeTruthy();
       expect(spyError).toHaveBeenCalled();
-
     });
     it('should render message for show user this station not documents assigned', () => {
       component.questions = [];
