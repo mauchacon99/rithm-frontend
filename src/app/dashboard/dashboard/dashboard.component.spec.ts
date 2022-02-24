@@ -423,7 +423,7 @@ describe('DashboardComponent', () => {
       expect(spyDrawer).toHaveBeenCalled();
     });
 
-    it('should call toggle drawer for close drawer when show dialog add new widget', async () => {
+    it('should call toggle drawer for close drawer when show dialog add new widget', () => {
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
