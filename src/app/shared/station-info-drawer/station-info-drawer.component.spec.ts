@@ -102,6 +102,7 @@ describe('StationInfoDrawerComponent', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
     component.stationRithmId = stationId;
     stationInject = TestBed.inject(StationService);

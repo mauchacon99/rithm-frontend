@@ -374,6 +374,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         allowAllOrgWorkers: false,
         allowExternalWorkers: true,
         flowButton: 'Flow',
+        isChained: false,
       };
     }
   }
