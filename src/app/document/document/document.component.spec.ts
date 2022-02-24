@@ -349,6 +349,10 @@ describe('DocumentComponent', () => {
         rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
         name: 'Previous Station',
       },
+      {
+        rithmId: '44904ac2-6bdd-4157-a818-50ffb37fdfbd',
+        name: 'Previous Station #2',
+      },
     ];
     fixture.detectChanges();
   });
@@ -633,13 +637,16 @@ describe('DocumentComponent', () => {
     });
   });
 
-  it('should move flow document to a previous station', () => {
+  it('should move flow document to a previous stations', () => {
     const stationId = component.documentInformation.stationRithmId;
     const documentId = component.documentInformation.documentRithmId;
+    const previousStations: string[] = component.previousStations.map(
+      (item) => item.rithmId
+    );
 
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
-      toStationRithmIds: [component.previousStations[0].rithmId],
+      toStationRithmIds: previousStations,
       documentRithmId: documentId,
     };
     component['stationId'] = stationId;

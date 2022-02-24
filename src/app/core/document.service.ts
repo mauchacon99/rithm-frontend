@@ -358,7 +358,10 @@ export class DocumentService {
           })
       ).pipe(delay(1000));
     }
-    return of().pipe(delay(1000));
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`,
+      document
+    );
   }
 
   /**

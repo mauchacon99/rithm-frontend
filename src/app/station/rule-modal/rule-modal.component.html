@@ -9,6 +9,7 @@
     [linear]="true"
     (selectionChange)="clearOnStepBack($event)"
     [orientation]="(stepperOrientation$ | async)!"
+    #stepper
   >
     <ng-template matStepperIcon="edit">
       <i class="fas fa-check"></i>
@@ -33,13 +34,41 @@
         >
           <mat-label>Select Field</mat-label>
           <mat-select [(value)]="firstOperandQuestionRithmId">
-            <mat-option
-              *ngFor="let question of questionStation"
-              [value]="question.rithmId"
-              (click)="setFirstOperandInformation(question)"
-            >
-              {{ question.prompt }}
-            </mat-option>
+            <ng-container *ngFor="let question of questionStation">
+              <mat-option
+                *ngIf="
+                  question.questionType !== questionTypes.AddressLine;
+                  else isAddressLine
+                "
+                [value]="question.rithmId"
+                (click)="setFirstOperandInformation(question)"
+              >
+                {{ question.prompt }}
+              </mat-option>
+              <ng-template #isAddressLine>
+                <mat-option
+                  [value]="question.rithmId"
+                  (click)="setFirstOperandInformation(question)"
+                >
+                  {{ question.prompt }}
+                </mat-option>
+                <mat-optgroup class="address-line-group">
+                  <mat-option
+                    *ngFor="
+                      let subquestion of question.children;
+                      let child = index
+                    "
+                    [value]="question.rithmId"
+                    (click)="setFirstOperandInformation(question, child)"
+                  >
+                    <span class="text-secondary-200"
+                      >{{ question.prompt }} /</span
+                    >
+                    {{ subquestion.prompt }}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-template>
+            </ng-container>
           </mat-select>
         </mat-form-field>
         <ng-template #selectFieldLoading>
@@ -243,7 +272,7 @@
         <p class="text-sm my-1">
           {{ firstOperand.text }}
           <span class="font-semibold">{{ operatorSelected?.text }} </span>
-          {{ secondOperandToShow }}
+          {{ secondOperand.text }}
         </p>
       </div>
       <div class="flex flex-row space-x-2 mt-5">

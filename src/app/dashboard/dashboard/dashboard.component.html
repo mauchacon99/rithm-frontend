@@ -16,7 +16,7 @@
       *ngIf="drawerContext === 'stationWidget' && isDrawerOpen"
     ></app-widget-drawer>
   </mat-drawer>
-  <mat-drawer-content class="textured-bg h-calc">
+  <mat-drawer-content class="textured-bg h-calc scrollbar">
     <ng-container *ngIf="!viewNewDashboard; else newDashboard">
       <div class="container mx-auto px-3 py-5 lg:px-0">
         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
@@ -42,7 +42,7 @@
       </div>
     </ng-container>
     <ng-template #newDashboard>
-      <div class="container mx-auto px-3 py-5 lg:px-0">
+      <div class="container mx-auto py-5">
         <button
           mat-button
           id="menu-button"
@@ -63,7 +63,7 @@
           id="error-loading-dashboard"
           *ngIf="errorLoadingDashboard"
         >
-          Unable to retrieve dashboard
+          Unable to retrieve dashboard.
         </div>
         <div
           class="text-center my-4"
@@ -141,7 +141,7 @@
               id="add-widget-button"
               data-testid="add-widget-button"
               class="bg-accent-800 text-secondary-50 drop-shadow-md"
-              style="margin-top: 1em"
+              style="margin-top: 0.5em; margin-bottom: 0.5em"
             >
               <i class="fas fa-plus"></i> Add Widget
             </button>
@@ -151,9 +151,12 @@
             id="error-loading-widgets"
             *ngIf="!dashboardData.widgets.length"
           >
-            Current dashboard has no widgets to display
+            Current dashboard has no widgets to display.
           </div>
-          <gridster class="h-screen bg-transparent px-0" [options]="options">
+          <gridster
+            class="h-screen bg-transparent px-0 scrollbar"
+            [options]="options"
+          >
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"
@@ -164,16 +167,17 @@
               "
             >
               <app-station-widget
-                *ngIf="item.widgetType === 'station'"
+                *ngIf="item.widgetType === widgetType.Station"
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [dataWidget]="item.data"
                 [editMode]="editMode"
-                (toggleDrawer)="toggleStationWidgetDrawer(item.data, index)"
+                (toggleDrawer)="toggleWidgetDrawer(item, index)"
               >
               </app-station-widget>
               <app-document-widget
-                *ngIf="item.widgetType === 'document-list'"
+                *ngIf="item.widgetType === widgetType.Document"
                 [documentRithmId]="item.data"
+                [editMode]="editMode"
               >
               </app-document-widget>
             </gridster-item>
