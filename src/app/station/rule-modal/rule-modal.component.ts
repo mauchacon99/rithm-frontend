@@ -31,6 +31,13 @@ import { DocumentService } from 'src/app/core/document.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-field.component';
 
+interface Operator {
+  /** The operator selector text to show.*/
+  text: string;
+  /** The operator selector value.*/
+  value: OperatorType;
+}
+
 /**
  * Reusable component for displaying the information to add a new rule.
  */
@@ -63,40 +70,34 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** Station Rithm id. */
-  stationRithmId = '';
-
   /** Orientation for stepper. */
   stepperOrientation$: Observable<StepperOrientation>;
 
   /** Get current and previous Questions for Stations. */
   questionStation: Question[] = [];
 
-  /** The error if question stations fails . */
-  questionStationError = false;
-
-  /** Loading in current and previous questions for stations. */
-  questionStationLoading = false;
-
   /** The rithmId of the first selected question to be compared. */
   firstOperandQuestionRithmId = '';
 
+  /** The type of the first questions selected for the first operand. */
+  firstOperandQuestionType!: QuestionFieldType;
+
   /** The value of the first operand. */
   firstOperand: RuleOperand = {
-    type: OperandType.String,
+    type: OperandType.Field,
     questionType: QuestionFieldType.ShortText,
     value: '',
     text: '',
   };
-
-  /** The type of the first questions selected for the first operand. */
-  firstOperandQuestionType!: QuestionFieldType;
 
   /** The rithmId of the second selected question to be compared if needed. */
   secondOperandQuestionRithmId = '';
 
   /** Set the text to show when the secondOperand is a field. */
   secondOperandQuestionPrompt = '';
+
+  /** The type of the second questions selected for the first operand. */
+  secondOperandQuestionType!: QuestionFieldType;
 
   /** The value of the second operand. */
   secondOperand: RuleOperand = {
@@ -114,21 +115,31 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     isReadOnly: false,
     isRequired: false,
     isPrivate: false,
-    value: '',
+    value: '2022-02-23',
     children: [],
     possibleAnswers: [],
+    answer: {
+      questionRithmId: Math.random().toString(36).slice(2),
+      referAttribute: '',
+      asArray: [
+        {
+          value: '',
+          isChecked: false,
+        },
+      ],
+      asInt: 0,
+      asDecimal: 0,
+      asString: '',
+      asDate: '',
+      value: '',
+    },
   };
 
-  /** The type of the second questions selected for the first operand. */
-  secondOperandQuestionType!: QuestionFieldType;
-
   /** The information of the operator selected. */
-  operatorSelected: {
-    /**Operator text. */
-    text: string;
-    /**Operator type */
-    value: OperatorType;
-  } | null = null;
+  operatorSelected: Operator | null = null;
+
+  /** The operatorList to be shown. */
+  operatorList: Operator[] = [];
 
   /** Contain all the operand Types. */
   operandType = OperandType;
@@ -136,6 +147,13 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Contain all the question Types. */
   questionTypes = QuestionFieldType;
 
+  /** The rule to be returned and added to new rulesArray. */
+  ruleToAdd!: RuleEquation;
+
+  /** Is modal rule in edit mode. */
+  editRuleMode = false;
+
+  /** Static Information. */
   /** Text group for the operator options. */
   textGroup = [
     {
@@ -195,10 +213,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       text: 'after',
       value: OperatorType.After,
     },
-    {
-      text: 'on',
-      value: OperatorType.On,
-    },
+    // {
+    //   text: 'on',
+    //   value: OperatorType.On,
+    // },
   ];
 
   /** Select group for the operator options. */
@@ -213,22 +231,15 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     },
   ];
 
-  /** The operatorList to be shown. */
-  operatorList: {
-    /** The operator selector text to show.*/
-    text: string;
-    /** The operator selector value.*/
-    value: OperatorType;
-  }[] = [];
+  /** Loading/Error Variables. */
+  /** Loading in current and previous questions for stations. */
+  questionStationLoading = false;
 
-  /** The rule to be returned and added to new rulesArray. */
-  ruleToAdd!: RuleEquation;
+  /** Loading in current and previous questions for stations. */
+  ruleModalLoading = true;
 
-  /** Is modal rule in edit mode. */
-  editMode = false;
-
-  /** Edit mode to clear each step as a new rule. */
-  editModeCleanStep = false;
+  /** The error if question stations fails . */
+  questionStationError = false;
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -245,7 +256,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     private readonly changeDetectorR: ChangeDetectorRef,
     private documentService: DocumentService
   ) {
-    this.stationRithmId = modalData.stationId;
     this.stepperOrientation$ = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -257,12 +267,14 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.text = answer.value;
         this.secondOperand.value = answer.value;
         this.secondOperand.questionType = this.firstOperand.questionType;
-        this.secondOperand.type = this.firstOperand.type;
+        if (
+          this.secondOperandQuestionType === QuestionFieldType.Select ||
+          this.secondOperandQuestionType === QuestionFieldType.MultiSelect ||
+          this.secondOperandQuestionType === QuestionFieldType.CheckList
+        ) {
+          this.secondOperand.type = OperandType.String;
+        }
       });
-
-    if (modalData.editRule) {
-      this.editMode = true;
-    }
   }
 
   /**
@@ -270,6 +282,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   ngOnInit(): void {
     this.getStationQuestions();
+    if (this.modalData.editRule) {
+      this.editRuleMode = true;
+    }
   }
 
   /**
@@ -277,6 +292,33 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   ngAfterViewChecked(): void {
     this.changeDetectorR.detectChanges();
+  }
+
+  /**
+   * Set the Rule Modal Title.
+   *
+   * @returns Modal Title.
+   */
+  get ruleModalTitle(): string {
+    return this.editRuleMode ? 'Edit Rule' : 'New Rule';
+  }
+
+  /**
+   * Get the list of questions for the second operand.
+   *
+   * @returns Questions for the second operand options.
+   */
+  get firstOperandQuestionList(): Question[] {
+    const secondOperandQuestions: Question[] = this.questionStation.filter(
+      (question: Question) =>
+        question.questionType !== QuestionFieldType.Instructions &&
+        question.questionType !== QuestionFieldType.State &&
+        question.questionType !== QuestionFieldType.City &&
+        question.questionType !== QuestionFieldType.Zip &&
+        question.prompt !== 'Address Line 1' &&
+        question.prompt !== 'Address Line 2'
+    );
+    return secondOperandQuestions;
   }
 
   /**
@@ -310,25 +352,31 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @returns A normal value or a rithmId to display.
    */
   get displayOperatorType(): string {
-    return this.firstOperand.type === this.operandType.String
-      ? 'string'
-      : this.firstOperand.type === this.operandType.Date
-      ? 'date'
-      : this.firstOperand.type === this.operandType.Number
-      ? 'number'
-      : this.firstOperand.type === this.operandType.Field
-      ? this.firstOperandQuestionType === this.questionTypes.Select
-        ? 'select'
-        : this.firstOperandQuestionType === this.questionTypes.MultiSelect
-        ? 'multiselect'
-        : this.firstOperandQuestionType === this.questionTypes.CheckList
-        ? 'checklist'
-        : this.firstOperandQuestionType === this.questionTypes.State
-        ? 'select'
-        : this.firstOperandQuestionType === this.questionTypes.Zip
-        ? 'number'
-        : 'string'
-      : 'string';
+    let display = 'string';
+    switch (this.firstOperandQuestionType) {
+      case QuestionFieldType.Date:
+        display = 'date';
+        break;
+      case QuestionFieldType.State:
+      case QuestionFieldType.Select:
+        display = 'select';
+        break;
+      case QuestionFieldType.MultiSelect:
+        display = 'multiselect';
+        break;
+      case QuestionFieldType.CheckList:
+        display = 'checklist';
+        break;
+      case QuestionFieldType.Number:
+      case QuestionFieldType.Currency:
+      case QuestionFieldType.Zip:
+        display = 'number';
+        break;
+      default:
+        display = 'string';
+        break;
+    }
+    return display;
   }
 
   /**
@@ -337,21 +385,16 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   getStationQuestions(): void {
     this.questionStationLoading = true;
     this.stationService
-      .getStationQuestions(this.stationRithmId, true)
+      .getStationQuestions(this.modalData.stationId, true)
       .pipe(first())
       .subscribe({
         next: (questions) => {
           this.questionStationLoading = false;
           this.questionStation = questions;
-          //Filter to show questions that are different to Instructions
-          this.questionStation = this.questionStation.filter(
-            (question: Question) =>
-              question.questionType !== QuestionFieldType.Instructions
-          );
-          //If you are in edit mode we assign the values that come from the modal
-          if (this.editMode) {
+          if (this.editRuleMode) {
             this.setRuleModalEditData();
           }
+          this.ruleModalLoading = false;
         },
         error: (error: unknown) => {
           this.questionStationError = true;
@@ -362,6 +405,97 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
           );
         },
       });
+  }
+
+  /**
+   * Set The modal data to update the rule.
+   */
+  setRuleModalEditData(): void {
+    const rule: RuleEquation = this.modalData.editRule;
+
+    this.firstOperand = rule.leftOperand;
+    this.secondOperand = rule.rightOperand;
+    this.secondOperandDefaultQuestion.questionType =
+      this.secondOperand.questionType;
+
+    //Set the values to the first operand
+    const firstOperandQuestionSelected: Question | undefined =
+      this.questionStation.find(
+        (question) => question.rithmId === rule.leftOperand.value
+      );
+
+    if (firstOperandQuestionSelected) {
+      this.firstOperandQuestionRithmId = firstOperandQuestionSelected.rithmId;
+      this.firstOperandQuestionType = this.firstOperand.questionType;
+
+      if (
+        this.firstOperand.questionType === QuestionFieldType.Select ||
+        this.firstOperand.questionType === QuestionFieldType.MultiSelect ||
+        this.firstOperand.questionType === QuestionFieldType.CheckList
+      ) {
+        this.secondOperandDefaultQuestion.possibleAnswers =
+          firstOperandQuestionSelected.possibleAnswers;
+        this.secondOperandDefaultQuestion.questionType =
+          firstOperandQuestionSelected.questionType ===
+          QuestionFieldType.CheckList
+            ? QuestionFieldType.MultiSelect
+            : firstOperandQuestionSelected.questionType;
+      }
+    }
+    this.setOperatorList(this.firstOperandQuestionType);
+    const operatorSelect: Operator | undefined = this.operatorList.find(
+      (operator) => operator.value === rule.operatorType
+    );
+
+    if (operatorSelect) {
+      this.operatorSelected = operatorSelect;
+    }
+
+    if (this.secondOperand.type === OperandType.Field) {
+      this.secondOperandQuestionRithmId = this.secondOperand.value;
+    }
+
+    this.secondOperandDefaultQuestion.value = this.secondOperand.value;
+
+    if (this.secondOperandDefaultQuestion.answer) {
+      this.secondOperandDefaultQuestion.answer.asDate =
+        this.secondOperand.type === OperandType.Date
+          ? this.secondOperand.value
+          : '';
+      this.secondOperandDefaultQuestion.answer.asString =
+        this.secondOperand.type === OperandType.String
+          ? this.secondOperand.value
+          : '';
+      // eslint-disable-next-line max-len
+      this.secondOperandDefaultQuestion.answer.asInt =
+        this.secondOperand.type === OperandType.Number
+          ? parseInt(this.secondOperand.value)
+          : 0;
+      // eslint-disable-next-line max-len
+      this.secondOperandDefaultQuestion.answer.asDecimal =
+        this.secondOperand.type === OperandType.Number
+          ? parseFloat(this.secondOperand.value)
+          : 0;
+
+      if (
+        this.firstOperand.questionType === QuestionFieldType.Select ||
+        this.firstOperand.questionType === QuestionFieldType.MultiSelect ||
+        this.firstOperand.questionType === QuestionFieldType.CheckList
+      ) {
+        const optAsArray = this.secondOperand.text?.split('|');
+        this.secondOperandDefaultQuestion.possibleAnswers?.forEach((option) => {
+          const item = {
+            /** The text value of the item.*/
+            value: option.text,
+            /** Whether the item is checked or not. */
+            isChecked: optAsArray?.includes(option.text) ? true : false,
+          };
+          this.secondOperandDefaultQuestion.answer?.asArray?.push(item);
+        });
+      }
+    }
+
+    this.resetQuestionFieldComponent();
   }
 
   /**
@@ -381,58 +515,34 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       questionSelected.questionType;
     this.firstOperand.value = questionSelected.rithmId;
     this.firstOperand.text = questionSelected.prompt;
+    this.setOperatorList(questionSelected.questionType);
     if (childIndex < 0) {
       switch (questionSelected.questionType) {
         case QuestionFieldType.ShortText:
         case QuestionFieldType.URL:
         case QuestionFieldType.Email:
         case QuestionFieldType.Phone:
-          this.operatorList = this.textGroup;
-          this.firstOperand.type =
-            questionSelected.questionType !== QuestionFieldType.Phone
-              ? OperandType.String
-              : OperandType.Number;
-          this.secondOperand.type = this.firstOperand.type;
-          break;
         case QuestionFieldType.LongText:
-          this.operatorList = this.contentGroup;
-          this.firstOperand.type = OperandType.String;
-          this.secondOperand.type = this.firstOperand.type;
+          this.secondOperand.type = OperandType.String;
           break;
-
         case QuestionFieldType.Number:
         case QuestionFieldType.Currency:
-          this.operatorList = this.numberGroup;
-          this.firstOperand.type = OperandType.Number;
-          this.secondOperand.type = this.firstOperand.type;
+          this.secondOperand.type = OperandType.Number;
           break;
         case QuestionFieldType.Date:
-          this.operatorList = this.dateGroup;
-          this.firstOperand.type = OperandType.Date;
-          this.secondOperand.type = this.firstOperand.type;
+          this.secondOperand.type = OperandType.Date;
           break;
         case QuestionFieldType.MultiSelect:
         case QuestionFieldType.Select:
-          this.operatorList = this.textGroup;
-          this.firstOperand.type = OperandType.Field;
-          this.secondOperand.type = OperandType.String;
-          this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
-          this.secondOperandDefaultQuestion.possibleAnswers =
-            questionSelected.possibleAnswers;
-          break;
         case QuestionFieldType.CheckList:
-          this.operatorList = this.textGroup;
-          this.firstOperand.type = OperandType.Field;
           this.secondOperand.type = OperandType.String;
           this.secondOperandDefaultQuestion.prompt = questionSelected.prompt;
-          this.secondOperandDefaultQuestion.questionType =
-            QuestionFieldType.MultiSelect;
           this.secondOperandDefaultQuestion.possibleAnswers =
             questionSelected.possibleAnswers;
-          break;
-        case QuestionFieldType.AddressLine:
-          this.firstOperand.type = OperandType.Field;
-          this.operatorList = this.selectGroup;
+          this.secondOperandDefaultQuestion.questionType =
+            questionSelected.questionType === QuestionFieldType.CheckList
+              ? QuestionFieldType.MultiSelect
+              : questionSelected.questionType;
           break;
       }
     } else {
@@ -453,12 +563,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         questionSelected.children[childIndex].prompt;
       this.firstOperand.questionType = childType;
       this.firstOperandQuestionType = childType;
-      this.firstOperand.type =
-        childType === QuestionFieldType.State
-          ? OperandType.Field
-          : childType === QuestionFieldType.Zip
-          ? OperandType.Number
-          : OperandType.String;
       if (
         childType === QuestionFieldType.State ||
         childType === QuestionFieldType.Zip
@@ -468,13 +572,15 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.operatorList = this.textGroup;
       }
     }
+
     // If it is edit mode and you have changed the first operand from options.
-    if (this.editMode && this.editModeCleanStep) {
+    if (this.editRuleMode) {
       this.operatorSelected = null;
       this.secondOperand.value = '';
       this.secondOperand.type = OperandType.String;
       this.secondOperandQuestionPrompt = '';
-      this.editModeCleanStep = !this.editModeCleanStep;
+      this.secondOperandDefaultQuestion.prompt = '';
+      this.secondOperandDefaultQuestion.value = '';
     }
 
     this.resetQuestionFieldComponent();
@@ -491,6 +597,42 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.secondOperand.type = OperandType.Field;
     /** When selecting the second operand from the field, we wanna compare field-to-field. */
     this.firstOperand.type = OperandType.Field;
+  }
+
+  /**
+   * Set operator list.
+   *
+   * @param questionType The question type to filter the operator list.
+   */
+  setOperatorList(questionType: QuestionFieldType): void {
+    switch (questionType) {
+      case QuestionFieldType.ShortText:
+      case QuestionFieldType.URL:
+      case QuestionFieldType.Email:
+      case QuestionFieldType.Phone:
+      case QuestionFieldType.MultiSelect:
+      case QuestionFieldType.Select:
+      case QuestionFieldType.CheckList:
+        this.operatorList = this.textGroup;
+        break;
+      case QuestionFieldType.LongText:
+        this.operatorList = this.contentGroup;
+        break;
+
+      case QuestionFieldType.Number:
+      case QuestionFieldType.Currency:
+        this.operatorList = this.numberGroup;
+        break;
+      case QuestionFieldType.Date:
+        this.operatorList = this.dateGroup;
+        break;
+      case QuestionFieldType.AddressLine:
+        this.operatorList = this.selectGroup;
+        break;
+      default:
+        this.operatorList = this.textGroup;
+        break;
+    }
   }
 
   /**
@@ -514,43 +656,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         text: this.secondOperandToShow,
       },
     };
-    this.dialogRef.close(this.ruleToAdd);
-  }
-
-  /**
-   * Set The modal data to update the rule.
-   */
-  setRuleModalEditData(): void {
-    const rule: RuleEquation = this.modalData.editRule;
-
-    //Set the values to the first operand
-    const firstQuestionSelected: Question = this.questionStation.filter(
-      (question) => question.rithmId === rule.leftOperand.value
-    )[0];
-    this.firstOperandQuestionRithmId = firstQuestionSelected.rithmId;
-    this.setFirstOperandInformation(firstQuestionSelected);
-
-    //Set the values to the second operand
-    this.secondOperand.value = rule.rightOperand.value;
-    //If it does not come with questions for the second operand, the value is assigned to the component field.
-    if (!this.secondOperandQuestionList.length) {
-      this.secondOperandDefaultQuestion.value = rule.rightOperand.value;
-    }
-    this.secondOperand.questionType = rule.rightOperand.questionType;
-
-    //Set the value to the operator
-    const operator = this.operatorList.find(
-      (ope) => ope.value === rule.operatorType
-    );
-    this.operatorSelected = operator || null;
-
-    //Set the linear to refresh and index 3 to be in step 4.
-    this.stepper.linear = false;
-    this.stepper.selectedIndex = 3;
-    this.stepper.linear = true;
-
-    // Set true in editModeCleanStep for the method setFirstOperandInformation to clean operands and operator.
-    this.editModeCleanStep = true;
+    this.dialogRef.close({ rule: this.ruleToAdd, editMode: this.editRuleMode });
+    this.resetValues();
   }
 
   /**
@@ -581,7 +688,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param event The stepper selection event for all steps.
    */
   clearOnStepBack(event: StepperSelectionEvent): void {
-    if (!this.editModeCleanStep) {
+    if (!this.editRuleMode) {
       if (event.selectedIndex < event.previouslySelectedIndex) {
         switch (event.selectedIndex) {
           case 0:
@@ -589,6 +696,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.secondOperand.value = '';
             this.secondOperand.type = OperandType.String;
             this.secondOperandQuestionPrompt = '';
+            this.secondOperandDefaultQuestion.prompt = '';
+            this.secondOperandDefaultQuestion.value = '';
             this.resetQuestionFieldComponent();
             break;
           case 1:
@@ -608,7 +717,59 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Close rule Modal.
    */
   closeModal(): void {
+    this.resetValues();
     this.dialogRef.close();
+  }
+
+  /**
+   * Reset Modal Values.
+   */
+  resetValues(): void {
+    this.firstOperandQuestionRithmId = '';
+    this.firstOperand = {
+      type: OperandType.Field,
+      questionType: QuestionFieldType.ShortText,
+      value: '',
+      text: '',
+    };
+    this.secondOperand = {
+      type: OperandType.String,
+      questionType: QuestionFieldType.ShortText,
+      value: '',
+      text: '',
+    };
+    this.operatorSelected = null;
+    this.operatorList = [];
+    this.firstOperandQuestionType = QuestionFieldType.ShortText;
+    this.secondOperandQuestionType = QuestionFieldType.ShortText;
+    this.secondOperandQuestionRithmId = '';
+    this.secondOperandQuestionPrompt = '';
+    this.secondOperandDefaultQuestion = {
+      questionType: QuestionFieldType.ShortText,
+      rithmId: Math.random().toString(36).slice(2),
+      prompt: 'Custom',
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      value: '2022-02-23',
+      children: [],
+      possibleAnswers: [],
+      answer: {
+        questionRithmId: Math.random().toString(36).slice(2),
+        referAttribute: '',
+        asArray: [
+          {
+            value: '',
+            isChecked: false,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: '',
+        asDate: '',
+        value: '',
+      },
+    };
   }
 
   /**

@@ -43,7 +43,6 @@ describe('RuleModalComponent', () => {
     /** The data of the equation of the rule to be edited. */
     editRule: null,
   };
-  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -77,6 +76,7 @@ describe('RuleModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RuleModalComponent);
     component = fixture.componentInstance;
+    component.ruleModalLoading = false;
     fixture.detectChanges();
   });
 
@@ -84,18 +84,16 @@ describe('RuleModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be stationRithmId to equal MAT_DIALOG_DATA', () => {
-    expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA.stationId);
-  });
-
   it('should call the method that returns the questions of a station.', () => {
-    component.stationRithmId = stationId;
     const getStationQuestions = spyOn(
       TestBed.inject(StationService),
       'getStationQuestions'
     ).and.callThrough();
     component.ngOnInit();
-    expect(getStationQuestions).toHaveBeenCalledWith(stationId, true);
+    expect(getStationQuestions).toHaveBeenCalledWith(
+      DIALOG_TEST_DATA.stationId,
+      true
+    );
   });
 
   it('should show error message when request for questions of a station fails.', () => {
@@ -156,7 +154,6 @@ describe('RuleModalComponent', () => {
 
   it('should show loading-indicator-questions while get current and previous questions', () => {
     component.questionStationLoading = false;
-    component.stationRithmId = stationId;
     component.getStationQuestions();
     spyOn(
       TestBed.inject(StationService),
@@ -290,7 +287,6 @@ describe('RuleModalComponent', () => {
     component.setFirstOperandInformation(question);
     fixture.detectChanges();
     expect(spyMethod).toHaveBeenCalled();
-    expect(component.textField).toBeDefined();
   });
 
   it('should return a the list of questions for the second operand', () => {
