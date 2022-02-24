@@ -174,7 +174,7 @@ describe('DocumentWidgetComponent', () => {
       sidenavDrawer = TestBed.inject(SidenavDrawerService);
     });
 
-    it('should receive the drawer context for the component', () {
+    it('should receive the drawer context for the component', () => {
       expect(component.drawerContext).not.toBe('stationWidget');
       sidenavDrawer.drawerContext$.next('stationWidget');
       sidenavDrawer.drawerContext$.subscribe((data) => {
