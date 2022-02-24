@@ -115,7 +115,6 @@ export class StationComponent
     margin: 12,
     minCols: 24,
     maxCols: 24,
-    minRows: 24,
   };
 
   constructor(
