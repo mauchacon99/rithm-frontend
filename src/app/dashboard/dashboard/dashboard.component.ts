@@ -416,7 +416,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       error: (error: unknown) => {
         this.isLoading = false;
         this.errorLoadingDashboard = true;
-        this.dashboardService.toggleLoadingDashboard(false);
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
