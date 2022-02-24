@@ -103,7 +103,7 @@ export class StationComponent
 
   /** Grid initial values. */
   options: GridsterConfig = {
-    gridType: 'fit',
+    gridType: 'scrollVertical',
     displayGrid: 'always',
     pushItems: true,
     draggable: {
