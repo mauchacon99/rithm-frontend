@@ -474,9 +474,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open dialog.
+   * Open dialog add widget.
    */
-  openDialog(): void {
+  openDialogAddWidget(): void {
     this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5'],
       maxWidth: '1024px',
