@@ -82,12 +82,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.getDocumentFields();
         }
       });
-
-    this.dashboardService.isLoadingDashboard$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ statusLoading }) => {
-        this.isLoading = statusLoading;
-      });
   }
 
   /** Set document info static. */
@@ -264,7 +258,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
       widgetIndex: this.widgetIndex,
-      isCloseDrawer: false,
     });
   }
 

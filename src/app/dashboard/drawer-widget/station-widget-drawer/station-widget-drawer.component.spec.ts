@@ -108,19 +108,6 @@ describe('StationWidgetDrawerComponent', () => {
     expect(component.widgetItem).toEqual(dataEditWidget.widgetItem);
   });
 
-  it('should subscribe to DashboardService.isLoadingDashboard$', () => {
-    TestBed.inject(DashboardService).toggleLoadingDashboard(false);
-    fixture.detectChanges();
-    const body = fixture.nativeElement.querySelector(
-      '#content-drawer-station-widget'
-    );
-    const loading = fixture.nativeElement.querySelector('#loading-indicator');
-
-    expect(component.isLoading).toBeFalse();
-    expect(loading).toBeNull();
-    expect(body).toBeTruthy();
-  });
-
   it('should show loading indicator', () => {
     component.isLoading = true;
     fixture.detectChanges();
@@ -362,7 +349,6 @@ describe('StationWidgetDrawerComponent', () => {
       const expectData = {
         widgetItem: component.widgetItem,
         widgetIndex: component.widgetIndex,
-        isCloseDrawer: false,
       };
       const spyService = spyOn(
         TestBed.inject(DashboardService),

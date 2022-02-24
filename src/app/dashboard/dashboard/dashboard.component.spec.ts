@@ -34,6 +34,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -448,7 +449,6 @@ describe('DashboardComponent', () => {
 
   it('should update dashboard widgets', () => {
     component.dashboardData = dataDashboard;
-    const spyMethod = spyOn(component, 'updateDashboard').and.callThrough();
     const editDataWidget = {
       widgetItem: {
         cols: 4,
@@ -470,7 +470,6 @@ describe('DashboardComponent', () => {
     expectDashboardData.widgets[0] = editDataWidget.widgetItem;
     component.updateDashboardWidget(editDataWidget);
     expect(component.dashboardData).toEqual(expectDashboardData);
-    expect(spyMethod).toHaveBeenCalledOnceWith(editDataWidget.isCloseDrawer);
   });
 
   it('should subscribe to DashboardService.updateDataWidget$', () => {
@@ -479,7 +478,6 @@ describe('DashboardComponent', () => {
     const expectEditDataWidget = {
       widgetItem: dataDashboard.widgets[0],
       widgetIndex: 1,
-      isCloseDrawer: false,
     };
 
     TestBed.inject(DashboardService).updateDashboardWidgets(
@@ -487,5 +485,15 @@ describe('DashboardComponent', () => {
     );
 
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
+  });
+
+  it('should emit DashboardService.isLoadingDashboard$ and call getParams', () => {
+    const spyRoute = spyOn(TestBed.inject(ActivatedRoute).params, 'subscribe');
+    TestBed.inject(DashboardService).toggleLoadingDashboard(true, true);
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    expect(component.errorLoadingDashboard).toBeFalse();
+    expect(component.isCreateNewDashboard).toBeFalse();
+    expect(spyRoute).toHaveBeenCalled();
   });
 });
