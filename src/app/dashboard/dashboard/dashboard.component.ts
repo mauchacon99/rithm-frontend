@@ -18,6 +18,7 @@ import {
   EditDataWidget,
   RoleDashboardMenu,
   Station,
+  WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
@@ -71,6 +72,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
+
+  /** Value used to compare the widgets. */
+  widgetType = WidgetType;
 
   /** Config grid. */
   options: GridsterConfig = {
