@@ -111,6 +111,7 @@ export class MockStationService {
       allowAllOrgWorkers: true,
       allowExternalWorkers: false,
       flowButton: 'Flow',
+      isChained: false,
     };
     return of(data).pipe(delay(1000));
   }
@@ -214,6 +215,7 @@ export class MockStationService {
         allowAllOrgWorkers: false,
         allowExternalWorkers: true,
         flowButton: 'Flow',
+        isChained: false,
       };
       return of(data).pipe(delay(1000));
     }
