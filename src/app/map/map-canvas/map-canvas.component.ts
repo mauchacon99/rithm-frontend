@@ -1182,8 +1182,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    //Always allow movement when centerStationCount is greater than 0.
-    if (this.mapService.centerStationCount$.value > 0) {
+    //Always allow movement when centerStationCount or centerStationgGroupCount are greater than 0.
+    if (
+      this.mapService.centerStationCount$.value > 0 ||
+      this.mapService.centerStationGroupCount$.value > 0
+    ) {
       return true;
     }
 
