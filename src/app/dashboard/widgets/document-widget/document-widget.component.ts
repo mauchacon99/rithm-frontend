@@ -1,21 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { first } from 'rxjs';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentWidget, QuestionFieldType } from 'src/models';
 import { Router } from '@angular/router';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget[documentRithmId]',
+  selector: 'app-document-widget[documentRithmId][editMode]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
-export class DocumentWidgetComponent implements OnInit {
+export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Document rithmId. */
   @Input() documentRithmId = '';
+
+  /** Edit mode toggle from dashboard. */
+  @Input() editMode = false;
 
   /** Data document list for widget. */
   dataDocumentWidget!: DocumentWidget;
@@ -29,11 +34,26 @@ export class DocumentWidgetComponent implements OnInit {
   /** The question field type. */
   questionFieldType = QuestionFieldType;
 
+  /** Type of drawer opened. */
+  drawerContext!: string;
+
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private errorService: ErrorService,
     private documentService: DocumentService,
-    private router: Router
+    private router: Router,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
 
   /**
    * Initial Method.
@@ -41,6 +61,11 @@ export class DocumentWidgetComponent implements OnInit {
   ngOnInit(): void {
     this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
     this.getDocumentWidget();
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
   }
 
   /**
@@ -81,5 +106,11 @@ export class DocumentWidgetComponent implements OnInit {
         stationId: stationId,
       },
     });
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
