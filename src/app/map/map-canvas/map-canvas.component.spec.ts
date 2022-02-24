@@ -140,8 +140,8 @@ describe('MapCanvasComponent', () => {
       subStationGroups: [],
       isReadOnlyRootStationGroup: false,
       status: 3,
-      isChained: false,
       path: {},
+      isChained: false,
     },
   ];
 
@@ -207,6 +207,7 @@ describe('MapCanvasComponent', () => {
       status: MapItemStatus.Normal,
       subStationGroups: ['24b9accd-5d1c-4292-a723-a3f2ca80ceed'],
       title: 'RithmGroup',
+      isChained: false,
     }),
     new StationGroupMapElement({
       isReadOnlyRootStationGroup: false,
@@ -215,6 +216,7 @@ describe('MapCanvasComponent', () => {
       status: MapItemStatus.Normal,
       subStationGroups: [],
       title: 'SubRithmFlow',
+      isChained: false,
     }),
     new StationGroupMapElement({
       isReadOnlyRootStationGroup: false,
@@ -230,6 +232,7 @@ describe('MapCanvasComponent', () => {
       status: MapItemStatus.Normal,
       subStationGroups: [],
       title: 'Add New Employee Group',
+      isChained: false,
     }),
   ];
   const stations = [
