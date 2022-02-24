@@ -388,7 +388,6 @@ describe('DashboardComponent', () => {
       component.updateDashboard();
       expect(spyDrawer).toHaveBeenCalled();
     });
-
   });
 
   describe('Expand widget', () => {
