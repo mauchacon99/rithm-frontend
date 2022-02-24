@@ -71,20 +71,40 @@ describe('MapSearchComponent', () => {
 
   it('should return 0 stations when search text is empty', () => {
     component.searchText = '';
-    component.searchStations();
+    component.searchStationsStationGroups();
     expect(component.filteredStations.length).toEqual(0);
   });
 
   it('should return filtered stations when search text is not empty', () => {
     component.searchText = 'untitled';
-    component.searchStations();
+    component.searchStationsStationGroups();
     expect(component.filteredStations.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should clear search box text', () => {
+    const mapServiceSpy = spyOn(
+      TestBed.inject(MapService),
+      'handleDrawerClose'
+    );
     component.clearSearchText();
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
+    expect(mapServiceSpy).toHaveBeenCalledWith('stationInfo');
+  });
+
+  it('should store Input search text', () => {
+    component.onBlur();
+    localStorage.setItem(
+      'placeHolderText',
+      JSON.stringify(component.searchText)
+    );
+    expect(component.searchInput).toBeFalse();
+  });
+
+  it('should returns to current search text & close the infoDrawer', () => {
+    component.returnSearchText();
+    expect(component.searchInput).toBeTrue();
+    expect(component.searchText).toEqual(component.placeHolderText);
   });
 
   it('should open drawer when any autocomplete option is selected', fakeAsync(() => {

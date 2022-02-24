@@ -29,7 +29,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 /**
  * Main component for viewing a station.
  */
@@ -128,6 +128,7 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
+        this.stationInformation.name = stationName;
       });
 
     this.stationService.documentStationNameFields$
@@ -615,17 +616,21 @@ export class StationComponent
    *
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
-  addFlowLogicRule(flowLogicRule: FlowLogicRule): void {
-    const flowLogicStation = this.pendingFlowLogicRules.findIndex(
-      (flowRule) =>
-        flowRule.destinationStationRithmID ===
-          flowLogicRule.destinationStationRithmID &&
-        flowRule.stationRithmId === flowLogicRule.stationRithmId
-    );
-    if (flowLogicStation >= 0) {
-      this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+  addFlowLogicRule(flowLogicRule: FlowLogicRule | null): void {
+    if (flowLogicRule) {
+      const flowLogicStation = this.pendingFlowLogicRules.findIndex(
+        (flowRule) =>
+          flowRule.destinationStationRithmID ===
+            flowLogicRule.destinationStationRithmID &&
+          flowRule.stationRithmId === flowLogicRule.stationRithmId
+      );
+      if (flowLogicStation >= 0) {
+        this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+      } else {
+        this.pendingFlowLogicRules.push(flowLogicRule);
+      }
     } else {
-      this.pendingFlowLogicRules.push(flowLogicRule);
+      this.pendingFlowLogicRules = [];
     }
   }
 }

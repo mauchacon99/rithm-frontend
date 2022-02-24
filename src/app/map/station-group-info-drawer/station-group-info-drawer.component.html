@@ -1,4 +1,4 @@
-<div class="p-4 w-72 overflow-y-auto drawer-content-h-map">
+<div class="p-4 pt-0 w-72 overflow-y-auto drawer-content-h-map">
   <div class="grid grid-cols-1">
     <div class="w-full py-2">
       <div class="col-span-12">
@@ -31,7 +31,8 @@
         Chained
         <mat-slide-toggle
           [checked]="isChained"
-          (change)="isChained = !isChained"
+          [(ngModel)]="isChained"
+          (ngModelChange)="setStationGroupChanges()"
           [disabled]="!isBuilding"
         >
         </mat-slide-toggle>

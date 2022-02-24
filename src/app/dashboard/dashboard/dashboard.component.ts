@@ -12,7 +12,14 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
+import {
+  DashboardData,
+  DashboardItem,
+  EditDataWidget,
+  RoleDashboardMenu,
+  Station,
+  WidgetType,
+} from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -65,6 +72,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
+
+  /** Value used to compare the widgets. */
+  widgetType = WidgetType;
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -136,11 +146,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.dashboardService.isLoadingDashboard$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((status) => {
-        this.isLoading = status;
+      .subscribe(({ statusLoading, getParams }) => {
+        this.isLoading = statusLoading;
         this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
-        if (!status) this.getParams();
+        if (getParams) {
+          this.getParams();
+        }
       });
 
     this.sidenavDrawerService.drawerContext$
@@ -152,6 +164,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         ) {
           this.drawerContext = drawerContext;
         }
+      });
+
+    this.dashboardService.updateDataWidget$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((editDataWidget) => {
+        this.updateDashboardWidget(editDataWidget);
       });
   }
 
@@ -192,17 +210,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param drawerItem The information that will be displayed in the side drawer.
    * @param drawerData Data optional of the drawer.
-   * @param drawerData.stationData String of station widget data.
-   * @param drawerData.widgetIndex Number of index of the widget.
    */
   toggleDrawer(
     drawerItem: 'menuDashboard' | 'stationWidget',
-    drawerData?: {
-      /** String of station widget data. */
-      stationData: string;
-      /** Number of index of the widget. */
-      widgetIndex: number;
-    }
+    drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
       this.sidenavDrawerService.toggleDrawer(this.drawerContext);
@@ -219,12 +230,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
-   * @param stationData String of the data station.
+   * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    */
-  toggleStationWidgetDrawer(stationData: string, widgetIndex: number): void {
+  toggleWidgetDrawer(widgetItem: DashboardItem, widgetIndex: number): void {
     this.toggleDrawer('stationWidget', {
-      stationData,
+      widgetItem,
       widgetIndex,
     });
   }
@@ -326,9 +337,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
-        const dashboardId = params.get('dashboardId');
+        const dashboardId = params['dashboardId'];
         if (dashboardId) {
           this.getDashboardByRithmId(dashboardId);
         } else {
@@ -384,9 +395,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Update dashboard.
-   */
+  /** Update dashboard. */
   updateDashboard(): void {
     this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
@@ -399,20 +408,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
         this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
-        this.isLoading = false;
         this.editMode = false;
-        this.errorLoadingDashboard = false;
         this.configEditMode();
+        this.errorLoadingDashboard = false;
+        this.isLoading = false;
       },
       error: (error: unknown) => {
-        this.errorLoadingDashboard = true;
         this.isLoading = false;
+        this.errorLoadingDashboard = true;
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
         );
       },
     });
+  }
+
+  /**
+   * Update data of the widget since drawer station.
+   *
+   * @param editDataWidget Data to edit widget.
+   */
+  updateDashboardWidget(editDataWidget: EditDataWidget): void {
+    this.dashboardData.widgets[editDataWidget.widgetIndex] =
+      editDataWidget.widgetItem;
   }
 
   /**
