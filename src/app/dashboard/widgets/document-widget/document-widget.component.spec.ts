@@ -10,7 +10,7 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
-import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
