@@ -81,6 +81,7 @@ describe('RuleModalComponent', () => {
   });
 
   beforeEach(() => {
+    DIALOG_TEST_DATA.editRule = null;
     fixture = TestBed.createComponent(RuleModalComponent);
     component = fixture.componentInstance;
     component.ruleModalLoading = false;
@@ -326,6 +327,8 @@ describe('RuleModalComponent', () => {
   });
 
   it('should open the stepper with the first step as selected if is not editMode', () => {
+    component.ruleModalLoading = false;
+    fixture.detectChanges();
     const stepperComponent: MatStepper = fixture.debugElement.query(
       By.css('mat-stepper')
     )?.componentInstance;
