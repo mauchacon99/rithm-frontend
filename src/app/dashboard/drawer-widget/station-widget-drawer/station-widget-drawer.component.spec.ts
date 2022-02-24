@@ -358,61 +358,79 @@ describe('StationWidgetDrawerComponent', () => {
       component['updateWidget']();
       expect(spyService).toHaveBeenCalledOnceWith(expectData);
     });
-  });
 
-  it('should check  if stationColumns questionId exists in question.rithmId.', () => {
-    component.stationColumns = [
-      {
-        name: 'name',
-      },
-      {
-        name: 'name',
-        questionId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
-      },
-      {
-        name: 'name',
-        questionId: 'd17f6f7a-9642-45e0-8221-e482436rfhbhrte',
-      },
-    ];
-    component.questions = [
-      {
-        prompt: 'Fake question 1',
-        rithmId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-        value: '1',
-      },
-      {
-        prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-        value: '2',
-      },
-    ];
-    component['checkStationColumns']();
-    expect(component.stationColumns.length).toEqual(2);
-  });
+    it('should check  if stationColumns questionId exists in question.rithmId.', () => {
+      component.stationColumns = [
+        {
+          name: 'name',
+        },
+        {
+          name: 'name',
+          questionId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
+        },
+        {
+          name: 'name',
+          questionId: 'd17f6f7a-9642-45e0-8221-e482436rfhbhrte',
+        },
+      ];
+      component.questions = [
+        {
+          prompt: 'Fake question 1',
+          rithmId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '1',
+        },
+        {
+          prompt: 'Fake question 2',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          value: '2',
+        },
+      ];
+      component['checkStationColumns']();
+      expect(component.stationColumns.length).toEqual(2);
+    });
 
-  it('should render message for show user this station not documents assigned', () => {
-    component.questions = [];
-    fixture.detectChanges();
-    const renderMessage = fixture.nativeElement.querySelector(
-      '#message-not-documents-assigned-to-station'
-    );
-    expect(renderMessage).toBeTruthy();
-  });
+    it('should show error in getStationQuestions', () => {
+      const spyError = spyOn(
+        TestBed.inject(StationService),
+        'getStationQuestions'
+      ).and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      component['getDocumentFields']();
+      fixture.detectChanges();
+      expect(component.failedLoadDrawer).toBeTrue();
+      const error = fixture.debugElement.nativeElement.querySelector(
+        '#error-loading-columns'
+      );
+      expect(error).toBeTruthy();
+      expect(spyError).toHaveBeenCalled();
+    });
+    it('should render message for show user this station not documents assigned', () => {
+      component.questions = [];
+      fixture.detectChanges();
+      const renderMessage = fixture.debugElement.nativeElement.querySelector(
+        '#message-not-documents-assigned-to-station'
+      );
+      expect(renderMessage).toBeTruthy();
+    });
 
-  it('should no render message for show user this station not documents assigned', () => {
-    const renderMessage = fixture.nativeElement.querySelector(
-      '#message-not-documents-assigned-to-station'
-    );
-    expect(renderMessage).toBeFalsy();
+    it('should no render message for show user this station not documents assigned', () => {
+      const renderMessage = fixture.debugElement.nativeElement.querySelector(
+        '#message-not-documents-assigned-to-station'
+      );
+      expect(renderMessage).toBeFalsy();
+    });
   });
 });
