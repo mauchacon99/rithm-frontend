@@ -2,11 +2,9 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { first, Subject } from 'rxjs';
@@ -15,7 +13,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import {
   ColumnFieldsWidget,
   StationWidgetData,
-  ColumnsLogicDocument,
+  ColumnsLogicWidget,
   ColumnsDocumentInfo,
   QuestionFieldType,
 } from 'src/models';
@@ -24,7 +22,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /**
  * Component for Station widget.
@@ -35,16 +33,14 @@ import { DashboardService } from '../../dashboard.service';
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
+export class StationWidgetComponent implements OnInit, OnDestroy {
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
   private _dataWidget = '';
 
-  /**
-   * Set data for station widget.
-   */
+  /** Set data for station widget. */
   @Input() set dataWidget(value: string) {
     this._dataWidget = value;
     if (this.stationRithmId) {
@@ -65,8 +61,24 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<void>();
 
-  /** Edit mode toggle from dashboard. */
-  @Input() editMode = false;
+  private _editMode = false;
+
+  /** Set edit mode toggle from dashboard. */
+  @Input() set editMode(value: boolean) {
+    this._editMode = value;
+    if (value && this.isDocument) {
+      this.viewDocument('', true);
+    }
+  }
+
+  /**
+   * Get edit mode toggle from dashboard.
+   *
+   * @returns Boolean to edit mode.
+   */
+  get editMode(): boolean {
+    return this._editMode;
+  }
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
@@ -142,17 +154,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
     this.getStationWidgetDocuments();
   }
 
-  /**
-   * Detect changes of this component.
-   *
-   * @param changes Object of the properties in this component.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.editMode && this.isDocument) {
-      this.viewDocument('', true);
-    }
-  }
-
   /** Parse data of columns widget. */
   parseDataColumnsWidget(): void {
     this.columnsToDisplayTable = [];
@@ -206,7 +207,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    * @returns A string reading something like "4 days" or "32 minutes".
    */
   getElapsedTime(timeEntered: string): string {
-    let timeInStation = '';
+    let timeInStation: string;
     if (timeEntered && timeEntered !== 'Unknown') {
       timeInStation = this.utcTimeConversion.getElapsedTimeText(
         this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
@@ -299,8 +300,30 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   getColumnBasicName(name: string): string {
     const nameDom = this.dashboardService.columnsDocumentInfo.find(
       (column) => column.key === name
-    ) as ColumnsLogicDocument;
-    return nameDom?.name;
+    ) as ColumnsLogicWidget;
+    return nameDom.name;
+  }
+
+  /**
+   * Get specific name of column document when have questionId.
+   *
+   * @param columnFieldsWidget Data for column.
+   * @returns String to show name of the document in dom.
+   */
+  getColumnQuestionPrompt(columnFieldsWidget: ColumnFieldsWidget): string {
+    for (let i = 0; i < this.dataStationWidget.documents.length; i++) {
+      const questionData = this.dataStationWidget.documents[
+        i
+      ].questions[0].questions.find(
+        (question) => question.rithmId === columnFieldsWidget.questionId
+      );
+      if (questionData) {
+        return questionData.questionType === 'instructions'
+          ? 'Instruction'
+          : questionData.prompt;
+      }
+    }
+    return columnFieldsWidget.name;
   }
 
   /** Clean subscriptions. */

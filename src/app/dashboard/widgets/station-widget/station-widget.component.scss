@@ -5,3 +5,11 @@
 td.mat-cell {
   padding-right: 10px !important;
 }
+
+td.mat-cell:last-of-type {
+  padding: 0 !important;
+}
+
+tr.mat-header-row {
+  height: 30px !important;
+}
