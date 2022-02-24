@@ -102,6 +102,7 @@ describe('StationInfoDrawerComponent', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
     component.stationRithmId = stationId;
     stationInject = TestBed.inject(StationService);
@@ -539,5 +540,26 @@ describe('StationInfoDrawerComponent', () => {
     component.updateFlowButtonName();
 
     expect(spyFlowButton).toHaveBeenCalledOnceWith(component.flowButtonName);
+  });
+
+  it('should show status-allow-previous-loading when calling updateAllowPreviousButton', () => {
+    component.stationLoading = false;
+    component.updateAllowPreviousButton();
+    fixture.detectChanges();
+    expect(component.statusAllowPreviousLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#status-allow-previous-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should not show status-allow-previous-loading', () => {
+    component.stationLoading = false;
+    expect(component.statusAllowPreviousLoading).toBe(false);
+    fixture.detectChanges();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#status-allow-previous-loading'
+    );
+    expect(loadingComponent).toBeNull();
   });
 });

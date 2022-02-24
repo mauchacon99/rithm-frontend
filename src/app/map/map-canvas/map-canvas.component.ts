@@ -1182,6 +1182,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
+    //Always allow movement when centerStationCount is greater than 0.
+    if (this.mapService.centerStationCount$.value > 0) {
+      return true;
+    }
+
     //Allow movement based on the axis being checked.
     if (isXAxis) {
       //If user is attempting to move left and is already outside the left edge.
@@ -2174,7 +2179,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               numberOfStations: stationGroup.stations.length,
               numberOfSubgroups: stationGroup.subStationGroups.length,
               stationGroupStatus: stationGroup.status,
-              isChained: false,
+              isChained: stationGroup.isChained,
             };
             //Open station group info drawer when clicked on station group boundary or name.
             this.sidenavDrawerService.openDrawer(
@@ -2286,6 +2291,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
     //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.
     const dataInformationDrawer: StationInfoDrawerData = {

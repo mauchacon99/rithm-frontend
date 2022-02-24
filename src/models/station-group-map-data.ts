@@ -29,6 +29,9 @@ export interface StationGroupMapData {
   /** The status of the station group (what should happen to this station group). */
   status: MapItemStatus;
 
+  /** Whether the station group is a chained group. */
+  isChained: boolean;
+
   /** Whether this station group is the implicit, root station group for the whole map. This should not be sent to the API. */
   readonly isReadOnlyRootStationGroup: boolean;
 
