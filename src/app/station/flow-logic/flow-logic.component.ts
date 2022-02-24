@@ -30,7 +30,7 @@ export class FlowLogicComponent implements OnInit {
   @Input() rithmId = '';
 
   /** The modified Flow Logic Rule to send back to station. */
-  @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule>();
+  @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule | null>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -253,6 +253,7 @@ export class FlowLogicComponent implements OnInit {
               else flowLogicRules?.flowRule.subRules.splice(index, 1);
               // hidden loading
               this.flowLogicLoadingByRuleType = null;
+              this.modifiedFlowRules.emit(null);
             },
             error: (error: unknown) => {
               this.flowRuleError = true;

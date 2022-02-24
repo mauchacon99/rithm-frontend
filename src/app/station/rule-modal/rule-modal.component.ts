@@ -23,6 +23,7 @@ import {
   DocumentAnswer,
   RuleEquation,
   RuleOperand,
+  RuleModalOperator,
 } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
@@ -30,13 +31,6 @@ import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.
 import { DocumentService } from 'src/app/core/document.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-field.component';
-
-interface Operator {
-  /** The operator selector text to show.*/
-  text: string;
-  /** The operator selector value.*/
-  value: OperatorType;
-}
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -136,10 +130,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCustomValue = false;
 
   /** The information of the operator selected. */
-  operatorSelected: Operator | null = null;
+  operatorSelected: RuleModalOperator | null = null;
 
   /** The operatorList to be shown. */
-  operatorList: Operator[] = [];
+  operatorList: RuleModalOperator[] = [];
 
   /** Contain all the operand Types. */
   operandType = OperandType;
@@ -267,6 +261,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.secondOperand.text = answer.value;
         this.secondOperand.value = answer.value;
         this.secondOperand.questionType = this.firstOperand.questionType;
+        this.isCustomValue = true;
       });
   }
 
@@ -436,9 +431,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     }
     this.setOperatorList(this.firstOperandQuestionType);
-    const operatorSelect: Operator | undefined = this.operatorList.find(
-      (operator) => operator.value === rule.operatorType
-    );
+    const operatorSelect: RuleModalOperator | undefined =
+      this.operatorList.find(
+        (operator) => operator.value === rule.operatorType
+      );
 
     if (operatorSelect) {
       this.operatorSelected = operatorSelect;
@@ -593,15 +589,15 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    *
    * @param customValue Whether the value comes from the custom value field or a previous question.
    */
-   setSecondOperandType(customValue: boolean): void {
+  setSecondOperandType(customValue: boolean): void {
     if (customValue) {
       if (
         this.secondOperandQuestionType === QuestionFieldType.Select ||
         this.secondOperandQuestionType === QuestionFieldType.MultiSelect ||
         this.secondOperandQuestionType === QuestionFieldType.CheckList
-        ) {
-          this.secondOperand.type = OperandType.String;
-        }
+      ) {
+        this.secondOperand.type = OperandType.String;
+      }
     } else {
       this.secondOperand.type = OperandType.Field;
     }

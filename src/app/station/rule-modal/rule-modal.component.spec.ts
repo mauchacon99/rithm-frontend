@@ -27,26 +27,19 @@ import {
   Question,
   QuestionFieldType,
   OperatorType,
-  Rule,
   RuleType,
+  RuleModalData,
 } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { DocumentService } from 'src/app/core/document.service';
 
-interface ModalData {
-  /** The station rithmId. */
-  stationId: string;
-  /** The data of the equation of the rule to be edited. */
-  editRule: Rule | null;
-}
-
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
 
-  const DIALOG_TEST_DATA: ModalData = {
+  const DIALOG_TEST_DATA: RuleModalData = {
     stationId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
     editRule: null,
   };
