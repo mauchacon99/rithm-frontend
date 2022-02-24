@@ -85,6 +85,7 @@ describe('StationInfoHeaderComponent', () => {
     allowAllOrgWorkers: false,
     allowExternalWorkers: true,
     flowButton: 'Flow',
+    isChained: false,
   };
   const user: StationRosterMember = {
     rithmId: '123132132',

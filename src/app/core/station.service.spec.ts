@@ -165,6 +165,7 @@ describe('StationService', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     const expectedResponse: StationInformation = {
@@ -213,6 +214,7 @@ describe('StationService', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     service.updateStation(station).subscribe((response) => {
@@ -810,6 +812,7 @@ describe('StationService', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     service.updateStationName(newName, station.rithmId);
