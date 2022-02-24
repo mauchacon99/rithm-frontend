@@ -10,7 +10,7 @@ import {
 import { STATES } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatStepper, StepperOrientation } from '@angular/material/stepper';
+import { StepperOrientation } from '@angular/material/stepper';
 import { Observable, Subject } from 'rxjs';
 import { first, map, takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
@@ -59,9 +59,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The component date-field to be updated for step 3. */
   @ViewChild('dateField', { static: false })
   dateField!: DateFieldComponent;
-
-  /* Stepper to use properties and redirect to a specific step. */
-  @ViewChild('stepper', { static: false }) stepper!: MatStepper;
 
   /** The component date-field to be updated for step 3. */
   @ViewChild('selectField', { static: false })
