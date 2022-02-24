@@ -236,7 +236,7 @@ export class MapSearchComponent implements OnDestroy {
         numberOfStations: drawerItem.stations.length,
         numberOfSubgroups: drawerItem.subStationGroups.length,
         stationGroupStatus: drawerItem.status,
-        isChained: false,
+        isChained: drawerItem.isChained,
       };
       //Open station group info drawer when clicked on station group boundary or name.
       this.sidenavDrawerService.openDrawer(

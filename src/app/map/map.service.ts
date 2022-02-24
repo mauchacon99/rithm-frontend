@@ -448,6 +448,7 @@ export class MapService {
       stations: [],
       subStationGroups: [],
       status: MapItemStatus.Pending,
+      isChained: false,
       isReadOnlyRootStationGroup: false,
     });
 
@@ -1826,13 +1827,20 @@ export class MapService {
     const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
     const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
     const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
+
+    //Determine the map center point of station group to pan it to the center.
+    const groupCenterMapPoint = this.getMapPoint({
+      x: (minX + maxX) / 2,
+      y: (minY + maxY) / 2,
+    });
+
     //Determine the canvas point of station group to pan it to the center.
     const adjustedCenter = {
       x:
-        (minX + maxX) / 2 +
+        groupCenterMapPoint.x +
         drawerWidth / 2 / this.mapScale$.value -
         canvasCenter.x / this.mapScale$.value,
-      y: (minY + maxY) / 2 - canvasCenter.y / this.mapScale$.value,
+      y: groupCenterMapPoint.y - canvasCenter.y / this.mapScale$.value,
     };
 
     //How far away is the currentCanvasPoint from the map center?

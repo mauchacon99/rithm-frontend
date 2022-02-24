@@ -42,6 +42,7 @@ describe('StationGroupElementService', () => {
       ],
       status: MapItemStatus.Normal,
       isReadOnlyRootStationGroup: true,
+      isChained: false,
     },
     {
       rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -51,6 +52,7 @@ describe('StationGroupElementService', () => {
       subStationGroups: [],
       status: MapItemStatus.Normal,
       isReadOnlyRootStationGroup: true,
+      isChained: false,
     },
     {
       rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -60,6 +62,7 @@ describe('StationGroupElementService', () => {
       subStationGroups: [],
       status: MapItemStatus.Normal,
       isReadOnlyRootStationGroup: false,
+      isChained: false,
     },
   ];
   const stationsMapData: StationMapData[] = [

@@ -126,6 +126,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
       (stGroup) => stGroup.rithmId === this.stationGroupRithmId
     );
     this.mapService.stationGroupElements[index].title = this.groupName;
+    this.mapService.stationGroupElements[index].isChained = this.isChained;
     this.mapService.stationGroupElements[index].markAsUpdated();
     this.mapService.stationGroupElementsChanged$.next(true);
   }
