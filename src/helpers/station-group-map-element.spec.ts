@@ -12,6 +12,7 @@ const TEST_STATION_GROUP_DATA: StationGroupMapData = {
   subStationGroups: ['9724A1FB-426D-4826-8FF2-F0752979155E'],
   status: MapItemStatus.Normal,
   isReadOnlyRootStationGroup: false,
+  isChained: false,
 };
 
 describe('StationGroupMapElement', () => {
