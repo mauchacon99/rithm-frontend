@@ -179,10 +179,7 @@
           </app-user-avatar>
         </div>
       </div>
-      <div
-        *ngIf="!document.assignedUser"
-        class="text-xs text-secondary-500"
-      >
+      <div *ngIf="!document.assignedUser" class="text-xs text-secondary-500">
         None
       </div>
     </div>
@@ -268,10 +265,7 @@
             - {{ answer.value }} <br />
           </span>
         </p>
-        <p
-          *ngSwitchCase="'instructions'"
-          class="text-xs text-secondary-500"
-        >
+        <p *ngSwitchCase="'instructions'" class="text-xs text-secondary-500">
           {{ questions.prompt }}
         </p>
         <p *ngSwitchDefault class="text-xs text-secondary-500">
