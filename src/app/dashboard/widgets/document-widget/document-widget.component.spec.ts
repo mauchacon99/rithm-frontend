@@ -168,7 +168,7 @@ describe('DocumentWidgetComponent', () => {
     expect(gearIcon).toBeTruthy();
   });
 
-  describe('testing sidenavDrawerService', () => {
+  describe('Testing sidenavDrawerService', () => {
     let sidenavDrawer: SidenavDrawerService;
     beforeEach(() => {
       sidenavDrawer = TestBed.inject(SidenavDrawerService);
