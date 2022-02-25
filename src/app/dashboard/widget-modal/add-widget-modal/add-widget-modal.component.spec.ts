@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { AddWidgetModalComponent } from './add-widget-modal.component';
 
@@ -11,6 +11,7 @@ describe('AddWidgetModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MatDialogModule],
       declarations: [AddWidgetModalComponent],
+      providers: [{ provide: MatDialogRef, useValue: { close } }],
     }).compileComponents();
   });
 

@@ -1,4 +1,15 @@
 <!-- Header Add Widgets Modal -->
 <div>
-  <h1 mat-dialog-title>Title</h1>
+  <div class="flex justify-between">
+    <h3 class="font-semibold">Widget Builder</h3>
+    <button
+      data-testid="close-widget-builder"
+      id="close-widget-builder"
+      mat-icon-button
+      class="text-secondary-500"
+      (click)="closeModal()"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
 </div>
