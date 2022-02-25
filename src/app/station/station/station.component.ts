@@ -104,6 +104,9 @@ export class StationComponent
   /** Index for station tabs. */
   stationTabsIndex = 0;
 
+   /** Set the value about mode config. */
+   modeConfig = "";
+
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'scrollVertical',
@@ -304,6 +307,15 @@ export class StationComponent
         )) ||
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
+  }
+
+  /**
+   * Set mode configuration in question.
+   *
+   * @param mode The value of new mode.
+   */
+  settingMode(mode: string): void {
+    this.modeConfig = mode;
   }
 
   /**
