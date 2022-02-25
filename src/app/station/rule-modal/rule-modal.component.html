@@ -2,14 +2,16 @@
 <div class="modal-container">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
-    <h4 class="text-center">New Rule</h4>
+    <h4 class="text-center">{{ ruleModalTitle }}</h4>
   </div>
   <!-- Stepper for new rule -->
   <mat-stepper
     [linear]="true"
     (selectionChange)="clearOnStepBack($event)"
     [orientation]="(stepperOrientation$ | async)!"
+    [selectedIndex]="editRuleMode ? 3 : 0"
     #stepper
+    *ngIf="!ruleModalLoading"
   >
     <ng-template matStepperIcon="edit">
       <i class="fas fa-check"></i>
@@ -34,7 +36,7 @@
         >
           <mat-label>Select Field</mat-label>
           <mat-select [(value)]="firstOperandQuestionRithmId">
-            <ng-container *ngFor="let question of questionStation">
+            <ng-container *ngFor="let question of firstOperandQuestionList">
               <mat-option
                 *ngIf="
                   question.questionType !== questionTypes.AddressLine;
@@ -257,6 +259,7 @@
           class="w-1/12 text-accent-500"
           data-testid="next-step-3"
           id="next-step-3"
+          (click)="setSecondOperandType(isCustomValue)"
           [disabled]="secondOperand.value === ''"
         >
           Next
@@ -272,7 +275,7 @@
         <p class="text-sm my-1">
           {{ firstOperand.text }}
           <span class="font-semibold">{{ operatorSelected?.text }} </span>
-          {{ secondOperandToShow }}
+          {{ secondOperand.text }}
         </p>
       </div>
       <div class="flex flex-row space-x-2 mt-5">
@@ -297,6 +300,9 @@
       </div>
     </mat-step>
   </mat-stepper>
+  <div class="w-full py-3" *ngIf="ruleModalLoading">
+    <app-loading-indicator id="modal-loading-indicator"></app-loading-indicator>
+  </div>
   <div mat-dialog-actions class="flex justify-end">
     <button
       mat-button

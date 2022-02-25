@@ -18,12 +18,15 @@ import {
   EditDataWidget,
   RoleDashboardMenu,
   Station,
+  WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 
 /**
  * Main component for the dashboard screens.
@@ -71,6 +74,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
+
+  /** Value used to compare the widgets. */
+  widgetType = WidgetType;
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -128,7 +134,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
     private router: Router,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private dialog: MatDialog
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -391,16 +398,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Update dashboard.
-   *
-   * @param isCloseDrawer If close drawer, only used by drawer widgets.
-   */
-  updateDashboard(isCloseDrawer = true): void {
-    this.dashboardService.toggleLoadingDashboard(true);
-    if (isCloseDrawer) {
-      this.toggleDrawerOnlyForWidgets();
-    }
+  /** Update dashboard. */
+  updateDashboard(): void {
+    this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
@@ -411,16 +411,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
         this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
-        this.dashboardService.toggleLoadingDashboard(false);
-        if (isCloseDrawer) {
-          this.editMode = false;
-          this.configEditMode();
-        }
+        this.editMode = false;
+        this.configEditMode();
         this.errorLoadingDashboard = false;
+        this.isLoading = false;
       },
       error: (error: unknown) => {
+        this.isLoading = false;
         this.errorLoadingDashboard = true;
-        this.dashboardService.toggleLoadingDashboard(false);
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
@@ -437,7 +435,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   updateDashboardWidget(editDataWidget: EditDataWidget): void {
     this.dashboardData.widgets[editDataWidget.widgetIndex] =
       editDataWidget.widgetItem;
-    this.updateDashboard(editDataWidget.isCloseDrawer);
   }
 
   /**
@@ -468,6 +465,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   trackBy(index: number, item: GridsterItem): number {
     return item.id;
+  }
+
+  /**
+   * Open dialog add widget.
+   */
+  openDialogAddWidget(): void {
+    this.toggleDrawerOnlyForWidgets();
+    this.dialog.open(AddWidgetModalComponent, {
+      panelClass: ['w-11/12', 'sm:w-4/5'],
+      maxWidth: '1500px',
+    });
   }
 
   /** Clean subscriptions. */

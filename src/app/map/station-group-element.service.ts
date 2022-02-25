@@ -324,7 +324,9 @@ export class StationGroupElementService {
         ? NODE_HOVER_COLOR
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
-    this.canvasContext.font = `bold ${fontSize}px Montserrat`;
+    const isItalic =
+      stationGroup.status === MapItemStatus.Updated ? 'italic bold' : 'bold';
+    this.canvasContext.font = `${isItalic} ${fontSize}px Montserrat`;
 
     // Get the canvas dimensions.
     const canvasBoundingRect =
@@ -348,6 +350,13 @@ export class StationGroupElementService {
       newPosition,
       stationGroup.boundaryPoints
     );
+
+    // Append * if station group is updated.
+    if (stationGroup.status === MapItemStatus.Updated) {
+      if (newTitle && newTitle.length > 0) {
+        newTitle[0] = '*' + newTitle[0];
+      }
+    }
 
     // Delete the line under the station group name.
     newTitle.forEach((title, index) => {

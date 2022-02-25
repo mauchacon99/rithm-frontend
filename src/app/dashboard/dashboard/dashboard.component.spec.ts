@@ -34,6 +34,10 @@ import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
+import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -72,6 +76,7 @@ describe('DashboardComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(DocumentWidgetComponent),
         MockComponent(WidgetDrawerComponent),
+        MockComponent(AddWidgetModalComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -88,6 +93,8 @@ describe('DashboardComponent', () => {
         GridsterModule,
         FormsModule,
         MatInputModule,
+        MatDialogModule,
+        MatTabsModule,
         RouterTestingModule.withRoutes([
           {
             path: 'dashboard/:dashboardId',
@@ -304,6 +311,37 @@ describe('DashboardComponent', () => {
     expect(spyMethod).toHaveBeenCalledWith();
   });
 
+  it('should call openDialog', () => {
+    component.viewNewDashboard = true;
+    component.editMode = true;
+    component.dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+    fixture.detectChanges();
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+
+    const btn = fixture.nativeElement.querySelector('#add-widget-button');
+    expect(btn).toBeTruthy();
+    btn.click();
+    expect(spyDialog).toHaveBeenCalled();
+  });
+
   describe('Test for SidenavDrawerService', () => {
     let sidenavDrawer: SidenavDrawerService;
 
@@ -387,6 +425,18 @@ describe('DashboardComponent', () => {
       component.updateDashboard();
       expect(spyDrawer).toHaveBeenCalled();
     });
+
+    it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      const drawerContext = 'stationWidget';
+      sidenavDrawer.drawerContext$.next(drawerContext);
+      expect(component.drawerContext).toBe(drawerContext);
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+      component.openDialogAddWidget();
+      expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
+      expect(spyDialog).toHaveBeenCalled();
+    });
   });
 
   describe('Expand widget', () => {
@@ -431,7 +481,6 @@ describe('DashboardComponent', () => {
 
   it('should update dashboard widgets', () => {
     component.dashboardData = dataDashboard;
-    const spyMethod = spyOn(component, 'updateDashboard').and.callThrough();
     const editDataWidget = {
       widgetItem: {
         cols: 4,
@@ -453,7 +502,6 @@ describe('DashboardComponent', () => {
     expectDashboardData.widgets[0] = editDataWidget.widgetItem;
     component.updateDashboardWidget(editDataWidget);
     expect(component.dashboardData).toEqual(expectDashboardData);
-    expect(spyMethod).toHaveBeenCalledOnceWith(editDataWidget.isCloseDrawer);
   });
 
   it('should subscribe to DashboardService.updateDataWidget$', () => {
@@ -462,7 +510,6 @@ describe('DashboardComponent', () => {
     const expectEditDataWidget = {
       widgetItem: dataDashboard.widgets[0],
       widgetIndex: 1,
-      isCloseDrawer: false,
     };
 
     TestBed.inject(DashboardService).updateDashboardWidgets(
@@ -470,5 +517,15 @@ describe('DashboardComponent', () => {
     );
 
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
+  });
+
+  it('should emit DashboardService.isLoadingDashboard$ and call getParams', () => {
+    const spyRoute = spyOn(TestBed.inject(ActivatedRoute).params, 'subscribe');
+    TestBed.inject(DashboardService).toggleLoadingDashboard(true, true);
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    expect(component.errorLoadingDashboard).toBeFalse();
+    expect(component.isCreateNewDashboard).toBeFalse();
+    expect(spyRoute).toHaveBeenCalled();
   });
 });
