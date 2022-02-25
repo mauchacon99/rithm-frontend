@@ -6,6 +6,4 @@ export interface EditDataWidget {
   widgetIndex: number;
   /** String, json stringify of data the widget. */
   widgetItem: DashboardItem;
-  /** If close drawer when update dashboard. */
-  isCloseDrawer?: boolean;
 }
