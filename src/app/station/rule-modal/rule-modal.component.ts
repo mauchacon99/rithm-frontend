@@ -62,7 +62,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   private destroyed$ = new Subject<void>();
 
   /** Orientation for stepper. */
-  stepperOrientation$: Observable<StepperOrientation>;
+  stepperOrientation$!: Observable<StepperOrientation>;
 
   /** Get current and previous Questions for Stations. */
   questionStation: Question[] = [];
@@ -244,16 +244,19 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       /** The data of the equation of the rule to be edited. */
       editRule: RuleEquation;
     },
-    breakpointObserver: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver,
     private stationService: StationService,
     private errorService: ErrorService,
     private readonly changeDetectorR: ChangeDetectorRef,
     private documentService: DocumentService
-  ) {
-    this.stepperOrientation$ = breakpointObserver
-      .observe('(min-width: 800px)')
-      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  ) {}
 
+  /** Listeners functions. */
+
+  /**
+   * Listen the answerSubject from documents.
+   */
+  subscribeDocumentAnswers(): void {
     //Gets from documentAnswer the value to be set to the second operand
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
@@ -266,6 +269,15 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Listen the windowsSize to set the stepper orientation.
+   */
+  setStepperOrientation(): void {
+    this.stepperOrientation$ = this.breakpointObserver
+      .observe('(min-width: 800px)')
+      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  /**
    * Life cycle init the component.
    */
   ngOnInit(): void {
@@ -273,6 +285,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this.modalData.editRule) {
       this.editRuleMode = true;
     }
+    this.subscribeDocumentAnswers();
+    this.setStepperOrientation();
   }
 
   /**
