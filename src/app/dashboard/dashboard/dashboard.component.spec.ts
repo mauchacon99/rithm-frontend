@@ -37,6 +37,7 @@ import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widg
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -93,6 +94,7 @@ describe('DashboardComponent', () => {
         FormsModule,
         MatInputModule,
         MatDialogModule,
+        MatTabsModule,
         RouterTestingModule.withRoutes([
           {
             path: 'dashboard/:dashboardId',
@@ -439,8 +441,10 @@ describe('DashboardComponent', () => {
       expect(component.drawerContext).toBe(drawerContext);
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
       component.openDialogAddWidget();
-      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+      expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
+      expect(spyDialog).toHaveBeenCalled();
     });
   });
 
