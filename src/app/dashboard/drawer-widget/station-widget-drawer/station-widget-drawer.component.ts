@@ -29,7 +29,7 @@ import { ErrorService } from 'src/app/core/error.service';
   styleUrls: ['./station-widget-drawer.component.scss'],
 })
 export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
-  /** Form. */
+  /** Form for fields the select. */
   formColumns: FormGroup = new FormGroup({
     columns: new FormArray([]),
   });
@@ -49,6 +49,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
 
+  /** Questions the station. */
   questions!: Question[];
 
   /** Loading document. */
@@ -62,6 +63,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
+
+  /** Loading error. */
+  failedLoadDrawer = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -87,12 +91,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.setWidgetIndex.emit(this.widgetIndex);
           this.getDocumentFields();
         }
-      });
-
-    this.dashboardService.isLoadingDashboard$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ statusLoading }) => {
-        this.isLoading = statusLoading;
       });
   }
 
@@ -214,6 +212,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Get station questions. */
   private getDocumentFields(): void {
     this.isLoading = true;
+    this.failedLoadDrawer = false;
     this.stationService
       .getStationQuestions(this.stationRithmId)
       .pipe(first())
@@ -226,6 +225,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.isLoading = false;
+          this.failedLoadDrawer = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -268,7 +268,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
       widgetIndex: this.widgetIndex,
-      isCloseDrawer: false,
     });
   }
 

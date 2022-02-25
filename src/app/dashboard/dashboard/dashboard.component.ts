@@ -18,6 +18,7 @@ import {
   EditDataWidget,
   RoleDashboardMenu,
   Station,
+  WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
@@ -71,6 +72,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
+
+  /** Value used to compare the widgets. */
+  widgetType = WidgetType;
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -419,16 +423,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Update dashboard.
-   *
-   * @param isCloseDrawer If close drawer, only used by drawer widgets.
-   */
-  updateDashboard(isCloseDrawer = true): void {
-    this.dashboardService.toggleLoadingDashboard(true);
-    if (isCloseDrawer) {
-      this.toggleDrawerOnlyForWidgets();
-    }
+  /** Update dashboard. */
+  updateDashboard(): void {
+    this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
@@ -439,16 +436,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
         this.dashboardDataCopy = JSON.parse(JSON.stringify(this.dashboardData));
-        this.dashboardService.toggleLoadingDashboard(false);
-        if (isCloseDrawer) {
-          this.editMode = false;
-          this.configEditMode();
-        }
+        this.editMode = false;
+        this.configEditMode();
         this.errorLoadingDashboard = false;
+        this.isLoading = false;
       },
       error: (error: unknown) => {
+        this.isLoading = false;
         this.errorLoadingDashboard = true;
-        this.dashboardService.toggleLoadingDashboard(false);
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
@@ -465,7 +460,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   updateDashboardWidget(editDataWidget: EditDataWidget): void {
     this.dashboardData.widgets[editDataWidget.widgetIndex] =
       editDataWidget.widgetItem;
-    this.updateDashboard(editDataWidget.isCloseDrawer);
   }
 
   /**
