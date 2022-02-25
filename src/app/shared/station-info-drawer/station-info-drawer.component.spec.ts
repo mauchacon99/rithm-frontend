@@ -540,4 +540,30 @@ describe('StationInfoDrawerComponent', () => {
 
     expect(spyFlowButton).toHaveBeenCalledOnceWith(component.flowButtonName);
   });
+
+  it('should navigate to the station on the map', () => {
+    const mapService = TestBed.inject(MapService);
+    const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
+    component.goToStationOnMap();
+    expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
+    expect(mapService.stationRithmIdCenter$.value).toBe(stationId);
+  });
+
+  it('should show view on the map station button', () => {
+    component.selectedTabIndex = 0;
+    component.stationLoading = false;
+    component.openedFromMap = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
+    fixture.detectChanges();
+
+    const goToStationOnMapSpy = spyOn(
+      component,
+      'goToStationOnMap'
+    );
+    const viewOnMapButton = fixture.debugElement.nativeElement.querySelector('#view-on-map-station-button');
+    expect(viewOnMapButton).toBeTruthy();
+    viewOnMapButton.click();
+    expect(goToStationOnMapSpy).toHaveBeenCalled();
+  });
 });

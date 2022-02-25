@@ -5,7 +5,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import {
@@ -143,7 +143,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private documentService: DocumentService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -254,7 +255,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   get displayCreateDocumentButton(): boolean {
     return (
       this.stationDocumentGenerationStatus ===
-        DocumentGenerationStatus.Manual &&
+      DocumentGenerationStatus.Manual &&
       (this.mapMode === 0 || this.mapMode === undefined) &&
       !this.locallyCreated &&
       (this.isUserAdminOrOwner || this.isWorker)
@@ -289,10 +290,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       status === 'None' && statusNew.checked
         ? DocumentGenerationStatus.None
         : status === 'None' && !statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : status === 'Manual' && statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : DocumentGenerationStatus.None;
+          ? DocumentGenerationStatus.Manual
+          : status === 'Manual' && statusNew.checked
+            ? DocumentGenerationStatus.Manual
+            : DocumentGenerationStatus.None;
 
     this.updateStationDocumentGenerationStatus(this.stationRithmId, value);
   }
@@ -754,6 +755,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Navigate the user to the station on the map.
+   */
+  goToStationOnMap(): void {
+    this.mapService.stationRithmIdCenter$.next(this.stationRithmId);
+    this.router.navigate([`/map`]);
   }
 
   /**
