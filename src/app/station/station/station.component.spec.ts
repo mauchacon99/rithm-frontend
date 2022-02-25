@@ -412,7 +412,6 @@ describe('StationComponent', () => {
   it('should show layout-mode-button and layoutMode active when in station edit mode', () => {
     component.editMode = true;
     component.viewNewStation = true;
-    component.stationLoading = false;
     fixture.detectChanges();
 
     const btnLayout = fixture.debugElement.nativeElement.querySelector(
