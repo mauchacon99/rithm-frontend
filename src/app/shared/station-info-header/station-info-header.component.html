@@ -59,7 +59,7 @@
   </section>
 </ng-container>
 <ng-template #newStationHeader>
-  <section class="grid grid-cols-12 pt-8 px-4">
+  <section class="grid grid-cols-12 pt-6 px-4">
     <div class="col-span-12">
       <div
         *ngIf="!stationEditMode"
@@ -96,7 +96,9 @@
         >
           <i
             class="fas fa-cog text-2xl"
-            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-secondary-500'"
+            [ngClass]="
+              isDrawerOpen ? 'text-secondary-100' : 'text-secondary-500'
+            "
           ></i>
         </button>
       </div>
