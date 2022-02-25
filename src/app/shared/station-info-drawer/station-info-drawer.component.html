@@ -127,16 +127,27 @@
             </mat-form-field>
           </div>
           <div class="flex justify-between items-center">
-            <div>
-              <p class="w-5/6 text-sm text-secondary-300">
-                Users can flow document to previous station
+            <div class="w-5/6">
+              <p class="text-sm text-secondary-300">
+                Users can flow containers to previous station
               </p>
             </div>
-            <mat-slide-toggle
-              class="px-2"
-              [(ngModel)]="statusAllowPreviousButton"
-              (ngModelChange)="updateAllowPreviousButton()"
-            ></mat-slide-toggle>
+            <ng-container
+              *ngIf="statusAllowPreviousLoading; else slideToggleAllowPrevious"
+            >
+              <app-loading-indicator
+                id="status-allow-previous-loading"
+                [inlineText]="'Loading...'"
+              ></app-loading-indicator>
+            </ng-container>
+            <ng-template #slideToggleAllowPrevious>
+              <mat-slide-toggle
+                class="px-2"
+                [(ngModel)]="statusAllowPreviousButton"
+                (ngModelChange)="updateAllowPreviousButton()"
+              >
+              </mat-slide-toggle>
+            </ng-template>
           </div>
         </section>
         <div *ngIf="mapMode === mapModeEnum.Build">
