@@ -104,8 +104,8 @@ export class StationComponent
   /** Index for station tabs. */
   stationTabsIndex = 0;
 
-   /** Set the value about mode config. */
-   modeConfig = "";
+  /** Set the value about mode config. */
+  modeConfig = '';
 
   /** Grid initial values. */
   options: GridsterConfig = {
