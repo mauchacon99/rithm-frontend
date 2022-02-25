@@ -161,8 +161,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Adding boundary box inner padding for top-left and bottom-right. */
   readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
 
-  /** The Station rithm Id pass of param. */
-  stationRithmIdCenter = '';
+  /** The Station rithm Id centered on the map. */
+  private centerStationRithmId = '';
 
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
@@ -278,10 +278,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.checkAutoPan();
       });
 
-    this.mapService.stationRithmIdCenter$
+    this.mapService.centerStationRithmId$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationRithmId) => {
-        this.stationRithmIdCenter = stationRithmId;
+        this.centerStationRithmId = stationRithmId;
       });
   }
 
@@ -316,9 +316,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //If this is the first time the component is being initialized, center the map without animation.
         if (dataReceived && this.initLoad) {
-          if (this.stationRithmIdCenter !== '') {
+          if (this.centerStationRithmId !== '') {
             const stationCenter = this.mapService.stationElements.filter(
-              (station) => station.rithmId === this.stationRithmIdCenter
+              (station) => station.rithmId === this.centerStationRithmId
             );
             //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
             this.mapService.centerActive$.next(true);
@@ -335,10 +335,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               notes: stationCenter[0].notes,
             };
             //Pass dataInformationDrawer to open the station info drawer.
-            /*  setTimeout(() => {
-               this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-               this.stationService.updatedStationNameText(stationCenter[0].stationName);
-             }, 1000); */
+            setTimeout(() => {
+              this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+              this.stationService.updatedStationNameText(stationCenter[0].stationName);
+            }, 5000);
           } else {
             this.mapService.centerActive$.next(true);
             this.mapService.centerCount$.next(1);

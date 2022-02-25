@@ -768,7 +768,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Navigate the user to the station on the map.
    */
   goToStationOnMap(): void {
-    this.mapService.stationRithmIdCenter$.next(this.stationRithmId);
+    this.mapService.centerStationRithmId$.next(this.stationRithmId);
     this.router.navigate([`/map`]);
   }
 

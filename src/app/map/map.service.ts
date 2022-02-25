@@ -139,8 +139,8 @@ export class MapService {
   /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
   centerStationCount$ = new BehaviorSubject(0);
 
-  /** The station Rithm Center. */
-  stationRithmIdCenter$ = new BehaviorSubject('');
+  /** The Station rithm Id centered on the map. */
+  centerStationRithmId$ = new BehaviorSubject('');
 
   constructor(
     private http: HttpClient

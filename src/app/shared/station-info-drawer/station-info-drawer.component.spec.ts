@@ -547,7 +547,7 @@ describe('StationInfoDrawerComponent', () => {
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
     component.goToStationOnMap();
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
-    expect(mapService.stationRithmIdCenter$.value).toBe(stationId);
+    expect(mapService.centerStationRithmId$.value).toBe(stationId);
   });
 
   it('should show view on the map station button', () => {
