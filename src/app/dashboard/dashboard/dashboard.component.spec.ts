@@ -432,9 +432,9 @@ describe('DashboardComponent', () => {
       expect(component.drawerContext).toBe(drawerContext);
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
-      const spyDialog = spyOn(TestBed.inject(MatDialog),'open');
+      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
       component.openDialogAddWidget();
-      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+      expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalled();
     });
   });
