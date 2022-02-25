@@ -42,7 +42,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { GridsterModule } from 'angular-gridster2';
 
