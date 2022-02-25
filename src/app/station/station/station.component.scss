@@ -5,13 +5,6 @@
   box-shadow: 1px -2px 2px #e5e4e7;
 }
 
-/// mat-tab-label Container and Flow Logic Tabs styles
-::ng-deep .mat-tab-label {
-  min-width: 1px !important;
-  padding: 1px 16px !important;
-  color: #081e57;
-}
-
 .info-drawer-station {
   mat-drawer {
     @apply w-72 mt-28;
@@ -23,6 +16,19 @@
       @apply opacity-100 text-accent-500 text-sm;
 
       min-width: 140px !important;
+    }
+  }
+}
+
+/// mat-tab-label Container and Flow Logic Tabs styles
+::ng-deep .mat-tab-label-container {
+  ::ng-deep .mat-tab-label {
+    @apply px-4 min-w-0 text-accent-900;
+
+    &.mat-tab-label-active {
+      @apply text-accent-900;
+
+      opacity: 1;
     }
   }
 }
