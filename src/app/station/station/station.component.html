@@ -319,7 +319,14 @@
                     <gridster
                       class="p-0 bg-transparent h-screen"
                       [options]="options"
-                    ></gridster>
+                    >
+                      <gridster-item
+                        [item]="widgetItem"
+                        *ngFor="let widgetItem of inputFrameWidgetItems"
+                      >
+                        <app-input-frame-widget></app-input-frame-widget>
+                      </gridster-item>
+                    </gridster>
                   </div>
                 </ng-template>
               </mat-tab>
