@@ -177,6 +177,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.openedFromMap = dataDrawer.openedFromMap;
             this.stationNotes = dataDrawer.notes;
             if (this.openedFromMap) {
+              this.mapService.handleDrawerClose();
+
               const currentStationIndex =
                 this.mapService.stationElements.findIndex(
                   (e) => e.rithmId === this.stationRithmId
