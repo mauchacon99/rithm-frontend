@@ -86,6 +86,16 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
           this.numberOfSubgroups = infoData.numberOfSubgroups;
           this.editMode = infoData.editMode;
           this.isChained = infoData.isChained;
+
+          this.mapService.handleDrawerClose();
+          const currentStationIndex =
+            this.mapService.stationGroupElements.findIndex(
+              (e) => e.rithmId === this.stationGroupRithmId
+            );
+          this.mapService.stationGroupElements[
+            currentStationIndex
+          ].drawerOpened = true;
+          this.mapService.mapDataReceived$.next(true);
         }
       });
   }
@@ -96,6 +106,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'stationGroupInfo'): void {
+    this.mapService.isDrawerOpened$.next(false);
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 

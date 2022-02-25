@@ -997,6 +997,23 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should get the allow previous button for the document', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+
+    service.getAllowPreviousButton(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-previous-button?rithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.url).toBe(router);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
   it('should update the allow external workers status in the station', () => {
     const allowExtWorkers = true;
     const expectedResponse: StandardBooleanJSON = {

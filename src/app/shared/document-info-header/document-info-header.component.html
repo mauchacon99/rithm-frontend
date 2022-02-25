@@ -137,10 +137,12 @@
   </ng-container>
 
   <ng-template #newDocumentHeader>
-    <section class="grid grid-cols-12 border-b border-secondary-200 pt-5 pb-2">
+    <section
+      class="grid grid-cols-12 border-b border-secondary-200 pt-5 pb-2 px-4"
+    >
       <div class="col-span-12 flex justify-between items-center mt-6 mb-1">
         <div class="flex items-center">
-          <p class="text-center tracking-tight text-xl font-semibold px-5">
+          <p class="text-center tracking-tight text-xl font-semibold">
             {{ appendedDocumentName || 'Untitled Container' }}
           </p>
         </div>
@@ -153,8 +155,10 @@
           [disabled]="isDrawerOpen"
         >
           <i
-            class="fas fa-cog text-xl"
-            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-300'"
+            class="fas fa-cog text-2xl"
+            [ngClass]="
+              isDrawerOpen ? 'text-secondary-100' : 'text-secondary-500'
+            "
           ></i>
         </button>
       </div>
