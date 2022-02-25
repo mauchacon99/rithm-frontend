@@ -27,10 +27,13 @@ describe('AddWidgetModalComponent', () => {
 
   it('should call dialogRef service', () => {
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+    const spyMethod = spyOn(component, 'closeModal').and.callThrough();
     const btnClose = fixture.nativeElement.querySelector(
       '#close-widget-builder'
     );
+    expect(btnClose).toBeTruthy();
     btnClose.click();
+    expect(spyMethod).toHaveBeenCalled();
     expect(spyMatDialogRef).toHaveBeenCalled();
   });
 });
