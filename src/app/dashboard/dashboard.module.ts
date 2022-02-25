@@ -10,6 +10,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StationCardComponent } from './station-card/station-card.component';
@@ -33,6 +34,7 @@ import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-dra
 import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-drawer.component';
 import { LoadingWidgetComponent } from './widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,8 @@ import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.compon
     MatMenuModule,
     FormsModule,
     MatSelectModule,
+    MatRippleModule,
+    MatTableModule,
   ],
 })
 export class DashboardModule {}

@@ -10,6 +10,7 @@ import {
   DashboardData,
   EditDataWidget,
   ColumnsDocumentInfo,
+  ColumnsLogicWidget,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -32,12 +33,7 @@ export class DashboardService {
   /** Update specific widget and data. */
   updateDataWidget$ = new Subject<EditDataWidget>();
 
-  columnsDocumentInfo: {
-    /** Name to show in dom. */
-    name: string;
-    /** Key property to get value of the document. */
-    key: string;
-  }[] = [
+  columnsDocumentInfo: ColumnsLogicWidget[] = [
     {
       name: 'Document',
       key: ColumnsDocumentInfo.Name,

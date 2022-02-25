@@ -3,11 +3,17 @@ import { of, throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import {
+  MockDashboardService,
   MockDocumentService,
   MockErrorService,
   MockPopupService,
 } from 'src/mocks';
-import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
+import {
+  ColumnsDocumentInfo,
+  DocumentGenerationStatus,
+  QuestionFieldType,
+  StationWidgetData,
+} from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
@@ -15,14 +21,15 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
-import { SimpleChange } from '@angular/core';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MatTableModule } from '@angular/material/table';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
   const dataWidget =
     // eslint-disable-next-line max-len
-    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "priority"}, {"name": "name"}, {"name": "Field name 2"}]}';
+    '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "name"}, {"name":"Test QuestionId","questionId":"37534-453543-453453"}]}';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -33,9 +40,11 @@ describe('StationWidgetComponent', () => {
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
       ],
+      imports: [MatTableModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
@@ -62,7 +71,37 @@ describe('StationWidgetComponent', () => {
             email: 'string',
             isAssigned: true,
           },
-          questions: [],
+          questions: [
+            {
+              questions: [
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Instructions,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+                },
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Number,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28186',
+                },
+              ],
+              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+            },
+          ],
         },
       ],
     };
@@ -122,7 +161,25 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
-          questions: [],
+          questions: [
+            {
+              questions: [
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Instructions,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+                },
+              ],
+              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+            },
+          ],
         },
       ],
     };
@@ -161,7 +218,25 @@ describe('StationWidgetComponent', () => {
             email: 'pablo@mundo.com',
             isAssigned: true,
           },
-          questions: [],
+          questions: [
+            {
+              questions: [
+                {
+                  answer: undefined,
+                  children: [],
+                  isEncrypted: false,
+                  isPrivate: false,
+                  isReadOnly: false,
+                  isRequired: false,
+                  possibleAnswers: [],
+                  prompt: 'value instruccions dev 1',
+                  questionType: QuestionFieldType.Instructions,
+                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+                },
+              ],
+              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+            },
+          ],
         },
       ],
     };
@@ -273,12 +348,7 @@ describe('StationWidgetComponent', () => {
     it('should show detail of the document', () => {
       const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
       component.isLoading = false;
-      fixture.detectChanges();
-      const btnDisplayDocument =
-        fixture.debugElement.nativeElement.querySelector(
-          '#show-document-widget'
-        );
-      btnDisplayDocument.click();
+      component.viewDocument(component.dataStationWidget.documents[0].rithmId);
       fixture.detectChanges();
       const documentDetail =
         fixture.debugElement.nativeElement.querySelector('#document-detail');
@@ -362,20 +432,6 @@ describe('StationWidgetComponent', () => {
     expect(errorWidget).toBeTruthy();
   });
 
-  it('should detect change of editMode and return list of components', function () {
-    spyOn(component, 'viewDocument').and.callThrough();
-    spyOn(component, 'toggleExpandWidget').and.callThrough();
-    component.isDocument = true;
-    component.isExpandWidget = true;
-    component.editMode = true;
-    component.ngOnChanges({
-      editMode: new SimpleChange(false, component.editMode, true),
-    });
-    fixture.detectChanges();
-    expect(component.viewDocument).toHaveBeenCalledOnceWith('', true);
-    expect(component.toggleExpandWidget).toHaveBeenCalled();
-  });
-
   it('should click edit button and emit toggleDrawer', () => {
     component.isLoading = false;
     component.failedLoadWidget = false;
@@ -394,5 +450,68 @@ describe('StationWidgetComponent', () => {
     btnEdit.click();
     expect(component.toggleEditStation).toHaveBeenCalled();
     expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
+
+  it('should get name of the column', () => {
+    expect(component.getColumnBasicName(ColumnsDocumentInfo.Name)).toEqual(
+      'Document'
+    );
+  });
+
+  it('should be parse data of the columns widget', () => {
+    spyOnProperty(component, 'dataWidget').and.returnValue(dataWidget);
+    const expectColumnsWidget = JSON.parse(dataWidget)?.columns;
+    component.parseDataColumnsWidget();
+    expect(component.columnsAllField).toEqual(expectColumnsWidget);
+    expect(component.columnsFieldPetition).toEqual([
+      expectColumnsWidget[1]?.questionId,
+    ]);
+    expect(component.columnsToDisplayTable).toEqual([
+      expectColumnsWidget[0]?.name,
+      expectColumnsWidget[1]?.questionId,
+      'viewDocument',
+    ]);
+  });
+
+  it('should be parse data of the columns widget when columns is empty', () => {
+    const jsonStringData =
+      '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": []}';
+    spyOnProperty(component, 'dataWidget').and.returnValue(jsonStringData);
+    component.parseDataColumnsWidget();
+    expect(component.columnsFieldPetition.length).toEqual(0);
+    expect(component.columnsAllField.length).toEqual(0);
+    expect(component.columnsToDisplayTable).toEqual(['name', 'viewDocument']);
+  });
+
+  it('should get name of question to table column when questionType id instructions', () => {
+    const expectDataValue = 'Instruction';
+    const expectDataReturn = component.getColumnQuestionPrompt({
+      name: 'Value Test',
+      questionId:
+        component.dataStationWidget.documents[0].questions[0].questions[0]
+          .rithmId,
+    });
+    expect(expectDataReturn).toEqual(expectDataValue);
+  });
+
+  it('should get name of question to table column when not found questionId', () => {
+    const expectDataValue = 'Value Test';
+    const expectDataReturn = component.getColumnQuestionPrompt({
+      name: expectDataValue,
+      questionId: '5f652ab1-6870-4b78-881-b5e4a6e2818',
+    });
+    expect(expectDataReturn).toEqual(expectDataValue);
+  });
+
+  it('should get name of question to table column when found questionId and its different to instructions', () => {
+    const expectDataValue =
+      component.dataStationWidget.documents[0].questions[0].questions[1].prompt;
+    const expectDataReturn = component.getColumnQuestionPrompt({
+      name: expectDataValue,
+      questionId:
+        component.dataStationWidget.documents[0].questions[0].questions[1]
+          .rithmId,
+    });
+    expect(expectDataReturn).toEqual(expectDataValue);
   });
 });
