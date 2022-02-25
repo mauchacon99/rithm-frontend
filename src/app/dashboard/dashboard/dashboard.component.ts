@@ -253,7 +253,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       if (response) {
         this.editMode = false;
-        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
+        const oldWidgets = this.returnWidgetsCompared(
+          this.dashboardDataCopy.widgets
+        );
+        const currentWidgets = this.returnWidgetsCompared(
+          this.dashboardData.widgets
+        );
+
+        if (oldWidgets === currentWidgets)
+          this.dashboardData = JSON.parse(
+            JSON.stringify(this.dashboardDataCopy)
+          );
+        else this.getParams();
+
         this.configEditMode();
         this.toggleDrawerOnlyForWidgets();
       }
@@ -262,6 +274,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.editMode = true;
       this.configEditMode();
     }
+  }
+
+  /**
+   * Returns widgets without the data attribute to compare if the widget has changed in edit mode.
+   *
+   * @returns The widgets without the data attribute and how string.
+   * @param  items Widget items.
+   */
+  private returnWidgetsCompared(items: DashboardItem[]): string {
+    const newItems: string[] = [];
+    items.map((item) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data, ...widget } = item;
+      newItems.push(JSON.stringify(widget));
+    });
+    return JSON.stringify(newItems);
   }
 
   /**

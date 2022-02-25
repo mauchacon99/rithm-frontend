@@ -288,6 +288,7 @@ describe('DashboardComponent', () => {
       okButtonText: 'Yes',
       cancelButtonText: 'No',
     };
+    component.dashboardData = dataDashboard;
     component.dashboardDataCopy = dataDashboard;
     const spyMethod = spyOn(
       TestBed.inject(PopupService),
@@ -370,6 +371,7 @@ describe('DashboardComponent', () => {
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
+      component.dashboardData = dataDashboard;
       component.dashboardDataCopy = dataDashboard;
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
@@ -386,6 +388,13 @@ describe('DashboardComponent', () => {
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       component.updateDashboard();
       expect(spyDrawer).toHaveBeenCalled();
+    });
+
+    it('should call method returnWidgetsCompared', () => {
+      const response = component['returnWidgetsCompared'](
+        dataDashboard.widgets
+      );
+      expect(response).not.toBeUndefined();
     });
   });
 
