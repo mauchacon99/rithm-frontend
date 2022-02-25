@@ -17,6 +17,7 @@ import {
   QuestionFieldType,
   ColumnsLogicWidget,
   WidgetDocument,
+  WidgetType,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -25,12 +26,13 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 
 /**
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[dataWidget][editMode]',
+  selector: 'app-station-widget[dataWidget][editMode][widgetType][image]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -40,9 +42,38 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
-  private _dataWidget = '';
+  /** To load dom by WidgetType. */
+  @Input() widgetType: WidgetType = WidgetType.Station;
 
-  dataSourceTable!: MatTableDataSource<WidgetDocument>;
+  private _image!: string | null;
+
+  /** Image to banner. */
+  @Input() set image(value: string | File | null | undefined) {
+    if (value && typeof value !== 'string') {
+      const reader = new FileReader();
+      reader.readAsDataURL(value);
+
+      reader.onload = () => {
+        this._image = reader.result as string;
+      };
+    } else {
+      this._image = value as string;
+    }
+  }
+
+  /**
+   * Get image.
+   *
+   * @returns String or NUll of the image.
+   */
+  get image(): string | null | undefined {
+    return this._image;
+  }
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<void>();
+
+  private _dataWidget = '';
 
   /** Set data for station widget. */
   @Input() set dataWidget(value: string) {
@@ -61,9 +92,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   get dataWidget(): string {
     return this._dataWidget;
   }
-
-  /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<void>();
 
   private _editMode = false;
 
@@ -90,6 +118,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** StationRithmId for station widget. */
   stationRithmId = '';
 
+  /** Data of type MatTableDataSource to show table documents. */
+  dataSourceTable!: MatTableDataSource<WidgetDocument>;
+
   /** Columns for list the widget. */
   columnsAllField: ColumnFieldsWidget[] = [];
 
@@ -98,6 +129,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** To set its expanded the widget. */
   isExpandWidget = false;
+
+  /** Enum with types widget station. */
+  typesWidget = WidgetType;
 
   /** Key names of the columns to mat-table. */
   columnsToDisplayTable: string[] = [];
@@ -140,7 +174,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private sidenavDrawerService: SidenavDrawerService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private readonly sanitizer: DomSanitizer
   ) {}
 
   /**

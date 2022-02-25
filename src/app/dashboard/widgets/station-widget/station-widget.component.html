@@ -18,7 +18,14 @@
   *ngIf="!isLoading && !failedLoadWidget && !isDocument"
   id="show-docs"
   class="h-full w-full"
+  [ngClass]="{'min-h-[350px]': widgetType === typesWidget.StationTableBanner}"
 >
+  <!--  Banner image-->
+  <div *ngIf="widgetType === typesWidget.StationTableBanner"
+       class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col">
+    <i *ngIf="!image" class="fas text-[60px] text-secondary-300 fa-image"></i>
+    <img *ngIf="image" [src]="image" class="h-full w-full" alt="Image station">
+  </div>
   <!-- Header widget -->
   <div class="w-full p-2 flex flex-col h-full">
     <!--  Header Container  -->

@@ -25,6 +25,7 @@ import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
+import * as fs from 'fs';
 
 /**
  * Main component for the dashboard screens.
