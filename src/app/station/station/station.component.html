@@ -210,7 +210,9 @@
         <!-- left column -->
         <div class="hidden lg:inline-block col-span-2">left column</div>
         <!-- center column -->
-        <div class="col-span-12 lg:col-span-8 bg-white h-full">
+        <div
+          class="flex flex-col col-span-12 lg:col-span-8 bg-white h-full w-full"
+        >
           <form
             *ngIf="!stationLoading"
             [formGroup]="stationForm"
@@ -240,18 +242,84 @@
                     [viewNewStation]="viewNewStation"
                     *ngIf="!stationLoading"
                   ></app-document-info-header>
+                  <!--  Toolbar Edit -->
                   <div
+                    *ngIf="!editMode; else toolbarEditStation"
                     class="w-full flex bg-secondary-50 justify-end items-center p-2"
                   >
                     <button
-                      type="button"
                       mat-stroked-button
-                      class="md:w-auto w-full font-semibold text-sm"
+                      type="button"
                       color="accent"
+                      class="font-semibold text-sm"
                       id="station-edit-mode-button"
+                      (click)="editMode = !editMode"
                     >
                       Edit
                     </button>
+                  </div>
+                  <ng-template #toolbarEditStation>
+                    <div
+                      class="w-full flex bg-secondary-50 items-center justify-between p-2"
+                    >
+                      <div class="flex">
+                        <button type="button" class="px-2 mr-2">
+                          <span
+                            class="fas fa-tools text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                        <button
+                          mat-button
+                          type="button"
+                          color="accent"
+                          class="text-sm font-semibold"
+                        >
+                          Layout
+                        </button>
+                        <button
+                          mat-button
+                          color="accent"
+                          [disabled]="true"
+                          type="button"
+                          class="text-sm font-semibold"
+                        >
+                          Setting
+                        </button>
+                      </div>
+                      <div class="flex">
+                        <button type="button" class="px-2">
+                          <span
+                            class="fas fa-trash text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                        <button
+                          mat-button
+                          type="button"
+                          color="accent"
+                          class="font-semibold text-sm"
+                          (click)="editMode = !editMode"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="accent"
+                          class="font-semibold text-sm"
+                          (click)="editMode = !editMode"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </ng-template>
+                  <div class="gridster-container pb-4 w-full">
+                    <gridster
+                      class="p-0 bg-transparent h-screen"
+                      [options]="options"
+                    ></gridster>
                   </div>
                 </ng-template>
               </mat-tab>

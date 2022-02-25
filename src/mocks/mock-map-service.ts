@@ -134,6 +134,9 @@ export class MockMapService {
   /** The station Rithm Center. */
   stationRithmIdCenter$ = new BehaviorSubject('');
 
+  /** Informs the map that which drawer is opened. */
+  isDrawerOpened$ = new BehaviorSubject(false);
+
   /**
    * Creates a new `MockMapService`.
    *
