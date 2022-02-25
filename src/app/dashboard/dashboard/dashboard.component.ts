@@ -25,6 +25,8 @@ import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 
 /**
  * Main component for the dashboard screens.
@@ -133,7 +135,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
     private router: Router,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private dialog: MatDialog
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -467,6 +470,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   trackBy(index: number, item: GridsterItem): number {
     return item.id;
+  }
+
+  /**
+   * Open dialog add widget.
+   */
+  openDialogAddWidget(): void {
+    this.toggleDrawerOnlyForWidgets();
+    this.dialog.open(AddWidgetModalComponent, {
+      panelClass: ['w-11/12', 'sm:w-4/5'],
+      maxWidth: '1024px',
+    });
   }
 
   /** Clean subscriptions. */
