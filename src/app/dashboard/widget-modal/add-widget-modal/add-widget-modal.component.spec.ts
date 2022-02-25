@@ -23,6 +23,7 @@ describe('AddWidgetModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddWidgetModalComponent);
     component = fixture.componentInstance;
+    component.tabParentSelect = 0;
     fixture.detectChanges();
   });
 
