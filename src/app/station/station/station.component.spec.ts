@@ -418,7 +418,6 @@ describe('StationComponent', () => {
     const btnLayout = fixture.debugElement.nativeElement.querySelector(
       '#layout-mode-button'
     );
-    expect(btnLayout).toBeFalsy();
     expect(btnLayout).toBeTruthy();
     expect(component.layoutMode).toBeTrue();
     btnLayout.click();
