@@ -95,6 +95,9 @@ export class StationComponent
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
+  /** Edit mode toggle for station. */
+  editMode = false;
+
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
@@ -496,7 +499,7 @@ export class StationComponent
         error: (error: unknown) => {
           this.stationLoading = false;
           this.stationTabsIndex = 1;
-          this.childFlowLogic.ruleError = true;
+          this.childFlowLogic.ruleLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -633,17 +636,21 @@ export class StationComponent
    *
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
-  addFlowLogicRule(flowLogicRule: FlowLogicRule): void {
-    const flowLogicStation = this.pendingFlowLogicRules.findIndex(
-      (flowRule) =>
-        flowRule.destinationStationRithmID ===
-          flowLogicRule.destinationStationRithmID &&
-        flowRule.stationRithmId === flowLogicRule.stationRithmId
-    );
-    if (flowLogicStation >= 0) {
-      this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+  addFlowLogicRule(flowLogicRule: FlowLogicRule | null): void {
+    if (flowLogicRule) {
+      const flowLogicStation = this.pendingFlowLogicRules.findIndex(
+        (flowRule) =>
+          flowRule.destinationStationRithmID ===
+            flowLogicRule.destinationStationRithmID &&
+          flowRule.stationRithmId === flowLogicRule.stationRithmId
+      );
+      if (flowLogicStation >= 0) {
+        this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+      } else {
+        this.pendingFlowLogicRules.push(flowLogicRule);
+      }
     } else {
-      this.pendingFlowLogicRules.push(flowLogicRule);
+      this.pendingFlowLogicRules = [];
     }
   }
 }

@@ -34,6 +34,7 @@ import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.mod
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GridsterModule } from 'angular-gridster2';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { GridsterModule } from 'angular-gridster2';
     SelectFieldModule,
     MatTooltipModule,
     GridsterModule,
+    MatDividerModule,
   ],
 })
 export class StationModule {}

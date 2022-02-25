@@ -602,7 +602,6 @@ describe('DashboardService', () => {
         maxItemCols: 12,
         maxItemRows: 12,
       },
-      isCloseDrawer: false,
     };
     service.updateDataWidget$.subscribe((editDataWidget) => {
       expect(editDataWidget).toEqual(expectEditDataWidget);
