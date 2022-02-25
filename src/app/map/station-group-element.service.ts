@@ -34,6 +34,13 @@ import {
   ICON_STATION_GROUP_PATH_RADIUS,
   GROUP_CHARACTER_SIZE,
   STATION_GROUP_DISPLACEMENT,
+  CHAIN_GRID_SEVEN,
+  CHAIN_GRID_TWO,
+  CHAIN_GRID_NINE,
+  CHAIN_GRID_SIX,
+  CHAIN_GRID_FIVE,
+  CHAIN_GRID_THREE,
+  CHAIN_GRID_FOUR,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -1117,7 +1124,7 @@ export class StationGroupElementService {
     if (typeof icon === 'undefined' && typeof hoverColor === 'undefined') {
       const iconStartPoint = {
         x: displacedMap ? newPoint.x - pointStart.x : newPoint.x,
-        y: 10 * this.mapScale,
+        y: -5 * 3 * this.mapScale,
       };
       this.drawChainIcon(iconStartPoint);
     }
@@ -1136,36 +1143,59 @@ export class StationGroupElementService {
     //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
+    const scaledChainLinkOneBottomLeftHeight = CHAIN_GRID_SEVEN * this.mapScale;
+    const scaledChainLinkOneBottomRightWidth = CHAIN_GRID_TWO * this.mapScale;
+    const scaledChainLinkOneBottomRightHeight = CHAIN_GRID_NINE * this.mapScale;
+    const scaledChainLinkOneTopRightWidth = CHAIN_GRID_FIVE * this.mapScale;
+    const scaledChainLinkOneTopRightHeight = CHAIN_GRID_SIX * this.mapScale;
+    const scaledChainLinkOneTopLeftWidth = CHAIN_GRID_THREE * this.mapScale;
+    const scaledChainLinkOneTopLeftHeight = CHAIN_GRID_FOUR * this.mapScale;
+
+    const scaledChainCenterLineBottomWidth = CHAIN_GRID_THREE * this.mapScale;
+    const scaledChainCenterLineBottomHeight = CHAIN_GRID_SIX * this.mapScale;
+    const scaledChainCenterLineTopWidth = CHAIN_GRID_SIX * this.mapScale;
+    const scaledChainCenterLineTopHeight = CHAIN_GRID_THREE * this.mapScale;
+
+    const scaledChainLinkTwoBottomLeftWidth = CHAIN_GRID_FOUR * this.mapScale;
+    const scaledChainLinkTwoBottomLeftHeight = CHAIN_GRID_THREE * this.mapScale;
+    const scaledChainLinkTwoBottomRightWidth = CHAIN_GRID_SIX * this.mapScale;
+    const scaledChainLinkTwoBottomRightHeight = CHAIN_GRID_FIVE * this.mapScale;
+    const scaledChainLinkTwoTopRightWidth = CHAIN_GRID_NINE * this.mapScale;
+    const scaledChainLinkTwoTopRightHeight = CHAIN_GRID_TWO * this.mapScale;
+    const scaledChainLinkTwoTopLeftWidth = CHAIN_GRID_SEVEN * this.mapScale;
+
     //This is a complex shape with various lines and curves.
     ctx.save();
     ctx.beginPath();
     ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = Math.floor(3 * this.mapScale);
+    // ctx.lineWidth = Math.floor(3 * this.mapScale);
+    ctx.lineWidth = 1;
     ctx.moveTo(point.x, point.y);
-    ctx.clearRect(point.x, point.y, 45 * this.mapScale, -30 * this.mapScale);
+    ctx.clearRect(point.x, point.y, CHAIN_GRID_NINE * this.mapScale, CHAIN_GRID_NINE * this.mapScale);
+    //move down
+    ctx.moveTo(point.x, point.y + scaledChainLinkOneBottomLeftHeight);
     //draw down to the right
-    ctx.lineTo(point.x + 10 * this.mapScale, point.y + 10 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkOneBottomRightWidth, point.y + scaledChainLinkOneBottomRightHeight);
     //draw up to the right
-    ctx.lineTo(point.x + 25 * this.mapScale, point.y - 5 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkOneTopRightWidth, point.y + scaledChainLinkOneTopRightHeight);
     //draw up to the left
-    ctx.lineTo(point.x + 15 * this.mapScale, point.y - 15 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkOneTopLeftWidth, point.y + scaledChainLinkOneTopLeftHeight);
     //draw down to the left
-    ctx.lineTo(point.x, point.y);
+    ctx.lineTo(point.x, point.y + scaledChainLinkOneBottomLeftHeight);
     //start new line, move up to the right
-    ctx.moveTo(point.x + 15 * this.mapScale, point.y - 5 * this.mapScale);
+    ctx.moveTo(point.x + scaledChainCenterLineBottomWidth, point.y + scaledChainCenterLineBottomHeight);
     //draw up to the right
-    ctx.lineTo(point.x + 30 * this.mapScale, point.y - 20 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainCenterLineTopWidth, point.y + scaledChainCenterLineTopHeight);
     //start new line, move to the left
-    ctx.moveTo(point.x + 20 * this.mapScale, point.y - 20 * this.mapScale);
+    ctx.moveTo(point.x + scaledChainLinkTwoBottomLeftWidth, point.y + scaledChainLinkTwoBottomLeftHeight);
     //draw down to the right
-    ctx.lineTo(point.x + 30 * this.mapScale, point.y - 10 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkTwoBottomRightWidth, point.y + scaledChainLinkTwoBottomRightHeight);
     //draw up to the right
-    ctx.lineTo(point.x + 45 * this.mapScale, point.y - 25 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkTwoTopRightWidth, point.y + scaledChainLinkTwoTopRightHeight);
     //draw up and to the left
-    ctx.lineTo(point.x + 35 * this.mapScale, point.y - 35 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkTwoTopLeftWidth, point.y);
     //draw down to the left
-    ctx.lineTo(point.x + 20 * this.mapScale, point.y - 20 * this.mapScale);
+    ctx.lineTo(point.x + scaledChainLinkTwoBottomLeftWidth, point.y + scaledChainLinkTwoBottomLeftHeight);
     ctx.stroke();
     ctx.restore();
   }
