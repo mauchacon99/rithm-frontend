@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
+import { DashboardItem } from 'src/models';
 
 /**
  * Component for widget drawer.
@@ -27,6 +28,9 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
+
+  /** Widget item of opened widget-drawer. */
+  widgetItem!: DashboardItem;
 
   /** Whether the called widget-drawer. */
   drawerMode: 'stationWidget' = 'stationWidget';
@@ -82,8 +86,17 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    *
    * @param widgetIndex Widget index from station-widget-drawer.
    */
-  eventWidgetIndex(widgetIndex: number): void {
+  setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
+  }
+
+  /**
+   * Event emit widgetItem to dashboard.
+   *
+   * @param widgetItem Widget item from station-widget-drawer.
+   */
+  setWidgetItem(widgetItem: DashboardItem): void {
+    this.widgetItem = widgetItem;
   }
 
   /**
