@@ -181,9 +181,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                 this.mapService.stationElements.findIndex(
                   (e) => e.rithmId === this.stationRithmId
                 );
-              this.mapService.stationElements[
-                currentStationIndex
-              ].drawerOpened = true;
+              if (this.mapService.stationElements[currentStationIndex]) {
+                this.mapService.stationElements[
+                  currentStationIndex
+                ].drawerOpened = true;
+              }
               this.mapService.mapDataReceived$.next(true);
             }
             if (
@@ -335,6 +337,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationInformation.flowButton =
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
+              this.isChained = stationInfo.isChained || false;
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;

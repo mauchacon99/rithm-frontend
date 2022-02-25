@@ -1,0 +1,19 @@
+.tabs-custom-pre-build {
+  ::ng-deep .mat-tab-header {
+    .mat-tab-label:hover {
+      @apply text-accent-500;
+    }
+
+    .mat-tab-label.mat-tab-label-active {
+      @apply text-accent-500;
+    }
+
+    .mat-tab-label .mat-tab-label-content {
+      @apply font-semibold;
+    }
+  }
+
+  ::ng-deep mat-ink-bar.mat-ink-bar {
+    background-color: #1e4994 !important;
+  }
+}

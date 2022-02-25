@@ -117,7 +117,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** StationRithmId for station widget. */
   stationRithmId = '';
 
-  /** Data of type MatTableDataSource to show table documents. */
+  /** Interface for list items in table. */
   dataSourceTable!: MatTableDataSource<WidgetDocument>;
 
   /** Columns for list the widget. */
