@@ -43,6 +43,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
 import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -75,6 +76,7 @@ describe('StationComponent', () => {
         ReactiveFormsModule,
         MatTabsModule,
         MatExpansionModule,
+        MatDividerModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -403,5 +405,19 @@ describe('StationComponent', () => {
     ).and.callThrough();
     component.saveFlowLogicRules();
     expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should show layout-mode-btn and layoutMode active when in station edit mode', () => {
+    component.editMode = true;
+    component.viewNewStation = true;
+    component.stationLoading = false;
+    fixture.detectChanges();
+
+    const btnLayout =
+      fixture.debugElement.nativeElement.querySelector('#layout-mode-btn');
+    expect(btnLayout).toBeFalsy();
+    expect(btnLayout).toBeTruthy();
+    expect(component.layoutMode).toBeTrue();
+    btnLayout.click();
   });
 });

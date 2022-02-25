@@ -271,11 +271,15 @@
                           mat-button
                           type="button"
                           color="accent"
+                          data-testid="layout-mode-btn"
+                          id="layout-mode-btn"
+                          (click)="layoutMode = !layoutMode"
                           class="text-sm font-semibold"
                         >
                           Layout
                         </button>
                         <button
+                          [ngClass]="{ 'opacity-70': layoutMode }"
                           mat-button
                           color="accent"
                           [disabled]="true"

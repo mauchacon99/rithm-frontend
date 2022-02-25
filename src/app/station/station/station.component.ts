@@ -103,6 +103,9 @@ export class StationComponent
   /** Index for station tabs. */
   stationTabsIndex = 0;
 
+  /** Layaout mode button for station. */
+  layoutMode = true;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
