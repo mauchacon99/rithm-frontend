@@ -9,7 +9,6 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import { DashboardItem } from 'src/models';
 
 /**
  * Component for widget drawer.
