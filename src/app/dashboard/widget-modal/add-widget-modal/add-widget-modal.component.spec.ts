@@ -25,7 +25,7 @@ describe('AddWidgetModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call dialogRef service', () => {
+  it('should call close the modal in dialogRef service', () => {
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
     const spyMethod = spyOn(component, 'closeModal').and.callThrough();
     const btnClose = fixture.nativeElement.querySelector(
