@@ -431,17 +431,18 @@ describe('DashboardComponent', () => {
         dataDashboard.widgets
       );
       expect(response).not.toBeUndefined();
-   });
-
-   it('should call toggle drawer for close drawer when show dialog add new widget', () => {
-    const drawerContext = 'stationWidget';
-    sidenavDrawer.drawerContext$.next(drawerContext);
-    expect(component.drawerContext).toBe(drawerContext);
-    spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
-    const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
-    component.openDialogAddWidget();
-    expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
     });
+
+    it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      const drawerContext = 'stationWidget';
+      sidenavDrawer.drawerContext$.next(drawerContext);
+      expect(component.drawerContext).toBe(drawerContext);
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      component.openDialogAddWidget();
+      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+    });
+  });
 
   describe('Expand widget', () => {
     const dashboardData = {
