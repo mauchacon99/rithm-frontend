@@ -34,6 +34,8 @@ import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-dra
 import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-drawer.component';
 import { LoadingWidgetComponent } from './widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-widget-modal.component';
 import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
@@ -55,6 +57,7 @@ import { MatRippleModule } from '@angular/material/core';
     WidgetDrawerComponent,
     LoadingWidgetComponent,
     ErrorWidgetComponent,
+    AddWidgetModalComponent,
   ],
   imports: [
     CommonModule,
@@ -75,6 +78,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatMenuModule,
     FormsModule,
     MatSelectModule,
+    MatDialogModule,
     MatRippleModule,
     MatTableModule,
   ],
