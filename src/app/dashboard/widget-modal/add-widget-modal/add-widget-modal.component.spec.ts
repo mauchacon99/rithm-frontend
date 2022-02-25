@@ -13,8 +13,8 @@ describe('AddWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule,NoopAnimationsModule],
       providers: [{ provide: MatDialogRef, useValue: { close } }],
+      imports: [MatTabsModule, NoopAnimationsModule, MatDialogModule],
       declarations: [
         AddWidgetModalComponent,
         MockComponent(CustomTabWidgetModalComponent),

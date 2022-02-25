@@ -8,7 +8,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
-
   /** Tab Parents selected. */
   tabParentSelect = 0;
 
