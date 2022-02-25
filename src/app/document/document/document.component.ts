@@ -448,8 +448,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   async flowDocumentToPreviousStation(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Are you sure?',
-      message:
-        '\nAfter the document is moved you will be redirected to the documents at the previous station or dashboard.',
+      message: '\nYou will be redirected to the dashboard.',
       okButtonText: 'Confirm',
       cancelButtonText: 'Cancel',
     });

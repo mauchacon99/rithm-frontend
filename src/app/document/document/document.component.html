@@ -150,13 +150,12 @@
                   </button>
                 </div>
                 <button
-                  *ngIf="allowPreviousButton"
+                  *ngIf="allowPreviousButton && previousStations.length"
                   type="button"
                   mat-raised-button
                   color="accent"
                   data-testid="document-previous-station"
                   id="document-previous-station"
-                  [disabled]="!previousStations.length"
                   (click)="flowDocumentToPreviousStation()"
                 >
                   Previous Station
