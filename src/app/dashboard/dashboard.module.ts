@@ -37,7 +37,6 @@ import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.compon
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-widget-modal.component';
 import { MatRippleModule } from '@angular/material/core';
-import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +57,6 @@ import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-d
     WidgetDrawerComponent,
     LoadingWidgetComponent,
     ErrorWidgetComponent,
-    DocumentWidgetDrawerComponent,
     AddWidgetModalComponent,
   ],
   imports: [

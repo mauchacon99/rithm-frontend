@@ -29,9 +29,6 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
-  /** Widget item of opened widget-drawer. */
-  widgetItem!: DashboardItem;
-
   /** Whether the called widget-drawer. */
   drawerMode: 'stationWidget' = 'stationWidget';
 
@@ -88,15 +85,6 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
-  }
-
-  /**
-   * Event emit widgetItem to dashboard.
-   *
-   * @param widgetItem Widget item from station-widget-drawer.
-   */
-  setWidgetItem(widgetItem: DashboardItem): void {
-    this.widgetItem = widgetItem;
   }
 
   /**
