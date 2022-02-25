@@ -6,8 +6,6 @@ import { MockComponent } from 'ng-mocks';
 import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-widget-drawer.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
-import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
-import { DashboardItem, WidgetType } from 'src/models';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -18,7 +16,6 @@ describe('WidgetDrawerComponent', () => {
       declarations: [
         WidgetDrawerComponent,
         MockComponent(StationWidgetDrawerComponent),
-        MockComponent(DocumentWidgetDrawerComponent),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -133,30 +130,5 @@ describe('WidgetDrawerComponent', () => {
     component.setWidgetIndex(widgetIndex);
     expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
     expect(component.widgetIndex).toBe(widgetIndex);
-  });
-
-  it('should call setWidgetItem', () => {
-    const widgetItemData: DashboardItem = {
-      cols: 4,
-      // eslint-disable-next-line max-len
-      data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
-      maxItemCols: 0,
-      maxItemRows: 0,
-      minItemCols: 0,
-      minItemRows: 0,
-      rows: 2,
-      widgetType: WidgetType.Station,
-      x: 0,
-      y: 0,
-    };
-
-    const spySetWidgetIndex = spyOn(
-      component,
-      'setWidgetItem'
-    ).and.callThrough();
-
-    component.setWidgetItem(widgetItemData);
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetItemData);
-    expect(component.widgetItem).toBe(widgetItemData);
   });
 });

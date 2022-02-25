@@ -35,7 +35,6 @@ import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-draw
 import { LoadingWidgetComponent } from './widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
 import { MatRippleModule } from '@angular/material/core';
-import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +55,6 @@ import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-d
     WidgetDrawerComponent,
     LoadingWidgetComponent,
     ErrorWidgetComponent,
-    DocumentWidgetDrawerComponent,
   ],
   imports: [
     CommonModule,

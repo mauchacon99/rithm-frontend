@@ -181,37 +181,5 @@ describe('DocumentWidgetComponent', () => {
         expect(component.drawerContext).toBe(data);
       });
     });
-
-    it('should click edit button and emit toggleDrawer', () => {
-      component.isLoading = false;
-      component.failedLoadWidget = false;
-      component.editMode = true;
-
-      component.dataDocumentWidget = {
-        documentName: 'Untitled Document',
-        documentRithmId: JSON.parse(documentRithmId).documentRithmId,
-        questions: [],
-        stations: [
-          {
-            stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
-            stationName: 'New station',
-          },
-        ],
-      };
-
-      fixture.detectChanges();
-      spyOn(component.toggleDrawer, 'emit');
-      spyOn(component, 'toggleEditDocument').and.callThrough();
-
-      const btnEdit = fixture.debugElement.nativeElement.querySelector(
-        '#toggle-edit-document'
-      );
-
-      expect(btnEdit).toBeTruthy();
-      btnEdit.disabled = false;
-      btnEdit.click();
-      expect(component.toggleEditDocument).toHaveBeenCalled();
-      expect(component.toggleDrawer.emit).toHaveBeenCalled();
-    });
   });
 });

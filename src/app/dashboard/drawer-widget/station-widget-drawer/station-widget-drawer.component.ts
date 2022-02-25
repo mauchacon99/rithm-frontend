@@ -49,9 +49,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
 
-  /** Emit widgetItem to widget-drawer. */
-  @Output() setWidgetItem = new EventEmitter<DashboardItem>();
-
   /** Questions the station. */
   questions!: Question[];
 
@@ -92,7 +89,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.setWidgetIndex.emit(this.widgetIndex);
-          this.setWidgetItem.emit(this.widgetItem);
           this.getDocumentFields();
         }
       });
