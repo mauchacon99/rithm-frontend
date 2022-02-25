@@ -34,7 +34,11 @@ import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-dra
 import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-drawer.component';
 import { LoadingWidgetComponent } from './widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-widget-modal.component';
 import { MatRippleModule } from '@angular/material/core';
+import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,8 @@ import { MatRippleModule } from '@angular/material/core';
     WidgetDrawerComponent,
     LoadingWidgetComponent,
     ErrorWidgetComponent,
+    AddWidgetModalComponent,
+    CustomTabWidgetModalComponent,
   ],
   imports: [
     CommonModule,
@@ -75,8 +81,10 @@ import { MatRippleModule } from '@angular/material/core';
     MatMenuModule,
     FormsModule,
     MatSelectModule,
+    MatDialogModule,
     MatRippleModule,
     MatTableModule,
+    MatTabsModule,
   ],
 })
 export class DashboardModule {}
