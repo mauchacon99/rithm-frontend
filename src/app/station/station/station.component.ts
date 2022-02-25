@@ -482,7 +482,7 @@ export class StationComponent
         error: (error: unknown) => {
           this.stationLoading = false;
           this.stationTabsIndex = 1;
-          this.childFlowLogic.ruleError = true;
+          this.childFlowLogic.ruleLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
