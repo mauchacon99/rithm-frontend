@@ -409,14 +409,15 @@ describe('StationComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should show layout-mode-btn and layoutMode active when in station edit mode', () => {
+  it('should show layout-mode-button and layoutMode active when in station edit mode', () => {
     component.editMode = true;
     component.viewNewStation = true;
     component.stationLoading = false;
     fixture.detectChanges();
 
-    const btnLayout =
-      fixture.debugElement.nativeElement.querySelector('#layout-mode-btn');
+    const btnLayout = fixture.debugElement.nativeElement.querySelector(
+      '#layout-mode-button'
+    );
     expect(btnLayout).toBeFalsy();
     expect(btnLayout).toBeTruthy();
     expect(component.layoutMode).toBeTrue();
