@@ -26,7 +26,6 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { DomSanitizer } from '@angular/platform-browser';
 
 /**
  * Component for Station widget.
@@ -174,8 +173,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private sidenavDrawerService: SidenavDrawerService,
-    private dashboardService: DashboardService,
-    private readonly sanitizer: DomSanitizer
+    private dashboardService: DashboardService
   ) {}
 
   /**
