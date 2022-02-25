@@ -4,8 +4,11 @@
 </div>
 
 <!-- Content Add Widgets Modal -->
-<mat-tab-group class="tabs-custom-pre-build pt-2" [selectedIndex]="tabParentSelect"
-  (selectedIndexChange)="tabParentSelect = $event">
+<mat-tab-group
+  class="tabs-custom-pre-build pt-2"
+  [selectedIndex]="tabParentSelect"
+  (selectedIndexChange)="tabParentSelect = $event"
+>
   <!-- Tab Custom widget -->
   <mat-tab label="Custom" aria-label="Custom">
     <app-custom-tab-widget-modal></app-custom-tab-widget-modal>
