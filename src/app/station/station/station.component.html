@@ -266,7 +266,10 @@
                             class="fas fa-tools text-secondary-500 fa-lg"
                           ></span>
                         </button>
-                        <mat-divider [vertical]="true"></mat-divider>
+                        <mat-divider
+                          [vertical]="true"
+                          class="ml-2"
+                        ></mat-divider>
                         <button
                           mat-button
                           type="button"
@@ -296,7 +299,7 @@
                           mat-button
                           type="button"
                           color="accent"
-                          class="font-semibold text-sm"
+                          class="font-semibold text-sm mr-1"
                           (click)="editMode = !editMode"
                         >
                           Cancel
