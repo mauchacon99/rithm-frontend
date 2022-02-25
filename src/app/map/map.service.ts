@@ -991,6 +991,7 @@ export class MapService {
             this.stationGroupElements.forEach(
               (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
             );
+            this.mapDataReceived$.next(true);
           })
         )
     );
