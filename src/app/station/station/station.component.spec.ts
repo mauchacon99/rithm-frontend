@@ -44,6 +44,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
 import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { GridsterModule } from 'angular-gridster2';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -77,6 +78,7 @@ describe('StationComponent', () => {
         MatTabsModule,
         MatExpansionModule,
         MatDividerModule,
+        GridsterModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

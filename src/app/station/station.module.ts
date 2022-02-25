@@ -33,6 +33,7 @@ import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-fie
 import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.module';
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
@@ -73,6 +74,7 @@ import { MatDividerModule } from '@angular/material/divider';
     DateFieldModule,
     SelectFieldModule,
     MatTooltipModule,
+    GridsterModule,
     MatDividerModule,
   ],
 })
