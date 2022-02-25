@@ -7,9 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
-  /** Tabs parents custom and pre build. */
-  tabsParents = ['Custom', 'Pre Built'];
-
   /** Tab Parents selected. */
   tabParentSelect = 0;
 }

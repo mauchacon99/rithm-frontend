@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './custom-tab-widget-modal.component.html',
   styleUrls: ['./custom-tab-widget-modal.component.scss'],
 })
-export class CustomTabWidgetModalComponent {
-
-}
+export class CustomTabWidgetModalComponent {}

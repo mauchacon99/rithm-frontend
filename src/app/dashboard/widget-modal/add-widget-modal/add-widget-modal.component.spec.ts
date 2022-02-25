@@ -5,7 +5,6 @@ import { MockComponent } from 'ng-mocks';
 import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -13,11 +12,7 @@ describe('AddWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        CommonModule,
-        MatTabsModule,
-        NoopAnimationsModule,
-      ],
+      imports: [MatTabsModule, NoopAnimationsModule],
       declarations: [
         AddWidgetModalComponent,
         MockComponent(CustomTabWidgetModalComponent),

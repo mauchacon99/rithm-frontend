@@ -1,24 +1,18 @@
-<!-- Header Add Widgets Modal. -->
+<!-- Header Add Widgets Modal -->
 <div>
   <h1>Title</h1>
 </div>
 
-<!-- Content Add Widgets Modal. -->
-<mat-tab-group class="tabs-custom-pre-build pt-2">
+<!-- Content Add Widgets Modal -->
+<mat-tab-group class="tabs-custom-pre-build pt-2" [selectedIndex]="tabParentSelect"
+  (selectedIndexChange)="tabParentSelect = $event">
+  <!-- Tab Custom widget -->
+  <mat-tab label="Custom" aria-label="Custom">
+    <app-custom-tab-widget-modal></app-custom-tab-widget-modal>
+  </mat-tab>
 
-  <!-- Tabs Custom and Pre Built. -->
-  <mat-tab *ngFor="let tab of tabsParents; let index = index" [label]="tab" [aria-label]="tab">
-
-    <!-- Content for tab Custom. -->
-    <div *ngIf="tab === 'Custom'; else preBuiltTab">
-      <app-custom-tab-widget-modal></app-custom-tab-widget-modal>
-    </div>
-
-    <!-- Content for tab Pre Built. -->
-    <ng-template #preBuiltTab>
-      <div class="py-4">
-        Content for {{ tab }} tab
-      </div>
-    </ng-template>
+  <!-- Tab Pre Build widget -->
+  <mat-tab label="Pre Build" aria-label="Pre Build">
+    <div class="py-4">Content for Pre build tab</div>
   </mat-tab>
 </mat-tab-group>
