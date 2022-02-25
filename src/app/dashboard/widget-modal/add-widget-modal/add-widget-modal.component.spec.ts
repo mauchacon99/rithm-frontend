@@ -24,4 +24,13 @@ describe('AddWidgetModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should call dialogRef service', () => {
+    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+    const btnClose = fixture.nativeElement.querySelector(
+      '#close-widget-builder'
+    );
+    btnClose.click();
+    expect(spyMatDialogRef).toHaveBeenCalled();
+  });
 });
