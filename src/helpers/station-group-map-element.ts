@@ -73,6 +73,8 @@ export class StationGroupMapElement {
             break;
           }
         }
+      } else if (ctx.isPointInPath(this.path, point.x, point.y)) {
+        this.hoverItem = StationGroupElementHoverItem.ButtonOption;
       } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
         this.hoverItem = StationGroupElementHoverItem.Boundary;
       } else {

@@ -919,14 +919,14 @@ export class StationGroupElementService {
         const titleWidth =
           this.canvasContext.measureText(title).width +
           GROUP_CHARACTER_SIZE * 1 * this.mapScale;
-        // Paint the Cancel Icon on the map.
+        // Paint the Option Icon on the map.
         this.drawStationGroupIcon(
           pointStart,
           pointEnd,
           titleWidth,
           StationGroupElementHoverItem.ButtonOption,
           ICON_STATION_GROUP_OPTION,
-          ICON_STATION_GROUP_HOVER_COLOR_CANCEL,
+          MAP_SELECTED,
           stationGroup
         );
       }
@@ -1006,7 +1006,6 @@ export class StationGroupElementService {
     displacedMap = true
   ): void {
     this.canvasContext = this.mapService.canvasContext;
-
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group boundary line if context is not defined'
@@ -1085,7 +1084,6 @@ export class StationGroupElementService {
       2 * Math.PI
     );
     path.closePath();
-
     // Adds the hover zone of the button in position Buttons of the stationGroup.
     stationGroup.pathButtons?.push({
       typeButton: typeButton,
