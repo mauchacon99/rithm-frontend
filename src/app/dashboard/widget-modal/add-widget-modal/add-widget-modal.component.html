@@ -4,16 +4,15 @@
 </div>
 
 <!-- Content Add Widgets Modal. -->
-<mat-tab-group class="tabs-custom-pre-build pt-2" [selectedIndex]="tabParentSelect.value"
-  (selectedIndexChange)="tabParentSelect.setValue($event)">
+<mat-tab-group class="tabs-custom-pre-build pt-2">
 
   <!-- Tabs Custom and Pre Built. -->
   <mat-tab *ngFor="let tab of tabsParents; let index = index" [label]="tab" [aria-label]="tab">
 
     <!-- Content for tab Custom. -->
-    <ng-container *ngIf="tab === 'Custom'; else preBuiltTab">
+    <div *ngIf="tab === 'Custom'; else preBuiltTab">
       <app-custom-tab-widget-modal></app-custom-tab-widget-modal>
-    </ng-container>
+    </div>
 
     <!-- Content for tab Pre Built. -->
     <ng-template #preBuiltTab>

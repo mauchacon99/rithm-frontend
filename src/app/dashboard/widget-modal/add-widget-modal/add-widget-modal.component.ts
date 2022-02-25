@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -12,5 +11,5 @@ export class AddWidgetModalComponent {
   tabsParents = ['Custom', 'Pre Built'];
 
   /** Tab Parents selected. */
-  tabParentSelect = new FormControl(0);
+  tabParentSelect = 0;
 }
