@@ -470,18 +470,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         .subscribe({
           next: () => {
             this.documentLoading = false;
-            if (this.documentInformation.isChained) {
-              const previousStation: ConnectedStationInfo =
-                this.previousStations[this.previousStations.length - 1];
-              this.router.navigate([`/document/${this.documentId}`], {
-                queryParams: {
-                  documentId: this.documentId,
-                  stationId: previousStation.rithmId,
-                },
-              });
-            } else {
-              this.router.navigateByUrl('dashboard');
-            }
+            this.router.navigateByUrl('dashboard');
           },
           error: (error: unknown) => {
             this.documentLoading = false;
