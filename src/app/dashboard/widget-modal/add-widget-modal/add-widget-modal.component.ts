@@ -10,7 +10,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class AddWidgetModalComponent {
   constructor(private dialogRef: MatDialogRef<AddWidgetModalComponent>) {}
 
-  /** Close modal. */
+  /** Close add widgets modal. */
   closeModal(): void {
     this.dialogRef.close();
   }
