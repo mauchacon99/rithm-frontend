@@ -23,7 +23,7 @@
 /// mat-tab-label Container and Flow Logic Tabs styles
 ::ng-deep .mat-tab-label-container {
   ::ng-deep .mat-tab-label {
-    @apply px-4 min-w-0 text-accent-900;
+    @apply px-4 min-w-0;
 
     &.mat-tab-label-active {
       @apply text-accent-600;
