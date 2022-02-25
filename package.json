@@ -28,7 +28,7 @@
     "@angular/material": "^13.2.4",
     "@angular/platform-browser": "^13.2.4",
     "@angular/platform-browser-dynamic": "^13.2.4",
-    "@angular/router": "^13.2.3",
+    "@angular/router": "^13.2.4",
     "@splitsoftware/splitio-browserjs": "^0.4.1",
     "angular-gridster2": "^13.1.1",
     "ng-click-outside": "^9.0.1",
