@@ -445,6 +445,7 @@ export class MapService {
       stations: [],
       subStationGroups: [],
       status: MapItemStatus.Pending,
+      isChained: false,
       isReadOnlyRootStationGroup: false,
     });
 

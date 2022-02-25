@@ -31,7 +31,8 @@
         Chained
         <mat-slide-toggle
           [checked]="isChained"
-          (change)="isChained = !isChained"
+          [(ngModel)]="isChained"
+          (ngModelChange)="setStationGroupChanges()"
           [disabled]="!isBuilding"
         >
         </mat-slide-toggle>
