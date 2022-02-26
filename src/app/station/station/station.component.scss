@@ -21,7 +21,7 @@
 }
 
 /// mat-tab-label Container and Flow Logic Tabs styles
-::ng-deep .mat-tab-label-container {
+.mat-tab-label-container {
   ::ng-deep .mat-tab-label {
     @apply px-4 min-w-0;
 
