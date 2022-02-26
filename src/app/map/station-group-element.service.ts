@@ -187,7 +187,8 @@ export class StationGroupElementService {
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
         ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+        : (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+            stationGroup.drawerOpened) &&
           stationGroup.status !== MapItemStatus.Pending
         ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
           ? MAP_SELECTED

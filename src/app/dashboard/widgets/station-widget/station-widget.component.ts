@@ -40,8 +40,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
+  /** Property of dataWidget in setter.  */
   private _dataWidget = '';
 
+  /** Interface for list items in table. */
   dataSourceTable!: MatTableDataSource<WidgetDocument>;
 
   /** Set data for station widget. */
@@ -65,6 +67,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<void>();
 
+  /** Property of editMode in setter.  */
   private _editMode = false;
 
   /** Set edit mode toggle from dashboard. */

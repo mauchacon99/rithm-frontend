@@ -838,6 +838,7 @@ export class MockDocumentService {
         },
       ],
       instructions: 'General instructions',
+      isChained: false,
     };
     return of(documentInfo).pipe(delay(1000));
   }

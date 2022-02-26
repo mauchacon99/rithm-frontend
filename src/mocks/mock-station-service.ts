@@ -888,6 +888,19 @@ export class MockStationService {
   }
 
   /**
+   * Get the allow previous button for the document.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow previous button to be assigned to document.
+   */
+  getAllowPreviousButton(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
+  }
+
+  /**
    * Update the allow external workers status for the station roster.
    *
    * @param stationRithmId The Specific id of station.
