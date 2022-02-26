@@ -41,6 +41,9 @@ import {
   CHAIN_GRID_FIVE,
   CHAIN_GRID_THREE,
   CHAIN_GRID_FOUR,
+  CHAIN_CORNER_RADIUS,
+  SCALE_REDUCED_RENDER,
+  CONNECTION_LINE_WIDTH_ZOOM_OUT,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -169,6 +172,7 @@ export class StationGroupElementService {
     //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
+    ctx.save();
     //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
     ctx.lineDashOffset =
@@ -202,6 +206,7 @@ export class StationGroupElementService {
     }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+    ctx.restore();
   }
 
   /**
@@ -1126,7 +1131,7 @@ export class StationGroupElementService {
         x: displacedMap ? newPoint.x - pointStart.x : newPoint.x,
         y: -5 * 3 * this.mapScale,
       };
-      this.drawChainIcon(iconStartPoint);
+      this.drawChainIcon(iconStartPoint, stationGroup);
     }
   }
 
@@ -1134,8 +1139,9 @@ export class StationGroupElementService {
    * Draws the chain icon used to show if a group has the isChained property.
    *
    * @param point The given point where to paint icon.
+   * @param stationGroup The group this icon is drawn for.
    */
-  drawChainIcon(point: Point): void {
+  drawChainIcon(point: Point, stationGroup: StationGroupMapElement,): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw chained icon if context is not defined');
     }
@@ -1143,59 +1149,133 @@ export class StationGroupElementService {
     //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
-    const scaledChainLinkOneBottomLeftHeight = CHAIN_GRID_SEVEN * this.mapScale;
-    const scaledChainLinkOneBottomRightWidth = CHAIN_GRID_TWO * this.mapScale;
-    const scaledChainLinkOneBottomRightHeight = CHAIN_GRID_NINE * this.mapScale;
-    const scaledChainLinkOneTopRightWidth = CHAIN_GRID_FIVE * this.mapScale;
-    const scaledChainLinkOneTopRightHeight = CHAIN_GRID_SIX * this.mapScale;
-    const scaledChainLinkOneTopLeftWidth = CHAIN_GRID_THREE * this.mapScale;
-    const scaledChainLinkOneTopLeftHeight = CHAIN_GRID_FOUR * this.mapScale;
+    const linkOneBottomLeftHeight = CHAIN_GRID_SEVEN * this.mapScale;
+    const linkOneBottomRightWidth = CHAIN_GRID_TWO * this.mapScale;
+    const linkOneBottomRightHeight = CHAIN_GRID_NINE * this.mapScale;
+    const linkOneTopRightWidth = CHAIN_GRID_FIVE * this.mapScale;
+    const linkOneTopRightHeight = CHAIN_GRID_SIX * this.mapScale;
+    const linkOneTopLeftWidth = CHAIN_GRID_THREE * this.mapScale;
+    const linkOneTopLeftHeight = CHAIN_GRID_FOUR * this.mapScale;
 
-    const scaledChainCenterLineBottomWidth = CHAIN_GRID_THREE * this.mapScale;
-    const scaledChainCenterLineBottomHeight = CHAIN_GRID_SIX * this.mapScale;
-    const scaledChainCenterLineTopWidth = CHAIN_GRID_SIX * this.mapScale;
-    const scaledChainCenterLineTopHeight = CHAIN_GRID_THREE * this.mapScale;
+    const centerLineBottomWidth = CHAIN_GRID_THREE * this.mapScale;
+    const centerLineBottomHeight = CHAIN_GRID_SIX * this.mapScale;
+    const centerLineTopWidth = CHAIN_GRID_SIX * this.mapScale;
+    const centerLineTopHeight = CHAIN_GRID_THREE * this.mapScale;
 
-    const scaledChainLinkTwoBottomLeftWidth = CHAIN_GRID_FOUR * this.mapScale;
-    const scaledChainLinkTwoBottomLeftHeight = CHAIN_GRID_THREE * this.mapScale;
-    const scaledChainLinkTwoBottomRightWidth = CHAIN_GRID_SIX * this.mapScale;
-    const scaledChainLinkTwoBottomRightHeight = CHAIN_GRID_FIVE * this.mapScale;
-    const scaledChainLinkTwoTopRightWidth = CHAIN_GRID_NINE * this.mapScale;
-    const scaledChainLinkTwoTopRightHeight = CHAIN_GRID_TWO * this.mapScale;
-    const scaledChainLinkTwoTopLeftWidth = CHAIN_GRID_SEVEN * this.mapScale;
+    const linkTwoBottomLeftWidth = CHAIN_GRID_FOUR * this.mapScale;
+    const linkTwoBottomLeftHeight = CHAIN_GRID_THREE * this.mapScale;
+    const linkTwoBottomRightWidth = CHAIN_GRID_SIX * this.mapScale;
+    const linkTwoBottomRightHeight = CHAIN_GRID_FIVE * this.mapScale;
+    const linkTwoTopRightWidth = CHAIN_GRID_NINE * this.mapScale;
+    const linkTwoTopRightHeight = CHAIN_GRID_TWO * this.mapScale;
+    const linkTwoTopLeftWidth = CHAIN_GRID_SEVEN * this.mapScale;
+
+    const scaledCornerRadius = CHAIN_CORNER_RADIUS * this.mapScale;
 
     //This is a complex shape with various lines and curves.
     ctx.save();
     ctx.beginPath();
     ctx.lineCap = 'round';
-    // ctx.lineWidth = Math.floor(3 * this.mapScale);
-    ctx.lineWidth = 1;
+    ctx.lineWidth = this.mapScale > SCALE_REDUCED_RENDER
+    ? Math.ceil(2 * this.mapScale)
+    : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+    ctx.strokeStyle =
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      stationGroup.selected &&
+      stationGroup.status !== MapItemStatus.Pending
+        ? MAP_SELECTED
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled &&
+          stationGroup.status !== MapItemStatus.Pending
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          stationGroup.status !== MapItemStatus.Pending
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     ctx.moveTo(point.x, point.y);
     ctx.clearRect(point.x, point.y, CHAIN_GRID_NINE * this.mapScale, CHAIN_GRID_NINE * this.mapScale);
-    //move down
-    ctx.moveTo(point.x, point.y + scaledChainLinkOneBottomLeftHeight);
-    //draw down to the right
-    ctx.lineTo(point.x + scaledChainLinkOneBottomRightWidth, point.y + scaledChainLinkOneBottomRightHeight);
-    //draw up to the right
-    ctx.lineTo(point.x + scaledChainLinkOneTopRightWidth, point.y + scaledChainLinkOneTopRightHeight);
-    //draw up to the left
-    ctx.lineTo(point.x + scaledChainLinkOneTopLeftWidth, point.y + scaledChainLinkOneTopLeftHeight);
-    //draw down to the left
-    ctx.lineTo(point.x, point.y + scaledChainLinkOneBottomLeftHeight);
-    //start new line, move up to the right
-    ctx.moveTo(point.x + scaledChainCenterLineBottomWidth, point.y + scaledChainCenterLineBottomHeight);
-    //draw up to the right
-    ctx.lineTo(point.x + scaledChainCenterLineTopWidth, point.y + scaledChainCenterLineTopHeight);
-    //start new line, move to the left
-    ctx.moveTo(point.x + scaledChainLinkTwoBottomLeftWidth, point.y + scaledChainLinkTwoBottomLeftHeight);
-    //draw down to the right
-    ctx.lineTo(point.x + scaledChainLinkTwoBottomRightWidth, point.y + scaledChainLinkTwoBottomRightHeight);
-    //draw up to the right
-    ctx.lineTo(point.x + scaledChainLinkTwoTopRightWidth, point.y + scaledChainLinkTwoTopRightHeight);
-    //draw up and to the left
-    ctx.lineTo(point.x + scaledChainLinkTwoTopLeftWidth, point.y);
-    //draw down to the left
-    ctx.lineTo(point.x + scaledChainLinkTwoBottomLeftWidth, point.y + scaledChainLinkTwoBottomLeftHeight);
+    //start drawing after bottom left corner.
+    ctx.moveTo(point.x + scaledCornerRadius, point.y + linkOneBottomLeftHeight + scaledCornerRadius);
+    //draw bottom side of link one.
+    ctx.lineTo(point.x + linkOneBottomRightWidth - scaledCornerRadius, point.y + linkOneBottomRightHeight - scaledCornerRadius);
+    //draw bottom right corner of link one.
+    ctx.quadraticCurveTo(
+      point.x + linkOneBottomRightWidth,
+      point.y + linkOneBottomRightHeight,
+      point.x + linkOneBottomRightWidth + scaledCornerRadius,
+      point.y + linkOneBottomRightHeight - scaledCornerRadius
+    );
+    //draw right side of link one.
+    ctx.lineTo(point.x + linkOneTopRightWidth - scaledCornerRadius, point.y + linkOneTopRightHeight + scaledCornerRadius);
+    //draw top right corner of link one.
+    ctx.quadraticCurveTo(
+      point.x + linkOneTopRightWidth,
+      point.y + linkOneTopRightHeight,
+      point.x + linkOneTopRightWidth - scaledCornerRadius,
+      point.y + linkOneTopRightHeight - scaledCornerRadius,
+    );
+    //draw top side of link one.
+    ctx.lineTo(point.x + linkOneTopLeftWidth + scaledCornerRadius, point.y + linkOneTopLeftHeight + scaledCornerRadius);
+    //draw top right corner of link one.
+    ctx.quadraticCurveTo(
+      point.x + linkOneTopLeftWidth,
+      point.y + linkOneTopLeftHeight,
+      point.x + linkOneTopLeftWidth - scaledCornerRadius,
+      point.y + linkOneTopLeftHeight + scaledCornerRadius,
+    );
+    //draw left side of link one.
+    ctx.lineTo(point.x + scaledCornerRadius, point.y + linkOneBottomLeftHeight - scaledCornerRadius);
+    //draw bottom left corner of link one.
+    ctx.quadraticCurveTo(
+      point.x,
+      point.y + linkOneBottomLeftHeight,
+      point.x + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight + scaledCornerRadius,
+    );
+    //Move to bottom of center line.
+    ctx.moveTo(point.x + centerLineBottomWidth, point.y + centerLineBottomHeight);
+    //draw center line.
+    ctx.lineTo(point.x + centerLineTopWidth, point.y + centerLineTopHeight);
+    //start drawing after bottom left corner of link two.
+    ctx.moveTo(point.x + linkTwoBottomLeftWidth + scaledCornerRadius, point.y + linkTwoBottomLeftHeight + scaledCornerRadius);
+    //draw bottom side of link two.
+    ctx.lineTo(point.x + linkTwoBottomRightWidth - scaledCornerRadius, point.y + linkTwoBottomRightHeight - scaledCornerRadius);
+    //draw bottom right corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoBottomRightWidth,
+      point.y + linkTwoBottomRightHeight,
+      point.x + linkTwoBottomRightWidth + scaledCornerRadius,
+      point.y + linkTwoBottomRightHeight - scaledCornerRadius
+    );
+    //draw right side of link two.
+    ctx.lineTo(point.x + linkTwoTopRightWidth - scaledCornerRadius, point.y + linkTwoTopRightHeight + scaledCornerRadius);
+    //draw top right corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoTopRightWidth,
+      point.y + linkTwoTopRightHeight,
+      point.x + linkTwoTopRightWidth - scaledCornerRadius,
+      point.y + linkTwoTopRightHeight - scaledCornerRadius,
+    );
+    //draw top side of link two.
+    ctx.lineTo(point.x + linkTwoTopLeftWidth + scaledCornerRadius, point.y + scaledCornerRadius);
+    //draw top right corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoTopLeftWidth,
+      point.y,
+      point.x + linkTwoTopLeftWidth - scaledCornerRadius,
+      point.y + scaledCornerRadius,
+    );
+    //draw left side of link two.
+    ctx.lineTo(point.x + linkTwoBottomLeftWidth + scaledCornerRadius, point.y + linkTwoBottomLeftHeight - scaledCornerRadius);
+    //draw bottom left corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoBottomLeftWidth,
+      point.y + linkTwoBottomLeftHeight,
+      point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight + scaledCornerRadius,
+    );
     ctx.stroke();
     ctx.restore();
   }

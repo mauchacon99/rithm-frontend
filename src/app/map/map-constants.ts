@@ -74,6 +74,7 @@ export const CHAIN_GRID_SIX = 6 * MULTIPLIER;
 export const CHAIN_GRID_SEVEN = 7 * MULTIPLIER;
 export const CHAIN_GRID_EIGHT = 8 * MULTIPLIER;
 export const CHAIN_GRID_NINE = 9 * MULTIPLIER;
+export const CHAIN_CORNER_RADIUS = 1 * MULTIPLIER;
 
 // Station
 export const STATION_PADDING = 10;
