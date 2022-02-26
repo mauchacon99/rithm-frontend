@@ -496,9 +496,9 @@ describe('StationGroupElementService', () => {
         { x: 15, y: 5 },
         5,
         StationGroupElementHoverItem.ButtonAccept,
+        stationGroup,
         ICON_STATION_GROUP_ACCEPT,
-        MAP_SELECTED,
-        stationGroup
+        MAP_SELECTED
       )
     ).toThrow(
       new Error('Cannot draw station group icon if context is not defined')

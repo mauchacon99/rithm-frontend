@@ -1142,7 +1142,7 @@ export class StationGroupElementService {
    * @param point The given point where to paint icon.
    * @param stationGroup The group this icon is drawn for.
    */
-  drawChainIcon(point: Point, stationGroup: StationGroupMapElement,): void {
+  drawChainIcon(point: Point, stationGroup: StationGroupMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw chained icon if context is not defined');
     }
@@ -1177,9 +1177,10 @@ export class StationGroupElementService {
     ctx.save();
     ctx.beginPath();
     ctx.lineCap = 'round';
-    ctx.lineWidth = this.mapScale > SCALE_REDUCED_RENDER
-    ? Math.ceil(2 * this.mapScale)
-    : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+    ctx.lineWidth =
+      this.mapScale > SCALE_REDUCED_RENDER
+        ? Math.ceil(2 * this.mapScale)
+        : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       stationGroup.selected &&
@@ -1196,11 +1197,22 @@ export class StationGroupElementService {
           : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     ctx.moveTo(point.x, point.y);
-    ctx.clearRect(point.x, point.y, CHAIN_GRID_NINE * this.mapScale, CHAIN_GRID_NINE * this.mapScale);
+    ctx.clearRect(
+      point.x,
+      point.y,
+      CHAIN_GRID_NINE * this.mapScale,
+      CHAIN_GRID_NINE * this.mapScale
+    );
     //start drawing after bottom left corner.
-    ctx.moveTo(point.x + scaledCornerRadius, point.y + linkOneBottomLeftHeight + scaledCornerRadius);
+    ctx.moveTo(
+      point.x + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight + scaledCornerRadius
+    );
     //draw bottom side of link one.
-    ctx.lineTo(point.x + linkOneBottomRightWidth - scaledCornerRadius, point.y + linkOneBottomRightHeight - scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkOneBottomRightWidth - scaledCornerRadius,
+      point.y + linkOneBottomRightHeight - scaledCornerRadius
+    );
     //draw bottom right corner of link one.
     ctx.quadraticCurveTo(
       point.x + linkOneBottomRightWidth,
@@ -1209,40 +1221,58 @@ export class StationGroupElementService {
       point.y + linkOneBottomRightHeight - scaledCornerRadius
     );
     //draw right side of link one.
-    ctx.lineTo(point.x + linkOneTopRightWidth - scaledCornerRadius, point.y + linkOneTopRightHeight + scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkOneTopRightWidth - scaledCornerRadius,
+      point.y + linkOneTopRightHeight + scaledCornerRadius
+    );
     //draw top right corner of link one.
     ctx.quadraticCurveTo(
       point.x + linkOneTopRightWidth,
       point.y + linkOneTopRightHeight,
       point.x + linkOneTopRightWidth - scaledCornerRadius,
-      point.y + linkOneTopRightHeight - scaledCornerRadius,
+      point.y + linkOneTopRightHeight - scaledCornerRadius
     );
     //draw top side of link one.
-    ctx.lineTo(point.x + linkOneTopLeftWidth + scaledCornerRadius, point.y + linkOneTopLeftHeight + scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkOneTopLeftWidth + scaledCornerRadius,
+      point.y + linkOneTopLeftHeight + scaledCornerRadius
+    );
     //draw top right corner of link one.
     ctx.quadraticCurveTo(
       point.x + linkOneTopLeftWidth,
       point.y + linkOneTopLeftHeight,
       point.x + linkOneTopLeftWidth - scaledCornerRadius,
-      point.y + linkOneTopLeftHeight + scaledCornerRadius,
+      point.y + linkOneTopLeftHeight + scaledCornerRadius
     );
     //draw left side of link one.
-    ctx.lineTo(point.x + scaledCornerRadius, point.y + linkOneBottomLeftHeight - scaledCornerRadius);
+    ctx.lineTo(
+      point.x + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight - scaledCornerRadius
+    );
     //draw bottom left corner of link one.
     ctx.quadraticCurveTo(
       point.x,
       point.y + linkOneBottomLeftHeight,
       point.x + scaledCornerRadius,
-      point.y + linkOneBottomLeftHeight + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight + scaledCornerRadius
     );
     //Move to bottom of center line.
-    ctx.moveTo(point.x + centerLineBottomWidth, point.y + centerLineBottomHeight);
+    ctx.moveTo(
+      point.x + centerLineBottomWidth,
+      point.y + centerLineBottomHeight
+    );
     //draw center line.
     ctx.lineTo(point.x + centerLineTopWidth, point.y + centerLineTopHeight);
     //start drawing after bottom left corner of link two.
-    ctx.moveTo(point.x + linkTwoBottomLeftWidth + scaledCornerRadius, point.y + linkTwoBottomLeftHeight + scaledCornerRadius);
+    ctx.moveTo(
+      point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight + scaledCornerRadius
+    );
     //draw bottom side of link two.
-    ctx.lineTo(point.x + linkTwoBottomRightWidth - scaledCornerRadius, point.y + linkTwoBottomRightHeight - scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkTwoBottomRightWidth - scaledCornerRadius,
+      point.y + linkTwoBottomRightHeight - scaledCornerRadius
+    );
     //draw bottom right corner of link two.
     ctx.quadraticCurveTo(
       point.x + linkTwoBottomRightWidth,
@@ -1251,31 +1281,40 @@ export class StationGroupElementService {
       point.y + linkTwoBottomRightHeight - scaledCornerRadius
     );
     //draw right side of link two.
-    ctx.lineTo(point.x + linkTwoTopRightWidth - scaledCornerRadius, point.y + linkTwoTopRightHeight + scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkTwoTopRightWidth - scaledCornerRadius,
+      point.y + linkTwoTopRightHeight + scaledCornerRadius
+    );
     //draw top right corner of link two.
     ctx.quadraticCurveTo(
       point.x + linkTwoTopRightWidth,
       point.y + linkTwoTopRightHeight,
       point.x + linkTwoTopRightWidth - scaledCornerRadius,
-      point.y + linkTwoTopRightHeight - scaledCornerRadius,
+      point.y + linkTwoTopRightHeight - scaledCornerRadius
     );
     //draw top side of link two.
-    ctx.lineTo(point.x + linkTwoTopLeftWidth + scaledCornerRadius, point.y + scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkTwoTopLeftWidth + scaledCornerRadius,
+      point.y + scaledCornerRadius
+    );
     //draw top right corner of link two.
     ctx.quadraticCurveTo(
       point.x + linkTwoTopLeftWidth,
       point.y,
       point.x + linkTwoTopLeftWidth - scaledCornerRadius,
-      point.y + scaledCornerRadius,
+      point.y + scaledCornerRadius
     );
     //draw left side of link two.
-    ctx.lineTo(point.x + linkTwoBottomLeftWidth + scaledCornerRadius, point.y + linkTwoBottomLeftHeight - scaledCornerRadius);
+    ctx.lineTo(
+      point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight - scaledCornerRadius
+    );
     //draw bottom left corner of link two.
     ctx.quadraticCurveTo(
       point.x + linkTwoBottomLeftWidth,
       point.y + linkTwoBottomLeftHeight,
       point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
-      point.y + linkTwoBottomLeftHeight + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight + scaledCornerRadius
     );
     ctx.stroke();
     ctx.restore();
