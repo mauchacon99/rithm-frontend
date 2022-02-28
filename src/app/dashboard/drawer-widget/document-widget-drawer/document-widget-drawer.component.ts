@@ -20,14 +20,14 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
 
-  /** Widget index of opened widget-drawer. */
-  widgetIndex!: number;
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
 
   /** Widget item of opened widget-drawer. */
   widgetItem!: DashboardItem;
 
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
+  /** Widget index of opened widget-drawer. */
+  widgetIndex!: number;
 
   /** Element list in drawer. */
   quantityElementsWidget = 0;
