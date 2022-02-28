@@ -267,11 +267,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dashboardData.widgets
         );
 
-        if (oldWidgets === currentWidgets)
+        if (oldWidgets === currentWidgets) {
           this.dashboardData = JSON.parse(
             JSON.stringify(this.dashboardDataCopy)
           );
-        else this.getParams();
+        } else {
+          this.getParams();
+        }
 
         this.configEditMode();
         this.toggleDrawerOnlyForWidgets();
