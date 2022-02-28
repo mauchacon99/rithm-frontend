@@ -20,6 +20,19 @@
   }
 }
 
+/// mat-tab-label Container and Flow Logic Tabs styles
+.mat-tab-label-container {
+  ::ng-deep .mat-tab-label {
+    @apply px-4 min-w-0;
+
+    &.mat-tab-label-active {
+      @apply text-accent-500;
+
+      opacity: 1;
+    }
+  }
+}
+
 .loading {
   @apply flex;
 
@@ -43,4 +56,11 @@ textarea {
 
 .long-text ::ng-deep .mat-form-field-prefix {
   align-self: center;
+}
+
+.gridster-container ::ng-deep {
+  .gridster-column,
+  .gridster-row {
+    @apply border-secondary-50;
+  }
 }

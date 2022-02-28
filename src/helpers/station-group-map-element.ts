@@ -24,6 +24,9 @@ export interface StationGroupMapElement extends StationGroupMapData {
 
   /** Whether the station group is selected or not. */
   selected: boolean;
+
+  /** Whether the station group drawer is opened or not. */
+  drawerOpened: boolean;
 }
 
 /**
@@ -40,6 +43,7 @@ export class StationGroupMapElement {
     this.dragging = false;
     this.disabled = false;
     this.selected = false;
+    this.drawerOpened = false;
     this.hoverItem = StationGroupElementHoverItem.None;
     Object.assign(this, stationGroupMapData);
   }

@@ -27,6 +27,8 @@ import {
   Question,
   QuestionFieldType,
   OperatorType,
+  RuleType,
+  RuleModalData,
 } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
@@ -36,8 +38,11 @@ import { DocumentService } from 'src/app/core/document.service';
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
-  const DIALOG_TEST_DATA = '34904ac2-6bdd-4157-a818-50ffb37fdfbc';
-  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+
+  const DIALOG_TEST_DATA: RuleModalData = {
+    stationId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+    editRule: null,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -69,8 +74,10 @@ describe('RuleModalComponent', () => {
   });
 
   beforeEach(() => {
+    DIALOG_TEST_DATA.editRule = null;
     fixture = TestBed.createComponent(RuleModalComponent);
     component = fixture.componentInstance;
+    component.ruleModalLoading = false;
     fixture.detectChanges();
   });
 
@@ -78,18 +85,16 @@ describe('RuleModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be stationRithmId to equal MAT_DIALOG_DATA', () => {
-    expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA);
-  });
-
   it('should call the method that returns the questions of a station.', () => {
-    component.stationRithmId = stationId;
     const getStationQuestions = spyOn(
       TestBed.inject(StationService),
       'getStationQuestions'
     ).and.callThrough();
     component.ngOnInit();
-    expect(getStationQuestions).toHaveBeenCalledWith(stationId, true);
+    expect(getStationQuestions).toHaveBeenCalledWith(
+      DIALOG_TEST_DATA.stationId,
+      true
+    );
   });
 
   it('should show error message when request for questions of a station fails.', () => {
@@ -150,7 +155,6 @@ describe('RuleModalComponent', () => {
 
   it('should show loading-indicator-questions while get current and previous questions', () => {
     component.questionStationLoading = false;
-    component.stationRithmId = stationId;
     component.getStationQuestions();
     spyOn(
       TestBed.inject(StationService),
@@ -284,7 +288,6 @@ describe('RuleModalComponent', () => {
     component.setFirstOperandInformation(question);
     fixture.detectChanges();
     expect(spyMethod).toHaveBeenCalled();
-    expect(component.textField).toBeDefined();
   });
 
   it('should return a the list of questions for the second operand', () => {
@@ -314,5 +317,38 @@ describe('RuleModalComponent', () => {
     );
     const valueExpected = component.secondOperandQuestionList;
     expect(valueExpected).toBe(expectedResponse);
+  });
+
+  it('should open the stepper with the first step as selected if is not editMode', () => {
+    component.ruleModalLoading = false;
+    fixture.detectChanges();
+    const stepperComponent: MatStepper = fixture.debugElement.query(
+      By.css('mat-stepper')
+    )?.componentInstance;
+
+    expect(stepperComponent.selectedIndex).toBe(0);
+  });
+
+  describe('Rule Modal Edit Mode', () => {
+    beforeEach(() => {
+      DIALOG_TEST_DATA.editRule = {
+        ruleType: RuleType.And,
+        equations: [],
+        subRules: [],
+      };
+      fixture = TestBed.createComponent(RuleModalComponent);
+      component = fixture.componentInstance;
+      component.ruleModalLoading = false;
+      fixture.detectChanges();
+    });
+    it('should open the stepper with the fourth step as selected if is editMode', () => {
+      component.editRuleMode = true;
+      fixture.detectChanges();
+      const stepperComponent: MatStepper = fixture.debugElement.query(
+        By.css('mat-stepper')
+      )?.componentInstance;
+
+      expect(stepperComponent.selectedIndex).toBe(3);
+    });
   });
 });

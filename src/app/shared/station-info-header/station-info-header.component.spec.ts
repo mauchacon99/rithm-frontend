@@ -85,6 +85,7 @@ describe('StationInfoHeaderComponent', () => {
     allowAllOrgWorkers: false,
     allowExternalWorkers: true,
     flowButton: 'Flow',
+    isChained: false,
   };
   const user: StationRosterMember = {
     rithmId: '123132132',
@@ -109,6 +110,7 @@ describe('StationInfoHeaderComponent', () => {
     workers: [],
     questions: [],
     instructions: 'General instructions',
+    isChained: false,
   };
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;

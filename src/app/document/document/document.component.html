@@ -109,7 +109,7 @@
           <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
             <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
               <div
-                class="flex"
+                class="flex space-x-4"
                 [ngClass]="{
                   'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
                     !isWidget
@@ -149,6 +149,17 @@
                     Save
                   </button>
                 </div>
+                <button
+                  *ngIf="allowPreviousButton && previousStations.length"
+                  type="button"
+                  mat-raised-button
+                  color="accent"
+                  data-testid="document-previous-station"
+                  id="document-previous-station"
+                  (click)="flowDocumentToPreviousStation()"
+                >
+                  Previous Station
+                </button>
                 <button
                   mat-raised-button
                   color="accent"

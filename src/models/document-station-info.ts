@@ -48,4 +48,7 @@ export interface DocumentStationInformation {
 
   /** The Instructions for the station. */
   instructions: string;
+
+  /** Document station is chained or not. */
+  isChained: boolean;
 }

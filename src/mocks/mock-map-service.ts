@@ -50,6 +50,7 @@ export class MockMapService {
       subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
       status: MapItemStatus.Normal,
       isReadOnlyRootStationGroup: false,
+      isChained: false,
     },
     {
       rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -59,6 +60,7 @@ export class MockMapService {
       subStationGroups: [],
       status: MapItemStatus.Normal,
       isReadOnlyRootStationGroup: false,
+      isChained: false,
     },
   ];
 
@@ -128,6 +130,9 @@ export class MockMapService {
 
   /** Checks if there should be panning towards the center of any station. */
   centerActive$ = new BehaviorSubject(false);
+
+  /** Informs the map that which drawer is opened. */
+  isDrawerOpened$ = new BehaviorSubject(false);
 
   /**
    * Creates a new `MockMapService`.
@@ -227,6 +232,7 @@ export class MockMapService {
           subStationGroups: [],
           status: MapItemStatus.Normal,
           isReadOnlyRootStationGroup: false,
+          isChained: false,
         },
         {
           rithmId: '',
@@ -235,6 +241,7 @@ export class MockMapService {
           subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
           status: MapItemStatus.Normal,
           isReadOnlyRootStationGroup: true,
+          isChained: false,
         },
       ],
     };
@@ -597,6 +604,7 @@ export class MockMapService {
       subStationGroups: [],
       status: MapItemStatus.Pending,
       isReadOnlyRootStationGroup: false,
+      isChained: false,
     });
 
     /* There should only ever be one pending group in the stationGroupElements array,

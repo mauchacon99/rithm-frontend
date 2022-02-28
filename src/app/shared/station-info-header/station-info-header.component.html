@@ -58,4 +58,50 @@
     </div>
   </section>
 </ng-container>
-<ng-template #newStationHeader> New station header goes here :) </ng-template>
+<ng-template #newStationHeader>
+  <section class="grid grid-cols-12 pt-6 px-4">
+    <div class="col-span-12">
+      <div
+        *ngIf="!stationEditMode"
+        class="flex justify-between items-center w-full"
+      >
+        <p>{{ stationName }}</p>
+        <button
+          type="button"
+          data-testid="station-info-drawer"
+          mat-icon-button
+          (click)="toggleDrawer('stationInfo')"
+          [disabled]="isDrawerOpen"
+        >
+          <i
+            class="fas fa-info-circle text-2xl"
+            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
+          ></i>
+        </button>
+      </div>
+      <p
+        class="leading-none tracking-widest uppercase font-semibold text-[0.72rem]"
+      >
+        Station
+      </p>
+      <div class="col-span-12 flex justify-between">
+        <p class="items-center flex font-semibold text-xl">{{ stationName }}</p>
+        <button
+          type="button"
+          data-testid="station-info-drawer"
+          id="info-drawer-button-station"
+          mat-icon-button
+          (click)="toggleDrawer('stationInfo')"
+          [disabled]="isDrawerOpen"
+        >
+          <i
+            class="fas fa-cog text-2xl"
+            [ngClass]="
+              isDrawerOpen ? 'text-secondary-100' : 'text-secondary-500'
+            "
+          ></i>
+        </button>
+      </div>
+    </div>
+  </section>
+</ng-template>

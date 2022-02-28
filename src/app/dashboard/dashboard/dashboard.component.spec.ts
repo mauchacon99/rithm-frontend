@@ -26,7 +26,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { RoleDashboardMenu, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -34,6 +34,10 @@ import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
+import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -50,7 +54,7 @@ describe('DashboardComponent', () => {
         x: 0,
         y: 0,
         widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
         minItemCols: 4,
         minItemRows: 4,
         maxItemCols: 12,
@@ -72,6 +76,7 @@ describe('DashboardComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(DocumentWidgetComponent),
         MockComponent(WidgetDrawerComponent),
+        MockComponent(AddWidgetModalComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -88,6 +93,8 @@ describe('DashboardComponent', () => {
         GridsterModule,
         FormsModule,
         MatInputModule,
+        MatDialogModule,
+        MatTabsModule,
         RouterTestingModule.withRoutes([
           {
             path: 'dashboard/:dashboardId',
@@ -126,7 +133,7 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should show error message when return error dashboard', function () {
+  it('should show error message when return error dashboard', () => {
     component.viewNewDashboard = true;
     component.errorLoadingDashboard = true;
     fixture.detectChanges();
@@ -141,7 +148,7 @@ describe('DashboardComponent', () => {
     expect(dashboardWidgets).toBeNull();
   });
 
-  it('should show message when dashboard its empty', function () {
+  it('should show message when dashboard its empty', () => {
     component.viewNewDashboard = true;
     component.isCreateNewDashboard = true;
     fixture.detectChanges();
@@ -288,6 +295,7 @@ describe('DashboardComponent', () => {
       okButtonText: 'Yes',
       cancelButtonText: 'No',
     };
+    component.dashboardData = dataDashboard;
     component.dashboardDataCopy = dataDashboard;
     const spyMethod = spyOn(
       TestBed.inject(PopupService),
@@ -302,6 +310,37 @@ describe('DashboardComponent', () => {
     const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
     await component.toggleEditMode(true);
     expect(spyMethod).toHaveBeenCalledWith();
+  });
+
+  it('should call openDialog', () => {
+    component.viewNewDashboard = true;
+    component.editMode = true;
+    component.dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+    fixture.detectChanges();
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+
+    const btn = fixture.nativeElement.querySelector('#add-widget-button');
+    expect(btn).toBeTruthy();
+    btn.click();
+    expect(spyDialog).toHaveBeenCalled();
   });
 
   describe('Test for SidenavDrawerService', () => {
@@ -343,17 +382,25 @@ describe('DashboardComponent', () => {
       expect(component.drawer.close).toHaveBeenCalled();
     });
 
-    it('Should toggle drawer of the station widget', () => {
+    it('Should toggle drawer of the widgets', () => {
       spyOn(sidenavDrawer, 'toggleDrawer');
-      const [stationData, widgetIndex] = [
-        // eslint-disable-next-line max-len
-        '{"stationRithmId":"21316c62-8a45-4e79-ba58-0927652569cc", "columns": [{"name": "document"}, {"name": "last Updated"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
-        1,
-      ];
+      const widgetItem = {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      };
+      const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-      component.toggleStationWidgetDrawer(stationData, widgetIndex);
+      component.toggleWidgetDrawer('stationWidget', widgetItem, widgetIndex);
       expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
-        stationData,
+        widgetItem,
         widgetIndex,
       });
     });
@@ -362,6 +409,7 @@ describe('DashboardComponent', () => {
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
+      component.dashboardData = dataDashboard;
       component.dashboardDataCopy = dataDashboard;
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
@@ -378,6 +426,25 @@ describe('DashboardComponent', () => {
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       component.updateDashboard();
       expect(spyDrawer).toHaveBeenCalled();
+    });
+
+    it('should call method returnWidgetsCompared', () => {
+      const response = component['returnWidgetsCompared'](
+        dataDashboard.widgets
+      );
+      expect(response).not.toBeUndefined();
+    });
+
+    it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      const drawerContext = 'stationWidget';
+      sidenavDrawer.drawerContext$.next(drawerContext);
+      expect(component.drawerContext).toBe(drawerContext);
+      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
+      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
+      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+      component.openDialogAddWidget();
+      expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
+      expect(spyDialog).toHaveBeenCalled();
     });
   });
 
@@ -419,5 +486,116 @@ describe('DashboardComponent', () => {
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
     });
+  });
+
+  it('should update dashboard widgets', () => {
+    component.dashboardData = dataDashboard;
+    const editDataWidget = {
+      widgetItem: {
+        cols: 4,
+        // eslint-disable-next-line max-len
+        data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+        maxItemCols: 0,
+        maxItemRows: 0,
+        minItemCols: 0,
+        minItemRows: 0,
+        rows: 2,
+        widgetType: WidgetType.Station,
+        x: 0,
+        y: 0,
+      },
+      widgetIndex: 0,
+      isCloseDrawer: false,
+    };
+    const expectDashboardData = dataDashboard;
+    expectDashboardData.widgets[0] = editDataWidget.widgetItem;
+    component.updateDashboardWidget(editDataWidget);
+    expect(component.dashboardData).toEqual(expectDashboardData);
+  });
+
+  it('should subscribe to DashboardService.updateDataWidget$', () => {
+    component.dashboardData = dataDashboard;
+    const spyMethod = spyOn(component, 'updateDashboardWidget');
+    const expectEditDataWidget = {
+      widgetItem: dataDashboard.widgets[0],
+      widgetIndex: 1,
+    };
+
+    TestBed.inject(DashboardService).updateDashboardWidgets(
+      expectEditDataWidget
+    );
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
+  });
+
+  it('should emit DashboardService.isLoadingDashboard$ and call getParams', () => {
+    const spyRoute = spyOn(TestBed.inject(ActivatedRoute).params, 'subscribe');
+    TestBed.inject(DashboardService).toggleLoadingDashboard(true, true);
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    expect(component.errorLoadingDashboard).toBeFalse();
+    expect(component.isCreateNewDashboard).toBeFalse();
+    expect(spyRoute).toHaveBeenCalled();
+  });
+
+  it('should remove a widget in dashboard', () => {
+    const spyRemoveWidgetIndex = spyOn(
+      component,
+      'removeWidgetIndex'
+    ).and.callThrough();
+
+    const widgetIndex = 1;
+    const dashboardData: DashboardData = {
+      rithmId: 'DF362D34-25E0-49B8-9FA8-2B1349E9A42D',
+      name: 'Company Dashboard no delete!',
+      widgets: [
+        {
+          cols: 4,
+          rows: 2,
+          x: 8,
+          y: 0,
+          widgetType: WidgetType.StationGroup,
+          data: '{"documentRithmId":"07ce2489-b07e-48e2-a378-99e7f487aa0f"}',
+          minItemRows: 1,
+          maxItemRows: 1,
+          minItemCols: 3,
+          maxItemCols: 1,
+        },
+        {
+          cols: 4,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '',
+          minItemRows: 1,
+          maxItemRows: 1,
+          minItemCols: 3,
+          maxItemCols: 1,
+        },
+      ],
+      type: RoleDashboardMenu.Company,
+    };
+
+    component.dashboardData = dashboardData;
+    fixture.detectChanges();
+    expect(component.dashboardData.widgets.length).toEqual(2);
+    component.removeWidgetIndex(widgetIndex);
+    expect(spyRemoveWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(component.dashboardData.widgets.length).toEqual(1);
+  });
+
+  it('should call trackBy and return id', () => {
+    const rithmId = 'DF362D34-25E0-49B8-9FA8-2B1349E9A42D';
+    const item = {
+      rithmId,
+      x: 0,
+      y: 0,
+      rows: 1,
+      cols: 1,
+      '': '',
+    };
+    const ExpectedRithmId = component.trackBy(1, item);
+    expect(ExpectedRithmId).toBe(rithmId);
   });
 });

@@ -111,6 +111,7 @@ export class MockStationService {
       allowAllOrgWorkers: true,
       allowExternalWorkers: false,
       flowButton: 'Flow',
+      isChained: false,
     };
     return of(data).pipe(delay(1000));
   }
@@ -214,6 +215,7 @@ export class MockStationService {
         allowAllOrgWorkers: false,
         allowExternalWorkers: true,
         flowButton: 'Flow',
+        isChained: false,
       };
       return of(data).pipe(delay(1000));
     }
@@ -886,6 +888,19 @@ export class MockStationService {
   }
 
   /**
+   * Get the allow previous button for the document.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow previous button to be assigned to document.
+   */
+  getAllowPreviousButton(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
+  }
+
+  /**
    * Update the allow external workers status for the station roster.
    *
    * @param stationRithmId The Specific id of station.
@@ -990,6 +1005,34 @@ export class MockStationService {
         data: allowPreviousButton,
       };
       return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the flow button text.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param flowButtonText Contains the text of flow button for updated.
+   * @returns The status of update of flow button text.
+   */
+  updateFlowButtonText(
+    stationRithmId: string,
+    flowButtonText: string
+  ): Observable<StandardStringJSON> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the flow button text.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardStringJSON = {
+        data: flowButtonText,
+      };
+      return of(expectedResponse).pipe(delay(1000));
     }
   }
 }

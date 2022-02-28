@@ -29,7 +29,8 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
+import { GridsterConfig } from 'angular-gridster2';
 /**
  * Main component for viewing a station.
  */
@@ -94,11 +95,30 @@ export class StationComponent
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
+  /** Edit mode toggle for station. */
+  editMode = false;
+
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** Grid initial values. */
+  options: GridsterConfig = {
+    gridType: 'scrollVertical',
+    displayGrid: 'always',
+    pushItems: true,
+    draggable: {
+      enabled: false,
+    },
+    resizable: {
+      enabled: false,
+    },
+    margin: 12,
+    minCols: 24,
+    maxCols: 24,
+  };
 
   constructor(
     private stationService: StationService,
@@ -128,6 +148,7 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
+        this.stationInformation.name = stationName;
       });
 
     this.stationService.documentStationNameFields$
@@ -421,6 +442,12 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
+
+      // Update flow button text.
+      this.stationService.updateFlowButtonText(
+        this.stationInformation.rithmId,
+        this.stationInformation.flowButton
+      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -472,7 +499,7 @@ export class StationComponent
         error: (error: unknown) => {
           this.stationLoading = false;
           this.stationTabsIndex = 1;
-          this.childFlowLogic.ruleError = true;
+          this.childFlowLogic.ruleLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -609,17 +636,21 @@ export class StationComponent
    *
    * @param flowLogicRule Contains a flow logic rules of the current station.
    */
-  addFlowLogicRule(flowLogicRule: FlowLogicRule): void {
-    const flowLogicStation = this.pendingFlowLogicRules.findIndex(
-      (flowRule) =>
-        flowRule.destinationStationRithmID ===
-          flowLogicRule.destinationStationRithmID &&
-        flowRule.stationRithmId === flowLogicRule.stationRithmId
-    );
-    if (flowLogicStation >= 0) {
-      this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+  addFlowLogicRule(flowLogicRule: FlowLogicRule | null): void {
+    if (flowLogicRule) {
+      const flowLogicStation = this.pendingFlowLogicRules.findIndex(
+        (flowRule) =>
+          flowRule.destinationStationRithmID ===
+            flowLogicRule.destinationStationRithmID &&
+          flowRule.stationRithmId === flowLogicRule.stationRithmId
+      );
+      if (flowLogicStation >= 0) {
+        this.pendingFlowLogicRules[flowLogicStation] = flowLogicRule;
+      } else {
+        this.pendingFlowLogicRules.push(flowLogicRule);
+      }
     } else {
-      this.pendingFlowLogicRules.push(flowLogicRule);
+      this.pendingFlowLogicRules = [];
     }
   }
 }

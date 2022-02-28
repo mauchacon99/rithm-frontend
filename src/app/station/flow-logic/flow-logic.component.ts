@@ -3,6 +3,7 @@ import {
   ConnectedStationInfo,
   FlowLogicRule,
   Rule,
+  RuleEquation,
   RuleType,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +12,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
+import { OperatorType } from 'src/models/enums/operator-type.enum';
 
 /**
  * Component for the flow logic tab on a station.
@@ -28,7 +30,7 @@ export class FlowLogicComponent implements OnInit {
   @Input() rithmId = '';
 
   /** The modified Flow Logic Rule to send back to station. */
-  @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule>();
+  @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule | null>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -70,55 +72,77 @@ export class FlowLogicComponent implements OnInit {
    *
    * @param type If the rule to add is AND/OR type.
    * @param connectedStationId The connected station to create the rule.
+   * @param editRule The rule to be edited, optional value.
+   * @param eqIndex The equation to be updated.
    */
-  async openModal(type: string, connectedStationId: string): Promise<void> {
+  async openModal(
+    type: string,
+    connectedStationId: string,
+    editRule?: RuleEquation,
+    eqIndex = 0
+  ): Promise<void> {
     const dialog = await this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      data: this.rithmId,
+      data: {
+        stationId: this.rithmId,
+        editRule: editRule || null,
+      },
       disableClose: true,
     });
     if (dialog) {
       dialog
         .afterClosed()
         .pipe(first())
-        .subscribe((equation) => {
-          if (equation) {
+        .subscribe((data) => {
+          if (data) {
+            const equation = data.rule;
             const flowLogicStation = this.flowLogicRules.find(
               (station) =>
                 station.destinationStationRithmID === connectedStationId
             );
+            const flowLogic: FlowLogicRule = {
+              stationRithmId: this.rithmId,
+              destinationStationRithmID: connectedStationId,
+              flowRule: {
+                ruleType: RuleType.And,
+                equations: [],
+                subRules: [],
+              },
+            };
             const subRule: Rule = {
               ruleType: RuleType.Or,
               equations: [equation],
               subRules: [],
             };
-            if (!flowLogicStation) {
-              // add a flowLogicRule with this connectedStation to the FlowLogicRule array
-              const flowLogic: FlowLogicRule = {
-                stationRithmId: this.rithmId,
-                destinationStationRithmID: connectedStationId,
-                flowRule: {
-                  ruleType: RuleType.And,
-                  equations: [],
-                  subRules: [],
-                },
-              };
-              if (type === 'all') {
-                flowLogic.flowRule.equations.push(equation);
+            if (!data.editMode) {
+              if (!flowLogicStation) {
+                // add a flowLogicRule with this connectedStation to the FlowLogicRule array
+                if (type === 'all') {
+                  flowLogic.flowRule.equations.push(equation);
+                } else {
+                  flowLogic.flowRule.subRules.push(subRule);
+                }
+                this.flowLogicRules.push(flowLogic);
+                this.modifiedFlowRules.emit(flowLogic);
               } else {
-                flowLogic.flowRule.subRules.push(subRule);
+                // Update the flowRules if the station exists in the FlowLogicRule array
+                if (type === 'all') {
+                  flowLogicStation.flowRule.equations.push(equation);
+                } else {
+                  flowLogicStation.flowRule.subRules.push(subRule);
+                }
+                this.modifiedFlowRules.emit(flowLogicStation);
               }
-              this.flowLogicRules.push(flowLogic);
-              this.modifiedFlowRules.emit(flowLogic);
             } else {
-              // Update the flowRules if the station exists in the FlowLogicRule array
-              if (type === 'all') {
-                flowLogicStation.flowRule.equations.push(equation);
-              } else {
-                flowLogicStation.flowRule.subRules.push(subRule);
+              if (flowLogicStation) {
+                if (type === 'all') {
+                  flowLogicStation.flowRule.equations[eqIndex] = equation;
+                } else {
+                  flowLogicStation.flowRule.subRules[eqIndex] = subRule;
+                }
+                this.modifiedFlowRules.emit(flowLogicStation);
               }
-              this.modifiedFlowRules.emit(flowLogicStation);
             }
           }
         });
@@ -223,12 +247,14 @@ export class FlowLogicComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: () => {
-              // remove the rule from the  array  flowLogicRules when is 'any' or 'all'
-              if (type === 'all')
+              // remove the rule from the  array flowLogicRules when is 'any' or 'all'
+              if (type === 'all') {
                 flowLogicRules?.flowRule.equations.splice(index, 1);
-              else flowLogicRules?.flowRule.subRules.splice(index, 1);
-              // hidden loading
+              } else {
+                flowLogicRules?.flowRule.subRules.splice(index, 1);
+              }
               this.flowLogicLoadingByRuleType = null;
+              this.modifiedFlowRules.emit(null);
             },
             error: (error: unknown) => {
               this.flowRuleError = true;
@@ -242,5 +268,51 @@ export class FlowLogicComponent implements OnInit {
           });
       }
     }
+  }
+
+  /**
+   * Translate the operator from Math to natural.
+   *
+   * @param operator The operator to be translated.
+   * @returns The translation for the current operator.
+   */
+  translateOperator(operator: string): string {
+    let operatorTranslated = '';
+    switch (operator) {
+      case OperatorType.GreaterThan:
+        operatorTranslated = 'Is Greater Than';
+        break;
+      case OperatorType.LesserThan:
+        operatorTranslated = 'Is Lesser Than';
+        break;
+      case OperatorType.GreaterOrEqual:
+        operatorTranslated = 'Is Greater or Equal to';
+        break;
+      case OperatorType.LesserOrEqual:
+        operatorTranslated = 'Is Lesser or Equal to';
+        break;
+      case OperatorType.EqualTo:
+        operatorTranslated = 'Is Equal To';
+        break;
+      case OperatorType.NotEqualTo:
+        operatorTranslated = 'Is Not Equal To';
+        break;
+      case OperatorType.Before:
+        operatorTranslated = 'Is Before';
+        break;
+      case OperatorType.After:
+        operatorTranslated = 'Is After';
+        break;
+      case OperatorType.Contains:
+        operatorTranslated = 'Contains';
+        break;
+      case OperatorType.NotContains:
+        operatorTranslated = 'Does not contains';
+        break;
+      case OperatorType.On:
+        operatorTranslated = 'Is On';
+        break;
+    }
+    return operatorTranslated;
   }
 }

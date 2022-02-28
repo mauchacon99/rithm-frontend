@@ -23,10 +23,11 @@ import {
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
-import { Subject, forkJoin } from 'rxjs';
+import { Subject, forkJoin, lastValueFrom } from 'rxjs';
 import { Input } from '@angular/core';
 import { UserService } from 'src/app/core/user.service';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Main component for viewing a document.
@@ -102,8 +103,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** To check click comment. */
   clickComment = false;
 
+  /** Whether the document allow previous button or not. */
+  allowPreviousButton = false;
+
   constructor(
     private documentService: DocumentService,
+    private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
@@ -261,10 +266,14 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .getDocumentInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
-        next: (document) => {
+        next: async (document) => {
           if (document) {
             this.documentInformation = document;
           }
+          // Get the allow the previous button for the document.
+          this.allowPreviousButton = await lastValueFrom(
+            this.stationService.getAllowPreviousButton(this.stationId)
+          );
           this.documentLoading = false;
         },
         error: (error: unknown) => {
@@ -436,27 +445,42 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Move document flow from current station to previous station.
    */
-  private flowDocumentToPreviousStation(): void {
-    const previousStation: string[] = this.previousStations.map(
-      (item) => item.rithmId
-    );
-    const moveDoc: MoveDocument = {
-      fromStationRithmId: this.stationId,
-      toStationRithmIds: previousStation,
-      documentRithmId: this.documentId,
-    };
+  async flowDocumentToPreviousStation(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: '\nYou will be redirected to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    });
 
-    this.documentService
-      .flowDocumentToPreviousStation(moveDoc)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error,
-            false
-          );
-        },
-      });
+    if (confirm) {
+      this.documentLoading = true;
+      const previousStations: string[] = this.previousStations.map(
+        (item) => item.rithmId
+      );
+      const moveDoc: MoveDocument = {
+        fromStationRithmId: this.stationId,
+        toStationRithmIds: previousStations,
+        documentRithmId: this.documentId,
+      };
+
+      this.documentService
+        .flowDocumentToPreviousStation(moveDoc)
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            this.documentLoading = false;
+            this.router.navigateByUrl('dashboard');
+          },
+          error: (error: unknown) => {
+            this.documentLoading = false;
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error,
+              false
+            );
+          },
+        });
+    }
   }
 }

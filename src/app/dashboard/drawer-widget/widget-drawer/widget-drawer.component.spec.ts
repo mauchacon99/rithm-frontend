@@ -4,6 +4,9 @@ import { WidgetDrawerComponent } from './widget-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MockComponent } from 'ng-mocks';
 import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-widget-drawer.component';
+import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -14,9 +17,11 @@ describe('WidgetDrawerComponent', () => {
       declarations: [
         WidgetDrawerComponent,
         MockComponent(StationWidgetDrawerComponent),
+        MockComponent(DocumentWidgetDrawerComponent),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -63,10 +68,69 @@ describe('WidgetDrawerComponent', () => {
 
     const spyMethod = spyOn(component, 'toggleDrawer');
     const toggleButton = fixture.debugElement.nativeElement.querySelector(
-      '#close-station-widget-drawer'
+      '#close-widget-drawer'
     );
     expect(toggleButton).toBeTruthy();
     toggleButton.click();
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should display a confirmation Popup', () => {
+    const confirmationData = {
+      title: 'Delete Widget?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    const btnDelete = fixture.nativeElement.querySelector(
+      '#delete-widget-button'
+    );
+
+    expect(btnDelete).toBeTruthy();
+    btnDelete.click();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+  });
+
+  it('should emit event deleteWidget', async () => {
+    const widgetIndex = 1;
+    component.widgetIndex = widgetIndex;
+    component.drawerMode = 'stationWidget';
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    const infoDrawerSpy = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
+
+    const spyDeleteWidget = spyOn(component.deleteWidget, 'emit');
+
+    await component.confirmWidgetDelete();
+    expect(infoDrawerSpy).toHaveBeenCalled();
+    expect(popUpConfirmSpy).toHaveBeenCalled();
+    expect(spyDeleteWidget).toHaveBeenCalledOnceWith(widgetIndex);
+  });
+
+  it('should call setWidgetIndex', () => {
+    const widgetIndex = 1;
+
+    const spySetWidgetIndex = spyOn(
+      component,
+      'setWidgetIndex'
+    ).and.callThrough();
+
+    component.setWidgetIndex(widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(component.widgetIndex).toBe(widgetIndex);
   });
 });

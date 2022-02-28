@@ -2,45 +2,114 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationColumnWidget, StationWidgetData } from 'src/models';
+import {
+  ColumnFieldsWidget,
+  StationWidgetData,
+  ColumnsDocumentInfo,
+  QuestionFieldType,
+  ColumnsLogicWidget,
+  WidgetDocument,
+  WidgetType,
+} from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 /**
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[dataWidget][editMode]',
+  selector: 'app-station-widget[dataWidget][editMode][widgetType]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
+export class StationWidgetComponent implements OnInit, OnDestroy {
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
 
-  /** Data for station widget. */
-  @Input() dataWidget = '';
+  /** To load dom by WidgetType. */
+  @Input() widgetType: WidgetType = WidgetType.Station;
+
+  private _image!: string | null;
+
+  /** Image to banner. */
+  @Input() set image(value: string | File | null | undefined) {
+    if (value && typeof value !== 'string') {
+      const reader = new FileReader();
+      reader.readAsDataURL(value);
+
+      reader.onload = () => {
+        this._image = reader.result as string;
+      };
+    } else {
+      this._image = value as string;
+    }
+  }
+
+  /**
+   * Get image.
+   *
+   * @returns String or NUll of the image.
+   */
+  get image(): string | null | undefined {
+    return this._image;
+  }
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<void>();
 
-  /** Edit mode toggle from dashboard. */
-  @Input() editMode = false;
+  private _dataWidget = '';
+
+  /** Set data for station widget. */
+  @Input() set dataWidget(value: string) {
+    this._dataWidget = value;
+    if (this.stationRithmId) {
+      this.parseDataColumnsWidget();
+      this.getStationWidgetDocuments();
+    }
+  }
+
+  /**
+   * Get data for station widget.
+   *
+   * @returns Data for station widget.
+   */
+  get dataWidget(): string {
+    return this._dataWidget;
+  }
+
+  private _editMode = false;
+
+  /** Set edit mode toggle from dashboard. */
+  @Input() set editMode(value: boolean) {
+    this._editMode = value;
+    if (value && this.isDocument) {
+      this.viewDocument('', true);
+    }
+  }
+
+  /**
+   * Get edit mode toggle from dashboard.
+   *
+   * @returns Boolean to edit mode.
+   */
+  get editMode(): boolean {
+    return this._editMode;
+  }
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
@@ -48,14 +117,23 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   /** StationRithmId for station widget. */
   stationRithmId = '';
 
+  /** Interface for list items in table. */
+  dataSourceTable!: MatTableDataSource<WidgetDocument>;
+
   /** Columns for list the widget. */
-  columnsAllField: StationColumnWidget[] = [];
+  columnsAllField: ColumnFieldsWidget[] = [];
 
   /** Columns for petition. */
   columnsFieldPetition: string[] = [];
 
   /** To set its expanded the widget. */
   isExpandWidget = false;
+
+  /** Enum with types widget station. */
+  typesWidget = WidgetType;
+
+  /** Key names of the columns to mat-table. */
+  columnsToDisplayTable: string[] = [];
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
@@ -83,12 +161,19 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
   /** Type of drawer opened. */
   drawerContext!: string;
 
+  /** The enum question field type. */
+  questionFieldType = QuestionFieldType;
+
+  /** The enum document columns info. */
+  columnsDocumentInfo = ColumnsDocumentInfo;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private dashboardService: DashboardService
   ) {}
 
   /**
@@ -96,28 +181,33 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    */
   ngOnInit(): void {
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
-    this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
-    this.columnsAllField.filter((data: StationColumnWidget) => {
-      if (data.questionId !== undefined)
-        this.columnsFieldPetition.push(data.questionId);
-    });
+    this.parseDataColumnsWidget();
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
+
     this.getStationWidgetDocuments();
   }
 
-  /**
-   * Detect changes of this component.
-   *
-   * @param changes Object of the properties in this component.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.editMode && this.isDocument) {
-      this.viewDocument('', true);
+  /** Parse data of columns widget. */
+  parseDataColumnsWidget(): void {
+    this.columnsToDisplayTable = [];
+    this.columnsFieldPetition = [];
+    this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
+    this.columnsAllField.filter((data: ColumnFieldsWidget) => {
+      if (data.questionId) {
+        this.columnsFieldPetition.push(data.questionId);
+        this.columnsToDisplayTable.push(data.questionId);
+      } else {
+        this.columnsToDisplayTable.push(data.name);
+      }
+    });
+    if (!this.columnsAllField.length) {
+      this.columnsToDisplayTable.push('name');
     }
+    this.columnsToDisplayTable.push('viewDocument');
   }
 
   /**
@@ -134,6 +224,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
           this.isLoading = false;
           this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
+          this.dataSourceTable = new MatTableDataSource(
+            this.dataStationWidget.documents
+          );
         },
         error: (error: unknown) => {
           this.failedLoadWidget = true;
@@ -154,7 +247,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    * @returns A string reading something like "4 days" or "32 minutes".
    */
   getElapsedTime(timeEntered: string): string {
-    let timeInStation = '';
+    let timeInStation: string;
     if (timeEntered && timeEntered !== 'Unknown') {
       timeInStation = this.utcTimeConversion.getElapsedTimeText(
         this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
@@ -236,6 +329,41 @@ export class StationWidgetComponent implements OnInit, OnDestroy, OnChanges {
    */
   get isDrawerOpen(): boolean {
     return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
+   * Get specific name of column document when is not have questionId.
+   *
+   * @param name String, name of the column to search specific value.
+   * @returns String to show name of the document in dom.
+   */
+  getColumnBasicName(name: string): string {
+    const nameDom = this.dashboardService.columnsDocumentInfo.find(
+      (column) => column.key === name
+    ) as ColumnsLogicWidget;
+    return nameDom.name;
+  }
+
+  /**
+   * Get specific name of column document when have questionId.
+   *
+   * @param columnFieldsWidget Data for column.
+   * @returns String to show name of the document in dom.
+   */
+  getColumnQuestionPrompt(columnFieldsWidget: ColumnFieldsWidget): string {
+    for (let i = 0; i < this.dataStationWidget.documents.length; i++) {
+      const questionData = this.dataStationWidget.documents[
+        i
+      ].questions[0]?.questions?.find(
+        (question) => question.rithmId === columnFieldsWidget.questionId
+      );
+      if (questionData) {
+        return questionData.questionType === 'instructions'
+          ? 'Instruction'
+          : questionData.prompt;
+      }
+    }
+    return columnFieldsWidget.name;
   }
 
   /** Clean subscriptions. */

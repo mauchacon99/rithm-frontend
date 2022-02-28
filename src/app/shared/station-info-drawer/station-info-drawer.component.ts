@@ -68,6 +68,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station allow previous button or not. */
   statusAllowPreviousButton = false;
 
+  /** Loading in the toggle to allow previous button or not. */
+  statusAllowPreviousLoading = false;
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -174,13 +177,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.openedFromMap = dataDrawer.openedFromMap;
             this.stationNotes = dataDrawer.notes;
             if (this.openedFromMap) {
+              this.mapService.handleDrawerClose();
+
               const currentStationIndex =
                 this.mapService.stationElements.findIndex(
                   (e) => e.rithmId === this.stationRithmId
                 );
-              this.mapService.stationElements[
-                currentStationIndex
-              ].drawerOpened = true;
+              if (this.mapService.stationElements[currentStationIndex]) {
+                this.mapService.stationElements[
+                  currentStationIndex
+                ].drawerOpened = true;
+              }
               this.mapService.mapDataReceived$.next(true);
             }
             if (
@@ -332,6 +339,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationInformation.flowButton =
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
+              this.isChained = stationInfo.isChained || false;
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
@@ -371,6 +379,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         allowAllOrgWorkers: false,
         allowExternalWorkers: true,
         flowButton: 'Flow',
+        isChained: false,
       };
     }
   }
@@ -736,6 +745,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Update status allow previous button in the station.
    */
   updateAllowPreviousButton(): void {
+    this.statusAllowPreviousLoading = true;
     this.stationService
       .updateAllowPreviousButton(
         this.stationRithmId,
@@ -745,9 +755,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (allowPreviousButton) => {
           this.statusAllowPreviousButton = allowPreviousButton;
+          this.statusAllowPreviousLoading = false;
         },
         error: (error: unknown) => {
           this.statusAllowPreviousButton = !this.statusAllowPreviousButton;
+          this.statusAllowPreviousLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

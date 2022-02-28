@@ -165,6 +165,7 @@ describe('StationService', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     const expectedResponse: StationInformation = {
@@ -213,6 +214,7 @@ describe('StationService', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     service.updateStation(station).subscribe((response) => {
@@ -810,6 +812,7 @@ describe('StationService', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     service.updateStationName(newName, station.rithmId);
@@ -994,6 +997,23 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should get the allow previous button for the document', () => {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+
+    service.getAllowPreviousButton(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-previous-button?rithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.url).toBe(router);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
   it('should update the allow external workers status in the station', () => {
     const allowExtWorkers = true;
     const expectedResponse: StandardBooleanJSON = {
@@ -1068,6 +1088,25 @@ describe('StationService', () => {
       expect(response).toEqual(expectedResponse.data);
     });
     const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-previous-button?rithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the status when updated the flow button text', () => {
+    const expectedResponse: StandardStringJSON = {
+      data: 'test',
+    };
+    const flowButtonText = 'test';
+    service
+      .updateFlowButtonText(stationId, flowButtonText)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`;
     const req = httpTestingController.expectOne(router);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(expectedResponse);

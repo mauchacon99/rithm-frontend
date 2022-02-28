@@ -12,6 +12,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockStationService,
   MockUserService,
 } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -34,6 +35,7 @@ import { throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
 import { MapComponent } from 'src/app/map/map/map.component';
+import { StationService } from 'src/app/core/station.service';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -78,6 +80,7 @@ describe('DocumentComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: UserService, useClass: MockUserService },
+        { provide: StationService, useClass: MockStationService },
       ],
     }).compileComponents();
   });
@@ -343,11 +346,16 @@ describe('DocumentComponent', () => {
         },
       ],
       instructions: 'General instructions',
+      isChained: false,
     };
     component.previousStations = [
       {
         rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
         name: 'Previous Station',
+      },
+      {
+        rithmId: '44904ac2-6bdd-4157-a818-50ffb37fdfbd',
+        name: 'Previous Station #2',
       },
     ];
     fixture.detectChanges();
@@ -633,13 +641,16 @@ describe('DocumentComponent', () => {
     });
   });
 
-  it('should move flow document to a previous station', () => {
+  it('should move flow document to a previous stations', async () => {
     const stationId = component.documentInformation.stationRithmId;
     const documentId = component.documentInformation.documentRithmId;
+    const previousStations: string[] = component.previousStations.map(
+      (item) => item.rithmId
+    );
 
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
-      toStationRithmIds: [component.previousStations[0].rithmId],
+      toStationRithmIds: previousStations,
       documentRithmId: documentId,
     };
     component['stationId'] = stationId;
@@ -649,11 +660,11 @@ describe('DocumentComponent', () => {
       TestBed.inject(DocumentService),
       'flowDocumentToPreviousStation'
     ).and.callThrough();
-    component['flowDocumentToPreviousStation']();
+    await component.flowDocumentToPreviousStation();
     expect(spyMethod).toHaveBeenCalledOnceWith(dataExpect);
   });
 
-  it('should catch an error when moving document to previous station fails', () => {
+  it('should catch an error when moving document to previous station fails', async () => {
     spyOn(
       TestBed.inject(DocumentService),
       'flowDocumentToPreviousStation'
@@ -666,7 +677,7 @@ describe('DocumentComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['flowDocumentToPreviousStation']();
+    await component.flowDocumentToPreviousStation();
     expect(spyError).toHaveBeenCalled();
   });
 });

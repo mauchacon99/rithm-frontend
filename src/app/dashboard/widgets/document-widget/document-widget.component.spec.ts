@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-
 import { DocumentWidgetComponent } from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
@@ -10,6 +9,8 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -28,7 +29,7 @@ describe('DocumentWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
       ],
-      imports: [RouterTestingModule],
+      imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
   });
 
@@ -143,5 +144,74 @@ describe('DocumentWidgetComponent', () => {
         },
       }
     );
+  });
+
+  it('should show a gear icon in edit mode', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+      questions: [],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    const gearIcon = fixture.debugElement.nativeElement.querySelector(
+      '#gear-icon-document'
+    );
+    expect(gearIcon).toBeTruthy();
+  });
+
+  describe('Testing sidenavDrawerService', () => {
+    let sidenavDrawer: SidenavDrawerService;
+    beforeEach(() => {
+      sidenavDrawer = TestBed.inject(SidenavDrawerService);
+    });
+
+    it('should receive the drawer context for the component', () => {
+      expect(component.drawerContext).not.toBe('stationWidget');
+      sidenavDrawer.drawerContext$.next('stationWidget');
+      sidenavDrawer.drawerContext$.subscribe((data) => {
+        expect(component.drawerContext).toBe(data);
+      });
+    });
+
+    it('should click edit button and emit toggleDrawer', () => {
+      component.isLoading = false;
+      component.failedLoadWidget = false;
+      component.editMode = true;
+
+      component.dataDocumentWidget = {
+        documentName: 'Untitled Document',
+        documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+        questions: [],
+        stations: [
+          {
+            stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+            stationName: 'New station',
+          },
+        ],
+      };
+
+      fixture.detectChanges();
+      spyOn(component.toggleDrawer, 'emit');
+      spyOn(component, 'toggleEditDocument').and.callThrough();
+
+      const btnEdit = fixture.debugElement.nativeElement.querySelector(
+        '#toggle-edit-document'
+      );
+
+      expect(btnEdit).toBeTruthy();
+      btnEdit.disabled = false;
+      btnEdit.click();
+      expect(component.toggleEditDocument).toHaveBeenCalled();
+      expect(component.toggleDrawer.emit).toHaveBeenCalled();
+    });
   });
 });

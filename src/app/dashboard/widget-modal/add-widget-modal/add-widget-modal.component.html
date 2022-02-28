@@ -1,0 +1,32 @@
+<!-- Header Add Widgets Modal -->
+<div>
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold">Widget Builder</h3>
+    <button
+      data-testid="close-widget-builder"
+      id="close-widget-builder"
+      mat-icon-button
+      class="text-secondary-500"
+      (click)="closeModal()"
+    >
+      <i class="fas fa-times text-lg"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Content Add Widgets Modal -->
+<mat-tab-group
+  class="tabs-custom-pre-build pt-2"
+  [selectedIndex]="tabParentSelect"
+  (selectedIndexChange)="tabParentSelect = $event"
+>
+  <!-- Tab Custom widget -->
+  <mat-tab label="Custom" aria-label="Custom">
+    <app-custom-tab-widget-modal></app-custom-tab-widget-modal>
+  </mat-tab>
+
+  <!-- Tab Pre Build widget -->
+  <mat-tab label="Pre Build" aria-label="Pre Build">
+    <div class="py-4">Content for Pre build tab</div>
+  </mat-tab>
+</mat-tab-group>

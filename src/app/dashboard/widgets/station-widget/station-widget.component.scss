@@ -1,3 +1,24 @@
 .container-document {
   height: calc(100% - 40px);
 }
+
+.container-station {
+  height: calc(100% - 155px);
+}
+
+td.mat-cell {
+  padding-right: 10px !important;
+}
+
+td.mat-cell:last-of-type {
+  padding: 0 !important;
+}
+
+td.mat-cell:first-of-type,
+th.mat-header-cell:first-of-type {
+  padding-left: 0 !important;
+}
+
+tr.mat-header-row {
+  height: 30px !important;
+}

@@ -233,11 +233,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe shows if there are any drawers open.
-    this.mapService.openedDrawerType$
+    this.mapService.isDrawerOpened$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((drawerType) => {
-        if (this.sidenavDrawerService.isDrawerOpen) {
-          this.mapService.handleDrawerClose(drawerType);
+      .subscribe((drawerOpened) => {
+        if (!drawerOpened) {
+          this.mapService.handleDrawerClose();
         }
       });
 
@@ -1180,6 +1180,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       ) {
         outsideBottomEdge = true;
       }
+    }
+
+    //Always allow movement when centerStationCount or centerStationgGroupCount are greater than 0.
+    if (
+      this.mapService.centerStationCount$.value > 0 ||
+      this.mapService.centerStationGroupCount$.value > 0
+    ) {
+      return true;
     }
 
     //Allow movement based on the axis being checked.
@@ -2174,13 +2182,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               numberOfStations: stationGroup.stations.length,
               numberOfSubgroups: stationGroup.subStationGroups.length,
               stationGroupStatus: stationGroup.status,
-              isChained: false,
+              isChained: stationGroup.isChained,
             };
             //Open station group info drawer when clicked on station group boundary or name.
             this.sidenavDrawerService.openDrawer(
               'stationGroupInfo',
               dataInformationDrawer
             );
+            this.mapService.isDrawerOpened$.next(true);
             break;
           }
         }
@@ -2286,6 +2295,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
     //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.
     const dataInformationDrawer: StationInfoDrawerData = {
@@ -2301,6 +2311,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
+    this.mapService.isDrawerOpened$.next(true);
   }
 
   /**

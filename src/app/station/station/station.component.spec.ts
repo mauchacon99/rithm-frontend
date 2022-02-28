@@ -42,7 +42,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
-import { FlowLogicComponent } from '../flow-logic/flow-logic.component';
+import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
+import { GridsterModule } from 'angular-gridster2';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -75,6 +76,7 @@ describe('StationComponent', () => {
         ReactiveFormsModule,
         MatTabsModule,
         MatExpansionModule,
+        GridsterModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -161,6 +163,7 @@ describe('StationComponent', () => {
       allowAllOrgWorkers: false,
       allowExternalWorkers: true,
       flowButton: 'Flow',
+      isChained: false,
     };
 
     fixture.detectChanges();
@@ -212,6 +215,10 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'updateStationQuestions'
     ).and.callThrough();
+    const spyUpdateFlowButtonText = spyOn(
+      TestBed.inject(StationService),
+      'updateFlowButtonText'
+    ).and.callThrough();
     const spyFunctionSave = spyOn(
       component,
       'saveStationInformation'
@@ -227,6 +234,7 @@ describe('StationComponent', () => {
     expect(spyUpdateNameTemplate).toHaveBeenCalled();
     expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
+    expect(spyUpdateFlowButtonText).toHaveBeenCalled();
   });
 
   it('should validate the form controls initial value', () => {
