@@ -260,8 +260,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       if (response) {
         this.editMode = false;
-        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
-        this.configEditMode();
+
+        if (
+          this.returnWidgetsCompared(this.dashboardDataCopy.widgets) ===
+          this.returnWidgetsCompared(this.dashboardData.widgets)
+        ) {
+          this.dashboardData = JSON.parse(
+            JSON.stringify(this.dashboardDataCopy)
+          );
+          this.configEditMode();
+        } else {
+          this.getParams();
+        }
         this.toggleDrawerOnlyForWidgets();
       }
     } else {
@@ -269,6 +279,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.editMode = true;
       this.configEditMode();
     }
+  }
+
+  /**
+   * Returns widgets without the data attribute to compare if the widget has changed in edit mode.
+   *
+   * @returns The widgets without the data attribute and how string.
+   * @param  items Widget items.
+   */
+  private returnWidgetsCompared(items: DashboardItem[]): string {
+    const newItems: string[] = [];
+    items.map((item) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data, ...widget } = item;
+      newItems.push(JSON.stringify(widget));
+    });
+    return JSON.stringify(newItems);
   }
 
   /**
@@ -463,8 +489,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param item Item of the interface GridsterItem.
    * @returns Item id of the GridsterItem.
    */
-  trackBy(index: number, item: GridsterItem): number {
-    return item.id;
+  trackBy(index: number, item: GridsterItem): string {
+    return item.rithmId;
+  }
+
+  /**
+   * Remove widget on dashboardData for the index.
+   *
+   * @param widgetIndex Index of widget that opened widget-drawer.
+   */
+  removeWidgetIndex(widgetIndex: number): void {
+    this.dashboardData.widgets.splice(widgetIndex, 1);
   }
 
   /**
