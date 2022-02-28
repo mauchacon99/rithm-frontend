@@ -579,6 +579,20 @@ export class StationService {
   }
 
   /**
+   * Get the allow previous button for the document.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow previous button to be assigned to document.
+   */
+  getAllowPreviousButton(stationRithmId: string): Observable<boolean> {
+    return this.http
+      .get<StandardBooleanJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-previous-button?rithmId=${stationRithmId}`
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  /**
    * Update the the status to allow external workers for the station roster.
    *
    * @param stationRithmId The Specific id of station.

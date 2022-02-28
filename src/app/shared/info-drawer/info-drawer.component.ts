@@ -68,7 +68,7 @@ export class InfoDrawerComponent implements OnDestroy {
       drawerItem === 'stationInfo' ||
       drawerItem === 'history'
     ) {
-      this.mapService.openedDrawerType$.next(drawerItem);
+      this.mapService.isDrawerOpened$.next(false);
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
     this.drawerMode = '';
