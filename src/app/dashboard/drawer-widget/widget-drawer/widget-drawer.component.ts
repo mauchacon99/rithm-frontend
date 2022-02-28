@@ -20,20 +20,20 @@ import { WidgetType } from 'src/models';
   styleUrls: ['./widget-drawer.component.scss'],
 })
 export class WidgetDrawerComponent implements OnInit, OnDestroy {
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
   /** Emit event for delete widget in dashboard. */
   @Output() deleteWidget = new EventEmitter<number>();
 
-  /** Widget index of opened widget-drawer. */
-  widgetIndex!: number;
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Validate if the widget is type station-table-banner-widget. */
+  stationTableBanner = WidgetType.StationTableBanner;
 
   /** Widget type of opened widget-drawer.*/
   widgetType!: string;
 
-  /** Validate if the widget is type station-table-banner-widget. */
-  stationTableBanner = WidgetType.StationTableBanner;
+  /** Widget index of opened widget-drawer. */
+  widgetIndex!: number;
 
   /** Whether the called widget-drawer. */
   drawerMode: 'stationWidget' | 'documentWidget' = 'stationWidget';
