@@ -49,6 +49,7 @@ describe('DashboardComponent', () => {
     type: RoleDashboardMenu.Company,
     widgets: [
       {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
@@ -321,6 +322,7 @@ describe('DashboardComponent', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
           maxItemCols: 0,
@@ -386,6 +388,7 @@ describe('DashboardComponent', () => {
       const quantityElementsWidget = 2;
       spyOn(sidenavDrawer, 'toggleDrawer');
       const widgetItem = {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
@@ -462,6 +465,7 @@ describe('DashboardComponent', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
           maxItemCols: 0,
@@ -500,6 +504,7 @@ describe('DashboardComponent', () => {
     component.dashboardData = dataDashboard;
     const editDataWidget = {
       widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         // eslint-disable-next-line max-len
         data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
@@ -561,6 +566,7 @@ describe('DashboardComponent', () => {
       name: 'Company Dashboard no delete!',
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 2,
           x: 8,
@@ -573,6 +579,7 @@ describe('DashboardComponent', () => {
           maxItemCols: 1,
         },
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 2,
           x: 0,
