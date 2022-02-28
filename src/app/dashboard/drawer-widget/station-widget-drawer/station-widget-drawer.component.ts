@@ -64,6 +64,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
 
+  /** WidgetType of item. */
+  @Output() widgetType = new EventEmitter<string>();
+
   /** Loading error. */
   failedLoadDrawer = false;
 
@@ -89,6 +92,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.setWidgetIndex.emit(this.widgetIndex);
+          this.widgetType.emit(this.widgetItem.widgetType);
           this.getDocumentFields();
         }
       });

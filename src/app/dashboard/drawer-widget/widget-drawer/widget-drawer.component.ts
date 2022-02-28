@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
+import { WidgetType } from 'src/models';
 
 /**
  * Component for widget drawer.
@@ -27,6 +28,12 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
+
+  /** Widget type of opened widget-drawer.*/
+  widgetType!: string;
+
+  /** Validate if the widget is type station-table-banner-widget. */
+  stationTableBanner = WidgetType.StationTableBanner;
 
   /** Whether the called widget-drawer. */
   drawerMode: 'stationWidget' | 'documentWidget' = 'stationWidget';
@@ -87,6 +94,15 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
+  }
+
+  /**
+   * Event emit setWidgetType for show o hidden section upload image.
+   *
+   * @param widgetType Widget type from station-widget-drawer.
+   */
+  setWidgetType(widgetType: string): void {
+    this.widgetType = widgetType;
   }
 
   /**
