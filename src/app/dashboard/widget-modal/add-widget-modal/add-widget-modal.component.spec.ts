@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { AddWidgetModalComponent } from './add-widget-modal.component';
 import { MockComponent } from 'ng-mocks';
@@ -12,7 +13,8 @@ describe('AddWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatTabsModule, NoopAnimationsModule],
+      providers: [{ provide: MatDialogRef, useValue: { close } }],
+      imports: [MatTabsModule, NoopAnimationsModule, MatDialogModule],
       declarations: [
         AddWidgetModalComponent,
         MockComponent(CustomTabWidgetModalComponent),
@@ -29,5 +31,17 @@ describe('AddWidgetModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call close the modal in dialogRef service', () => {
+    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+    const spyMethod = spyOn(component, 'closeModal').and.callThrough();
+    const btnClose = fixture.nativeElement.querySelector(
+      '#close-widget-builder'
+    );
+    expect(btnClose).toBeTruthy();
+    btnClose.click();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(spyMatDialogRef).toHaveBeenCalled();
   });
 });
