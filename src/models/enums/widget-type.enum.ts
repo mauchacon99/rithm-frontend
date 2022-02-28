@@ -3,9 +3,11 @@
  */
 export enum WidgetType {
   /** Widget type StationGroup. */
-  StationGroup = 'stationGroup',
+  StationGroup = 'station-group',
   /** Widget type station. */
   Station = 'station',
   /** Widget type document. */
   Document = 'document-list',
+  /** Widget type StationTableBanner. */
+  StationTableBanner = 'station-table-banner-widget',
 }

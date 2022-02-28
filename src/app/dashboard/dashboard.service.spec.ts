@@ -602,6 +602,7 @@ describe('DashboardService', () => {
         maxItemCols: 12,
         maxItemRows: 12,
       },
+      quantityElementsWidget: 2,
     };
     service.updateDataWidget$.subscribe((editDataWidget) => {
       expect(editDataWidget).toEqual(expectEditDataWidget);

@@ -5,13 +5,16 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
+import { GridsterConfig, GridsterItem } from 'angular-gridster2';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { MatDrawer } from '@angular/material/sidenav';
 import {
   DashboardData,
   DashboardItem,
@@ -21,9 +24,6 @@ import {
   WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
@@ -40,63 +40,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** The component for the side nav on the dashboard. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /** Show the dashboard menu. */
-  drawerContext: 'menuDashboard' | 'stationWidget' = 'menuDashboard';
-
-  /** Validate type of role. */
-  roleDashboardMenu = RoleDashboardMenu;
-
-  // TODO: remove when admin users can access stations through map
-  /** The list of all stations for an admin to view. */
-  stations: Station[] = [];
-
-  /** View new dashboard. */
-  viewNewDashboard = false;
-
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
-  /** If it needs to create new dashboard. */
-  isCreateNewDashboard = false;
-
-  /** Dashboard data, default dashboard general. */
-  dashboardData!: DashboardData;
-
-  /** Dashboard data Copy for save original data in mode edit. */
-  dashboardDataCopy!: DashboardData;
-
-  /** Error Loading dashboard. */
-  errorLoadingDashboard = false;
-
-  /** Load indicator in dashboard. */
-  isLoading = false;
-
-  /** Edit mode toggle for widgets and dashboard name. */
-  editMode = false;
-
-  /** Value used to compare the widgets. */
-  widgetType = WidgetType;
-
-  /** Config grid. */
-  options: GridsterConfig = {
-    gridType: 'verticalFixed',
-    displayGrid: 'onDrag&Resize',
-    pushItems: true,
-    draggable: {
-      enabled: false,
-    },
-    resizable: {
-      enabled: false,
-    },
-    margin: 16,
-    minCols: 12,
-    maxCols: 12,
-    allowMultiLayer: true,
-    defaultLayerIndex: 1,
-    maxLayerIndex: 2,
-    baseLayerIndex: 1,
-  };
 
   /**
    * Whether the signed in user is an admin or not.
@@ -125,6 +68,64 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.isDrawerOpen;
   }
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Dashboard data, default dashboard general. */
+  dashboardData!: DashboardData;
+
+  /** Dashboard data Copy for save original data in mode edit. */
+  dashboardDataCopy!: DashboardData;
+
+  /** Validate type of role. */
+  roleDashboardMenu = RoleDashboardMenu;
+
+  /** Value used to compare the widgets. */
+  widgetType = WidgetType;
+
+  /** View new dashboard. */
+  viewNewDashboard = false;
+
+  /** If it needs to create new dashboard. */
+  isCreateNewDashboard = false;
+
+  /** Error Loading dashboard. */
+  errorLoadingDashboard = false;
+
+  /** Load indicator in dashboard. */
+  isLoading = false;
+
+  /** Edit mode toggle for widgets and dashboard name. */
+  editMode = false;
+
+  // TODO: remove when admin users can access stations through map
+  /** The list of all stations for an admin to view. */
+  stations: Station[] = [];
+
+  /** Show the dashboard menu. */
+  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
+    'menuDashboard';
+
+  /** Config grid. */
+  options: GridsterConfig = {
+    gridType: 'verticalFixed',
+    displayGrid: 'onDrag&Resize',
+    pushItems: true,
+    draggable: {
+      enabled: false,
+    },
+    resizable: {
+      enabled: false,
+    },
+    margin: 16,
+    minCols: 12,
+    maxCols: 12,
+    allowMultiLayer: true,
+    defaultLayerIndex: 1,
+    maxLayerIndex: 2,
+    baseLayerIndex: 1,
+  };
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
@@ -146,40 +147,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.stations = stations;
         });
     }
-
-    this.dashboardService.isLoadingDashboard$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ statusLoading, getParams }) => {
-        this.isLoading = statusLoading;
-        this.errorLoadingDashboard = false;
-        this.isCreateNewDashboard = false;
-        if (getParams) {
-          this.getParams();
-        }
-      });
-
-    this.sidenavDrawerService.drawerContext$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((drawerContext) => {
-        if (
-          drawerContext === 'menuDashboard' ||
-          drawerContext === 'stationWidget'
-        ) {
-          this.drawerContext = drawerContext;
-        }
-      });
-
-    this.dashboardService.updateDataWidget$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((editDataWidget) => {
-        this.updateDashboardWidget(editDataWidget);
-      });
   }
 
   /**
    * Initialize split on page load.
    */
   ngOnInit(): void {
+    this.subscribeIsLoadingDashboardService$();
+    this.subscribeDrawerContext$();
+    this.subscribeDrawerDataWidget$();
     this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
@@ -190,6 +166,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /** Get loading in service dashboard for show loading in dashboard component. */
+  private subscribeIsLoadingDashboardService$(): void {
+    this.dashboardService.isLoadingDashboard$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(({ statusLoading, getParams }) => {
+        this.isLoading = statusLoading;
+        this.errorLoadingDashboard = false;
+        this.isCreateNewDashboard = false;
+        if (getParams) {
+          this.getParams();
+        }
+      });
+  }
+
+  /** Get drawer context. */
+  private subscribeDrawerContext$(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        if (
+          drawerContext === 'menuDashboard' ||
+          drawerContext === 'stationWidget'
+        ) {
+          this.drawerContext = drawerContext;
+        }
+      });
+  }
+
+  /** Update data in specific widget. */
+  private subscribeDrawerDataWidget$(): void {
+    this.dashboardService.updateDataWidget$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((editDataWidget) => {
+        this.updateDashboardWidget(editDataWidget);
+      });
   }
 
   /** Split Service. */
@@ -215,7 +228,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem: 'menuDashboard' | 'stationWidget',
+    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -233,14 +246,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
+   * @param context Context for drawer widget.
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
+   * @param quantityElementsWidget Number of items to be displayed in the widget.
    */
-  toggleWidgetDrawer(widgetItem: DashboardItem, widgetIndex: number): void {
-    this.toggleDrawer('stationWidget', {
-      widgetItem,
-      widgetIndex,
-    });
+  toggleWidgetDrawer(
+    context: string,
+    widgetItem: DashboardItem,
+    widgetIndex: number,
+    quantityElementsWidget: number
+  ): void {
+    if (context === 'stationWidget' || context === 'documentWidget') {
+      this.toggleDrawer(context, {
+        widgetItem,
+        widgetIndex,
+        quantityElementsWidget,
+      });
+    }
   }
 
   /**
