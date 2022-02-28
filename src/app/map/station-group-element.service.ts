@@ -998,7 +998,7 @@ export class StationGroupElementService {
             GROUP_CHARACTER_SIZE * 1 * this.mapScale;
           // Reset pathButtons of stationGroup.
           stationGroup.pathButtons = [];
-          //Paint the Chained Icon on the map.
+          // Paint the Chained Icon on the map.
           this.drawStationGroupIcon(
             pointStart,
             pointEnd,
