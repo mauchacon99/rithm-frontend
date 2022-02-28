@@ -13,7 +13,11 @@
       *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
     ></app-menu>
     <app-widget-drawer
-      *ngIf="drawerContext === 'stationWidget' && isDrawerOpen"
+      *ngIf="
+        (drawerContext === 'stationWidget' ||
+          drawerContext === 'documentWidget') &&
+        isDrawerOpen
+      "
       (deleteWidget)="removeWidgetIndex($event)"
     ></app-widget-drawer>
   </mat-drawer>
@@ -161,7 +165,7 @@
           >
             <gridster-item
               [item]="item"
-              class="drop-shadow-md rounded min-h-[250px]"
+              class="drop-shadow-md rounded min-h-[400px] sm:min-h-[250px]"
               *ngFor="
                 let item of dashboardData.widgets;
                 let index = index;
@@ -169,17 +173,27 @@
               "
             >
               <app-station-widget
-                *ngIf="item.widgetType === widgetType.Station"
+                *ngIf="
+                  item.widgetType === widgetType.Station ||
+                  item.widgetType === widgetType.StationTableBanner
+                "
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [dataWidget]="item.data"
+                [widgetType]="item.widgetType"
+                [image]="item.image"
                 [editMode]="editMode"
-                (toggleDrawer)="toggleWidgetDrawer(item, index)"
+                (toggleDrawer)="
+                  toggleWidgetDrawer('stationWidget', item, index)
+                "
               >
               </app-station-widget>
               <app-document-widget
                 *ngIf="item.widgetType === widgetType.Document"
                 [documentRithmId]="item.data"
                 [editMode]="editMode"
+                (toggleDrawer)="
+                  toggleWidgetDrawer('documentWidget', item, index)
+                "
               >
               </app-document-widget>
             </gridster-item>
