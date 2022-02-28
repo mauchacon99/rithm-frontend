@@ -406,4 +406,20 @@ describe('StationComponent', () => {
     component.saveFlowLogicRules();
     expect(displayErrorSpy).toHaveBeenCalled();
   });
+
+  it('should open confirmation popup when canceling button', async () => {
+    const dataToConfirmPopup = {
+      title: 'Cancel?',
+      message: 'Unsaved changes will be lost',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.cancelStationChanges();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+  });
 });
