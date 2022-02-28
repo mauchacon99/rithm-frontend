@@ -38,6 +38,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-widget-modal.component';
 import { MatRippleModule } from '@angular/material/core';
 import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
+import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -60,6 +62,7 @@ import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-d
     ErrorWidgetComponent,
     DocumentWidgetDrawerComponent,
     AddWidgetModalComponent,
+    CustomTabWidgetModalComponent,
   ],
   imports: [
     CommonModule,
@@ -83,6 +86,7 @@ import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-d
     MatDialogModule,
     MatRippleModule,
     MatTableModule,
+    MatTabsModule,
   ],
 })
 export class DashboardModule {}
