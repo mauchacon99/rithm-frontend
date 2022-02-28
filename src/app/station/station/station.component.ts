@@ -658,7 +658,7 @@ export class StationComponent
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Cancel?',
-      message: 'Unsaved changes will be lost',
+      message: '\nUnsaved changes will be lost.',
       okButtonText: 'Yes',
       cancelButtonText: 'No',
       important: true,
