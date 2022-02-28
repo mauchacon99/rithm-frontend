@@ -9,6 +9,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   let fixture: ComponentFixture<DocumentWidgetDrawerComponent>;
   const dataEditWidget: EditDataWidget = {
     widgetItem: {
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
       cols: 4,
       data: '{"documentRithmId":"1bda1a41-e86a-4031-b3f5-f2329e108db5","columns":[]}',
       maxItemCols: 0,
