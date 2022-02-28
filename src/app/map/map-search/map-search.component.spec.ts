@@ -89,7 +89,7 @@ describe('MapSearchComponent', () => {
     component.clearSearchText();
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
-    expect(mapServiceSpy).toHaveBeenCalledWith('stationInfo');
+    expect(mapServiceSpy).toHaveBeenCalled();
   });
 
   it('should store Input search text', () => {

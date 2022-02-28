@@ -177,6 +177,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.openedFromMap = dataDrawer.openedFromMap;
             this.stationNotes = dataDrawer.notes;
             if (this.openedFromMap) {
+              this.mapService.handleDrawerClose();
+
               const currentStationIndex =
                 this.mapService.stationElements.findIndex(
                   (e) => e.rithmId === this.stationRithmId
@@ -337,6 +339,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationInformation.flowButton =
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
+              this.isChained = stationInfo.isChained || false;
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;

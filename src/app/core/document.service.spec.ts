@@ -275,6 +275,7 @@ describe('DocumentService', () => {
       workers: [],
       questions: [],
       instructions: 'General instructions',
+      isChained: false,
     };
 
     service.getDocumentInfo(stationId, documentId).subscribe((response) => {
