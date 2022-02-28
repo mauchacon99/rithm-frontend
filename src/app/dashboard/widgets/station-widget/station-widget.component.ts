@@ -31,7 +31,7 @@ import { MatTableDataSource } from '@angular/material/table';
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[dataWidget][editMode][widgetType][image]',
+  selector: 'app-station-widget[dataWidget][editMode][widgetType]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],

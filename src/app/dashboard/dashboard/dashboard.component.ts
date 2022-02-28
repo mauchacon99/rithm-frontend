@@ -94,7 +94,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     maxCols: 12,
     allowMultiLayer: true,
     defaultLayerIndex: 1,
-    fixedRowHeight: 169.5,
     maxLayerIndex: 2,
     baseLayerIndex: 1,
   };
