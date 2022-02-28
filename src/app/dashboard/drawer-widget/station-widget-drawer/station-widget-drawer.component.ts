@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -40,6 +46,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Position of the widget. */
   widgetIndex!: number;
 
+  /** Emit widgetIndex to widget-drawer. */
+  @Output() setWidgetIndex = new EventEmitter<number>();
+
   /** Questions the station. */
   questions!: Question[];
 
@@ -79,6 +88,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.stationColumns = dataWidget.columns || [];
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
+          this.setWidgetIndex.emit(this.widgetIndex);
           this.getDocumentFields();
         }
       });
