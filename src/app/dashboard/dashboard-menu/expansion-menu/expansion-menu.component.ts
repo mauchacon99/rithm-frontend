@@ -47,9 +47,7 @@ export class ExpansionMenuComponent implements OnInit {
   /** Init live cycle component. */
   ngOnInit(): void {
     this.getToListDashboards();
-    if (this.router.url === '/dashboard') {
-      this.isPrincipalPageDashboard = true;
-    }
+      this.isPrincipalPageDashboard = this.router.url === '/dashboard';
   }
 
   /** Get list to dashboard in expansion menu. */
