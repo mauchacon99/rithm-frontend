@@ -98,7 +98,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @Input() set editMode(value: boolean) {
     this._editMode = value;
     if (value && this.isDocument) {
-      this.viewDocument('', true);
+      this.viewDocument('');
     }
   }
 
@@ -278,6 +278,23 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       if (this.isExpandWidget) {
         this.toggleExpandWidget();
       }
+    }
+  }
+
+  /**
+   * Emit reload list of documents in station widget.
+   *
+   * @param isReturnListDocuments When click in flow, return to list of documents in widget.
+   * @param isReloadListDocuments When assign new worker, reload list of documents in widget when click to see list.
+   */
+  widgetReloadListDocuments(
+    isReturnListDocuments: boolean,
+    isReloadListDocuments: boolean
+  ): void {
+    if (isReloadListDocuments) {
+      this.reloadDocumentList = isReloadListDocuments;
+    } else {
+      this.viewDocument('', isReturnListDocuments);
     }
   }
 

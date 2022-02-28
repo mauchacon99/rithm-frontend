@@ -312,7 +312,7 @@
           : true
       "
       mat-icon-button
-      (click)="viewDocument('', true)"
+      (click)="viewDocument('')"
       id="return-list-documents"
       data-testid="return-list-documents"
     >
@@ -343,7 +343,8 @@
   <div class="container-document">
     <app-document
       [isWidget]="true"
-      (returnDocumentsWidget)="viewDocument('', $event)"
+      (returnDocumentsWidget)="widgetReloadListDocuments($event.isReturnListDocuments,
+$event.isReloadListDocuments)"
       [documentRithmIdWidget]="documentIdSelected"
       [stationRithmIdWidget]="stationRithmId"
     ></app-document>

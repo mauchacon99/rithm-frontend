@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   DocumentStationInformation,
@@ -39,6 +46,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** The Document how widget. */
   @Input() isWidget = false;
+
+  @Output() isReloadListDocuments = new EventEmitter<boolean>();
 
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
@@ -347,6 +356,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
   assignUserToDocument(): void {
+    if (this.isWidget) {
+      this.isReloadListDocuments.emit(true);
+    }
     this.loadingAssignUser = true;
     this.displayAssignUserError = false;
     this.documentService

@@ -285,7 +285,11 @@ describe('DocumentInfoHeaderComponent', () => {
   });
   it('should assign user to document', () => {
     component.isWidget = true;
-
+    const spyEmit = spyOn(component.isReloadListDocuments, 'emit');
+    const assignUserDocument = spyOn(
+      component,
+      'assignUserToDocument'
+    ).and.callThrough();
     spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
       rithmId: '',
       firstName: '',
@@ -298,11 +302,10 @@ describe('DocumentInfoHeaderComponent', () => {
     const button = fixture.debugElement.nativeElement.querySelector(
       '#start-document-button'
     );
-
     expect(button).toBeTruthy();
-    const assignUserDocument = spyOn(component, 'assignUserToDocument');
     button.click();
     expect(assignUserDocument).toHaveBeenCalledOnceWith();
+    expect(spyEmit).toHaveBeenCalledOnceWith(true);
   });
 
   it('should executed method for assigned user in document', () => {

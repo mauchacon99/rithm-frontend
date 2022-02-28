@@ -37,7 +37,7 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss'],
 })
-export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class DocumentComponent implements OnInit, OnDestroy {
   /** The Document how widget. */
   @Input() isWidget = false;
 
@@ -48,7 +48,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() documentRithmIdWidget!: string;
 
   /** Return to list of the documents only with isWidget. */
-  @Output() returnDocumentsWidget: EventEmitter<boolean> = new EventEmitter();
+  @Output() returnDocumentsWidget = new EventEmitter<{
+    /** When click in flow, return to list of documents in widget. */
+    isReturnListDocuments: boolean;
+    /** When assign new worker, reload list of documents in widget when click to see list. */
+    isReloadListDocuments: boolean;
+  }>();
 
   /** Document form. */
   documentForm: FormGroup;
@@ -167,12 +172,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  /**
-   * Checks after the component views and child views.
-   */
-  ngAfterViewChecked(): void {
-    this.changeDetectorR.detectChanges();
-  }
+  // /**
+  //  * Checks after the component views and child views.
+  //  */
+  // ngAfterViewChecked(): void {
+  //   this.changeDetectorR.detectChanges();
+  // }
 
   /**
    * Whether to show the backdrop for the comment and history drawers.
@@ -242,19 +247,35 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Navigates the user back to the dashboard page.
    *
-   * @param isReloadDocumentsWidget Boolean, when is true, reload the documents list in widget.
+   * @param isReturnListDocuments Boolean, when is true, return and reload to the documents list in widget.
    */
-  private navigateBack(isReloadDocumentsWidget = false): void {
+  private navigateBack(isReturnListDocuments = false): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
     // If is widget return to the documents list
     this.isWidget
-      ? this.returnDocumentsWidget.emit(isReloadDocumentsWidget)
+      ? this.widgetReloadListDocuments(isReturnListDocuments, false)
       : this.isUserAdmin
       ? this.router.navigateByUrl('map')
       : this.router.navigateByUrl('dashboard');
+  }
+
+  /**
+   * Emit reload list of documents in station widget.
+   *
+   * @param isReturnListDocuments When click in flow, return to list of documents in widget.
+   * @param isReloadListDocuments When assign new worker, reload list of documents in widget when click to see list.
+   */
+  widgetReloadListDocuments(
+    isReturnListDocuments: boolean,
+    isReloadListDocuments: boolean
+  ): void {
+    this.returnDocumentsWidget.emit({
+      isReturnListDocuments,
+      isReloadListDocuments,
+    });
   }
 
   /**
