@@ -5,6 +5,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardData } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { Router } from '@angular/router';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -33,15 +34,23 @@ export class ExpansionMenuComponent implements OnInit {
   /** Show error in list the dashboard. */
   showError = false;
 
+  /** Show error in list the dashboard. */
+  isPrincipalPageDashboard = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private router: Router
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
     this.getToListDashboards();
+    //set router
+    if (this.router.url === '/dashboard') {
+      this.isPrincipalPageDashboard = true;
+    }
   }
 
   /** Get list to dashboard in expansion menu. */
