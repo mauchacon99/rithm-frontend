@@ -31,6 +31,7 @@ describe('OptionsMenuComponent', () => {
     type: RoleDashboardMenu.Company,
     widgets: [
       {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
