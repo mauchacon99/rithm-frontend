@@ -98,6 +98,9 @@ export class MapService {
   /** Informs the map that which drawer is opened. */
   isDrawerOpened$ = new BehaviorSubject(false);
 
+  /** The View Station Button Click, informs to make the init Load on the map. */
+  viewStationButtonClick$ = new BehaviorSubject(true);
+
   /**
    * The coordinate at which the canvas is currently rendering in regards to the overall map.
    * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
@@ -145,7 +148,7 @@ export class MapService {
   /** The number of times this.centerStationGroup() should be called.*/
   centerStationGroupCount$ = new BehaviorSubject(0);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -882,20 +885,20 @@ export class MapService {
     return Array.isArray(source)
       ? source.map((item) => this.deepCopy(item))
       : source instanceof Date
-        ? new Date(source.getTime())
-        : source && typeof source === 'object'
-          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-            Object.defineProperty(
-              o,
-              prop,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              Object.getOwnPropertyDescriptor(source, prop)!
-            );
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-            return o;
-          }, Object.create(Object.getPrototypeOf(source)))
-          : (source as T);
+      ? new Date(source.getTime())
+      : source && typeof source === 'object'
+      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+          Object.defineProperty(
+            o,
+            prop,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.getOwnPropertyDescriptor(source, prop)!
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+          return o;
+        }, Object.create(Object.getPrototypeOf(source)))
+      : (source as T);
   }
 
   /**
@@ -1160,7 +1163,7 @@ export class MapService {
           //current scale to new scale
           (zoomOrigin[coord] / this.mapScale$.value -
             zoomOrigin[coord] / newScale) *
-          translateDirection
+            translateDirection
         );
         //If zooming out.
       } else {
@@ -1169,7 +1172,7 @@ export class MapService {
           //new scale to current scale
           (zoomOrigin[coord] / newScale -
             zoomOrigin[coord] / this.mapScale$.value) *
-          translateDirection
+            translateDirection
         );
       }
     };

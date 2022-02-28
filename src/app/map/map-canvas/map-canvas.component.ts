@@ -164,9 +164,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
-  /** Opened Drawer. */
-  private isOpenedDrawer = false;
-
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
    *
@@ -318,7 +315,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.connections = this.mapService.connectionElements;
 
         //If this is the first time the component is being initialized, center the map without animation.
-        if (dataReceived && this.initLoad) {
+        if (dataReceived && this.mapService.viewStationButtonClick$.value) {
+          // If there is a station id to be centered.
           if (this.centerStationRithmId !== '') {
             const stationCenter = this.mapService.stationElements.filter(
               (station) => station.rithmId === this.centerStationRithmId
@@ -327,9 +325,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.centerActive$.next(true);
             //Increment centerStationCount to show that more centering of station needs to be done.
             this.mapService.centerStationCount$.next(1);
-            this.mapService.centerStation(stationCenter[0], 0);
-            if (!this.isOpenedDrawer) {
-              this.isOpenedDrawer = true;
+            // If Drawer isn't open and there is station to be centered.
+            if (
+              !this.mapService.isDrawerOpened$.value &&
+              stationCenter.length > 0
+            ) {
+              // Center the map on the station.
+              this.mapService.centerStation(stationCenter[0], 0);
+              this.mapService.isDrawerOpened$.next(true);
+
               const dataInformationDrawer: StationInfoDrawerData = {
                 stationRithmId: stationCenter[0].rithmId,
                 stationName: stationCenter[0].stationName,
@@ -341,16 +345,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               };
               //Pass dataInformationDrawer to open the station info drawer.
               setTimeout(() => {
-                this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-                this.stationService.updatedStationNameText(stationCenter[0].stationName);
-                this.mapService.openedDrawerType$.next('stationInfo');
-              }, 1000);
+                this.sidenavDrawerService.openDrawer(
+                  'stationInfo',
+                  dataInformationDrawer
+                );
+                this.stationService.updatedStationNameText(
+                  stationCenter[0].stationName
+                );
+              }, 5);
+              this.mapService.viewStationButtonClick$.next(false);
             }
           } else {
             this.mapService.centerActive$.next(true);
             this.mapService.centerCount$.next(1);
             this.mapService.center(dataReceived);
-            this.initLoad = false;
+            this.mapService.viewStationButtonClick$.next(false);
           }
         }
 
@@ -764,12 +773,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Is the zoom out attempt fast?
       event.deltaY >= 100
         ? //If so, set eventAmount divided by 100.
-        Math.floor(event.deltaY / 100)
+          Math.floor(event.deltaY / 100)
         : //is the zoom in attempt fast?
         event.deltaY <= -100
-          ? //If so, set eventAmount divided by 100.
+        ? //If so, set eventAmount divided by 100.
           Math.ceil(event.deltaY / 100)
-          : //If not fast, only divide by 3.
+        : //If not fast, only divide by 3.
           event.deltaY / 3;
 
     //If a zoom in is attempted when scrolling.
@@ -1080,7 +1089,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Set the x coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const rightPan = Math.floor(
         ((canvasRect.width - box() - position.x) * MAX_PAN_VELOCITY * 0.01) /
-        this.scale
+          this.scale
       );
       //If rightPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.x =
@@ -1108,7 +1117,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ((canvasRect.height - box() - mobileAdjust - position.y) *
           MAX_PAN_VELOCITY *
           0.01) /
-        this.scale
+          this.scale
       );
       //If bottomPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.y =
@@ -1207,16 +1216,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
       if (
         this.maxBoundaryCoords.x -
-        canvasRect.width +
-        BOUNDARY_MARGIN / this.scale <
+          canvasRect.width +
+          BOUNDARY_MARGIN / this.scale <
         0
       ) {
         outsideRightEdge = true;
       }
       if (
         this.maxBoundaryCoords.y -
-        canvasRect.height +
-        BOUNDARY_MARGIN / this.scale <
+          canvasRect.height +
+          BOUNDARY_MARGIN / this.scale <
         0
       ) {
         outsideBottomEdge = true;
@@ -1482,9 +1491,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     This allows users to be a little less precise. */
     if (
       Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) <
-      TOUCH_EVENT_MARGIN &&
+        TOUCH_EVENT_MARGIN &&
       Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) <
-      TOUCH_EVENT_MARGIN
+        TOUCH_EVENT_MARGIN
     ) {
       //Reset properties that were changed by the event.
       this.dragItem = MapDragItem.Default;

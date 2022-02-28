@@ -131,11 +131,14 @@ export class MockMapService {
   /** Checks if there should be panning towards the center of any station. */
   centerActive$ = new BehaviorSubject(false);
 
-  /** The station Rithm Center. */
-  stationRithmIdCenter$ = new BehaviorSubject('');
+  /** The Station rithm Id centered on the map. */
+  centerStationRithmId$ = new BehaviorSubject('');
 
   /** Informs the map that which drawer is opened. */
   isDrawerOpened$ = new BehaviorSubject(false);
+
+  /** The View Station Button Click, informs to make the init Load on the map. */
+  viewStationButtonClick$ = new BehaviorSubject(true);
 
   /**
    * Creates a new `MockMapService`.
@@ -257,7 +260,7 @@ export class MockMapService {
    * @param coords The coordinates where the station will be placed.
    */
   // eslint-disable-next-line
-  createNewStation(coords: Point): void { }
+  createNewStation(coords: Point): void {}
 
   /**
    * Updates station status to delete.
@@ -265,19 +268,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void { }
+  deleteStation(station: StationMapElement): void {}
 
   /**
    * Enters build mode for the map.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buildMap(): void { }
+  buildMap(): void {}
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void { }
+  cancelMapChanges(): void {}
 
   /**
    * Publishes local map changes to the server.
@@ -312,7 +315,7 @@ export class MockMapService {
     zoomingIn: boolean,
     zoomOrigin = this.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
-  ): void { }
+  ): void {}
   /* eslint-enable */
 
   /**

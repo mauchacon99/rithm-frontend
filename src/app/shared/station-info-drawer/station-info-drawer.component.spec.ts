@@ -548,6 +548,7 @@ describe('StationInfoDrawerComponent', () => {
     component.goToStationOnMap();
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
     expect(mapService.centerStationRithmId$.value).toBe(stationId);
+    expect(mapService.viewStationButtonClick$.value).toBeTrue();
   });
 
   it('should show view on the map station button', () => {
@@ -558,11 +559,10 @@ describe('StationInfoDrawerComponent', () => {
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     fixture.detectChanges();
 
-    const goToStationOnMapSpy = spyOn(
-      component,
-      'goToStationOnMap'
+    const goToStationOnMapSpy = spyOn(component, 'goToStationOnMap');
+    const viewOnMapButton = fixture.debugElement.nativeElement.querySelector(
+      '#view-on-map-station-button'
     );
-    const viewOnMapButton = fixture.debugElement.nativeElement.querySelector('#view-on-map-station-button');
     expect(viewOnMapButton).toBeTruthy();
     viewOnMapButton.click();
     expect(goToStationOnMapSpy).toHaveBeenCalled();
