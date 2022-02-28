@@ -81,11 +81,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.getDataWidgetSidenavService();
+    this.getDataSidenavDrawerService();
   }
 
   /** Get data the sidenavDrawerService. */
-  private getDataWidgetSidenavService(): void {
+  private getDataSidenavDrawerService(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {

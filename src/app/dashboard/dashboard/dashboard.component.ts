@@ -21,7 +21,11 @@ import {
   WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
+import {
+  GridsterConfig,
+  GridsterItem,
+  GridsterModule,
+} from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
@@ -147,40 +151,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.stations = stations;
         });
     }
-
-    this.dashboardService.isLoadingDashboard$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ statusLoading, getParams }) => {
-        this.isLoading = statusLoading;
-        this.errorLoadingDashboard = false;
-        this.isCreateNewDashboard = false;
-        if (getParams) {
-          this.getParams();
-        }
-      });
-
-    this.sidenavDrawerService.drawerContext$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((drawerContext) => {
-        if (
-          drawerContext === 'menuDashboard' ||
-          drawerContext === 'stationWidget'
-        ) {
-          this.drawerContext = drawerContext;
-        }
-      });
-
-    this.dashboardService.updateDataWidget$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((editDataWidget) => {
-        this.updateDashboardWidget(editDataWidget);
-      });
   }
 
   /**
    * Initialize split on page load.
    */
   ngOnInit(): void {
+    this.getIsLoadingDashboardService();
+    this.getDrawerContext();
+    this.updateDrawerDataWidget();
     this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
@@ -191,6 +170,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /** Get loading in service dashboard for show loading in dashboard component. */
+  private getIsLoadingDashboardService(): void {
+    this.dashboardService.isLoadingDashboard$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(({ statusLoading, getParams }) => {
+        this.isLoading = statusLoading;
+        this.errorLoadingDashboard = false;
+        this.isCreateNewDashboard = false;
+        if (getParams) {
+          this.getParams();
+        }
+      });
+  }
+
+  /** Get drawer context. */
+  private getDrawerContext(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        if (
+          drawerContext === 'menuDashboard' ||
+          drawerContext === 'stationWidget'
+        ) {
+          this.drawerContext = drawerContext;
+        }
+      });
+  }
+
+  private updateDrawerDataWidget(): void {
+    this.dashboardService.updateDataWidget$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((editDataWidget) => {
+        this.updateDashboardWidget(editDataWidget);
+      });
   }
 
   /** Split Service. */
@@ -246,7 +261,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     quantityElementsWidget: number
   ): void {
     if (context === 'stationWidget' || context === 'documentWidget') {
-      this.toggleDrawer(context, { widgetItem, widgetIndex, quantityElementsWidget });
+      this.toggleDrawer(context, {
+        widgetItem,
+        widgetIndex,
+        quantityElementsWidget,
+      });
     }
   }
 

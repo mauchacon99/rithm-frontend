@@ -182,13 +182,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
     this.parseDataColumnsWidget();
+    this.getDrawerContext();
+    this.getStationWidgetDocuments();
+  }
+
+  /** Get context drawer. */
+  private getDrawerContext(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
-
-    this.getStationWidgetDocuments();
   }
 
   /** Parse data of columns widget. */
@@ -313,7 +317,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Toggle drawer when click on edit station widget. */
   toggleEditStation(): void {
-    this.toggleDrawer.emit(this.dataStationWidget.documents.length);
+    this.toggleDrawer.emit(+this.dataStationWidget.documents.length);
   }
 
   /** Expand widget. */
