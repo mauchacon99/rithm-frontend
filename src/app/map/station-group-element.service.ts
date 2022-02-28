@@ -375,6 +375,10 @@ export class StationGroupElementService {
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
       at the bottom of the group we delete from the lowest to the highest position. */
+
+      //if title is last in newTitle array.
+      const titleEnd = index === newTitle.length - 1;
+
       if (
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
@@ -384,7 +388,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition + index - 1],
           stationGroup.boundaryPoints[newPosition + index],
           stationGroup,
-          false
+          false,
+          titleEnd
         );
       } else {
         this.paintOrDeleteLineStationGroupName(
@@ -392,7 +397,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition - index],
           stationGroup.boundaryPoints[newPosition - index - 1],
           stationGroup,
-          false
+          false,
+          titleEnd
         );
       }
     });
@@ -402,6 +408,10 @@ export class StationGroupElementService {
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
       at the bottom of the group we paint from the lowest to the highest position. */
+
+      //if title is last in newTitle array.
+      const titleEnd = index === newTitle.length - 1;
+
       if (
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
@@ -411,7 +421,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition + index - 1],
           stationGroup.boundaryPoints[newPosition + index],
           stationGroup,
-          true
+          true,
+          titleEnd
         );
       } else {
         this.paintOrDeleteLineStationGroupName(
@@ -419,7 +430,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition - index],
           stationGroup.boundaryPoints[newPosition - index - 1],
           stationGroup,
-          true
+          true,
+          titleEnd
         );
       }
     });
@@ -900,13 +912,15 @@ export class StationGroupElementService {
    * @param pointEnd The end point of the line.
    * @param stationGroup The station group.
    * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
+   * @param endOfTitle If true, this is the last element in the title array.
    */
   paintOrDeleteLineStationGroupName(
     title: string,
     pointStart: Point,
     pointEnd: Point,
     stationGroup: StationGroupMapElement,
-    paintOrDelete = true
+    paintOrDelete = true,
+    endOfTitle: boolean
   ): void {
     // Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
@@ -946,50 +960,53 @@ export class StationGroupElementService {
         STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
-      // If status of the station group is pending.
-      if (stationGroup.status === MapItemStatus.Pending) {
-        const titleWidth =
-          this.canvasContext.measureText(title).width +
-          GROUP_CHARACTER_SIZE * 2 * this.mapScale;
+      // If end of title, draw any group icons.
+      if (endOfTitle) {
+        // If status of the station group is pending.
+        if (stationGroup.status === MapItemStatus.Pending) {
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * 2 * this.mapScale;
 
-        // Reset pathButtons of the station group.
-        stationGroup.pathButtons = [];
-        // Paint the Cancel Icon on the map.
-        this.drawStationGroupIcon(
-          pointStart,
-          pointEnd,
-          titleWidth,
-          StationGroupElementHoverItem.ButtonCancel,
-          stationGroup,
-          ICON_STATION_GROUP_CANCEL,
-          ICON_STATION_GROUP_HOVER_COLOR_CANCEL
-        );
-        // Paint the Accept Icon on the map.
-        this.drawStationGroupIcon(
-          pointStart,
-          pointEnd,
-          titleWidth + GROUP_CHARACTER_SIZE * 4 * this.mapScale,
-          StationGroupElementHoverItem.ButtonAccept,
-          stationGroup,
-          ICON_STATION_GROUP_ACCEPT,
-          MAP_SELECTED
-        );
-      }
-      // If isChained is set to true.
-      if (stationGroup.isChained) {
-        const titleWidth =
-          this.canvasContext.measureText(title).width +
-          GROUP_CHARACTER_SIZE * 2 * this.mapScale;
-        // Reset pathButtons of stationGroup.
-        stationGroup.pathButtons = [];
-        //Paint the Chained Icon on the map.
-        this.drawStationGroupIcon(
-          pointStart,
-          pointEnd,
-          titleWidth,
-          StationGroupElementHoverItem.Boundary,
-          stationGroup
-        );
+          // Reset pathButtons of the station group.
+          stationGroup.pathButtons = [];
+          // Paint the Cancel Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.ButtonCancel,
+            stationGroup,
+            ICON_STATION_GROUP_CANCEL,
+            ICON_STATION_GROUP_HOVER_COLOR_CANCEL
+          );
+          // Paint the Accept Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth + GROUP_CHARACTER_SIZE * 4 * this.mapScale,
+            StationGroupElementHoverItem.ButtonAccept,
+            stationGroup,
+            ICON_STATION_GROUP_ACCEPT,
+            MAP_SELECTED
+          );
+        }
+        // If isChained is set to true.
+        if (stationGroup.isChained) {
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+          // Reset pathButtons of stationGroup.
+          stationGroup.pathButtons = [];
+          //Paint the Chained Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.Boundary,
+            stationGroup
+          );
+        }
       }
     } else {
       // Delete the line under the station group name.
