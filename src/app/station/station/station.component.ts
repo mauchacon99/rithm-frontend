@@ -656,4 +656,13 @@ export class StationComponent
       this.pendingFlowLogicRules = [];
     }
   }
+
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: string): void {
+    if (mode === 'layout') this.layoutMode = true;
+  }
 }
