@@ -16,17 +16,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./expansion-menu.component.scss'],
 })
 export class ExpansionMenuComponent implements OnInit {
-  /** Dashboards list. */
-  dashboardsList: DashboardData[] = [];
-
-  /** Status expanded, this save the state the panel for show icon expanded. */
-  panelOpenState = false;
-
   /** Type dashboard. */
   @Input() dashboardRole!: RoleDashboardMenu;
 
-  /** Validate type of role. */
-  roleDashboardMenu = RoleDashboardMenu;
+  /** Status expanded, this save the state the panel for show icon expanded. */
+  panelOpenState = false;
 
   /** Loading for list menu. */
   isLoading = false;
@@ -36,6 +30,12 @@ export class ExpansionMenuComponent implements OnInit {
 
   /** Show error in list the dashboard. */
   isPrincipalPageDashboard = false;
+
+  /** Dashboards list. */
+  dashboardsList: DashboardData[] = [];
+
+  /** Validate type of role. */
+  roleDashboardMenu = RoleDashboardMenu;
 
   constructor(
     private dashboardService: DashboardService,

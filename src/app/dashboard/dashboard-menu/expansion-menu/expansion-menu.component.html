@@ -57,7 +57,9 @@
           [id]="dashboardRole + '-item-' + i"
           (click)="hiddenDrawer()"
           [routerLink]="
-            isPrincipalPageDashboard && i === 0
+            isPrincipalPageDashboard &&
+            i === 0 &&
+            dashboardRole === roleDashboardMenu.Company
               ? ['/', 'dashboard']
               : ['/', 'dashboard', dashboard.rithmId]
           "
