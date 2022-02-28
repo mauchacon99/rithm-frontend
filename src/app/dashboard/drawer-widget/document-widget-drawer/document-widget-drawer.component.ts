@@ -38,11 +38,11 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.getDataSidenavDrawerService();
+    this.subscribeDrawerData$();
   }
 
   /** Get data the sidenavDrawerService. */
-  private getDataSidenavDrawerService(): void {
+  private subscribeDrawerData$(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
