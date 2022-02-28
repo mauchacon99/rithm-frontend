@@ -409,16 +409,17 @@ describe('StationComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should show layout-mode-button and layoutMode active when in station edit mode', () => {
+  it('should show layout-mode-button and layoutMode active when you click on it in station edition', () => {
     component.editMode = true;
     component.viewNewStation = true;
+    component.layoutMode = false;
     fixture.detectChanges();
 
     const btnLayout = fixture.debugElement.nativeElement.querySelector(
       '#layout-mode-button'
     );
     expect(btnLayout).toBeTruthy();
-    expect(component.layoutMode).toBeTrue();
     btnLayout.click();
+    expect(component.layoutMode).toBeTrue();
   });
 });
