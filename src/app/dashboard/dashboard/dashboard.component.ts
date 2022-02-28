@@ -42,7 +42,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   drawer!: MatDrawer;
 
   /** Show the dashboard menu. */
-  drawerContext: 'menuDashboard' | 'stationWidget' = 'menuDashboard';
+  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
+    'menuDashboard';
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
@@ -215,7 +216,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem: 'menuDashboard' | 'stationWidget',
+    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -233,14 +234,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
+   * @param context Context for drawer widget.
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    */
-  toggleWidgetDrawer(widgetItem: DashboardItem, widgetIndex: number): void {
-    this.toggleDrawer('stationWidget', {
-      widgetItem,
-      widgetIndex,
-    });
+  toggleWidgetDrawer(
+    context: string,
+    widgetItem: DashboardItem,
+    widgetIndex: number
+  ): void {
+    if (context === 'stationWidget' || context === 'documentWidget') {
+      this.toggleDrawer(context, { widgetItem, widgetIndex });
+    }
   }
 
   /**
@@ -260,8 +265,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       if (response) {
         this.editMode = false;
-        this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
-        this.configEditMode();
+
+        if (
+          this.returnWidgetsCompared(this.dashboardDataCopy.widgets) ===
+          this.returnWidgetsCompared(this.dashboardData.widgets)
+        ) {
+          this.dashboardData = JSON.parse(
+            JSON.stringify(this.dashboardDataCopy)
+          );
+          this.configEditMode();
+        } else {
+          this.getParams();
+        }
         this.toggleDrawerOnlyForWidgets();
       }
     } else {
@@ -269,6 +284,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.editMode = true;
       this.configEditMode();
     }
+  }
+
+  /**
+   * Returns widgets without the data attribute to compare if the widget has changed in edit mode.
+   *
+   * @returns The widgets without the data attribute and how string.
+   * @param  items Widget items.
+   */
+  private returnWidgetsCompared(items: DashboardItem[]): string {
+    const newItems: string[] = [];
+    items.map((item) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data, ...widget } = item;
+      newItems.push(JSON.stringify(widget));
+    });
+    return JSON.stringify(newItems);
   }
 
   /**
@@ -463,8 +494,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param item Item of the interface GridsterItem.
    * @returns Item id of the GridsterItem.
    */
-  trackBy(index: number, item: GridsterItem): number {
-    return item.id;
+  trackBy(index: number, item: GridsterItem): string {
+    return item.rithmId;
+  }
+
+  /**
+   * Remove widget on dashboardData for the index.
+   *
+   * @param widgetIndex Index of widget that opened widget-drawer.
+   */
+  removeWidgetIndex(widgetIndex: number): void {
+    this.dashboardData.widgets.splice(widgetIndex, 1);
   }
 
   /**

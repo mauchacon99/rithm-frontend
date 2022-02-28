@@ -18,12 +18,31 @@
   *ngIf="!isLoading && !failedLoadWidget && !isDocument"
   id="show-docs"
   class="h-full w-full"
+  [ngClass]="{
+    'container-station': widgetType === typesWidget.StationTableBanner
+  }"
 >
+  <!--  Banner image-->
+  <div
+    *ngIf="widgetType === typesWidget.StationTableBanner"
+    class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col"
+  >
+    <i *ngIf="!image" class="fas text-[60px] text-secondary-300 fa-image"></i>
+    <img
+      *ngIf="image"
+      [src]="image"
+      class="h-full w-full"
+      alt="Image station"
+    />
+  </div>
   <!-- Header widget -->
-  <div class="w-full p-2 flex flex-col h-full">
+  <div
+    class="w-full px-2 pb-2 flex flex-col h-full"
+    [ngClass]="{ 'pt-2': widgetType !== typesWidget.StationTableBanner }"
+  >
     <!--  Header Container  -->
     <div class="m-2">
-      <div class="flex justify-between items-center">
+      <div class="h-[30px] -mx-2 flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName }}
         </h3>
@@ -65,7 +84,7 @@
       <div *ngIf="dataStationWidget">
         <div
           *ngIf="!dataStationWidget.documents.length"
-          class="text-center my-4"
+          class="text-center my-4 text-sm"
           id="no-docs-message"
         >
           No documents found in station.
