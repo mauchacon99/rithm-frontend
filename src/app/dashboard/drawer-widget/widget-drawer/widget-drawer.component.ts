@@ -47,6 +47,11 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.subscribeDrawerContext$();
+  }
+
+  /** Get drawer context the drawers. */
+  private subscribeDrawerContext$(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {

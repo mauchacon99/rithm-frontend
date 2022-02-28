@@ -81,6 +81,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.subscribeDrawerData$();
+  }
+
+  /** Get data the sidenavDrawerService. */
+  private subscribeDrawerData$(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -91,6 +96,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.stationColumns = dataWidget.columns || [];
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
+          this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
           this.setWidgetIndex.emit(this.widgetIndex);
           this.widgetType.emit(this.widgetItem.widgetType);
           this.getDocumentFields();
@@ -272,6 +278,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
       widgetIndex: this.widgetIndex,
+      quantityElementsWidget: this.quantityElementsWidget,
     });
   }
 

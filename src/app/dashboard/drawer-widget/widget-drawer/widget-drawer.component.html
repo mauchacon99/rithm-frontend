@@ -25,7 +25,10 @@
     </div>
     <!-- Document drawer-->
     <div class="px-3 pb-4">
-      <app-document-widget-drawer *ngIf="drawerMode === 'documentWidget'">
+      <app-document-widget-drawer
+        *ngIf="drawerMode === 'documentWidget'"
+        (setWidgetIndex)="setWidgetIndex($event)"
+      >
       </app-document-widget-drawer>
     </div>
     <!-- Upload image-->
