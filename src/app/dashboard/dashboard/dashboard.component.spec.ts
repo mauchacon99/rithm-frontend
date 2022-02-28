@@ -383,6 +383,7 @@ describe('DashboardComponent', () => {
     });
 
     it('Should toggle drawer of the widgets', () => {
+      const quantityElementsWidget = 2;
       spyOn(sidenavDrawer, 'toggleDrawer');
       const widgetItem = {
         cols: 4,
@@ -398,10 +399,16 @@ describe('DashboardComponent', () => {
       };
       const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-      component.toggleWidgetDrawer('stationWidget', widgetItem, widgetIndex);
+      component.toggleWidgetDrawer(
+        'stationWidget',
+        widgetItem,
+        widgetIndex,
+        quantityElementsWidget
+      );
       expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
         widgetItem,
         widgetIndex,
+        quantityElementsWidget,
       });
     });
 
@@ -489,6 +496,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should update dashboard widgets', () => {
+    const quantityElementsWidget = 2;
     component.dashboardData = dataDashboard;
     const editDataWidget = {
       widgetItem: {
@@ -505,6 +513,7 @@ describe('DashboardComponent', () => {
         y: 0,
       },
       widgetIndex: 0,
+      quantityElementsWidget,
       isCloseDrawer: false,
     };
     const expectDashboardData = dataDashboard;
@@ -514,11 +523,13 @@ describe('DashboardComponent', () => {
   });
 
   it('should subscribe to DashboardService.updateDataWidget$', () => {
+    const quantityElementsWidget = 2;
     component.dashboardData = dataDashboard;
     const spyMethod = spyOn(component, 'updateDashboardWidget');
     const expectEditDataWidget = {
       widgetItem: dataDashboard.widgets[0],
       widgetIndex: 1,
+      quantityElementsWidget,
     };
 
     TestBed.inject(DashboardService).updateDashboardWidgets(

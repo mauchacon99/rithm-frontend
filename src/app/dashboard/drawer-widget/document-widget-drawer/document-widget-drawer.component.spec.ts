@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { WidgetType } from 'src/models';
+import { WidgetType, EditDataWidget } from 'src/models';
 
 import { DocumentWidgetDrawerComponent } from './document-widget-drawer.component';
 
 describe('DocumentWidgetDrawerComponent', () => {
   let component: DocumentWidgetDrawerComponent;
   let fixture: ComponentFixture<DocumentWidgetDrawerComponent>;
-  const dataEditWidget = {
+  const dataEditWidget: EditDataWidget = {
     widgetItem: {
       cols: 4,
       // eslint-disable-next-line max-len
@@ -22,7 +22,7 @@ describe('DocumentWidgetDrawerComponent', () => {
       y: 0,
     },
     widgetIndex: 0,
-    isCloseDrawer: false,
+    quantityElementsWidget: 2,
   };
 
   beforeEach(async () => {
@@ -37,6 +37,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentWidgetDrawerComponent);
     component = fixture.componentInstance;
+    component.quantityElementsWidget = 2;
     fixture.detectChanges();
   });
 

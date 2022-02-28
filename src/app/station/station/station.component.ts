@@ -31,6 +31,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { GridsterConfig } from 'angular-gridster2';
+import { InputFrameWidget } from '../../../models/input-frame-widget';
 /**
  * Main component for viewing a station.
  */
@@ -53,14 +54,20 @@ export class StationComponent
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Get station name from behaviour subject. */
+  private stationName = '';
+
   /** Station form. */
   stationForm: FormGroup;
 
   /** The information about the station. */
   stationInformation!: StationInformation;
 
-  /** Whether the request to get the station info is currently underway. */
-  stationLoading = false;
+  /** Station Rithm id. */
+  stationRithmId = '';
+
+  /** Index for station tabs. */
+  stationTabsIndex = 0;
 
   /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -68,32 +75,23 @@ export class StationComponent
   /** The list of stations that precede this station. */
   previousStations: ConnectedStationInfo[] = [];
 
-  /** Whether the request to get connected stations is currently underway. */
-  connectedStationsLoading = true;
+  /** Appended Fields array. */
+  appendedFields: DocumentNameField[] = [];
+
+  /** Contains the rules received from Flow Logic to save them. */
+  pendingFlowLogicRules: FlowLogicRule[] = [];
+
+  /** Flag that renames the save button when the selected tab is Flow Logic. */
+  isFlowLogicTab = false;
 
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
 
-  /** The context of what is open in the drawer. */
-  drawerContext = 'comments';
-
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
-  /** Station Rithm id. */
-  stationRithmId = '';
-
-  /** Get station name from behaviour subject. */
-  private stationName = '';
-
-  /** Appended Fields array. */
-  appendedFields: DocumentNameField[] = [];
-
   /** View new station. */
   viewNewStation = false;
-
-  /** Flag that renames the save button when the selected tab is Flow Logic. */
-  isFlowLogicTab = false;
 
   /** Edit mode toggle for station. */
   editMode = false;
@@ -101,11 +99,8 @@ export class StationComponent
   /** Layaout mode button for station. */
   layoutMode = true;
 
-  /** Contains the rules received from Flow Logic to save them. */
-  pendingFlowLogicRules: FlowLogicRule[] = [];
-
-  /** Index for station tabs. */
-  stationTabsIndex = 0;
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -113,15 +108,35 @@ export class StationComponent
     displayGrid: 'always',
     pushItems: true,
     draggable: {
-      enabled: false,
+      enabled: true,
     },
     resizable: {
-      enabled: false,
+      enabled: true,
     },
     margin: 12,
     minCols: 24,
     maxCols: 24,
   };
+
+  inputFrameWidgetItems: InputFrameWidget[] = [
+    {
+      cols: 6,
+      rows: 4,
+      x: 1,
+      y: 1,
+      minItemRows: 4,
+      minItemCols: 6,
+      questions: [],
+    },
+  ];
+
+  /** Loading / Error variables. */
+
+  /** Whether the request to get the station info is currently underway. */
+  stationLoading = false;
+
+  /** Whether the request to get connected stations is currently underway. */
+  connectedStationsLoading = true;
 
   constructor(
     private stationService: StationService,
@@ -140,30 +155,55 @@ export class StationComponent
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
     });
+  }
 
+  /**
+   * Listen the DrawerContext Service.
+   */
+  private subscribeDrawerContext(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
       });
+  }
 
+  /**
+   * Listen the DocumentStationNameFields subject.
+   */
+  private subscribeDocumentStationNameFields(): void {
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appFields) => {
+        this.appendedFields = appFields;
+      });
+  }
+
+  /**
+   * Listen the stationName subject.
+   */
+  private subscribeStationName(): void {
     this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
         this.stationInformation.name = stationName;
       });
+  }
 
-    this.stationService.documentStationNameFields$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((appFields) => {
-        this.appendedFields = appFields;
-      });
-
+  /**
+   * Listen the StationFormTouched subject.
+   */
+  private subscribeStationFormTouched(): void {
     this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
       this.stationForm.get('stationTemplateForm')?.markAsTouched();
     });
+  }
 
+  /**
+   * Listen the stationQuestion subject.
+   */
+  private subscribeStationQuestion(): void {
     this.stationService.stationQuestion$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((question) => {
@@ -187,7 +227,12 @@ export class StationComponent
           }
         }
       });
+  }
 
+  /**
+   * Listen the flowButtonText subject.
+   */
+  private subscribeFlowButtonText(): void {
     this.stationService.flowButtonText$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -244,6 +289,13 @@ export class StationComponent
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
+
+    this.subscribeDrawerContext();
+    this.subscribeDocumentStationNameFields();
+    this.subscribeStationName();
+    this.subscribeStationFormTouched();
+    this.subscribeStationQuestion();
+    this.subscribeFlowButtonText();
   }
 
   /** Comment. */
