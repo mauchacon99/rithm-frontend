@@ -102,7 +102,7 @@ export class StationComponent
 
   /** Flag that show if is setting mode. */
   settingMode = false;
-  
+
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
