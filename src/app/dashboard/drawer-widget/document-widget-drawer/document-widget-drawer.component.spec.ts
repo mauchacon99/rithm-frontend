@@ -10,14 +10,13 @@ describe('DocumentWidgetDrawerComponent', () => {
   const dataEditWidget = {
     widgetItem: {
       cols: 4,
-      // eslint-disable-next-line max-len
-      data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+      data: '{"documentRithmId":"1bda1a41-e86a-4031-b3f5-f2329e108db5","columns":[]}',
       maxItemCols: 0,
       maxItemRows: 0,
       minItemCols: 0,
       minItemRows: 0,
       rows: 2,
-      widgetType: WidgetType.Station,
+      widgetType: WidgetType.Document,
       x: 0,
       y: 0,
     },
