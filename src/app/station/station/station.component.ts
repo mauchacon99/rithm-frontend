@@ -314,25 +314,6 @@ export class StationComponent
   }
 
   /**
-   * Change configuration mode in edit mode of current station.
-   *
-   * @param mode The value of new mode.
-   */
-  changeConfigMode(mode: string): void {
-    switch (mode) {
-      case 'layout':
-        this.layoutMode = true;
-        this.settingMode = false;
-        break;
-
-      case 'setting':
-        this.layoutMode = false;
-        this.settingMode = true;
-        break;
-    }
-  }
-
-  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
@@ -649,6 +630,21 @@ export class StationComponent
    */
   tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
     this.isFlowLogicTab = tabChangeEvent.index === 1 ? true : false;
+  }
+
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: string): void {
+    if (mode === 'layout') {
+      this.layoutMode = true;
+      this.settingMode = false;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = true;
+    }
   }
 
   /**

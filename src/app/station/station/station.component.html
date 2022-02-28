@@ -279,7 +279,7 @@
                           type="button"
                           id="button-mode-layout"
                           data-testid="button-mode-layout"
-                          (click)="changeConfigMode('layout')"
+                          (click)="setGridMode('layout')"
                           [ngClass]="
                             layoutMode
                               ? 'text-sm font-semibold text-accent-500'
@@ -293,7 +293,7 @@
                           type="button"
                           id="button-mode-setting"
                           data-testid="button-mode-setting"
-                          (click)="changeConfigMode('setting')"
+                          (click)="setGridMode('setting')"
                           [ngClass]="
                             settingMode
                               ? 'text-sm font-semibold text-accent-500'
