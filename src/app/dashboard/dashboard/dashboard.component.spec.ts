@@ -398,7 +398,7 @@ describe('DashboardComponent', () => {
       };
       const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-      component.toggleWidgetDrawer(widgetItem, widgetIndex);
+      component.toggleWidgetDrawer('stationWidget', widgetItem, widgetIndex);
       expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
         widgetItem,
         widgetIndex,

@@ -4,6 +4,7 @@ import { WidgetDrawerComponent } from './widget-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MockComponent } from 'ng-mocks';
 import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-widget-drawer.component';
+import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
 
@@ -16,6 +17,7 @@ describe('WidgetDrawerComponent', () => {
       declarations: [
         WidgetDrawerComponent,
         MockComponent(StationWidgetDrawerComponent),
+        MockComponent(DocumentWidgetDrawerComponent),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
