@@ -70,6 +70,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
 
+  /** Element list in drawer. */
+  quantityElementsWidget = 0;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService,
