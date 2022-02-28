@@ -21,11 +21,7 @@ import {
   WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import {
-  GridsterConfig,
-  GridsterItem,
-  GridsterModule,
-} from 'angular-gridster2';
+import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
@@ -200,6 +196,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  /** Update data in specific widget. */
   private updateDrawerDataWidget(): void {
     this.dashboardService.updateDataWidget$
       .pipe(takeUntil(this.destroyed$))
