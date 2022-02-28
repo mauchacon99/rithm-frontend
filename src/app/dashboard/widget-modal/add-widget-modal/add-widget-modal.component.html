@@ -1,6 +1,17 @@
 <!-- Header Add Widgets Modal -->
 <div>
-  <h1>Title</h1>
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold">Widget Builder</h3>
+    <button
+      data-testid="close-widget-builder"
+      id="close-widget-builder"
+      mat-icon-button
+      class="text-secondary-500"
+      (click)="closeModal()"
+    >
+      <i class="fas fa-times text-lg"></i>
+    </button>
+  </div>
 </div>
 
 <!-- Content Add Widgets Modal -->

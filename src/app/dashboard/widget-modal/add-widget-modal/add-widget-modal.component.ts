@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -9,4 +10,11 @@ import { Component } from '@angular/core';
 export class AddWidgetModalComponent {
   /** Tab Parents selected. */
   tabParentSelect = 0;
+
+  constructor(private dialogRef: MatDialogRef<AddWidgetModalComponent>) {}
+
+  /** Close add widgets modal. */
+  closeModal(): void {
+    this.dialogRef.close();
+  }
 }
