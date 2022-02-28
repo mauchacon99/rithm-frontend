@@ -422,4 +422,21 @@ describe('StationComponent', () => {
     btnLayout.click();
     expect(component.layoutMode).toBeTrue();
   });
+  
+  it('should open confirmation popup when canceling button', async () => {
+    const dataToConfirmPopup = {
+      title: 'Cancel?',
+      message: '\nUnsaved changes will be lost.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.cancelStationChanges();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+    expect(component.editMode).toBeFalsy();
+  });
 });

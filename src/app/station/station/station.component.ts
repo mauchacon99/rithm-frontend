@@ -717,4 +717,18 @@ export class StationComponent
   setGridMode(mode: string): void {
     if (mode === 'layout') this.layoutMode = true;
   }
+  
+  /** This cancel button clicked show alert. */
+  async cancelStationChanges(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Cancel?',
+      message: '\nUnsaved changes will be lost.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+    if (confirm) {
+      this.editMode = false;
+    }
+  }
 }
