@@ -9,6 +9,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   let fixture: ComponentFixture<DocumentWidgetDrawerComponent>;
   const dataEditWidget = {
     widgetItem: {
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
       cols: 4,
       // eslint-disable-next-line max-len
       data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
