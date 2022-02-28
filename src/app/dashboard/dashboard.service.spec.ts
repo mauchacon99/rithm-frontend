@@ -27,8 +27,7 @@ describe('DashboardService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [ MockDashboardService ]
-
+      providers: [MockDashboardService],
     });
     service = TestBed.inject(DashboardService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -621,19 +620,18 @@ describe('DashboardService', () => {
         isChainedGroup: true,
         totalDocuments: 5,
         totalStations: 5,
-        totalSubGroups: 5
-      },{
+        totalSubGroups: 5,
+      },
+      {
         documentRithmId: rithmId,
         isChainedGroup: true,
         totalDocuments: 5,
         totalStations: 5,
-        totalSubGroups: 5
-      }
+        totalSubGroups: 5,
+      },
     ];
     service.getListTabDocuments(rithmId).subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
-
   });
-
 });

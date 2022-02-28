@@ -58,7 +58,10 @@ export class DashboardService {
     },
   ];
 
-  constructor(private http: HttpClient, private mockDashboardService: MockDashboardService) {}
+  constructor(
+    private http: HttpClient,
+    private mockDashboardService: MockDashboardService
+  ) {}
 
   /**
    * Gets info needed for dashboard header.
@@ -269,9 +272,10 @@ export class DashboardService {
    * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getListTabDocuments(dashboardRithmId: string): Observable<ItemListWidgetModal[]> {
-      return this.mockDashboardService.getListTabDocuments(dashboardRithmId);
-    }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getListTabDocuments(
+    dashboardRithmId: string
+  ): Observable<ItemListWidgetModal[]> {
+    return this.mockDashboardService.getListTabDocuments(dashboardRithmId);
+  }
 }

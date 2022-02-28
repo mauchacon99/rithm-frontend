@@ -13,7 +13,7 @@ describe('CustomTabWidgetModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
       imports: [HttpClientModule],
-      providers:[DashboardService, MockDashboardService]
+      providers: [DashboardService, MockDashboardService],
     }).compileComponents();
   });
 
@@ -35,16 +35,17 @@ describe('CustomTabWidgetModalComponent', () => {
         isChainedGroup: true,
         totalDocuments: 5,
         totalStations: 5,
-        totalSubGroups: 5
-      },{
+        totalSubGroups: 5,
+      },
+      {
         documentRithmId: rithmId,
         isChainedGroup: true,
         totalDocuments: 5,
         totalStations: 5,
-        totalSubGroups: 5
-      }
+        totalSubGroups: 5,
+      },
     ];
-    component['getListTabDocuments'] (rithmId).subscribe((response) => {
+    component['getListTabDocuments'](rithmId).subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
   });

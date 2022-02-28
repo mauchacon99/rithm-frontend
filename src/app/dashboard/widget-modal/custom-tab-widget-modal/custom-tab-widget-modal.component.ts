@@ -10,8 +10,7 @@ import { DashboardService } from '../../dashboard.service';
   styleUrls: ['./custom-tab-widget-modal.component.scss'],
 })
 export class CustomTabWidgetModalComponent {
-
-  constructor(private dashboardService: DashboardService){}
+  constructor(private dashboardService: DashboardService) {}
 
   /**
    * Get list tab documents.
@@ -19,8 +18,10 @@ export class CustomTabWidgetModalComponent {
    * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private getListTabDocuments(dashboardRithmId: string): Observable<ItemListWidgetModal[]> {
-      return this.dashboardService.getListTabDocuments(dashboardRithmId);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private getListTabDocuments(
+    dashboardRithmId: string
+  ): Observable<ItemListWidgetModal[]> {
+    return this.dashboardService.getListTabDocuments(dashboardRithmId);
+  }
 }
