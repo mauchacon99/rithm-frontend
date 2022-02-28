@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DashboardItem, EditDataWidget } from 'src/models';
@@ -11,6 +17,9 @@ import { DashboardItem, EditDataWidget } from 'src/models';
   styleUrls: ['./document-widget-drawer.component.scss'],
 })
 export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
+  /** Emit widgetIndex to widget-drawer. */
+  @Output() setWidgetIndex = new EventEmitter<number>();
+
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
@@ -42,6 +51,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.widgetItem = dataDrawer.widgetItem;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
+          this.setWidgetIndex.emit(this.widgetIndex);
         }
       });
   }
