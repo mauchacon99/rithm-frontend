@@ -31,6 +31,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { GridsterConfig } from 'angular-gridster2';
+
 /**
  * Main component for viewing a station.
  */
@@ -103,9 +104,6 @@ export class StationComponent
 
   /** Index for station tabs. */
   stationTabsIndex = 0;
-
-  /** Contains the configuration mode. */
-  modeConfig = '';
 
   /** Flag that show if is layout mode. */
   layoutMode = true;
@@ -321,10 +319,16 @@ export class StationComponent
    * @param mode The value of new mode.
    */
   changeConfigMode(mode: string): void {
-    if (this.modeConfig !== mode) {
-      this.layoutMode = !this.layoutMode;
-      this.settingMode = !this.settingMode;
-      this.modeConfig = mode;
+    switch (mode) {
+      case 'layout':
+        this.layoutMode = true;
+        this.settingMode = false;
+        break;
+
+      case 'setting':
+        this.layoutMode = false;
+        this.settingMode = true;
+        break;
     }
   }
 
