@@ -228,11 +228,16 @@
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->
-            <mat-tab-group mat-align-tabs="left" class="mt-2 w-full pb-8">
+            <mat-tab-group
+              mat-align-tabs="left"
+              class="mt-2 w-full pb-8 mat-tab-label-container"
+            >
               <!-- Document Tab -->
-              <mat-tab>
+              <mat-tab label="container-tab">
                 <ng-template mat-tab-label>
-                  <span data-testid="document-tab">Document</span>
+                  <span data-testid="document-tab" class="text-sm font-semibold"
+                    >Container</span
+                  >
                 </ng-template>
                 <ng-template matTabContent>
                   <!-- Document info header -->
@@ -335,9 +340,13 @@
                 </ng-template>
               </mat-tab>
               <!-- Flow Logic Tab -->
-              <mat-tab>
+              <mat-tab label="flow-logic-tab">
                 <ng-template mat-tab-label>
-                  <span data-testid="flow-logic-tab">Flow Logic</span>
+                  <span
+                    data-testid="flow-logic-tab"
+                    class="text-sm font-semibold"
+                    >Flow Logic</span
+                  >
                 </ng-template>
                 <ng-template matTabContent>
                   <app-flow-logic
