@@ -410,7 +410,7 @@ describe('StationComponent', () => {
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Cancel?',
-      message: 'Unsaved changes will be lost',
+      message: '\nUnsaved changes will be lost.',
       okButtonText: 'Yes',
       cancelButtonText: 'No',
       important: true,
