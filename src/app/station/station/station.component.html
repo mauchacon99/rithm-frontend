@@ -273,10 +273,11 @@
                           mat-button
                           type="button"
                           class="text-sm font-semibold"
+                          id="button-mode-layout"
                           data-testid="button-mode-layout"
-                          (click)="settingMode('layout')"
+                          (click)="configMode('layout')"
                           [ngClass]="
-                            modeConfig === 'layout' || modeConfig === ''
+                            layoutMode
                               ? 'text-sm font-semibold text-accent-500'
                               : 'text-secondary-500'
                           "
@@ -286,11 +287,12 @@
                         <button
                           mat-button
                           type="button"
-                          data-testid="button-mode-settings"
+                          id="button-mode-setting"
+                          data-testid="button-mode-setting"
                           class="text-sm font-semibold"
-                          (click)="settingMode('settings')"
+                          (click)="configMode('setting')"
                           [ngClass]="
-                            modeConfig === 'settings'
+                            settingMode
                               ? 'text-sm font-semibold text-accent-500'
                               : 'text-secondary-500'
                           "

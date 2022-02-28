@@ -104,8 +104,14 @@ export class StationComponent
   /** Index for station tabs. */
   stationTabsIndex = 0;
 
-  /** Set the value about mode config. */
+  /** Contains the configuration mode. */
   modeConfig = '';
+
+  /** Flag that show if is layout mode. */
+  layoutMode = true;
+
+  /** Flag that show if is setting mode. */
+  settingMode = false;
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -310,12 +316,31 @@ export class StationComponent
   }
 
   /**
-   * Set mode configuration in question.
+   * Switch to mode layout.
+   *
+   */
+  setLayoutMode(): void {
+    this.layoutMode = true;
+    this.settingMode = false;
+  }
+
+  /**
+   * Switch to mode setting.
+   *
+   */
+  setSettingMode(): void {
+    this.settingMode = true;
+    this.layoutMode = false;
+  }
+
+  /**
+   * Change configuration mode in edit mode of current station.
    *
    * @param mode The value of new mode.
    */
-  settingMode(mode: string): void {
-    this.modeConfig = mode;
+  configMode(mode: string): void {
+    this.modeConfig = mode || 'layout';
+    this.modeConfig === 'layout' ? this.setLayoutMode() : this.setSettingMode();
   }
 
   /**
@@ -422,14 +447,6 @@ export class StationComponent
     }
     this.stationInformation.questions.push(newQuestion);
     this.stationService.touchStationForm();
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   /**
@@ -666,5 +683,13 @@ export class StationComponent
     } else {
       this.pendingFlowLogicRules = [];
     }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
