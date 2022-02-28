@@ -421,5 +421,6 @@ describe('StationComponent', () => {
     ).and.callThrough();
     await component.cancelStationChanges();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+    expect(component.editMode).toBeFalsy();
   });
 });
