@@ -942,7 +942,7 @@ export class StationGroupElementService {
         // If status of the station group option button.
         const titleWidth =
           this.canvasContext.measureText(title).width +
-          GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+          GROUP_CHARACTER_SIZE * 2 * this.mapScale;
         // Paint the Option Icon on the map.
         this.drawStationGroupIcon(
           pointStart,
@@ -992,7 +992,7 @@ export class StationGroupElementService {
           STATION_GROUP_NAME_PADDING +
           (stationGroup.status === MapItemStatus.Pending
             ? GROUP_CHARACTER_SIZE * 12
-            : GROUP_CHARACTER_SIZE) *
+            : (this.mapService.mapMode$.value !== MapMode.View  ? GROUP_CHARACTER_SIZE * 4 : GROUP_CHARACTER_SIZE )) *
             this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
@@ -1075,10 +1075,10 @@ export class StationGroupElementService {
       Math.abs(m) < Math.PI / 3
     );
 
-    const IconfontSize =
-      icon === ICON_STATION_GROUP_OPTION ? 8 : FONT_SIZE_MODIFIER;
+    // const IconfontSize =
+    //   icon === ICON_STATION_GROUP_OPTION ? 8 : FONT_SIZE_MODIFIER;
 
-    const fontSize = Math.ceil(IconfontSize * this.mapScale);
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
     // Font selected to paint the icon.
     // If the icon is hover we increase the font by 0.5.
