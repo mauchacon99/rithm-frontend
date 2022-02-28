@@ -316,31 +316,16 @@ export class StationComponent
   }
 
   /**
-   * Switch to mode layout.
-   *
-   */
-  setLayoutMode(): void {
-    this.layoutMode = true;
-    this.settingMode = false;
-  }
-
-  /**
-   * Switch to mode setting.
-   *
-   */
-  setSettingMode(): void {
-    this.layoutMode = false;
-    this.settingMode = true;
-  }
-
-  /**
    * Change configuration mode in edit mode of current station.
    *
    * @param mode The value of new mode.
    */
-  configMode(mode: string): void {
-    this.modeConfig = mode || 'layout';
-    this.modeConfig === 'layout' ? this.setLayoutMode() : this.setSettingMode();
+  changeConfigMode(mode: string): void {
+    if (this.modeConfig !== mode) {
+      this.layoutMode = !this.layoutMode;
+      this.settingMode = !this.settingMode;
+      this.modeConfig = mode;
+    }
   }
 
   /**

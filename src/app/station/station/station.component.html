@@ -274,7 +274,7 @@
                           type="button"
                           id="button-mode-layout"
                           data-testid="button-mode-layout"
-                          (click)="configMode('layout')"
+                          (click)="changeConfigMode('layout')"
                           [ngClass]="
                             layoutMode
                               ? 'text-sm font-semibold text-accent-500'
@@ -288,7 +288,7 @@
                           type="button"
                           id="button-mode-setting"
                           data-testid="button-mode-setting"
-                          (click)="configMode('setting')"
+                          (click)="changeConfigMode('setting')"
                           [ngClass]="
                             settingMode
                               ? 'text-sm font-semibold text-accent-500'
