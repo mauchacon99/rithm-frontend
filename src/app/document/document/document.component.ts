@@ -176,6 +176,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+  /** Subscribe to drawerContext$. */
   private subscribeDrawerContext$(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -184,6 +185,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       });
   }
 
+  /** Subscribe to documentName$. */
   private subscribeDocumentName$(): void {
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
@@ -192,6 +194,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       });
   }
 
+  /** Subscribe to documentAnswer$. */
   private subscribeDocumentAnswer$(): void {
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
@@ -268,8 +271,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isWidget
       ? this.widgetReloadListDocuments(isReturnListDocuments, false)
       : this.isUserAdmin
-      ? this.router.navigateByUrl('map')
-      : this.router.navigateByUrl('dashboard');
+        ? this.router.navigateByUrl('map')
+        : this.router.navigateByUrl('dashboard');
   }
 
   /**
