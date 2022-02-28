@@ -7,6 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { first, Subject, takeUntil } from 'rxjs';
 import {
   DocumentStationInformation,
   UserType,
@@ -16,12 +18,10 @@ import {
   StationRosterMember,
 } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { Router } from '@angular/router';
 
 /**
  * Reusable component for the document information header.
@@ -33,11 +33,11 @@ import { Router } from '@angular/router';
   providers: [],
 })
 export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
   /** Type of user looking at a document. */
   @Input() userType!: UserType;
+
+  /** View new ui for station/document screen. */
+  @Input() viewNewStation = false;
 
   /** Document information object passed from parent. */
   @Input() documentInformation!:
@@ -47,72 +47,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** The Document how widget. */
   @Input() isWidget = false;
 
+  /** Reload list of documents in station-widget when is true. */
   @Output() isReloadListDocuments = new EventEmitter<boolean>();
-
-  /** Enum for all types of a user. */
-  userTypeEnum = UserType;
-
-  /** Document Appended Fields. */
-  documentAppendedFields: DocumentNameField[] = [];
-
-  /** Document name form. */
-  documentNameForm: FormGroup;
-
-  /** Whether the Station allows edit document name or not. */
-  isDocumentNameEditable!: boolean;
-
-  /**Current document name */
-  documentName = '';
-
-  /** Fields appended to the document name. */
-  appendedDocumentName = '';
-
-  /** View new ui for station/document screen. */
-  @Input() viewNewStation = false;
-
-  /** Loading indicator to assign user. */
-  loadingAssignUser = false;
-
-  /** Variable to show if error message should be displayed. */
-  displayAssignUserError = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService,
-    private documentService: DocumentService,
-    private errorService: ErrorService,
-    private userService: UserService,
-    private router: Router
-  ) {
-    this.documentNameForm = this.fb.group({
-      name: [''],
-    });
-
-    /** Get Document Appended Fields from Behaviour Subject. */
-    this.stationService.documentStationNameFields$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((appendedFields) => {
-        this.documentAppendedFields = appendedFields;
-      });
-  }
-
-  /**
-   * Disable document input element in station edit mode.
-   */
-  ngOnInit(): void {
-    this.isStation
-      ? this.documentNameForm.disable()
-      : this.documentNameForm.enable();
-    if (!this.isStation) {
-      this.getDocumentName();
-    } else {
-      this.getAppendedFieldsOnDocumentName(this.stationRithmId);
-    }
-    if (!this.isWidget) {
-      this.getStatusDocumentEditable();
-    }
-  }
 
   /**
    * Whether the info-drawer is opened.
@@ -171,11 +107,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @returns Validate if user is owner or admin of current station.
    */
   get isUserAdminOrOwner(): boolean {
-    return this.documentInformation.stationOwners?.find(
-      (owner) => this.userService.user.rithmId === owner.rithmId
-    ) !== undefined
-      ? true
-      : false;
+    return (
+      this.documentInformation.stationOwners?.find(
+        (owner) => this.userService.user.rithmId === owner.rithmId
+      ) !== undefined
+    );
   }
 
   /**
@@ -195,6 +131,75 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return 'currentAssignedUser' in this.documentInformation
       ? this.documentInformation.currentAssignedUser
       : user;
+  }
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Document name form. */
+  documentNameForm: FormGroup;
+
+  /** Enum for all types of a user. */
+  userTypeEnum = UserType;
+
+  /**Current document name */
+  documentName = '';
+
+  /** Fields appended to the document name. */
+  appendedDocumentName = '';
+
+  /** Whether the Station allows edit document name or not. */
+  isDocumentNameEditable!: boolean;
+
+  /** Loading indicator to assign user. */
+  loadingAssignUser = false;
+
+  /** Variable to show if error message should be displayed. */
+  displayAssignUserError = false;
+
+  /** Document Appended Fields. */
+  documentAppendedFields: DocumentNameField[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private sidenavDrawerService: SidenavDrawerService,
+    private stationService: StationService,
+    private documentService: DocumentService,
+    private errorService: ErrorService,
+    private userService: UserService,
+    private router: Router
+  ) {
+    this.documentNameForm = fb.group({
+      name: [''],
+    });
+  }
+
+  /**
+   * Disable document input element in station edit mode.
+   */
+  ngOnInit(): void {
+    this.subscribeDocumentStationNameFields$();
+
+    this.isStation
+      ? this.documentNameForm.disable()
+      : this.documentNameForm.enable();
+    if (!this.isStation) {
+      this.getDocumentName();
+    } else {
+      this.getAppendedFieldsOnDocumentName(this.stationRithmId);
+    }
+    if (!this.isWidget) {
+      this.getStatusDocumentEditable();
+    }
+  }
+
+  /** Get Document Appended Fields from Behaviour Subject. */
+  private subscribeDocumentStationNameFields$() {
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appendedFields) => {
+        this.documentAppendedFields = appendedFields;
+      });
   }
 
   /**

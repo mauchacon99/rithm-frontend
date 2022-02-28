@@ -343,8 +343,12 @@
   <div class="container-document">
     <app-document
       [isWidget]="true"
-      (returnDocumentsWidget)="widgetReloadListDocuments($event.isReturnListDocuments,
-$event.isReloadListDocuments)"
+      (returnDocumentsWidget)="
+        widgetReloadListDocuments(
+          $event.isReturnListDocuments,
+          $event.isReloadListDocuments
+        )
+      "
       [documentRithmIdWidget]="documentIdSelected"
       [stationRithmIdWidget]="stationRithmId"
     ></app-document>
