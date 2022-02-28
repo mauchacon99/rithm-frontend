@@ -329,8 +329,8 @@ export class StationComponent
    *
    */
   setSettingMode(): void {
-    this.settingMode = true;
     this.layoutMode = false;
+    this.settingMode = true;
   }
 
   /**
