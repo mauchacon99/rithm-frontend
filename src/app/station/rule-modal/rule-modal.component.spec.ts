@@ -34,10 +34,14 @@ import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { DocumentService } from 'src/app/core/document.service';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatSelectHarness } from '@angular/material/select/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
+  let selectLoader: HarnessLoader;
 
   const DIALOG_TEST_DATA: RuleModalData = {
     stationId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
@@ -78,6 +82,7 @@ describe('RuleModalComponent', () => {
     fixture = TestBed.createComponent(RuleModalComponent);
     component = fixture.componentInstance;
     component.ruleModalLoading = false;
+    selectLoader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
   });
 
@@ -273,21 +278,16 @@ describe('RuleModalComponent', () => {
     expect(component.firstOperand.value).toBe('3j4k-3h2j-hj4j');
   });
 
-  it('should call resetQuestionFieldComponent to refresh component field', () => {
-    const question: Question = {
-      prompt: 'Example question#1',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [],
-    };
-    const spyMethod = spyOn(component, 'resetQuestionFieldComponent');
-    expect(component.textField).toBeUndefined();
-    component.setFirstOperandInformation(question);
+  it('should call resetQuestionFieldComponent to refresh component field', async () => {
+    const setOperatorListSpy = spyOn(
+      component,
+      'resetQuestionFieldComponent'
+    ).and.callThrough();
+    component.setOperatorList(QuestionFieldType.ShortText);
     fixture.detectChanges();
-    expect(spyMethod).toHaveBeenCalled();
+    const matSelect = await selectLoader.getAllHarnesses(MatSelectHarness);
+    await matSelect[0].clickOptions();
+    expect(setOperatorListSpy).toHaveBeenCalled();
   });
 
   it('should return a the list of questions for the second operand', () => {
