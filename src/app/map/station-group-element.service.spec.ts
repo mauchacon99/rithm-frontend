@@ -467,6 +467,7 @@ describe('StationGroupElementService', () => {
         { x: 20, y: 10 },
         { x: 15, y: 5 },
         stationGroup,
+        true,
         true
       )
     ).toThrow(
