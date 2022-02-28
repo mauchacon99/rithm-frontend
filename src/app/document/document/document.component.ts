@@ -278,8 +278,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Emit reload list of documents in station widget.
    *
-   * @param isReturnListDocuments When click in flow, return to list of documents in widget.
-   * @param isReloadListDocuments When assign new worker, reload list of documents in widget when click to see list.
+   * @param isReturnListDocuments Return to list of documents, true to reload list.
+   * @param isReloadListDocuments Reload list of documents when click to see list.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
