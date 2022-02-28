@@ -271,8 +271,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isWidget
       ? this.widgetReloadListDocuments(isReturnListDocuments, false)
       : this.isUserAdmin
-        ? this.router.navigateByUrl('map')
-        : this.router.navigateByUrl('dashboard');
+      ? this.router.navigateByUrl('map')
+      : this.router.navigateByUrl('dashboard');
   }
 
   /**
