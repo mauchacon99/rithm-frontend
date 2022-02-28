@@ -29,7 +29,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   widgetIndex!: number;
 
   /** Whether the called widget-drawer. */
-  drawerMode: 'stationWidget' = 'stationWidget';
+  drawerMode: 'stationWidget' | 'documentWidget' = 'stationWidget';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -43,7 +43,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        if (data === 'stationWidget') {
+        if (data === 'stationWidget' || data === 'documentWidget') {
           this.drawerMode = data;
         }
       });
@@ -54,7 +54,10 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    *
    */
   toggleDrawer(): void {
-    if (this.drawerMode === 'stationWidget') {
+    if (
+      this.drawerMode === 'stationWidget' ||
+      this.drawerMode === 'documentWidget'
+    ) {
       this.sidenavDrawerService.toggleDrawer(this.drawerMode);
     }
   }

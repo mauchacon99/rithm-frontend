@@ -42,7 +42,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   drawer!: MatDrawer;
 
   /** Show the dashboard menu. */
-  drawerContext: 'menuDashboard' | 'stationWidget' = 'menuDashboard';
+  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
+    'menuDashboard';
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
@@ -215,7 +216,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem: 'menuDashboard' | 'stationWidget',
+    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -233,14 +234,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
+   * @param context Context for drawer widget.
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    */
-  toggleWidgetDrawer(widgetItem: DashboardItem, widgetIndex: number): void {
-    this.toggleDrawer('stationWidget', {
-      widgetItem,
-      widgetIndex,
-    });
+  toggleWidgetDrawer(
+    context: string,
+    widgetItem: DashboardItem,
+    widgetIndex: number
+  ): void {
+    if (context === 'stationWidget' || context === 'documentWidget') {
+      this.toggleDrawer(context, { widgetItem, widgetIndex });
+    }
   }
 
   /**
