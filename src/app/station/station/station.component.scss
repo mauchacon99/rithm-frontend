@@ -57,3 +57,10 @@ textarea {
 .long-text ::ng-deep .mat-form-field-prefix {
   align-self: center;
 }
+
+.gridster-container ::ng-deep {
+  .gridster-column,
+  .gridster-row {
+    @apply border-secondary-50;
+  }
+}
