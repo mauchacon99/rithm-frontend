@@ -8,6 +8,7 @@ import {
   RoleDashboardMenu,
   EditDataWidget,
   ColumnsDocumentInfo,
+  ItemListWidgetModal,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -493,4 +494,14 @@ export class MockDashboardService {
   deletePersonalDashboard(rithmId: string): Observable<unknown> {
     return of().pipe(delay(1000));
   }
+
+  /**
+   * Get list tab documents.
+   *
+   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
+   * @returns The item list widget modal.
+   */
+     getListTabDocuments(dashboardRithmId: string): Observable<ItemListWidgetModal[]> {
+      return of().pipe(delay(1000));
+    }
 }

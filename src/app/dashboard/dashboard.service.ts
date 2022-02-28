@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { MockDashboardService } from 'src/mocks';
 import {
   WorkerDashboardHeader,
   DashboardStationData,
@@ -11,6 +12,7 @@ import {
   EditDataWidget,
   ColumnsDocumentInfo,
   ColumnsLogicWidget,
+  ItemListWidgetModal,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -56,7 +58,7 @@ export class DashboardService {
     },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private mockDashboardService: MockDashboardService) {}
 
   /**
    * Gets info needed for dashboard header.
@@ -260,4 +262,16 @@ export class DashboardService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal?rithmId=${rithmId}`
     );
   }
+
+  /**
+   * Get list tab documents.
+   *
+   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
+   * @returns The item list widget modal.
+   */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getListTabDocuments(dashboardRithmId: string): Observable<ItemListWidgetModal[]> {
+      return this.mockDashboardService.getListTabDocuments(dashboardRithmId);
+    }
+
 }

@@ -10,11 +10,13 @@ import {
   DashboardData,
   RoleDashboardMenu,
   EditDataWidget,
+  ItemListWidgetModal,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockDashboardService } from 'src/mocks';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -25,6 +27,8 @@ describe('DashboardService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [ MockDashboardService ]
+
     });
     service = TestBed.inject(DashboardService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -608,4 +612,28 @@ describe('DashboardService', () => {
     });
     service.updateDashboardWidgets(expectEditDataWidget);
   });
+
+  it('should get list tab documents', () => {
+    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: rithmId,
+        isChainedGroup: true,
+        totalDocuments: 5,
+        totalStations: 5,
+        totalSubGroups: 5
+      },{
+        documentRithmId: rithmId,
+        isChainedGroup: true,
+        totalDocuments: 5,
+        totalStations: 5,
+        totalSubGroups: 5
+      }
+    ];
+    service.getListTabDocuments(rithmId).subscribe((response) => {
+      expect(response).toEqual(itemListWidgetModal);
+    });
+
+  });
+
 });
