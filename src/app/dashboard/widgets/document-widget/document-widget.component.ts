@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -37,6 +44,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Type of drawer opened. */
   drawerContext!: string;
 
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
   private destroyed$ = new Subject<void>();
 
   constructor(
@@ -60,7 +70,12 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
+    this.getDrawerContext();
     this.getDocumentWidget();
+  }
+
+  /** Get context drawer. */
+  private getDrawerContext(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
@@ -106,6 +121,11 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
         stationId: stationId,
       },
     });
+  }
+
+  /** Toggle drawer when click on edit station widget. */
+  toggleEditDocument(): void {
+    this.toggleDrawer.emit(+this.dataDocumentWidget.questions.length);
   }
 
   /** Clean subscriptions. */

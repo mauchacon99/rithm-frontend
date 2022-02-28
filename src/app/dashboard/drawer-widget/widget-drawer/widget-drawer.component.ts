@@ -19,17 +19,17 @@ import { PopupService } from 'src/app/core/popup.service';
   styleUrls: ['./widget-drawer.component.scss'],
 })
 export class WidgetDrawerComponent implements OnInit, OnDestroy {
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
   /** Emit event for delete widget in dashboard. */
   @Output() deleteWidget = new EventEmitter<number>();
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
 
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
   /** Whether the called widget-drawer. */
-  drawerMode: 'stationWidget' = 'stationWidget';
+  drawerMode: 'stationWidget' | 'documentWidget' = 'stationWidget';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -40,10 +40,15 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.subscribeDrawerContext$();
+  }
+
+  /** Get drawer context the drawers. */
+  private subscribeDrawerContext$(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        if (data === 'stationWidget') {
+        if (data === 'stationWidget' || data === 'documentWidget') {
           this.drawerMode = data;
         }
       });
@@ -54,7 +59,10 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    *
    */
   toggleDrawer(): void {
-    if (this.drawerMode === 'stationWidget') {
+    if (
+      this.drawerMode === 'stationWidget' ||
+      this.drawerMode === 'documentWidget'
+    ) {
       this.sidenavDrawerService.toggleDrawer(this.drawerMode);
     }
   }
