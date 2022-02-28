@@ -45,7 +45,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   drawerContext!: string;
 
   /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<void>();
+  @Output() toggleDrawer = new EventEmitter<number>();
 
   private destroyed$ = new Subject<void>();
 
@@ -70,7 +70,12 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
+    this.getDrawerContext();
     this.getDocumentWidget();
+  }
+
+  /** Get context drawer. */
+  private getDrawerContext(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
@@ -120,7 +125,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Toggle drawer when click on edit station widget. */
   toggleEditDocument(): void {
-    this.toggleDrawer.emit();
+    this.toggleDrawer.emit(+this.dataDocumentWidget.questions.length);
   }
 
   /** Clean subscriptions. */

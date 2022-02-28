@@ -44,6 +44,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** To load dom by WidgetType. */
   @Input() widgetType: WidgetType = WidgetType.Station;
 
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** Image setter. */
   private _image!: string | null;
 
   /** Image to banner. */
@@ -70,8 +74,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<void>();
+  @Output() toggleDrawer = new EventEmitter<number>();
 
+  /** Data widget. */
   private _dataWidget = '';
 
   /** Set data for station widget. */
@@ -92,6 +97,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     return this._dataWidget;
   }
 
+  /** EditMode the widget. */
   private _editMode = false;
 
   /** Set edit mode toggle from dashboard. */
@@ -111,32 +117,26 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
-  /** If expand or not the widget. */
-  @Output() expandWidget = new EventEmitter<boolean>();
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
 
-  /** StationRithmId for station widget. */
-  stationRithmId = '';
-
-  /** Interface for list items in table. */
+  /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<WidgetDocument>;
 
   /** Columns for list the widget. */
   columnsAllField: ColumnFieldsWidget[] = [];
 
-  /** Columns for petition. */
-  columnsFieldPetition: string[] = [];
-
-  /** To set its expanded the widget. */
-  isExpandWidget = false;
-
   /** Enum with types widget station. */
   typesWidget = WidgetType;
 
-  /** Key names of the columns to mat-table. */
-  columnsToDisplayTable: string[] = [];
-
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
+
+  /** The enum question field type. */
+  questionFieldType = QuestionFieldType;
+
+  /** The enum document columns info. */
+  columnsDocumentInfo = ColumnsDocumentInfo;
 
   /** Show error loading widget. */
   failedLoadWidget = false;
@@ -144,11 +144,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Loading documents of station. */
   isLoading = false;
 
-  /** View detail document. */
-  isDocument = false;
-
-  /** Document id selected for view. */
-  documentIdSelected = '';
+  /** To set its expanded the widget. */
+  isExpandWidget = false;
 
   /** Update document list when a new document is created. */
   reloadDocumentList = false;
@@ -156,16 +153,23 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Variable to show if the error message should be displayed. */
   displayDocumentError = false;
 
-  private destroyed$ = new Subject<void>();
+  /** View detail document. */
+  isDocument = false;
 
   /** Type of drawer opened. */
   drawerContext!: string;
 
-  /** The enum question field type. */
-  questionFieldType = QuestionFieldType;
+  /** Document id selected for view. */
+  documentIdSelected = '';
 
-  /** The enum document columns info. */
-  columnsDocumentInfo = ColumnsDocumentInfo;
+  /** StationRithmId for station widget. */
+  stationRithmId = '';
+
+  /** Columns for petition. */
+  columnsFieldPetition: string[] = [];
+
+  /** Key names of the columns to mat-table. */
+  columnsToDisplayTable: string[] = [];
 
   constructor(
     private documentService: DocumentService,
@@ -181,14 +185,18 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
+    this.subscribeDrawerContext$();
     this.parseDataColumnsWidget();
+    this.getStationWidgetDocuments();
+  }
+
+  /** Get context drawer. */
+  private subscribeDrawerContext$(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
-
-    this.getStationWidgetDocuments();
   }
 
   /** Parse data of columns widget. */
@@ -313,7 +321,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Toggle drawer when click on edit station widget. */
   toggleEditStation(): void {
-    this.toggleDrawer.emit();
+    this.toggleDrawer.emit(+this.dataStationWidget.documents.length);
   }
 
   /** Expand widget. */
