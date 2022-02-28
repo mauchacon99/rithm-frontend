@@ -7,5 +7,5 @@ export interface EditDataWidget {
   /** String, json stringify of data the widget. */
   widgetItem: DashboardItem;
   /** Number of items to be displayed in the widget to be able to identify in the drawer whether to show alert or not. */
-  quantityElements: number;
+  quantityElementsWidget: number;
 }

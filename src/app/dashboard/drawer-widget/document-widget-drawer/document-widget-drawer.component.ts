@@ -20,12 +20,20 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Element list in drawer. */
+  quantityElementsWidget = 0;
+
   constructor(private sidenavDrawerService: SidenavDrawerService) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.getDataWidgetSidenavService();
+  }
+
+  /** Get data the sidenavDrawerService. */
+  private getDataWidgetSidenavService(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -33,6 +41,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
         if (dataDrawer) {
           this.widgetItem = dataDrawer.widgetItem;
           this.widgetIndex = dataDrawer.widgetIndex;
+          this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
         }
       });
   }

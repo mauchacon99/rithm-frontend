@@ -45,7 +45,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   drawerContext!: string;
 
   /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<void>();
+  @Output() toggleDrawer = new EventEmitter<number>();
 
   private destroyed$ = new Subject<void>();
 
@@ -120,7 +120,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Toggle drawer when click on edit station widget. */
   toggleEditDocument(): void {
-    this.toggleDrawer.emit();
+    this.toggleDrawer.emit(this.dataDocumentWidget.questions.length);
   }
 
   /** Clean subscriptions. */

@@ -14,7 +14,7 @@
 <div *ngIf="!isLoading && !failedLoadDrawer" id="content-drawer-station-widget">
   <div *ngIf="!isLoading" id="content-drawer-station-widget">
     <div
-      *ngIf="!questions.length; else selectDrawer"
+      *ngIf="quantityElementsWidget === 0; else selectDrawer"
       id="message-not-documents-assigned-to-station"
     >
       <p class="text-sm">

@@ -70,7 +70,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<void>();
+  @Output() toggleDrawer = new EventEmitter<number>();
 
   private _dataWidget = '';
 
@@ -313,7 +313,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Toggle drawer when click on edit station widget. */
   toggleEditStation(): void {
-    this.toggleDrawer.emit();
+    this.toggleDrawer.emit(this.dataStationWidget.documents.length);
   }
 
   /** Expand widget. */

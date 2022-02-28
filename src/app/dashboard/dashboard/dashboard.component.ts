@@ -237,14 +237,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param context Context for drawer widget.
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
+   * @param quantityElementsWidget Number of items to be displayed in the widget.
    */
   toggleWidgetDrawer(
     context: string,
     widgetItem: DashboardItem,
-    widgetIndex: number
+    widgetIndex: number,
+    quantityElementsWidget: number
   ): void {
     if (context === 'stationWidget' || context === 'documentWidget') {
-      this.toggleDrawer(context, { widgetItem, widgetIndex });
+      this.toggleDrawer(context, { widgetItem, widgetIndex, quantityElementsWidget });
     }
   }
 
