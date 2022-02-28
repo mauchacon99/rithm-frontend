@@ -93,6 +93,7 @@ describe('StationWidgetDrawerComponent', () => {
     fixture = TestBed.createComponent(StationWidgetDrawerComponent);
     component = fixture.componentInstance;
     component.questions = questions;
+    component.quantityElementsWidget = 2;
     fixture.detectChanges();
   });
 
@@ -350,6 +351,7 @@ describe('StationWidgetDrawerComponent', () => {
       const expectData = {
         widgetItem: component.widgetItem,
         widgetIndex: component.widgetIndex,
+        quantityElementsWidget: 2,
       };
       const spyService = spyOn(
         TestBed.inject(DashboardService),
@@ -419,6 +421,7 @@ describe('StationWidgetDrawerComponent', () => {
       expect(spyError).toHaveBeenCalled();
     });
     it('should render message for show user this station not documents assigned', () => {
+      component.quantityElementsWidget = 0;
       component.questions = [];
       fixture.detectChanges();
       const renderMessage = fixture.debugElement.nativeElement.querySelector(
