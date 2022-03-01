@@ -20,7 +20,6 @@ describe('CustomTabWidgetModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
-      imports: [MatDialogModule, MatSnackBarModule],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
