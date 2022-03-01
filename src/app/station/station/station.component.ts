@@ -696,6 +696,24 @@ export class StationComponent
     } else {
       this.layoutMode = false;
       this.settingMode = true;
+      this.options.displayGrid = 'none';
+      if (this.options.resizable) {
+        this.options.resizable.enabled = false;
+      }
+      if (this.options.draggable) {
+        this.options.draggable.enabled = false;
+      }
+    }
+    this.changedOptions();
+  }
+
+  /**
+   * Change options in grid.
+   *
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
     }
   }
 

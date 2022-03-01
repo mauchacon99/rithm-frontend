@@ -46,6 +46,7 @@ import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.compon
 import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
+import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -449,12 +450,26 @@ describe('StationComponent', () => {
 
   it('should call the function that changes to setting mode in edit mode', () => {
     const modeConfig = 'setting';
+    const displayGrid = 'none';
     component.viewNewStation = true;
     component.editMode = true;
     fixture.detectChanges();
+
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
+    expect(component.options.resizable?.enabled).toBeFalsy();
+    expect(component.options.draggable?.enabled).toBeFalsy();
+  });
+
+  it('should call the function changedOptions that make changes in grid', () => {
+    const spyChangedOptions = spyOn(
+      component,
+      'changedOptions'
+    ).and.callThrough();
+    component.changedOptions();
+    expect(spyChangedOptions).toHaveBeenCalled();
   });
 
   it('should open confirmation popup when canceling button', async () => {
