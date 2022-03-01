@@ -14,11 +14,7 @@ import {
 } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
-import {
-  DocumentName,
-  DocumentNameField,
-  StationRosterMember,
-} from 'src/models';
+import { DocumentName, StationRosterMember } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { RouterTestingModule } from '@angular/router/testing';
