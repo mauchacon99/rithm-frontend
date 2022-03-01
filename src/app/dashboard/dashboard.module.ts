@@ -40,6 +40,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatRippleModule,
     MatTableModule,
     MatTabsModule,
+    MatButtonToggleModule,
   ],
 })
 export class DashboardModule {}

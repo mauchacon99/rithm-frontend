@@ -32,6 +32,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { GridsterConfig } from 'angular-gridster2';
 import { InputFrameWidget } from '../../../models/input-frame-widget';
+
 /**
  * Main component for viewing a station.
  */
@@ -95,6 +96,12 @@ export class StationComponent
 
   /** Edit mode toggle for station. */
   editMode = false;
+
+  /** Flag that show if is layout mode. */
+  layoutMode = true;
+
+  /** Flag that show if is setting mode. */
+  settingMode = false;
 
   /** Flag that show if is layout mode. */
   layoutMode = true;
@@ -190,7 +197,9 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
-        this.stationInformation.name = stationName;
+        if (this.stationInformation) {
+          this.stationInformation.name = stationName;
+        }
       });
   }
 
@@ -513,12 +522,12 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: (data) => {
+        next: ([, , , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
-          if (data[3]) {
+          if (stationQuestions) {
             //in case of save/update questions the station questions object is updated.
-            this.stationInformation.questions = data[3] as Question[];
+            this.stationInformation.questions = stationQuestions as Question[];
           }
         },
         error: (error: unknown) => {
@@ -679,6 +688,21 @@ export class StationComponent
    */
   tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
     this.isFlowLogicTab = tabChangeEvent.index === 1 ? true : false;
+  }
+
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: 'layout' | 'setting'): void {
+    if (mode === 'layout') {
+      this.layoutMode = true;
+      this.settingMode = false;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = true;
+    }
   }
 
   /**
