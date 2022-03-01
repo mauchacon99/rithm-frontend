@@ -7,6 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { throwError } from 'rxjs';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -41,5 +42,32 @@ describe('CustomTabWidgetModalComponent', () => {
     btnTab.click();
     expect(spyTabs).toHaveBeenCalledOnceWith(indexTab);
     expect(component.indexTab).toBe(indexTab);
+  });
+
+  it('should get list tab documents', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getStationTabList'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should get list tab documents error ', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getStationTabList'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 });
