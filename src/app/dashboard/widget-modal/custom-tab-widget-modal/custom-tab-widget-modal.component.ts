@@ -11,6 +11,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
   styleUrls: ['./custom-tab-widget-modal.component.scss'],
 })
 export class CustomTabWidgetModalComponent implements OnInit {
+  /* Dashboard rithm Id. */
   @Input() dashboardRithmId!: string;
 
   /* List document tab Widget Modal. */
@@ -35,7 +36,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Get list tab documents.
    *
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private getDocumentTabList(): void {
     this.dashboardService
       .getDocumentTabList(this.dashboardRithmId)
@@ -51,8 +51,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
           );
         },
       });
-
-    }
+  }
 
   /**
    * Selected tab for index.
@@ -63,4 +62,3 @@ export class CustomTabWidgetModalComponent implements OnInit {
     this.indexTab = index;
   }
 }
-
