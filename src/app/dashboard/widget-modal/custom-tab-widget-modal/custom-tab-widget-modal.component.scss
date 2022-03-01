@@ -4,14 +4,14 @@
       @apply bg-accent-500;
 
       ::ng-deep .mat-button-toggle-label-content {
-        color: #fff;
+        @apply text-white;
       }
     }
   }
 
   .tabs {
     ::ng-deep .mat-tab-header {
-      display: none;
+      @apply hidden;
     }
   }
 }
