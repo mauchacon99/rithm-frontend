@@ -424,6 +424,39 @@ describe('StationComponent', () => {
     expect(component.layoutMode).toBeFalsy();
   });
 
+  it('should show layout mode when click in button Layout', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+    const btnLayout = fixture.nativeElement.querySelector(
+      '#button-mode-layout'
+    );
+    expect(btnLayout).toBeTruthy();
+    btnLayout.click();
+    expect(component.layoutMode).toBeTruthy();
+    expect(component.settingMode).toBeFalsy();
+  });
+
+  it('should call the function that changes to layout mode in edit mode', () => {
+    const modeConfig = 'layout';
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
+    component.setGridMode(modeConfig);
+    expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+  });
+
+  it('should call the function that changes to setting mode in edit mode', () => {
+    const modeConfig = 'setting';
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
+    component.setGridMode(modeConfig);
+    expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+  });
+
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Cancel?',

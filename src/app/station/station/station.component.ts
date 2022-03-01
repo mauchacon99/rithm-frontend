@@ -689,8 +689,9 @@ export class StationComponent
    *
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
-  setGridMode(mode: string): void {
+  setGridMode(mode: 'layout' | 'setting'): void {
     if (mode === 'layout') {
+      this.layoutMode = true;
       this.settingMode = false;
     } else {
       this.layoutMode = false;
