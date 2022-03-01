@@ -6,6 +6,9 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { throwError } from 'rxjs';
 
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
   let fixture: ComponentFixture<CustomTabWidgetModalComponent>;
@@ -24,6 +27,7 @@ describe('CustomTabWidgetModalComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
       ],
+      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
     }).compileComponents();
   });
 
@@ -62,5 +66,14 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+  });
+  it('should selected index tabs', () => {
+    const indexTab = 1;
+    const spyTabs = spyOn(component, 'selectedTab').and.callThrough();
+    const btnTab = fixture.nativeElement.querySelector('#tab-button-station');
+    expect(btnTab).toBeTruthy();
+    btnTab.click();
+    expect(spyTabs).toHaveBeenCalledOnceWith(indexTab);
+    expect(component.indexTab).toBe(indexTab);
   });
 });

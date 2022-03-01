@@ -16,6 +16,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /* List document tab Widget Modal. */
   itemsListDocument: ItemListWidgetModal[] = [];
 
+  /** Index default in tabs. */
+  indexTab = 0;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -48,5 +51,16 @@ export class CustomTabWidgetModalComponent implements OnInit {
           );
         },
       });
+
+    }
+
+  /**
+   * Selected tab for index.
+   *
+   * @param index Index of tab.
+   */
+  selectedTab(index: number): void {
+    this.indexTab = index;
   }
 }
+
