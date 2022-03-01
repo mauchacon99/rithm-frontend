@@ -1,27 +1,52 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
 import { ItemListWidgetModal } from 'src/models';
 import { DashboardService } from '../../dashboard.service';
 
 /** Component for Tab Custom in modal add widget. */
 @Component({
-  selector: 'app-custom-tab-widget-modal',
+  selector: 'app-custom-tab-widget-modal[dashboardRithmId]',
   templateUrl: './custom-tab-widget-modal.component.html',
   styleUrls: ['./custom-tab-widget-modal.component.scss'],
 })
-export class CustomTabWidgetModalComponent {
-  constructor(private dashboardService: DashboardService) {}
+export class CustomTabWidgetModalComponent implements OnInit {
+  @Input() dashboardRithmId!: string;
+
+  /* List Widget Modal */
+  itemsListDocument: ItemListWidgetModal[] = [];
+
+  constructor(
+    private dashboardService: DashboardService,
+    private errorService: ErrorService
+  ) {}
+
+  /**
+   * Initial Method.
+   */
+  ngOnInit(): void {
+    this.getListTabDocuments();
+  }
 
   /**
    * Get list tab documents.
    *
-   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
-   * @returns The item list widget modal.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private getListTabDocuments(
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
-    return this.dashboardService.getListTabDocuments(dashboardRithmId);
+  private getListTabDocuments(): void {
+    this.dashboardService
+      .getListTabDocuments(this.dashboardRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (itemsListDocument) => {
+          this.itemsListDocument = itemsListDocument;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

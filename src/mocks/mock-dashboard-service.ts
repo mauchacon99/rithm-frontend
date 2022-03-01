@@ -511,6 +511,19 @@ export class MockDashboardService {
   getListTabDocuments(
     dashboardRithmId: string
   ): Observable<ItemListWidgetModal[]> {
-    return of().pipe(delay(1000));
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Station Name that is name',
+        groupName: 'Group group',
+        isChainedGroup: true,
+        totalDocuments: 5,
+        totalStations: 5,
+        totalSubGroups: 5,
+      },
+    ];
+    return of(itemListWidgetModal).pipe(delay(1000));
   }
 }

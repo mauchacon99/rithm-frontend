@@ -1,25 +1,37 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ItemListWidgetModal } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { CustomTabWidgetModalComponent } from './custom-tab-widget-modal.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MockDashboardService } from 'src/mocks';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
   let fixture: ComponentFixture<CustomTabWidgetModalComponent>;
+  const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+  const DIALOG_TEST_DATA: {
+    /** The dashboard rithmId. */ dashboardRithmId: string;
+  } = {
+    dashboardRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
-      imports: [HttpClientModule],
-      providers: [DashboardService, MockDashboardService],
+      imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
+      providers: [
+        DashboardService,
+        MockDashboardService,
+        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CustomTabWidgetModalComponent);
     component = fixture.componentInstance;
+    component.dashboardRithmId = dashboardRithmId;
     fixture.detectChanges();
   });
 
@@ -28,25 +40,11 @@ describe('CustomTabWidgetModalComponent', () => {
   });
 
   it('should get list tab documents', () => {
-    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const itemListWidgetModal: ItemListWidgetModal[] = [
-      {
-        documentRithmId: rithmId,
-        isChainedGroup: true,
-        totalDocuments: 5,
-        totalStations: 5,
-        totalSubGroups: 5,
-      },
-      {
-        documentRithmId: rithmId,
-        isChainedGroup: true,
-        totalDocuments: 5,
-        totalStations: 5,
-        totalSubGroups: 5,
-      },
-    ];
-    component['getListTabDocuments'](rithmId).subscribe((response) => {
-      expect(response).toEqual(itemListWidgetModal);
-    });
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getListTabDocuments'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
   });
 });
