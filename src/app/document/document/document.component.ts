@@ -7,10 +7,14 @@ import {
   ChangeDetectorRef,
   EventEmitter,
   Output,
+  Input,
 } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
+import { Subject, forkJoin, lastValueFrom } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -21,10 +25,7 @@ import {
   DocumentAutoFlow,
   MoveDocument,
 } from 'src/models';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
-import { Subject, forkJoin, lastValueFrom } from 'rxjs';
-import { Input } from '@angular/core';
 import { UserService } from 'src/app/core/user.service';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { StationService } from 'src/app/core/station.service';
@@ -38,6 +39,14 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./document.component.scss'],
 })
 export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
+  /** The component for the drawer that houses comments and history. */
+  @ViewChild('detailDrawer', { static: true })
+  detailDrawer!: MatDrawer;
+
+  /** The component for the subheader component. */
+  @ViewChild('subHeaderComponent')
+  subHeaderComponent!: SubHeaderComponent;
+
   /** The Document how widget. */
   @Input() isWidget = false;
 
@@ -48,131 +57,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() documentRithmIdWidget!: string;
 
   /** Return to list of the documents only with isWidget. */
-  @Output() returnDocumentsWidget: EventEmitter<boolean> = new EventEmitter();
-
-  /** Document form. */
-  documentForm: FormGroup;
-
-  /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', { static: true })
-  detailDrawer!: MatDrawer;
-
-  /** The component for the subheader component. */
-  @ViewChild('subHeaderComponent')
-  subHeaderComponent!: SubHeaderComponent;
-
-  /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
-
-  /** Document Id. */
-  private documentId = '';
-
-  /** Station Id. */
-  private stationId = '';
-
-  /** Whether the request to get the document info is currently underway. */
-  documentLoading = true;
-
-  /** The list of stations that this document could flow to. */
-  forwardStations: ConnectedStationInfo[] = [];
-
-  /** The list of stations that this document came from. */
-  previousStations: ConnectedStationInfo[] = [];
-
-  /** Whether the request to get connected stations is currently underway. */
-  connectedStationsLoading = true;
-
-  /** The context of what is open in the drawer. */
-  drawerContext = 'comments';
-
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
-  /** The all document answers the document actually. */
-  documentAnswer: DocumentAnswer[] = [];
-
-  /** Get Document Name from BehaviorSubject. */
-  private documentName = '';
-
-  /** Show or hidden accordion for all field. */
-  accordionFieldAllExpanded = false;
-
-  /** To check click SubHeader. */
-  clickSubHeader = false;
-
-  /** To check click comment. */
-  clickComment = false;
-
-  /** Whether the document allow previous button or not. */
-  allowPreviousButton = false;
-
-  constructor(
-    private documentService: DocumentService,
-    private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService,
-    private errorService: ErrorService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private popupService: PopupService,
-    private readonly changeDetectorR: ChangeDetectorRef,
-    private userService: UserService
-  ) {
-    this.documentForm = this.fb.group({
-      documentTemplateForm: this.fb.control(''),
-    });
-
-    this.sidenavDrawerService.drawerContext$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((context) => {
-        this.drawerContext = context;
-      });
-
-    this.documentService.documentName$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((documentName) => {
-        this.documentName = documentName.baseName;
-      });
-
-    this.documentService.documentAnswer$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((answer) => {
-        const answerFound = this.documentAnswer.find(
-          (da) => da.questionRithmId === answer.questionRithmId
-        );
-        if (answerFound === undefined) {
-          /** Answer doesn't exists then add it. */
-          answer.stationRithmId = this.documentInformation.stationRithmId;
-          answer.documentRithmId = this.documentInformation.documentRithmId;
-          this.documentAnswer.push(answer);
-        } else {
-          /** Answer exists then update its value. */
-          const answerIndex = this.documentAnswer.indexOf(answerFound);
-          this.documentAnswer[answerIndex].value = answer.value;
-        }
-      });
-  }
-
-  /**
-   * Gets info about the document as well as forward and previous stations for a specific document.
-   */
-  ngOnInit(): void {
-    if (!this.isWidget) {
-      this.sidenavDrawerService.setDrawer(this.detailDrawer);
-      this.getParams();
-    } else {
-      this.documentId = this.documentRithmIdWidget;
-      this.stationId = this.stationRithmIdWidget;
-      this.getDocumentStationData();
-    }
-  }
-
-  /**
-   * Checks after the component views and child views.
-   */
-  ngAfterViewChecked(): void {
-    this.changeDetectorR.detectChanges();
-  }
+  @Output() returnDocumentsWidget = new EventEmitter<{
+    /** When click in flow, return to list of documents in widget. */
+    isReturnListDocuments: boolean;
+    /** When assign new worker, reload list of documents in widget when click to see list. */
+    isReloadListDocuments: boolean;
+  }>();
 
   /**
    * Whether to show the backdrop for the comment and history drawers.
@@ -202,6 +92,134 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       (owner) => this.userService.user.rithmId === owner.rithmId
     );
     return !!ownerDocument || this.userService.isAdmin;
+  }
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Document form. */
+  documentForm: FormGroup;
+
+  /** The information about the document within a station. */
+  documentInformation!: DocumentStationInformation;
+
+  /** Document Id. */
+  private documentId = '';
+
+  /** Station Id. */
+  private stationId = '';
+
+  /** Get Document Name from BehaviorSubject. */
+  private documentName = '';
+
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
+
+  /** Whether the request to get the document info is currently underway. */
+  documentLoading = true;
+
+  /** Whether the request to get connected stations is currently underway. */
+  connectedStationsLoading = true;
+
+  /** Show or hidden accordion for all field. */
+  accordionFieldAllExpanded = false;
+
+  /** To check click SubHeader. */
+  clickSubHeader = false;
+
+  /** To check click comment. */
+  clickComment = false;
+
+  /** Whether the document allow previous button or not. */
+  allowPreviousButton = false;
+
+  /** The list of stations that this document could flow to. */
+  forwardStations: ConnectedStationInfo[] = [];
+
+  /** The list of stations that this document came from. */
+  previousStations: ConnectedStationInfo[] = [];
+
+  /** The all document answers the document actually. */
+  documentAnswer: DocumentAnswer[] = [];
+
+  constructor(
+    private documentService: DocumentService,
+    private stationService: StationService,
+    private sidenavDrawerService: SidenavDrawerService,
+    private errorService: ErrorService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private popupService: PopupService,
+    private readonly changeDetectorR: ChangeDetectorRef,
+    private userService: UserService
+  ) {
+    this.documentForm = this.fb.group({
+      documentTemplateForm: this.fb.control(''),
+    });
+  }
+
+  /**
+   * Gets info about the document as well as forward and previous stations for a specific document.
+   */
+  ngOnInit(): void {
+    this.subscribeDrawerContext$();
+    this.subscribeDocumentName$();
+    this.subscribeDocumentAnswer$();
+    if (!this.isWidget) {
+      this.sidenavDrawerService.setDrawer(this.detailDrawer);
+      this.getParams();
+    } else {
+      this.documentId = this.documentRithmIdWidget;
+      this.stationId = this.stationRithmIdWidget;
+      this.getDocumentStationData();
+    }
+  }
+
+  /** Subscribe to drawerContext$. */
+  private subscribeDrawerContext$(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.drawerContext = context;
+      });
+  }
+
+  /** Subscribe to documentName$. */
+  private subscribeDocumentName$(): void {
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((documentName) => {
+        this.documentName = documentName.baseName;
+      });
+  }
+
+  /** Subscribe to documentAnswer$. */
+  private subscribeDocumentAnswer$(): void {
+    this.documentService.documentAnswer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((answer) => {
+        const answerFound = this.documentAnswer.find(
+          (da) => da.questionRithmId === answer.questionRithmId
+        );
+        if (answerFound === undefined) {
+          /** Answer doesn't exists then add it. */
+          answer.stationRithmId = this.documentInformation.stationRithmId;
+          answer.documentRithmId = this.documentInformation.documentRithmId;
+          this.documentAnswer.push(answer);
+        } else {
+          /** Answer exists then update its value. */
+          const answerIndex = this.documentAnswer.indexOf(answerFound);
+          this.documentAnswer[answerIndex].value = answer.value;
+        }
+      });
+  }
+
+  /**
+   * Checks after the component views and child views.
+   */
+  ngAfterViewChecked(): void {
+    this.changeDetectorR.detectChanges();
   }
 
   /**
@@ -242,19 +260,35 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Navigates the user back to the dashboard page.
    *
-   * @param isReloadDocumentsWidget Boolean, when is true, reload the documents list in widget.
+   * @param isReturnListDocuments Boolean, when is true, return and reload to the documents list in widget.
    */
-  private navigateBack(isReloadDocumentsWidget = false): void {
+  private navigateBack(isReturnListDocuments = false): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
     // If is widget return to the documents list
     this.isWidget
-      ? this.returnDocumentsWidget.emit(isReloadDocumentsWidget)
+      ? this.widgetReloadListDocuments(isReturnListDocuments, false)
       : this.isUserAdmin
       ? this.router.navigateByUrl('map')
       : this.router.navigateByUrl('dashboard');
+  }
+
+  /**
+   * Emit reload list of documents in station widget.
+   *
+   * @param isReturnListDocuments Return to list of documents, true to reload list.
+   * @param isReloadListDocuments Reload list of documents when click to see list.
+   */
+  widgetReloadListDocuments(
+    isReturnListDocuments: boolean,
+    isReloadListDocuments: boolean
+  ): void {
+    this.returnDocumentsWidget.emit({
+      isReturnListDocuments,
+      isReloadListDocuments,
+    });
   }
 
   /**
@@ -350,14 +384,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   checkClickSubHeader(clickInside: boolean): void {
     this.clickSubHeader = clickInside;
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   /**
@@ -482,5 +508,13 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           },
         });
     }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -15,6 +15,7 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
+  WidgetType,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -37,23 +38,20 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
 
+  /** WidgetType of item. */
+  @Output() widgetType = new EventEmitter<WidgetType>();
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /** All data of the widget. */
   widgetItem!: DashboardItem;
 
-  /** Questions the station. */
-  questions!: Question[];
+  /** Station RithmId. */
+  stationRithmId!: string;
 
-  /** Station columns. */
-  stationColumns!: ColumnFieldsWidget[];
-
-  /** Static columns. */
-  documentInfo: OptionsSelectWidgetDrawer[] = [];
-
-  /** Document fields. */
-  documentFields: OptionsSelectWidgetDrawer[] = [];
+  /** Position of the widget. */
+  widgetIndex!: number;
 
   /** Loading document. */
   isLoading = false;
@@ -61,11 +59,17 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Loading error. */
   failedLoadDrawer = false;
 
-  /** Station RithmId. */
-  stationRithmId!: string;
+  /** Station columns. */
+  stationColumns!: ColumnFieldsWidget[];
 
-  /** Position of the widget. */
-  widgetIndex!: number;
+  /** Questions the station. */
+  questions!: Question[];
+
+  /** Static columns. */
+  documentInfo: OptionsSelectWidgetDrawer[] = [];
+
+  /** Document fields. */
+  documentFields: OptionsSelectWidgetDrawer[] = [];
 
   /** Element list in drawer. */
   quantityElementsWidget = 0;
@@ -98,6 +102,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.widgetIndex = dataDrawer.widgetIndex;
           this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
           this.setWidgetIndex.emit(this.widgetIndex);
+          this.widgetType.emit(this.widgetItem.widgetType);
           this.getDocumentFields();
         }
       });
