@@ -42,7 +42,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
-    private cd: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   /**
@@ -50,7 +50,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.subscribeDrawerContext$();
-    this.cd.detectChanges();
+    this.changeDetector.detectChanges();
   }
 
   /** Get drawer context the drawers. */
