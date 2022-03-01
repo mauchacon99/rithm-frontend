@@ -388,7 +388,7 @@ describe('StationWidgetComponent', () => {
       expect(documentDetail).toBeNull();
       expect(showDocs).toBeTruthy();
       expect(component.documentIdSelected).toBe('');
-      expect(spyMethod).toHaveBeenCalledOnceWith('', true);
+      expect(spyMethod).toHaveBeenCalledOnceWith('');
     });
   });
 
@@ -513,5 +513,17 @@ describe('StationWidgetComponent', () => {
           .rithmId,
     });
     expect(expectDataReturn).toEqual(expectDataValue);
+  });
+
+  it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
+    component.widgetReloadListDocuments(false, true);
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should return list of documents and reload list', () => {
+    const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+    component.widgetReloadListDocuments(true, false);
+    expect(component.reloadDocumentList).toBeFalse();
+    expect(spyMethod).toHaveBeenCalledOnceWith('', true);
   });
 });
