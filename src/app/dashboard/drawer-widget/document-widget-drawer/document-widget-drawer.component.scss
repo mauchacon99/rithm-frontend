@@ -1,0 +1,23 @@
+::ng-deep {
+  .cdk-overlay-pane {
+    transform: translateX(0) translateY(0) !important;
+  }
+
+  .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #3f51b5 !important;
+    background-color: white !important;
+  }
+
+  .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {
+    background-color: #3f51b5 !important;
+  }
+
+  .mat-select-panel {
+    min-width: 100% !important;
+    max-width: 99px !important;
+  }
+
+  .mat-option-text {
+    @apply text-sm;
+  }
+}
