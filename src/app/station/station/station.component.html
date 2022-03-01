@@ -281,12 +281,15 @@
                           data-testid="layout-mode-button"
                           id="layout-mode-button"
                           (click)="setGridMode('layout')"
-                          class="text-sm font-semibold"
+                          [ngClass]="
+                            layoutMode
+                              ? 'text-sm font-semibold text-accent-500'
+                              : 'text-sm font-semibold text-secondary-500'
+                          "
                         >
                           Layout
                         </button>
                         <button
-                          [ngClass]="{ 'opacity-70': layoutMode }"
                           mat-button
                           color="accent"
                           [disabled]="true"

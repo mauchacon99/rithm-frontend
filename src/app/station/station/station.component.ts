@@ -96,8 +96,11 @@ export class StationComponent
   /** Edit mode toggle for station. */
   editMode = false;
 
-  /** Layaout mode button for station. */
+  /** Flag that show if is layout mode. */
   layoutMode = true;
+
+  /** Flag that show if is setting mode. */
+  settingMode = false;
 
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
@@ -466,14 +469,6 @@ export class StationComponent
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
    * Save Station information and executed petitions to api.
    *
    */
@@ -714,8 +709,14 @@ export class StationComponent
    *
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
-  setGridMode(mode: string): void {
-    if (mode === 'layout') this.layoutMode = true;
+  setGridMode(mode: 'layout' | 'setting'): void {
+    if (mode === 'layout') {
+      this.layoutMode = true;
+      this.settingMode = false;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = true;
+    }
   }
 
   /** This cancel button clicked show alert. */
@@ -730,5 +731,13 @@ export class StationComponent
     if (confirm) {
       this.editMode = false;
     }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
