@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { CustomTabWidgetModalComponent } from './custom-tab-widget-modal.component';
-import { HttpClientModule } from '@angular/common/http';
-import { MockDashboardService } from 'src/mocks';
+import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ErrorService } from 'src/app/core/error.service';
+import { throwError } from 'rxjs';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -19,11 +20,11 @@ describe('CustomTabWidgetModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
-      imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
+      imports: [MatDialogModule, MatSnackBarModule],
       providers: [
-        DashboardService,
-        MockDashboardService,
+        { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+        { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
   });
@@ -46,5 +47,22 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should get list tab documents error ', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getListTabDocuments'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 });

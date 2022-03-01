@@ -446,32 +446,13 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      component.dashboardData = dataDashboard;
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
-      component.dashboardData = {
-        rithmId: 'E204F369-386F-4E41-B3CA-2459E674DF52',
-        name: 'Untitled Dashboard',
-        type: RoleDashboardMenu.Personal,
-        widgets: [
-          {
-            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
-            cols: 0,
-            rows: 0,
-            x: 0,
-            y: 0,
-            widgetType: WidgetType.Station,
-            data: 'string',
-            minItemRows: 0,
-            maxItemRows: 0,
-            minItemCols: 0,
-            maxItemCols: 0,
-          },
-        ],
-      };
       component.openDialogAddWidget();
       expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalled();
