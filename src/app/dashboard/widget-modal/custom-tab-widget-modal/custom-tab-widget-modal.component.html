@@ -4,18 +4,28 @@
     value="primary"
     class="button-group"
   >
-    <mat-button-toggle value="primary" (click)="selectedTab(0)"
+    <mat-button-toggle
+      value="primary"
+      (click)="selectedTab(0)"
       data-testid="tab-button-document"
-      id="tab-button-document">
+      id="tab-button-document"
+    >
       Documents
     </mat-button-toggle>
-    <mat-button-toggle value="accent" (click)="selectedTab(1)" data-testid="tab-button-station"
-    id="tab-button-station">
+    <mat-button-toggle
+      value="accent"
+      (click)="selectedTab(1)"
+      data-testid="tab-button-station"
+      id="tab-button-station"
+    >
       Stations
     </mat-button-toggle>
-    <mat-button-toggle value="accent" (click)="selectedTab(2)" data-testid="tab-button-flow"
-    id="tab-button-flow">>
-      Flows
+    <mat-button-toggle
+      value="accent"
+      (click)="selectedTab(2)"
+      data-testid="tab-button-flow"
+      id="tab-button-flow"
+      >> Flows
     </mat-button-toggle>
   </mat-button-toggle-group>
 
