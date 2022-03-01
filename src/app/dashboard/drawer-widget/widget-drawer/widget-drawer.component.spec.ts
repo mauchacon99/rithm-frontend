@@ -7,6 +7,7 @@ import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-w
 import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
+import { WidgetType } from 'src/models';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -132,5 +133,19 @@ describe('WidgetDrawerComponent', () => {
     component.setWidgetIndex(widgetIndex);
     expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
     expect(component.widgetIndex).toBe(widgetIndex);
+  });
+
+  it('should show section upload image and defined input in button', () => {
+    component.widgetType = WidgetType.StationTableBanner;
+    fixture.detectChanges();
+    const uploadImageButton = fixture.debugElement.nativeElement.querySelector(
+      '#upload-image-button'
+    );
+    expect(uploadImageButton).toBeTruthy();
+    uploadImageButton.click();
+    const uploadImageInput = fixture.debugElement.nativeElement.querySelector(
+      '#upload-image-input'
+    );
+    expect(uploadImageInput).toBeDefined();
   });
 });
