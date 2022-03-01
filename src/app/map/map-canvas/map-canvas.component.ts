@@ -130,12 +130,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** An array of data used to render and interact with connection line paths between stations in the map. */
   connections: ConnectionMapElement[] = [];
 
-  /**
-   * This is set to true initially than set to false once the map has initialized.
-   * Used to allow methods to have a separate behavior for when the map first loads. Such as the center method.
-   */
-  private initLoad = true;
-
   /** Scale to calculate canvas points. Defaults to 1. Zooming adjusts this scale exponentially. */
   private scale = DEFAULT_SCALE;
 
@@ -330,10 +324,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               !this.mapService.isDrawerOpened$.value &&
               stationCenter.length > 0
             ) {
-              // Center the map on the station.
-              this.mapService.centerStation(stationCenter[0], 0);
               this.mapService.isDrawerOpened$.next(true);
-
+              const drawer = document.getElementsByTagName('mat-drawer');
               const dataInformationDrawer: StationInfoDrawerData = {
                 stationRithmId: stationCenter[0].rithmId,
                 stationName: stationCenter[0].stationName,
@@ -344,13 +336,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
                 notes: stationCenter[0].notes,
               };
               //Pass dataInformationDrawer to open the station info drawer.
+              this.sidenavDrawerService.openDrawer(
+                'stationInfo',
+                dataInformationDrawer
+              );
+              this.stationService.updatedStationNameText(
+                stationCenter[0].stationName
+              );
+              stationCenter[0].drawerOpened = true;
               setTimeout(() => {
-                this.sidenavDrawerService.openDrawer(
-                  'stationInfo',
-                  dataInformationDrawer
-                );
-                this.stationService.updatedStationNameText(
-                  stationCenter[0].stationName
+                // Center the map on the station.
+                this.mapService.centerStation(
+                  stationCenter[0],
+                  drawer[0] ? drawer[0].clientWidth : 0
                 );
               }, 5);
               this.mapService.viewStationButtonClick$.next(false);
@@ -380,6 +378,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.stationElements = [];
     this.mapService.stationGroupElements = [];
     this.mapService.connectionElements = [];
+    this.mapService.isDrawerOpened$.next(false);
   }
 
   /**
