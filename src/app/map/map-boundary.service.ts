@@ -35,6 +35,7 @@ export class MapBoundaryService {
     //TODO: Add this to the const file and reference it from there.
     const strokeColor = '#1b4387';
 
+    ctx.save();
     //Render this as a dashed line.
     ctx.setLineDash([1, 5]);
     ctx.beginPath();
@@ -55,5 +56,6 @@ export class MapBoundaryService {
     ctx.stroke();
     //Reset dash so that nothing accidentally inherits it.
     ctx.setLineDash([]);
+    ctx.restore();
   }
 }

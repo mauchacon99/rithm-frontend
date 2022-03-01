@@ -183,7 +183,7 @@
                 [image]="item.image"
                 [editMode]="editMode"
                 (toggleDrawer)="
-                  toggleWidgetDrawer('stationWidget', item, index)
+                  toggleWidgetDrawer('stationWidget', item, index, $event)
                 "
               >
               </app-station-widget>
@@ -192,7 +192,7 @@
                 [documentRithmId]="item.data"
                 [editMode]="editMode"
                 (toggleDrawer)="
-                  toggleWidgetDrawer('documentWidget', item, index)
+                  toggleWidgetDrawer('documentWidget', item, index, $event)
                 "
               >
               </app-document-widget>

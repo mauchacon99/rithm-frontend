@@ -45,6 +45,7 @@ import { throwError } from 'rxjs';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
+import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -65,6 +66,7 @@ describe('StationComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(ToolbarComponent),
         MockComponent(StationTemplateComponent),
+        MockComponent(InputFrameWidgetComponent),
       ],
       imports: [
         NoopAnimationsModule,
@@ -409,19 +411,6 @@ describe('StationComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should show layout mode when click in button Layout', () => {
-    component.viewNewStation = true;
-    component.editMode = true;
-    fixture.detectChanges();
-    const btnLayout = fixture.nativeElement.querySelector(
-      '#button-mode-layout'
-    );
-    expect(btnLayout).toBeTruthy();
-    btnLayout.click();
-    expect(component.layoutMode).toBeTruthy();
-    expect(component.settingMode).toBeFalsy();
-  });
-
   it('should show setting mode when click in button Setting', () => {
     component.viewNewStation = true;
     component.editMode = true;
@@ -433,5 +422,22 @@ describe('StationComponent', () => {
     btnSetting.click();
     expect(component.settingMode).toBeTruthy();
     expect(component.layoutMode).toBeFalsy();
+  });
+
+  it('should open confirmation popup when canceling button', async () => {
+    const dataToConfirmPopup = {
+      title: 'Cancel?',
+      message: '\nUnsaved changes will be lost.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.cancelStationChanges();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+    expect(component.editMode).toBeFalsy();
   });
 });
