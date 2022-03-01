@@ -624,17 +624,17 @@ describe('DashboardService', () => {
   });
 
   it('should get list tab documents', () => {
-    const dashboardRithmId= 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const listDoducmentTab: ItemListWidgetModal[] = [
       {
-        documentRithmId: rithmId,
+        documentRithmId: dashboardRithmId,
         isChainedGroup: true,
         totalDocuments: 5,
         totalStations: 5,
         totalSubGroups: 5,
       },
       {
-        documentRithmId: rithmId,
+        documentRithmId: dashboardRithmId,
         isChainedGroup: true,
         totalDocuments: 5,
         totalStations: 5,
@@ -642,7 +642,7 @@ describe('DashboardService', () => {
       },
     ];
     service.getListTabDocuments(dashboardRithmId).subscribe((response) => {
-      expect(response).toEqual(itemListWidgetModal);
+      expect(response).toEqual(listDoducmentTab);
     });
   });
 });
