@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CustomTabWidgetModalComponent } from './custom-tab-widget-modal.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { ErrorService } from '../../../core/error.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
