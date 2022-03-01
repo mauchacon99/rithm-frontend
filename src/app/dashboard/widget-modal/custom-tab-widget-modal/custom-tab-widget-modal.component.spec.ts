@@ -11,7 +11,7 @@ describe('CustomTabWidgetModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
-      imports: [MatButtonToggleModule, MatTabsModule, BrowserAnimationsModule],
+      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
     }).compileComponents();
   });
 
