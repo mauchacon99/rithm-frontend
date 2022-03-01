@@ -69,6 +69,7 @@
           </app-station-info-header>
           <app-document-info-header
             [isWidget]="isWidget"
+            (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
             [documentInformation]="documentInformation"
             [viewNewStation]="false"
           ></app-document-info-header>
