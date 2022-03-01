@@ -13,7 +13,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 export class CustomTabWidgetModalComponent implements OnInit {
   @Input() dashboardRithmId!: string;
 
-  /* List Widget Modal */
+  /* List document tab Widget Modal. */
   itemsListDocument: ItemListWidgetModal[] = [];
 
   constructor(
