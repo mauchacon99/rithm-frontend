@@ -641,7 +641,7 @@ describe('DashboardService', () => {
         totalSubGroups: 5,
       },
     ];
-    service.getListTabDocuments(rithmId).subscribe((response) => {
+    service.getListTabDocuments(dashboardRithmId).subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
   });
