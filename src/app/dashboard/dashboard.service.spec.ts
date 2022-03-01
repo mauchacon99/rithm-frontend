@@ -256,6 +256,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -293,6 +294,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Personal,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 0,
           rows: 0,
           x: 0,
@@ -326,6 +328,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
             maxItemCols: 0,
@@ -345,6 +348,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
             maxItemCols: 0,
@@ -381,6 +385,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
             maxItemCols: 0,
@@ -400,6 +405,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
             maxItemCols: 0,
@@ -435,6 +441,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Personal,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -472,6 +479,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 1,
           rows: 2,
           x: 0,
@@ -506,6 +514,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -592,6 +601,7 @@ describe('DashboardService', () => {
     const expectEditDataWidget: EditDataWidget = {
       widgetIndex: 1,
       widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
@@ -603,6 +613,7 @@ describe('DashboardService', () => {
         maxItemCols: 12,
         maxItemRows: 12,
       },
+      quantityElementsWidget: 2,
     };
     service.updateDataWidget$.subscribe((editDataWidget) => {
       expect(editDataWidget).toEqual(expectEditDataWidget);

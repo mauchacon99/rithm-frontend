@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   OnDestroy,
@@ -9,6 +10,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
+import { WidgetType } from 'src/models';
 
 /**
  * Component for widget drawer.
@@ -19,11 +21,17 @@ import { PopupService } from 'src/app/core/popup.service';
   styleUrls: ['./widget-drawer.component.scss'],
 })
 export class WidgetDrawerComponent implements OnInit, OnDestroy {
+  /** Emit event for delete widget in dashboard. */
+  @Output() deleteWidget = new EventEmitter<number>();
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** Emit event for delete widget in dashboard. */
-  @Output() deleteWidget = new EventEmitter<number>();
+  /** Validate if the widget is type station-table-banner-widget. */
+  widgetTypeEnum = WidgetType;
+
+  /** Widget type of opened widget-drawer.*/
+  widgetType!: WidgetType;
 
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
@@ -33,13 +41,20 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.subscribeDrawerContext$();
+    this.changeDetector.detectChanges();
+  }
+
+  /** Get drawer context the drawers. */
+  private subscribeDrawerContext$(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -87,6 +102,15 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
+  }
+
+  /**
+   * Event emit setWidgetType for show o hidden section upload image.
+   *
+   * @param widgetType Widget type from station-widget-drawer.
+   */
+  setWidgetType(widgetType: WidgetType): void {
+    this.widgetType = widgetType;
   }
 
   /**
