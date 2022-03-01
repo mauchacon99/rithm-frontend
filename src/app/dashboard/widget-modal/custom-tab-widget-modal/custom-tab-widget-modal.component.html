@@ -1,11 +1,23 @@
-<div class="mt-10">
+<div class="mt-10 tabs-group">
   <mat-button-toggle-group
     #colorToggle="matButtonToggleGroup"
     value="primary"
-    class="tabs-button-group"
+    class="button-group"
   >
-    <mat-button-toggle value="primary"> Documents </mat-button-toggle>
-    <mat-button-toggle value="accent"> Stations </mat-button-toggle>
-    <mat-button-toggle value="accent"> Flows </mat-button-toggle>
+    <mat-button-toggle value="primary" (click)="selectedTab(0)">
+      Documents
+    </mat-button-toggle>
+    <mat-button-toggle value="accent" (click)="selectedTab(1)">
+      Stations
+    </mat-button-toggle>
+    <mat-button-toggle value="accent" (click)="selectedTab(2)">
+      Flows
+    </mat-button-toggle>
   </mat-button-toggle-group>
+
+  <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
+    <mat-tab> Content 1 </mat-tab>
+    <mat-tab> Content 2 </mat-tab>
+    <mat-tab> Content 3 </mat-tab>
+  </mat-tab-group>
 </div>

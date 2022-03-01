@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomTabWidgetModalComponent } from './custom-tab-widget-modal.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
   let fixture: ComponentFixture<CustomTabWidgetModalComponent>;
@@ -9,7 +11,7 @@ describe('CustomTabWidgetModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
-      imports: [MatButtonToggleModule],
+      imports: [MatButtonToggleModule, MatTabsModule, BrowserAnimationsModule],
     }).compileComponents();
   });
 
