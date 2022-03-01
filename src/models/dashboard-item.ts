@@ -1,6 +1,8 @@
 import { WidgetType } from './enums/widget-type.enum';
 
 export interface DashboardItem {
+  /** Rithm id of item. */
+  rithmId: string;
   /** Number of columns that item spans. */
   cols: number;
   /** Number of rows that item spans. */

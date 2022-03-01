@@ -34,6 +34,16 @@ import {
   ICON_STATION_GROUP_PATH_RADIUS,
   GROUP_CHARACTER_SIZE,
   STATION_GROUP_DISPLACEMENT,
+  CHAIN_GRID_SEVEN,
+  CHAIN_GRID_TWO,
+  CHAIN_GRID_NINE,
+  CHAIN_GRID_SIX,
+  CHAIN_GRID_FIVE,
+  CHAIN_GRID_THREE,
+  CHAIN_GRID_FOUR,
+  CHAIN_CORNER_RADIUS,
+  SCALE_REDUCED_RENDER,
+  CONNECTION_LINE_WIDTH_ZOOM_OUT,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -162,6 +172,7 @@ export class StationGroupElementService {
     //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
+    ctx.save();
     //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
     ctx.lineDashOffset =
@@ -196,6 +207,7 @@ export class StationGroupElementService {
     }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+    ctx.restore();
   }
 
   /**
@@ -363,6 +375,10 @@ export class StationGroupElementService {
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
       at the bottom of the group we delete from the lowest to the highest position. */
+
+      //if title is last in newTitle array.
+      const titleEnd = index === newTitle.length - 1;
+
       if (
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
@@ -372,7 +388,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition + index - 1],
           stationGroup.boundaryPoints[newPosition + index],
           stationGroup,
-          false
+          false,
+          titleEnd
         );
       } else {
         this.paintOrDeleteLineStationGroupName(
@@ -380,7 +397,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition - index],
           stationGroup.boundaryPoints[newPosition - index - 1],
           stationGroup,
-          false
+          false,
+          titleEnd
         );
       }
     });
@@ -390,6 +408,10 @@ export class StationGroupElementService {
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
       at the bottom of the group we paint from the lowest to the highest position. */
+
+      //if title is last in newTitle array.
+      const titleEnd = index === newTitle.length - 1;
+
       if (
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
@@ -399,7 +421,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition + index - 1],
           stationGroup.boundaryPoints[newPosition + index],
           stationGroup,
-          true
+          true,
+          titleEnd
         );
       } else {
         this.paintOrDeleteLineStationGroupName(
@@ -407,7 +430,8 @@ export class StationGroupElementService {
           stationGroup.boundaryPoints[newPosition - index],
           stationGroup.boundaryPoints[newPosition - index - 1],
           stationGroup,
-          true
+          true,
+          titleEnd
         );
       }
     });
@@ -888,13 +912,15 @@ export class StationGroupElementService {
    * @param pointEnd The end point of the line.
    * @param stationGroup The station group.
    * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
+   * @param endOfTitle If true, this is the last element in the title array.
    */
   paintOrDeleteLineStationGroupName(
     title: string,
     pointStart: Point,
     pointEnd: Point,
     stationGroup: StationGroupMapElement,
-    paintOrDelete = true
+    paintOrDelete = true,
+    endOfTitle: boolean
   ): void {
     // Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
@@ -934,34 +960,53 @@ export class StationGroupElementService {
         STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).fontBoundingBoxDescent
       );
-      // If status of the station group is pending.
-      if (stationGroup.status === MapItemStatus.Pending) {
-        const titleWidth =
-          this.canvasContext.measureText(title).width +
-          GROUP_CHARACTER_SIZE * 2 * this.mapScale;
+      // If end of title, draw any group icons.
+      if (endOfTitle) {
+        // If status of the station group is pending.
+        if (stationGroup.status === MapItemStatus.Pending) {
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * 2 * this.mapScale;
 
-        // Reset pathButtons of the station group.
-        stationGroup.pathButtons = [];
-        // Paint the Cancel Icon on the map.
-        this.drawStationGroupIcon(
-          pointStart,
-          pointEnd,
-          titleWidth,
-          StationGroupElementHoverItem.ButtonCancel,
-          ICON_STATION_GROUP_CANCEL,
-          ICON_STATION_GROUP_HOVER_COLOR_CANCEL,
-          stationGroup
-        );
-        // Paint the Accept Icon on the map.
-        this.drawStationGroupIcon(
-          pointStart,
-          pointEnd,
-          titleWidth + GROUP_CHARACTER_SIZE * 4 * this.mapScale,
-          StationGroupElementHoverItem.ButtonAccept,
-          ICON_STATION_GROUP_ACCEPT,
-          MAP_SELECTED,
-          stationGroup
-        );
+          // Reset pathButtons of the station group.
+          stationGroup.pathButtons = [];
+          // Paint the Cancel Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.ButtonCancel,
+            stationGroup,
+            ICON_STATION_GROUP_CANCEL,
+            ICON_STATION_GROUP_HOVER_COLOR_CANCEL
+          );
+          // Paint the Accept Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth + GROUP_CHARACTER_SIZE * 4 * this.mapScale,
+            StationGroupElementHoverItem.ButtonAccept,
+            stationGroup,
+            ICON_STATION_GROUP_ACCEPT,
+            MAP_SELECTED
+          );
+        }
+        // If isChained is set to true.
+        if (stationGroup.isChained) {
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+          // Reset pathButtons of stationGroup.
+          stationGroup.pathButtons = [];
+          // Paint the Chained Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.Boundary,
+            stationGroup
+          );
+        }
       }
     } else {
       // Delete the line under the station group name.
@@ -994,9 +1039,9 @@ export class StationGroupElementService {
    * @param pointEnd The end point of the line.
    * @param displacement The displacement on the line.
    * @param typeButton The icon type button.
+   * @param stationGroup The station group.
    * @param icon The icon.
    * @param hoverColor The color of the icon when hovering.
-   * @param stationGroup The station group.
    * @param displacedMap If the map was moved to point Start.
    */
   drawStationGroupIcon(
@@ -1004,9 +1049,9 @@ export class StationGroupElementService {
     pointEnd: Point,
     displacement: number,
     typeButton: StationGroupElementHoverItem,
-    icon: string,
-    hoverColor: string,
     stationGroup: StationGroupMapElement,
+    icon?: string,
+    hoverColor?: string,
     displacedMap = true
   ): void {
     this.canvasContext = this.mapService.canvasContext;
@@ -1056,41 +1101,239 @@ export class StationGroupElementService {
       Math.abs(m) < Math.PI / 3
     );
 
-    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+    //If icon and hoverColor are defined.
+    if (typeof icon !== 'undefined' && typeof hoverColor !== 'undefined') {
+      const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
-    // Font selected to paint the icon.
-    // If the icon is hover we increase the font by 0.5.
-    this.canvasContext.font = `${
-      fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
-    }px "FontAwesome"`;
+      // Font selected to paint the icon.
+      // If the icon is hover we increase the font by 0.5.
+      this.canvasContext.font = `${
+        fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
+      }px "FontAwesome"`;
 
-    // Hovering changes the color of the icon.
-    this.canvasContext.fillStyle =
-      stationGroup.hoverItem === typeButton ? hoverColor : BUTTON_DEFAULT_COLOR;
+      // Hovering changes the color of the icon.
+      this.canvasContext.fillStyle =
+        stationGroup.hoverItem === typeButton
+          ? hoverColor
+          : BUTTON_DEFAULT_COLOR;
 
-    // Paint the icon on the map.
-    this.canvasContext.fillText(
-      icon,
-      displacedMap ? newPoint.x - pointStart.x : newPoint.x,
-      this.canvasContext.measureText(icon).fontBoundingBoxDescent
+      // Paint the icon on the map.
+      this.canvasContext.fillText(
+        icon,
+        displacedMap ? newPoint.x - pointStart.x : newPoint.x,
+        this.canvasContext.measureText(icon).fontBoundingBoxDescent
+      );
+      // If the slope is 0 then we do a displacement by the x-coordinate so that it does not overlap the station group name.
+      const displacementX = m === 0 ? GROUP_CHARACTER_SIZE * this.mapScale : 0;
+      const path = new Path2D();
+      // Create a circle over the icon button for hovering.
+      path.arc(
+        newUnRotatedPointStart.x + displacementX,
+        newUnRotatedPointStart.y,
+        ICON_STATION_GROUP_PATH_RADIUS * this.mapScale,
+        0,
+        2 * Math.PI
+      );
+      path.closePath();
+
+      // Adds the hover zone of the button in position Buttons of the stationGroup.
+      stationGroup.pathButtons?.push({
+        typeButton: typeButton,
+        path: path,
+      });
+    }
+
+    //If icon and hoverColor are undefined then call drawChainIcon.
+    if (typeof icon === 'undefined' && typeof hoverColor === 'undefined') {
+      const iconStartPoint = {
+        x: displacedMap ? newPoint.x - pointStart.x : newPoint.x,
+        y: -5 * 3 * this.mapScale,
+      };
+      this.drawChainIcon(iconStartPoint, stationGroup);
+    }
+  }
+
+  /**
+   * Draws the chain icon used to show if a group has the isChained property.
+   *
+   * @param point The given point where to paint icon.
+   * @param stationGroup The group this icon is drawn for.
+   */
+  drawChainIcon(point: Point, stationGroup: StationGroupMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw chained icon if context is not defined');
+    }
+
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
+    const ctx = this.canvasContext;
+
+    const linkOneBottomLeftHeight = CHAIN_GRID_SEVEN * this.mapScale;
+    const linkOneBottomRightWidth = CHAIN_GRID_TWO * this.mapScale;
+    const linkOneBottomRightHeight = CHAIN_GRID_NINE * this.mapScale;
+    const linkOneTopRightWidth = CHAIN_GRID_FIVE * this.mapScale;
+    const linkOneTopRightHeight = CHAIN_GRID_SIX * this.mapScale;
+    const linkOneTopLeftWidth = CHAIN_GRID_THREE * this.mapScale;
+    const linkOneTopLeftHeight = CHAIN_GRID_FOUR * this.mapScale;
+
+    const centerLineBottomWidth = CHAIN_GRID_THREE * this.mapScale;
+    const centerLineBottomHeight = CHAIN_GRID_SIX * this.mapScale;
+    const centerLineTopWidth = CHAIN_GRID_SIX * this.mapScale;
+    const centerLineTopHeight = CHAIN_GRID_THREE * this.mapScale;
+
+    const linkTwoBottomLeftWidth = CHAIN_GRID_FOUR * this.mapScale;
+    const linkTwoBottomLeftHeight = CHAIN_GRID_THREE * this.mapScale;
+    const linkTwoBottomRightWidth = CHAIN_GRID_SIX * this.mapScale;
+    const linkTwoBottomRightHeight = CHAIN_GRID_FIVE * this.mapScale;
+    const linkTwoTopRightWidth = CHAIN_GRID_NINE * this.mapScale;
+    const linkTwoTopRightHeight = CHAIN_GRID_TWO * this.mapScale;
+    const linkTwoTopLeftWidth = CHAIN_GRID_SEVEN * this.mapScale;
+
+    const scaledCornerRadius = CHAIN_CORNER_RADIUS * this.mapScale;
+
+    //This is a complex shape with various lines and curves.
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineCap = 'round';
+    ctx.lineWidth =
+      this.mapScale > SCALE_REDUCED_RENDER
+        ? Math.ceil(2 * this.mapScale)
+        : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+    ctx.strokeStyle =
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      stationGroup.selected &&
+      stationGroup.status !== MapItemStatus.Pending
+        ? MAP_SELECTED
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled &&
+          stationGroup.status !== MapItemStatus.Pending
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          stationGroup.status !== MapItemStatus.Pending
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
+    ctx.moveTo(point.x, point.y);
+    ctx.clearRect(
+      point.x,
+      point.y,
+      CHAIN_GRID_NINE * this.mapScale,
+      CHAIN_GRID_NINE * this.mapScale
     );
-    // If the slope is 0 then we do a displacement by the x-coordinate so that it does not overlap the station group name.
-    const displacementX = m === 0 ? GROUP_CHARACTER_SIZE * this.mapScale : 0;
-    const path = new Path2D();
-    // Create a circle over the icon button for hovering.
-    path.arc(
-      newUnRotatedPointStart.x + displacementX,
-      newUnRotatedPointStart.y,
-      ICON_STATION_GROUP_PATH_RADIUS * this.mapScale,
-      0,
-      2 * Math.PI
+    //start drawing after bottom left corner.
+    ctx.moveTo(
+      point.x + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight + scaledCornerRadius
     );
-    path.closePath();
-
-    // Adds the hover zone of the button in position Buttons of the stationGroup.
-    stationGroup.pathButtons?.push({
-      typeButton: typeButton,
-      path: path,
-    });
+    //draw bottom side of link one.
+    ctx.lineTo(
+      point.x + linkOneBottomRightWidth - scaledCornerRadius,
+      point.y + linkOneBottomRightHeight - scaledCornerRadius
+    );
+    //draw bottom right corner of link one.
+    ctx.quadraticCurveTo(
+      point.x + linkOneBottomRightWidth,
+      point.y + linkOneBottomRightHeight,
+      point.x + linkOneBottomRightWidth + scaledCornerRadius,
+      point.y + linkOneBottomRightHeight - scaledCornerRadius
+    );
+    //draw right side of link one.
+    ctx.lineTo(
+      point.x + linkOneTopRightWidth - scaledCornerRadius,
+      point.y + linkOneTopRightHeight + scaledCornerRadius
+    );
+    //draw top right corner of link one.
+    ctx.quadraticCurveTo(
+      point.x + linkOneTopRightWidth,
+      point.y + linkOneTopRightHeight,
+      point.x + linkOneTopRightWidth - scaledCornerRadius,
+      point.y + linkOneTopRightHeight - scaledCornerRadius
+    );
+    //draw top side of link one.
+    ctx.lineTo(
+      point.x + linkOneTopLeftWidth + scaledCornerRadius,
+      point.y + linkOneTopLeftHeight + scaledCornerRadius
+    );
+    //draw top right corner of link one.
+    ctx.quadraticCurveTo(
+      point.x + linkOneTopLeftWidth,
+      point.y + linkOneTopLeftHeight,
+      point.x + linkOneTopLeftWidth - scaledCornerRadius,
+      point.y + linkOneTopLeftHeight + scaledCornerRadius
+    );
+    //draw left side of link one.
+    ctx.lineTo(
+      point.x + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight - scaledCornerRadius
+    );
+    //draw bottom left corner of link one.
+    ctx.quadraticCurveTo(
+      point.x,
+      point.y + linkOneBottomLeftHeight,
+      point.x + scaledCornerRadius,
+      point.y + linkOneBottomLeftHeight + scaledCornerRadius
+    );
+    //Move to bottom of center line.
+    ctx.moveTo(
+      point.x + centerLineBottomWidth,
+      point.y + centerLineBottomHeight
+    );
+    //draw center line.
+    ctx.lineTo(point.x + centerLineTopWidth, point.y + centerLineTopHeight);
+    //start drawing after bottom left corner of link two.
+    ctx.moveTo(
+      point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight + scaledCornerRadius
+    );
+    //draw bottom side of link two.
+    ctx.lineTo(
+      point.x + linkTwoBottomRightWidth - scaledCornerRadius,
+      point.y + linkTwoBottomRightHeight - scaledCornerRadius
+    );
+    //draw bottom right corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoBottomRightWidth,
+      point.y + linkTwoBottomRightHeight,
+      point.x + linkTwoBottomRightWidth + scaledCornerRadius,
+      point.y + linkTwoBottomRightHeight - scaledCornerRadius
+    );
+    //draw right side of link two.
+    ctx.lineTo(
+      point.x + linkTwoTopRightWidth - scaledCornerRadius,
+      point.y + linkTwoTopRightHeight + scaledCornerRadius
+    );
+    //draw top right corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoTopRightWidth,
+      point.y + linkTwoTopRightHeight,
+      point.x + linkTwoTopRightWidth - scaledCornerRadius,
+      point.y + linkTwoTopRightHeight - scaledCornerRadius
+    );
+    //draw top side of link two.
+    ctx.lineTo(
+      point.x + linkTwoTopLeftWidth + scaledCornerRadius,
+      point.y + scaledCornerRadius
+    );
+    //draw top right corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoTopLeftWidth,
+      point.y,
+      point.x + linkTwoTopLeftWidth - scaledCornerRadius,
+      point.y + scaledCornerRadius
+    );
+    //draw left side of link two.
+    ctx.lineTo(
+      point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight - scaledCornerRadius
+    );
+    //draw bottom left corner of link two.
+    ctx.quadraticCurveTo(
+      point.x + linkTwoBottomLeftWidth,
+      point.y + linkTwoBottomLeftHeight,
+      point.x + linkTwoBottomLeftWidth + scaledCornerRadius,
+      point.y + linkTwoBottomLeftHeight + scaledCornerRadius
+    );
+    ctx.stroke();
+    ctx.restore();
   }
 }
