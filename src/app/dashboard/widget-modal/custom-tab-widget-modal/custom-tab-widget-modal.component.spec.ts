@@ -9,7 +9,7 @@ describe('CustomTabWidgetModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
-      imports:[MatButtonToggleModule]
+      imports: [MatButtonToggleModule],
     }).compileComponents();
   });
 
