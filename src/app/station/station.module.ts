@@ -35,6 +35,7 @@ import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-fie
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
+import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget.module';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTooltipModule,
     GridsterModule,
     MatDividerModule,
+    InputFrameWidgetModule,
   ],
 })
 export class StationModule {}

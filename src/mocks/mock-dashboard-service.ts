@@ -276,6 +276,7 @@ export class MockDashboardService {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
           maxItemCols: 0,
@@ -318,6 +319,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
             maxItemCols: 0,
@@ -337,6 +339,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
             maxItemCols: 0,
@@ -368,6 +371,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
             maxItemCols: 0,
@@ -387,6 +391,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
             maxItemCols: 0,
@@ -417,6 +422,7 @@ export class MockDashboardService {
       name: 'Untitled Dashboard',
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -446,6 +452,7 @@ export class MockDashboardService {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
