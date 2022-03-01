@@ -516,12 +516,12 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: (data) => {
+        next: ([, , , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
-          if (data[3]) {
+          if (stationQuestions) {
             //in case of save/update questions the station questions object is updated.
-            this.stationInformation.questions = data[3] as Question[];
+            this.stationInformation.questions = stationQuestions as Question[];
           }
         },
         error: (error: unknown) => {
