@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { CustomTabWidgetModalComponent } from './custom-tab-widget-modal.component';
 import { MockDashboardService, MockErrorService } from 'src/mocks';
-import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { throwError } from 'rxjs';
 
