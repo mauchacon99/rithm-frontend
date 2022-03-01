@@ -680,4 +680,13 @@ describe('DocumentComponent', () => {
     await component.flowDocumentToPreviousStation();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should call and emit widgetReloadListDocuments', () => {
+    const spyEmit = spyOn(component.returnDocumentsWidget, 'emit');
+    component.widgetReloadListDocuments(true, false);
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      isReturnListDocuments: true,
+      isReloadListDocuments: false,
+    });
+  });
 });

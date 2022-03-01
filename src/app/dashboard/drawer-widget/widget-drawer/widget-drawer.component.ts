@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   OnDestroy,
@@ -9,6 +10,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
+import { WidgetType } from 'src/models';
 
 /**
  * Component for widget drawer.
@@ -25,6 +27,12 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Validate if the widget is type station-table-banner-widget. */
+  widgetTypeEnum = WidgetType;
+
+  /** Widget type of opened widget-drawer.*/
+  widgetType!: WidgetType;
+
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
@@ -33,7 +41,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   /**
@@ -41,6 +50,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.subscribeDrawerContext$();
+    this.changeDetector.detectChanges();
   }
 
   /** Get drawer context the drawers. */
@@ -92,6 +102,15 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
+  }
+
+  /**
+   * Event emit setWidgetType for show o hidden section upload image.
+   *
+   * @param widgetType Widget type from station-widget-drawer.
+   */
+  setWidgetType(widgetType: WidgetType): void {
+    this.widgetType = widgetType;
   }
 
   /**
