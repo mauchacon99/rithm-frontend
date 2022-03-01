@@ -66,6 +66,9 @@ export class TextFieldComponent
   /** Whether Field belongs to another component beside station to be displayed as an inputText instead a textarea. */
   @Input() isInput = false;
 
+  /** Whether field belongs to a station/container widget or not. */
+  @Input() widgetItem = false;
+
   /** Output the value of the field. */
   @Output() removeOptionField = new EventEmitter<Question>();
 
