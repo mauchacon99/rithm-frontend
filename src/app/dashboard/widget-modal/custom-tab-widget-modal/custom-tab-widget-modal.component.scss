@@ -1,0 +1,9 @@
+.tabs-button-group {
+  ::ng-deep .mat-button-toggle-checked {
+    @apply bg-accent-500;
+
+    ::ng-deep .mat-button-toggle-label-content {
+      color: #fff;
+    }
+  }
+}

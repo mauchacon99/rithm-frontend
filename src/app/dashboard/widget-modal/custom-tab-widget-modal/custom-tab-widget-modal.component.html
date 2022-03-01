@@ -1,3 +1,11 @@
-<p class="py-4">
-  To build a custom widget, first select what item you'd like to pull data from.
-</p>
+<div class="mt-10">
+  <mat-button-toggle-group
+    #colorToggle="matButtonToggleGroup"
+    value="primary"
+    class="tabs-button-group"
+  >
+    <mat-button-toggle value="primary"> Documents </mat-button-toggle>
+    <mat-button-toggle value="accent"> Stations </mat-button-toggle>
+    <mat-button-toggle value="accent"> Flows </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
