@@ -28,10 +28,10 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Validate if the widget is type station-table-banner-widget. */
-  stationTableBanner = WidgetType.StationTableBanner;
+  widgetTypeEnum = WidgetType;
 
   /** Widget type of opened widget-drawer.*/
-  widgetType!: string;
+  widgetType!: WidgetType;
 
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
@@ -109,7 +109,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    *
    * @param widgetType Widget type from station-widget-drawer.
    */
-  setWidgetType(widgetType: string): void {
+  setWidgetType(widgetType: WidgetType): void {
     this.widgetType = widgetType;
   }
 

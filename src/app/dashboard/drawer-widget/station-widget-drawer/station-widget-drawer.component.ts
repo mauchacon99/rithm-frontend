@@ -15,6 +15,7 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
+  WidgetType,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -38,7 +39,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   @Output() setWidgetIndex = new EventEmitter<number>();
 
   /** WidgetType of item. */
-  @Output() widgetType = new EventEmitter<string>();
+  @Output() widgetType = new EventEmitter<WidgetType>();
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
