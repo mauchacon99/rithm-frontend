@@ -44,7 +44,7 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(component.indexTab).toBe(indexTab);
   });
 
-  it('should get list tab documents', () => {
+  it('should get list tab stations', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'getStationTabList'
@@ -53,7 +53,7 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
-  it('should get list tab documents error ', () => {
+  it('should get list tab stations error ', () => {
     spyOn(
       TestBed.inject(DashboardService),
       'getStationTabList'
