@@ -625,7 +625,7 @@ describe('DashboardService', () => {
 
   it('should get list tab documents', () => {
     const dashboardRithmId= 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const itemListWidgetModal: ItemListWidgetModal[] = [
+    const listDoducmentTab: ItemListWidgetModal[] = [
       {
         documentRithmId: rithmId,
         isChainedGroup: true,
