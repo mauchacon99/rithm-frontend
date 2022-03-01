@@ -39,7 +39,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Widget item of opened widget-drawer. */
   widgetItem!: DashboardItem;
-  
+
   /** Questions the document. */
   questions!: QuestionList[];
 
@@ -58,7 +58,6 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Columns list to display in select. */
   documentFields: ColumnFieldsWidget[] = [];
 
-
   /** Document columns. */
   documentColumns: ColumnFieldsWidget[] = [];
 
@@ -67,8 +66,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     private documentService: DocumentService,
     private errorService: ErrorService,
     private dashboardService: DashboardService
-  ) {
-  }
+  ) {}
 
   /**
    * Initial Method.
