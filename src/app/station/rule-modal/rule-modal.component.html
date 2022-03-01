@@ -126,6 +126,7 @@
           <mat-select
             [(ngModel)]="operatorSelected"
             [ngModelOptions]="{ standalone: true }"
+            (selectionChange)="resetQuestionFieldComponent()"
           >
             <mat-option
               *ngFor="let operator of operatorList"
@@ -189,12 +190,14 @@
             [labelTag]="secondOperandDefaultQuestion.prompt"
             [isStation]="true"
             [isInput]="true"
+            [validateMask]="validateFormat"
           >
           </app-text-field>
           <app-number-field
             *ngSwitchCase="'number'"
             #numberField
             [field]="secondOperandDefaultQuestion"
+            [validateMask]="validateFormat"
           >
           </app-number-field>
           <app-date-field
