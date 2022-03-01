@@ -171,20 +171,20 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-        stationGroup.selected &&
-        stationGroup.status !== MapItemStatus.Pending
+      stationGroup.selected &&
+      stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
-          ? MAP_DISABLED_STROKE
-          : (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+        ? MAP_DISABLED_STROKE
+        : (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
             stationGroup.drawerOpened) &&
-            stationGroup.status !== MapItemStatus.Pending
-            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-              ? MAP_SELECTED
-              : NODE_HOVER_COLOR
-            : CONNECTION_DEFAULT_COLOR;
+          stationGroup.status !== MapItemStatus.Pending
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       stationGroup.status !== MapItemStatus.Pending &&
@@ -314,16 +314,16 @@ export class StationGroupElementService {
     // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.selected ||
-        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-          !stationGroup.disabled &&
-          this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+      (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+        !stationGroup.disabled &&
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
         ? MAP_SELECTED
         : stationGroup.disabled &&
           this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? MAP_DISABLED_STROKE
-          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-            ? NODE_HOVER_COLOR
-            : BUTTON_DEFAULT_COLOR;
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ? NODE_HOVER_COLOR
+        : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     const isItalic =
       stationGroup.status === MapItemStatus.Updated ? 'italic bold' : 'bold';
@@ -342,7 +342,7 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-      STATION_GROUP_PADDING * this.mapScale
+        STATION_GROUP_PADDING * this.mapScale
     );
 
     // Split station group name.
@@ -1005,14 +1005,14 @@ export class StationGroupElementService {
         -STATION_GROUP_DISPLACEMENT,
         -STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).width +
-        STATION_GROUP_NAME_PADDING +
-        (stationGroup.status === MapItemStatus.Pending
-          ? GROUP_CHARACTER_SIZE * 12
-          : GROUP_CHARACTER_SIZE) *
-        this.mapScale,
+          STATION_GROUP_NAME_PADDING +
+          (stationGroup.status === MapItemStatus.Pending
+            ? GROUP_CHARACTER_SIZE * 12
+            : GROUP_CHARACTER_SIZE) *
+            this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
-        STATION_GROUP_NAME_PADDING
+          STATION_GROUP_NAME_PADDING
       );
     }
 
@@ -1075,8 +1075,8 @@ export class StationGroupElementService {
       (Math.abs(m) === Math.PI / 2
         ? 0
         : Math.abs(m) < Math.PI / 3
-          ? -STATION_GROUP_DISPLACEMENT * this.mapScale
-          : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
+        ? -STATION_GROUP_DISPLACEMENT * this.mapScale
+        : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
 
     // Moves the point on the line to delimit where the hover zone begins.
     const newUnRotatedPointStart = this.movePointOnLine(
@@ -1098,8 +1098,9 @@ export class StationGroupElementService {
 
       // Font selected to paint the icon.
       // If the icon is hover we increase the font by 0.5.
-      this.canvasContext.font = `${fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
-        }px "FontAwesome"`;
+      this.canvasContext.font = `${
+        fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
+      }px "FontAwesome"`;
 
       // Hovering changes the color of the icon.
       this.canvasContext.fillStyle =
@@ -1190,19 +1191,19 @@ export class StationGroupElementService {
         : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-        stationGroup.selected &&
-        stationGroup.status !== MapItemStatus.Pending
+      stationGroup.selected &&
+      stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
-          ? MAP_DISABLED_STROKE
-          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-            stationGroup.status !== MapItemStatus.Pending
-            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-              ? MAP_SELECTED
-              : NODE_HOVER_COLOR
-            : CONNECTION_DEFAULT_COLOR;
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          stationGroup.status !== MapItemStatus.Pending
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     ctx.moveTo(point.x, point.y);
     ctx.clearRect(
       point.x,
