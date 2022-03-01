@@ -103,12 +103,6 @@ export class StationComponent
   /** Flag that show if is setting mode. */
   settingMode = false;
 
-  /** Flag that show if is layout mode. */
-  layoutMode = true;
-
-  /** Flag that show if is setting mode. */
-  settingMode = false;
-
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
@@ -688,21 +682,6 @@ export class StationComponent
    */
   tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
     this.isFlowLogicTab = tabChangeEvent.index === 1 ? true : false;
-  }
-
-  /**
-   * Set the grid mode for station edition.
-   *
-   * @param mode Value of the grid mode of the toolbarEditStation buttons.
-   */
-  setGridMode(mode: 'layout' | 'setting'): void {
-    if (mode === 'layout') {
-      this.layoutMode = true;
-      this.settingMode = false;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = true;
-    }
   }
 
   /**
