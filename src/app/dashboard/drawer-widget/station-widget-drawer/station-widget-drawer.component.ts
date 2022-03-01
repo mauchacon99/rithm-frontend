@@ -15,6 +15,7 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
+  WidgetType,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -34,29 +35,35 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     columns: new FormArray([]),
   });
 
+  /** Emit widgetIndex to widget-drawer. */
+  @Output() setWidgetIndex = new EventEmitter<number>();
+
+  /** WidgetType of item. */
+  @Output() widgetType = new EventEmitter<WidgetType>();
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** All data of the widget. */
   widgetItem!: DashboardItem;
 
   /** Station RithmId. */
   stationRithmId!: string;
 
-  /** Station columns. */
-  stationColumns!: ColumnFieldsWidget[];
-
   /** Position of the widget. */
   widgetIndex!: number;
-
-  /** Emit widgetIndex to widget-drawer. */
-  @Output() setWidgetIndex = new EventEmitter<number>();
-
-  /** Questions the station. */
-  questions!: Question[];
 
   /** Loading document. */
   isLoading = false;
 
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
+  /** Loading error. */
+  failedLoadDrawer = false;
+
+  /** Station columns. */
+  stationColumns!: ColumnFieldsWidget[];
+
+  /** Questions the station. */
+  questions!: Question[];
 
   /** Static columns. */
   documentInfo: OptionsSelectWidgetDrawer[] = [];
@@ -64,8 +71,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
 
-  /** Loading error. */
-  failedLoadDrawer = false;
+  /** Element list in drawer. */
+  quantityElementsWidget = 0;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -78,6 +85,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.subscribeDrawerData$();
+  }
+
+  /** Get data the sidenavDrawerService. */
+  private subscribeDrawerData$(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -88,7 +100,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.stationColumns = dataWidget.columns || [];
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
+          this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
           this.setWidgetIndex.emit(this.widgetIndex);
+          this.widgetType.emit(this.widgetItem.widgetType);
           this.getDocumentFields();
         }
       });
@@ -268,6 +282,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
       widgetIndex: this.widgetIndex,
+      quantityElementsWidget: this.quantityElementsWidget,
     });
   }
 
