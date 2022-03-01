@@ -1,0 +1,17 @@
+<div [formGroup]="fileFieldForm">
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label> {{ field.prompt }} </mat-label>
+    <div matPrefix class="icon">
+      <!-- Text Icons -->
+      <i class="fas fa-tag"></i>
+    </div>
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.File"
+      matInput
+      [required]="field.isRequired"
+      formControlName="file"
+      placeholder="Upload resumen"
+      (dateChange)="updateFieldAnswer()"
+    />
+  </mat-form-field>
+</div>
