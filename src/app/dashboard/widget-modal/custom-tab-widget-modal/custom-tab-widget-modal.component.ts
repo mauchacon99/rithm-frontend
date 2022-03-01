@@ -25,7 +25,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.getListTabDocuments();
+    this.getDocumentTabList();
   }
 
   /**
@@ -33,9 +33,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
    *
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private getListTabDocuments(): void {
+  private getDocumentTabList(): void {
     this.dashboardService
-      .getListTabDocuments(this.dashboardRithmId)
+      .getDocumentTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {

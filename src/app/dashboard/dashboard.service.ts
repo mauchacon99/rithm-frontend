@@ -268,7 +268,7 @@ export class DashboardService {
    * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-  getListTabDocuments(
+  getDocumentTabList(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dashboardRithmId: string
   ): Observable<ItemListWidgetModal[]> {

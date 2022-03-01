@@ -43,7 +43,7 @@ describe('CustomTabWidgetModalComponent', () => {
   it('should get list tab documents', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'getListTabDocuments'
+      'getDocumentTabList'
     ).and.callThrough();
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
@@ -52,7 +52,7 @@ describe('CustomTabWidgetModalComponent', () => {
   it('should get list tab documents error ', () => {
     spyOn(
       TestBed.inject(DashboardService),
-      'getListTabDocuments'
+      'getDocumentTabList'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
