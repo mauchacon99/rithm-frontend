@@ -514,8 +514,8 @@ describe('StationGroupElementService', () => {
   });
 
   it('should return Throw Error in the method drawStationGroupToolTip', () => {
-    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
-    expect(() => service.drawStationGroupToolTip(stationGroup)).toThrow(
+    const pointStart = { x: 0, y: 0 };
+    expect(() => service.drawStationGroupToolTip(pointStart)).toThrow(
       new Error('Cannot draw the tooltip if context is not defined')
     );
   });
