@@ -8,6 +8,8 @@ import { throwError } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponents } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -21,7 +23,10 @@ describe('CustomTabWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CustomTabWidgetModalComponent],
+      declarations: [
+        CustomTabWidgetModalComponent,
+        MockComponents(LoadingIndicatorComponent),
+      ],
       imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
@@ -104,5 +109,26 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+    expect(component.errorLoadingStationtTab).toBeTrue();
+  });
+
+  it('should display error in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.errorLoadingStationtTab = true;
+    await fixture.detectChanges();
+    const errorLoadingStationTab = fixture.nativeElement.querySelector(
+      '#error-station-list-tab'
+    );
+    expect(errorLoadingStationTab).toBeTruthy();
+  });
+
+  it('should display loading indicator in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.isLoadingStationTab = true;
+    await fixture.detectChanges();
+    const LoadingStationTab = fixture.nativeElement.querySelector(
+      '#loading-station-list-tab'
+    );
+    expect(LoadingStationTab).toBeTruthy();
   });
 });
