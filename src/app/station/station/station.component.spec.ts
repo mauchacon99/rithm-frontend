@@ -45,8 +45,8 @@ import { throwError } from 'rxjs';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { GridsterModule } from 'angular-gridster2';
-import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
+import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
