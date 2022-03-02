@@ -9,8 +9,7 @@
       *ngIf="field.questionType === fieldTypeEnum.File"
       matInput
       [required]="field.isRequired"
-      formControlName="file"
-      placeholder="Upload resumen"
+      [formControlName]="field.questionType"
       (dateChange)="updateFieldAnswer()"
     />
   </mat-form-field>
