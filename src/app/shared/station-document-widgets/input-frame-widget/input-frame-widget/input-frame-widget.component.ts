@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Question } from 'src/models/question';
-import { QuestionFieldType } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
