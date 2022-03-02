@@ -5,14 +5,9 @@ import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { throwError } from 'rxjs';
-
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { ErrorService } from 'src/app/core/error.service';
-import { throwError } from 'rxjs';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -27,14 +22,10 @@ describe('CustomTabWidgetModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CustomTabWidgetModalComponent],
+      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
-        { provide: ErrorService, useClass: MockErrorService },
-      ],
-      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
-      providers: [
-        { provide: DashboardService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
@@ -44,6 +35,7 @@ describe('CustomTabWidgetModalComponent', () => {
     fixture = TestBed.createComponent(CustomTabWidgetModalComponent);
     component = fixture.componentInstance;
     component.dashboardRithmId = dashboardRithmId;
+    component.indexTab = 0;
     fixture.detectChanges();
   });
 
@@ -76,6 +68,7 @@ describe('CustomTabWidgetModalComponent', () => {
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
   });
+
   it('should selected index tabs', () => {
     const indexTab = 1;
     const spyTabs = spyOn(component, 'selectedTab').and.callThrough();
