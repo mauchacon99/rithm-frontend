@@ -954,27 +954,6 @@ export class StationGroupElementService {
       );
       // If end of title, draw any group icons.
       if (endOfTitle) {
-
-        if (
-          this.mapService.mapMode$.value !== MapMode.View &&
-          stationGroup.status !== MapItemStatus.Pending
-        ) {
-          // If status of the station group option button.
-          const titleWidth =
-            this.canvasContext.measureText(title).width +
-            GROUP_CHARACTER_SIZE * 2 * this.mapScale;
-          // Paint the Option Icon on the map.
-          this.drawStationGroupIcon(
-            pointStart,
-            pointEnd,
-            titleWidth,
-            StationGroupElementHoverItem.ButtonOption,
-            ICON_STATION_GROUP_OPTION,
-            MAP_SELECTED,
-            stationGroup
-          );
-        }
-
         // If status of the station group is pending.
         if (stationGroup.status === MapItemStatus.Pending) {
           const titleWidth =
@@ -1006,9 +985,11 @@ export class StationGroupElementService {
         }
         // If isChained is set to true.
         if (stationGroup.isChained) {
+          const IconSpan =
+            this.mapService.mapMode$.value !== MapMode.View ? 4 : 1;
           const titleWidth =
             this.canvasContext.measureText(title).width +
-            GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+            GROUP_CHARACTER_SIZE * IconSpan * this.mapScale;
           // Reset pathButtons of stationGroup.
           stationGroup.pathButtons = [];
           // Paint the Chained Icon on the map.
@@ -1018,6 +999,28 @@ export class StationGroupElementService {
             titleWidth,
             StationGroupElementHoverItem.Boundary,
             stationGroup
+          );
+        }
+        if (
+          this.mapService.mapMode$.value !== MapMode.View &&
+          stationGroup.status !== MapItemStatus.Pending
+        ) {
+          // If status of the station group option button.
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * 2 * this.mapScale;
+          // Reset pathButtons of the station group.
+          stationGroup.pathButtons = [];
+
+          // Paint the Option Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.ButtonOption,
+            stationGroup,
+            ICON_STATION_GROUP_OPTION,
+            MAP_SELECTED
           );
         }
       }
@@ -1030,7 +1033,9 @@ export class StationGroupElementService {
           STATION_GROUP_NAME_PADDING +
           (stationGroup.status === MapItemStatus.Pending
             ? GROUP_CHARACTER_SIZE * 12
-            : (this.mapService.mapMode$.value !== MapMode.View  ? GROUP_CHARACTER_SIZE * 4 : GROUP_CHARACTER_SIZE )) *
+            : this.mapService.mapMode$.value !== MapMode.View
+            ? GROUP_CHARACTER_SIZE * 4
+            : GROUP_CHARACTER_SIZE) *
             this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
