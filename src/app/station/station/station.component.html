@@ -258,7 +258,7 @@
                       color="accent"
                       class="font-semibold text-sm"
                       id="station-edit-mode-button"
-                      (click)="editMode = !editMode"
+                      (click)="setEditMode()"
                     >
                       Edit
                     </button>
@@ -318,7 +318,7 @@
                           type="button"
                           color="accent"
                           class="font-semibold text-sm"
-                          (click)="editMode = !editMode"
+                          (click)="saveStationChanges()"
                         >
                           Save
                         </button>

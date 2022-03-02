@@ -487,6 +487,17 @@ describe('StationComponent', () => {
     expect(spyChangedOptions).toHaveBeenCalled();
   });
 
+  it('should change the edit mode and layout config', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spyEditMode = spyOn(component, 'setEditMode').and.callThrough();
+    component.setEditMode();
+    expect(spyEditMode).toHaveBeenCalled();
+    expect(component.editMode).toBeFalsy();
+  });
+
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Cancel?',
@@ -501,6 +512,19 @@ describe('StationComponent', () => {
     ).and.callThrough();
     await component.cancelStationChanges();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+    expect(component.editMode).toBeFalsy();
+  });
+  it('should change setting config after canceling', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spySaveChange = spyOn(
+      component,
+      'saveStationChanges'
+    ).and.callThrough();
+    component.saveStationChanges();
+    expect(spySaveChange).toHaveBeenCalled();
     expect(component.editMode).toBeFalsy();
   });
 });

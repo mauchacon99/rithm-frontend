@@ -685,6 +685,15 @@ export class StationComponent
   }
 
   /**
+   * Inicializate the edit mode and layout config.
+   *
+   */
+  setEditMode(): void {
+    this.editMode = !this.editMode;
+    this.setGridMode('layout');
+  }
+
+  /**
    * Set the grid mode for station edition.
    *
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
@@ -693,16 +702,32 @@ export class StationComponent
     if (mode === 'layout') {
       this.layoutMode = true;
       this.settingMode = false;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = true;
-      this.options.displayGrid = 'none';
+      this.options.displayGrid = 'always';
       if (this.options.resizable) {
-        this.options.resizable.enabled = false;
+        this.options.resizable.enabled = true;
       }
       if (this.options.draggable) {
-        this.options.draggable.enabled = false;
+        this.options.draggable.enabled = true;
       }
+    } else {
+      this.settingOptions();
+    }
+    this.changedOptions();
+  }
+
+  /**
+   * Set the options related to settings mode.
+   *
+   */
+  settingOptions(): void {
+    this.layoutMode = false;
+    this.settingMode = true;
+    this.options.displayGrid = 'none';
+    if (this.options.resizable) {
+      this.options.resizable.enabled = false;
+    }
+    if (this.options.draggable) {
+      this.options.draggable.enabled = false;
     }
     this.changedOptions();
   }
@@ -751,7 +776,16 @@ export class StationComponent
     });
     if (confirm) {
       this.editMode = false;
+      this.settingOptions();
     }
+  }
+
+  /**
+   * Save the changes make in the gridster.
+   */
+  saveStationChanges(): void {
+    this.editMode = !this.editMode;
+    this.settingOptions();
   }
 
   /**
