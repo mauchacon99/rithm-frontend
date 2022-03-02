@@ -621,6 +621,26 @@ describe('DashboardService', () => {
     service.updateDashboardWidgets(expectEditDataWidget);
   });
 
+  it('should get list tab documents', () => {
+    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Stationy Name that is namey',
+        groupName: 'Groupygroup',
+        isChainedGroup: false,
+        totalDocuments: 2,
+        totalStations: 2,
+        totalSubGroups: 2,
+      },
+    ];
+    service.getDocumentTabList(dashboardRithmId).subscribe((response) => {
+      expect(response).toEqual(itemListWidgetModal);
+    });
+  });
+
   it('should get tab list for stations', () => {
     const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const itemListWidgetModal: ItemListWidgetModal[] = [
@@ -636,6 +656,7 @@ describe('DashboardService', () => {
         totalSubGroups: 2,
       },
     ];
+
     service.getStationTabList(dashboardRithmId).subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });

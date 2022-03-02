@@ -1,21 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { first } from 'rxjs/operators';
+import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { ItemListWidgetModal } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /** Component for Tab Custom in modal add widget. */
 @Component({
-  selector: 'app-custom-tab-widget-modal',
+  selector: 'app-custom-tab-widget-modal[dashboardRithmId]',
   templateUrl: './custom-tab-widget-modal.component.html',
   styleUrls: ['./custom-tab-widget-modal.component.scss'],
 })
 export class CustomTabWidgetModalComponent implements OnInit {
-  /** Dashboard RithmId from openDialogAddWidget function.*/
-  @Input() dashboardRithmId = '';
+  /* Dashboard rithm Id. */
+  @Input() dashboardRithmId!: string;
 
-  /** Data for the dashboard item list. */
-  itemListWidgetModal!: ItemListWidgetModal[];
+  /* List document tab Widget Modal. */
+  itemsListDocument: ItemListWidgetModal[] = [];
+
+  /* List station tab widget Modal. */
+  itemsListStation: ItemListWidgetModal[] = [];
 
   /** Index default in tabs. */
   indexTab = 0;
@@ -29,19 +32,41 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.getDocumentTabList();
     this.getStationTabList();
   }
 
   /**
    * Get the station tab list.
    */
-  getStationTabList(): void {
+  private getStationTabList(): void {
     this.dashboardService
       .getStationTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
-        next: (itemListWidgetModal) => {
-          this.itemListWidgetModal = itemListWidgetModal;
+        next: (itemsListStation) => {
+          this.itemsListStation = itemsListStation;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get list tab documents.
+   *
+   */
+  private getDocumentTabList(): void {
+    this.dashboardService
+      .getDocumentTabList(this.dashboardRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (itemsListDocument) => {
+          this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

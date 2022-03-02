@@ -143,15 +143,6 @@ export class StationGroupElementService {
       if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
         this.drawStationGroupName(stationGroup);
       }
-
-      if (
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-        stationGroup.disabled &&
-        !stationGroup.selected &&
-        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-      ) {
-        this.drawStationGroupToolTip(stationGroup);
-      }
     }
   }
 
@@ -223,18 +214,16 @@ export class StationGroupElementService {
   /**
    * Draws the station group tooltip on the map for a station group.
    *
-   * @param stationGroup The station group for which to draw the tooltip.
+   * @param pointStart The point at which tooltip begins.
    */
-  drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
+  drawStationGroupToolTip(pointStart: Point): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the tooltip if context is not defined');
     }
     const ctx = this.canvasContext;
 
-    const startingX = stationGroup.boundaryPoints[0].x;
-    const startingY =
-      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y -
-      65 * this.mapScale;
+    const startingX = pointStart.x;
+    const startingY = pointStart.y - 65 * this.mapScale;
 
     const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
     const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
@@ -372,6 +361,8 @@ export class StationGroupElementService {
 
     // Delete the line under the station group name.
     newTitle.forEach((title, index) => {
+      let positionStart = newPosition - index;
+      let positionEnd = newPosition - index - 1;
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
       at the bottom of the group we delete from the lowest to the highest position. */
@@ -383,28 +374,23 @@ export class StationGroupElementService {
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
       ) {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition + index - 1],
-          stationGroup.boundaryPoints[newPosition + index],
-          stationGroup,
-          false,
-          titleEnd
-        );
-      } else {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition - index],
-          stationGroup.boundaryPoints[newPosition - index - 1],
-          stationGroup,
-          false,
-          titleEnd
-        );
+        positionStart = newPosition + index - 1;
+        positionEnd = newPosition + index;
       }
+      this.paintOrDeleteLineStationGroupName(
+        title,
+        stationGroup.boundaryPoints[positionStart],
+        stationGroup.boundaryPoints[positionEnd],
+        stationGroup,
+        false,
+        titleEnd
+      );
     });
 
     // Paint the station group name.
     newTitle.forEach((title, index) => {
+      let positionStart = newPosition - index;
+      let positionEnd = newPosition - index - 1;
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
       at the bottom of the group we paint from the lowest to the highest position. */
@@ -416,23 +402,28 @@ export class StationGroupElementService {
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
       ) {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition + index - 1],
-          stationGroup.boundaryPoints[newPosition + index],
-          stationGroup,
-          true,
-          titleEnd
-        );
-      } else {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition - index],
-          stationGroup.boundaryPoints[newPosition - index - 1],
-          stationGroup,
-          true,
-          titleEnd
-        );
+        positionStart = newPosition + index - 1;
+        positionEnd = newPosition + index;
+      }
+      this.paintOrDeleteLineStationGroupName(
+        title,
+        stationGroup.boundaryPoints[positionStart],
+        stationGroup.boundaryPoints[positionEnd],
+        stationGroup,
+        true,
+        titleEnd
+      );
+      if (index === 0) {
+        if (
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled &&
+          !stationGroup.selected &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ) {
+          this.drawStationGroupToolTip(
+            stationGroup.boundaryPoints[positionStart]
+          );
+        }
       }
     });
   }
