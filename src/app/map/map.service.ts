@@ -399,6 +399,19 @@ export class MapService {
 
     //Update the stationElements array.
     this.stationElements.push(newStation);
+
+    // Find the Root Station Group index.
+    const isReadOnlyRootStationGroupIndex = this.stationGroupElements.findIndex(
+      (stationGroup) => stationGroup.isReadOnlyRootStationGroup
+    );
+
+    if (isReadOnlyRootStationGroupIndex !== -1) {
+      // Updating the stations in the Root station group.
+      this.stationGroupElements[isReadOnlyRootStationGroupIndex].stations.push(
+        newStation.rithmId
+      );
+    }
+
     //Update the map boundary.
     if (this.boundaryElement) {
       this.boundaryElement.updatePoints(this.stationElements);
