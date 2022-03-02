@@ -1,4 +1,4 @@
-<ng-container *ngIf="widgetMode === 'layout'; else settingMode" class="pt-3">
+<ng-container *ngIf="widgetMode === 'layout'; else settingMode">
   <div *ngFor="let field of fields" class="min-h-[48.5px]">
     <app-text-field
       [field]="field"
