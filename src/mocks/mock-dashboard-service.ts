@@ -8,6 +8,7 @@ import {
   RoleDashboardMenu,
   EditDataWidget,
   ColumnsDocumentInfo,
+  ItemListWidgetModal,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -499,5 +500,57 @@ export class MockDashboardService {
    */
   deletePersonalDashboard(rithmId: string): Observable<unknown> {
     return of().pipe(delay(1000));
+  }
+
+  /**
+   * Get list tab documents.
+   *
+   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
+   * @returns The item list widget modal.
+   */
+  getDocumentTabList(
+    dashboardRithmId: string
+  ): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Station Name that is name',
+        groupName: 'Group group',
+        isChainedGroup: true,
+        totalDocuments: 5,
+        totalStations: 5,
+        totalSubGroups: 5,
+      },
+    ];
+    return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Get the list for the station tabs.
+   *
+   * @param dashboardRithmId The Id of the dashboard.
+   * @returns The list.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getStationTabList(
+    dashboardRithmId: string
+  ): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Stationy Name that is namey',
+        groupName: 'Groupygroup',
+        isChainedGroup: false,
+        totalDocuments: 2,
+        totalStations: 2,
+        totalSubGroups: 2,
+      },
+    ];
+
+    return of(itemListWidgetModal).pipe(delay(1000));
   }
 }
