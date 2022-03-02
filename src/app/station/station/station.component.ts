@@ -32,6 +32,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { GridsterConfig } from 'angular-gridster2';
 import { InputFrameWidget } from '../../../models/input-frame-widget';
+
 /**
  * Main component for viewing a station.
  */
@@ -63,6 +64,12 @@ export class StationComponent
   /** The information about the station. */
   stationInformation!: StationInformation;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
+  /** Index for station tabs. */
+  stationTabsIndex = 0;
+
   /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
 
@@ -75,6 +82,9 @@ export class StationComponent
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
+  /** Flag that renames the save button when the selected tab is Flow Logic. */
+  isFlowLogicTab = false;
+
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
 
@@ -84,17 +94,14 @@ export class StationComponent
   /** View new station. */
   viewNewStation = false;
 
-  /** Flag that renames the save button when the selected tab is Flow Logic. */
-  isFlowLogicTab = false;
-
   /** Edit mode toggle for station. */
   editMode = false;
 
-  /** Station Rithm id. */
-  stationRithmId = '';
+  /** Flag that show if is layout mode. */
+  layoutMode = true;
 
-  /** Index for station tabs. */
-  stationTabsIndex = 0;
+  /** Flag that show if is setting mode. */
+  settingMode = false;
 
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
@@ -187,7 +194,9 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
-        this.stationInformation.name = stationName;
+        if (this.stationInformation) {
+          this.stationInformation.name = stationName;
+        }
       });
   }
 
@@ -468,14 +477,6 @@ export class StationComponent
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
    * Save Station information and executed petitions to api.
    *
    */
@@ -520,12 +521,12 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: (data) => {
+        next: ([, , , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
-          if (data[3]) {
+          if (stationQuestions) {
             //in case of save/update questions the station questions object is updated.
-            this.stationInformation.questions = data[3] as Question[];
+            this.stationInformation.questions = stationQuestions as Question[];
           }
         },
         error: (error: unknown) => {
@@ -711,6 +712,21 @@ export class StationComponent
     }
   }
 
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: 'layout' | 'setting'): void {
+    if (mode === 'layout') {
+      this.layoutMode = true;
+      this.settingMode = false;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = true;
+    }
+  }
+
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
@@ -723,5 +739,13 @@ export class StationComponent
     if (confirm) {
       this.editMode = false;
     }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

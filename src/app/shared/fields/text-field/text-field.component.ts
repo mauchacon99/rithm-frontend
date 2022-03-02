@@ -69,6 +69,9 @@ export class TextFieldComponent
   /** Whether field belongs to a station/container widget or not. */
   @Input() widgetItem = false;
 
+  /** Whether to validate input text mask (true by default). */
+  @Input() validateMask = true;
+
   /** Output the value of the field. */
   @Output() removeOptionField = new EventEmitter<Question>();
 
@@ -109,7 +112,7 @@ export class TextFieldComponent
       validators.push(Validators.required);
     }
 
-    if (!this.isStation) {
+    if (this.validateMask) {
       //Need to set email and url.
       switch (this.field.questionType) {
         case QuestionFieldType.Email:

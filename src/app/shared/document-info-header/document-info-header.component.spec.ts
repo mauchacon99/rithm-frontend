@@ -14,11 +14,7 @@ import {
 } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
-import {
-  DocumentName,
-  DocumentNameField,
-  StationRosterMember,
-} from 'src/models';
+import { DocumentName, StationRosterMember } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -125,65 +121,39 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it(
-    'should splice one item from appended fields array in and update document name template'
-  ),
-    () => {
-      const currentIndex = 0;
-      const appendedFields: DocumentNameField[] = [
-        {
-          prompt: 'Address',
-          questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
-        },
-        {
-          prompt: '/',
-          questionRithmId: '',
-        },
-        {
-          prompt: 'Which is best?',
-          questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
-        },
-      ];
+  it('should splice one item from appended fields array in and update document name template', () => {
+    const currentIndex = 0;
+    const expectRemoveStartIndex = currentIndex;
+    const spyProperty = spyOn(
+      component.documentAppendedFields,
+      'splice'
+    ).and.callThrough();
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'updateDocumentStationNameFields'
+    ).and.callThrough();
 
-      const documentNameTemplateSpy = spyOn(
-        TestBed.inject(StationService),
-        'updateDocumentStationNameFields'
-      ).and.callThrough();
-      component.removeAppendedFieldFromDocumentName(currentIndex);
-      expect(documentNameTemplateSpy).toHaveBeenCalledWith(
-        appendedFields.splice(currentIndex, 2)
-      );
-    };
+    component.removeAppendedFieldFromDocumentName(currentIndex);
+    expect(spyProperty).toHaveBeenCalledWith(expectRemoveStartIndex, 2);
+    expect(spyService).toHaveBeenCalledWith(component.documentAppendedFields);
+  });
 
-  it(
-    'should splice two item from appended fields array in and update document name template'
-  ),
-    () => {
-      const currentIndex = 1;
-      const appendedFields: DocumentNameField[] = [
-        {
-          prompt: 'Address',
-          questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
-        },
-        {
-          prompt: '/',
-          questionRithmId: '',
-        },
-        {
-          prompt: 'Which is best?',
-          questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
-        },
-      ];
+  it('should splice two item from appended fields array in and update document name template', () => {
+    const currentIndex = 1;
+    const expectRemoveStartIndex = currentIndex - 1;
+    const spyProperty = spyOn(
+      component.documentAppendedFields,
+      'splice'
+    ).and.callThrough();
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'updateDocumentStationNameFields'
+    ).and.callThrough();
 
-      const documentNameTemplateSpy = spyOn(
-        TestBed.inject(StationService),
-        'updateDocumentStationNameFields'
-      ).and.callThrough();
-      component.removeAppendedFieldFromDocumentName(currentIndex);
-      expect(documentNameTemplateSpy).toHaveBeenCalledWith(
-        appendedFields.splice(currentIndex - 1, 2)
-      );
-    };
+    component.removeAppendedFieldFromDocumentName(currentIndex);
+    expect(spyProperty).toHaveBeenCalledWith(expectRemoveStartIndex, 2);
+    expect(spyService).toHaveBeenCalledWith(component.documentAppendedFields);
+  });
 
   it('should return the station document name editable status', () => {
     const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';

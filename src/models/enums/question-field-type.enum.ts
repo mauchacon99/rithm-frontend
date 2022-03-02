@@ -58,4 +58,7 @@ export enum QuestionFieldType {
 
   /** Instruction input type. */
   Instructions = 'instructions',
+
+  /** File input type. */
+  File = 'file',
 }
