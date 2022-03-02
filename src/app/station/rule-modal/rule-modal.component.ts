@@ -414,16 +414,18 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.secondOperandDefaultQuestion.questionType =
       this.secondOperand.questionType;
 
-    //Set the values to the first operand
+    this.firstOperandQuestionRithmId = this.firstOperand.value;
+    this.firstOperandQuestionType = this.firstOperand.questionType;
+
+    /** Look for firstOperandQuestionList selected question if it is a parent. */
     const firstOperandQuestionSelected: Question | undefined =
       this.questionStation.find(
         (question) => question.rithmId === rule.leftOperand.value
       );
 
+    /**If parent exists then, if not then it is a child */
+    //Set the values to the first operand
     if (firstOperandQuestionSelected) {
-      this.firstOperandQuestionRithmId = firstOperandQuestionSelected.rithmId;
-      this.firstOperandQuestionType = this.firstOperand.questionType;
-
       if (
         this.firstOperand.questionType === QuestionFieldType.Select ||
         this.firstOperand.questionType === QuestionFieldType.MultiSelect ||
@@ -437,7 +439,14 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
             ? QuestionFieldType.MultiSelect
             : firstOperandQuestionSelected.questionType;
       }
+    } else {
+      if (this.firstOperand.questionType === QuestionFieldType.State) {
+        this.secondOperandDefaultQuestion.possibleAnswers = STATES;
+        this.secondOperandDefaultQuestion.questionType =
+          QuestionFieldType.State;
+      }
     }
+
     this.setOperatorList(this.firstOperandQuestionType);
     const operatorSelect: RuleModalOperator | undefined =
       this.operatorList.find(
@@ -450,47 +459,54 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     if (this.secondOperand.type === OperandType.Field) {
       this.secondOperandQuestionRithmId = this.secondOperand.value;
+      this.secondOperandQuestionType = this.secondOperand.questionType;
+    } else {
+      this.secondOperandDefaultQuestion.value = this.secondOperand.value;
     }
+    this.setEditingSecondOperandAnswers();
+    this.resetQuestionFieldComponent();
+  }
 
-    this.secondOperandDefaultQuestion.value = this.secondOperand.value;
-
+  /**
+   * Set PossibleAnswers and answers to edit rules.
+   */
+  setEditingSecondOperandAnswers(): void {
     if (this.secondOperandDefaultQuestion.answer) {
-      this.secondOperandDefaultQuestion.answer.asDate =
-        this.secondOperand.type === OperandType.Date
-          ? this.secondOperand.value
-          : '';
-      this.secondOperandDefaultQuestion.answer.asString =
-        this.secondOperand.type === OperandType.String
-          ? this.secondOperand.value
-          : '';
-      this.secondOperandDefaultQuestion.answer.asInt =
-        this.secondOperand.type === OperandType.Number
-          ? parseInt(this.secondOperand.value)
-          : 0;
-      this.secondOperandDefaultQuestion.answer.asDecimal =
-        this.secondOperand.type === OperandType.Number
-          ? parseFloat(this.secondOperand.value)
-          : 0;
-
-      if (
-        this.firstOperand.questionType === QuestionFieldType.Select ||
-        this.firstOperand.questionType === QuestionFieldType.MultiSelect ||
-        this.firstOperand.questionType === QuestionFieldType.CheckList
-      ) {
-        const optAsArray = this.secondOperand.text?.split('|');
-        this.secondOperandDefaultQuestion.possibleAnswers?.forEach((option) => {
-          const item = {
-            /** The text value of the item.*/
-            value: option.text,
-            /** Whether the item is checked or not. */
-            isChecked: optAsArray?.includes(option.text) ? true : false,
-          };
-          this.secondOperandDefaultQuestion.answer?.asArray?.push(item);
-        });
+      switch (this.secondOperand.type) {
+        case OperandType.Date:
+          this.secondOperandDefaultQuestion.answer.asDate =
+            this.secondOperand.value;
+          break;
+        case OperandType.String:
+          this.secondOperandDefaultQuestion.answer.asString =
+            this.secondOperand.value;
+          break;
+        case OperandType.Number:
+          this.secondOperandDefaultQuestion.answer.asInt = parseInt(
+            this.secondOperand.value
+          );
+          this.secondOperandDefaultQuestion.answer.asDecimal = parseFloat(
+            this.secondOperand.value
+          );
+          break;
       }
     }
-
-    this.resetQuestionFieldComponent();
+    if (
+      this.firstOperand.questionType === QuestionFieldType.Select ||
+      this.firstOperand.questionType === QuestionFieldType.MultiSelect ||
+      this.firstOperand.questionType === QuestionFieldType.CheckList
+    ) {
+      const optAsArray = this.secondOperand.text?.split('|');
+      this.secondOperandDefaultQuestion.possibleAnswers?.forEach((option) => {
+        const item = {
+          /** The text value of the item.*/
+          value: option.text,
+          /** Whether the item is checked or not. */
+          isChecked: optAsArray?.includes(option.text) ? true : false,
+        };
+        this.secondOperandDefaultQuestion.answer?.asArray?.push(item);
+      });
+    }
   }
 
   /**
@@ -587,6 +603,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   setSecondOperandInformation(questionSelected: Question): void {
     this.secondOperandQuestionPrompt = questionSelected.prompt;
     this.secondOperand.questionType = questionSelected.questionType;
+    this.secondOperand.text = questionSelected.prompt;
     this.isCustomValue = false;
   }
 
