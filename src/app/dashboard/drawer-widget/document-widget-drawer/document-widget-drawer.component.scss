@@ -1,16 +1,18 @@
+@import './variables';
+
 ::ng-deep {
   .cdk-overlay-pane {
     transform: translateX(0) translateY(0) !important;
   }
 
   .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-    color: #3f51b5 !important;
-    background-color: white !important;
+    color: map-get($accent-palette, 800) !important;
+    background-color: #fff !important;
   }
 
   .mat-primary .mat-pseudo-checkbox-checked,
   .mat-primary .mat-pseudo-checkbox-indeterminate {
-    background-color: #3f51b5 !important;
+    background-color: map-get($accent-palette, 500) !important;
   }
 
   .mat-select-panel {
