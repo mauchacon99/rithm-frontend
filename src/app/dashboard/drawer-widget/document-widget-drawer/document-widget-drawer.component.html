@@ -15,8 +15,8 @@
       <mat-option
         *ngFor="let field of documentFields; index as index"
         [value]="field.questionId"
-        [id]="'option-column'+index"
-        [attr.data-testid]="'option-column'+index"
+        [id]="'option-column' + index"
+        [attr.data-testid]="'option-column' + index"
       >
         {{ field.name }}
       </mat-option>
