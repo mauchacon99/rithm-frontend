@@ -446,6 +446,7 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      component.dashboardData = dataDashboard;
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);

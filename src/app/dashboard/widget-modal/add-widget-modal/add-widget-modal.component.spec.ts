@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 import { AddWidgetModalComponent } from './add-widget-modal.component';
 import { MockComponent } from 'ng-mocks';
@@ -10,10 +14,18 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
   let fixture: ComponentFixture<AddWidgetModalComponent>;
+  const DIALOG_TEST_DATA: {
+    /** The dashboard rithmId. */ dashboardRithmId: string;
+  } = {
+    dashboardRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [{ provide: MatDialogRef, useValue: { close } }],
+      providers: [
+        { provide: MatDialogRef, useValue: { close } },
+        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+      ],
       imports: [MatTabsModule, NoopAnimationsModule, MatDialogModule],
       declarations: [
         AddWidgetModalComponent,
