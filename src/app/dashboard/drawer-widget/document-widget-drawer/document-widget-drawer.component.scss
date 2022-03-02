@@ -1,0 +1,28 @@
+@import './variables';
+
+.cdk-overlay-pane {
+  transform: translateX(0) translateY(0) !important;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: map-get($accent-palette, 800) !important;
+  background-color: #fff !important;
+}
+
+.mat-primary .mat-pseudo-checkbox-checked,
+.mat-primary .mat-pseudo-checkbox-indeterminate {
+  background-color: map-get($accent-palette, 500) !important;
+}
+
+.mat-select-panel {
+  min-width: 100% !important;
+  max-width: 99px !important;
+}
+
+.mat-option-text {
+  @apply text-sm;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
