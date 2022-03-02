@@ -1822,7 +1822,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (
           !hoveringOverStation &&
           !hoveringOverStationGroup &&
-          this.mapMode !== MapMode.StationGroupAdd
+          this.mapMode !== MapMode.StationGroupAdd &&
+          this.mapMode !== MapMode.StationGroupEdit
         ) {
           /*Set all connections hoverActive status to false.
           This ensures only one connection line can be hovered at a time. */
@@ -2011,7 +2012,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
         //If clicking on station to add it to a group.
-        if (this.mapMode === MapMode.StationGroupAdd) {
+        if (
+          this.mapMode === MapMode.StationGroupAdd ||
+          this.mapMode === MapMode.StationGroupEdit
+        ) {
           //If the station is clickable.
           if (!station.disabled) {
             //If station is not disabled, should be able to select it and based on it's selection should disable other stations
@@ -2021,6 +2025,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
+            // if (this.mapMode === MapMode.StationGroupAdd) {
+            //   this.mapService.updatePendingStationGroup();
+            // } else if (this.mapMode === MapMode.StationGroupEdit) {
+            //   this.mapService.updatePendingStationGroup1();
+            // }
             this.animatePendingGroup();
           }
           return;
@@ -2034,7 +2043,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     /* If mapMode is not StationGroupAdd, Check if click was on a connection line.
     This line placed after station for loop to not trigger
     a connection click while clicking a station. */
-    if (this.mapMode !== MapMode.StationGroupAdd) {
+    if (
+      this.mapMode !== MapMode.StationGroupAdd &&
+      this.mapMode !== MapMode.StationGroupEdit
+    ) {
       this.checkConnectionClick(contextPoint);
     }
 
@@ -2043,7 +2055,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     // Accepted or Cancel a new station group.
     if (
-      this.mapMode === MapMode.StationGroupAdd &&
+      (this.mapMode === MapMode.StationGroupAdd ||
+        this.mapMode === MapMode.StationGroupEdit) &&
       this.mapService.stationGroupElements.some(
         (stationGroup) => stationGroup.status === MapItemStatus.Pending
       )
@@ -2121,6 +2134,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param contextPoint Calculated position of click.
    */
   checkConnectionClick(contextPoint: Point): void {
+    this.updateStationGroup();
+    return;
     //Loop through connections to find the connection that was clicked.
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
@@ -2143,7 +2158,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (stationGroup.status !== MapItemStatus.Pending) {
         stationGroup.checkElementHover(contextPoint, this.context);
         //If MapMode is StationGroupAdd we select the group.
-        if (this.mapMode === MapMode.StationGroupAdd) {
+        if (
+          this.mapMode === MapMode.StationGroupAdd ||
+          this.mapMode === MapMode.StationGroupEdit
+        ) {
           //If the cursor is over the group boundary and the group is not disabled.
           if (
             stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
@@ -2161,6 +2179,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.stationGroupSelectStatus(stationGroup);
             //Set station group status of parent and child station group and respective stations.
             this.mapService.setStationGroupStatus(stationGroup);
+            // if (this.mapMode === MapMode.StationGroupAdd) {
+            //   this.mapService.updatePendingStationGroup();
+            // } else if (this.mapMode === MapMode.StationGroupEdit) {
+            //   this.mapService.updatePendingStationGroup1();
+            // }
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
             this.animatePendingGroup();
@@ -2386,5 +2409,38 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.lastTouchCoords[0] = eventCanvasPoint;
       }
     }
+  }
+
+  /**
+   * Update the status to create for a new station group.
+   *
+   */
+  updateStationGroup(): void {
+    this.mapService.mapMode$.next(MapMode.StationGroupEdit);
+    const stationGroup = this.stationGroups.find(
+      (group) =>
+        group.rithmId?.toString().toLowerCase() ===
+        'ebe6bdac-ba29-4bfb-933e-2e4600dbfa12'
+    );
+    if (!stationGroup) {
+      throw new Error(`There is not any station group with status pending.`);
+    }
+    stationGroup.status = MapItemStatus.Pending;
+    stationGroup.selected = true;
+    this.mapService.setStationGroupStationStatus();
+    // To make sure it's not disabled and should allow user to undo previous action.
+    stationGroup.disabled = false;
+    //Set current station group status and respective station's.
+    this.stationGroupSelectStatus(stationGroup);
+    //Set station group status of parent and child station group and respective stations.
+    this.mapService.setStationGroupStatus(stationGroup);
+    //Draw the boundary for the pending stationGroup.
+    stationGroup.stations.map((groupStation) => {
+      const stationIndex = this.stations.findIndex(
+        (station) => station.rithmId === groupStation
+      );
+      this.stations[stationIndex].disabled = false;
+    });
+    this.animatePendingGroup();
   }
 }
