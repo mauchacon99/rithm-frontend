@@ -241,4 +241,24 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
     expect(component.documentColumns).toEqual(expectDocmentColumns);
   });
+
+  it('should render message for show user this document not have questions assigned', () => {
+    component.quantityElementsWidget = 0;
+    component.isLoading = false;
+    fixture.detectChanges();
+    const renderMessage = fixture.debugElement.nativeElement.querySelector(
+      '#message-not-question-assigned-to-document'
+    );
+    expect(renderMessage).toBeTruthy();
+  });
+
+  it('should no render message for show user this document not have questions assigned', () => {
+    component.quantityElementsWidget = 1;
+    component.isLoading = false;
+    fixture.detectChanges();
+    const renderMessage = fixture.debugElement.nativeElement.querySelector(
+      '#message-not-question-assigned-to-document'
+    );
+    expect(renderMessage).toBeFalsy();
+  });
 });

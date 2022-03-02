@@ -5,6 +5,19 @@
 </div>
 
 <div *ngIf="!isLoading" id="content-drawer-document-widget" class="mt-3">
+  <div
+    *ngIf="!quantityElementsWidget; else selectDrawer"
+    id="message-not-question-assigned-to-document"
+  >
+    <p class="text-sm">
+      This document has no questions and therefore the fields to be assigned
+      cannot be displayed.
+    </p>
+  </div>
+</div>
+
+<!--Template to select questions to show in document-widget-->
+<ng-template #selectDrawer>
   <mat-form-field appearance="outline" class="w-full">
     <mat-label>Select Fields</mat-label>
     <mat-select
@@ -22,4 +35,4 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-</div>
+</ng-template>

@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   OnDestroy,
+  ViewEncapsulation,
   OnInit,
   Output,
 } from '@angular/core';
@@ -26,6 +27,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
   selector: 'app-document-widget-drawer',
   templateUrl: './document-widget-drawer.component.html',
   styleUrls: ['./document-widget-drawer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit widgetIndex to widget-drawer. */
