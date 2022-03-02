@@ -17,6 +17,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /* List document tab Widget Modal. */
   itemsListDocument: ItemListWidgetModal[] = [];
 
+  /* List station tab widget Modal. */
+  itemsListStation: ItemListWidgetModal[] = [];
+
   /** Index default in tabs. */
   indexTab = 0;
 
@@ -30,6 +33,16 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocumentTabList();
+    this.getStationTabList();
+  }
+
+  /**
+   * Selected tab for index.
+   *
+   * @param index Index of tab.
+   */
+  selectedTab(index: number): void {
+    this.indexTab = index;
   }
 
   /**
@@ -54,11 +67,22 @@ export class CustomTabWidgetModalComponent implements OnInit {
   }
 
   /**
-   * Selected tab for index.
-   *
-   * @param index Index of tab.
+   * Get the station tab list.
    */
-  selectedTab(index: number): void {
-    this.indexTab = index;
+  private getStationTabList(): void {
+    this.dashboardService
+      .getStationTabList(this.dashboardRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (itemsListStation) => {
+          this.itemsListStation = itemsListStation;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
