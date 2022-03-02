@@ -1019,7 +1019,7 @@ export class StationGroupElementService {
             ? GROUP_CHARACTER_SIZE * 12
             : GROUP_CHARACTER_SIZE) *
             this.mapScale,
-        //This dynamically sets the hight of the rectangle based on the hight of the text.
+        // This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
           STATION_GROUP_NAME_PADDING
       );
