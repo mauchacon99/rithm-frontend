@@ -80,6 +80,22 @@ export class MapSearchComponent implements OnDestroy {
   }
 
   /**
+   * Whether the screen width is below a certain amount.
+   *
+   * @returns True if width is below a certain amount.
+   */
+  get isMobile(): boolean {
+    return window.innerWidth <= 380;
+  }
+
+  /**
+   * Opens the mobile search overlay.
+   */
+  mobileSearch(): void {
+    //toggle search.
+  }
+
+  /**
    * Display station name when it's selected.
    *
    * @param displayItem The selected item.

@@ -1,4 +1,18 @@
-<div class="bg-white relative">
+<div *ngIf="isMobile">
+  <div class="bg-white shadow-md rounded border border-solid mb-2">
+    <button
+      class="p-1 text-secondary-500 hover:text-secondary-300"
+      id="centerButton"
+      data-testid="center"
+      [disabled]="isLoading"
+      (click)="mobileSearch()"
+    >
+      <i class="fas fa-search cursor-pointer"></i>
+    </button>
+  </div>
+</div>
+
+<div class="bg-white relative" *ngIf="!isMobile">
   <i
     class="fas text-sm absolute left-3 top-3 z-40 text-secondary-300"
     [ngClass]="
