@@ -64,6 +64,20 @@ export const ICON_STATION_GROUP_OPTION = '\uf142';
 // The radius of the hover icon area.
 export const ICON_STATION_GROUP_PATH_RADIUS = 30;
 
+// Chained Station Group Icon.
+// used to scale the icon.
+const MULTIPLIER = 3;
+// The Chain Icon is drawn on a 9x9 grid, consts reflect that.
+export const CHAIN_GRID_TWO = 2 * MULTIPLIER;
+export const CHAIN_GRID_THREE = 3 * MULTIPLIER;
+export const CHAIN_GRID_FOUR = 4 * MULTIPLIER;
+export const CHAIN_GRID_FIVE = 5 * MULTIPLIER;
+export const CHAIN_GRID_SIX = 6 * MULTIPLIER;
+export const CHAIN_GRID_SEVEN = 7 * MULTIPLIER;
+export const CHAIN_GRID_EIGHT = 8 * MULTIPLIER;
+export const CHAIN_GRID_NINE = 9 * MULTIPLIER;
+export const CHAIN_CORNER_RADIUS = 1 * MULTIPLIER;
+
 // Station
 export const STATION_PADDING = 10;
 export const STATION_HEIGHT = 110;

@@ -277,17 +277,22 @@
                         <button
                           mat-button
                           type="button"
-                          color="accent"
-                          class="text-sm font-semibold"
+                          id="button-mode-layout"
+                          data-testid="button-mode-layout"
+                          (click)="setGridMode('layout')"
+                          class="text-sm font-semibold text-accent-500 tracking-wide"
+                          [ngClass]="{ 'text-secondary-300': settingMode }"
                         >
                           Layout
                         </button>
                         <button
                           mat-button
-                          color="accent"
-                          [disabled]="true"
                           type="button"
-                          class="text-sm font-semibold"
+                          id="button-mode-setting"
+                          data-testid="button-mode-setting"
+                          (click)="setGridMode('setting')"
+                          class="text-sm font-semibold text-accent-500 tracking-wide"
+                          [ngClass]="{ 'text-secondary-300': layoutMode }"
                         >
                           Setting
                         </button>
@@ -304,7 +309,7 @@
                           type="button"
                           color="accent"
                           class="font-semibold text-sm"
-                          (click)="editMode = !editMode"
+                          (click)="cancelStationChanges()"
                         >
                           Cancel
                         </button>
@@ -324,7 +329,14 @@
                     <gridster
                       class="p-0 bg-transparent h-screen"
                       [options]="options"
-                    ></gridster>
+                    >
+                      <gridster-item
+                        [item]="widgetItem"
+                        *ngFor="let widgetItem of inputFrameWidgetItems"
+                      >
+                        <app-input-frame-widget></app-input-frame-widget>
+                      </gridster-item>
+                    </gridster>
                   </div>
                 </ng-template>
               </mat-tab>

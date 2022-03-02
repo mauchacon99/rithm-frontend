@@ -5,6 +5,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardData } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { Router } from '@angular/router';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -15,17 +16,11 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   styleUrls: ['./expansion-menu.component.scss'],
 })
 export class ExpansionMenuComponent implements OnInit {
-  /** Dashboards list. */
-  dashboardsList: DashboardData[] = [];
-
-  /** Status expanded, this save the state the panel for show icon expanded. */
-  panelOpenState = false;
-
   /** Type dashboard. */
   @Input() dashboardRole!: RoleDashboardMenu;
 
-  /** Validate type of role. */
-  roleDashboardMenu = RoleDashboardMenu;
+  /** Status expanded, this save the state the panel for show icon expanded. */
+  panelOpenState = false;
 
   /** Loading for list menu. */
   isLoading = false;
@@ -33,15 +28,26 @@ export class ExpansionMenuComponent implements OnInit {
   /** Show error in list the dashboard. */
   showError = false;
 
+  /** Show error in list the dashboard. */
+  isPrincipalPageDashboard = false;
+
+  /** Dashboards list. */
+  dashboardsList: DashboardData[] = [];
+
+  /** Validate type of role. */
+  roleDashboardMenu = RoleDashboardMenu;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private router: Router
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
     this.getToListDashboards();
+    this.isPrincipalPageDashboard = this.router.url === '/dashboard';
   }
 
   /** Get list to dashboard in expansion menu. */

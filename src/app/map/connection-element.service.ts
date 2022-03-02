@@ -45,6 +45,7 @@ export class ConnectionElementService {
     //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(connection.startPoint.x, connection.startPoint.y);
     //Styling dependent on a scale and hover state.
@@ -57,5 +58,6 @@ export class ConnectionElementService {
       : CONNECTION_DEFAULT_COLOR;
     //use the path information in connection to draw the connection line.
     ctx.stroke(connection.path);
+    ctx.restore();
   }
 }
