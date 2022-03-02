@@ -400,7 +400,7 @@ export class MapService {
     );
 
     if (isReadOnlyRootStationGroupIndex !== -1) {
-      // Updating the stations in the Root station group Only.
+      // Updating the stations in the Root station group.
       this.stationGroupElements[isReadOnlyRootStationGroupIndex].stations.push(
         newStation.rithmId
       );
