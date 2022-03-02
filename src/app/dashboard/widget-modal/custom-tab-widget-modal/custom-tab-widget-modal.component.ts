@@ -23,7 +23,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Index default in tabs. */
   indexTab = 0;
 
-  /** Variable to show if the error getting tab document list.. */
+  /** Variable to show if the error getting tab document list. */
   errorLoadingDocumentTab = false;
 
   constructor(

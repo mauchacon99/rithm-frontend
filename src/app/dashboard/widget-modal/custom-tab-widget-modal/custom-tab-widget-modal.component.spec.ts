@@ -121,5 +121,6 @@ describe('CustomTabWidgetModalComponent', () => {
       '#error-documents-list-tab'
     );
     expect(errorMessage).toBeTruthy();
+    expect(component.errorLoadingDocumentTab).toBeTrue();
   });
 });
