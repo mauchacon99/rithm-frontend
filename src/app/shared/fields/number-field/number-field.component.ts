@@ -37,11 +37,14 @@ import { DocumentService } from 'src/app/core/document.service';
 export class NumberFieldComponent
   implements OnInit, ControlValueAccessor, Validator
 {
-  /** The form to add this field in the template. */
-  numberFieldForm!: FormGroup;
-
   /** The document field to display. */
   @Input() field!: Question;
+
+  /** Whether to validate input text mask (true by default). */
+  @Input() validateMask = true;
+
+  /** The form to add this field in the template. */
+  numberFieldForm!: FormGroup;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
@@ -73,17 +76,19 @@ export class NumberFieldComponent
       validators.push(Validators.required);
     }
 
-    //Need to set zip, currency and phone validation.
-    switch (this.field.questionType) {
-      case QuestionFieldType.Zip:
-        validators.push(this.fieldValidation.zipValidation());
-        break;
-      case QuestionFieldType.Currency:
-        validators.push(this.fieldValidation.currencyValidation());
-        break;
-      case QuestionFieldType.Phone:
-        validators.push(this.fieldValidation.phoneValidation());
-        break;
+    if (this.validateMask) {
+      //Need to set zip, currency and phone validation.
+      switch (this.field.questionType) {
+        case QuestionFieldType.Zip:
+          validators.push(this.fieldValidation.zipValidation());
+          break;
+        case QuestionFieldType.Currency:
+          validators.push(this.fieldValidation.currencyValidation());
+          break;
+        case QuestionFieldType.Phone:
+          validators.push(this.fieldValidation.phoneValidation());
+          break;
+      }
     }
 
     this.numberFieldForm
