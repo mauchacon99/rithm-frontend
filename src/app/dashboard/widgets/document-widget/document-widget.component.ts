@@ -90,8 +90,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     private documentService: DocumentService,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService
-  ) {
-  }
+  ) {}
 
   /**
    * Initial Method.
