@@ -9,7 +9,11 @@ import {
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { DocumentWidget, QuestionFieldType } from 'src/models';
+import {
+  ColumnFieldsWidget,
+  DocumentWidget,
+  QuestionFieldType,
+} from 'src/models';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
@@ -18,43 +22,36 @@ import { takeUntil } from 'rxjs/operators';
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget[documentRithmId][editMode]',
+  selector: 'app-document-widget[dataWidget][editMode]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
 export class DocumentWidgetComponent implements OnInit, OnDestroy {
-  /** Document rithmId. */
-  @Input() documentRithmId = '';
+  /** Data widget. */
+  private _dataWidget = '';
+
+  /** Set data for document widget. */
+  @Input() set dataWidget(value: string) {
+    this._dataWidget = value;
+    if (this.documentRithmId) {
+      this.parseDataColumnsWidget();
+    }
+  }
+
+  /**
+   * Get data for document widget.
+   *
+   * @returns Data for document widget.
+   */
+  get dataWidget(): string {
+    return this._dataWidget;
+  }
 
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
-  /** Data document list for widget. */
-  dataDocumentWidget!: DocumentWidget;
-
-  /** Loading document widget. */
-  isLoading = false;
-
-  /** Show error if get documentWidget fails. */
-  failedLoadWidget = false;
-
-  /** The question field type. */
-  questionFieldType = QuestionFieldType;
-
-  /** Type of drawer opened. */
-  drawerContext!: string;
-
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
-
-  private destroyed$ = new Subject<void>();
-
-  constructor(
-    private errorService: ErrorService,
-    private documentService: DocumentService,
-    private router: Router,
-    private sidenavDrawerService: SidenavDrawerService
-  ) {}
 
   /**
    * Whether the drawer is open.
@@ -65,13 +62,51 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.isDrawerOpen;
   }
 
+  private destroyed$ = new Subject<void>();
+
+  /** Data document list for widget. */
+  dataDocumentWidget!: DocumentWidget;
+
+  /** Type of drawer opened. */
+  drawerContext!: string;
+
+  /** Document rithmId. */
+  documentRithmId!: string;
+
+  /** Loading document widget. */
+  isLoading = false;
+
+  /** Show error if get documentWidget fails. */
+  failedLoadWidget = false;
+
+  /** Columns for list the widget. */
+  documentColumns: ColumnFieldsWidget[] = [];
+
+  /** The question field type. */
+  questionFieldType = QuestionFieldType;
+
+  constructor(
+    private errorService: ErrorService,
+    private documentService: DocumentService,
+    private router: Router,
+    private sidenavDrawerService: SidenavDrawerService
+  ) {
+  }
+
   /**
    * Initial Method.
    */
   ngOnInit(): void {
-    this.documentRithmId = JSON.parse(this.documentRithmId).documentRithmId;
+    this.parseDataColumnsWidget();
     this.getDrawerContext();
     this.getDocumentWidget();
+  }
+
+  /** Parse data of columns widget. */
+  private parseDataColumnsWidget(): void {
+    const dataWidget = JSON.parse(this.dataWidget);
+    this.documentRithmId = dataWidget.documentRithmId;
+    this.documentColumns = dataWidget.columns || [];
   }
 
   /** Get context drawer. */
