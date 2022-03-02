@@ -22,7 +22,7 @@ import {
   QuestionList,
 } from 'src/models';
 import { MockComponent } from 'ng-mocks';
-import { LoadingIndicatorComponent } from '../../../shared/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('DocumentWidgetDrawerComponent', () => {
   let component: DocumentWidgetDrawerComponent;
