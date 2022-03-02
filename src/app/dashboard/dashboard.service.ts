@@ -284,6 +284,28 @@ export class DashboardService {
         totalStations: 2,
         totalSubGroups: 2,
       },
+      {
+        documentRithmId: '3B78-433F-9E6C-22E3A0BDBD8B-200E132A',
+        stationRithmId: 'A1B9-4AC5-93E8-58316C1FDD9F-9360D633',
+        groupRithmId: '7',
+        stationName: 'Stationy Name that is namey',
+        groupName: 'Groupygroup',
+        isChainedGroup: true,
+        totalDocuments: 2,
+        totalStations: 2,
+        totalSubGroups: 2,
+      },
+      {
+        documentRithmId: '3B78-433F-9E6C-200E132A-22E3A0BDBD8B',
+        stationRithmId: 'A1B9-4AC5-93E8-9360D633-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Stationy Name that is namey',
+        groupName: 'Groupygroup',
+        isChainedGroup: false,
+        totalDocuments: 2,
+        totalStations: 2,
+        totalSubGroups: 2,
+      }
     ];
     return of(itemListWidgetModal).pipe(delay(1000));
   }

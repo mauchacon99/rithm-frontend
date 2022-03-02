@@ -3,6 +3,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { ItemListWidgetModal } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 /** Component for Tab Custom in modal add widget. */
 @Component({
@@ -23,6 +24,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Index default in tabs. */
   indexTab = 0;
 
+  /** Interface for list data in widget. */
+  dataSourceTableDocument!: MatTableDataSource<ItemListWidgetModal>;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -34,6 +38,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   ngOnInit(): void {
     this.getDocumentTabList();
     this.getStationTabList();
+
   }
 
   /**
@@ -55,6 +60,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
+          this.dataSourceTableDocument = new MatTableDataSource(
+            itemsListDocument
+          );
           this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
