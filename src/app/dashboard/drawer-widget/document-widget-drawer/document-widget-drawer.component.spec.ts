@@ -174,13 +174,17 @@ describe('DocumentWidgetDrawerComponent', () => {
           questionId: questions[0].questions[1].rithmId,
         },
       ];
+      const expectForm = [
+        questions[0].questions[0].rithmId,
+        questions[0].questions[1].rithmId,
+      ];
       component.questions = questions;
       component.documentColumns = [];
 
       component['loadColumnsSelect']();
 
       expect(component.documentFields).toEqual(expectDocumentFields);
-      expect(component.formColumns.value).toEqual(expectDocumentFields);
+      expect(component.formColumns.value).toEqual(expectForm);
     });
 
     it('should load list in select when documentColumns have any column', () => {
@@ -206,7 +210,9 @@ describe('DocumentWidgetDrawerComponent', () => {
       component['loadColumnsSelect']();
 
       expect(component.documentFields).toEqual(expectDocumentFields);
-      expect(component.formColumns.value).toEqual(expectDocumentColumns);
+      expect(component.formColumns.value).toEqual([
+        expectDocumentColumns[0].questionId,
+      ]);
     });
   });
 
@@ -214,17 +220,18 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.widgetItem = dataEditWidget.widgetItem;
     component.widgetIndex = dataEditWidget.widgetIndex;
     component.quantityElementsWidget = dataEditWidget.quantityElementsWidget;
-    component.formColumns.setValue([
-      {
-        name: 'Test',
-        questionId: '1020-65sdvsd4-05060708-090trhrth',
-      },
-    ]);
+    component.formColumns.setValue(['1020-65sdvsd4-05060708-090trhrth']);
     const expectData = {
       widgetItem: component.widgetItem,
       widgetIndex: component.widgetIndex,
       quantityElementsWidget: component.quantityElementsWidget,
     };
+    const expectDocmentColumns = [
+      {
+        name: 'Question Document',
+        questionId: component.formColumns.value[0],
+      },
+    ];
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'updateDashboardWidgets'
@@ -232,6 +239,6 @@ describe('DocumentWidgetDrawerComponent', () => {
 
     component['updateWidget']();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
-    expect(component.documentColumns).toEqual(component.formColumns.value);
+    expect(component.documentColumns).toEqual(expectDocmentColumns);
   });
 });
