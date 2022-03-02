@@ -20,7 +20,7 @@ const FIELD: Question = {
   children: [],
 };
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const fn = function () {};
+const fn = () => {};
 const errorMessage = {
   invalidForm: {
     valid: false,
