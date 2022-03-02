@@ -12,7 +12,10 @@
       multiple
       (selectionChange)="updateWidget()"
     >
-      <mat-option *ngFor="let field of documentFields" [value]="field">
+      <mat-option
+        *ngFor="let field of documentFields"
+        [value]="field.questionId"
+      >
         {{ field.name }}
       </mat-option>
     </mat-select>

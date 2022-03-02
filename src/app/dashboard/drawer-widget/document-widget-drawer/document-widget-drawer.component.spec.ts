@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { throwError } from 'rxjs';
 
@@ -55,7 +55,7 @@ describe('DocumentWidgetDrawerComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         MatSelectModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },

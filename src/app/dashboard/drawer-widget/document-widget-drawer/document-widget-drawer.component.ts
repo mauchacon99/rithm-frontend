@@ -120,24 +120,37 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   private loadColumnsSelect(): void {
     this.formColumns.reset();
     this.documentFields = [];
+    const dataForm: string[] = [];
     this.questions.map((questionList) => {
       questionList.questions.map((question) => {
         this.documentFields.push({
           name: question.prompt,
           questionId: question.rithmId,
         });
+        if (!this.documentColumns.length) {
+          dataForm.push(question.rithmId);
+        }
       });
     });
-    this.formColumns.setValue(
-      !this.documentColumns.length ? this.documentFields : this.documentColumns
-    );
+    if (this.documentColumns.length) {
+      this.documentColumns.map((column) => {
+        dataForm.push(column.questionId as string);
+      });
+    }
+    this.formColumns.setValue(dataForm);
   }
 
   /** Update widget. */
   updateWidget(): void {
-    this.documentColumns = this.formColumns.value;
+    this.documentColumns = [];
+    this.formColumns.value.map((questionId: string) => {
+      this.documentColumns.push({
+        name: 'Question Document',
+        questionId,
+      });
+    });
     this.widgetItem.data = JSON.stringify({
-      stationRithmId: this.documentRithmId,
+      documentRithmId: this.documentRithmId,
       columns: this.documentColumns,
     });
     this.dashboardService.updateDashboardWidgets({
