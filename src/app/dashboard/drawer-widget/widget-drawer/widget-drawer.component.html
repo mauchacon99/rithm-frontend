@@ -21,6 +21,7 @@
         *ngIf="drawerMode === 'stationWidget'"
         (setWidgetIndex)="setWidgetIndex($event)"
         (widgetType)="setWidgetType($event)"
+        [image]="imageSelected"
       >
       </app-station-widget-drawer>
 
@@ -46,7 +47,7 @@
         (click)="fileInput.click()"
         [disabled]="imageSelected"
       >
-        <i class="fa fa-cloud-upload"></i>
+        <i class="fa fa-upload"></i>
         Upload image
         <input
           #fileInput

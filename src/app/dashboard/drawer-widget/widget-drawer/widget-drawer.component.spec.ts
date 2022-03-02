@@ -155,10 +155,8 @@ describe('WidgetDrawerComponent', () => {
       component,
       'setWidgetIndex'
     ).and.callThrough();
-    const spyOnWidgetIndexOpened = spyOn(component.widgetIndexOpened, 'emit');
     component.setWidgetIndex(widgetIndex);
     expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-    expect(spyOnWidgetIndexOpened).toHaveBeenCalledOnceWith(widgetIndex);
   });
 
   it('should remove image selected', () => {
@@ -171,11 +169,9 @@ describe('WidgetDrawerComponent', () => {
       component,
       'removeSelectedFile'
     ).and.callThrough();
-    const spyOnEmitImage = spyOn(component.image, 'emit');
     component.removeSelectedFile();
     expect(spyOnRemoveSelectedFile).toHaveBeenCalledOnceWith();
     expect(component.imageSelected).toBeUndefined();
     expect(component.fileInputFile.nativeElement.value).toBe('');
-    expect(spyOnEmitImage).toHaveBeenCalledOnceWith(undefined);
   });
 });

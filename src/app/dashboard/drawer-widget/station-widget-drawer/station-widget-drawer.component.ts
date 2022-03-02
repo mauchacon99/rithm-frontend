@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -73,6 +74,22 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Element list in drawer. */
   quantityElementsWidget = 0;
+
+  /** Image to banner. */
+  @Input() set image(value: string | File | null | undefined) {
+    if (value && typeof value !== 'string') {
+      const reader = new FileReader();
+      reader.readAsDataURL(value);
+
+      reader.onload = () => {
+        this.widgetItem.image = reader.result as string;
+        this.updateWidget();
+      };
+    } else {
+      this.widgetItem.image = value as string;
+      this.updateWidget();
+    }
+  }
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,

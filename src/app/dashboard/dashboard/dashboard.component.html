@@ -19,8 +19,6 @@
         isDrawerOpen
       "
       (deleteWidget)="removeWidgetIndex($event)"
-      (image)="setImageBanner($event)"
-      (widgetIndexOpened)="setWIdgetIndex($event)"
     ></app-widget-drawer>
   </mat-drawer>
   <mat-drawer-content class="textured-bg h-calc scrollbar">
@@ -182,11 +180,7 @@
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
-                [image]="
-                  imageBanner && index === widgetIndexOpened
-                    ? imageBanner
-                    : item.image
-                "
+                [image]="item.image"
                 [editMode]="editMode"
                 (toggleDrawer)="
                   toggleWidgetDrawer('stationWidget', item, index, $event)

@@ -30,12 +30,6 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit event for delete widget in dashboard. */
   @Output() deleteWidget = new EventEmitter<number>();
 
-  /** Emit image to dashboard. */
-  @Output() image = new EventEmitter<File | undefined>();
-
-  /** Emit widget index to dashboard. */
-  @Output() widgetIndexOpened = new EventEmitter<number>();
-
   /** Image selected in input file. */
   imageSelected!: File | undefined;
 
@@ -120,14 +114,12 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     const file = (target.files as FileList)[0];
     if (file) {
       this.imageSelected = file;
-      this.image.emit(this.imageSelected);
     }
   }
 
   /** Remove selected file. */
   removeSelectedFile(): void {
     this.imageSelected = undefined;
-    this.image.emit(this.imageSelected);
     this.fileInputFile.nativeElement.value = '';
   }
 
@@ -138,7 +130,6 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
-    this.widgetIndexOpened.emit(widgetIndex);
   }
 
   /**
@@ -154,7 +145,6 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
-    this.image.emit(undefined);
     this.destroyed$.next();
     this.destroyed$.complete();
   }
