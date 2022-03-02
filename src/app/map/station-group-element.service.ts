@@ -1020,7 +1020,9 @@ export class StationGroupElementService {
             StationGroupElementHoverItem.ButtonOption,
             stationGroup,
             ICON_STATION_GROUP_OPTION,
-            MAP_SELECTED
+            this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? NODE_HOVER_COLOR
+              : MAP_SELECTED
           );
         }
       }
@@ -1125,15 +1127,24 @@ export class StationGroupElementService {
       const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
       // Font selected to paint the icon.
+      // Ignore icon hover font increase size.
+      const hoverFontSize =
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        typeButton === 'buttonOption'
+          ? 2
+          : 2.5;
       // If the icon is hover we increase the font by 0.5.
       this.canvasContext.font = `${
-        fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
+        fontSize * (stationGroup.hoverItem === typeButton ? hoverFontSize : 2)
       }px "FontAwesome"`;
 
       // Hovering changes the color of the icon.
       this.canvasContext.fillStyle =
         stationGroup.hoverItem === typeButton
           ? hoverColor
+          : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            typeButton === 'buttonOption'
+          ? NODE_HOVER_COLOR
           : BUTTON_DEFAULT_COLOR;
 
       // Paint the icon on the map.
