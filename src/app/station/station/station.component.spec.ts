@@ -43,8 +43,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
+import { GridsterModule } from 'angular-gridster2';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 
@@ -80,6 +80,7 @@ describe('StationComponent', () => {
         ReactiveFormsModule,
         MatTabsModule,
         MatExpansionModule,
+        MatDividerModule,
         GridsterModule,
         MatDividerModule,
       ],
@@ -410,6 +411,20 @@ describe('StationComponent', () => {
     ).and.callThrough();
     component.saveFlowLogicRules();
     expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should show layout-mode-button and layoutMode active when you click on it in station edition', () => {
+    component.editMode = true;
+    component.viewNewStation = true;
+    component.layoutMode = false;
+    fixture.detectChanges();
+
+    const btnLayout = fixture.debugElement.nativeElement.querySelector(
+      '#button-mode-layout'
+    );
+    expect(btnLayout).toBeTruthy();
+    btnLayout.click();
+    expect(component.layoutMode).toBeTrue();
   });
 
   it('should show setting mode when click in button Setting', () => {

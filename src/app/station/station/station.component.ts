@@ -64,6 +64,12 @@ export class StationComponent
   /** The information about the station. */
   stationInformation!: StationInformation;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
+  /** Index for station tabs. */
+  stationTabsIndex = 0;
+
   /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
 
@@ -76,6 +82,9 @@ export class StationComponent
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
+  /** Flag that renames the save button when the selected tab is Flow Logic. */
+  isFlowLogicTab = false;
+
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
 
@@ -85,17 +94,8 @@ export class StationComponent
   /** View new station. */
   viewNewStation = false;
 
-  /** Flag that renames the save button when the selected tab is Flow Logic. */
-  isFlowLogicTab = false;
-
   /** Edit mode toggle for station. */
   editMode = false;
-
-  /** Station Rithm id. */
-  stationRithmId = '';
-
-  /** Index for station tabs. */
-  stationTabsIndex = 0;
 
   /** Flag that show if is layout mode. */
   layoutMode = true;
