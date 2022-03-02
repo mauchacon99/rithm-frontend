@@ -18,7 +18,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockStationService,
-  MockSplitService
+  MockSplitService,
 } from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
@@ -28,6 +28,7 @@ import {
   FlowLogicRule,
   OperandType,
   OperatorType,
+  PossibleAnswer,
   Question,
   QuestionFieldType,
   RuleType,
@@ -354,6 +355,57 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions[0].children).toHaveSize(0);
   });
 
+  it('should listen the station question when exists', () => {
+    const question: Question = {
+      rithmId: '3j4k-3h2j-hj4j',
+      prompt: 'Label #1',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      children: [],
+      originalStationRithmId: '3j4k-3h2j-hj4j',
+    };
+    component.stationInformation.questions = [question];
+    fixture.detectChanges();
+    stationInject.stationQuestion$.next(question);
+    const prevQuestion = component.stationInformation.questions.find(
+      (field) => field.rithmId === question.rithmId
+    );
+    expect(prevQuestion).toBeTruthy();
+  });
+
+  it('should listen the station question when possibles answer', () => {
+    const question: Question = {
+      rithmId: '3j4k-3h2j-hj4j',
+      prompt: 'Label #1',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      children: [],
+      originalStationRithmId: '3j4k-3h2j-hj4j',
+    };
+    component.stationInformation.questions = [
+      {
+        rithmId: '3j4k-3h2j-hj6j',
+        prompt: 'Label #1',
+        questionType: QuestionFieldType.ShortText,
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false,
+        children: [],
+        originalStationRithmId: '3j4k-3h2j-hj4j',
+      },
+    ];
+    fixture.detectChanges();
+    stationInject.stationQuestion$.next(question);
+    const prevQuestion = component.stationInformation.questions.find(
+      (field) => field.rithmId === question.rithmId
+    );
+    expect(prevQuestion).toBeFalsy();
+  });
+
   it('should update text of flow button', () => {
     const flowButtonName = '';
     expect(flowButtonName).toBe('');
@@ -597,10 +649,7 @@ describe('StationComponent', () => {
   });
 
   it('should show error message when return data about current station', () => {
-    spyOn(
-      TestBed.inject(StationService),
-      'getStationInfo'
-    ).and.returnValue(
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -613,20 +662,9 @@ describe('StationComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should call function getTreatment',()=>{
+  it('should call function getTreatment', () => {
     const splitInject = TestBed.inject(SplitService);
     splitInject.sdkReady$.next();
     expect(component.viewNewStation).toBeFalsy();
   });
-
-  // fit('should listen the DrawerContext service',()=>{
-  //   const sideNavInject = TestBed.inject(SidenavDrawerService);
-  //   let sideNavDrawer;
-  //   sideNavInject.drawerContext$.subscribe(() => {
-  //     sideNavDrawer = 'comments';
-  //   });
-  //   expect(component.drawerContext).toEqual(sideNavDrawer);
-  // });
 });
-
-
