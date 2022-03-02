@@ -98,6 +98,9 @@ export class MapService {
   /** Informs the map that which drawer is opened. */
   isDrawerOpened$ = new BehaviorSubject(false);
 
+  /** The View Station Button Click, informs to make the init Load on the map. */
+  viewStationButtonClick$ = new BehaviorSubject(true);
+
   /**
    * The coordinate at which the canvas is currently rendering in regards to the overall map.
    * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
@@ -138,6 +141,9 @@ export class MapService {
 
   /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
   centerStationCount$ = new BehaviorSubject(0);
+
+  /** The Station rithm Id centered on the map. */
+  centerStationRithmId$ = new BehaviorSubject('');
 
   /** The number of times this.centerStationGroup() should be called.*/
   centerStationGroupCount$ = new BehaviorSubject(0);
