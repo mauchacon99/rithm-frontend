@@ -129,6 +129,9 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Whether the second operand is a custom value or a field value. */
   isCustomValue = false;
 
+  /** Whether Validate custom values text format. */
+  validateFormat = true;
+
   /** The information of the operator selected. */
   operatorSelected: RuleModalOperator | null = null;
 
@@ -359,6 +362,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         display = 'checklist';
         break;
       case QuestionFieldType.Number:
+      case QuestionFieldType.Phone:
+      case QuestionFieldType.CreditCard:
       case QuestionFieldType.Currency:
       case QuestionFieldType.Zip:
         display = 'number';
@@ -572,8 +577,6 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.secondOperandDefaultQuestion.prompt = '';
       this.secondOperandDefaultQuestion.value = '';
     }
-
-    this.resetQuestionFieldComponent();
   }
 
   /**
@@ -671,6 +674,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Reset component field when a first operand is selected.
    */
   resetQuestionFieldComponent(): void {
+    this.validateFormat =
+      this.operatorSelected?.text === 'contains' ? false : true;
     switch (this.displayOperatorType) {
       case 'string':
         this.textField?.ngOnInit();

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -11,7 +11,15 @@ export class AddWidgetModalComponent {
   /** Tab Parents selected. */
   tabParentSelect = 0;
 
-  constructor(private dialogRef: MatDialogRef<AddWidgetModalComponent>) {}
+  /** Dashboard rithm id. */
+  dashboardRithmId = '';
+
+  constructor(
+    private dialogRef: MatDialogRef<AddWidgetModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public matData: string
+  ) {
+    this.dashboardRithmId = matData;
+  }
 
   /** Close add widgets modal. */
   closeModal(): void {

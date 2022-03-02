@@ -54,14 +54,14 @@
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Phone"
-      mask="(000) 000-0000"
+      [mask]="validateMask ? '(000) 000-0000' : ''"
       [dropSpecialCharacters]="false"
       matInput
       type="tel"
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
-      (change)="updateFieldAnswer()"
+      (keyup)="updateFieldAnswer()"
     />
   </mat-form-field>
 </div>

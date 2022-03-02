@@ -446,4 +446,13 @@ describe('StationWidgetDrawerComponent', () => {
       dataEditWidget.widgetIndex
     );
   });
+
+  it('Should emit widgetType', () => {
+    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
+    const spySetWidgetType = spyOn(component.widgetType, 'emit');
+    component.ngOnInit();
+    expect(spySetWidgetType).toHaveBeenCalledOnceWith(
+      dataEditWidget.widgetItem.widgetType
+    );
+  });
 });
