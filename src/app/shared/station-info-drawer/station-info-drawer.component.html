@@ -161,6 +161,19 @@
             ></textarea>
           </mat-form-field>
         </div>
+        <div class="w-full py-2 px-2 text-center" *ngIf="!openedFromMap">
+          <button
+            type="button"
+            mat-stroked-button
+            color="accent"
+            id="view-on-map-station-button"
+            data-testid="view-on-map-station-button"
+            (click)="goToStationOnMap()"
+          >
+            <i class="fas fa-map-marked-alt text-accent-500 pr-1"></i>
+            View On Map
+          </button>
+        </div>
         <div
           class="w-full py-2 px-2 text-center"
           *ngIf="openedFromMap && !locallyCreated"
