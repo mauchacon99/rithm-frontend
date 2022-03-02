@@ -713,22 +713,18 @@ export class StationComponent
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
   setGridMode(mode: 'layout' | 'setting'): void {
-    if (mode === 'layout') {
-      this.layoutMode = true;
-      this.settingMode = false;
-      //Make the grid visible
-      this.options.displayGrid = 'always';
-      //Resizing is performed
-      if (this.options.resizable) {
-        this.options.resizable.enabled = true;
-      }
-      //Rearranges, can be dragged
-      if (this.options.draggable) {
-        this.options.draggable.enabled = true;
-      }
-    } else {
-      this.layoutMode = false;
-      this.settingMode = true;
+    const enabledMode = mode === 'layout' ? true : false;
+    this.layoutMode = enabledMode;
+    this.settingMode = !enabledMode;
+    //Make the grid visible
+    this.options.displayGrid = enabledMode ? 'always' : 'none';
+    //Resizing is performed
+    if (this.options.resizable) {
+      this.options.resizable.enabled = enabledMode;
+    }
+    //Rearranges, can be dragged
+    if (this.options.draggable) {
+      this.options.draggable.enabled = enabledMode;
     }
     //Execute changes
     this.changedOptions();
