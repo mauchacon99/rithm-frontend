@@ -82,9 +82,9 @@ describe('CustomTabWidgetModalComponent', () => {
   });
 
   it('should rendered component loading for document tabs', () => {
-    component.isLoading = true;
+    component.isLoadingDocumentTab = true;
     fixture.detectChanges();
-    expect(component.isLoading).toBeTrue();
+    expect(component.isLoadingDocumentTab).toBeTrue();
     const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
       '#loading-tab-document-list'
     );

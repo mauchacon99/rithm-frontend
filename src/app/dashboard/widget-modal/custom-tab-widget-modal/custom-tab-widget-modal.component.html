@@ -32,10 +32,9 @@
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
     <mat-tab>
-      <div *ngIf="isLoading" class="items-center py-10">
+      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
         <app-loading-indicator
           id="loading-tab-document-list"
-          [inlineText]="'Loading Documents...'"
         ></app-loading-indicator>
       </div>
     </mat-tab>

@@ -21,7 +21,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   indexTab = 0;
 
   /** Whether the getting tab document list is loading. */
-  isLoading = false;
+  isLoadingDocumentTab = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -40,17 +40,17 @@ export class CustomTabWidgetModalComponent implements OnInit {
    *
    */
   private getDocumentTabList(): void {
-    this.isLoading = true;
+    this.isLoadingDocumentTab = true;
     this.dashboardService
       .getDocumentTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
-          this.isLoading = false;
+          this.isLoadingDocumentTab = false;
           this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
-          this.isLoading = false;
+          this.isLoadingDocumentTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
