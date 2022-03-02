@@ -467,6 +467,7 @@ describe('StationGroupElementService', () => {
         { x: 20, y: 10 },
         { x: 15, y: 5 },
         stationGroup,
+        true,
         true
       )
     ).toThrow(
@@ -496,9 +497,9 @@ describe('StationGroupElementService', () => {
         { x: 15, y: 5 },
         5,
         StationGroupElementHoverItem.ButtonAccept,
+        stationGroup,
         ICON_STATION_GROUP_ACCEPT,
-        MAP_SELECTED,
-        stationGroup
+        MAP_SELECTED
       )
     ).toThrow(
       new Error('Cannot draw station group icon if context is not defined')
@@ -513,8 +514,8 @@ describe('StationGroupElementService', () => {
   });
 
   it('should return Throw Error in the method drawStationGroupToolTip', () => {
-    const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
-    expect(() => service.drawStationGroupToolTip(stationGroup)).toThrow(
+    const pointStart = { x: 0, y: 0 };
+    expect(() => service.drawStationGroupToolTip(pointStart)).toThrow(
       new Error('Cannot draw the tooltip if context is not defined')
     );
   });

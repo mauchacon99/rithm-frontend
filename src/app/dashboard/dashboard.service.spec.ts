@@ -10,6 +10,7 @@ import {
   DashboardData,
   RoleDashboardMenu,
   EditDataWidget,
+  ItemListWidgetModal,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -255,6 +256,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -292,6 +294,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Personal,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 0,
           rows: 0,
           x: 0,
@@ -325,6 +328,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
             maxItemCols: 0,
@@ -344,6 +348,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
             maxItemCols: 0,
@@ -380,6 +385,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
             maxItemCols: 0,
@@ -399,6 +405,7 @@ describe('DashboardService', () => {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
             maxItemCols: 0,
@@ -434,6 +441,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Personal,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -471,6 +479,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 1,
           rows: 2,
           x: 0,
@@ -505,6 +514,7 @@ describe('DashboardService', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -591,6 +601,7 @@ describe('DashboardService', () => {
     const expectEditDataWidget: EditDataWidget = {
       widgetIndex: 1,
       widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
@@ -602,10 +613,31 @@ describe('DashboardService', () => {
         maxItemCols: 12,
         maxItemRows: 12,
       },
+      quantityElementsWidget: 2,
     };
     service.updateDataWidget$.subscribe((editDataWidget) => {
       expect(editDataWidget).toEqual(expectEditDataWidget);
     });
     service.updateDashboardWidgets(expectEditDataWidget);
+  });
+
+  it('should get list tab documents', () => {
+    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Station Name that is name',
+        groupName: 'Group group',
+        isChainedGroup: true,
+        totalDocuments: 5,
+        totalStations: 5,
+        totalSubGroups: 5,
+      },
+    ];
+    service.getDocumentTabList(dashboardRithmId).subscribe((response) => {
+      expect(response).toEqual(itemListWidgetModal);
+    });
   });
 });

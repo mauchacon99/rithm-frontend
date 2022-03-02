@@ -49,6 +49,7 @@ describe('DashboardComponent', () => {
     type: RoleDashboardMenu.Company,
     widgets: [
       {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
@@ -321,6 +322,7 @@ describe('DashboardComponent', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
           maxItemCols: 0,
@@ -383,8 +385,10 @@ describe('DashboardComponent', () => {
     });
 
     it('Should toggle drawer of the widgets', () => {
+      const quantityElementsWidget = 2;
       spyOn(sidenavDrawer, 'toggleDrawer');
       const widgetItem = {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         rows: 1,
         x: 0,
@@ -398,10 +402,16 @@ describe('DashboardComponent', () => {
       };
       const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-      component.toggleWidgetDrawer('stationWidget', widgetItem, widgetIndex);
+      component.toggleWidgetDrawer(
+        'stationWidget',
+        widgetItem,
+        widgetIndex,
+        quantityElementsWidget
+      );
       expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
         widgetItem,
         widgetIndex,
+        quantityElementsWidget,
       });
     });
 
@@ -436,6 +446,7 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      component.dashboardData = dataDashboard;
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
@@ -455,6 +466,7 @@ describe('DashboardComponent', () => {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
           maxItemCols: 0,
@@ -489,9 +501,11 @@ describe('DashboardComponent', () => {
   });
 
   it('should update dashboard widgets', () => {
+    const quantityElementsWidget = 2;
     component.dashboardData = dataDashboard;
     const editDataWidget = {
       widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
         // eslint-disable-next-line max-len
         data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
@@ -505,6 +519,7 @@ describe('DashboardComponent', () => {
         y: 0,
       },
       widgetIndex: 0,
+      quantityElementsWidget,
       isCloseDrawer: false,
     };
     const expectDashboardData = dataDashboard;
@@ -514,11 +529,13 @@ describe('DashboardComponent', () => {
   });
 
   it('should subscribe to DashboardService.updateDataWidget$', () => {
+    const quantityElementsWidget = 2;
     component.dashboardData = dataDashboard;
     const spyMethod = spyOn(component, 'updateDashboardWidget');
     const expectEditDataWidget = {
       widgetItem: dataDashboard.widgets[0],
       widgetIndex: 1,
+      quantityElementsWidget,
     };
 
     TestBed.inject(DashboardService).updateDashboardWidgets(
@@ -550,6 +567,7 @@ describe('DashboardComponent', () => {
       name: 'Company Dashboard no delete!',
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 2,
           x: 8,
@@ -562,6 +580,7 @@ describe('DashboardComponent', () => {
           maxItemCols: 1,
         },
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 2,
           x: 0,

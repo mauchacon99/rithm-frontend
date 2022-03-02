@@ -31,6 +31,8 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { GridsterConfig } from 'angular-gridster2';
+import { InputFrameWidget } from '../../../models/input-frame-widget';
+
 /**
  * Main component for viewing a station.
  */
@@ -53,14 +55,20 @@ export class StationComponent
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Get station name from behaviour subject. */
+  private stationName = '';
+
   /** Station form. */
   stationForm: FormGroup;
 
   /** The information about the station. */
   stationInformation!: StationInformation;
 
-  /** Whether the request to get the station info is currently underway. */
-  stationLoading = false;
+  /** Station Rithm id. */
+  stationRithmId = '';
+
+  /** Index for station tabs. */
+  stationTabsIndex = 0;
 
   /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -68,41 +76,35 @@ export class StationComponent
   /** The list of stations that precede this station. */
   previousStations: ConnectedStationInfo[] = [];
 
-  /** Whether the request to get connected stations is currently underway. */
-  connectedStationsLoading = true;
-
-  /** Show Hidden accordion field private. */
-  accordionFieldPrivateExpanded = false;
-
-  /** The context of what is open in the drawer. */
-  drawerContext = 'comments';
-
-  /** Show Hidden accordion all field. */
-  accordionFieldAllExpanded = false;
-
-  /** Station Rithm id. */
-  stationRithmId = '';
-
-  /** Get station name from behaviour subject. */
-  private stationName = '';
-
   /** Appended Fields array. */
   appendedFields: DocumentNameField[] = [];
-
-  /** View new station. */
-  viewNewStation = false;
-
-  /** Flag that renames the save button when the selected tab is Flow Logic. */
-  isFlowLogicTab = false;
-
-  /** Edit mode toggle for station. */
-  editMode = false;
 
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
 
-  /** Index for station tabs. */
-  stationTabsIndex = 0;
+  /** Flag that renames the save button when the selected tab is Flow Logic. */
+  isFlowLogicTab = false;
+
+  /** Show Hidden accordion field private. */
+  accordionFieldPrivateExpanded = false;
+
+  /** Show Hidden accordion all field. */
+  accordionFieldAllExpanded = false;
+
+  /** View new station. */
+  viewNewStation = false;
+
+  /** Edit mode toggle for station. */
+  editMode = false;
+
+  /** Flag that show if is layout mode. */
+  layoutMode = true;
+
+  /** Flag that show if is setting mode. */
+  settingMode = false;
+
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -110,15 +112,35 @@ export class StationComponent
     displayGrid: 'always',
     pushItems: true,
     draggable: {
-      enabled: false,
+      enabled: true,
     },
     resizable: {
-      enabled: false,
+      enabled: true,
     },
     margin: 12,
     minCols: 24,
     maxCols: 24,
   };
+
+  inputFrameWidgetItems: InputFrameWidget[] = [
+    {
+      cols: 6,
+      rows: 4,
+      x: 1,
+      y: 1,
+      minItemRows: 4,
+      minItemCols: 6,
+      questions: [],
+    },
+  ];
+
+  /** Loading / Error variables. */
+
+  /** Whether the request to get the station info is currently underway. */
+  stationLoading = false;
+
+  /** Whether the request to get connected stations is currently underway. */
+  connectedStationsLoading = true;
 
   constructor(
     private stationService: StationService,
@@ -137,30 +159,57 @@ export class StationComponent
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
     });
+  }
 
+  /**
+   * Listen the DrawerContext Service.
+   */
+  private subscribeDrawerContext(): void {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
       });
+  }
 
-    this.stationService.stationName$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((stationName) => {
-        this.stationName = stationName;
-        this.stationInformation.name = stationName;
-      });
-
+  /**
+   * Listen the DocumentStationNameFields subject.
+   */
+  private subscribeDocumentStationNameFields(): void {
     this.stationService.documentStationNameFields$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((appFields) => {
         this.appendedFields = appFields;
       });
+  }
 
+  /**
+   * Listen the stationName subject.
+   */
+  private subscribeStationName(): void {
+    this.stationService.stationName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName) => {
+        this.stationName = stationName;
+        if (this.stationInformation) {
+          this.stationInformation.name = stationName;
+        }
+      });
+  }
+
+  /**
+   * Listen the StationFormTouched subject.
+   */
+  private subscribeStationFormTouched(): void {
     this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
       this.stationForm.get('stationTemplateForm')?.markAsTouched();
     });
+  }
 
+  /**
+   * Listen the stationQuestion subject.
+   */
+  private subscribeStationQuestion(): void {
     this.stationService.stationQuestion$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((question) => {
@@ -184,7 +233,12 @@ export class StationComponent
           }
         }
       });
+  }
 
+  /**
+   * Listen the flowButtonText subject.
+   */
+  private subscribeFlowButtonText(): void {
     this.stationService.flowButtonText$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -241,6 +295,13 @@ export class StationComponent
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
+
+    this.subscribeDrawerContext();
+    this.subscribeDocumentStationNameFields();
+    this.subscribeStationName();
+    this.subscribeStationFormTouched();
+    this.subscribeStationQuestion();
+    this.subscribeFlowButtonText();
   }
 
   /** Comment. */
@@ -411,14 +472,6 @@ export class StationComponent
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
    * Save Station information and executed petitions to api.
    *
    */
@@ -463,12 +516,12 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: (data) => {
+        next: ([, , , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
-          if (data[3]) {
+          if (stationQuestions) {
             //in case of save/update questions the station questions object is updated.
-            this.stationInformation.questions = data[3] as Question[];
+            this.stationInformation.questions = stationQuestions as Question[];
           }
         },
         error: (error: unknown) => {
@@ -652,5 +705,42 @@ export class StationComponent
     } else {
       this.pendingFlowLogicRules = [];
     }
+  }
+
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: 'layout' | 'setting'): void {
+    if (mode === 'layout') {
+      this.layoutMode = true;
+      this.settingMode = false;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = true;
+    }
+  }
+
+  /** This cancel button clicked show alert. */
+  async cancelStationChanges(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Cancel?',
+      message: '\nUnsaved changes will be lost.',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+    if (confirm) {
+      this.editMode = false;
+    }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

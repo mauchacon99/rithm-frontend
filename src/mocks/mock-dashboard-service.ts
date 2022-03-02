@@ -8,6 +8,7 @@ import {
   RoleDashboardMenu,
   EditDataWidget,
   ColumnsDocumentInfo,
+  ItemListWidgetModal,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -275,6 +276,7 @@ export class MockDashboardService {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
           maxItemCols: 0,
@@ -317,6 +319,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
             maxItemCols: 0,
@@ -336,6 +339,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Company,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
             maxItemCols: 0,
@@ -367,6 +371,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
             maxItemCols: 0,
@@ -386,6 +391,7 @@ export class MockDashboardService {
         type: RoleDashboardMenu.Personal,
         widgets: [
           {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
             cols: 4,
             data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
             maxItemCols: 0,
@@ -416,6 +422,7 @@ export class MockDashboardService {
       name: 'Untitled Dashboard',
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -445,6 +452,7 @@ export class MockDashboardService {
       type: RoleDashboardMenu.Company,
       widgets: [
         {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
           rows: 1,
           x: 0,
@@ -492,5 +500,30 @@ export class MockDashboardService {
    */
   deletePersonalDashboard(rithmId: string): Observable<unknown> {
     return of().pipe(delay(1000));
+  }
+
+  /**
+   * Get list tab documents.
+   *
+   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
+   * @returns The item list widget modal.
+   */
+  getDocumentTabList(
+    dashboardRithmId: string
+  ): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        groupRithmId: '7',
+        stationName: 'Station Name that is name',
+        groupName: 'Group group',
+        isChainedGroup: true,
+        totalDocuments: 5,
+        totalStations: 5,
+        totalSubGroups: 5,
+      },
+    ];
+    return of(itemListWidgetModal).pipe(delay(1000));
   }
 }
