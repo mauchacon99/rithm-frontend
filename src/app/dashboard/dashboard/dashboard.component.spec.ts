@@ -456,6 +456,30 @@ describe('DashboardComponent', () => {
       expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalled();
     });
+
+    it('should call setWIdgetIndex', () => {
+      const widgetIndex = 1;
+      const spyOnSetWidgetIndex = spyOn(
+        component,
+        'setWIdgetIndex'
+      ).and.callThrough();
+      component.setWIdgetIndex(widgetIndex);
+      expect(spyOnSetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+      expect(component.widgetIndexOpened).toBe(widgetIndex);
+    });
+
+    it('should call setImageBanner', () => {
+      const image = new File(new Array<Blob>(), 'image', {
+        type: 'image/jpeg',
+      });
+      const spyOnSetImageBanner = spyOn(
+        component,
+        'setImageBanner'
+      ).and.callThrough();
+      component.setImageBanner(image);
+      expect(spyOnSetImageBanner).toHaveBeenCalledOnceWith(image);
+      expect(component.imageBanner).toBe(image);
+    });
   });
 
   describe('Expand widget', () => {

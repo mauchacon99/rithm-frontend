@@ -148,4 +148,34 @@ describe('WidgetDrawerComponent', () => {
     );
     expect(uploadImageInput).toBeDefined();
   });
+
+  it('should emit widgetIndex to dashboard', () => {
+    const widgetIndex = 1;
+    const spySetWidgetIndex = spyOn(
+      component,
+      'setWidgetIndex'
+    ).and.callThrough();
+    const spyOnWidgetIndexOpened = spyOn(component.widgetIndexOpened, 'emit');
+    component.setWidgetIndex(widgetIndex);
+    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
+    expect(spyOnWidgetIndexOpened).toHaveBeenCalledOnceWith(widgetIndex);
+  });
+
+  it('should remove image selected', () => {
+    component.widgetType = WidgetType.StationTableBanner;
+    component.imageSelected = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    fixture.detectChanges();
+    const spyOnRemoveSelectedFile = spyOn(
+      component,
+      'removeSelectedFile'
+    ).and.callThrough();
+    const spyOnEmitImage = spyOn(component.image, 'emit');
+    component.removeSelectedFile();
+    expect(spyOnRemoveSelectedFile).toHaveBeenCalledOnceWith();
+    expect(component.imageSelected).toBeUndefined();
+    expect(component.fileInputFile.nativeElement.value).toBe('');
+    expect(spyOnEmitImage).toHaveBeenCalledOnceWith(undefined);
+  });
 });

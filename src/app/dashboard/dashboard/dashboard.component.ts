@@ -126,6 +126,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     baseLayerIndex: 1,
   };
 
+  /** Image for show on banner in widget.*/
+  imageBanner!: File | undefined;
+
+  /** Widget index opened.*/
+  widgetIndexOpened!: number;
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
@@ -534,6 +540,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       panelClass: ['w-11/12', 'sm:w-4/5'],
       maxWidth: '1500px',
     });
+  }
+
+  /**
+   * Set image of drawer-widget.
+   *
+   * @param image Image selected.
+   */
+  setImageBanner(image: File | undefined): void {
+    this.imageBanner = image;
+  }
+
+  /**
+   * Set widget index.
+   *
+   * @param widgetIndex Widget index opened.
+   */
+  setWIdgetIndex(widgetIndex: number): void {
+    this.widgetIndexOpened = widgetIndex;
   }
 
   /** Clean subscriptions. */

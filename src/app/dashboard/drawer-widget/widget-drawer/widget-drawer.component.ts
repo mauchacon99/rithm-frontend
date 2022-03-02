@@ -1,10 +1,12 @@
 import {
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -21,8 +23,21 @@ import { WidgetType } from 'src/models';
   styleUrls: ['./widget-drawer.component.scss'],
 })
 export class WidgetDrawerComponent implements OnInit, OnDestroy {
+  /** Reference to clear input when delete selection. */
+  @ViewChild('fileInput', { static: false })
+  fileInputFile!: ElementRef;
+
   /** Emit event for delete widget in dashboard. */
   @Output() deleteWidget = new EventEmitter<number>();
+
+  /** Emit image to dashboard. */
+  @Output() image = new EventEmitter<File | undefined>();
+
+  /** Emit widget index to dashboard. */
+  @Output() widgetIndexOpened = new EventEmitter<number>();
+
+  /** Image selected in input file. */
+  imageSelected!: File | undefined;
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -96,12 +111,34 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Select image.
+   *
+   * @param event Event of select image.
+   */
+  onSelectFile(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = (target.files as FileList)[0];
+    if (file) {
+      this.imageSelected = file;
+      this.image.emit(this.imageSelected);
+    }
+  }
+
+  /** Remove selected file. */
+  removeSelectedFile(): void {
+    this.imageSelected = undefined;
+    this.image.emit(this.imageSelected);
+    this.fileInputFile.nativeElement.value = '';
+  }
+
+  /**
    * Event emit widgetIndex to dashboard.
    *
    * @param widgetIndex Widget index from station-widget-drawer.
    */
   setWidgetIndex(widgetIndex: number): void {
     this.widgetIndex = widgetIndex;
+    this.widgetIndexOpened.emit(widgetIndex);
   }
 
   /**
@@ -117,6 +154,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
+    this.image.emit(undefined);
     this.destroyed$.next();
     this.destroyed$.complete();
   }
