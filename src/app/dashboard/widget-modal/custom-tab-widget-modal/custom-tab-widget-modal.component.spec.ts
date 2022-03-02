@@ -5,10 +5,11 @@ import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { throwError } from 'rxjs';
-
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
   let fixture: ComponentFixture<CustomTabWidgetModalComponent>;
@@ -21,7 +22,10 @@ describe('CustomTabWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CustomTabWidgetModalComponent],
+      declarations: [
+        CustomTabWidgetModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
@@ -75,5 +79,15 @@ describe('CustomTabWidgetModalComponent', () => {
     btnTab.click();
     expect(spyTabs).toHaveBeenCalledOnceWith(indexTab);
     expect(component.indexTab).toBe(indexTab);
+  });
+
+  it('should rendered component loading for document tabs', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-tab-document-list'
+    );
+    expect(loadingIndicator).toBeTruthy();
   });
 });
