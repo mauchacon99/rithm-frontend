@@ -46,6 +46,7 @@ import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.compon
 import { MatDividerModule } from '@angular/material/divider';
 import { GridsterModule } from 'angular-gridster2';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
+import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -454,12 +455,17 @@ describe('StationComponent', () => {
 
   it('should call the function that changes to layout mode in edit mode', () => {
     const modeConfig = 'layout';
+    const displayGrid = 'always';
     component.viewNewStation = true;
     component.editMode = true;
     fixture.detectChanges();
+
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
+    expect(component.options.resizable?.enabled).toBeTrue();
+    expect(component.options.draggable?.enabled).toBeTrue();
   });
 
   it('should call the function that changes to setting mode in edit mode', () => {

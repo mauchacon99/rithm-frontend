@@ -716,9 +716,31 @@ export class StationComponent
     if (mode === 'layout') {
       this.layoutMode = true;
       this.settingMode = false;
+      //Make the grid visible
+      this.options.displayGrid = 'always';
+      //Resizing is performed
+      if (this.options.resizable) {
+        this.options.resizable.enabled = true;
+      }
+      //Rearranges, can be dragged
+      if (this.options.draggable) {
+        this.options.draggable.enabled = true;
+      }
     } else {
       this.layoutMode = false;
       this.settingMode = true;
+    }
+    //Execute changes
+    this.changedOptions();
+  }
+
+  /**
+   * Change options in grid for station edition.
+   *
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
     }
   }
 

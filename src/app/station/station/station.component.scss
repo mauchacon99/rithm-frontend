@@ -64,3 +64,10 @@ textarea {
     @apply border-secondary-50;
   }
 }
+
+gridster-item.widget-item-layout {
+  @apply border-2 border-primary-100 p-0 rounded-none transition-colors;
+  &:hover {
+    @apply border-2 border-accent-500 rounded;
+  }
+}
