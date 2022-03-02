@@ -118,7 +118,7 @@ describe('CustomTabWidgetModalComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
-      '#error-documents-list'
+      '#error-documents-list-tab'
     );
     expect(errorMessage).toBeTruthy();
   });
