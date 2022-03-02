@@ -527,7 +527,7 @@ export class MockDashboardService {
     return of(itemListWidgetModal).pipe(delay(1000));
   }
 
-    /**
+  /**
    * Get the list for the station tabs.
    *
    * @param dashboardRithmId The Id of the dashboard.
