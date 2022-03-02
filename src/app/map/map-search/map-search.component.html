@@ -1,15 +1,71 @@
 <div *ngIf="isMobile">
   <div class="bg-white shadow-md rounded border border-solid mb-2">
     <button
-      class="p-1 text-secondary-500 hover:text-secondary-300"
+      class="px-2 py-1 text-secondary-500 hover:text-secondary-300"
       id="centerButton"
       data-testid="center"
       [disabled]="isLoading"
-      (click)="mobileSearch()"
+      (click)="toggleMobileSearch()"
     >
       <i class="fas fa-search cursor-pointer"></i>
     </button>
   </div>
+</div>
+
+<div class="bg-white fixed top-0 bottom-0 left-0 right-0" *ngIf="mobileSearchOpen">
+  <i
+    class="fas text-sm absolute left-3 top-3 z-40 text-secondary-300"
+    [ngClass]="
+      searchText !== '' && isDrawerOpen
+        ? ' fa-arrow-left cursor-pointer '
+        : ' fa-search '
+    "
+    (click)="returnSearchText()"
+  ></i>
+  <i
+    *ngIf="searchText !== '' || searchText.length !== 0"
+    class="fas fa-times text-sm absolute right-3 top-3 z-40 cursor-pointer text-secondary-300"
+    (click)="clearSearchText()"
+  ></i>
+  <mat-form-field class="text-sm" appearance="fill">
+    <input
+      #inputText
+      type="text"
+      matInput
+      [matAutocomplete]="auto"
+      [(ngModel)]="searchText"
+      (ngModelChange)="searchStationsStationGroups()"
+      placeholder="Search"
+      [disabled]="isLoading"
+      (blur)="onBlur()"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayStationName"
+    >
+      <mat-option
+        class="text-sm"
+        *ngFor="let option of filteredStations"
+        [value]="option"
+        (click)="openDrawer(option)"
+      >
+        <span
+          *ngIf="option.stationName"
+          class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
+        ></span>
+        <span
+          *ngIf="option.title"
+          class="group bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
+        ></span>
+        <span class="inlin-block w-44">
+          {{ option.title ? option.title : option.stationName }}
+          <span class="block text-secondary-300 text-xs">{{
+            option.title ? 'Group' : 'Station'
+          }}</span>
+        </span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 </div>
 
 <div class="bg-white relative" *ngIf="!isMobile">
@@ -27,7 +83,7 @@
     class="fas fa-times text-sm absolute right-3 top-3 z-40 cursor-pointer text-secondary-300"
     (click)="clearSearchText()"
   ></i>
-  <mat-form-field class="example-full-width text-sm" appearance="fill">
+  <mat-form-field class="text-sm" appearance="fill">
     <input
       #inputText
       type="text"

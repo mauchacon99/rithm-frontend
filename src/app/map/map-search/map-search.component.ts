@@ -47,6 +47,9 @@ export class MapSearchComponent implements OnDestroy {
   /** On false used to store previous search text before station drawer opens. */
   searchInput = true;
 
+  /** Is the mobile search open? */
+  mobileSearchOpen = false;
+
   constructor(
     private mapService: MapService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -86,6 +89,16 @@ export class MapSearchComponent implements OnDestroy {
    */
   get isMobile(): boolean {
     return window.innerWidth <= 380;
+  }
+
+  /**
+   * Toggles the mobile search overlay.
+   */
+  toggleMobileSearch(): void {
+    this.mobileSearchOpen = !this.mobileSearchOpen;
+    if (this.mobileSearchOpen) {
+      this.mobileSearch();
+    }
   }
 
   /**
