@@ -1,7 +1,7 @@
 /**
  * Represent the types of input frames.
  */
-export enum InputFrameType {
+export enum FrameType {
   /** Input's headline.*/
   Headline = 'h1',
 
@@ -15,11 +15,11 @@ export enum InputFrameType {
   Image = 'image',
 
   /** Input's graphs, this could be a Bar Graph, a Line Graph or a Pie Chart .*/
-  Graphs = 'graphs',
+  Graph = 'graph',
 
   /** Input's table.*/
   Table = 'table',
 
   /** Input's list.*/
-  List = 'list',
+  Input = 'input',
 }

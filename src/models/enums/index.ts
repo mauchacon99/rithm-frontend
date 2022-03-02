@@ -18,4 +18,4 @@ export * from './role-dashboard-menu.enum';
 export * from './matMenu-type-enum';
 export * from './corner';
 export * from './columns-document-info';
-export * from './input-frame-type.enum';
+export * from './frame-type.enum';
