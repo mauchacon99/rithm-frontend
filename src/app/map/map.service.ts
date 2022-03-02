@@ -394,14 +394,14 @@ export class MapService {
     //Update the stationElements array.
     this.stationElements.push(newStation);
 
-    // Find the Root Station Group Only index.
-    const isOnlyRootStationGroupIndex = this.stationGroupElements.findIndex(
+    // Find the Root Station Group index.
+    const isReadOnlyRootStationGroupIndex = this.stationGroupElements.findIndex(
       (stationGroup) => stationGroup.isReadOnlyRootStationGroup
     );
 
-    if (isOnlyRootStationGroupIndex !== -1) {
+    if (isReadOnlyRootStationGroupIndex !== -1) {
       // Updating the stations in the Root station group Only.
-      this.stationGroupElements[isOnlyRootStationGroupIndex].stations.push(
+      this.stationGroupElements[isReadOnlyRootStationGroupIndex].stations.push(
         newStation.rithmId
       );
     }
