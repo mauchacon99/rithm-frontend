@@ -31,7 +31,11 @@
   </mat-button-toggle-group>
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
-    <mat-tab> Content 1 </mat-tab>
+    <mat-tab>
+      <div *ngIf="errorLoadingDocumentTab" id="error-documents-list">
+        <p class="text-error-500">Error: failed to obtain documents.</p>
+      </div>
+    </mat-tab>
     <mat-tab> Content 2 </mat-tab>
     <mat-tab> Content 3 </mat-tab>
   </mat-tab-group>
