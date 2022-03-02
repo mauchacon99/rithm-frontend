@@ -130,12 +130,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** An array of data used to render and interact with connection line paths between stations in the map. */
   connections: ConnectionMapElement[] = [];
 
-  /**
-   * This is set to true initially than set to false once the map has initialized.
-   * Used to allow methods to have a separate behavior for when the map first loads. Such as the center method.
-   */
-  private initLoad = true;
-
   /** Scale to calculate canvas points. Defaults to 1. Zooming adjusts this scale exponentially. */
   private scale = DEFAULT_SCALE;
 
@@ -160,6 +154,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**Adding boundary box inner padding for top-left and bottom-right. */
   readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
+
+  /** The Station rithm Id centered on the map. */
+  private centerStationRithmId = '';
 
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
@@ -274,6 +271,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.nextPanVelocity = velocity;
         this.checkAutoPan();
       });
+
+    this.mapService.centerStationRithmId$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationRithmId) => {
+        this.centerStationRithmId = stationRithmId;
+      });
   }
 
   /**
@@ -306,11 +309,56 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.connections = this.mapService.connectionElements;
 
         //If this is the first time the component is being initialized, center the map without animation.
-        if (dataReceived && this.initLoad) {
-          this.mapService.centerActive$.next(true);
-          this.mapService.centerCount$.next(1);
-          this.mapService.center(dataReceived);
-          this.initLoad = false;
+        if (dataReceived && this.mapService.viewStationButtonClick$.value) {
+          // If there is a station id to be centered.
+          if (this.centerStationRithmId !== '') {
+            const stationCenter = this.mapService.stationElements.filter(
+              (station) => station.rithmId === this.centerStationRithmId
+            );
+            //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+            this.mapService.centerActive$.next(true);
+            //Increment centerStationCount to show that more centering of station needs to be done.
+            this.mapService.centerStationCount$.next(1);
+            // If Drawer isn't open and there is station to be centered.
+            if (
+              !this.mapService.isDrawerOpened$.value &&
+              stationCenter.length > 0
+            ) {
+              this.mapService.isDrawerOpened$.next(true);
+              const drawer = document.getElementsByTagName('mat-drawer');
+              const dataInformationDrawer: StationInfoDrawerData = {
+                stationRithmId: stationCenter[0].rithmId,
+                stationName: stationCenter[0].stationName,
+                editMode: this.mapService.mapMode$.value === MapMode.Build,
+                stationStatus: stationCenter[0].status,
+                mapMode: this.mapService.mapMode$.value,
+                openedFromMap: true,
+                notes: stationCenter[0].notes,
+              };
+              //Pass dataInformationDrawer to open the station info drawer.
+              this.sidenavDrawerService.openDrawer(
+                'stationInfo',
+                dataInformationDrawer
+              );
+              this.stationService.updatedStationNameText(
+                stationCenter[0].stationName
+              );
+              stationCenter[0].drawerOpened = true;
+              setTimeout(() => {
+                // Center the map on the station.
+                this.mapService.centerStation(
+                  stationCenter[0],
+                  drawer[0] ? drawer[0].clientWidth : 0
+                );
+              }, 5);
+              this.mapService.viewStationButtonClick$.next(false);
+            }
+          } else {
+            this.mapService.centerActive$.next(true);
+            this.mapService.centerCount$.next(1);
+            this.mapService.center(dataReceived);
+            this.mapService.viewStationButtonClick$.next(false);
+          }
         }
 
         //Redraw to reflect changes.
@@ -330,6 +378,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.stationElements = [];
     this.mapService.stationGroupElements = [];
     this.mapService.connectionElements = [];
+    this.mapService.isDrawerOpened$.next(false);
   }
 
   /**
