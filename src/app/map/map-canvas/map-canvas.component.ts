@@ -2080,8 +2080,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             (stationGroup) => stationGroup.selected
           )
         ) {
-          this.mapService.resetSelectedStationGroupStationStatus();
-          this.mapService.updatePendingStationGroup();
+          if (this.mapMode === MapMode.StationGroupAdd) {
+            this.mapService.resetSelectedStationGroupStationStatus();
+            this.mapService.updatePendingStationGroup();
+          } else if (this.mapMode === MapMode.StationGroupEdit) {
+            this.mapService.resetSelectedStationGroupStationStatus();
+            this.mapService.revertStationGroup();
+          }
         }
       } else if (
         stationGroupPending.hoverItem ===
@@ -2420,7 +2425,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const stationGroup = this.stationGroups.find(
       (group) =>
         group.rithmId?.toString().toLowerCase() ===
-        'ebe6bdac-ba29-4bfb-933e-2e4600dbfa12'
+        '19a2820b-4394-411e-a4e3-85c8f795c08f'
     );
     if (!stationGroup) {
       throw new Error(`There is not any station group with status pending.`);

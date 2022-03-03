@@ -776,6 +776,26 @@ export class MapService {
   }
 
   /**
+   * Revert the changes made across station group edit mode.
+   */
+   revertStationGroup(): void {
+    if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      const stationGroup = this.stationGroupElements.find(
+        (group) => group.status === MapItemStatus.Pending
+      );
+      if (!stationGroup) {
+        throw new Error(`A start station was not found for`);
+      }
+      const group = this.storedStationGroupElements.find(gr => gr.rithmId === stationGroup.rithmId);
+      if (group) {
+        const groupIndex = this.stationGroupElements.findIndex(gr => gr.rithmId === stationGroup.rithmId);
+        this.stationGroupElements[groupIndex] = group;
+        this.stationGroupElements[groupIndex].status = MapItemStatus.Normal;
+      }
+    }
+  }
+
+  /**
    * Based on incoming station selection, update the status of related stations and station group.
    *
    * @param station The incoming station.
@@ -1779,9 +1799,12 @@ export class MapService {
     if (stationGroupIndex === -1) {
       throw new Error(`There is not any station group with this rithmId.`);
     }
-    this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
-    this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
-
+    if (this.mapMode$.value === MapMode.StationGroupAdd) {
+      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
+    } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+    }
     this.resetSelectedStationGroupStationStatus();
   }
 
