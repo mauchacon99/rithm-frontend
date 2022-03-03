@@ -155,6 +155,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       documentRithmId: this.documentRithmId,
       columns: this.documentColumns,
     });
+    this.loadColumnsSelect();
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
       widgetIndex: this.widgetIndex,

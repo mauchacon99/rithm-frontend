@@ -14,5 +14,5 @@ export interface RuleOperand {
   value: string;
 
   /** The text to show if the operand is fieldType. */
-  text?: string;
+  text: string;
 }
