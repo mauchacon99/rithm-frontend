@@ -221,6 +221,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.widgetIndex = dataEditWidget.widgetIndex;
     component.quantityElementsWidget = dataEditWidget.quantityElementsWidget;
     component.formColumns.setValue(['1020-65sdvsd4-05060708-090trhrth']);
+    component.questions = [];
     const expectData = {
       widgetItem: component.widgetItem,
       widgetIndex: component.widgetIndex,

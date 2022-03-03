@@ -18,7 +18,7 @@
   *ngIf="!isLoading && !failedLoadWidget"
 >
   <!--  Header Container -->
-  <div class="m-2">
+  <div>
     <div class="flex justify-between items-center">
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
@@ -81,87 +81,20 @@
       </ng-template>
     </div>
   </div>
-  <!--List of the questions-->
-  <div class="w-full p-2 flex h-full overflow-auto scrollbar">
-    <div class="h-full w-full" *ngIf="dataDocumentWidget">
-      <ng-container
-        class="h-full w-full"
-        *ngFor="let questionList of dataDocumentWidget.questions"
-      >
-        <ng-container
-          class="h-full w-full"
-          *ngFor="let questions of questionList.questions"
-        >
-          <div class="py-3 border-b border-b-secondary-200">
-            <p class="font-semibold text-sm">
-              {{
-                questions.questionType === 'instructions'
-                  ? 'Instruction'
-                  : questions.prompt
-              }}
-            </p>
 
-            <div [ngSwitch]="questions.questionType">
-              <p
-                *ngSwitchCase="questionFieldType.CheckList"
-                class="pt-3 text-sm"
-              >
-                <span *ngFor="let answer of questions.answer?.asArray">
-                  <i
-                    class="fas"
-                    [ngClass]="
-                      answer.isChecked
-                        ? 'fa-check-square text-accent-500'
-                        : 'fa-square text-secondary-500'
-                    "
-                  ></i>
-                  - {{ answer.value }}<br />
-                </span>
-              </p>
-              <p
-                *ngSwitchCase="questionFieldType.MultiSelect"
-                class="pt-3 text-sm"
-              >
-                <span *ngFor="let answer of questions.answer?.asArray">
-                  <i
-                    class="fas"
-                    [ngClass]="
-                      answer.isChecked
-                        ? 'fa-check-square text-accent-500'
-                        : 'fa-square text-secondary-500'
-                    "
-                  ></i>
-                  -
-                  {{ answer.value }}
-                  <br />
-                </span>
-              </p>
-              <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
-                <span *ngFor="let answer of questions.answer?.asArray">
-                  <i
-                    class="fas"
-                    [ngClass]="
-                      answer.isChecked
-                        ? 'fa-check-square text-accent-500'
-                        : 'fa-square text-secondary-500'
-                    "
-                  ></i>
-                  - {{ answer.value }} <br />
-                </span>
-              </p>
-              <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
-                {{ questions.prompt }}
-              </p>
-              <p *ngSwitchDefault class="pt-3 text-sm">
-                {{
-                  questions.answer?.value ||
-                    "This question doesn't have an answer."
-                }}
-              </p>
-            </div>
-          </div>
-        </ng-container>
+  <!--List of the questions-->
+  <div class="w-full flex h-full overflow-auto scrollbar">
+    <div class="w-full h-full" *ngIf="dataDocumentWidget">
+      <!-- Display questions by columns or all questions if columns is empty-->
+      <ng-container
+        *ngIf="
+          documentColumns.length;
+          then displayQuestionsWithDataColumns;
+          else displayQuestionsDefault
+        "
+      >
       </ng-container>
+
       <div
         class="text-center py-2 text-sm"
         *ngIf="!dataDocumentWidget.questions.length"
@@ -171,3 +104,95 @@
     </div>
   </div>
 </div>
+
+<!--Display questions with list of the columns-->
+<ng-template #displayQuestionsWithDataColumns>
+  <ng-container *ngFor="let column of documentColumns">
+    <ng-container *ngFor="let questionList of dataDocumentWidget.questions">
+      <ng-container *ngFor="let questions of questionList.questions">
+        <ng-container *ngIf="questions.rithmId === column.questionId">
+          <ng-container
+            *ngTemplateOutlet="
+              questionColumn;
+              context: { $implicit: questions }
+            "
+          ></ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<!--Display questions default if columns is empty-->
+<ng-template #displayQuestionsDefault>
+  <ng-container *ngFor="let questionList of dataDocumentWidget.questions">
+    <ng-container *ngFor="let questions of questionList.questions">
+      <ng-container
+        *ngTemplateOutlet="questionColumn; context: { $implicit: questions }"
+      ></ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<!--Question column-->
+<ng-template #questionColumn let-questions>
+  <div class="py-3 border-b border-b-secondary-200">
+    <p class="font-semibold text-sm">
+      {{
+        questions.questionType === 'instructions'
+          ? 'Instruction'
+          : questions.prompt
+      }}
+    </p>
+
+    <div [ngSwitch]="questions.questionType">
+      <p *ngSwitchCase="questionFieldType.CheckList" class="pt-3 text-sm">
+        <span *ngFor="let answer of questions.answer?.asArray">
+          <i
+            class="fas"
+            [ngClass]="
+              answer.isChecked
+                ? 'fa-check-square text-accent-500'
+                : 'fa-square text-secondary-500'
+            "
+          ></i>
+          - {{ answer.value }}<br />
+        </span>
+      </p>
+      <p *ngSwitchCase="questionFieldType.MultiSelect" class="pt-3 text-sm">
+        <span *ngFor="let answer of questions.answer?.asArray">
+          <i
+            class="fas"
+            [ngClass]="
+              answer.isChecked
+                ? 'fa-check-square text-accent-500'
+                : 'fa-square text-secondary-500'
+            "
+          ></i>
+          -
+          {{ answer.value }}
+          <br />
+        </span>
+      </p>
+      <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
+        <span *ngFor="let answer of questions.answer?.asArray">
+          <i
+            class="fas"
+            [ngClass]="
+              answer.isChecked
+                ? 'fa-check-square text-accent-500'
+                : 'fa-square text-secondary-500'
+            "
+          ></i>
+          - {{ answer.value }} <br />
+        </span>
+      </p>
+      <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
+        {{ questions.prompt }}
+      </p>
+      <p *ngSwitchDefault class="pt-3 text-sm">
+        {{ questions.answer?.value || "This question doesn't have an answer." }}
+      </p>
+    </div>
+  </div>
+</ng-template>
