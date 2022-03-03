@@ -10,6 +10,11 @@
 </ng-container>
 <ng-template #previewMode>
   <div *ngFor="let field of fields" class="min-h-[48.5px]">
-    <app-text-field [field]="field" [isStation]="false" [labelTag]="field.prompt" [widgetItem]="false"></app-text-field>
+    <app-text-field
+      [field]="field"
+      [isStation]="false"
+      [labelTag]="field.prompt"
+      [widgetItem]="false"
+    ></app-text-field>
   </div>
 </ng-template>

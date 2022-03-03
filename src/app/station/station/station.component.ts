@@ -697,7 +697,7 @@ export class StationComponent
    */
   setEditMode(): void {
     this.editMode = !this.editMode;
-    if (this.editMode){
+    if (this.editMode) {
       this.setGridMode('layout');
     }
   }
