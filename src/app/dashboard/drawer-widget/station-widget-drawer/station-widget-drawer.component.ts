@@ -36,6 +36,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     columns: new FormArray([]),
   });
 
+  /** Image to banner. */
+  @Input() set image(value: File | null) {
+    if (this.widgetItem) {
+      this.widgetItem.image = value ? value : null;
+      this.updateWidget();
+    }
+  }
+
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
 
@@ -47,18 +55,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** All data of the widget. */
   widgetItem!: DashboardItem;
-
-  /** Station RithmId. */
-  stationRithmId!: string;
-
-  /** Position of the widget. */
-  widgetIndex!: number;
-
-  /** Loading drawer. */
-  isLoading = false;
-
-  /** Loading error. */
-  failedLoadDrawer = false;
 
   /** Station columns. */
   stationColumns!: ColumnFieldsWidget[];
@@ -72,16 +68,20 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
 
+  /** Station RithmId. */
+  stationRithmId!: string;
+
+  /** Position of the widget. */
+  widgetIndex!: number;
+
+  /** Loading drawer. */
+  isLoading = false;
+
+  /** Loading error. */
+  failedLoadDrawer = false;
+
   /** Element list in drawer. */
   quantityElementsWidget = 0;
-
-  /** Image to banner. */
-  @Input() set image(value: File | null) {
-    if (this.widgetItem) {
-      this.widgetItem.image = value ? value : null;
-      this.updateWidget();
-    }
-  }
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
