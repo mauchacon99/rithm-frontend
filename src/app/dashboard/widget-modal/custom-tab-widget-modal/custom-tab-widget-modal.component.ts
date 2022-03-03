@@ -33,6 +33,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Group. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
+  /** Whether the getting tab document list is loading. */
+  isLoadingDocumentTab = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -61,6 +64,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
    *
    */
   private getDocumentTabList(): void {
+    this.isLoadingDocumentTab = true;
     this.dashboardService
       .getDocumentTabList(this.dashboardRithmId)
       .pipe(first())
@@ -69,9 +73,11 @@ export class CustomTabWidgetModalComponent implements OnInit {
           this.dataSourceTableDocument = new MatTableDataSource(
             itemsListDocument
           );
+          this.isLoadingDocumentTab = false;
           this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
+          this.isLoadingDocumentTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

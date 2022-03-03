@@ -32,6 +32,11 @@
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
     <mat-tab>
+      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+        <app-loading-indicator
+          id="loading-tab-document-list"
+        ></app-loading-indicator>
+      </div>
       <app-item-list-widget-modal [itemListWidgetModal]="dataSourceTableDocument" [type]="'document'"></app-item-list-widget-modal>
     </mat-tab>
     <mat-tab>
