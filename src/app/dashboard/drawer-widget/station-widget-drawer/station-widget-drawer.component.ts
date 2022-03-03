@@ -85,7 +85,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
         this.widgetItem.image = reader.result as string;
         this.updateWidget();
       };
-    } else {
+    } else if (value) {
       this.widgetItem.image = value as string;
       this.updateWidget();
     }

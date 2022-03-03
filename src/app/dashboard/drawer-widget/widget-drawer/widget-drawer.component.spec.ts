@@ -149,16 +149,6 @@ describe('WidgetDrawerComponent', () => {
     expect(uploadImageInput).toBeDefined();
   });
 
-  it('should emit widgetIndex to dashboard', () => {
-    const widgetIndex = 1;
-    const spySetWidgetIndex = spyOn(
-      component,
-      'setWidgetIndex'
-    ).and.callThrough();
-    component.setWidgetIndex(widgetIndex);
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-  });
-
   it('should remove image selected', () => {
     component.widgetType = WidgetType.StationTableBanner;
     component.imageSelected = new File(new Array<Blob>(), 'image', {
