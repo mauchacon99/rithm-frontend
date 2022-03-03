@@ -306,9 +306,7 @@ export class StationComponent
     this.subscribeStationQuestion();
     this.subscribeFlowButtonText();
 
-    if (!this.editMode) {
-      this.setGridMode('setting');
-    }
+    if (!this.editMode) this.setGridMode('setting');
   }
 
   /** Comment. */
@@ -699,7 +697,9 @@ export class StationComponent
    */
   setEditMode(): void {
     this.editMode = !this.editMode;
-    this.setGridMode('layout');
+    if (this.editMode){
+      this.setGridMode('layout');
+    }
   }
 
   /**
@@ -708,36 +708,20 @@ export class StationComponent
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
   setGridMode(mode: 'layout' | 'setting'): void {
-    if (mode === 'layout') {
-      this.layoutMode = true;
-      this.settingMode = false;
-      this.options.displayGrid = 'always';
-      if (this.options.resizable) {
-        this.options.resizable.enabled = true;
-      }
-      if (this.options.draggable) {
-        this.options.draggable.enabled = true;
-      }
-    } else {
-      this.settingOptions();
-    }
-    this.changedOptions();
-  }
-
-  /**
-   * Set the options related to settings mode.
-   *
-   */
-  settingOptions(): void {
-    this.layoutMode = false;
-    this.settingMode = true;
-    this.options.displayGrid = 'none';
+    const enabledMode = mode === 'layout' ? true : false;
+    this.layoutMode = enabledMode;
+    this.settingMode = !enabledMode;
+    //Make the grid visible
+    this.options.displayGrid = enabledMode ? 'always' : 'none';
+    //Resizing is performed
     if (this.options.resizable) {
-      this.options.resizable.enabled = false;
+      this.options.resizable.enabled = enabledMode;
     }
+    //Rearranges, can be dragged
     if (this.options.draggable) {
-      this.options.draggable.enabled = false;
+      this.options.draggable.enabled = enabledMode;
     }
+    //Execute changes
     this.changedOptions();
   }
 
@@ -785,7 +769,7 @@ export class StationComponent
     });
     if (confirm) {
       this.editMode = false;
-      this.settingOptions();
+      this.setGridMode('setting');
     }
   }
 
@@ -794,7 +778,7 @@ export class StationComponent
    */
   saveStationChanges(): void {
     this.editMode = !this.editMode;
-    this.settingOptions();
+    this.setGridMode('setting');
   }
 
   /**

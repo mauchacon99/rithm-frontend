@@ -532,7 +532,7 @@ describe('StationComponent', () => {
     expect(spyGridMode).toHaveBeenCalledWith('layout');
     expect(component.editMode).toBeTrue();
   });
-  
+
   it('should change setting config after canceling', () => {
     component.viewNewStation = true;
     component.editMode = true;

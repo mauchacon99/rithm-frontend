@@ -1,4 +1,4 @@
-<ng-container *ngIf="widgetMode === 'layout'; else settingMode">
+<ng-container *ngIf="widgetEditMode; else previewMode">
   <div *ngFor="let field of fields" class="min-h-[48.5px]">
     <app-text-field
       [field]="field"
@@ -8,4 +8,8 @@
     ></app-text-field>
   </div>
 </ng-container>
-<ng-template #settingMode></ng-template>
+<ng-template #previewMode>
+  <div *ngFor="let field of fields" class="min-h-[48.5px]">
+    <app-text-field [field]="field" [isStation]="false" [labelTag]="field.prompt" [widgetItem]="false"></app-text-field>
+  </div>
+</ng-template>
