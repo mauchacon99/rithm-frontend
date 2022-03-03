@@ -770,6 +770,7 @@ export class StationComponent
     });
     if (confirm) {
       this.editMode = false;
+      this.setGridMode('setting');
     }
   }
 
