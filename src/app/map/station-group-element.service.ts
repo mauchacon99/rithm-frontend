@@ -1212,14 +1212,14 @@ export class StationGroupElementService {
       stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
         ? MAP_DISABLED_STROKE
         : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
           stationGroup.status !== MapItemStatus.Pending
-        ? (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit)
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit
           ? MAP_SELECTED
           : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;

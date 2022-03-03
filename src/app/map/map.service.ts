@@ -778,7 +778,7 @@ export class MapService {
   /**
    * Revert the changes made across station group edit mode.
    */
-   revertStationGroup(): void {
+  revertStationGroup(): void {
     if (this.mapMode$.value === MapMode.StationGroupEdit) {
       const stationGroup = this.stationGroupElements.find(
         (group) => group.status === MapItemStatus.Pending
@@ -786,9 +786,13 @@ export class MapService {
       if (!stationGroup) {
         throw new Error(`A start station was not found for`);
       }
-      const group = this.storedStationGroupElements.find(gr => gr.rithmId === stationGroup.rithmId);
+      const group = this.storedStationGroupElements.find(
+        (gr) => gr.rithmId === stationGroup.rithmId
+      );
       if (group) {
-        const groupIndex = this.stationGroupElements.findIndex(gr => gr.rithmId === stationGroup.rithmId);
+        const groupIndex = this.stationGroupElements.findIndex(
+          (gr) => gr.rithmId === stationGroup.rithmId
+        );
         this.stationGroupElements[groupIndex] = group;
         this.stationGroupElements[groupIndex].status = MapItemStatus.Normal;
       }
@@ -1801,7 +1805,8 @@ export class MapService {
     }
     if (this.mapMode$.value === MapMode.StationGroupAdd) {
       this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
-      this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
+      this.stationGroupElements[stationGroupIndex].status =
+        MapItemStatus.Created;
     } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
       this.stationGroupElements[stationGroupIndex].markAsUpdated();
     }
