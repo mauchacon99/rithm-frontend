@@ -23,3 +23,9 @@
     border: 1px solid #bfbfbf;
   }
 }
+
+.search-tabs {
+  ::ng-deep.mat-form-field-underline {
+    display: none;
+  }
+}
