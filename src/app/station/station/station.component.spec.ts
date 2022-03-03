@@ -495,14 +495,16 @@ describe('StationComponent', () => {
     expect(component.editMode).toBeFalsy();
   });
 
-  it('should change the edit mode and layout config', () => {
+  it('should change the edit mode and set grid mode', () => {
     component.viewNewStation = true;
-    component.editMode = true;
+    component.editMode = false;
     fixture.detectChanges();
-
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     const spyEditMode = spyOn(component, 'setEditMode').and.callThrough();
+
     component.setEditMode();
     expect(spyEditMode).toHaveBeenCalled();
-    expect(component.editMode).toBeFalsy();
+    expect(spyGridMode).toHaveBeenCalledWith('layout');
+    expect(component.editMode).toBeTrue();
   });
 });

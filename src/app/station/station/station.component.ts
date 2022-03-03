@@ -306,7 +306,7 @@ export class StationComponent
     this.subscribeStationQuestion();
     this.subscribeFlowButtonText();
 
-    if (!this.editMode){
+    if (!this.editMode) {
       this.setGridMode('setting');
     }
   }
