@@ -1,19 +1,14 @@
-<div
-  class="grid grid-cols-1 p-4 pt-0 w-72 overflow-y-auto drawer-content-h-map"
->
-  <div class="w-full py-2">
-    <div class="col-span-12 mb-3">
-      <h6 class="text-center">Connection Information</h6>
+<div class="grid grid-cols-1 pt-0 w-72 overflow-y-auto drawer-content-h-map">
+  <div class="w-full mt-2">
+    <div class="w-full py-2 px-4 border-b border-solid border-secondary-50">
+      <p class="font-bold mb-1 text-xs">Connection Start</p>
+      <div class="text-xs">{{ connectionStartStationName }}</div>
     </div>
-    <div class="col-span-12 mb-3">
-      <p class="overline-font">CONNECTION START</p>
-      <div class="col-span-12">{{ connectionStartStationName }}</div>
+    <div class="w-full py-2 px-4 text-sm">
+      <p class="font-bold mb-1 text-xs">Connection End</p>
+      <div class="text-xs">{{ connectionEndStationName }}</div>
     </div>
-    <div class="col-span-12">
-      <p class="overline-font">CONNECTION END</p>
-      <div class="col-span-12">{{ connectionEndStationName }}</div>
-    </div>
-    <div class="w-full py-2">
+    <div class="w-full p-4">
       <button
         *ngIf="mapMode !== mapModeEnum.View"
         mat-stroked-button
@@ -26,8 +21,12 @@
     </div>
   </div>
 </div>
-<div class="flex justify-center border-t border-solid border-secondary-50">
-  <button mat-button color="accent" (click)="toggleDrawer('connectionInfo')">
-    Close
+<div class="flex justify-center border-t border-solid border-secondary-50 py-2">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="toggleDrawer('connectionInfo')"
+  >
+    Done
   </button>
 </div>
