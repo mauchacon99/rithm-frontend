@@ -6,7 +6,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -21,6 +20,7 @@ import {
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for Station widget drawer.
@@ -54,7 +54,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Position of the widget. */
   widgetIndex!: number;
 
-  /** Loading document. */
+  /** Loading drawer. */
   isLoading = false;
 
   /** Loading error. */
