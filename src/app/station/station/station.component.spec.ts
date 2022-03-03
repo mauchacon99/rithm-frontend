@@ -494,4 +494,15 @@ describe('StationComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
     expect(component.editMode).toBeFalsy();
   });
+
+  it('should change the edit mode and layout config', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spyEditMode = spyOn(component, 'setEditMode').and.callThrough();
+    component.setEditMode();
+    expect(spyEditMode).toHaveBeenCalled();
+    expect(component.editMode).toBeFalsy();
+  });
 });

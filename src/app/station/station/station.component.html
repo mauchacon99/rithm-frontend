@@ -333,9 +333,12 @@
                       <gridster-item
                         [item]="widgetItem"
                         [ngClass]="{ 'widget-item-layout': layoutMode }"
+                        class="pt-1"
                         *ngFor="let widgetItem of inputFrameWidgetItems"
                       >
-                        <app-input-frame-widget></app-input-frame-widget>
+                        <app-input-frame-widget
+                          [fields]="widgetItem.questions"
+                        ></app-input-frame-widget>
                       </gridster-item>
                     </gridster>
                   </div>
