@@ -31,7 +31,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   @Output() deleteWidget = new EventEmitter<number>();
 
   /** Image selected in input file. */
-  imageSelected!: File | undefined;
+  imageSelected: File | null = null;
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -119,7 +119,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Remove selected file. */
   removeSelectedFile(): void {
-    this.imageSelected = undefined;
+    this.imageSelected = null;
     this.fileInputFile.nativeElement.value = '';
   }
 

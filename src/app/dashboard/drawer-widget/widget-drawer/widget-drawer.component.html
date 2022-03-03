@@ -60,7 +60,7 @@
       </button>
 
       <div class="w-full flex space-x-5 mt-5 pr-8" *ngIf="imageSelected">
-        <span class="text-accent-500">{{ imageSelected.name }}</span>
+        <span class="text-accent-500 truncate">{{ imageSelected.name }}</span>
         <button
           id="remove-select-image"
           data-testid="remove-selected-image"

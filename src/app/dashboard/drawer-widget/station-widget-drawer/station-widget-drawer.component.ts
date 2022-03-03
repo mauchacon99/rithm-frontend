@@ -76,17 +76,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   quantityElementsWidget = 0;
 
   /** Image to banner. */
-  @Input() set image(value: string | File | null | undefined) {
-    if (value && typeof value !== 'string') {
-      const reader = new FileReader();
-      reader.readAsDataURL(value);
-
-      reader.onload = () => {
-        this.widgetItem.image = reader.result as string;
-        this.updateWidget();
-      };
-    } else if (value) {
-      this.widgetItem.image = value as string;
+  @Input() set image(value: File | null) {
+    if (this.widgetItem) {
+      this.widgetItem.image = value ? value : null;
       this.updateWidget();
     }
   }

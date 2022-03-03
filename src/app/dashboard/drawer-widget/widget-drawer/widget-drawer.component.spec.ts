@@ -161,7 +161,7 @@ describe('WidgetDrawerComponent', () => {
     ).and.callThrough();
     component.removeSelectedFile();
     expect(spyOnRemoveSelectedFile).toHaveBeenCalledOnceWith();
-    expect(component.imageSelected).toBeUndefined();
+    expect(component.imageSelected).toBeNull();
     expect(component.fileInputFile.nativeElement.value).toBe('');
   });
 });
