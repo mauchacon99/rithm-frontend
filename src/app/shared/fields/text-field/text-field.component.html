@@ -4,7 +4,8 @@
     appearance="outline"
     [ngClass]="{
       'long-text': field.questionType === fieldTypeEnum.LongText,
-      'information-field': field.questionType === fieldTypeEnum.Instructions
+      'information-field': field.questionType === fieldTypeEnum.Instructions,
+      widgetItem: widgetItem
     }"
   >
     <mat-label>{{ labelTag }}</mat-label>
@@ -92,6 +93,7 @@
         [formControlName]="field.questionType"
         autocomplete="off"
         (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        [readonly]="widgetItem"
       />
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && isInput"
@@ -101,6 +103,7 @@
         [formControlName]="field.questionType"
         autocomplete="off"
         (keyup)="updateFieldAnswer()"
+        [readonly]="widgetItem"
       />
       <textarea
         *ngIf="field.questionType === fieldTypeEnum.Instructions && !isInput"
@@ -124,6 +127,7 @@
         [formControlName]="field.questionType"
         autocomplete="off"
         (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        [readonly]="widgetItem"
       />
       <textarea
         *ngIf="field.questionType === fieldTypeEnum.LongText"
