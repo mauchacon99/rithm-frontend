@@ -30,13 +30,13 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table stations. */
   dataSourceTableStations!: MatTableDataSource<ItemListWidgetModal>;
 
-  /** List table Group. */
+  /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
   /** Whether the getting tab document list is loading. */
   isLoadingDocumentTab = false;
 
-  /* Value to simulate list of groups waiting final method will be incorporated*/
+  /* Value to simulate list of groups waiting final method will be incorporated. */
   itemListWidgetModalGroups: ItemListWidgetModal[] = [
     {
       rithmId: '7',
@@ -72,7 +72,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   ngOnInit(): void {
     this.getDocumentTabList();
     this.getStationTabList();
-    /*Temporal function to simulate list of groups waiting final method will be incorporated */
+    /*Temporal function to simulate list of groups waiting final method will be incorporated. */
     this.dataSourceTableGroup = new MatTableDataSource(
       this.itemListWidgetModalGroups
     );
