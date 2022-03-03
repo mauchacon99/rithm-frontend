@@ -65,6 +65,6 @@ textarea {
   }
   //Widget item in layout mode
   .widget-item-layout {
-    @apply border-2 border-primary-100 p-0 rounded-none transition-colors hover:border-accent-500 hover:rounded;
+    @apply border-2 border-primary-100 p-0 rounded transition-colors hover:border-accent-500;
   }
 }
