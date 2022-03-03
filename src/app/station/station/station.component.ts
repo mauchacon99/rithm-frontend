@@ -302,6 +302,10 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeFlowButtonText();
+
+    if (!this.editMode){
+      this.setGridMode('setting');
+    }
   }
 
   /** Comment. */
@@ -705,6 +709,16 @@ export class StationComponent
     } else {
       this.pendingFlowLogicRules = [];
     }
+  }
+
+  /**
+   * Inicializate the edit mode and layout config.
+   *
+   */
+  setEditMode(): void {
+    this.editMode = !this.editMode;
+    const gridMode = this.editMode ? 'layout' : 'setting';
+    this.setGridMode(gridMode);
   }
 
   /**
