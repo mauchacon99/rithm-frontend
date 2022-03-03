@@ -96,9 +96,7 @@ export class MapSearchComponent implements OnDestroy {
    */
   toggleMobileSearch(): void {
     this.mobileSearchOpen = !this.mobileSearchOpen;
-    if (this.mobileSearchOpen) {
-      this.mobileSearch();
-    } else {
+    if (!this.mobileSearchOpen) {
       this.clearSearchText();
     }
   }
