@@ -18,7 +18,7 @@
   *ngIf="!isLoading && !failedLoadWidget"
 >
   <!--  Header Container -->
-  <div class="m-2">
+  <div>
     <div class="flex justify-between items-center">
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
@@ -83,7 +83,7 @@
   </div>
 
   <!--List of the questions-->
-  <div class="w-full p-2 flex h-full overflow-auto scrollbar">
+  <div class="w-full flex h-full overflow-auto scrollbar">
     <div class="w-full h-full" *ngIf="dataDocumentWidget">
       <!-- Display questions by columns or all questions if columns is empty-->
       <ng-container
@@ -136,12 +136,12 @@
 
 <!--Question column-->
 <ng-template #questionColumn let-questions>
-  <div class="py-3 border-b border-b-secondary-200w-full">
+  <div class="py-3 border-b border-b-secondary-200">
     <p class="font-semibold text-sm">
       {{
-        questions.questionType === 'instructions'
-          ? 'Instruction'
-          : questions.prompt
+      questions.questionType === 'instructions'
+        ? 'Instruction'
+        : questions.prompt
       }}
     </p>
 
