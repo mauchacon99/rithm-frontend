@@ -23,8 +23,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Index default in tabs. */
   indexTab = 0;
 
+  /** Loading indicator tab station. */
+  isLoadingStationTab = false;
+
   /** Whether the getting tab document list is loading. */
   isLoadingDocumentTab = false;
+
+  /** Error loading petition station tab. */
+  errorLoadingStationTab = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -76,14 +82,20 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Get the station tab list.
    */
   private getStationTabList(): void {
+    this.isLoadingStationTab = true;
+    this.errorLoadingStationTab = false;
     this.dashboardService
       .getStationTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
+          this.isLoadingStationTab = false;
+          this.errorLoadingStationTab = false;
           this.itemsListStation = itemsListStation;
         },
         error: (error: unknown) => {
+          this.isLoadingStationTab = false;
+          this.errorLoadingStationTab = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
