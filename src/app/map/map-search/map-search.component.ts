@@ -104,7 +104,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
    * @returns True if width is below a certain amount.
    */
   get isMobile(): boolean {
-    return window.innerWidth <= 380;
+    return window.innerWidth <= 450;
   }
 
   /**
@@ -157,7 +157,9 @@ export class MapSearchComponent implements OnInit, OnDestroy {
    *
    * @param option The station or station group who's drawer will be opened.
    */
-  openDrawerMobileSearch(option: StationMapElement | StationGroupMapElement): void {
+  openDrawerMobileSearch(
+    option: StationMapElement | StationGroupMapElement
+  ): void {
     this.toggleMobileSearch();
     this.openDrawer(option);
   }
@@ -219,25 +221,27 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       ...this.mapService.stationElements,
       ...this.mapService.stationGroupElements,
     ];
-    this.filteredStationsStationGroups = stationsStationGroups.filter((item) => {
-      // If the item is a station.
-      if (item instanceof StationMapElement) {
-        return item.stationName
-          .toLowerCase()
-          .includes(searchText.toString().toLowerCase());
-        // If the item is a station group.
-      } else if (item instanceof StationGroupMapElement) {
-        if (item.title) {
-          return item.title
+    this.filteredStationsStationGroups = stationsStationGroups.filter(
+      (item) => {
+        // If the item is a station.
+        if (item instanceof StationMapElement) {
+          return item.stationName
             .toLowerCase()
             .includes(searchText.toString().toLowerCase());
+          // If the item is a station group.
+        } else if (item instanceof StationGroupMapElement) {
+          if (item.title) {
+            return item.title
+              .toLowerCase()
+              .includes(searchText.toString().toLowerCase());
+          } else {
+            return;
+          }
         } else {
-          return;
+          throw new Error('Item is not defined as a station or station group.');
         }
-      } else {
-        throw new Error('Item is not defined as a station or station group.');
       }
-    });
+    );
   }
 
   /**

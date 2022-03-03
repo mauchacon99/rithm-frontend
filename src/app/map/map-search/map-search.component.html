@@ -14,32 +14,36 @@
 
 <div
   class="bg-white"
-  [ngClass]="{ 'relative': !isMobile, 'fixed left-0 top-calc right-0 h-full': mobileSearchOpen }"
+  [ngClass]="{
+    relative: !isMobile,
+    'fixed left-0 top-calc right-0 h-full': mobileSearchOpen
+  }"
   *ngIf="!isMobile || mobileSearchOpen"
 >
   <i
     class="fas absolute z-40 text-secondary-300"
     [ngClass]="{
-      'fa-arrow-left cursor-pointer' : searchText !== '' && isDrawerOpen,
-      'fa-search' : !(searchText !== '' && isDrawerOpen),
-      'p-4 left-4 top-4' : isMobile,
-      'text-sm left-3 top-3' : !isMobile
+      'fa-arrow-left cursor-pointer': searchText !== '' && isDrawerOpen,
+      'fa-search': !(searchText !== '' && isDrawerOpen),
+      'p-4 left-4 top-4': isMobile,
+      'text-sm left-3 top-3': !isMobile
     }"
     (click)="returnSearchText()"
   ></i>
   <i
-    *ngIf="(searchText !== '' || searchText.length !== 0) || isMobile"
+    *ngIf="searchText !== '' || searchText.length !== 0 || isMobile"
     class="fas fa-times absolute z-40 cursor-pointer text-secondary-300"
     [ngClass]="{
-      'text-xl p-3 right-4 top-4' : isMobile,
-      'text-sm right-3 top-3' : !isMobile
+      'text-xl p-3 right-4 top-4': isMobile,
+      'text-sm right-3 top-3': !isMobile
     }"
     (click)="isMobile ? closeMobileSearch() : clearSearchText()"
   ></i>
   <mat-form-field
-  class="text-sm w-full"
-  [ngClass]="{ 'px-4 pt-4': isMobile}"
-  appearance="fill">
+    class="text-sm w-full"
+    [ngClass]="{ 'px-4 pt-4': isMobile }"
+    appearance="fill"
+  >
     <input
       #inputText
       type="text"
@@ -70,7 +74,7 @@
           *ngIf="!isStation(option)"
           class="group bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
-        <span class="inlin-block w-44">
+        <span class="inline-block w-44">
           {{ optionTitle }}
           <span class="block text-secondary-300 text-xs">{{
             !isStation(option) ? 'Group' : 'Station'
@@ -83,7 +87,13 @@
     <div
       *ngFor="let option of filteredStationsStationGroups"
       class="flex flex-row py-2"
-      [ngClass]="{' border-b border-b-secondary-100' : option !== filteredStationsStationGroups[filteredStationsStationGroups.length - 1]}"
+      [ngClass]="{
+        ' border-b border-b-secondary-100':
+          option !==
+          filteredStationsStationGroups[
+            filteredStationsStationGroups.length - 1
+          ]
+      }"
       (click)="openDrawerMobileSearch(option)"
     >
       <div

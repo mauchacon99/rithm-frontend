@@ -72,13 +72,15 @@ describe('MapSearchComponent', () => {
   it('should return 0 stations when search text is empty', () => {
     component.searchText = '';
     component.searchStationsStationGroups();
-    expect(component.filteredStations.length).toEqual(0);
+    expect(component.filteredStationsStationGroups.length).toEqual(0);
   });
 
   it('should return filtered stations when search text is not empty', () => {
     component.searchText = 'untitled';
     component.searchStationsStationGroups();
-    expect(component.filteredStations.length).toBeGreaterThanOrEqual(1);
+    expect(
+      component.filteredStationsStationGroups.length
+    ).toBeGreaterThanOrEqual(1);
   });
 
   it('should clear search box text', () => {
@@ -88,7 +90,7 @@ describe('MapSearchComponent', () => {
     );
     component.clearSearchText();
     expect(component.searchText).toEqual('');
-    expect(component.filteredStations.length).toEqual(0);
+    expect(component.filteredStationsStationGroups.length).toEqual(0);
     expect(mapServiceSpy).toHaveBeenCalled();
   });
 
@@ -145,7 +147,7 @@ describe('MapSearchComponent', () => {
     expect(stationServiceSpy).toHaveBeenCalledWith(dataInfoDrawer.stationName);
     expect(station.drawerOpened).toBeTrue();
     expect(component.searchText).toEqual('');
-    expect(component.filteredStations.length).toEqual(0);
+    expect(component.filteredStationsStationGroups.length).toEqual(0);
     service.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
     service.centerActive$.subscribe((res) => expect(res).toBe(true));
     service.centerStationCount$.subscribe((res) => expect(res).toBe(1));
