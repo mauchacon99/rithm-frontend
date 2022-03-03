@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockComponents } from 'ng-mocks';
+import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('CustomTabWidgetModalComponent', () => {
@@ -25,7 +25,7 @@ describe('CustomTabWidgetModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         CustomTabWidgetModalComponent,
-        MockComponents(LoadingIndicatorComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
       providers: [
@@ -84,6 +84,16 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(component.indexTab).toBe(indexTab);
   });
 
+  it('should rendered component loading for document tabs', () => {
+    component.isLoadingDocumentTab = true;
+    fixture.detectChanges();
+    expect(component.isLoadingDocumentTab).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-tab-document-list'
+    );
+
+    expect(loadingIndicator).toBeTruthy();
+  });
   it('should get list tab stations', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
@@ -109,12 +119,12 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
-    expect(component.errorLoadingStationtTab).toBeTrue();
+    expect(component.errorLoadingStationTab).toBeTrue();
   });
 
   it('should display error in station list tab', async () => {
     component.indexTab = 1; // station tab
-    component.errorLoadingStationtTab = true;
+    component.errorLoadingStationTab = true;
     await fixture.detectChanges();
     const errorLoadingStationTab = fixture.nativeElement.querySelector(
       '#error-station-list-tab'

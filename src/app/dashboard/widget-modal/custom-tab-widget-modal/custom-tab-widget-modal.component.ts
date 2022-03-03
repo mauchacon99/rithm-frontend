@@ -26,8 +26,11 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
 
+  /** Whether the getting tab document list is loading. */
+  isLoadingDocumentTab = false;
+
   /** Error loading petition station tab. */
-  errorLoadingStationtTab = false;
+  errorLoadingStationTab = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -56,14 +59,17 @@ export class CustomTabWidgetModalComponent implements OnInit {
    *
    */
   private getDocumentTabList(): void {
+    this.isLoadingDocumentTab = true;
     this.dashboardService
       .getDocumentTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
+          this.isLoadingDocumentTab = false;
           this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
+          this.isLoadingDocumentTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -77,19 +83,19 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   private getStationTabList(): void {
     this.isLoadingStationTab = true;
-    this.errorLoadingStationtTab = false;
+    this.errorLoadingStationTab = false;
     this.dashboardService
       .getStationTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
           this.isLoadingStationTab = false;
-          this.errorLoadingStationtTab = false;
+          this.errorLoadingStationTab = false;
           this.itemsListStation = itemsListStation;
         },
         error: (error: unknown) => {
           this.isLoadingStationTab = false;
-          this.errorLoadingStationtTab = true;
+          this.errorLoadingStationTab = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
