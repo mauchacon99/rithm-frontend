@@ -717,7 +717,7 @@ export class StationComponent
   }
 
   /**
-   * Inicializate the edit mode and layout config.
+   * Inicializate the edit mode and grid config.
    *
    */
   setEditMode(): void {
