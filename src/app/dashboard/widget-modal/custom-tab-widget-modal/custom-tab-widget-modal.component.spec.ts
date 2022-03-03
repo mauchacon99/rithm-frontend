@@ -125,5 +125,26 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+    expect(component.errorLoadingStationTab).toBeTrue();
+  });
+
+  it('should display error in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.errorLoadingStationTab = true;
+    await fixture.detectChanges();
+    const errorLoadingStationTab = fixture.nativeElement.querySelector(
+      '#error-station-list-tab'
+    );
+    expect(errorLoadingStationTab).toBeTruthy();
+  });
+
+  it('should display loading indicator in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.isLoadingStationTab = true;
+    await fixture.detectChanges();
+    const LoadingStationTab = fixture.nativeElement.querySelector(
+      '#loading-station-list-tab'
+    );
+    expect(LoadingStationTab).toBeTruthy();
   });
 });
