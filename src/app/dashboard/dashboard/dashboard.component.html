@@ -189,7 +189,7 @@
               </app-station-widget>
               <app-document-widget
                 *ngIf="item.widgetType === widgetType.Document"
-                [documentRithmId]="item.data"
+                [dataWidget]="item.data"
                 [editMode]="editMode"
                 (toggleDrawer)="
                   toggleWidgetDrawer('documentWidget', item, index, $event)
