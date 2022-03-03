@@ -1,4 +1,4 @@
-<ng-container *ngIf="widgetEditMode; else previewMode">
+<ng-container *ngIf="stationViewMode; else previewMode">
   <div *ngFor="let field of fields" class="min-h-[48.5px]">
     <app-text-field
       [field]="field"

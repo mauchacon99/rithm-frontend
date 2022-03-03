@@ -16,8 +16,8 @@ export class InputFrameWidgetComponent {
   /** The mode to display fields inside the widget. */
   @Input() widgetMode = 'layout';
 
-  /** Whether it is a widget in editable mode or not. */
-  @Input() widgetEditMode = false;
+  /** Whether the station is in editMode or previewMode. */
+  @Input() stationViewMode = false;
 
   /** The list of questionFieldTypes. */
   fieldTypes = QuestionFieldType;
