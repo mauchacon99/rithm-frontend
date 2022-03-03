@@ -27,8 +27,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
+  /** Loading indicator tab station. */
+  isLoadingStationTab = false;
+
   /** Whether the getting tab document list is loading. */
   isLoadingDocumentTab = false;
+
+  /** Error loading petition station tab. */
+  errorLoadingStationTab = false;
 
   /* Value to simulate list of groups waiting final method will be incorporated. */
   itemListWidgetModalGroups: ItemListWidgetModal[] = [
@@ -54,6 +60,8 @@ export class CustomTabWidgetModalComponent implements OnInit {
       totalSubGroups: 9,
     },
   ];
+
+
 
   constructor(
     private dashboardService: DashboardService,
@@ -111,6 +119,8 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Get the station tab list.
    */
   private getStationTabList(): void {
+    this.isLoadingStationTab = true;
+    this.errorLoadingStationTab = false;
     this.dashboardService
       .getStationTabList(this.dashboardRithmId)
       .pipe(first())
@@ -119,8 +129,12 @@ export class CustomTabWidgetModalComponent implements OnInit {
           this.dataSourceTableStations = new MatTableDataSource(
             itemsListStation
           );
+          this.isLoadingStationTab = false;
+          this.errorLoadingStationTab = false;
         },
         error: (error: unknown) => {
+          this.isLoadingStationTab = false;
+          this.errorLoadingStationTab = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
