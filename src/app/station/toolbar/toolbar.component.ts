@@ -102,7 +102,7 @@ export class ToolbarComponent {
     },
     {
       name: 'File Upload',
-      icon: 'fas fa-arrow-up-from-bracket',
+      icon: 'fa-solid fa-arrow-up-from-bracket',
       typeString: this.fieldTypeEnum.File,
       dataTestId: 'add-file-upload',
     },
