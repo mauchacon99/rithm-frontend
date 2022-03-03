@@ -31,7 +31,13 @@
   </mat-button-toggle-group>
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
-    <mat-tab> Content 1 </mat-tab>
+    <mat-tab>
+      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+        <app-loading-indicator
+          id="loading-tab-document-list"
+        ></app-loading-indicator>
+      </div>
+    </mat-tab>
     <mat-tab> Content 2 </mat-tab>
     <mat-tab> Content 3 </mat-tab>
   </mat-tab-group>

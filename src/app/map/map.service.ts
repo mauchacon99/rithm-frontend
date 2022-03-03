@@ -98,6 +98,9 @@ export class MapService {
   /** Informs the map that which drawer is opened. */
   isDrawerOpened$ = new BehaviorSubject(false);
 
+  /** The View Station Button Click, informs to make the init Load on the map. */
+  viewStationButtonClick$ = new BehaviorSubject(true);
+
   /**
    * The coordinate at which the canvas is currently rendering in regards to the overall map.
    * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
@@ -138,6 +141,9 @@ export class MapService {
 
   /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
   centerStationCount$ = new BehaviorSubject(0);
+
+  /** The Station rithm Id centered on the map. */
+  centerStationRithmId$ = new BehaviorSubject('');
 
   /** The number of times this.centerStationGroup() should be called.*/
   centerStationGroupCount$ = new BehaviorSubject(0);
@@ -393,6 +399,19 @@ export class MapService {
 
     //Update the stationElements array.
     this.stationElements.push(newStation);
+
+    // Find the Root Station Group index.
+    const isReadOnlyRootStationGroupIndex = this.stationGroupElements.findIndex(
+      (stationGroup) => stationGroup.isReadOnlyRootStationGroup
+    );
+
+    if (isReadOnlyRootStationGroupIndex !== -1) {
+      // Updating the stations in the Root station group.
+      this.stationGroupElements[isReadOnlyRootStationGroupIndex].stations.push(
+        newStation.rithmId
+      );
+    }
+
     //Update the map boundary.
     if (this.boundaryElement) {
       this.boundaryElement.updatePoints(this.stationElements);

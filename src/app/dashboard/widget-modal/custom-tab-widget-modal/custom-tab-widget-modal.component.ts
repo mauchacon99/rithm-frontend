@@ -17,8 +17,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /* List document tab Widget Modal. */
   itemsListDocument: ItemListWidgetModal[] = [];
 
+  /* List station tab widget Modal. */
+  itemsListStation: ItemListWidgetModal[] = [];
+
   /** Index default in tabs. */
   indexTab = 0;
+
+  /** Whether the getting tab document list is loading. */
+  isLoadingDocumentTab = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -30,27 +36,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocumentTabList();
-  }
-
-  /**
-   * Get list tab documents.
-   *
-   */
-  private getDocumentTabList(): void {
-    this.dashboardService
-      .getDocumentTabList(this.dashboardRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (itemsListDocument) => {
-          this.itemsListDocument = itemsListDocument;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+    this.getStationTabList();
   }
 
   /**
@@ -60,5 +46,49 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   selectedTab(index: number): void {
     this.indexTab = index;
+  }
+
+  /**
+   * Get list tab documents.
+   *
+   */
+  private getDocumentTabList(): void {
+    this.isLoadingDocumentTab = true;
+    this.dashboardService
+      .getDocumentTabList(this.dashboardRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (itemsListDocument) => {
+          this.isLoadingDocumentTab = false;
+          this.itemsListDocument = itemsListDocument;
+        },
+        error: (error: unknown) => {
+          this.isLoadingDocumentTab = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the station tab list.
+   */
+  private getStationTabList(): void {
+    this.dashboardService
+      .getStationTabList(this.dashboardRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (itemsListStation) => {
+          this.itemsListStation = itemsListStation;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
