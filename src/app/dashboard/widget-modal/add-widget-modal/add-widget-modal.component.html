@@ -22,11 +22,13 @@
 >
   <!-- Tab Custom widget -->
   <mat-tab label="Custom" aria-label="Custom">
-    <app-custom-tab-widget-modal></app-custom-tab-widget-modal>
+    <app-custom-tab-widget-modal
+      [dashboardRithmId]="dashboardRithmId"
+    ></app-custom-tab-widget-modal>
   </mat-tab>
 
   <!-- Tab Pre Build widget -->
-  <mat-tab label="Pre Build" aria-label="Pre Build">
-    <div class="py-4">Content for Pre build tab</div>
+  <mat-tab label="Pre Built" aria-label="Pre Built">
+    <div class="py-4">Content for Pre built tab</div>
   </mat-tab>
 </mat-tab-group>

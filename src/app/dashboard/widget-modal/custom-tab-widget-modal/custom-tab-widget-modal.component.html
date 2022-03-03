@@ -1,3 +1,44 @@
-<p class="py-4">
-  To build a custom widget, first select what item you'd like to pull data from.
-</p>
+<div class="mt-10 tabs-group">
+  <mat-button-toggle-group
+    #colorToggle="matButtonToggleGroup"
+    value="primary"
+    class="button-group"
+  >
+    <mat-button-toggle
+      value="primary"
+      (click)="selectedTab(0)"
+      data-testid="tab-button-document"
+      id="tab-button-document"
+    >
+      Documents
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="accent"
+      (click)="selectedTab(1)"
+      data-testid="tab-button-station"
+      id="tab-button-station"
+    >
+      Stations
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="accent"
+      (click)="selectedTab(2)"
+      data-testid="tab-button-flow"
+      id="tab-button-flow"
+    >
+      Groups
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
+    <mat-tab>
+      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+        <app-loading-indicator
+          id="loading-tab-document-list"
+        ></app-loading-indicator>
+      </div>
+    </mat-tab>
+    <mat-tab> Content 2 </mat-tab>
+    <mat-tab> Content 3 </mat-tab>
+  </mat-tab-group>
+</div>
