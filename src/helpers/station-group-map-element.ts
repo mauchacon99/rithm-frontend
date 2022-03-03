@@ -72,7 +72,6 @@ export class StationGroupMapElement {
           ) {
             this.hoverItem = iconButton.typeButton;
             if (this.status === MapItemStatus.Pending) return;
-            else continue;
           } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
             this.hoverItem = StationGroupElementHoverItem.Boundary;
           } else {

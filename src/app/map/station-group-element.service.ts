@@ -985,11 +985,9 @@ export class StationGroupElementService {
         }
         // If isChained is set to true.
         if (stationGroup.isChained) {
-          const IconSpan =
-            this.mapService.mapMode$.value !== MapMode.View ? 4 : 1;
           const titleWidth =
             this.canvasContext.measureText(title).width +
-            GROUP_CHARACTER_SIZE * IconSpan * this.mapScale;
+            GROUP_CHARACTER_SIZE * 1 * this.mapScale;
           // Reset pathButtons of stationGroup.
           stationGroup.pathButtons = [];
           // Paint the Chained Icon on the map.
@@ -1005,13 +1003,13 @@ export class StationGroupElementService {
           this.mapService.mapMode$.value !== MapMode.View &&
           stationGroup.status !== MapItemStatus.Pending
         ) {
+          const IconSpan = stationGroup.isChained ? 5.5 : 1;
           // If status of the station group option button.
           const titleWidth =
             this.canvasContext.measureText(title).width +
-            GROUP_CHARACTER_SIZE * 2 * this.mapScale;
+            GROUP_CHARACTER_SIZE * IconSpan * this.mapScale;
           // Reset pathButtons of the station group.
           stationGroup.pathButtons = [];
-
           // Paint the Option Icon on the map.
           this.drawStationGroupIcon(
             pointStart,
@@ -1035,8 +1033,11 @@ export class StationGroupElementService {
           STATION_GROUP_NAME_PADDING +
           (stationGroup.status === MapItemStatus.Pending
             ? GROUP_CHARACTER_SIZE * 12
+            : this.mapService.mapMode$.value !== MapMode.View &&
+              stationGroup.isChained
+            ? GROUP_CHARACTER_SIZE * 7
             : this.mapService.mapMode$.value !== MapMode.View
-            ? GROUP_CHARACTER_SIZE * 4
+            ? GROUP_CHARACTER_SIZE * 2
             : GROUP_CHARACTER_SIZE) *
             this.mapScale,
         //This dynamically sets the hight of the rectangle based on the hight of the text.
@@ -1120,14 +1121,13 @@ export class StationGroupElementService {
       Math.abs(m) < Math.PI / 3
     );
 
-    // const IconfontSize =
-    //   icon === ICON_STATION_GROUP_OPTION ? 8 : FONT_SIZE_MODIFIER;
     //If icon and hoverColor are defined.
     if (typeof icon !== 'undefined' && typeof hoverColor !== 'undefined') {
       const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
       // Font selected to paint the icon.
-      // Ignore icon hover font increase size.
+      /* Icons increase in size when hovered with the exception of the option icon while in
+      stationGroupAdd mode. */
       const hoverFontSize =
         this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
         typeButton === 'buttonOption'
