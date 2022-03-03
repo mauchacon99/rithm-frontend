@@ -8,6 +8,8 @@ import { throwError } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -21,7 +23,10 @@ describe('CustomTabWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CustomTabWidgetModalComponent],
+      declarations: [
+        CustomTabWidgetModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
@@ -79,6 +84,16 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(component.indexTab).toBe(indexTab);
   });
 
+  it('should rendered component loading for document tabs', () => {
+    component.isLoadingDocumentTab = true;
+    fixture.detectChanges();
+    expect(component.isLoadingDocumentTab).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-tab-document-list'
+    );
+
+    expect(loadingIndicator).toBeTruthy();
+  });
   it('should get list tab stations', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
@@ -104,5 +119,26 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+    expect(component.errorLoadingStationTab).toBeTrue();
+  });
+
+  it('should display error in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.errorLoadingStationTab = true;
+    await fixture.detectChanges();
+    const errorLoadingStationTab = fixture.nativeElement.querySelector(
+      '#error-station-list-tab'
+    );
+    expect(errorLoadingStationTab).toBeTruthy();
+  });
+
+  it('should display loading indicator in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.isLoadingStationTab = true;
+    await fixture.detectChanges();
+    const LoadingStationTab = fixture.nativeElement.querySelector(
+      '#loading-station-list-tab'
+    );
+    expect(LoadingStationTab).toBeTruthy();
   });
 });

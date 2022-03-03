@@ -15,8 +15,9 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
   let fixture: ComponentFixture<DocumentWidgetComponent>;
-  const documentRithmId =
-    '{"documentRithmId":"8263330A-BCAA-40DB-8C06-D4C111D5C9DA"}';
+  const dataWidget =
+    '{"documentRithmId":"8263330A-BCAA-40DB-8C06-D4C111D5C9DA","columns":[{"name":"Test","questionId":"45454-54545-45454"}]}';
+  const documentRithmId = '8263330A-BCAA-40DB-8C06-D4C111D5C9DA';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -36,7 +37,7 @@ describe('DocumentWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentWidgetComponent);
     component = fixture.componentInstance;
-    component.documentRithmId = documentRithmId;
+    component.dataWidget = dataWidget;
     fixture.detectChanges();
   });
 
@@ -112,7 +113,7 @@ describe('DocumentWidgetComponent', () => {
   it('should redirect to document page', () => {
     component.dataDocumentWidget = {
       documentName: 'Untitled Document',
-      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+      documentRithmId,
       questions: [],
       stations: [
         {
@@ -136,10 +137,10 @@ describe('DocumentWidgetComponent', () => {
     button.click(component.dataDocumentWidget.stations[0].stationRithmId);
     expect(navigateSpy).toHaveBeenCalled();
     expect(spyRoute).toHaveBeenCalledOnceWith(
-      ['/', 'document', JSON.parse(documentRithmId).documentRithmId],
+      ['/', 'document', documentRithmId],
       {
         queryParams: {
-          documentId: JSON.parse(documentRithmId).documentRithmId,
+          documentId: documentRithmId,
           stationId: component.dataDocumentWidget.stations[0].stationRithmId,
         },
       }
@@ -149,7 +150,7 @@ describe('DocumentWidgetComponent', () => {
   it('should show a gear icon in edit mode', () => {
     component.dataDocumentWidget = {
       documentName: 'Untitled Document',
-      documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+      documentRithmId,
       questions: [],
       stations: [
         {
@@ -189,7 +190,7 @@ describe('DocumentWidgetComponent', () => {
 
       component.dataDocumentWidget = {
         documentName: 'Untitled Document',
-        documentRithmId: JSON.parse(documentRithmId).documentRithmId,
+        documentRithmId,
         questions: [],
         stations: [
           {
@@ -213,5 +214,12 @@ describe('DocumentWidgetComponent', () => {
       expect(component.toggleEditDocument).toHaveBeenCalled();
       expect(component.toggleDrawer.emit).toHaveBeenCalled();
     });
+  });
+
+  it('should be parse dataWidget', () => {
+    const expectDataWidget = JSON.parse(dataWidget);
+    component['parseDataColumnsWidget']();
+    expect(component.documentRithmId).toEqual(expectDataWidget.documentRithmId);
+    expect(component.documentColumns).toEqual(expectDataWidget.columns);
   });
 });
