@@ -131,8 +131,14 @@ export class MockMapService {
   /** Checks if there should be panning towards the center of any station. */
   centerActive$ = new BehaviorSubject(false);
 
+  /** The Station rithm Id centered on the map. */
+  centerStationRithmId$ = new BehaviorSubject('');
+
   /** Informs the map that which drawer is opened. */
   isDrawerOpened$ = new BehaviorSubject(false);
+
+  /** The View Station Button Click, informs to make the init Load on the map. */
+  viewStationButtonClick$ = new BehaviorSubject(true);
 
   /**
    * Creates a new `MockMapService`.

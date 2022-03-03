@@ -124,6 +124,7 @@ export class StationComponent
 
   inputFrameWidgetItems: InputFrameWidget[] = [
     {
+      frameRithmId: '',
       cols: 6,
       rows: 4,
       x: 1,
@@ -131,6 +132,8 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
+      type: '',
+      data: '',
     },
   ];
 
@@ -426,6 +429,8 @@ export class StationComponent
             this.stationForm.controls.generalInstructions.setValue(
               stationInfo.instructions
             );
+            this.inputFrameWidgetItems[0].questions =
+              this.stationInformation.questions;
           }
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
