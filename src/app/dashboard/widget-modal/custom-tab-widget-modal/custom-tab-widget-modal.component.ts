@@ -24,8 +24,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Index default in tabs. */
   indexTab = 0;
 
-  /** Interface for list data in widget. */
+  /** List table documents. */
   dataSourceTableDocument!: MatTableDataSource<ItemListWidgetModal>;
+
+  /** List table stations. */
+  dataSourceTableStations!: MatTableDataSource<ItemListWidgetModal>;
+
+  /** List table Group. */
+  dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
   constructor(
     private dashboardService: DashboardService,
@@ -83,6 +89,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
+          this.dataSourceTableStations = new MatTableDataSource(
+            itemsListStation
+          );
           this.itemsListStation = itemsListStation;
         },
         error: (error: unknown) => {

@@ -516,6 +516,7 @@ export class MockDashboardService {
         documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         groupRithmId: '7',
+        documentName: 'Document Name',
         stationName: 'Station Name that is name',
         groupName: 'Group group',
         isChainedGroup: true,

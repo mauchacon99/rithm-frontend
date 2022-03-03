@@ -8,6 +8,8 @@ export interface ItemListWidgetModal {
   stationRithmId?: string;
   /** Group rithmId. */
   groupRithmId?: string;
+  /** Document name. */
+  documentName?: string;
   /** Station name. */
   stationName?: string;
   /** Group name. */
