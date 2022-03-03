@@ -31,6 +31,7 @@ import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fi
 import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
 import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-field.module';
 import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.module';
+import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.module';
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GridsterModule } from 'angular-gridster2';
@@ -73,6 +74,7 @@ import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/
     InfoDrawerModule,
     NumberFieldModule,
     DateFieldModule,
+    FileFieldModule,
     SelectFieldModule,
     MatTooltipModule,
     GridsterModule,

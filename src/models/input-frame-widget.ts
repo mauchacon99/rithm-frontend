@@ -1,6 +1,8 @@
 import { Question } from './question';
 
 export interface InputFrameWidget {
+  /** Unique Id for each InputFrame. */
+  frameRithmId: string;
   /** Number of columns that item spans. */
   cols: number;
   /** Number of rows that item spans. */
@@ -19,4 +21,9 @@ export interface InputFrameWidget {
   maxItemCols?: number;
   /** The array of questions. */
   questions: Question[];
+  /** Type each input frame. */
+  /** This is going to be updated with InputFrameType Enum. */
+  type: string;
+  /** The data contained in each frame. */
+  data: string;
 }
