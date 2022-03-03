@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ItemListWidgetModal } from 'src/models';
 
@@ -8,21 +8,19 @@ import { ItemListWidgetModal } from 'src/models';
 @Component({
   selector: 'app-item-list-widget-modal[itemListWidgetModal][type]',
   templateUrl: './item-list-widget-modal.component.html',
-  styleUrls: ['./item-list-widget-modal.component.scss']
+  styleUrls: ['./item-list-widget-modal.component.scss'],
 })
-export class ItemListWidgetModalComponent implements OnInit {
+export class ItemListWidgetModalComponent {
   /** The item list widget modal. */
   @Input() itemListWidgetModal!: MatTableDataSource<ItemListWidgetModal>;
 
   /** The item list widget modal. */
   @Input() type!: string;
 
-
-  displayedColumnsTableDocument: string[] = ['documentRithmId','groupName','action'];
-
-  /**Initial method. */
-  ngOnInit(): void {
-    return;
-  }
+  /** Columns to display. */
+  displayedColumnsTableDocument: string[] = [
+    'mainInformation',
+    'generalInformation',
+    'action',
+  ];
 }
-

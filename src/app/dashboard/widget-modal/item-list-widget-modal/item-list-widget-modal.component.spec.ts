@@ -8,9 +8,8 @@ describe('ItemListWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ItemListWidgetModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ItemListWidgetModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

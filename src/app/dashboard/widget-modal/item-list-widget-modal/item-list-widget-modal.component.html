@@ -1,24 +1,41 @@
-
 <!-- Document list item tab-->
 <div class="py-7">
-  <table *ngIf="type === 'document'" mat-table [dataSource]="itemListWidgetModal"  class="w-full scrollbar">
-
-    <ng-container  [matColumnDef]="'documentRithmId'">
+  <table
+    *ngIf="type === 'document'"
+    mat-table
+    [dataSource]="itemListWidgetModal"
+    class="w-full scrollbar table-container"
+  >
+    <ng-container [matColumnDef]="'mainInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold text-accent-600">{{ element.documentName }}</span><br>
-        <span class="text-xs text-secondary-500">Current Station: {{ (element.isChainedGroup)?'Chained':'Not Chained' }}</span>
+        <span class="text-base font-semibold text-accent-600">{{
+          element.name
+        }}</span
+        ><br />
+        <span class="text-xs text-secondary-500"
+          >Current Station: {{ element.stationName }}</span
+        >
       </td>
     </ng-container>
 
-    <ng-container  [matColumnDef]="'groupName'">
+    <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold">{{ element.groupName }}</span><br>
-        <span class="text-xs text-secondary-500">Group Type: {{ (element.isChainedGroup)?'Chained':'Not Chained' }}</span>
+        <span class="text-base font-semibold">{{
+          element.stationGroupName
+        }}</span
+        ><br />
+        <span class="text-xs text-secondary-500"
+          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+        >
       </td>
     </ng-container>
 
-    <ng-container  [matColumnDef]="'action'" stickyEnd>
-      <td mat-cell class="min-w-[150px]" *matCellDef="let element">
+    <ng-container [matColumnDef]="'action'" stickyEnd class="custom-action">
+      <td
+        mat-cell
+        class="pr-0 min-w-[40px] sm:min-w-[150px]"
+        *matCellDef="let element"
+      >
         <span class="text-xs text-secondary-500">
           <div class="text-right">
             <button
@@ -34,27 +51,42 @@
       </td>
     </ng-container>
 
-
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsTableDocument;"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumnsTableDocument"
+      class="cursor-pointer hover:bg-secondary-50"
+    ></tr>
   </table>
-<!-- Stations list item tab-->
-  <table *ngIf="type === 'station'" mat-table [dataSource]="itemListWidgetModal" class="w-full">
-
-    <ng-container  [matColumnDef]="'documentRithmId'">
+  <!-- Stations list item tab-->
+  <table
+    *ngIf="type === 'station'"
+    mat-table
+    [dataSource]="itemListWidgetModal"
+    class="w-full"
+  >
+    <ng-container [matColumnDef]="'mainInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold text-accent-600">{{ element.stationName }}</span><br>
-        <span class="text-xs text-secondary-500">{{ element.totalDocuments }} Documents</span>
+        <span class="text-base font-semibold text-accent-600">{{
+          element.name
+        }}</span
+        ><br />
+        <span class="text-xs text-secondary-500"
+          >{{ element.totalDocuments }} Documents</span
+        >
       </td>
     </ng-container>
 
-    <ng-container  [matColumnDef]="'groupName'">
+    <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold">{{ element.groupName }}</span><br>
-        <span class="text-xs text-secondary-500">Group Type: {{ (element.isChainedGroup)?'Chained':'Not Chained' }}</span>
+        <span class="text-base font-semibold">{{ element.groupName }}</span
+        ><br />
+        <span class="text-xs text-secondary-500"
+          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+        >
       </td>
     </ng-container>
 
-    <ng-container  [matColumnDef]="'action'" stickyEnd>
+    <ng-container [matColumnDef]="'action'" stickyEnd>
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-xs text-secondary-500">
           <div class="text-right">
@@ -71,27 +103,43 @@
       </td>
     </ng-container>
 
-
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsTableDocument;"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumnsTableDocument"
+      class="cursor-pointer hover:bg-secondary-50"
+    ></tr>
   </table>
-<!-- Group list item tab-->
-  <table *ngIf="type === 'group'" mat-table [dataSource]="itemListWidgetModal" class="w-full">
-
-    <ng-container  [matColumnDef]="'documentRithmId'">
+  <!-- Group list item tab-->
+  <table
+    *ngIf="type === 'group'"
+    mat-table
+    [dataSource]="itemListWidgetModal"
+    class="w-full"
+  >
+    <ng-container [matColumnDef]="'mainInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold text-accent-600">{{ element.groupName }}</span><br>
-        <span class="text-xs text-secondary-500">{{ element.totalStations }} Stations</span>
+        <span class="text-base font-semibold text-accent-600">{{
+          element.name
+        }}</span
+        ><br />
+        <span class="text-xs text-secondary-500"
+          >{{ element.totalStations }} Stations</span
+        >
       </td>
     </ng-container>
 
-    <ng-container  [matColumnDef]="'groupName'">
+    <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold">Group Type: {{ (element.isChainedGroup)?'Chained':'Not Chained' }}</span><br>
-        <span class="text-xs text-secondary-500"> {{ element.totalSubGroups }} Sub groups</span>
+        <span class="text-base font-semibold"
+          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+        ><br />
+        <span class="text-xs text-secondary-500">
+          {{ element.totalSubGroups }} Sub groups</span
+        >
       </td>
     </ng-container>
 
-    <ng-container  [matColumnDef]="'action'" stickyEnd>
+    <ng-container [matColumnDef]="'action'" stickyEnd>
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-xs text-secondary-500">
           <div class="text-right">
@@ -109,7 +157,11 @@
     </ng-container>
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">No data found</td>
-  </tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsTableDocument;"></tr>
+    </tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumnsTableDocument"
+      class="cursor-pointer hover:bg-secondary-50"
+    ></tr>
   </table>
 </div>

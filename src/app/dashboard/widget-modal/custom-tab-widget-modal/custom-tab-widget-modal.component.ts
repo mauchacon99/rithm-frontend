@@ -36,6 +36,31 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Whether the getting tab document list is loading. */
   isLoadingDocumentTab = false;
 
+  /* Value to simulate list of groups waiting final method will be incorporated*/
+  itemListWidgetModalGroups: ItemListWidgetModal[] = [
+    {
+      rithmId: '7',
+      name: 'Groupygroup',
+      isChained: false,
+      totalStations: 2,
+      totalSubGroups: 5,
+    },
+    {
+      rithmId: '7',
+      name: 'Groupygroup',
+      isChained: true,
+      totalStations: 2,
+      totalSubGroups: 3,
+    },
+    {
+      rithmId: '7',
+      name: 'Groupygroup',
+      isChained: false,
+      totalStations: 2,
+      totalSubGroups: 9,
+    },
+  ];
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -47,7 +72,10 @@ export class CustomTabWidgetModalComponent implements OnInit {
   ngOnInit(): void {
     this.getDocumentTabList();
     this.getStationTabList();
-
+    /*Temporal function to simulate list of groups waiting final method will be incorporated */
+    this.dataSourceTableGroup = new MatTableDataSource(
+      this.itemListWidgetModalGroups
+    );
   }
 
   /**

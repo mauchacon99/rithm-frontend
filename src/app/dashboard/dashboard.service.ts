@@ -274,41 +274,26 @@ export class DashboardService {
   ): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
-        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        groupRithmId: '7',
-        documentName: 'Document Name',
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
         stationName: 'Stationy Name that is namey',
-        groupName: 'Groupygroup',
-        isChainedGroup: false,
-        totalDocuments: 2,
-        totalStations: 2,
-        totalSubGroups: 2,
+        stationGroupName: 'Groupygroup',
+        isChained: false,
       },
       {
-        documentRithmId: '3B78-433F-9E6C-22E3A0BDBD8B-200E132A',
-        stationRithmId: 'A1B9-4AC5-93E8-58316C1FDD9F-9360D633',
-        groupRithmId: '7',
-        documentName: 'Document Name',
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
         stationName: 'Stationy Name that is namey',
-        groupName: 'Groupygroup',
-        isChainedGroup: true,
-        totalDocuments: 2,
-        totalStations: 2,
-        totalSubGroups: 2,
+        stationGroupName: 'Groupygroup',
+        isChained: true,
       },
       {
-        documentRithmId: '3B78-433F-9E6C-200E132A-22E3A0BDBD8B',
-        stationRithmId: 'A1B9-4AC5-93E8-9360D633-58316C1FDD9F',
-        groupRithmId: '7',
-        documentName: 'Document Name',
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
         stationName: 'Stationy Name that is namey',
-        groupName: 'Groupygroup',
-        isChainedGroup: false,
-        totalDocuments: 2,
-        totalStations: 2,
-        totalSubGroups: 2,
-      }
+        stationGroupName: 'Groupygroup',
+        isChained: false,
+      },
     ];
     return of(itemListWidgetModal).pipe(delay(1000));
   }
@@ -325,15 +310,11 @@ export class DashboardService {
   ): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
-        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        groupRithmId: '7',
-        stationName: 'Stationy Name that is namey',
+        rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        name: 'Stationy Name that is namey',
         groupName: 'Groupygroup',
-        isChainedGroup: false,
+        isChained: false,
         totalDocuments: 2,
-        totalStations: 2,
-        totalSubGroups: 2,
       },
     ];
     return of(itemListWidgetModal).pipe(delay(1000));
