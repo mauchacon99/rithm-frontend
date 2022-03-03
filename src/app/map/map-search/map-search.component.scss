@@ -43,3 +43,8 @@
 .top-calc {
   top: 64px;
 }
+
+.h-calc {
+  height: calc(100vh - 134px); //this height is set for browser compatibility.
+  height: calc(var(--mobilesearchvh, 1vh) * 100 - 134px);
+}

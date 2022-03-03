@@ -34,17 +34,18 @@
       'text-xl p-3 right-4 top-4' : isMobile,
       'text-sm right-3 top-3' : !isMobile
     }"
-    (click)="isMobile ? toggleMobileSearch() : clearSearchText()"
+    (click)="isMobile ? closeMobileSearch() : clearSearchText()"
   ></i>
   <mat-form-field
   class="text-sm w-full"
-  [ngClass]="{ 'p-4': isMobile}"
+  [ngClass]="{ 'px-4 pt-4': isMobile}"
   appearance="fill">
     <input
       #inputText
       type="text"
       matInput
       [matAutocomplete]="auto"
+      [matAutocompleteDisabled]="isMobile"
       [(ngModel)]="searchText"
       (ngModelChange)="searchStationsStationGroups()"
       placeholder="Search"
@@ -57,25 +58,48 @@
     >
       <mat-option
         class="text-sm"
-        *ngFor="let option of filteredStations"
+        *ngFor="let option of filteredStationsStationGroups"
         [value]="option"
         (click)="openDrawer(option)"
       >
         <span
-          *ngIf="option.stationName"
+          *ngIf="isStation(option)"
           class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
         <span
-          *ngIf="option.title"
+          *ngIf="!isStation(option)"
           class="group bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
         <span class="inlin-block w-44">
-          {{ option.title ? option.title : option.stationName }}
+          {{ optionTitle }}
           <span class="block text-secondary-300 text-xs">{{
-            option.title ? 'Group' : 'Station'
+            !isStation(option) ? 'Group' : 'Station'
           }}</span>
         </span>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+  <div *ngIf="isMobile" class="overflow-auto w-full h-calc px-4 mt-2">
+    <div
+      *ngFor="let option of filteredStationsStationGroups"
+      class="flex flex-row py-2"
+      [ngClass]="{' border-b border-b-secondary-100' : option !== filteredStationsStationGroups[filteredStationsStationGroups.length - 1]}"
+      (click)="openDrawerMobileSearch(option)"
+    >
+      <div
+        *ngIf="isStation(option)"
+        class="station bg-contain bg-no-repeat w-5 h-4 inline-block self-center mr-2"
+      ></div>
+      <div
+        *ngIf="!isStation(option)"
+        class="group bg-contain bg-no-repeat w-5 h-4 inline-block self-center mr-2"
+      ></div>
+      <span class="inline-block w-full">
+        {{ optionTitle }}
+        <span class="block text-secondary-300 text-xs">{{
+          !isStation(option) ? 'Group' : 'Station'
+        }}</span>
+      </span>
+    </div>
+  </div>
 </div>
