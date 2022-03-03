@@ -39,8 +39,8 @@
           <mat-label>Select Field</mat-label>
           <mat-select
             [(value)]="firstOperandQuestionRithmId"
-            id="first-operand"
-            data-testid="first-operand"
+            id="first-operand-selector"
+            data-testid="first-operand-selector"
           >
             <ng-container *ngFor="let question of firstOperandQuestionList">
               <mat-option
@@ -66,8 +66,8 @@
                 </mat-option>
                 <mat-optgroup class="address-line-group">
                   <mat-option
-                    id="first-operand-sub-option-{{ question.rithmId }}"
-                    attr.data-testid="first-operand-sub-option-{{
+                    id="first-operand-option-{{ question.rithmId }}"
+                    attr.data-testid="first-operand-option-{{
                       question.rithmId
                     }}"
                     *ngFor="
@@ -140,8 +140,8 @@
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
           <mat-select
-            id="operator"
-            data-testid="operator"
+            id="operator-selector"
+            data-testid="operator-selector"
             [(ngModel)]="operatorSelected"
             [ngModelOptions]="{ standalone: true }"
             (selectionChange)="resetQuestionFieldComponent()"
@@ -251,8 +251,8 @@
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
           <mat-select
-            id="second-operand"
-            data-testid="second-operand"
+            id="second-operand-selector"
+            data-testid="second-operand-selector"
             [disabled]="!secondOperandQuestionList.length"
             [(ngModel)]="secondOperand.value"
             [ngModelOptions]="{ standalone: true }"
