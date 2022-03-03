@@ -15,7 +15,7 @@ export class ItemListWidgetModalComponent {
   @Input() itemListWidgetModal!: MatTableDataSource<ItemListWidgetModal>;
 
   /** The item list widget modal. */
-  @Input() type!: string;
+  @Input() type: 'document' | 'station' | 'group' = 'document';
 
   /** Columns to display. */
   displayedColumnsTableDocument: string[] = [

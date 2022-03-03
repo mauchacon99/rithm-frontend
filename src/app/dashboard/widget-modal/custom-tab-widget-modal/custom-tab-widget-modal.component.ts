@@ -15,12 +15,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /* Dashboard rithm Id. */
   @Input() dashboardRithmId!: string;
 
-  /* List document tab Widget Modal. */
-  itemsListDocument: ItemListWidgetModal[] = [];
-
-  /* List station tab widget Modal. */
-  itemsListStation: ItemListWidgetModal[] = [];
-
   /** Index default in tabs. */
   indexTab = 0;
 
@@ -102,7 +96,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
             itemsListDocument
           );
           this.isLoadingDocumentTab = false;
-          this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
           this.isLoadingDocumentTab = false;
@@ -126,7 +119,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
           this.dataSourceTableStations = new MatTableDataSource(
             itemsListStation
           );
-          this.itemsListStation = itemsListStation;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
