@@ -8,6 +8,8 @@ import { throwError } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MatInputModule } from '@angular/material/input';
 
 describe('CustomTabWidgetModalComponent', () => {
@@ -22,7 +24,10 @@ describe('CustomTabWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CustomTabWidgetModalComponent],
+      declarations: [
+        CustomTabWidgetModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [
         MatButtonToggleModule,
         MatTabsModule,
@@ -85,6 +90,16 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(component.indexTab).toBe(indexTab);
   });
 
+  it('should rendered component loading for document tabs', () => {
+    component.isLoadingDocumentTab = true;
+    fixture.detectChanges();
+    expect(component.isLoadingDocumentTab).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-tab-document-list'
+    );
+
+    expect(loadingIndicator).toBeTruthy();
+  });
   it('should get list tab stations', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),

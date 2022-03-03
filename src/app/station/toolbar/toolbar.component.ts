@@ -100,6 +100,12 @@ export class ToolbarComponent {
       typeString: this.fieldTypeEnum.Instructions,
       dataTestId: 'add-instructions',
     },
+    {
+      name: 'File Upload',
+      icon: 'fa-solid fa-arrow-up-from-bracket',
+      typeString: this.fieldTypeEnum.File,
+      dataTestId: 'add-file-upload',
+    },
   ];
 
   /**
