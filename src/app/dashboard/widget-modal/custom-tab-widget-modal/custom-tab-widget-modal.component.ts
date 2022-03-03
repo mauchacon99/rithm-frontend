@@ -61,8 +61,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
     },
   ];
 
-
-
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
