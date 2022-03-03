@@ -9,68 +9,64 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import { DateAdapter } from '@angular/material/core';
+
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 
 /**
- * Reusable component for every date field.
+ *
  */
 @Component({
-  selector: 'app-date-field',
-  templateUrl: './date-field.component.html',
-  styleUrls: ['./date-field.component.scss'],
+  selector: 'app-file-field',
+  templateUrl: './file-field.component.html',
+  styleUrls: ['./file-field.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DateFieldComponent),
+      useExisting: forwardRef(() => FileFieldComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => DateFieldComponent),
+      useExisting: forwardRef(() => FileFieldComponent),
       multi: true,
     },
   ],
 })
-export class DateFieldComponent
+export class FileFieldComponent
   implements OnInit, ControlValueAccessor, Validator
 {
   /** The document field to display. */
   @Input() field!: Question;
 
+  /** Whether the instance comes from station or document. */
+  @Input() isStation = true;
+
   /** The form to add this field in the template. */
-  dateFieldForm!: FormGroup;
+  fileFieldForm!: FormGroup;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  /** Helper class for field validation. */
-  fieldValidation = new DocumentFieldValidation();
-
   constructor(
-    private fb: FormBuilder,
     private documentService: DocumentService,
-    readonly adapter: DateAdapter<Date>
-  ) {
-    this.adapter.setLocale('en-EN');
-  }
+    private fb: FormBuilder
+  ) {}
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    this.dateFieldForm = this.fb.group({
-      date: [this.fieldValue, []],
+    this.fileFieldForm = this.fb.group({
+      file: [this.fieldValue, []],
     });
 
     if (this.field.isRequired) {
-      this.dateFieldForm.get('date')?.setValidators([Validators.required]);
+      this.fileFieldForm.get('file')?.setValidators([Validators.required]);
     }
 
-    this.dateFieldForm.get('date')?.markAsTouched();
-    this.dateFieldForm.get('date')?.updateValueAndValidity();
+    this.fileFieldForm.get('file')?.markAsTouched();
+    this.fileFieldForm.get('file')?.updateValueAndValidity();
   }
 
   /**
@@ -86,7 +82,7 @@ export class DateFieldComponent
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.dateFieldForm.setValue(val, { emitEvent: false });
+    val && this.fileFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -98,7 +94,7 @@ export class DateFieldComponent
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.dateFieldForm.valueChanges.subscribe(fn);
+    this.fileFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -111,26 +107,17 @@ export class DateFieldComponent
   }
 
   /**
-   * Sets the disabled state of this form control.
-   *
-   * @param isDisabled The disabled state to set.
-   */
-  setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.dateFieldForm.disable() : this.dateFieldForm.enable();
-  }
-
-  /**
    * Reports whether this form control is valid.
    *
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.dateFieldForm.valid
+    return this.fileFieldForm.valid
       ? null
       : {
           invalidForm: {
             valid: false,
-            message: 'Date field form is invalid',
+            message: 'File field form is invalid',
           },
         };
   }
@@ -140,14 +127,11 @@ export class DateFieldComponent
    *
    */
   updateFieldAnswer(): void {
-    const pickedDate = new Date(this.dateFieldForm.controls['date'].value)
-      .toISOString()
-      .slice(0, 10);
     const documentAnswer: DocumentAnswer = {
       questionRithmId: this.field.rithmId,
       documentRithmId: '',
       stationRithmId: '',
-      value: pickedDate,
+      value: this.fileFieldForm.controls['file'].value,
       type: this.field.questionType,
       questionUpdated: true,
     };
@@ -161,8 +145,8 @@ export class DateFieldComponent
    */
   get fieldValue(): string {
     let fieldVal = '';
-    if (this.field.answer && this.field.answer?.asDate?.length) {
-      fieldVal = this.field.answer?.asDate;
+    if (this.isStation) {
+      fieldVal = this.field.value ? this.field.value : '';
     }
     return fieldVal;
   }
