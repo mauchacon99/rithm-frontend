@@ -423,8 +423,10 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         (question) => question.rithmId === rule.leftOperand.value
       );
 
-    /**If parent exists then, if not then it is a child */
-    //Set the values to the first operand
+    /**
+     * Set the values to the first operand.
+     * If parent exists then, if not then it is a child.
+     */
     if (firstOperandQuestionSelected) {
       if (
         this.firstOperand.questionType === QuestionFieldType.Select ||
@@ -447,6 +449,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     }
 
+    /** Set the operator value. */
     this.setOperatorList(this.firstOperandQuestionType);
     const operatorSelect: RuleModalOperator | undefined =
       this.operatorList.find(
@@ -457,6 +460,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.operatorSelected = operatorSelect;
     }
 
+    /** Set Second Operand data. */
     if (this.secondOperand.type === OperandType.Field) {
       this.secondOperandQuestionRithmId = this.secondOperand.value;
       this.secondOperandQuestionType = this.secondOperand.questionType;
@@ -464,6 +468,8 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.secondOperandDefaultQuestion.value = this.secondOperand.value;
     }
     this.setEditingSecondOperandAnswers();
+
+    /** Reset customValue input fields. */
     this.resetQuestionFieldComponent();
   }
 
