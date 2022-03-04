@@ -692,12 +692,6 @@ describe('StationComponent', () => {
     expect(displayErrorSpy).toHaveBeenCalled();
   });
 
-  it('should call function getTreatment', () => {
-    const splitInject = TestBed.inject(SplitService);
-    splitInject.sdkReady$.next();
-    expect(component.viewNewStation).toBeFalsy();
-  });
-  
   it('should change the edit mode and set grid mode', () => {
     component.viewNewStation = true;
     component.editMode = false;
