@@ -264,16 +264,21 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should show error message when request fails', () => {
-    spyOn(TestBed.inject(DocumentService), 'getDocumentWidget').and.returnValue(
+    const spyError = spyOn(
+      TestBed.inject(DocumentService),
+      'getDocumentWidget'
+    ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
+    component['getDocumentWidget']();
     fixture.detectChanges();
+    expect(component.failedLoadDrawer).toBeTrue();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-drawer-error'
     );
-    expect(component.errorMessageDocumentDrawer).toBeTrue();
     expect(errorMessage).toBeTruthy();
+    expect(spyError).toHaveBeenCalled();
   });
 });

@@ -36,10 +36,10 @@
     </mat-select>
   </mat-form-field>
   <div
-    *ngIf="errorMessageDocumentDrawer"
-    class="text-error-500 text-xs"
+    *ngIf="failedLoadDrawer"
+    class="text-error-500 text-center my-4"
     id="display-document-drawer-error"
   >
-    Request failed, please try again.
+    Unable to retrieve data.
   </div>
 </ng-template>
