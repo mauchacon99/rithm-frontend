@@ -17,10 +17,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold text-accent-600">{{
           element.name
-          }}</span
+        }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-        >Current Station: {{ element.stationName }}</span
+          >Current Station: {{ element.stationName }}</span
         >
       </td>
     </ng-container>
@@ -29,10 +29,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold">{{
           element.stationGroupName || "Doesn't have a group"
-          }}</span
+        }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-        >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
         >
       </td>
     </ng-container>
@@ -71,10 +71,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold text-accent-600">{{
           element.name
-          }}</span
+        }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-        >{{ element.totalDocuments }} Documents</span
+          >{{ element.totalDocuments }} Documents</span
         >
       </td>
     </ng-container>
@@ -83,10 +83,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold">{{
           element.groupName || "Doesn't have a group"
-          }}</span
+        }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-        >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
         >
       </td>
     </ng-container>
@@ -125,10 +125,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold text-accent-600">{{
           element.name
-          }}</span
+        }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-        >{{ element.totalStations }} Stations</span
+          >{{ element.totalStations }} Stations</span
         >
       </td>
     </ng-container>
@@ -136,7 +136,7 @@
     <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold"
-        >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
         ><br />
         <span class="text-xs text-secondary-500">
           {{ element.totalSubGroups }} Sub groups</span
