@@ -299,11 +299,11 @@
                       </div>
                       <div class="flex">
                         <button
+                          *ngIf="layoutMode"
                           type="button"
                           id="button-remove-widget"
                           data-testid="button-remove-widget"
                           class="px-2"
-                          *ngIf="layoutMode"
                           (click)="removeWidgets()"
                         >
                           <span
