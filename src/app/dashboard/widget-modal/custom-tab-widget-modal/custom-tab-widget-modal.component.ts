@@ -27,6 +27,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
+  /** Variable to show if the error getting tab document list. */
+  errorLoadingDocumentTab = false;
+
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
 
@@ -92,6 +95,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
    *
    */
   private getDocumentTabList(): void {
+    this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
       .getDocumentTabList(this.dashboardRithmId)
@@ -101,9 +105,11 @@ export class CustomTabWidgetModalComponent implements OnInit {
           this.dataSourceTableDocument = new MatTableDataSource(
             itemsListDocument
           );
+          this.errorLoadingDocumentTab = false;
           this.isLoadingDocumentTab = false;
         },
         error: (error: unknown) => {
+          this.errorLoadingDocumentTab = true;
           this.isLoadingDocumentTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
