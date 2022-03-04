@@ -29,7 +29,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
@@ -616,5 +616,16 @@ describe('DashboardComponent', () => {
     };
     const ExpectedRithmId = component.trackBy(1, item);
     expect(ExpectedRithmId).toBe(rithmId);
+  });
+
+  it('should get queryParam edit and toggleEditMode', () => {
+    const route = TestBed.inject(ActivatedRoute);
+    const spyMethod = spyOn(component, 'toggleEditMode');
+    route.queryParams = of({ edit: true });
+    const spyService = spyOn(route.queryParams, 'subscribe').and.callThrough();
+
+    component['getQueryParams']();
+    expect(spyMethod).toHaveBeenCalledOnceWith(true);
+    expect(spyService).toHaveBeenCalled();
   });
 });

@@ -8,7 +8,7 @@ import {
 import { MatDrawer } from '@angular/material/sidenav';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -361,7 +361,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             JSON.stringify(this.dashboardData)
           );
           this.isLoading = false;
-          this.configEditMode();
+          this.getQueryParams();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -404,6 +404,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
           error
         );
       },
+    });
+  }
+
+  /** Get query params to toggle edit mode. */
+  private getQueryParams(): void {
+    this.route.queryParams.pipe(first()).subscribe((queryParams) => {
+      if (queryParams['edit']) {
+        this.toggleEditMode(true);
+      } else {
+        this.configEditMode();
+      }
     });
   }
 
