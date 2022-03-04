@@ -661,18 +661,14 @@ describe('DashboardService', () => {
         totalDocuments: 2,
       },
     ];
-    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    service.getStationTabList(dashboardRithmId).subscribe((response) => {
+    service.getStationTabList().subscribe((response) => {
       expect(response).toEqual(expectDataResponse);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations?dashboardRithmId=${dashboardRithmId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
     );
     expect(req.request.method).toEqual('GET');
-    expect(req.request.params.get('dashboardRithmId')).toEqual(
-      dashboardRithmId
-    );
     req.flush(expectDataResponse);
     httpTestingController.verify();
   });

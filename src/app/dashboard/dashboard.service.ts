@@ -301,16 +301,11 @@ export class DashboardService {
   /**
    * Get the list for the station tabs.
    *
-   * @param dashboardRithmId The specific dashboard id.
    * @returns The list.
    */
-  getStationTabList(
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
-    const params = new HttpParams().set('dashboardRithmId', dashboardRithmId);
+  getStationTabList(): Observable<ItemListWidgetModal[]> {
     return this.http.get<ItemListWidgetModal[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`,
-      { params }
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
     );
   }
 }

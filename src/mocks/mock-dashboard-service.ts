@@ -540,12 +540,9 @@ export class MockDashboardService {
   /**
    * Get the list for the station tabs.
    *
-   * @param dashboardRithmId The Id of the dashboard.
    * @returns The list.
    */
-  getStationTabList(
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
+  getStationTabList(): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
