@@ -649,6 +649,12 @@ describe('DashboardService', () => {
     service.getDocumentTabList(dashboardRithmId).subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(itemListWidgetModal);
+    httpTestingController.verify();
   });
 
   it('should get tab list for stations', () => {

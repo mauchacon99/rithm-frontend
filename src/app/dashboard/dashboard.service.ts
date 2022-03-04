@@ -272,30 +272,9 @@ export class DashboardService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dashboardRithmId: string
   ): Observable<ItemListWidgetModal[]> {
-    const itemListWidgetModal: ItemListWidgetModal[] = [
-      {
-        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        name: 'Document Name',
-        stationName: 'Stationy Name that is namey',
-        stationGroupName: 'Groupygroup',
-        isChained: false,
-      },
-      {
-        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        name: 'Document Name',
-        stationName: 'Stationy Name that is namey',
-        stationGroupName: 'Groupygroup',
-        isChained: true,
-      },
-      {
-        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        name: 'Document Name',
-        stationName: 'Stationy Name that is namey',
-        stationGroupName: 'Groupygroup',
-        isChained: false,
-      },
-    ];
-    return of(itemListWidgetModal).pipe(delay(1000));
+    return this.http.get<ItemListWidgetModal[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+    );
   }
 
   /**
