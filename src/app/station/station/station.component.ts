@@ -707,21 +707,27 @@ export class StationComponent
    *
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
-  setGridMode(mode: 'layout' | 'setting'): void {
+  setGridMode(mode: 'layout' | 'setting' | 'preview'): void {
     const enabledMode = mode === 'layout' ? true : false;
-    this.layoutMode = enabledMode;
-    this.settingMode = !enabledMode;
-    //Make the grid visible
+    /* If it is different from preview, we are in editable mode. */
+    if (mode !== 'preview') {
+      this.layoutMode = enabledMode;
+      this.settingMode = !enabledMode;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = false;
+    }
+    /* Make the grid visible.*/
     this.options.displayGrid = enabledMode ? 'always' : 'none';
-    //Resizing is performed
+    /* Resizing is performed. */
     if (this.options.resizable) {
       this.options.resizable.enabled = enabledMode;
     }
-    //Rearranges, can be dragged
+    /* Rearranges, can be dragged. */
     if (this.options.draggable) {
       this.options.draggable.enabled = enabledMode;
     }
-    //Execute changes
+    /* Execute changes. */
     this.changedOptions();
   }
 
@@ -769,7 +775,7 @@ export class StationComponent
     });
     if (confirm) {
       this.editMode = false;
-      this.setGridMode('setting');
+      this.setGridMode('preview');
     }
   }
 
@@ -777,8 +783,8 @@ export class StationComponent
    * Save the changes make in the gridster.
    */
   saveStationChanges(): void {
-    this.editMode = !this.editMode;
-    this.setGridMode('setting');
+    this.editMode = false;
+    this.setGridMode('preview');
   }
 
   /**
