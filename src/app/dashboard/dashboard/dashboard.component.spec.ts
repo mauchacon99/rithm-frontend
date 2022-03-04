@@ -4,7 +4,6 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { Location } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -19,8 +18,8 @@ import { throwError } from 'rxjs';
 import { MockComponent } from 'ng-mocks';
 
 import { DashboardComponent } from './dashboard.component';
-import { HeaderComponent } from '../header/header.component';
-import { PriorityQueueComponent } from '../priority-queue/priority-queue.component';
+import { HeaderComponent } from 'src/app/dashboard/header/header.component';
+import { PriorityQueueComponent } from 'src/app/dashboard/priority-queue/priority-queue.component';
 import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
 import { MyStationsComponent } from '../my-stations/my-stations.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
