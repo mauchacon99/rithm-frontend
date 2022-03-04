@@ -262,4 +262,18 @@ describe('DocumentWidgetDrawerComponent', () => {
     );
     expect(renderMessage).toBeFalsy();
   });
+
+  it('should show error message when request fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'getDocumentWidget').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#display-document-drawer-error'
+    );
+    expect(component.errorMessageDocumentDrawer).toBeTrue();
+    expect(errorMessage).toBeTruthy();
+  });
 });

@@ -57,6 +57,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Loading drawer. */
   isLoading = false;
 
+  /** Toggle to show error message if update fails.*/
+  errorMessageDocumentDrawer = false;
+
   /** Columns list to display in select. */
   documentFields: ColumnFieldsWidget[] = [];
 
@@ -99,17 +102,20 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Get document widget. */
   private getDocumentWidget(): void {
     this.isLoading = true;
+    this.errorMessageDocumentDrawer = false;
     this.documentService
       .getDocumentWidget(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (documentWidget) => {
           this.isLoading = false;
+          this.errorMessageDocumentDrawer = false;
           this.questions = documentWidget.questions;
           this.loadColumnsSelect();
         },
         error: (error: unknown) => {
           this.isLoading = false;
+          this.errorMessageDocumentDrawer = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
