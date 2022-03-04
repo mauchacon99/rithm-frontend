@@ -1,16 +1,18 @@
 import {
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import { WidgetType } from 'src/models';
+import { DashboardItem, WidgetType } from 'src/models';
 
 /**
  * Component for widget drawer.
@@ -21,8 +23,15 @@ import { WidgetType } from 'src/models';
   styleUrls: ['./widget-drawer.component.scss'],
 })
 export class WidgetDrawerComponent implements OnInit, OnDestroy {
+  /** Reference to clear input when delete selection. */
+  @ViewChild('fileInput', { static: false })
+  fileInputFile!: ElementRef;
+
   /** Emit event for delete widget in dashboard. */
   @Output() deleteWidget = new EventEmitter<number>();
+
+  /** Image selected in input file. */
+  imageSelected: File | null = null;
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -96,6 +105,25 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Select image.
+   *
+   * @param event Event of select image.
+   */
+  onSelectFile(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = (target.files as FileList)[0];
+    if (file) {
+      this.imageSelected = file;
+    }
+  }
+
+  /** Remove selected file. */
+  removeSelectedFile(): void {
+    this.imageSelected = null;
+    this.fileInputFile.nativeElement.value = '';
+  }
+
+  /**
    * Event emit widgetIndex to dashboard.
    *
    * @param widgetIndex Widget index from station-widget-drawer.
@@ -105,12 +133,13 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Event emit setWidgetType for show o hidden section upload image.
+   * Get widget Item to assign widget type and reassign image in widget-drawer.
    *
-   * @param widgetType Widget type from station-widget-drawer.
+   * @param widgetItem DashboardItem of widget.
    */
-  setWidgetType(widgetType: WidgetType): void {
-    this.widgetType = widgetType;
+  setWidgetItem(widgetItem: DashboardItem): void {
+    this.widgetType = widgetItem.widgetType;
+    this.imageSelected = widgetItem.image ? (widgetItem.image as File) : null;
   }
 
   /**
