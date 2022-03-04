@@ -10,6 +10,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import {
+  CenterPanType,
   MapMode,
   StationGroupInfoDrawerData,
   StationInfoDrawerData,
@@ -220,11 +221,12 @@ export class MapSearchComponent implements OnDestroy {
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
       //Increment centerStationCount to show that more centering of station needs to be done.
-      this.mapService.centerStationCount$.next(1);
+      this.mapService.centerCount$.next(1);
       //Call method to run logic for centering of the station.
       setTimeout(() => {
-        this.mapService.centerStation(
-          drawerItem,
+        this.mapService.center(
+          false,
+          CenterPanType.Station,
           drawer[0] ? drawer[0].clientWidth : 0
         );
       }, 1);
@@ -245,11 +247,12 @@ export class MapSearchComponent implements OnDestroy {
       );
       drawerItem.drawerOpened = true;
       //Increment centerStationGroupCount to show that more centering of station needs to be done.
-      this.mapService.centerStationGroupCount$.next(1);
+      this.mapService.centerCount$.next(1);
       //Call method to run logic for centering of the station group.
       setTimeout(() => {
-        this.mapService.centerStationGroup(
-          drawerItem,
+        this.mapService.center(
+          false,
+          CenterPanType.StationGroup,
           drawer[0] ? drawer[0].clientWidth : 0
         );
       }, 1);

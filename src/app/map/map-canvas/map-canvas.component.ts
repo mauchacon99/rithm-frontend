@@ -24,6 +24,7 @@ import {
   StationGroupElementHoverItem,
   StationGroupInfoDrawerData,
   MatMenuOption,
+  CenterPanType,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -318,7 +319,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
             this.mapService.centerActive$.next(true);
             //Increment centerStationCount to show that more centering of station needs to be done.
-            this.mapService.centerStationCount$.next(1);
+            this.mapService.centerCount$.next(1);
             // If Drawer isn't open and there is station to be centered.
             if (
               !this.mapService.isDrawerOpened$.value &&
@@ -346,8 +347,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               stationCenter[0].drawerOpened = true;
               setTimeout(() => {
                 // Center the map on the station.
-                this.mapService.centerStation(
-                  stationCenter[0],
+                this.mapService.center(
+                  false,
+                  CenterPanType.Station,
                   drawer[0] ? drawer[0].clientWidth : 0
                 );
               }, 5);
@@ -356,7 +358,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           } else {
             this.mapService.centerActive$.next(true);
             this.mapService.centerCount$.next(1);
-            this.mapService.center(dataReceived);
+            this.mapService.center(dataReceived, CenterPanType.MapCenter, 0);
             this.mapService.viewStationButtonClick$.next(false);
           }
         }
@@ -1231,11 +1233,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    //Always allow movement when centerStationCount or centerStationgGroupCount are greater than 0.
-    if (
-      this.mapService.centerStationCount$.value > 0 ||
-      this.mapService.centerStationGroupCount$.value > 0
-    ) {
+    //Always allow movement when centerStationCount or centerStationGroupCount are greater than 0.
+    if (this.mapService.centerCount$.value > 0) {
       return true;
     }
 

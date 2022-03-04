@@ -8,6 +8,7 @@ import {
   MapItemStatus,
   EnvironmentName,
   MatMenuOption,
+  CenterPanType,
 } from 'src/models';
 import {
   ABOVE_MAX,
@@ -139,14 +140,8 @@ export class MapService {
   /** The number of times this.center() should be called. It will continually be incremented until centering is done.*/
   centerCount$ = new BehaviorSubject(0);
 
-  /** The number of times this.centerStation() should be called. It will continually be incremented until centering of station is done.*/
-  centerStationCount$ = new BehaviorSubject(0);
-
   /** The Station rithm Id centered on the map. */
   centerStationRithmId$ = new BehaviorSubject('');
-
-  /** The number of times this.centerStationGroup() should be called.*/
-  centerStationGroupCount$ = new BehaviorSubject(0);
 
   constructor(private http: HttpClient) {}
 
@@ -1279,17 +1274,19 @@ export class MapService {
    * Pans the map when center method is called to the map center.
    *
    * @param onInit Determines if this is called during mapCanvas init.
+   * @param panType Determines the area of the map to be pan to center..
+   * @param drawerWidth Width of the opened drawer.
    */
-  private centerPan(onInit = false): void {
+  private centerPan(
+    onInit = false,
+    panType: CenterPanType,
+    drawerWidth = 0
+  ): void {
     //Get the center of the map and the center of the canvas.
     let adjustedCenter = this.getMapCenterPoint();
-    const canvasCenter = this.getCanvasCenterPoint();
 
     //Get the point that currentCanvasPoint needs to be set to.
-    adjustedCenter = {
-      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
-    };
+    adjustedCenter = this.getAdjustedCenter(drawerWidth, panType);
 
     //On Init, immediately set the currentCanvasPoint to the center of the map.
     if (onInit) {
@@ -1334,8 +1331,10 @@ export class MapService {
    * On init, immediately change the scale and position.
    *
    * @param onInit Determines if this is called during mapCanvas init.
+   * @param panType Determines the area of the map to be pan to center.
+   * @param drawerWidth Width of the opened drawer.
    */
-  center(onInit = false): void {
+  center(onInit = false, panType: CenterPanType, drawerWidth: number): void {
     //If there are no stations to center around, do nothing.
     if (this.stationElements.length === 0) {
       return;
@@ -1352,11 +1351,11 @@ export class MapService {
           this.centerScale(onInit);
         }
         //Smoothly pan to the center.
-        this.centerPan(onInit);
+        this.centerPan(onInit, panType, drawerWidth);
         //Decrement centerCount to note that we've moved a step further to the center.
         this.centerCount$.next(this.centerCount$.value - 1);
         //Recursively call method so we can animate a smooth pan and scale.
-        this.center(onInit);
+        this.center(onInit, panType, drawerWidth);
         //If centering is finished.
       } else {
         //Reset properties that mark that more centering needs to happen.
@@ -1380,6 +1379,81 @@ export class MapService {
       //Don't use setTimeout so that centering is instant.
       centerLogic();
     }
+  }
+
+  /**
+   * Pans the station group when centerStationGroup method is called.
+   *
+   * @param drawerWidth Width of the opened drawer.
+   * @param panType Determines the area of the map to be pan to center.
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  private getAdjustedCenter(
+    drawerWidth: number,
+    panType: CenterPanType
+  ): Point {
+    let adjustedCenter = { x: 0, y: 0 };
+    //Get the point that currentCanvasPoint needs to be set to.
+    const canvasCenter = this.getCanvasCenterPoint();
+
+    //If selected station group needs to be pan to center.
+    if (panType === CenterPanType.StationGroup) {
+      const openedStationGroups = this.stationGroupElements.find(
+        (e) => e.drawerOpened
+      );
+      if (!openedStationGroups) {
+        throw new Error('There is no selected station group for center pan');
+      }
+      const updatedBoundaryPoints = [...openedStationGroups.boundaryPoints];
+      const minX = Math.min(...updatedBoundaryPoints.map((point) => point.x));
+      const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
+      const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
+      const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
+
+      //Determine the map center point of station group to pan it to the center.
+      const groupCenterMapPoint = this.getMapPoint({
+        x: (minX + maxX) / 2,
+        y: (minY + maxY) / 2,
+      });
+
+      //Determine the canvas point of station group to pan it to the center.
+      adjustedCenter = {
+        x:
+          groupCenterMapPoint.x +
+          drawerWidth / 2 / this.mapScale$.value -
+          canvasCenter.x / this.mapScale$.value,
+        y: groupCenterMapPoint.y - canvasCenter.y / this.mapScale$.value,
+      };
+      //If selected station needs to be pan to center.
+    } else if (panType === CenterPanType.Station) {
+      const openedStation = this.stationElements.find((e) => e.drawerOpened);
+      if (!openedStation) {
+        throw new Error('There is no selected station for center pan');
+      }
+      //Determine the canvas point of station to pan it to the center.
+      adjustedCenter = {
+        x:
+          openedStation.mapPoint.x +
+          drawerWidth / 2 / this.mapScale$.value +
+          STATION_PAN_CENTER_WIDTH / this.mapScale$.value -
+          canvasCenter.x / this.mapScale$.value,
+        y:
+          openedStation.mapPoint.y +
+          STATION_PAN_CENTER_HEIGHT / this.mapScale$.value -
+          canvasCenter.y / this.mapScale$.value,
+      };
+      //If selected map center needs to be pan to center.
+    } else if (panType === CenterPanType.MapCenter) {
+      //Get the center of the map and the center of the canvas.
+      adjustedCenter = this.getMapCenterPoint();
+
+      //Get the point that currentCanvasPoint needs to be set to.
+      adjustedCenter = {
+        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
+      };
+    }
+    return adjustedCenter;
   }
 
   /**
@@ -1670,103 +1744,6 @@ export class MapService {
   }
 
   /**
-   * Smoothly sets the scale and pans the station to center.
-   *
-   * @param station Station which should be pan to center.
-   * @param drawerWidth Width of the opened drawer.
-   */
-  centerStation(station: StationMapElement, drawerWidth: number): void {
-    //If there are no stations to center around, do nothing.
-    if (this.stationElements.length === 0) {
-      return;
-    }
-
-    //We put our logic in a const so we can call it later.
-    const centerStationLogic = () => {
-      //If there is still centering that needs to be done for the station.
-      if (this.centerStationCount$.value > 0) {
-        //Smoothly pan station to the center.
-        this.stationCenterPan(station, drawerWidth);
-        //Decrement centerStationCount to note that we've moved the station a step further to the center.
-        this.centerStationCount$.next(this.centerStationCount$.value - 1);
-        //Recursively call method so we can animate a smooth pan and scale.
-        this.centerStation(station, drawerWidth);
-        //If centering is finished.
-      } else {
-        //Reset properties that mark that more centering needs to happen.
-        this.centerActive$.next(false);
-        this.centerStationCount$.next(0);
-      }
-    };
-
-    //End method if centerActive is false.
-    if (!this.centerActive$.value) {
-      return;
-    }
-
-    setTimeout(() => {
-      centerStationLogic();
-    }, 4);
-  }
-
-  /**
-   * Pans the station when centerStation method is called.
-   *
-   * @param station Station which should be pan to center.
-   * @param drawerWidth Width of the opened drawer.
-   */
-  private stationCenterPan(
-    station: StationMapElement,
-    drawerWidth: number
-  ): void {
-    //Get the point that currentCanvasPoint needs to be set to.
-    const canvasCenter = this.getCanvasCenterPoint();
-    // Determine the canvas point of station to pan it to the center.
-    const adjustedCenter = {
-      x:
-        station.mapPoint.x +
-        drawerWidth / 2 / this.mapScale$.value +
-        STATION_PAN_CENTER_WIDTH / this.mapScale$.value -
-        canvasCenter.x / this.mapScale$.value,
-      y:
-        station.mapPoint.y +
-        STATION_PAN_CENTER_HEIGHT / this.mapScale$.value -
-        canvasCenter.y / this.mapScale$.value,
-    };
-
-    //How far away is the currentCanvasPoint from the map center?
-    const totalPanNeeded = {
-      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
-    };
-
-    //initialize variable needed to set panVelocity.
-    const panAmount: Point = { x: 0, y: 0 };
-
-    //Set x axis of panAmount as 1% of totalPanNeeded.
-    panAmount.x = totalPanNeeded.x * 0.1;
-
-    //Set y axis of panAmount as 1% of totalPanNeeded.
-    panAmount.y = totalPanNeeded.y * 0.1;
-
-    /* In order to have a fade out animation effect we exponentially decrement the totalPanNeeded with each recursive call of centerPan().
-    This means that panAmount wil never reach 0, so we need to decide on a number thats close enough.
-    If we waited for 0 we'd get caught in an infinite loop.
-    The number settled on for now is .12. */
-    if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
-      //nextPanVelocity on map canvas will be set to this.
-      this.centerPanVelocity$.next(panAmount);
-      //Increment the centerStationCount. This lets the center method know we aren't done centering.
-      this.centerStationCount$.next(this.centerStationCount$.value + 1);
-    } else {
-      //After the animation is finished, jump to the station center.
-      this.currentCanvasPoint$.next(adjustedCenter);
-      //Cancel panning by setting panVelocity to 0,0.
-      this.centerPanVelocity$.next({ x: 0, y: 0 });
-    }
-  }
-
-  /**
    * Update the status to create for a new station group.
    *
    * @param rithmId The specific rithm Id of the station group.
@@ -1782,118 +1759,5 @@ export class MapService {
     this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
 
     this.resetSelectedStationGroupStationStatus();
-  }
-
-  /**
-   * Smoothly sets the scale and pans the station group to center.
-   *
-   * @param stationGroup Station which should be pan to center.
-   * @param drawerWidth Width of the opened drawer.
-   */
-  centerStationGroup(
-    stationGroup: StationGroupMapElement,
-    drawerWidth: number
-  ): void {
-    //If there are no stations to center around, do nothing.
-    if (this.stationGroupElements.length === 0) {
-      return;
-    }
-
-    //We put our logic in a const so we can call it later.
-    const centerStationGroupLogic = () => {
-      //If there is still centering that needs to be done for the station.
-      if (this.centerStationGroupCount$.value > 0) {
-        //Smoothly pan station to the center.
-        this.stationGroupCenterPan(stationGroup, drawerWidth);
-        //Decrement centerStationGroupCount to note that we've moved the station a step further to the center.
-        this.centerStationGroupCount$.next(
-          this.centerStationGroupCount$.value - 1
-        );
-        //Recursively call method so we can animate a smooth pan and scale.
-        this.centerStationGroup(stationGroup, drawerWidth);
-        //If centering is finished.
-      } else {
-        //Reset properties that mark that more centering needs to happen.
-        this.centerActive$.next(false);
-        this.centerStationGroupCount$.next(0);
-      }
-    };
-
-    //End method if centerActive is false.
-    if (!this.centerActive$.value) {
-      return;
-    }
-
-    setTimeout(() => {
-      centerStationGroupLogic();
-    }, 4);
-  }
-
-  /**
-   * Pans the station group when centerStationGroup method is called.
-   *
-   * @param stationGroup Station which should be pan to center.
-   * @param drawerWidth Width of the opened drawer.
-   */
-  private stationGroupCenterPan(
-    stationGroup: StationGroupMapElement,
-    drawerWidth: number
-  ): void {
-    //Get the point that currentCanvasPoint needs to be set to.
-    const canvasCenter = this.getCanvasCenterPoint();
-
-    const updatedBoundaryPoints = [...stationGroup.boundaryPoints];
-    const minX = Math.min(...updatedBoundaryPoints.map((point) => point.x));
-    const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
-    const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
-    const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
-
-    //Determine the map center point of station group to pan it to the center.
-    const groupCenterMapPoint = this.getMapPoint({
-      x: (minX + maxX) / 2,
-      y: (minY + maxY) / 2,
-    });
-
-    //Determine the canvas point of station group to pan it to the center.
-    const adjustedCenter = {
-      x:
-        groupCenterMapPoint.x +
-        drawerWidth / 2 / this.mapScale$.value -
-        canvasCenter.x / this.mapScale$.value,
-      y: groupCenterMapPoint.y - canvasCenter.y / this.mapScale$.value,
-    };
-
-    //How far away is the currentCanvasPoint from the map center?
-    const totalPanNeeded = {
-      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
-    };
-
-    //initialize variable needed to set panVelocity.
-    const panAmount: Point = { x: 0, y: 0 };
-
-    //Set x axis of panAmount as 1% of totalPanNeeded.
-    panAmount.x = totalPanNeeded.x * 0.1;
-
-    //Set y axis of panAmount as 1% of totalPanNeeded.
-    panAmount.y = totalPanNeeded.y * 0.1;
-
-    /* In order to have a fade out animation effect we exponentially decrement the totalPanNeeded with each recursive call of centerPan().
-    This means that panAmount wil never reach 0, so we need to decide on a number thats close enough.
-    If we waited for 0 we'd get caught in an infinite loop.
-    The number settled on for now is .12. */
-    if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
-      //nextPanVelocity on map canvas will be set to this.
-      this.centerPanVelocity$.next(panAmount);
-      //Increment the centerStationGroupCount. This lets the center method know we aren't done centering.
-      this.centerStationGroupCount$.next(
-        this.centerStationGroupCount$.value + 1
-      );
-    } else {
-      //After the animation is finished, jump to the station center.
-      this.currentCanvasPoint$.next(adjustedCenter);
-      //Cancel panning by setting panVelocity to 0,0.
-      this.centerPanVelocity$.next({ x: 0, y: 0 });
-    }
   }
 }
