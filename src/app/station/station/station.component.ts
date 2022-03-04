@@ -124,6 +124,7 @@ export class StationComponent
 
   inputFrameWidgetItems: InputFrameWidget[] = [
     {
+      frameRithmId: '',
       cols: 6,
       rows: 4,
       x: 1,
@@ -131,6 +132,8 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
+      type: '',
+      data: '',
     },
   ];
 
@@ -426,6 +429,8 @@ export class StationComponent
             this.stationForm.controls.generalInstructions.setValue(
               stationInfo.instructions
             );
+            this.inputFrameWidgetItems[0].questions =
+              this.stationInformation.questions;
           }
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
@@ -685,6 +690,64 @@ export class StationComponent
   }
 
   /**
+   * Inicializate the edit mode and layout config.
+   *
+   */
+  setEditMode(): void {
+    this.editMode = !this.editMode;
+    this.setGridMode('layout');
+  }
+
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: 'layout' | 'setting'): void {
+    if (mode === 'layout') {
+      this.layoutMode = true;
+      this.settingMode = false;
+      this.options.displayGrid = 'always';
+      if (this.options.resizable) {
+        this.options.resizable.enabled = true;
+      }
+      if (this.options.draggable) {
+        this.options.draggable.enabled = true;
+      }
+    } else {
+      this.settingOptions();
+    }
+    this.changedOptions();
+  }
+
+  /**
+   * Set the options related to settings mode.
+   *
+   */
+  settingOptions(): void {
+    this.layoutMode = false;
+    this.settingMode = true;
+    this.options.displayGrid = 'none';
+    if (this.options.resizable) {
+      this.options.resizable.enabled = false;
+    }
+    if (this.options.draggable) {
+      this.options.draggable.enabled = false;
+    }
+    this.changedOptions();
+  }
+
+  /**
+   * Change options in grid.
+   *
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
+  }
+
+  /**
    * Receives a flow logic rule.
    *
    * @param flowLogicRule Contains a flow logic rules of the current station.
@@ -707,21 +770,6 @@ export class StationComponent
     }
   }
 
-  /**
-   * Set the grid mode for station edition.
-   *
-   * @param mode Value of the grid mode of the toolbarEditStation buttons.
-   */
-  setGridMode(mode: 'layout' | 'setting'): void {
-    if (mode === 'layout') {
-      this.layoutMode = true;
-      this.settingMode = false;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = true;
-    }
-  }
-
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
@@ -733,7 +781,16 @@ export class StationComponent
     });
     if (confirm) {
       this.editMode = false;
+      this.settingOptions();
     }
+  }
+
+  /**
+   * Save the changes make in the gridster.
+   */
+  saveStationChanges(): void {
+    this.editMode = !this.editMode;
+    this.settingOptions();
   }
 
   /**

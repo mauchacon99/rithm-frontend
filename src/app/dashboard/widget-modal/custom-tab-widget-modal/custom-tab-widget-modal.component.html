@@ -35,8 +35,27 @@
       <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
         <p class="text-error-500 text-center">Documents could not be listed.</p>
       </div>
+      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+        <app-loading-indicator
+          id="loading-tab-document-list"
+        ></app-loading-indicator>
+      </div>
     </mat-tab>
-    <mat-tab> Content 2 </mat-tab>
-    <mat-tab> Content 3 </mat-tab>
+    <mat-tab>
+      <!-- Station tab. -->
+      <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain stations.
+        </p>
+      </div>
+      <div
+        *ngIf="isLoadingStationTab"
+        id="loading-station-list-tab"
+        class="py-10"
+      >
+        <app-loading-indicator></app-loading-indicator>
+      </div>
+    </mat-tab>
+    <mat-tab> Content 3</mat-tab>
   </mat-tab-group>
 </div>

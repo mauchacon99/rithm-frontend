@@ -258,7 +258,7 @@
                       color="accent"
                       class="font-semibold text-sm"
                       id="station-edit-mode-button"
-                      (click)="editMode = !editMode"
+                      (click)="setEditMode()"
                     >
                       Edit
                     </button>
@@ -318,7 +318,7 @@
                           type="button"
                           color="accent"
                           class="font-semibold text-sm"
-                          (click)="editMode = !editMode"
+                          (click)="saveStationChanges()"
                         >
                           Save
                         </button>
@@ -332,9 +332,12 @@
                     >
                       <gridster-item
                         [item]="widgetItem"
+                        class="pt-1"
                         *ngFor="let widgetItem of inputFrameWidgetItems"
                       >
-                        <app-input-frame-widget></app-input-frame-widget>
+                        <app-input-frame-widget
+                          [fields]="widgetItem.questions"
+                        ></app-input-frame-widget>
                       </gridster-item>
                     </gridster>
                   </div>
