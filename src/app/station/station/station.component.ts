@@ -771,7 +771,7 @@ export class StationComponent
     this.editMode = false;
     this.setGridMode('preview');
   }
-  
+
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
