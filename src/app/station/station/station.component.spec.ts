@@ -28,7 +28,6 @@ import {
   FlowLogicRule,
   OperandType,
   OperatorType,
-  PossibleAnswer,
   Question,
   QuestionFieldType,
   RuleType,
@@ -693,6 +692,7 @@ describe('StationComponent', () => {
     splitInject.sdkReady$.next();
     expect(component.viewNewStation).toBeFalsy();
   });
+
   it('should change setting config after canceling', () => {
     component.viewNewStation = true;
     component.editMode = true;
