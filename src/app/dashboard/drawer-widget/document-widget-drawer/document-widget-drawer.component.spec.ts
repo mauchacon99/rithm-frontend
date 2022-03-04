@@ -263,7 +263,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(renderMessage).toBeFalsy();
   });
 
-  it('should show error message when request fails', () => {
+  it('should show error message when the request fails', () => {
     const spyError = spyOn(
       TestBed.inject(DocumentService),
       'getDocumentWidget'
