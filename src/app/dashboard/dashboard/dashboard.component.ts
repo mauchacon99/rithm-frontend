@@ -410,11 +410,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Get query params to toggle edit mode. */
   private getQueryParams(): void {
     this.route.queryParams.pipe(first()).subscribe((queryParams) => {
-      if (queryParams['edit']) {
-        this.toggleEditMode(true);
-      } else {
-        this.configEditMode();
-      }
+      this.editMode = queryParams['editMode'] === 'true';
+      this.configEditMode();
     });
   }
 

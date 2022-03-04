@@ -99,7 +99,7 @@ describe('OptionsMenuComponent', () => {
     expect(spyService).toHaveBeenCalled();
     expect(spyToggleMenu).toHaveBeenCalledWith('menuDashboard');
     expect(TestBed.inject(Location).path()).toEqual(
-      `/dashboard/${expectNewDashboard.rithmId}?edit=true`
+      `/dashboard/${expectNewDashboard.rithmId}?editMode=true`
     );
   });
 
@@ -153,7 +153,7 @@ describe('OptionsMenuComponent', () => {
     expect(spyLoadingDashboard).toHaveBeenCalled();
     expect(spyToggleMenu).toHaveBeenCalledWith('menuDashboard');
     expect(TestBed.inject(Location).path()).toEqual(
-      `/dashboard/${expectNewDashboard.rithmId}?edit=true`
+      `/dashboard/${expectNewDashboard.rithmId}?editMode=true`
     );
   });
 

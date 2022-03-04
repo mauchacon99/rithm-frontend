@@ -1,6 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DashboardComponent } from './dashboard.component';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { MatInputModule } from '@angular/material/input';
+import { GridsterModule } from 'angular-gridster2';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { throwError } from 'rxjs';
 import { MockComponent } from 'ng-mocks';
+
+import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from '../header/header.component';
 import { PriorityQueueComponent } from '../priority-queue/priority-queue.component';
 import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
@@ -19,25 +37,14 @@ import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from 'src/app/dashboard/dashboard-menu/menu/menu.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
-import { GridsterModule } from 'angular-gridster2';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
-import { MatInputModule } from '@angular/material/input';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of, throwError } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
-import { FormsModule } from '@angular/forms';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { MatTabsModule } from '@angular/material/tabs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -618,14 +625,20 @@ describe('DashboardComponent', () => {
     expect(ExpectedRithmId).toBe(rithmId);
   });
 
-  it('should get queryParam edit and toggleEditMode', () => {
-    const route = TestBed.inject(ActivatedRoute);
-    const spyMethod = spyOn(component, 'toggleEditMode');
-    route.queryParams = of({ edit: true });
-    const spyService = spyOn(route.queryParams, 'subscribe').and.callThrough();
-
+  it('should get queryParam edit and toggleEditMode', fakeAsync(() => {
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
     component['getQueryParams']();
-    expect(spyMethod).toHaveBeenCalledOnceWith(true);
+    expect(component.editMode).toBeTrue();
     expect(spyService).toHaveBeenCalled();
-  });
+  }));
 });

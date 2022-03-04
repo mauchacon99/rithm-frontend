@@ -92,7 +92,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         this.isGenerateNewDashboard = false;
         this.dashboardService.toggleLoadingDashboard(false);
         this.router.navigate(['/', 'dashboard', newDashboard.rithmId], {
-          queryParams: { edit: true },
+          queryParams: { editMode: true },
         });
         this.popupService.notify('Dashboard created successfully');
       },
