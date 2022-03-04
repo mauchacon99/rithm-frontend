@@ -305,6 +305,8 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeFlowButtonText();
+
+    if (!this.editMode) this.setGridMode('preview');
   }
 
   /** Comment. */
@@ -690,6 +692,56 @@ export class StationComponent
   }
 
   /**
+   * Inicializate the edit mode and layout config.
+   *
+   */
+  setEditMode(): void {
+    this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.setGridMode('layout');
+    }
+  }
+
+  /**
+   * Set the grid mode for station edition.
+   *
+   * @param mode Value of the grid mode of the toolbarEditStation buttons.
+   */
+  setGridMode(mode: 'layout' | 'setting' | 'preview'): void {
+    const enabledMode = mode === 'layout' ? true : false;
+    /* If it is different from preview, we are in editable mode. */
+    if (mode !== 'preview') {
+      this.layoutMode = enabledMode;
+      this.settingMode = !enabledMode;
+    } else {
+      this.layoutMode = false;
+      this.settingMode = false;
+    }
+    /* Make the grid visible.*/
+    this.options.displayGrid = enabledMode ? 'always' : 'none';
+    /* Resizing is performed. */
+    if (this.options.resizable) {
+      this.options.resizable.enabled = enabledMode;
+    }
+    /* Rearranges, can be dragged. */
+    if (this.options.draggable) {
+      this.options.draggable.enabled = enabledMode;
+    }
+    /* Execute changes. */
+    this.changedOptions();
+  }
+
+  /**
+   * Change options in grid.
+   *
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
+  }
+
+  /**
    * Receives a flow logic rule.
    *
    * @param flowLogicRule Contains a flow logic rules of the current station.
@@ -712,21 +764,6 @@ export class StationComponent
     }
   }
 
-  /**
-   * Set the grid mode for station edition.
-   *
-   * @param mode Value of the grid mode of the toolbarEditStation buttons.
-   */
-  setGridMode(mode: 'layout' | 'setting'): void {
-    if (mode === 'layout') {
-      this.layoutMode = true;
-      this.settingMode = false;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = true;
-    }
-  }
-
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
@@ -738,7 +775,16 @@ export class StationComponent
     });
     if (confirm) {
       this.editMode = false;
+      this.setGridMode('preview');
     }
+  }
+
+  /**
+   * Save the changes make in the gridster.
+   */
+  saveStationChanges(): void {
+    this.editMode = false;
+    this.setGridMode('preview');
   }
 
   /**

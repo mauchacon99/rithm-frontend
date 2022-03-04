@@ -31,7 +31,7 @@
     <img
       *ngIf="image"
       [src]="image"
-      class="h-full w-full"
+      class="w-full h-full object-cover"
       alt="Image station"
     />
   </div>
@@ -335,7 +335,7 @@
     >
       <i
         [ngClass]="isExpandWidget ? 'fa-compress-alt' : 'fa-expand-alt'"
-        class="fas text-secondary-500 text-lg"
+        class="fas text-secondary-500 text-base"
       ></i>
     </button>
   </div>

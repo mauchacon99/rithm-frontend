@@ -148,4 +148,29 @@ describe('WidgetDrawerComponent', () => {
     );
     expect(uploadImageInput).toBeDefined();
   });
+
+  it('should remove image selected', () => {
+    component.widgetType = WidgetType.StationTableBanner;
+    component.imageSelected = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    fixture.detectChanges();
+    const spyOnRemoveSelectedFile = spyOn(
+      component,
+      'removeSelectedFile'
+    ).and.callThrough();
+    component.removeSelectedFile();
+    expect(spyOnRemoveSelectedFile).toHaveBeenCalledOnceWith();
+    expect(component.imageSelected).toBeNull();
+    expect(component.fileInputFile.nativeElement.value).toBe('');
+  });
+
+  it('should call onSelectFile', () => {
+    const spyMethod = spyOn(component, 'onSelectFile').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'text/png' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.onSelectFile(mockEvt as unknown as Event);
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.imageSelected).not.toBeNull();
+  });
 });
