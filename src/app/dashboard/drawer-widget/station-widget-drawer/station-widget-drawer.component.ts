@@ -15,7 +15,6 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
-  WidgetType,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -38,17 +37,17 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Image to banner. */
   @Input() set image(value: File | null) {
-    if (this.widgetItem) {
-      this.widgetItem.image = value ? value : null;
+    if (this.widgetItem && this.widgetItem.image !== value) {
+      this.widgetItem.image = value;
       this.updateWidget();
     }
   }
 
   /** Emit widgetIndex to widget-drawer. */
-  @Output() setWidgetIndex = new EventEmitter<number>();
+  @Output() getWidgetIndex = new EventEmitter<number>();
 
   /** WidgetType of item. */
-  @Output() widgetType = new EventEmitter<WidgetType>();
+  @Output() getWidgetItem = new EventEmitter<DashboardItem>();
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -110,8 +109,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           this.stationRithmId = dataWidget.stationRithmId;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
-          this.setWidgetIndex.emit(this.widgetIndex);
-          this.widgetType.emit(this.widgetItem.widgetType);
+          this.getWidgetIndex.emit(this.widgetIndex);
+          this.getWidgetItem.emit(this.widgetItem);
           this.getDocumentFields();
         }
       });

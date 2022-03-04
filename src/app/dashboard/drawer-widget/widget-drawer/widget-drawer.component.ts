@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import { WidgetType } from 'src/models';
+import { DashboardItem, WidgetType } from 'src/models';
 
 /**
  * Component for widget drawer.
@@ -133,12 +133,13 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Event emit setWidgetType for show o hidden section upload image.
+   * Get widget Item to assign widget type and reassign image in widget-drawer.
    *
-   * @param widgetType Widget type from station-widget-drawer.
+   * @param widgetItem DashboardItem of widget.
    */
-  setWidgetType(widgetType: WidgetType): void {
-    this.widgetType = widgetType;
+  setWidgetItem(widgetItem: DashboardItem): void {
+    this.widgetType = widgetItem.widgetType;
+    this.imageSelected = widgetItem.image ? (widgetItem.image as File) : null;
   }
 
   /**

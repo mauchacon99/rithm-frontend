@@ -19,8 +19,8 @@
       <!--      Station drawer-->
       <app-station-widget-drawer
         *ngIf="drawerMode === 'stationWidget'"
-        (setWidgetIndex)="setWidgetIndex($event)"
-        (widgetType)="setWidgetType($event)"
+        (getWidgetIndex)="setWidgetIndex($event)"
+        (getWidgetItem)="setWidgetItem($event)"
         [image]="imageSelected"
       >
       </app-station-widget-drawer>
@@ -59,7 +59,10 @@
         />
       </button>
 
-      <div class="w-full flex space-x-5 mt-5 pr-8" *ngIf="imageSelected">
+      <div
+        class="w-full flex space-x-5 mt-5 pr-8 items-center"
+        *ngIf="imageSelected"
+      >
         <span class="text-accent-500 truncate">{{ imageSelected.name }}</span>
         <button
           mat-icon-button
@@ -68,7 +71,7 @@
           data-testid="remove-selected-image"
           (click)="removeSelectedFile()"
         >
-          <i class="fa fa-times text-base"></i>
+          <i class="fa fa-times text-base text-secondary-400"></i>
         </button>
       </div>
     </div>
