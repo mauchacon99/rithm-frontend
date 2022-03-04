@@ -1,5 +1,11 @@
 <!-- Document list item tab -->
 <div class="pt-5">
+  <div *ngIf="!itemListWidgetModal?.data?.length; else tableWidgetModal">
+    <p></p>There are not {{itemType}}s to show.
+  </div>
+</div>
+
+<ng-template #tableWidgetModal>
   <table
     *ngIf="itemType === 'document'"
     mat-table
@@ -10,10 +16,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold text-accent-600">{{
           element.name
-        }}</span
+          }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-          >Current Station: {{ element.stationName }}</span
+        >Current Station: {{ element.stationName }}</span
         >
       </td>
     </ng-container>
@@ -21,11 +27,11 @@
     <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold">{{
-          element.stationGroupName
-        }}</span
+          element.stationGroupName || "Don't have a group."
+          }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+        >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
         >
       </td>
     </ng-container>
@@ -64,20 +70,20 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold text-accent-600">{{
           element.name
-        }}</span
+          }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-          >{{ element.totalDocuments }} Documents</span
+        >{{ element.totalDocuments }} Documents</span
         >
       </td>
     </ng-container>
 
     <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold">{{ element.groupName }}</span
+        <span class="text-base font-semibold">{{ element.groupName || "Don't have a group." }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+        >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
         >
       </td>
     </ng-container>
@@ -116,10 +122,10 @@
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold text-accent-600">{{
           element.name
-        }}</span
+          }}</span
         ><br />
         <span class="text-xs text-secondary-500"
-          >{{ element.totalStations }} Stations</span
+        >{{ element.totalStations }} Stations</span
         >
       </td>
     </ng-container>
@@ -127,7 +133,7 @@
     <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold"
-          >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
+        >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
         ><br />
         <span class="text-xs text-secondary-500">
           {{ element.totalSubGroups }} Sub groups</span
@@ -160,4 +166,4 @@
       class="hover:bg-secondary-50"
     ></tr>
   </table>
-</div>
+</ng-template>

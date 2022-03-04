@@ -543,7 +543,6 @@ export class MockDashboardService {
    * @param dashboardRithmId The Id of the dashboard.
    * @returns The list.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStationTabList(
     dashboardRithmId: string
   ): Observable<ItemListWidgetModal[]> {
