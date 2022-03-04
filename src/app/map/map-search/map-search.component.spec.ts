@@ -5,7 +5,7 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { StationMapElement } from 'src/helpers';
+import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import { MockMapService } from 'src/mocks';
 import { MapItemStatus, MapMode, StationInfoDrawerData } from 'src/models';
 import { MapService } from '../map.service';
@@ -154,4 +154,79 @@ describe('MapSearchComponent', () => {
     tick(1);
     expect(mapServiceSpy).toHaveBeenCalledWith(station, drawerWidth);
   }));
+
+  it('should distinguish between element types', () => {
+    const station = new StationMapElement({
+      rithmId: '',
+      stationName: 'Untitled Station',
+      mapPoint: {
+        x: 12,
+        y: 15,
+      },
+      noOfDocuments: 0,
+      previousStations: [],
+      nextStations: [],
+      status: MapItemStatus.Normal,
+      notes: '',
+    });
+
+    const group = new StationGroupMapElement({
+      rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+      title: ' Sub RithmGroup',
+      organizationRithmId: '',
+      stations: [
+        'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+        'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+        'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+      ],
+      subStationGroups: [],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: false,
+      isChained: false,
+    });
+
+    expect(component.isStation(station)).toBeTrue();
+    expect(component.optionTitle).toEqual(station.stationName);
+    expect(component.isStation(group)).toBeFalse();
+    expect(component.optionTitle).toEqual(group.title);
+  });
+
+  it('should toggle mobileSearchOpen', () => {
+    component.toggleMobileSearch();
+    expect(component.mobileSearchOpen).toBeTrue();
+    component.toggleMobileSearch();
+    expect(component.mobileSearchOpen).toBeFalse();
+  });
+
+  it('should call open drawer', () => {
+    spyOn(component, 'toggleMobileSearch');
+    spyOn(component, 'openDrawer');
+
+    const station = new StationMapElement({
+      rithmId: '',
+      stationName: 'Untitled Station',
+      mapPoint: {
+        x: 12,
+        y: 15,
+      },
+      noOfDocuments: 0,
+      previousStations: [],
+      nextStations: [],
+      status: MapItemStatus.Normal,
+      notes: '',
+    });
+
+    component.openDrawerMobileSearch(station);
+    expect(component.toggleMobileSearch).toHaveBeenCalled();
+    expect(component.openDrawer).toHaveBeenCalled();
+  });
+
+  it('should call clearSearchText', () => {
+    spyOn(component, 'toggleMobileSearch');
+    spyOn(component, 'clearSearchText');
+
+    component.closeMobileSearch();
+    expect(component.toggleMobileSearch).toHaveBeenCalled();
+    expect(component.clearSearchText).toHaveBeenCalled();
+  });
 });
