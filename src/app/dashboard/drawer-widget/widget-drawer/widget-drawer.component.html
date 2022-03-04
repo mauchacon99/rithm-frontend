@@ -59,10 +59,7 @@
         />
       </button>
 
-      <div
-        class="w-full flex space-x-5 mt-5 pr-8 items-center"
-        *ngIf="imageSelected"
-      >
+      <div class="w-full flex mt-5 items-center" *ngIf="imageSelected">
         <span class="text-accent-500 truncate">{{ imageSelected.name }}</span>
         <button
           mat-icon-button

@@ -164,4 +164,13 @@ describe('WidgetDrawerComponent', () => {
     expect(component.imageSelected).toBeNull();
     expect(component.fileInputFile.nativeElement.value).toBe('');
   });
+
+  it('should call onSelectFile', () => {
+    const spyMethod = spyOn(component, 'onSelectFile').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'text/png' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.onSelectFile(mockEvt as unknown as Event);
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.imageSelected).not.toBeNull();
+  });
 });
