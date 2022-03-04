@@ -19,7 +19,9 @@
     <!-- Step 1 -->
     <mat-step color="accent" [completed]="firstOperand.value !== ''">
       <ng-template matStepLabel>
-        <p class="truncate font-semibold ml-2">Select Field</p>
+        <p class="truncate font-semibold ml-2" data-testid="select-field-title">
+          Select Field
+        </p>
       </ng-template>
       <div
         class="flex flex-col md:w-5/12 justify-start"
@@ -35,9 +37,15 @@
           *ngIf="!questionStationLoading; else selectFieldLoading"
         >
           <mat-label>Select Field</mat-label>
-          <mat-select [(value)]="firstOperandQuestionRithmId">
+          <mat-select
+            [(value)]="firstOperandQuestionRithmId"
+            id="first-operand-selector"
+            data-testid="first-operand-selector"
+          >
             <ng-container *ngFor="let question of firstOperandQuestionList">
               <mat-option
+                id="first-operand-option-{{ question.rithmId }}"
+                attr.data-testid="first-operand-option-{{ question.rithmId }}"
                 *ngIf="
                   question.questionType !== questionTypes.AddressLine;
                   else isAddressLine
@@ -49,6 +57,8 @@
               </mat-option>
               <ng-template #isAddressLine>
                 <mat-option
+                  id="first-operand-option-{{ question.rithmId }}"
+                  attr.data-testid="first-operand-option-{{ question.rithmId }}"
                   [value]="question.rithmId"
                   (click)="setFirstOperandInformation(question)"
                 >
@@ -56,11 +66,15 @@
                 </mat-option>
                 <mat-optgroup class="address-line-group">
                   <mat-option
+                    id="first-operand-option-{{ question.rithmId }}"
+                    attr.data-testid="first-operand-option-{{
+                      question.rithmId
+                    }}"
                     *ngFor="
                       let subquestion of question.children;
                       let child = index
                     "
-                    [value]="question.rithmId"
+                    [value]="subquestion.rithmId"
                     (click)="setFirstOperandInformation(question, child)"
                   >
                     <span class="text-secondary-200"
@@ -114,7 +128,9 @@
     <!-- Step 2 -->
     <mat-step color="accent" [completed]="operatorSelected?.text">
       <ng-template matStepLabel>
-        <p class="truncate ml-2">Comparison Type</p>
+        <p class="truncate ml-2" data-testid="comparison-type-title">
+          Comparison Type
+        </p>
       </ng-template>
       <div class="flex flex-col md:w-5/12 justify-start">
         <p class="text-sm mt-1">
@@ -124,12 +140,16 @@
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
           <mat-select
+            id="operator-selector"
+            data-testid="operator-selector"
             [(ngModel)]="operatorSelected"
             [ngModelOptions]="{ standalone: true }"
             (selectionChange)="resetQuestionFieldComponent()"
           >
             <mat-option
               *ngFor="let operator of operatorList"
+              id="operator-option-{{ operator.value }}"
+              attr.data-testid="operator-option-{{ operator.value }}"
               [value]="operator"
             >
               {{ operator.text }}
@@ -162,7 +182,9 @@
     <!-- Step 3 -->
     <mat-step color="accent" [completed]="secondOperand.value !== ''">
       <ng-template matStepLabel>
-        <p class="truncate ml-2">Comparison Value</p>
+        <p class="truncate ml-2" data-testid="comparison-value-title">
+          Comparison Value
+        </p>
       </ng-template>
       <div class="flex flex-col">
         <p class="text-sm mt-1">
@@ -229,6 +251,8 @@
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
           <mat-select
+            id="second-operand-selector"
+            data-testid="second-operand-selector"
             [disabled]="!secondOperandQuestionList.length"
             [(ngModel)]="secondOperand.value"
             [ngModelOptions]="{ standalone: true }"
@@ -238,6 +262,8 @@
           >
             <mat-option
               *ngFor="let question of secondOperandQuestionList"
+              id="second-operand-option-{{ question.rithmId }}"
+              attr.data-testid="second-operand-option-{{ question.rithmId }}"
               [value]="question.rithmId"
               (click)="setSecondOperandInformation(question)"
             >
@@ -272,7 +298,7 @@
     <!--Step 4 -->
     <mat-step color="accent" [completed]="false">
       <ng-template matStepLabel>
-        <p class="truncate ml-2">Done</p>
+        <p class="truncate ml-2" data-testid="done-title">Done</p>
       </ng-template>
       <div class="flex flex-col">
         <p class="text-sm my-1">

@@ -274,15 +274,47 @@ export class DashboardService {
   ): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
-        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        groupRithmId: '7',
-        stationName: 'Station Name that is name',
-        groupName: 'Group group',
-        isChainedGroup: true,
-        totalDocuments: 5,
-        totalStations: 5,
-        totalSubGroups: 5,
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
+        stationName: 'Stationy Name that is namey',
+        stationGroupName: 'Groupygroup',
+        isChained: false,
+      },
+      {
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
+        stationName: 'Stationy Name that is namey',
+        stationGroupName: 'Groupygroup',
+        isChained: true,
+      },
+      {
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
+        stationName: 'Stationy Name that is namey',
+        stationGroupName: 'Groupygroup',
+        isChained: false,
+      },
+    ];
+    return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Get the list for the station tabs.
+   *
+   * @param dashboardRithmId The specific dashboard id.
+   * @returns The list.
+   */
+  getStationTabList(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    dashboardRithmId: string
+  ): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        name: 'Stationy Name that is namey',
+        groupName: 'Groupygroup',
+        isChained: false,
+        totalDocuments: 2,
       },
     ];
     return of(itemListWidgetModal).pipe(delay(1000));

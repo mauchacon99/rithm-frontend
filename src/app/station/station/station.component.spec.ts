@@ -47,6 +47,7 @@ import { throwError } from 'rxjs';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { GridsterModule } from 'angular-gridster2';
+import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 import { SplitService } from 'src/app/core/split.service';
 
@@ -614,12 +615,37 @@ describe('StationComponent', () => {
 
   it('should call the function that changes to setting mode in edit mode', () => {
     const modeConfig = 'setting';
+    const displayGrid = 'none';
     component.viewNewStation = true;
     component.editMode = true;
     fixture.detectChanges();
+
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
+    expect(component.options.resizable?.enabled).toBeFalsy();
+    expect(component.options.draggable?.enabled).toBeFalsy();
+  });
+
+  it('should call the function changedOptions that make changes in grid', () => {
+    const spyChangedOptions = spyOn(
+      component,
+      'changedOptions'
+    ).and.callThrough();
+    component.changedOptions();
+    expect(spyChangedOptions).toHaveBeenCalled();
+  });
+
+  it('should change the edit mode and layout config', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spyEditMode = spyOn(component, 'setEditMode').and.callThrough();
+    component.setEditMode();
+    expect(spyEditMode).toHaveBeenCalled();
+    expect(component.editMode).toBeFalsy();
   });
 
   it('should open confirmation popup when canceling button', async () => {
@@ -666,5 +692,18 @@ describe('StationComponent', () => {
     const splitInject = TestBed.inject(SplitService);
     splitInject.sdkReady$.next();
     expect(component.viewNewStation).toBeFalsy();
+  });
+  it('should change setting config after canceling', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    fixture.detectChanges();
+
+    const spySaveChange = spyOn(
+      component,
+      'saveStationChanges'
+    ).and.callThrough();
+    component.saveStationChanges();
+    expect(spySaveChange).toHaveBeenCalled();
+    expect(component.editMode).toBeFalsy();
   });
 });
