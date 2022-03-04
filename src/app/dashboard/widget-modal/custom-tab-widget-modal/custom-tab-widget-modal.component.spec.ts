@@ -147,4 +147,22 @@ describe('CustomTabWidgetModalComponent', () => {
     );
     expect(LoadingStationTab).toBeTruthy();
   });
+
+  it('should catch an error if the request to get document tab list fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentTabList'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#error-documents-list-tab'
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(component.errorLoadingDocumentTab).toBeTrue();
+  });
 });

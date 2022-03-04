@@ -55,6 +55,11 @@
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
     <mat-tab>
+      <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain documents.
+        </p>
+      </div>
       <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
         <app-loading-indicator
           id="loading-tab-document-list"
