@@ -1,7 +1,7 @@
 <!-- Document list item tab -->
 <div class="pt-5">
   <table
-    *ngIf="type === 'document'"
+    *ngIf="itemType === 'document'"
     mat-table
     [dataSource]="itemListWidgetModal"
     class="w-full scrollbar table-container"
@@ -50,12 +50,12 @@
     <tr
       mat-row
       *matRowDef="let row; columns: displayedColumnsTableDocument"
-      class="cursor-pointer hover:bg-secondary-50"
+      class="hover:bg-secondary-50"
     ></tr>
   </table>
   <!-- Stations list item tab -->
   <table
-    *ngIf="type === 'station'"
+    *ngIf="itemType === 'station'"
     mat-table
     [dataSource]="itemListWidgetModal"
     class="w-full"
@@ -102,12 +102,12 @@
     <tr
       mat-row
       *matRowDef="let row; columns: displayedColumnsTableDocument"
-      class="cursor-pointer hover:bg-secondary-50"
+      class="hover:bg-secondary-50"
     ></tr>
   </table>
   <!-- Group list item tab -->
   <table
-    *ngIf="type === 'group'"
+    *ngIf="itemType === 'group'"
     mat-table
     [dataSource]="itemListWidgetModal"
     class="w-full"
@@ -152,12 +152,12 @@
       </td>
     </ng-container>
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">No data found</td>
+      <td class="mat-cell text-center" colspan="3">No data found.</td>
     </tr>
     <tr
       mat-row
       *matRowDef="let row; columns: displayedColumnsTableDocument"
-      class="cursor-pointer hover:bg-secondary-50"
+      class="hover:bg-secondary-50"
     ></tr>
   </table>
 </div>
