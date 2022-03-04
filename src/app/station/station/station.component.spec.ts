@@ -455,12 +455,17 @@ describe('StationComponent', () => {
 
   it('should call the function that changes to layout mode in edit mode', () => {
     const modeConfig = 'layout';
+    const displayGrid = 'always';
     component.viewNewStation = true;
     component.editMode = true;
     fixture.detectChanges();
+
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
+    expect(component.options.resizable?.enabled).toBeTrue();
+    expect(component.options.draggable?.enabled).toBeTrue();
   });
 
   it('should call the function that changes to setting mode in edit mode', () => {
@@ -514,6 +519,20 @@ describe('StationComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
     expect(component.editMode).toBeFalsy();
   });
+
+  it('should change the edit mode and set grid mode', () => {
+    component.viewNewStation = true;
+    component.editMode = false;
+    fixture.detectChanges();
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
+    const spyEditMode = spyOn(component, 'setEditMode').and.callThrough();
+
+    component.setEditMode();
+    expect(spyEditMode).toHaveBeenCalled();
+    expect(spyGridMode).toHaveBeenCalledWith('layout');
+    expect(component.editMode).toBeTrue();
+  });
+
   it('should change setting config after canceling', () => {
     component.viewNewStation = true;
     component.editMode = true;
