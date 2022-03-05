@@ -105,6 +105,22 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Show alert image delete in widget.
+   */
+  async confirmImageDelete(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Remove Image?',
+      message: 'this cannot be undone.',
+      important: true,
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    });
+    if (response) {
+      this.removeSelectedFile();
+    }
+  }
+
+  /**
    * Select image.
    *
    * @param event Event of select image.

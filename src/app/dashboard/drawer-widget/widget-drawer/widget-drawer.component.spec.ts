@@ -173,4 +173,44 @@ describe('WidgetDrawerComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
     expect(component.imageSelected).not.toBeNull();
   });
+
+  it('should show alert delete and remove image in widget', async () => {
+    component.widgetType = WidgetType.StationTableBanner;
+    component.imageSelected = new File([''], 'name', { type: 'text/png' });
+    fixture.detectChanges();
+
+    const dataExpect = {
+      title: 'Remove Image?',
+      message: 'this cannot be undone.',
+      important: true,
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    const spyConfirmImageDelete = spyOn(
+      component,
+      'confirmImageDelete'
+    ).and.callThrough();
+
+    const spyRemoveSelectedFile = spyOn(
+      component,
+      'removeSelectedFile'
+    ).and.callThrough();
+
+    const btnDelete = fixture.nativeElement.querySelector(
+      '#remove-selected-image'
+    );
+
+    await component.confirmImageDelete();
+    expect(btnDelete).toBeTruthy();
+    expect(spyConfirmImageDelete).toHaveBeenCalled();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataExpect);
+    expect(spyRemoveSelectedFile).toHaveBeenCalled();
+    expect(component.imageSelected).toBeNull();
+  });
 });
