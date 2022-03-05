@@ -98,7 +98,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
     this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
-      .getDocumentTabList(this.dashboardRithmId)
+      .getDocumentTabList()
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {

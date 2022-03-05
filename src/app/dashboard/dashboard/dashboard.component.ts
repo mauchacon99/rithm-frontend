@@ -531,8 +531,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openDialogAddWidget(): void {
     this.toggleDrawerOnlyForWidgets();
     this.dialog.open(AddWidgetModalComponent, {
-      panelClass: ['w-11/12', 'sm:w-4/5'],
+      panelClass: ['w-11/12', 'sm:w-4/5', 'h-5/6'],
       maxWidth: '1500px',
+      maxHeight: '800px',
       data: this.dashboardData.rithmId,
     });
   }

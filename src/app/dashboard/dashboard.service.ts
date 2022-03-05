@@ -265,13 +265,9 @@ export class DashboardService {
   /**
    * Get list tab documents.
    *
-   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
+  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
     return this.http.get<ItemListWidgetModal[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
     );

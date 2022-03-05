@@ -622,7 +622,6 @@ describe('DashboardService', () => {
   });
 
   it('should get list tab documents', () => {
-    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
@@ -646,7 +645,7 @@ describe('DashboardService', () => {
         isChained: false,
       },
     ];
-    service.getDocumentTabList(dashboardRithmId).subscribe((response) => {
+    service.getDocumentTabList().subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
     const req = httpTestingController.expectOne(

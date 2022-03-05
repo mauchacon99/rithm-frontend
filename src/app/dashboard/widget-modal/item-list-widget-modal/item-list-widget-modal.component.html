@@ -1,10 +1,10 @@
 <!-- Document list item tab -->
-<div class="pt-5">
+<div class="pt-5 flex-grow overflow-scroll scrollbar h-80">
   <table
     *ngIf="itemType === 'document'"
     mat-table
     [dataSource]="itemListWidgetModal"
-    class="w-full scrollbar table-container"
+    class="w-full table-container"
   >
     <ng-container [matColumnDef]="'mainInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
