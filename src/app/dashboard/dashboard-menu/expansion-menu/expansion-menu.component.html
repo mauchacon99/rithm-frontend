@@ -42,7 +42,7 @@
     </div>
 
     <div
-      *ngIf="!dashboardsList.length && !isLoading"
+      *ngIf="!dashboardsList.length && !isLoading && !showError"
       id="empty-dashboards-list"
     >
       <p>No dashboard for listing</p>
