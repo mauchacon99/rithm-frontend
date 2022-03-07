@@ -123,6 +123,7 @@
                 (ngModelChange)="updateFlowButtonName()"
                 data-testid="button-name"
                 autocomplete="off"
+                [disabled]="mapMode !== mapModeEnum.Build"
               />
             </mat-form-field>
           </div>

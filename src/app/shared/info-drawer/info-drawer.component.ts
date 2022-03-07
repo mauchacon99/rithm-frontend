@@ -1,9 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Subject, first } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from 'src/app/map/map.service';
-import { StationInfoDrawerData } from 'src/models';
+import { MapMode, StationInfoDrawerData } from 'src/models';
+import { StationInfoDrawerComponent } from 'src/app/shared/station-info-drawer/station-info-drawer.component';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for info drawer.
@@ -14,6 +16,9 @@ import { StationInfoDrawerData } from 'src/models';
   styleUrls: ['./info-drawer.component.scss'],
 })
 export class InfoDrawerComponent implements OnDestroy {
+
+  @ViewChild(StationInfoDrawerComponent, { static: false }) stationDrawer!: StationInfoDrawerComponent;
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -24,7 +29,8 @@ export class InfoDrawerComponent implements OnDestroy {
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
-    private mapService: MapService
+    private mapService: MapService,
+    private stationService: StationService
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -45,6 +51,15 @@ export class InfoDrawerComponent implements OnDestroy {
           this.openedFromMap = dataDrawer.openedFromMap;
         }
       });
+  }
+
+  /**
+   * Whether the info-drawer is opened.
+   *
+   * @returns Return true if info-drawer is opened, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /**
@@ -70,6 +85,11 @@ export class InfoDrawerComponent implements OnDestroy {
     ) {
       this.mapService.isDrawerOpened$.next(false);
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
+    }
+    if (drawerItem === 'stationInfo' && !this.isDrawerOpen && this.mapService.mapMode$.value === MapMode.Build) {
+      this.stationService.updateFlowButtonText(this.stationDrawer.stationRithmId, this.stationDrawer.flowButtonName)
+        .pipe(first())
+        .subscribe();
     }
     this.drawerMode = '';
   }
