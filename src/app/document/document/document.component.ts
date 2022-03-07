@@ -143,7 +143,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   documentAnswer: DocumentAnswer[] = [];
 
   /** Get flow button name. */
-  flowButtonName = 'Flow';
+  flowButtonName = '';
 
   constructor(
     private documentService: DocumentService,

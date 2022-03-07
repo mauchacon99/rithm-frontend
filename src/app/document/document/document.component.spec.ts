@@ -691,14 +691,12 @@ describe('DocumentComponent', () => {
   });
 
   it('should get text of flow button', () => {
-    const flowButton = 'Flow';
     const spyFlowButton = spyOn(
       TestBed.inject(StationService),
       'getFlowButtonText'
     ).and.callThrough();
+    expect(component.flowButtonName).toBeFalsy();
     component.getFlowButtonName();
-    expect(component.flowButtonName).toBe(flowButton);
-    fixture.detectChanges();
     expect(spyFlowButton).toHaveBeenCalledOnceWith(
       component.documentInformation.stationRithmId
     );
