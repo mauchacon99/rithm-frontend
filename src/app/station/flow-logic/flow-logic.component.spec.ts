@@ -175,23 +175,27 @@ describe('FlowLogicComponent', () => {
       );
     });
 
-    it('should to call method openModal after clicked in button with id: all-new-rule', () => {
+    it('should to call method openModal after clicked in button with id: all-new-rule-stationId', () => {
       component.flowLogicLoading = false;
       component.ruleLoading = false;
       fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
-      const btnOpenModal = fixture.nativeElement.querySelector('#all-new-rule');
+      const btnOpenModal = fixture.nativeElement.querySelector(
+        `#all-new-rule-${nextStations[0].rithmId}`
+      );
       expect(btnOpenModal).toBeTruthy();
       btnOpenModal.click();
       expect(spyFunc).toHaveBeenCalled();
     });
 
-    it('should to call method openModal after clicked in button with id: any-new-rule', () => {
+    it('should to call method openModal after clicked in button with id: any-new-rule-stationId', () => {
       component.flowLogicLoading = false;
       component.ruleLoading = false;
       fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
-      const btnOpenModal = fixture.nativeElement.querySelector('#any-new-rule');
+      const btnOpenModal = fixture.nativeElement.querySelector(
+        `#any-new-rule-${nextStations[0].rithmId}`
+      );
       expect(btnOpenModal).toBeTruthy();
       btnOpenModal.click();
       expect(spyFunc).toHaveBeenCalled();
