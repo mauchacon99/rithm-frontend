@@ -47,6 +47,15 @@ const FIELDS: Question[] = [
     isPrivate: false,
     children: [],
   },
+  {
+    rithmId: '3j4k-3h2j-hj4j',
+    prompt: 'Fake question 5',
+    questionType: QuestionFieldType.File,
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    children: [],
+  },
 ];
 
 describe('TextFieldComponent', () => {
@@ -222,6 +231,22 @@ describe('TextFieldComponent', () => {
       expect(url.valid).toBeFalse();
       expect(url.hasError('urlIncorrect')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
+    });
+  });
+
+  describe('file field when is not a station', () => {
+    beforeEach(() => {
+      component.field = FIELDS[4];
+      component.isStation = false;
+      component.ngOnInit();
+      fixture.detectChanges();
+    });
+
+    it('should not require an input in file field', () => {
+      const file = component.textFieldForm.controls['file'];
+      expect(file.valid).toBeTrue();
+      expect(file.hasError('required')).toBeFalse();
+      expect(component.textFieldForm.valid).toBeTrue();
     });
   });
 
