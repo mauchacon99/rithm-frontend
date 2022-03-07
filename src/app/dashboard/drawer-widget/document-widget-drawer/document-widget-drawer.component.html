@@ -35,4 +35,11 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <div
+    *ngIf="failedLoadDrawer"
+    class="text-error-500 text-center my-4"
+    id="display-document-drawer-error"
+  >
+    Unable to retrieve data.
+  </div>
 </ng-template>
