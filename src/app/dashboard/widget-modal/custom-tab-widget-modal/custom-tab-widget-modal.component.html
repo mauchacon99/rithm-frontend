@@ -37,7 +37,7 @@
           Error: failed to obtain documents.
         </p>
       </div>
-      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+      <div *ngIf="isLoadingDocumentTab" class="loading">
         <app-loading-indicator
           id="loading-tab-document-list"
         ></app-loading-indicator>
@@ -58,7 +58,7 @@
       <div
         *ngIf="isLoadingStationTab"
         id="loading-station-list-tab"
-        class="py-10"
+        class="loading"
       >
         <app-loading-indicator></app-loading-indicator>
       </div>
