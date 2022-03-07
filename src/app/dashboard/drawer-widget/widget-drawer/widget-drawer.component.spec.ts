@@ -181,7 +181,7 @@ describe('WidgetDrawerComponent', () => {
 
     const dataExpect = {
       title: 'Remove Image?',
-      message: 'this cannot be undone.',
+      message: 'This cannot be undone.',
       important: true,
       okButtonText: 'Yes',
       cancelButtonText: 'No',
