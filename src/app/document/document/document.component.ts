@@ -522,7 +522,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(first())
       .subscribe({
         next: (flowButtonText) => {
-          this.flowButtonName = flowButtonText.data || 'Flow';
+          this.flowButtonName = flowButtonText || 'Flow';
         },
         error: (error: unknown) => {
           this.errorService.displayError(

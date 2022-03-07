@@ -1120,7 +1120,7 @@ describe('StationService', () => {
       data: 'Flow',
     };
     service.getFlowButtonText(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
+      expect(response).toEqual(expectedResponse.data);
     });
   });
 });

@@ -658,7 +658,7 @@ export class StationService {
    * @param stationRithmId The current station id.
    * @returns The flow button text.
    */
-  getFlowButtonText(stationRithmId: string): Observable<StandardStringJSON> {
+  getFlowButtonText(stationRithmId: string): Observable<string> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -672,7 +672,7 @@ export class StationService {
       const expectedResponse: StandardStringJSON = {
         data: 'Flow',
       };
-      return of(expectedResponse).pipe(delay(1000));
+      return of(expectedResponse.data).pipe(delay(1000));
     }
   }
 }
