@@ -1035,4 +1035,28 @@ export class MockStationService {
       return of(expectedResponse).pipe(delay(1000));
     }
   }
+
+  /**
+   * Get the flow button text.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The flow button text.
+   */
+  getFlowButtonText(stationRithmId: string): Observable<StandardStringJSON> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get the flow button text.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardStringJSON = {
+        data: 'Flow',
+      };
+      return of(expectedResponse).pipe(delay(1000));
+    }
+  }
 }

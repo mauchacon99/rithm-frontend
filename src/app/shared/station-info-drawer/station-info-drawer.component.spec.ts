@@ -588,4 +588,15 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(loadingComponent).toBeNull();
   });
+
+  it('should get text of flow button', () => {
+    const spyFlowButton = spyOn(
+      TestBed.inject(StationService),
+      'getFlowButtonText'
+    ).and.callThrough();
+    expect(component.flowButtonName).toBe('');
+    component.getFlowButtonName();
+    expect(component.flowButtonName).toBe('');
+    expect(spyFlowButton).toHaveBeenCalledOnceWith(stationId);
+  });
 });

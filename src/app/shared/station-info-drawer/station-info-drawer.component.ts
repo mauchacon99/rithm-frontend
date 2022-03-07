@@ -679,6 +679,33 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get flow button name.
+   */
+  getFlowButtonName(): void {
+    this.stationService
+      .getFlowButtonText(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (flowButtonText) => {
+          this.flowButtonName = flowButtonText.data;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update flow button name.
+   */
+  updateFlowButtonName(): void {
+    this.stationService.updatedFlowButtonText(this.flowButtonName);
+  }
+
+  /**
    * Update the AllowAllOrgWorkers status.
    */
   updateAllOrgWorkersStation(): void {
@@ -733,13 +760,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationName);
-  }
-
-  /**
-   * Update flow button name.
-   */
-  updateFlowButtonName(): void {
-    this.stationService.updatedFlowButtonText(this.flowButtonName);
   }
 
   /**
