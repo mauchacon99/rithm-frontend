@@ -15,22 +15,3 @@
     }
   }
 }
-
-::ng-deep.mat-form-field-appearance-fill {
-  .mat-form-field-flex {
-    padding: 5px 10px 5px 10px !important;
-    background-color: #fff;
-    border: 1px solid #bfbfbf;
-    border-radius: 4px !important;
-  }
-
-  .mat-form-field-wrapper {
-    padding-bottom: 10px;
-  }
-}
-
-.search-tabs {
-  ::ng-deep.mat-form-field-underline {
-    display: none;
-  }
-}
