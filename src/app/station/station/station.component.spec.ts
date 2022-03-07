@@ -718,4 +718,21 @@ describe('StationComponent', () => {
     expect(spySaveChange).toHaveBeenCalled();
     expect(component.editMode).toBeFalsy();
   });
+
+  it('should remove widgets with the trash icon in the editToolbar', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    const modeConfig = 'layout';
+    component.setGridMode(modeConfig);
+    fixture.detectChanges();
+
+    const btnTrashIcon = fixture.debugElement.nativeElement.querySelector(
+      '#button-remove-widget'
+    );
+    expect(btnTrashIcon).toBeTruthy();
+    const spyRemove = spyOn(component, 'removeWidgets').and.callThrough();
+    btnTrashIcon.click();
+    expect(spyRemove).toHaveBeenCalled();
+    expect(component.inputFrameWidgetItems.length).toBeLessThanOrEqual(0);
+  });
 });
