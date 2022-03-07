@@ -1,5 +1,12 @@
 <!-- Document list item tab -->
 <div class="pt-5 overflow-scroll scrollbar">
+  <div *ngIf="!itemListWidgetModal?.data?.length; else tableWidgetModal">
+    <p></p>
+    There are not {{ itemType }}s to show.
+  </div>
+</div>
+
+<ng-template #tableWidgetModal>
   <table
     *ngIf="itemType === 'document'"
     mat-table
@@ -21,7 +28,7 @@
     <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
         <span class="text-base font-semibold">{{
-          element.stationGroupName
+          element.stationGroupName || "Doesn't have a group"
         }}</span
         ><br />
         <span class="text-xs text-secondary-500"
@@ -74,7 +81,9 @@
 
     <ng-container [matColumnDef]="'generalInformation'">
       <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-        <span class="text-base font-semibold">{{ element.groupName }}</span
+        <span class="text-base font-semibold">{{
+          element.groupName || "Doesn't have a group"
+        }}</span
         ><br />
         <span class="text-xs text-secondary-500"
           >Group Type: {{ element.isChained ? 'Chained' : 'Not Chained' }}</span
@@ -160,4 +169,4 @@
       class="hover:bg-secondary-50"
     ></tr>
   </table>
-</div>
+</ng-template>

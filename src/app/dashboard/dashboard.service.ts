@@ -276,22 +276,11 @@ export class DashboardService {
   /**
    * Get the list for the station tabs.
    *
-   * @param dashboardRithmId The specific dashboard id.
    * @returns The list.
    */
-  getStationTabList(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
-    const itemListWidgetModal: ItemListWidgetModal[] = [
-      {
-        rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        name: 'Stationy Name that is namey',
-        groupName: 'Groupygroup',
-        isChained: false,
-        totalDocuments: 2,
-      },
-    ];
-    return of(itemListWidgetModal).pipe(delay(1000));
+  getStationTabList(): Observable<ItemListWidgetModal[]> {
+    return this.http.get<ItemListWidgetModal[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
+    );
   }
 }

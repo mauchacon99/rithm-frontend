@@ -42,10 +42,12 @@
           id="loading-tab-document-list"
         ></app-loading-indicator>
       </div>
-      <app-item-list-widget-modal
-        [itemListWidgetModal]="dataSourceTableDocument"
-        [itemType]="'document'"
-      ></app-item-list-widget-modal>
+      <div *ngIf="!errorLoadingDocumentTab && !isLoadingDocumentTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableDocument"
+          [itemType]="'document'"
+        ></app-item-list-widget-modal>
+      </div>
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
@@ -60,10 +62,12 @@
       >
         <app-loading-indicator></app-loading-indicator>
       </div>
-      <app-item-list-widget-modal
-        [itemListWidgetModal]="dataSourceTableStations"
-        [itemType]="'station'"
-      ></app-item-list-widget-modal>
+      <div *ngIf="!errorLoadingStationTab && !isLoadingStationTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableStations"
+          [itemType]="'station'"
+        ></app-item-list-widget-modal>
+      </div>
     </mat-tab>
     <mat-tab>
       <app-item-list-widget-modal

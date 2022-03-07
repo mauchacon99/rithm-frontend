@@ -126,7 +126,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
     this.isLoadingStationTab = true;
     this.errorLoadingStationTab = false;
     this.dashboardService
-      .getStationTabList(this.dashboardRithmId)
+      .getStationTabList()
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
