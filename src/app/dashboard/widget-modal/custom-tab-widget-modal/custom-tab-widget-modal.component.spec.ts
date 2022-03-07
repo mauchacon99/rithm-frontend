@@ -10,6 +10,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
+import { MatTableModule } from '@angular/material/table';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -26,8 +28,14 @@ describe('CustomTabWidgetModalComponent', () => {
       declarations: [
         CustomTabWidgetModalComponent,
         MockComponent(LoadingIndicatorComponent),
+        ItemListWidgetModalComponent,
       ],
-      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
+      imports: [
+        MatButtonToggleModule,
+        MatTabsModule,
+        NoopAnimationsModule,
+        MatTableModule,
+      ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
@@ -140,5 +148,23 @@ describe('CustomTabWidgetModalComponent', () => {
       '#loading-station-list-tab'
     );
     expect(LoadingStationTab).toBeTruthy();
+  });
+
+  it('should catch an error if the request to get document tab list fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentTabList'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#error-documents-list-tab'
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(component.errorLoadingDocumentTab).toBeTrue();
   });
 });

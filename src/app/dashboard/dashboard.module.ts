@@ -41,6 +41,7 @@ import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-d
 import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ItemListWidgetModalComponent } from './widget-modal/item-list-widget-modal/item-list-widget-modal.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     DocumentWidgetDrawerComponent,
     AddWidgetModalComponent,
     CustomTabWidgetModalComponent,
+    ItemListWidgetModalComponent,
   ],
   imports: [
     CommonModule,

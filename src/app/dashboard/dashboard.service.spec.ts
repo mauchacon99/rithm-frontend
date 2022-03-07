@@ -625,15 +625,25 @@ describe('DashboardService', () => {
     const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
-        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        groupRithmId: '7',
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
         stationName: 'Stationy Name that is namey',
-        groupName: 'Groupygroup',
-        isChainedGroup: false,
-        totalDocuments: 2,
-        totalStations: 2,
-        totalSubGroups: 2,
+        stationGroupName: 'Groupygroup',
+        isChained: false,
+      },
+      {
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
+        stationName: 'Stationy Name that is namey',
+        stationGroupName: 'Groupygroup',
+        isChained: true,
+      },
+      {
+        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
+        name: 'Document Name',
+        stationName: 'Stationy Name that is namey',
+        stationGroupName: 'Groupygroup',
+        isChained: false,
       },
     ];
     service.getDocumentTabList(dashboardRithmId).subscribe((response) => {
@@ -642,23 +652,24 @@ describe('DashboardService', () => {
   });
 
   it('should get tab list for stations', () => {
-    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const itemListWidgetModal: ItemListWidgetModal[] = [
+    const expectDataResponse: ItemListWidgetModal[] = [
       {
-        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        groupRithmId: '7',
-        stationName: 'Stationy Name that is namey',
+        rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        name: 'Stationy Name that is namey',
         groupName: 'Groupygroup',
-        isChainedGroup: false,
+        isChained: false,
         totalDocuments: 2,
-        totalStations: 2,
-        totalSubGroups: 2,
       },
     ];
-
-    service.getStationTabList(dashboardRithmId).subscribe((response) => {
-      expect(response).toEqual(itemListWidgetModal);
+    service.getStationTabList().subscribe((response) => {
+      expect(response).toEqual(expectDataResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectDataResponse);
+    httpTestingController.verify();
   });
 });

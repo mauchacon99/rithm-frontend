@@ -3,6 +3,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { ItemListWidgetModal } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 /** Component for Tab Custom in modal add widget. */
 @Component({
@@ -14,14 +15,20 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /* Dashboard rithm Id. */
   @Input() dashboardRithmId!: string;
 
-  /* List document tab Widget Modal. */
-  itemsListDocument: ItemListWidgetModal[] = [];
-
-  /* List station tab widget Modal. */
-  itemsListStation: ItemListWidgetModal[] = [];
-
   /** Index default in tabs. */
   indexTab = 0;
+
+  /** List table documents. */
+  dataSourceTableDocument!: MatTableDataSource<ItemListWidgetModal>;
+
+  /** List table stations. */
+  dataSourceTableStations!: MatTableDataSource<ItemListWidgetModal>;
+
+  /** List table Groups. */
+  dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
+
+  /** Variable to show if the error getting tab document list. */
+  errorLoadingDocumentTab = false;
 
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
@@ -31,6 +38,31 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /** Error loading petition station tab. */
   errorLoadingStationTab = false;
+
+  /* Value to simulate list of groups waiting final method will be incorporated. */
+  itemListWidgetModalGroups: ItemListWidgetModal[] = [
+    {
+      rithmId: '7',
+      name: 'Groupygroup',
+      isChained: false,
+      totalStations: 2,
+      totalSubGroups: 5,
+    },
+    {
+      rithmId: '7',
+      name: 'Groupygroup',
+      isChained: true,
+      totalStations: 2,
+      totalSubGroups: 3,
+    },
+    {
+      rithmId: '7',
+      name: 'Groupygroup',
+      isChained: false,
+      totalStations: 2,
+      totalSubGroups: 9,
+    },
+  ];
 
   constructor(
     private dashboardService: DashboardService,
@@ -43,6 +75,10 @@ export class CustomTabWidgetModalComponent implements OnInit {
   ngOnInit(): void {
     this.getDocumentTabList();
     this.getStationTabList();
+    /*Temporal function to simulate list of groups waiting final method will be incorporated. */
+    this.dataSourceTableGroup = new MatTableDataSource(
+      this.itemListWidgetModalGroups
+    );
   }
 
   /**
@@ -59,16 +95,21 @@ export class CustomTabWidgetModalComponent implements OnInit {
    *
    */
   private getDocumentTabList(): void {
+    this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
       .getDocumentTabList(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
+          this.dataSourceTableDocument = new MatTableDataSource(
+            itemsListDocument
+          );
+          this.errorLoadingDocumentTab = false;
           this.isLoadingDocumentTab = false;
-          this.itemsListDocument = itemsListDocument;
         },
         error: (error: unknown) => {
+          this.errorLoadingDocumentTab = true;
           this.isLoadingDocumentTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -85,13 +126,15 @@ export class CustomTabWidgetModalComponent implements OnInit {
     this.isLoadingStationTab = true;
     this.errorLoadingStationTab = false;
     this.dashboardService
-      .getStationTabList(this.dashboardRithmId)
+      .getStationTabList()
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
+          this.dataSourceTableStations = new MatTableDataSource(
+            itemsListStation
+          );
           this.isLoadingStationTab = false;
           this.errorLoadingStationTab = false;
-          this.itemsListStation = itemsListStation;
         },
         error: (error: unknown) => {
           this.isLoadingStationTab = false;

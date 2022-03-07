@@ -221,6 +221,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.widgetIndex = dataEditWidget.widgetIndex;
     component.quantityElementsWidget = dataEditWidget.quantityElementsWidget;
     component.formColumns.setValue(['1020-65sdvsd4-05060708-090trhrth']);
+    component.questions = [];
     const expectData = {
       widgetItem: component.widgetItem,
       widgetIndex: component.widgetIndex,
@@ -260,5 +261,24 @@ describe('DocumentWidgetDrawerComponent', () => {
       '#message-not-question-assigned-to-document'
     );
     expect(renderMessage).toBeFalsy();
+  });
+
+  it('should show error message when the request fails', () => {
+    const spyError = spyOn(
+      TestBed.inject(DocumentService),
+      'getDocumentWidget'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component['getDocumentWidget']();
+    fixture.detectChanges();
+    expect(component.failedLoadDrawer).toBeTrue();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#display-document-drawer-error'
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(spyError).toHaveBeenCalled();
   });
 });

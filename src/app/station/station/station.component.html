@@ -298,7 +298,14 @@
                         </button>
                       </div>
                       <div class="flex">
-                        <button type="button" class="px-2">
+                        <button
+                          *ngIf="layoutMode"
+                          type="button"
+                          id="button-remove-widget"
+                          data-testid="button-remove-widget"
+                          class="px-2"
+                          (click)="removeWidgets()"
+                        >
                           <span
                             class="fas fa-trash text-secondary-500 fa-lg"
                           ></span>
@@ -332,11 +339,13 @@
                     >
                       <gridster-item
                         [item]="widgetItem"
+                        [ngClass]="{ 'widget-item-layout': layoutMode }"
                         class="pt-1"
                         *ngFor="let widgetItem of inputFrameWidgetItems"
                       >
                         <app-input-frame-widget
                           [fields]="widgetItem.questions"
+                          [stationViewMode]="editMode ? 'edit' : 'preview'"
                         ></app-input-frame-widget>
                       </gridster-item>
                     </gridster>

@@ -68,7 +68,7 @@
                     <span class="font-semibold px-2">
                       - {{ translateOperator(equation.operatorType) }} -</span
                     >
-                    {{ equation.rightOperand.text | titlecase }}
+                    {{ equation.rightOperand.text }}
                   </p>
                   <figure class="flex">
                     <button
@@ -111,8 +111,8 @@
                   mat-stroked-button
                   type="button"
                   (click)="openModal('all', station.rithmId)"
-                  data-testid="all-new-rule"
-                  id="all-new-rule"
+                  attr.data-testid="all-new-rule-{{ station.rithmId }}"
+                  id="all-new-rule-{{ station.rithmId }}"
                   class="px-4 py-1 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold"
                 >
                   New Rule
@@ -199,8 +199,8 @@
                   mat-stroked-button
                   type="button"
                   (click)="openModal('any', station.rithmId)"
-                  data-testid="any-new-rule"
-                  id="any-new-rule"
+                  attr.data-testid="any-new-rule-{{ station.rithmId }}"
+                  id="any-new-rule-{{ station.rithmId }}"
                   class="px-4 py-1 mt-4 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold"
                 >
                   New Rule
