@@ -764,6 +764,14 @@ export class StationComponent
     }
   }
 
+  /**
+   * Save the changes make in the gridster.
+   */
+  saveStationChanges(): void {
+    this.editMode = false;
+    this.setGridMode('preview');
+  }
+
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
@@ -779,12 +787,9 @@ export class StationComponent
     }
   }
 
-  /**
-   * Save the changes make in the gridster.
-   */
-  saveStationChanges(): void {
-    this.editMode = false;
-    this.setGridMode('preview');
+  /** Remove widgets from the gridster in layout mode. */
+  removeWidgets(): void {
+    this.inputFrameWidgetItems.length = 0;
   }
 
   /**
