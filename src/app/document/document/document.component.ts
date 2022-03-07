@@ -4,10 +4,11 @@ import {
   OnDestroy,
   ViewChild,
   AfterViewChecked,
-  ChangeDetectorRef,
   EventEmitter,
   Output,
   Input,
+  ChangeDetectorRef,
+  Inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -151,7 +152,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private readonly changeDetectorR: ChangeDetectorRef,
+    @Inject(ChangeDetectorRef) private changeDetectorR: ChangeDetectorRef,
     private userService: UserService
   ) {
     this.documentForm = this.fb.group({
@@ -425,33 +426,48 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Save document answers and auto flow.
    */
-  autoFlowDocument(): void {
+  saveAnswersFlowDocument(): void {
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
+    this.saveDocumentAnswer();
+  }
+
+  /**
+   * Save document answers (isolate request).
+   */
+  saveDocumentAnswer(): void {
+    this.documentService
+      .saveDocumentAnswer(
+        this.documentInformation.documentRithmId,
+        this.documentAnswer
+      )
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.autoFlowContainer();
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end saving answers and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * AutoFlow Container (isolated request).
+   */
+  autoFlowContainer(): void {
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
       // Parameter temporary testMode.
       testMode: false,
     };
-
-    const requestArray = [
-      // Save the document answers.
-      this.documentService.saveDocumentAnswer(
-        this.documentInformation.documentRithmId,
-        this.documentAnswer
-      ),
-      // Update the document name.
-      this.documentService.updateDocumentName(
-        this.documentInformation.documentRithmId,
-        this.documentName
-      ),
-
-      // Flow a document.
-      this.documentService.autoFlowDocument(documentAutoFlow),
-    ];
-
-    forkJoin(requestArray)
+    this.documentService
+      .autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
         next: () => {
@@ -461,7 +477,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            "Something went wrong on our end flowing the container and we're looking into it. Please try again in a little while.",
             error
           );
         },
