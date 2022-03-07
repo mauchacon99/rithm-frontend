@@ -588,29 +588,4 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(loadingComponent).toBeNull();
   });
-
-  it('should get text of flow button', () => {
-    const spyFlowButton = spyOn(
-      TestBed.inject(StationService),
-      'getFlowButtonText'
-    ).and.callThrough();
-    expect(component.flowButtonName).toBe('');
-    component.getFlowButtonName();
-    expect(component.flowButtonName).toBe('');
-    expect(spyFlowButton).toHaveBeenCalledOnceWith(stationId);
-  });
-
-  it('should catch error when unable to get flow button text', () => {
-    spyOn(TestBed.inject(StationService), 'getFlowButtonText').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component.getFlowButtonName();
-    expect(spyError).toHaveBeenCalled();
-  });
 });
