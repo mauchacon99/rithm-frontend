@@ -318,7 +318,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             );
             //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
             this.mapService.centerActive$.next(true);
-            //Increment centerStationCount to show that more centering of station needs to be done.
+            //Increment centerCount to show that more centering of station needs to be done.
             this.mapService.centerCount$.next(1);
             // If Drawer isn't open and there is station to be centered.
             if (
@@ -1232,7 +1232,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    //Always allow movement when centerStationCount or centerStationGroupCount are greater than 0.
+    //Always allow movement when centerCount are greater than 0.
     if (this.mapService.centerCount$.value > 0) {
       return true;
     }

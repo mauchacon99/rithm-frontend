@@ -308,7 +308,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       );
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
-      //Increment centerStationCount to show that more centering of station needs to be done.
+      //Increment centerCount to show that more centering of station needs to be done.
       this.mapService.centerCount$.next(1);
       //Call method to run logic for centering of the station.
       setTimeout(() => {
@@ -327,13 +327,13 @@ export class MapSearchComponent implements OnInit, OnDestroy {
         stationGroupStatus: drawerItem.status,
         isChained: drawerItem.isChained,
       };
-      //Open station group info drawer when clicked on station group boundary or name.
+      //Open station group info drawer when station group is selected.
       this.sidenavDrawerService.openDrawer(
         'stationGroupInfo',
         dataInformationDrawer
       );
       drawerItem.drawerOpened = true;
-      //Increment centerStationGroupCount to show that more centering of station needs to be done.
+      //Increment centerCount to show that more centering of station group needs to be done.
       this.mapService.centerCount$.next(1);
       //Call method to run logic for centering of the station group.
       setTimeout(() => {
