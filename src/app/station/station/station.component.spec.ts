@@ -55,7 +55,16 @@ describe('StationComponent', () => {
   let fixture: ComponentFixture<StationComponent>;
   let stationInject: StationService;
   const formBuilder = new FormBuilder();
-
+  const question: Question = {
+    rithmId: '3j4k-3h2j-hj4j',
+    prompt: 'Label #1',
+    questionType: QuestionFieldType.ShortText,
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    children: [],
+    originalStationRithmId: '3j4k-3h2j-hj4j',
+  };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -190,16 +199,7 @@ describe('StationComponent', () => {
   });
 
   it('should move previous field from private/all expansion panel to the template area', () => {
-    const previousField: Question = {
-      rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Label #1',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false,
-      children: [],
-      originalStationRithmId: '3j4k-3h2j-hj4j',
-    };
+    const previousField = question;
     component.movePreviousFieldToTemplate(previousField);
     fixture.detectChanges();
     expect(component.stationInformation.questions).toHaveSize(1);
@@ -356,16 +356,6 @@ describe('StationComponent', () => {
   });
 
   it('should listen the station question when exists', () => {
-    const question: Question = {
-      rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Label #1',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false,
-      children: [],
-      originalStationRithmId: '3j4k-3h2j-hj4j',
-    };
     component.stationInformation.questions = [question];
     fixture.detectChanges();
     stationInject.stationQuestion$.next(question);
@@ -376,16 +366,6 @@ describe('StationComponent', () => {
   });
 
   it('should listen the station question when possibles answer', () => {
-    const question: Question = {
-      rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Label #1',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false,
-      children: [],
-      originalStationRithmId: '3j4k-3h2j-hj4j',
-    };
     component.stationInformation.questions = [
       {
         rithmId: '3j4k-3h2j-hj6j',
