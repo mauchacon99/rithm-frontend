@@ -110,7 +110,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   async confirmImageDelete(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Remove Image?',
-      message: 'this cannot be undone.',
+      message: 'This cannot be undone.',
       important: true,
       okButtonText: 'Yes',
       cancelButtonText: 'No',
