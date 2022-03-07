@@ -32,7 +32,7 @@
           class="text-secondary-500"
           (click)="toggleEditDocument()"
         >
-          <i class="fas fa-cog text-[16px]"></i>
+          <i class="fas fa-cog text-base"></i>
         </button>
       </div>
       <div
@@ -47,7 +47,7 @@
           id="show-more-stations"
           data-testid="show-more-stations"
         >
-          <i class="fas fa-ellipsis-h text-secondary-500 text-[16px]"></i>
+          <i class="fas fa-ellipsis-h text-secondary-500 text-base"></i>
         </button>
         <mat-menu #stationMenu>
           <div
@@ -60,7 +60,7 @@
               (click)="goToDocument(station.stationRithmId)"
             >
               <i
-                class="fas fa-external-link-alt text-[16px] text-secondary-500"
+                class="fas fa-external-link-alt text-base text-secondary-500"
               ></i>
               {{ station.stationName }}
             </div>
@@ -74,9 +74,7 @@
           id="go-to-document-page-single"
           (click)="goToDocument(dataDocumentWidget.stations[0].stationRithmId)"
         >
-          <i
-            class="fas fa-external-link-alt text-[16px] text-secondary-500"
-          ></i>
+          <i class="fas fa-external-link-alt text-base text-secondary-500"></i>
         </button>
       </ng-template>
     </div>
