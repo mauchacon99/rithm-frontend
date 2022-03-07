@@ -217,7 +217,7 @@ export class StationElementService {
     //The outline of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-      dragItem === MapDragItem.Node &&
+      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
         ? MAP_SELECTED
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
@@ -237,7 +237,8 @@ export class StationElementService {
           (station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled))) ||
       (station.hoverItem !== StationElementHoverItem.None &&
-        dragItem === MapDragItem.Node &&
+        (dragItem === MapDragItem.Node ||
+          dragItem === MapDragItem.Connection) &&
         !station.dragging)
     ) {
       ctx.lineWidth = STATION_BORDER_LINE_WIDTH_SELECTED * this.mapScale;
