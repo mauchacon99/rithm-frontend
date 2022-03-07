@@ -7,7 +7,7 @@
 </div>
 
 <ng-template #tableWidgetModal>
-  <div class="pt-5 overflow-scroll scrollbar">
+  <div class="sm:pt-5 overflow-scroll scrollbar">
     <table
       *ngIf="itemType === 'document'"
       mat-table
@@ -17,7 +17,7 @@
       <ng-container [matColumnDef]="'mainInformation'">
         <td mat-cell class="min-w-[150px]" *matCellDef="let element">
           <span class="text-base font-semibold text-accent-600">{{
-            element.name
+            element.name || 'Untitled Document'
           }}</span
           ><br />
           <span class="text-xs text-secondary-500"
@@ -72,7 +72,7 @@
       <ng-container [matColumnDef]="'mainInformation'">
         <td mat-cell class="min-w-[150px]" *matCellDef="let element">
           <span class="text-base font-semibold text-accent-600">{{
-            element.name
+            element.name || 'Untitled Document'
           }}</span
           ><br />
           <span class="text-xs text-secondary-500"
@@ -127,7 +127,7 @@
       <ng-container [matColumnDef]="'mainInformation'">
         <td mat-cell class="min-w-[150px]" *matCellDef="let element">
           <span class="text-base font-semibold text-accent-600">{{
-            element.name
+            element.name || 'Untitled Document'
           }}</span
           ><br />
           <span class="text-xs text-secondary-500"
@@ -164,9 +164,6 @@
           </span>
         </td>
       </ng-container>
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell text-center" colspan="3">No data found.</td>
-      </tr>
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumnsTableDocument"
