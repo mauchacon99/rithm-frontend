@@ -36,7 +36,7 @@ describe('OptionsMenuComponent', () => {
         rows: 1,
         x: 0,
         y: 0,
-        widgetType: WidgetType.StationTable,
+        widgetType: WidgetType.Station,
         data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
         minItemCols: 4,
         minItemRows: 4,

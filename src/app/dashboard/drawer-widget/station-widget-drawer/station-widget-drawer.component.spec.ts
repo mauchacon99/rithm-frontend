@@ -37,7 +37,7 @@ describe('StationWidgetDrawerComponent', () => {
       minItemCols: 0,
       minItemRows: 0,
       rows: 2,
-      widgetType: WidgetType.StationTable,
+      widgetType: WidgetType.Station,
       x: 0,
       y: 0,
     },
