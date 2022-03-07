@@ -42,7 +42,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   documentComponent!: DocumentComponent;
 
   /** To load dom by WidgetType. */
-  @Input() widgetType: WidgetType = WidgetType.Station;
+  @Input() widgetType: WidgetType = WidgetType.StationTable;
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
