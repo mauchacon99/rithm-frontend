@@ -2128,6 +2128,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
       return;
     }
+
+    // Loop through groups to find the group that was clicked.
+    for (const stationGroup of this.stationGroups) {
+      if (
+        stationGroup.hoverItem === StationGroupElementHoverItem.ButtonOption &&
+        this.mapMode !== MapMode.View
+      ) {
+        //set mousePoint to the tracked cursor position.
+        this.mapService.currentMousePoint$.next(point);
+        //On clicked opening the option menu for the edit station group.
+        this.mapService.stationButtonClick$.next({
+          click: MatMenuOption.EditStationGroup,
+          data: [],
+        });
+        return;
+      }
+    }
   }
 
   /**
@@ -2191,6 +2208,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
         stationGroup.checkElementHover(contextPoint, this.context);
+
         //If MapMode is StationGroupAdd we select the group.
         if (this.mapMode === MapMode.StationGroupAdd) {
           //If the cursor is over the group boundary and the group is not disabled.
