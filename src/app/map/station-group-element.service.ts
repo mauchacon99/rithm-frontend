@@ -1040,7 +1040,7 @@ export class StationGroupElementService {
             ? GROUP_CHARACTER_SIZE * 2
             : GROUP_CHARACTER_SIZE) *
             this.mapScale,
-        //This dynamically sets the hight of the rectangle based on the hight of the text.
+        // This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
           STATION_GROUP_NAME_PADDING
       );
@@ -1081,7 +1081,7 @@ export class StationGroupElementService {
         'Cannot draw station group icon if context is not defined'
       );
     }
-    //Calculation of the slope of the line.
+    // Calculation of the slope of the line.
     const m = this.slopeLine(pointStart, pointEnd);
 
     // Move the point on the line to paint on the map.

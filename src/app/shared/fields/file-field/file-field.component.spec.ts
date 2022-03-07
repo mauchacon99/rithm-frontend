@@ -61,7 +61,7 @@ describe('FileFieldComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('should register function with the `onTouched` event', () => {
+  it('should register function with the `onTouched` event', () => {
     component.registerOnTouched(fn);
     expect(component.onTouched).toEqual(fn);
   });

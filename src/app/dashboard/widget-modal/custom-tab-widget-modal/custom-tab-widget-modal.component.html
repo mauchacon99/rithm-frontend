@@ -31,8 +31,49 @@
   </mat-button-toggle-group>
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
-    <mat-tab> Content 1 </mat-tab>
-    <mat-tab> Content 2 </mat-tab>
-    <mat-tab> Content 3 </mat-tab>
+    <mat-tab>
+      <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain documents.
+        </p>
+      </div>
+      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+        <app-loading-indicator
+          id="loading-tab-document-list"
+        ></app-loading-indicator>
+      </div>
+      <div *ngIf="!errorLoadingDocumentTab && !isLoadingDocumentTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableDocument"
+          [itemType]="'document'"
+        ></app-item-list-widget-modal>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain stations.
+        </p>
+      </div>
+      <div
+        *ngIf="isLoadingStationTab"
+        id="loading-station-list-tab"
+        class="py-10"
+      >
+        <app-loading-indicator></app-loading-indicator>
+      </div>
+      <div *ngIf="!errorLoadingStationTab && !isLoadingStationTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableStations"
+          [itemType]="'station'"
+        ></app-item-list-widget-modal>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <app-item-list-widget-modal
+        [itemListWidgetModal]="dataSourceTableGroup"
+        [itemType]="'group'"
+      ></app-item-list-widget-modal>
+    </mat-tab>
   </mat-tab-group>
 </div>

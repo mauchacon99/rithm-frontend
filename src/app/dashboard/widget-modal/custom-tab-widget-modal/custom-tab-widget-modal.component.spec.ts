@@ -8,6 +8,10 @@ import { throwError } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
+import { MatTableModule } from '@angular/material/table';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -21,8 +25,17 @@ describe('CustomTabWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CustomTabWidgetModalComponent],
-      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
+      declarations: [
+        CustomTabWidgetModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+        ItemListWidgetModalComponent,
+      ],
+      imports: [
+        MatButtonToggleModule,
+        MatTabsModule,
+        NoopAnimationsModule,
+        MatTableModule,
+      ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
@@ -79,6 +92,16 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(component.indexTab).toBe(indexTab);
   });
 
+  it('should rendered component loading for document tabs', () => {
+    component.isLoadingDocumentTab = true;
+    fixture.detectChanges();
+    expect(component.isLoadingDocumentTab).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-tab-document-list'
+    );
+
+    expect(loadingIndicator).toBeTruthy();
+  });
   it('should get list tab stations', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
@@ -104,5 +127,44 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+    expect(component.errorLoadingStationTab).toBeTrue();
+  });
+
+  it('should display error in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.errorLoadingStationTab = true;
+    await fixture.detectChanges();
+    const errorLoadingStationTab = fixture.nativeElement.querySelector(
+      '#error-station-list-tab'
+    );
+    expect(errorLoadingStationTab).toBeTruthy();
+  });
+
+  it('should display loading indicator in station list tab', async () => {
+    component.indexTab = 1; // station tab
+    component.isLoadingStationTab = true;
+    await fixture.detectChanges();
+    const LoadingStationTab = fixture.nativeElement.querySelector(
+      '#loading-station-list-tab'
+    );
+    expect(LoadingStationTab).toBeTruthy();
+  });
+
+  it('should catch an error if the request to get document tab list fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentTabList'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#error-documents-list-tab'
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(component.errorLoadingDocumentTab).toBeTrue();
   });
 });
