@@ -10,6 +10,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
+import { MatTableModule } from '@angular/material/table';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -26,8 +28,14 @@ describe('CustomTabWidgetModalComponent', () => {
       declarations: [
         CustomTabWidgetModalComponent,
         MockComponent(LoadingIndicatorComponent),
+        ItemListWidgetModalComponent,
       ],
-      imports: [MatButtonToggleModule, MatTabsModule, NoopAnimationsModule],
+      imports: [
+        MatButtonToggleModule,
+        MatTabsModule,
+        NoopAnimationsModule,
+        MatTableModule,
+      ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },

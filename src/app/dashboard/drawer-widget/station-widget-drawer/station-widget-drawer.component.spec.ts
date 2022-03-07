@@ -440,19 +440,19 @@ describe('StationWidgetDrawerComponent', () => {
 
   it('Should emit widgetIndex', () => {
     TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
-    const spySetWidgetIndex = spyOn(component.setWidgetIndex, 'emit');
+    const spySetWidgetIndex = spyOn(component.getWidgetIndex, 'emit');
     component.ngOnInit();
     expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(
       dataEditWidget.widgetIndex
     );
   });
 
-  it('Should emit widgetType', () => {
+  it('Should emit getWidgetItem', () => {
     TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
-    const spySetWidgetType = spyOn(component.widgetType, 'emit');
+    const spySetWidgetType = spyOn(component.getWidgetItem, 'emit');
     component.ngOnInit();
     expect(spySetWidgetType).toHaveBeenCalledOnceWith(
-      dataEditWidget.widgetItem.widgetType
+      dataEditWidget.widgetItem
     );
   });
 });

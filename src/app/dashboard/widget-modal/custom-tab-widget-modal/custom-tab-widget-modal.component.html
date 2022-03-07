@@ -42,9 +42,14 @@
           id="loading-tab-document-list"
         ></app-loading-indicator>
       </div>
+      <div *ngIf="!errorLoadingDocumentTab && !isLoadingDocumentTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableDocument"
+          [itemType]="'document'"
+        ></app-item-list-widget-modal>
+      </div>
     </mat-tab>
     <mat-tab>
-      <!-- Station tab. -->
       <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
         <p class="text-error-500 text-center">
           Error: failed to obtain stations.
@@ -57,7 +62,18 @@
       >
         <app-loading-indicator></app-loading-indicator>
       </div>
+      <div *ngIf="!errorLoadingStationTab && !isLoadingStationTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableStations"
+          [itemType]="'station'"
+        ></app-item-list-widget-modal>
+      </div>
     </mat-tab>
-    <mat-tab> Content 3</mat-tab>
+    <mat-tab>
+      <app-item-list-widget-modal
+        [itemListWidgetModal]="dataSourceTableGroup"
+        [itemType]="'group'"
+      ></app-item-list-widget-modal>
+    </mat-tab>
   </mat-tab-group>
 </div>
