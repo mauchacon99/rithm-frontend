@@ -5,7 +5,7 @@ export enum WidgetType {
   /** Widget type StationGroup. */
   StationGroup = 'station-group',
   /** Widget type station. */
-  Station = 'station',
+  Station = 'station-table',
   /** Widget type document. */
   Document = 'document-list',
   /** Widget type StationTableBanner. */
