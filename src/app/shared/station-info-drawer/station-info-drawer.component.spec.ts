@@ -601,10 +601,7 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should catch error when unable to get flow button text', () => {
-    spyOn(
-      TestBed.inject(StationService),
-      'getFlowButtonText'
-    ).and.returnValue(
+    spyOn(TestBed.inject(StationService), 'getFlowButtonText').and.returnValue(
       throwError(() => {
         throw new Error();
       })
