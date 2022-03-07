@@ -71,7 +71,7 @@ export class StationGroupMapElement {
             this.isPointInStationGroupPendingButtons(point, iconButton, ctx)
           ) {
             this.hoverItem = iconButton.typeButton;
-            if (this.status === MapItemStatus.Pending) return;
+            if (this.status === MapItemStatus.Pending) break;
           } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
             this.hoverItem = StationGroupElementHoverItem.Boundary;
           } else {

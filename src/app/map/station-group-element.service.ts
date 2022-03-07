@@ -683,13 +683,15 @@ export class StationGroupElementService {
    * @param pointEnd The end point of the line.
    * @param displacement The Amount of displacement.
    * @param coordinate The coordinate to move, if true the coordinate is X else the coordinate is Y.
+   * @param IsPath If calculated for a path.
    * @returns The new Point on line.
    */
   movePointOnLine(
     pointStart: Point,
     pointEnd: Point,
     displacement: number,
-    coordinate = true
+    coordinate = true,
+    IsPath = false
   ): Point {
     const newPoint = { ...pointStart };
 
@@ -709,10 +711,21 @@ export class StationGroupElementService {
 
     // If true the coordinate is X else the coordinate is Y.
     if (coordinate) {
-      // x-coordinate displacement.
-      newPoint.x += displacement;
-      // The point-slope equation evaluating X.
-      newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      if (
+        this.mapService.getMapX(pointStart.x) >
+          this.mapService.getMapX(pointEnd.x) &&
+        IsPath
+      ) {
+        // x-coordinate displacement.
+        newPoint.x -= displacement;
+        // The point-slope equation evaluating X.
+        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      } else {
+        // x-coordinate displacement.
+        newPoint.x += displacement;
+        // The point-slope equation evaluating X.
+        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      }
     } else {
       // If the Start point in y-coordinate is greater than the End point in y-coordinate
       // Then subtract the displacement to the new position, or sum the displacement to the new position..
@@ -1118,7 +1131,8 @@ export class StationGroupElementService {
         y: pointEnd.y,
       },
       newDisplacement,
-      Math.abs(m) < Math.PI / 3
+      Math.abs(m) < Math.PI / 3,
+      true
     );
 
     //If icon and hoverColor are defined.
