@@ -61,4 +61,7 @@ export enum QuestionFieldType {
 
   /** File input type. */
   File = 'file',
+
+  /** Data link input type. */
+  DataLink = 'dataLink',
 }
