@@ -313,7 +313,6 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       //Call method to run logic for centering of the station.
       setTimeout(() => {
         this.mapService.center(
-          false,
           CenterPanType.Station,
           drawer[0] ? drawer[0].clientWidth : 0
         );
@@ -339,7 +338,6 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       //Call method to run logic for centering of the station group.
       setTimeout(() => {
         this.mapService.center(
-          false,
           CenterPanType.StationGroup,
           drawer[0] ? drawer[0].clientWidth : 0
         );

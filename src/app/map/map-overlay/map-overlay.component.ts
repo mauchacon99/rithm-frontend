@@ -355,7 +355,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Increment centerCount to show that more centering needs to be done.
     this.mapService.centerCount$.next(1);
     //Call method to run logic for centering.
-    this.mapService.center(false, CenterPanType.MapCenter, 0);
+    this.mapService.center(CenterPanType.MapCenter);
   }
 
   /**

@@ -1271,22 +1271,19 @@ export class MapService {
   }
 
   /**
-   * Pans the map when center method is called to the map center.
+   * Pans the map when center method is called to the map center or station or station group.
    *
-   * @param onInit Determines if this is called during mapCanvas init.
    * @param panType Determines the area of the map to be pan to center..
    * @param drawerWidth Width of the opened drawer.
+   * @param onInit Determines if this is called during mapCanvas init.
    */
   private centerPan(
-    onInit = false,
     panType: CenterPanType,
-    drawerWidth = 0
+    drawerWidth = 0,
+    onInit = false
   ): void {
-    //Get the center of the map and the center of the canvas.
-    let adjustedCenter = this.getMapCenterPoint();
-
     //Get the point that currentCanvasPoint needs to be set to.
-    adjustedCenter = this.getAdjustedCenter(drawerWidth, panType);
+    const adjustedCenter = this.getAdjustedCenter(panType, drawerWidth);
 
     //On Init, immediately set the currentCanvasPoint to the center of the map.
     if (onInit) {
@@ -1327,16 +1324,27 @@ export class MapService {
   }
 
   /**
-   * Smoothly sets the scale and pans the map to center.
+   * Smoothly sets the scale and pans the map or station or station group to center.
    * On init, immediately change the scale and position.
    *
-   * @param onInit Determines if this is called during mapCanvas init.
    * @param panType Determines the area of the map to be pan to center.
    * @param drawerWidth Width of the opened drawer.
+   * @param onInit Determines if this is called during mapCanvas init.
    */
-  center(onInit = false, panType: CenterPanType, drawerWidth: number): void {
+  center(panType: CenterPanType, drawerWidth = 0, onInit = false): void {
     //If there are no stations to center around, do nothing.
-    if (this.stationElements.length === 0) {
+    if (
+      panType === CenterPanType.Station &&
+      this.stationElements.length === 0
+    ) {
+      return;
+    }
+
+    //If there are no station groups to center around, do nothing.
+    if (
+      panType === CenterPanType.StationGroup &&
+      this.stationGroupElements.length === 0
+    ) {
       return;
     }
 
@@ -1351,11 +1359,11 @@ export class MapService {
           this.centerScale(onInit);
         }
         //Smoothly pan to the center.
-        this.centerPan(onInit, panType, drawerWidth);
+        this.centerPan(panType, drawerWidth, onInit);
         //Decrement centerCount to note that we've moved a step further to the center.
         this.centerCount$.next(this.centerCount$.value - 1);
         //Recursively call method so we can animate a smooth pan and scale.
-        this.center(onInit, panType, drawerWidth);
+        this.center(panType, drawerWidth, onInit);
         //If centering is finished.
       } else {
         //Reset properties that mark that more centering needs to happen.
@@ -1382,15 +1390,15 @@ export class MapService {
   }
 
   /**
-   * Pans the station group when centerStationGroup method is called.
+   * Gets center canvas point of either station or station group or map center which should be pan.
    *
-   * @param drawerWidth Width of the opened drawer.
    * @param panType Determines the area of the map to be pan to center.
+   * @param drawerWidth Width of the opened drawer.
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   private getAdjustedCenter(
-    drawerWidth: number,
-    panType: CenterPanType
+    panType: CenterPanType,
+    drawerWidth: number
   ): Point {
     let adjustedCenter = { x: 0, y: 0 };
     //Get the point that currentCanvasPoint needs to be set to.

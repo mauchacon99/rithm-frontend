@@ -158,7 +158,6 @@ describe('MapSearchComponent', () => {
     service.centerCount$.subscribe((res) => expect(res).toBe(1));
     tick(1);
     expect(mapServiceSpy).toHaveBeenCalledWith(
-      false,
       CenterPanType.Station,
       drawerWidth
     );

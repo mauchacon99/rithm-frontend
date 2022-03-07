@@ -348,7 +348,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               setTimeout(() => {
                 // Center the map on the station.
                 this.mapService.center(
-                  false,
                   CenterPanType.Station,
                   drawer[0] ? drawer[0].clientWidth : 0
                 );
@@ -358,7 +357,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           } else {
             this.mapService.centerActive$.next(true);
             this.mapService.centerCount$.next(1);
-            this.mapService.center(dataReceived, CenterPanType.MapCenter, 0);
+            this.mapService.center(CenterPanType.MapCenter, 0, dataReceived);
             this.mapService.viewStationButtonClick$.next(false);
           }
         }
