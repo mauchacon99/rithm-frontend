@@ -66,11 +66,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.split();
-    const user = this.userService.user;
-    if (user) {
-      this.splitService.initSdk(user.organization);
-    }
+    this.split(this.userService.user.organization);
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
@@ -78,13 +74,18 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  /** Split Service. */
-  private split(): void {
+  /**
+   * Split Service.
+   *
+   * @param rithmIdOrganization Organization id of logged in user.
+   */
+  private split(rithmIdOrganization: string): void {
+    this.splitService.initSdk(rithmIdOrganization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         this.isManageMember =
           this.splitService.getManageUserTreatment() === 'on';
-          console.log(this.splitService.getManageUserTreatment());
+        console.log(this.splitService.getManageUserTreatment());
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
