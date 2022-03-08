@@ -1,6 +1,10 @@
 .expansion-dashboards {
   .mat-expansion-panel-header {
     padding: 0;
+
+    .mat-expansion-panel-header-title {
+      padding: 0 0 0 6px;
+    }
   }
 
   .mat-expansion-panel-header:hover {
@@ -14,7 +18,7 @@
 
 .list-options {
   &::ng-deep .mat-list-item-content {
-    padding: 0 10px !important;
+    padding: 0 15px !important;
   }
 }
 

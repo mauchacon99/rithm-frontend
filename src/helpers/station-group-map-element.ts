@@ -78,6 +78,8 @@ export class StationGroupMapElement {
             this.hoverItem = StationGroupElementHoverItem.None;
           }
         }
+        //Restore the saved context state and undo the changes to it.
+        ctx.restore();
       } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
         this.hoverItem = StationGroupElementHoverItem.Boundary;
       } else {
