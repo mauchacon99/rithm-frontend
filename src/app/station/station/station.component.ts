@@ -22,16 +22,16 @@ import {
   FlowLogicRule,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GridsterConfig } from 'angular-gridster2';
+import { InputFrameWidget } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-import { GridsterConfig } from 'angular-gridster2';
-import { InputFrameWidget } from '../../../models/input-frame-widget';
 
 /**
  * Main component for viewing a station.
@@ -103,8 +103,14 @@ export class StationComponent
   /** Flag that show if is setting mode. */
   settingMode = false;
 
+  /** Flag showing if the right drawer is open. */
+  isOpenDrawerRight = false;
+
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
+
+  /** The context of what is open in the right side drawer. */
+  drawerRightContext: '' | 'buildDrawer' = '';
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -790,6 +796,17 @@ export class StationComponent
   /** Remove widgets from the gridster in layout mode. */
   removeWidgets(): void {
     this.inputFrameWidgetItems.length = 0;
+  }
+
+  /**
+   * Toggles the open state for drawer mode.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+  toggleDrawerRight(drawerItem: '' | 'buildDrawer'): void {
+    this.sidenavDrawerService.closeDrawer();
+    this.isOpenDrawerRight = true;
+    this.drawerRightContext = drawerItem;
   }
 
   /**

@@ -6,7 +6,14 @@
   [hasBackdrop]="drawerHasBackdrop"
   class="h-full info-drawer-station"
 >
-  <mat-drawer #drawer mode="over" position="end" disableClose>
+  <!-- right match drawer -->
+  <mat-drawer
+    #drawer
+    mode="over"
+    (openedStart)="isOpenDrawerRight = false"
+    position="end"
+    disableClose
+  >
     <app-detail-drawer
       *ngIf="drawerContext === 'comments' || drawerContext === 'history'"
     ></app-detail-drawer>
@@ -15,6 +22,18 @@
         drawerContext === 'stationInfo' || drawerContext === 'documentInfo'
       "
     ></app-info-drawer>
+  </mat-drawer>
+  <!-- left match drawer -->
+  <mat-drawer
+    #drawerStart
+    mode="over"
+    position="start"
+    [opened]="isOpenDrawerRight"
+    disableClose
+  >
+    <app-build-drawer
+      *ngIf="drawerRightContext === 'buildDrawer'"
+    ></app-build-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
@@ -228,6 +247,7 @@
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->
+
             <mat-tab-group
               mat-align-tabs="left"
               class="mt-2 w-full pb-8 mat-tab-label-container"
@@ -247,6 +267,7 @@
                     [viewNewStation]="viewNewStation"
                     *ngIf="!stationLoading"
                   ></app-document-info-header>
+
                   <!--  Toolbar Edit -->
                   <div
                     *ngIf="!editMode; else toolbarEditStation"
@@ -268,7 +289,11 @@
                       class="w-full flex bg-secondary-50 items-center justify-between p-2"
                     >
                       <div class="flex">
-                        <button type="button" class="px-2 mr-2">
+                        <button
+                          type="button"
+                          (click)="toggleDrawerRight('buildDrawer')"
+                          class="px-2 mr-2"
+                        >
                           <span
                             class="fas fa-tools text-secondary-500 fa-lg"
                           ></span>
