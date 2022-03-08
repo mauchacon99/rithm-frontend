@@ -235,7 +235,6 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should call split service', () => {
-    const rithmId = '90bbe049-9703-44e2-b17f-dcbbd7347ce2';
     spyOn(TestBed.inject(SplitService), 'initSdk').and.callThrough();
     const splitConfigWidgets = spyOn(
       TestBed.inject(SplitService),
@@ -246,7 +245,7 @@ describe('DocumentWidgetComponent', () => {
     );
     component.ngOnInit();
     expect(button).toBeNull();
-    component['split'](rithmId);
+    component['split']();
     expect(button).toBeDefined();
     expect(splitConfigWidgets).toHaveBeenCalled();
   });

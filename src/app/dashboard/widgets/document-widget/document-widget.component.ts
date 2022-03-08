@@ -103,7 +103,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.split(this.userService.user.organization);
+    this.split();
     this.parseDataColumnsWidget();
     this.getDrawerContext();
     this.getDocumentWidget();
@@ -118,11 +118,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Split Service for show or hidden widget setting button.
-   *
-   * @param rithmIdOrganization Organization id of logged in user.
    */
-  private split(rithmIdOrganization: string): void {
-    this.splitService.initSdk(rithmIdOrganization);
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         this.showButtonSetting =
