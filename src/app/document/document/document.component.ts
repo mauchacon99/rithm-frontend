@@ -433,9 +433,30 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Update document name (isolate request).
+   */
+  private updateDocumentName(): void {
+    this.documentService
+      .updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      )
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end updating container's name and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Save document answers (isolate request).
    */
-  saveDocumentAnswer(): void {
+  private saveDocumentAnswer(): void {
     this.documentService
       .saveDocumentAnswer(
         this.documentInformation.documentRithmId,
@@ -444,6 +465,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.updateDocumentName();
           this.autoFlowContainer();
         },
         error: (error: unknown) => {
@@ -459,7 +481,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * AutoFlow Container (isolated request).
    */
-  autoFlowContainer(): void {
+  private autoFlowContainer(): void {
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
