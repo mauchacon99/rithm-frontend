@@ -78,6 +78,8 @@ export class StationGroupMapElement {
             this.hoverItem = StationGroupElementHoverItem.None;
           }
         }
+        //Restore the saved context state and undo the changes to it.
+        ctx.restore();
       } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
         this.hoverItem = StationGroupElementHoverItem.Boundary;
       } else {
@@ -123,7 +125,7 @@ export class StationGroupMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created station group as deleted. ' +
-          'You should instead remove it from the array of station groups.'
+        'You should instead remove it from the array of station groups.'
       );
     }
   }
