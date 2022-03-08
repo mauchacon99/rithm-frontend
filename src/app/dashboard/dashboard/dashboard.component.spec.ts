@@ -322,6 +322,9 @@ describe('DashboardComponent', () => {
   it('should call openDialog', () => {
     component.viewNewDashboard = true;
     component.editMode = true;
+    component.errorLoadingDashboard = false;
+    component.isCreateNewDashboard = false;
+    component.isLoading = false;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
       name: 'Organization 1',

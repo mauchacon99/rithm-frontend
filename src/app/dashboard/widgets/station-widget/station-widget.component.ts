@@ -26,6 +26,8 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for Station widget.
@@ -153,6 +155,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Variable to show if the error message should be displayed. */
   displayDocumentError = false;
 
+  /** Show setting button widget. */
+  showButtonSetting = false;
+
   /** View detail document. */
   isDocument = false;
 
@@ -177,13 +182,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private sidenavDrawerService: SidenavDrawerService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private splitService: SplitService,
+    private userService: UserService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.split(this.userService.user.organization);
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
     this.subscribeDrawerContext$();
     this.parseDataColumnsWidget();
@@ -197,6 +205,24 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
+  }
+
+  /**
+   * Split Service for show or hidden widget setting button.
+   *
+   * @param rithmIdOrganization Organization id of logged in user.
+   */
+  private split(rithmIdOrganization: string): void {
+    this.splitService.initSdk(rithmIdOrganization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showButtonSetting =
+          this.splitService.getConfigWidgetsTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /** Parse data of columns widget. */

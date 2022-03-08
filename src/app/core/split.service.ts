@@ -48,4 +48,13 @@ export class SplitService {
   public getStationDocumentTreatment(): string {
     return this.splitClient.getTreatment('Station-Document-Widgets');
   }
+
+  /**
+   * Get the widget settings config.
+   *
+   * @returns Split treatment.
+   */
+  public getConfigWidgetsTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_widget_settings_split');
+  }
 }

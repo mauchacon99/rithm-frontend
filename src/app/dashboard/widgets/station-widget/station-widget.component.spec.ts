@@ -7,6 +7,8 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockSplitService,
+  MockUserService,
 } from 'src/mocks';
 import {
   ColumnsDocumentInfo,
@@ -23,6 +25,8 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableModule } from '@angular/material/table';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -46,6 +50,8 @@ describe('StationWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
@@ -414,6 +420,7 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should show a gear icon in edit mode', () => {
+    component.showButtonSetting = true;
     component.isLoading = false;
     component.failedLoadWidget = false;
     component.isDocument = false;
@@ -437,6 +444,7 @@ describe('StationWidgetComponent', () => {
     component.failedLoadWidget = false;
     component.isDocument = false;
     component.editMode = true;
+    component.showButtonSetting = true;
     fixture.detectChanges();
     spyOn(component.toggleDrawer, 'emit');
     spyOn(component, 'toggleEditStation').and.callThrough();
@@ -525,5 +533,22 @@ describe('StationWidgetComponent', () => {
     component.widgetReloadListDocuments(true, false);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
+  });
+
+  it('should call split service', () => {
+    const rithmId = '90bbe049-9703-44e2-b17f-dcbbd7347ce2';
+    spyOn(TestBed.inject(SplitService), 'initSdk').and.callThrough();
+    const splitConfigWidgets = spyOn(
+      TestBed.inject(SplitService),
+      'getConfigWidgetsTreatment'
+    ).and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#toggle-edit-document'
+    );
+    component.ngOnInit();
+    expect(button).toBeNull();
+    component['split'](rithmId);
+    expect(button).toBeDefined();
+    expect(splitConfigWidgets).toHaveBeenCalled();
   });
 });

@@ -1,7 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockSplitService,
+  MockUserService,
+} from 'src/mocks';
 import { DocumentWidgetComponent } from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
@@ -11,6 +16,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -29,6 +36,8 @@ describe('DocumentWidgetComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: UserService, useClass: MockUserService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
       imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
@@ -148,6 +157,7 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should show a gear icon in edit mode', () => {
+    component.showButtonSetting = true;
     component.dataDocumentWidget = {
       documentName: 'Untitled Document',
       documentRithmId,
@@ -187,6 +197,7 @@ describe('DocumentWidgetComponent', () => {
       component.isLoading = false;
       component.failedLoadWidget = false;
       component.editMode = true;
+      component.showButtonSetting = true;
 
       component.dataDocumentWidget = {
         documentName: 'Untitled Document',
@@ -221,5 +232,22 @@ describe('DocumentWidgetComponent', () => {
     component['parseDataColumnsWidget']();
     expect(component.documentRithmId).toEqual(expectDataWidget.documentRithmId);
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
+  });
+
+  it('should call split service', () => {
+    const rithmId = '90bbe049-9703-44e2-b17f-dcbbd7347ce2';
+    spyOn(TestBed.inject(SplitService), 'initSdk').and.callThrough();
+    const splitConfigWidgets = spyOn(
+      TestBed.inject(SplitService),
+      'getConfigWidgetsTreatment'
+    ).and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#toggle-edit-document'
+    );
+    component.ngOnInit();
+    expect(button).toBeNull();
+    component['split'](rithmId);
+    expect(button).toBeDefined();
+    expect(splitConfigWidgets).toHaveBeenCalled();
   });
 });

@@ -17,6 +17,8 @@ import {
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for list field the document how widget.
@@ -79,6 +81,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
 
+  /** Show setting button widget. */
+  showButtonSetting = false;
+
   /** Columns for list the widget. */
   documentColumns: ColumnFieldsWidget[] = [];
 
@@ -89,13 +94,16 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private documentService: DocumentService,
     private router: Router,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private splitService: SplitService,
+    private userService: UserService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.split(this.userService.user.organization);
     this.parseDataColumnsWidget();
     this.getDrawerContext();
     this.getDocumentWidget();
@@ -106,6 +114,24 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     const dataWidget = JSON.parse(this.dataWidget);
     this.documentRithmId = dataWidget.documentRithmId;
     this.documentColumns = dataWidget.columns || [];
+  }
+
+  /**
+   * Split Service for show or hidden widget setting button.
+   *
+   * @param rithmIdOrganization Organization id of logged in user.
+   */
+  private split(rithmIdOrganization: string): void {
+    this.splitService.initSdk(rithmIdOrganization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showButtonSetting =
+          this.splitService.getConfigWidgetsTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /** Get context drawer. */
