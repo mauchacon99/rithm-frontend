@@ -1911,7 +1911,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroup.checkElementHover(eventContextPoint, this.context);
             //If cursor is over a group boundary or name.
             if (
-              stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+              stationGroup.hoverItem ===
+                StationGroupElementHoverItem.Boundary ||
+              (stationGroup.hoverItem ===
+                StationGroupElementHoverItem.ButtonOption &&
+                this.mapMode !== MapMode.View)
             ) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
