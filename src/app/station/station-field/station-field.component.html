@@ -55,7 +55,7 @@
             [validateMask]="false"
           ></app-text-field>
           <button
-            *ngIf="field.questionType === 'file'"
+            *ngIf="field.questionType === fieldType.File"
             mat-stroked-button
             class="ml-2"
             color="accent"
