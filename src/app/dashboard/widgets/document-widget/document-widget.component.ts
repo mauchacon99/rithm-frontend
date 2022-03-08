@@ -17,8 +17,6 @@ import {
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
-import { SplitService } from 'src/app/core/split.service';
-import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for list field the document how widget.
@@ -94,9 +92,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private documentService: DocumentService,
     private router: Router,
-    private sidenavDrawerService: SidenavDrawerService,
-    private splitService: SplitService,
-    private userService: UserService
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /**
