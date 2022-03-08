@@ -84,7 +84,6 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
       next: () => {
         this.isManageMember =
           this.splitService.getManageUserTreatment() === 'on';
-        console.log(this.splitService.getManageUserTreatment());
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

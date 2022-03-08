@@ -10,7 +10,10 @@
   <i class="fas fa-ellipsis-h text-lg"></i>
 </button>
 <mat-menu #menuList="matMenu">
-  <button mat-menu-item *ngIf="dashboardRole === roleDashboardMenu.Company && isManageMember">
+  <button
+    mat-menu-item
+    *ngIf="dashboardRole === roleDashboardMenu.Company && isManageMember"
+  >
     <i class="fas fa-users"></i>
     <span class="p-4">Manage Members</span>
   </button>
