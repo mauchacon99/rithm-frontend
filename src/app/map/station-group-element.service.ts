@@ -44,6 +44,7 @@ import {
   CHAIN_CORNER_RADIUS,
   SCALE_REDUCED_RENDER,
   CONNECTION_LINE_WIDTH_ZOOM_OUT,
+  ICON_STATION_GROUP_OPTION,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -709,13 +710,15 @@ export class StationGroupElementService {
    * @param pointEnd The end point of the line.
    * @param displacement The Amount of displacement.
    * @param coordinate The coordinate to move, if true the coordinate is X else the coordinate is Y.
+   * @param IsPath If calculated for a path.
    * @returns The new Point on line.
    */
   movePointOnLine(
     pointStart: Point,
     pointEnd: Point,
     displacement: number,
-    coordinate = true
+    coordinate = true,
+    IsPath = false
   ): Point {
     const newPoint = { ...pointStart };
 
@@ -735,10 +738,21 @@ export class StationGroupElementService {
 
     // If true the coordinate is X else the coordinate is Y.
     if (coordinate) {
-      // x-coordinate displacement.
-      newPoint.x += displacement;
-      // The point-slope equation evaluating X.
-      newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      if (
+        this.mapService.getMapX(pointStart.x) >
+          this.mapService.getMapX(pointEnd.x) &&
+        IsPath
+      ) {
+        // x-coordinate displacement.
+        newPoint.x -= displacement;
+        // The point-slope equation evaluating X.
+        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      } else {
+        // x-coordinate displacement.
+        newPoint.x += displacement;
+        // The point-slope equation evaluating X.
+        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      }
     } else {
       // If the Start point in y-coordinate is greater than the End point in y-coordinate
       // Then subtract the displacement to the new position, or sum the displacement to the new position..
@@ -1025,6 +1039,30 @@ export class StationGroupElementService {
             stationGroup
           );
         }
+        if (
+          this.mapService.mapMode$.value !== MapMode.View &&
+          stationGroup.status !== MapItemStatus.Pending
+        ) {
+          const IconSpan = stationGroup.isChained ? 5.5 : 1;
+          // If status of the station group option button.
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * IconSpan * this.mapScale;
+          // Reset pathButtons of the station group.
+          stationGroup.pathButtons = [];
+          // Paint the Option Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.ButtonOption,
+            stationGroup,
+            ICON_STATION_GROUP_OPTION,
+            this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? NODE_HOVER_COLOR
+              : MAP_SELECTED
+          );
+        }
       }
     } else {
       // Delete the line under the station group name.
@@ -1035,6 +1073,11 @@ export class StationGroupElementService {
           STATION_GROUP_NAME_PADDING +
           (stationGroup.status === MapItemStatus.Pending
             ? GROUP_CHARACTER_SIZE * 12
+            : this.mapService.mapMode$.value !== MapMode.View &&
+              stationGroup.isChained
+            ? GROUP_CHARACTER_SIZE * 7
+            : this.mapService.mapMode$.value !== MapMode.View
+            ? GROUP_CHARACTER_SIZE * 2
             : GROUP_CHARACTER_SIZE) *
             this.mapScale,
         // This dynamically sets the hight of the rectangle based on the hight of the text.
@@ -1073,7 +1116,6 @@ export class StationGroupElementService {
     displacedMap = true
   ): void {
     this.canvasContext = this.mapService.canvasContext;
-
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group icon if context is not defined'
@@ -1116,7 +1158,8 @@ export class StationGroupElementService {
         y: pointEnd.y,
       },
       newDisplacement,
-      Math.abs(m) < Math.PI / 3
+      Math.abs(m) < Math.PI / 3,
+      true
     );
 
     //If icon and hoverColor are defined.
@@ -1124,15 +1167,25 @@ export class StationGroupElementService {
       const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
       // Font selected to paint the icon.
+      /* Icons increase in size when hovered with the exception of the option icon while in
+      stationGroupAdd mode. */
+      const hoverFontSize =
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        typeButton === 'buttonOption'
+          ? 2
+          : 2.5;
       // If the icon is hover we increase the font by 0.5.
       this.canvasContext.font = `${
-        fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
+        fontSize * (stationGroup.hoverItem === typeButton ? hoverFontSize : 2)
       }px "FontAwesome"`;
 
       // Hovering changes the color of the icon.
       this.canvasContext.fillStyle =
         stationGroup.hoverItem === typeButton
           ? hoverColor
+          : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            typeButton === 'buttonOption'
+          ? NODE_HOVER_COLOR
           : BUTTON_DEFAULT_COLOR;
 
       // Paint the icon on the map.
