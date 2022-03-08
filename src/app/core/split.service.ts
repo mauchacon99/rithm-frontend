@@ -48,4 +48,15 @@ export class SplitService {
   public getStationDocumentTreatment(): string {
     return this.splitClient.getTreatment('Station-Document-Widgets');
   }
+
+  /**
+   * Get the section Image banner.
+   *
+   * @returns Split treatment.
+   */
+  public getSectionImageBanner(): string {
+    return this.splitClient.getTreatment(
+      'dashboard_station_banner_upload_split'
+    );
+  }
 }
