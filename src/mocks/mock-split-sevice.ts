@@ -16,9 +16,7 @@ export class MockSplitService {
    * @param userId User id of logged in user.
    */
   // eslint-disable-next-line
-  public initSdk(userId: string): void {
-    this.sdkReady$.next();
-  }
+  public initSdk(userId: string): void {}
 
   /**
    * Get the dashboard split.
