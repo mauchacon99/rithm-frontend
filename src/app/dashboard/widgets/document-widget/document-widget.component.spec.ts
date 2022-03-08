@@ -11,7 +11,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -31,7 +30,7 @@ describe('DocumentWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
       ],
-      imports: [MatMenuModule, RouterTestingModule, HttpClientModule],
+      imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
   });
 
