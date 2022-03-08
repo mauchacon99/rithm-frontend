@@ -7,7 +7,7 @@ import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserService } from '../../../core/user.service';
+import { UserService } from 'src/app/core/user.service';
 import { SplitService } from 'src/app/core/split.service';
 
 /**
@@ -84,6 +84,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
       next: () => {
         this.isManageMember =
           this.splitService.getManageUserTreatment() === 'on';
+          console.log(this.splitService.getManageUserTreatment());
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
