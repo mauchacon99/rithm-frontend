@@ -44,7 +44,6 @@ import {
   MAP_DISABLED_STROKE,
   MAP_SELECTED,
   MAP_DEFAULT_COLOR,
-  MAP_CONNECTION_HOVER_COLOR,
   MAP_DISABLE_TEXT_COLOR,
   MAP_DISABLE_BADGE_BUTTON_COLOR,
   TOOLTIP_RADIUS,
@@ -161,13 +160,18 @@ export class StationElementService {
     ctx.shadowOffsetY = shadowEquation(3);
     //If this station is being dragged right now make the shadow bigger.
     if (
-      (station.hoverItem === StationElementHoverItem.Station &&
-        dragItem === MapDragItem.Station &&
-        station.dragging) ||
-      station.drawerOpened
+      station.hoverItem === StationElementHoverItem.Station &&
+      dragItem === MapDragItem.Station &&
+      station.dragging
     ) {
       ctx.shadowOffsetY = shadowEquation(20);
       ctx.shadowBlur = shadowEquation(40);
+    }
+    if (station.drawerOpened) {
+      ctx.shadowColor = '#666666';
+      ctx.shadowOffsetX = shadowEquation(7);
+      ctx.shadowOffsetY = shadowEquation(7);
+      ctx.shadowBlur = shadowEquation(10);
     }
 
     //This draws the station card as a rectangle with rounded edges.
@@ -210,21 +214,17 @@ export class StationElementService {
     ctx.closePath();
     //The color of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.fillStyle =
-      station.hoverItem !== StationElementHoverItem.None &&
-      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
-      !station.dragging
-        ? MAP_CONNECTION_HOVER_COLOR
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.disabled &&
-          !station.selected
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      station.disabled &&
+      !station.selected
         ? MAP_DISABLED
         : MAP_DEFAULT_COLOR;
     //The outline of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-      dragItem === MapDragItem.Node &&
+      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
-        ? NODE_HOVER_COLOR
+        ? MAP_SELECTED
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
             station.selected) ||
           (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
@@ -237,10 +237,14 @@ export class StationElementService {
         ? MAP_DISABLED_STROKE
         : MAP_DEFAULT_COLOR;
     if (
-      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      (station.selected ||
-        (station.hoverItem !== StationElementHoverItem.None &&
-          !station.disabled))
+      (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        (station.selected ||
+          (station.hoverItem !== StationElementHoverItem.None &&
+            !station.disabled))) ||
+      (station.hoverItem !== StationElementHoverItem.None &&
+        (dragItem === MapDragItem.Node ||
+          dragItem === MapDragItem.Connection) &&
+        !station.dragging)
     ) {
       ctx.lineWidth = STATION_BORDER_LINE_WIDTH_SELECTED * this.mapScale;
     } else {

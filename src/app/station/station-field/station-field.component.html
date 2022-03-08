@@ -54,6 +54,17 @@
             [labelTag]="'Name your field'"
             [validateMask]="false"
           ></app-text-field>
+          <button
+            *ngIf="field.questionType === 'file'"
+            mat-stroked-button
+            class="ml-2"
+            color="accent"
+            [disabled]="true"
+            data-testid="upload-button-disabled"
+          >
+            <i class="fas fa-arrow-up-from-bracket"></i>
+            <span class="text-base"> Upload </span>
+          </button>
         </div>
         <!-- Options/Items -->
         <ng-container

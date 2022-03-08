@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, MatMenuOption, Point, User } from 'src/models';
+import { CenterPanType, MapMode, MatMenuOption, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -355,7 +355,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Increment centerCount to show that more centering needs to be done.
     this.mapService.centerCount$.next(1);
     //Call method to run logic for centering.
-    this.mapService.center();
+    this.mapService.center(CenterPanType.MapCenter);
   }
 
   /**

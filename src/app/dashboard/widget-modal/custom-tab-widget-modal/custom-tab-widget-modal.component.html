@@ -1,4 +1,28 @@
-<div class="mt-10 tabs-group">
+<!-- Search Input   -->
+<div class="mt-4 bg-white">
+  <div>
+    To build a custom widget, first select what item you'd like to pull data
+    from.
+  </div>
+  <div class="pt-2">
+    <mat-form-field class="w-full sm:w-80 search-tabs" appearance="outline">
+      <input
+        type="text"
+        matInput
+        placeholder="Search"
+        id="search-tabs"
+        data-testid="search-tabs"
+        maxlength="55"
+      />
+      <span matPrefix
+        ><i class="fas fa-search p-1 text-secondary-300"></i
+      ></span>
+    </mat-form-field>
+  </div>
+</div>
+
+<!-- Tabs Group -->
+<div class="tabs-group">
   <mat-button-toggle-group
     #colorToggle="matButtonToggleGroup"
     value="primary"
@@ -37,7 +61,7 @@
           Error: failed to obtain documents.
         </p>
       </div>
-      <div *ngIf="isLoadingDocumentTab" class="items-center py-10">
+      <div *ngIf="isLoadingDocumentTab" class="loading">
         <app-loading-indicator
           id="loading-tab-document-list"
         ></app-loading-indicator>
@@ -58,7 +82,7 @@
       <div
         *ngIf="isLoadingStationTab"
         id="loading-station-list-tab"
-        class="py-10"
+        class="loading"
       >
         <app-loading-indicator></app-loading-indicator>
       </div>
