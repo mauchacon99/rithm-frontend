@@ -50,8 +50,6 @@ describe('StationWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: UserService, useClass: MockUserService },
-        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
