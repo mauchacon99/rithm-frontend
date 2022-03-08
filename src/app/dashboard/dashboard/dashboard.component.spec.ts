@@ -642,7 +642,7 @@ describe('DashboardComponent', () => {
     expect(spyService).toHaveBeenCalled();
   }));
 
-  it('should not show the button add widget in edit mode', function () {
+  it('should not show the button add widget in edit mode', () => {
     component.viewNewDashboard = true;
     component.editMode = true;
     component.isAddWidget = false;
