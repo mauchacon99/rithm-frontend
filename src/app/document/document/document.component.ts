@@ -65,36 +65,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     isReloadListDocuments: boolean;
   }>();
 
-  /**
-   * Whether to show the backdrop for the comment and history drawers.
-   *
-   * @returns Whether to show the backdrop.
-   */
-  get drawerHasBackdrop(): boolean {
-    return this.sidenavDrawerService.drawerHasBackdrop;
-  }
-
-  /**
-   * Is the current user an admin.
-   *
-   * @returns Validate if user is admin.
-   */
-  get isUserAdmin(): boolean {
-    return this.userService.isAdmin;
-  }
-
-  /**
-   * Is the current user an owner or an admin for this document.
-   *
-   * @returns Validate if user is owner or admin of current document.
-   */
-  get isUserAdminOrOwner(): boolean {
-    const ownerDocument = this.documentInformation.stationOwners?.find(
-      (owner) => this.userService.user.rithmId === owner.rithmId
-    );
-    return !!ownerDocument || this.userService.isAdmin;
-  }
-
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -175,6 +145,36 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.stationId = this.stationRithmIdWidget;
       this.getDocumentStationData();
     }
+  }
+
+  /**
+   * Whether to show the backdrop for the comment and history drawers.
+   *
+   * @returns Whether to show the backdrop.
+   */
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Is the current user an admin.
+   *
+   * @returns Validate if user is admin.
+   */
+  get isUserAdmin(): boolean {
+    return this.userService.isAdmin;
+  }
+
+  /**
+   * Is the current user an owner or an admin for this document.
+   *
+   * @returns Validate if user is owner or admin of current document.
+   */
+  get isUserAdminOrOwner(): boolean {
+    const ownerDocument = this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    );
+    return !!ownerDocument || this.userService.isAdmin;
   }
 
   /** Subscribe to drawerContext$. */
@@ -433,27 +433,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Update document name (isolate request).
-   */
-  private updateDocumentName(): void {
-    this.documentService
-      .updateDocumentName(
-        this.documentInformation.documentRithmId,
-        this.documentName
-      )
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end updating container's name and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
    * Save document answers (isolate request).
    */
   private saveDocumentAnswer(): void {
@@ -466,12 +445,35 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.updateDocumentName();
-          this.autoFlowContainer();
         },
         error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end saving answers and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update document name (isolate request).
+   */
+  private updateDocumentName(): void {
+    this.documentService
+      .updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      )
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.autoFlowContainer();
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end updating container's name and we're looking into it. Please try again in a little while.",
             error
           );
         },

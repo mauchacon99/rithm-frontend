@@ -465,27 +465,44 @@ describe('DocumentComponent', () => {
     );
   });
 
-  it('should called service to save answers and then auto flow the document', async () => {
+  it('should called service to save answers and then auto flow the container', async () => {
     const expectedAnswer = component.documentAnswer;
+    const documentService = TestBed.inject(DocumentService);
 
-    const spySaveAnswerDocument = spyOn(
+    const spySaveContainerAnswers = spyOn(
       TestBed.inject(DocumentService),
       'saveDocumentAnswer'
     ).and.returnValue(of([]));
 
-    const spySaveAutoFlowDocument = spyOn(
+    const spyUpdateContainerName = spyOn(
+      TestBed.inject(DocumentService),
+      'updateDocumentName'
+    ).and.returnValue(of('New container Name'));
+
+    const spySaveAutoFlowContainer = spyOn(
       TestBed.inject(DocumentService),
       'autoFlowDocument'
     ).and.callThrough();
 
+    documentService.documentName$.next({
+      baseName: 'New Document Name',
+      appendedName: '',
+    });
+    const documentName = 'New Document Name';
+
     component.saveAnswersFlowDocument();
 
-    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(
+    expect(spySaveContainerAnswers).toHaveBeenCalledOnceWith(
       component.documentInformation.documentRithmId,
       expectedAnswer
     );
 
-    expect(spySaveAutoFlowDocument).toHaveBeenCalled();
+    expect(spyUpdateContainerName).toHaveBeenCalledOnceWith(
+      component.documentInformation.documentRithmId,
+      documentName
+    );
+
+    expect(spySaveAutoFlowContainer).toHaveBeenCalled();
   });
 
   it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
