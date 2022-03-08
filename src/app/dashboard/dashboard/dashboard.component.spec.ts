@@ -322,6 +322,7 @@ describe('DashboardComponent', () => {
   it('should call openDialog', () => {
     component.viewNewDashboard = true;
     component.editMode = true;
+    component.isAddWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
       name: 'Organization 1',
@@ -640,4 +641,34 @@ describe('DashboardComponent', () => {
     expect(component.editMode).toBeTrue();
     expect(spyService).toHaveBeenCalled();
   }));
+
+  it('should not show the button add widget in edit mode', function () {
+    component.viewNewDashboard = true;
+    component.editMode = true;
+    component.isAddWidget = false;
+    component.dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+    fixture.detectChanges();
+
+    const btn = fixture.nativeElement.querySelector('#add-widget-button');
+    expect(btn).toBeNull();
+  });
 });

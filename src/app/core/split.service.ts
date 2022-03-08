@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SplitFactory } from '@splitsoftware/splitio-browserjs';
 import * as SplitIO from '@splitsoftware/splitio-browserjs/types/splitio';
 import { Subject } from 'rxjs';
+
 /** Split.io service. */
 @Injectable({
   providedIn: 'root',
@@ -47,5 +48,14 @@ export class SplitService {
    */
   public getStationDocumentTreatment(): string {
     return this.splitClient.getTreatment('Station-Document-Widgets');
+  }
+
+  /**
+   * Get the dashboard library split.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardLibraryTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_library_split');
   }
 }
