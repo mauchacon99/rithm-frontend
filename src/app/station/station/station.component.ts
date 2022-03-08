@@ -104,13 +104,13 @@ export class StationComponent
   settingMode = false;
 
   /** Flag showing if the right drawer is open. */
-  isOpenDrawerRight = false;
+  isOpenDrawerLeft = false;
 
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
   /** The context of what is open in the right side drawer. */
-  drawerRightContext: '' | 'buildDrawer' = '';
+  drawerLeftContext: '' | 'buildDrawer' = '';
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -803,10 +803,10 @@ export class StationComponent
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawerRight(drawerItem: '' | 'buildDrawer'): void {
+  toggleDrawerLeft(drawerItem: '' | 'buildDrawer'): void {
     this.sidenavDrawerService.closeDrawer();
-    this.isOpenDrawerRight = true;
-    this.drawerRightContext = drawerItem;
+    this.isOpenDrawerLeft = true;
+    this.drawerLeftContext = drawerItem;
   }
 
   /**

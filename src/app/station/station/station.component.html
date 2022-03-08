@@ -10,7 +10,7 @@
   <mat-drawer
     #drawer
     mode="over"
-    (openedStart)="isOpenDrawerRight = false"
+    (openedStart)="isOpenDrawerLeft = false"
     position="end"
     disableClose
   >
@@ -28,11 +28,11 @@
     #drawerStart
     mode="over"
     position="start"
-    [opened]="isOpenDrawerRight"
+    [opened]="isOpenDrawerLeft"
     disableClose
   >
     <app-build-drawer
-      *ngIf="drawerRightContext === 'buildDrawer'"
+      *ngIf="drawerLeftContext === 'buildDrawer'"
     ></app-build-drawer>
   </mat-drawer>
 
@@ -291,7 +291,7 @@
                       <div class="flex">
                         <button
                           type="button"
-                          (click)="toggleDrawerRight('buildDrawer')"
+                          (click)="toggleDrawerLeft('buildDrawer')"
                           class="px-2 mr-2"
                         >
                           <span
