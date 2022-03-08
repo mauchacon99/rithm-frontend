@@ -525,6 +525,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.flowButtonName = flowButtonText || 'Flow';
         },
         error: (error: unknown) => {
+          this.flowButtonName = 'Flow';
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
