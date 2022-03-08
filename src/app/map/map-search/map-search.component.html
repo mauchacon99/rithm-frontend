@@ -65,6 +65,7 @@
         *ngFor="let option of filteredStationsStationGroups"
         [value]="option"
         (click)="openDrawer(option)"
+        (onSelectionChange)="openDrawer(option)"
       >
         <span
           *ngIf="isStation(option)"

@@ -63,6 +63,12 @@ export class StationGroupElementService {
   /** The default offset value for the pending station group animation. */
   private offset = 0;
 
+  /** The location a tooltip should be drawn. */
+  private tooltipPosition: Point = { x: -1, y: -1 };
+
+  /** Whether a tooltip should be drawn. */
+  private isTooltipDisplayed = false;
+
   /** The Dimensions of the canvas. */
   canvasDimensions: {
     /** The width of the canvas.*/ width: number;
@@ -93,6 +99,23 @@ export class StationGroupElementService {
     }
     //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
+    //If there is a tooltip hovered, draw that in the correct position.
+    if (this.isTooltipDisplayed) {
+      // Check if there still hovering over a group boundary.
+      const hover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled &&
+          !stationGroup.selected &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      );
+      if (hover) {
+        this.drawStationGroupToolTip(this.tooltipPosition);
+      } else {
+        this.isTooltipDisplayed = false;
+        this.tooltipPosition = { x: -1, y: -1 };
+      }
+    }
   }
 
   /**
@@ -414,13 +437,17 @@ export class StationGroupElementService {
         titleEnd
       );
       if (index === 0) {
+        //If station group is not available to add to pending group, display a tooltip on hover.
         if (
           this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled &&
           !stationGroup.selected &&
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
         ) {
-          this.drawStationGroupToolTip(
+          this.isTooltipDisplayed = true;
+          /* Need to deep copy the boundary points object so that when it gets overwritten
+          that doesn't change the position of the tooltip. */
+          this.tooltipPosition = this.mapService.deepCopy(
             stationGroup.boundaryPoints[positionStart]
           );
         }
