@@ -365,7 +365,7 @@ describe('StationComponent', () => {
     expect(prevQuestion).toBeTruthy();
   });
 
-  it('should listen the station question when possibles answer', () => {
+  it('should listen the station question when there are possible answers', () => {
     component.stationInformation.questions = [
       {
         rithmId: '3j4k-3h2j-hj6j',
@@ -376,6 +376,13 @@ describe('StationComponent', () => {
         isPrivate: false,
         children: [],
         originalStationRithmId: '3j4k-3h2j-hj4j',
+        possibleAnswers: [
+          {
+            rithmId: '3j4k-3h2j-hj41',
+            text: 'Option 1',
+            default: false,
+          },
+        ],
       },
     ];
     fixture.detectChanges();
