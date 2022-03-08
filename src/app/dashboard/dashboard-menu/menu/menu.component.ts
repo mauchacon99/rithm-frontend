@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
-import { UserService } from '../../../core/user.service';
-import { SplitService } from '../../../core/split.service';
-import { ErrorService } from '../../../core/error.service';
+import { UserService } from 'src/app/core/user.service';
+import { SplitService } from 'src/app/core/split.service';
+import { ErrorService } from 'src/app/core/error.service';
 import { first } from 'rxjs';
 /**
  * Main menu component for dashboard menu drawer.

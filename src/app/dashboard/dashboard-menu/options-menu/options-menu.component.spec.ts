@@ -10,8 +10,6 @@ import {
   MockDashboardService,
   MockErrorService,
   MockPopupService,
-  MockSplitService,
-  MockUserService,
 } from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,8 +19,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserService } from 'src/app/core/user.service';
-import { SplitService } from 'src/app/core/split.service';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
