@@ -41,6 +41,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
 
+  /** Show setting button widget. */
+  showButtonSetting = false;
+
   /**
    * Whether the signed in user is an admin or not.
    *
@@ -158,10 +161,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscribeDrawerDataWidget$();
     this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
-    const user = this.userService.user;
-    if (user) {
-      this.splitService.initSdk(user.organization);
-    }
 
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
@@ -207,13 +206,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Split Service. */
   private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        const treatment = this.splitService.getDashboardTreatment();
-        this.viewNewDashboard = treatment === 'on';
+        this.viewNewDashboard =
+          this.splitService.getDashboardTreatment() === 'on';
         if (this.viewNewDashboard) {
           this.getParams();
         }
+        this.showButtonSetting =
+          this.splitService.getConfigWidgetsTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

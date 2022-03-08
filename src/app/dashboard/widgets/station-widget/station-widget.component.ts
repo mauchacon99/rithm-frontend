@@ -33,7 +33,8 @@ import { UserService } from 'src/app/core/user.service';
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[dataWidget][editMode][widgetType]',
+  selector:
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -45,6 +46,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** To load dom by WidgetType. */
   @Input() widgetType: WidgetType = WidgetType.Station;
+
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
@@ -155,9 +159,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Variable to show if the error message should be displayed. */
   displayDocumentError = false;
 
-  /** Show setting button widget. */
-  showButtonSetting = false;
-
   /** View detail document. */
   isDocument = false;
 
@@ -191,7 +192,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.split();
     this.stationRithmId = JSON.parse(this.dataWidget).stationRithmId;
     this.subscribeDrawerContext$();
     this.parseDataColumnsWidget();
@@ -205,22 +205,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       .subscribe((drawerContext) => {
         this.drawerContext = drawerContext;
       });
-  }
-
-  /**
-   * Split Service for show or hidden widget setting button.
-   */
-  private split(): void {
-    this.splitService.initSdk(this.userService.user.organization);
-    this.splitService.sdkReady$.pipe(first()).subscribe({
-      next: () => {
-        this.showButtonSetting =
-          this.splitService.getConfigWidgetsTreatment() === 'on';
-      },
-      error: (error: unknown) => {
-        this.errorService.logError(error);
-      },
-    });
   }
 
   /** Parse data of columns widget. */

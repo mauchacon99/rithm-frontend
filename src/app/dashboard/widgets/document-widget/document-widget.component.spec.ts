@@ -233,20 +233,4 @@ describe('DocumentWidgetComponent', () => {
     expect(component.documentRithmId).toEqual(expectDataWidget.documentRithmId);
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
   });
-
-  it('should call split service', () => {
-    spyOn(TestBed.inject(SplitService), 'initSdk').and.callThrough();
-    const splitConfigWidgets = spyOn(
-      TestBed.inject(SplitService),
-      'getConfigWidgetsTreatment'
-    ).and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector(
-      '#toggle-edit-document'
-    );
-    component.ngOnInit();
-    expect(button).toBeNull();
-    component['split']();
-    expect(button).toBeDefined();
-    expect(splitConfigWidgets).toHaveBeenCalled();
-  });
 });

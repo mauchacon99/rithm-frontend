@@ -534,20 +534,4 @@ describe('StationWidgetComponent', () => {
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
   });
-
-  it('should call split service', () => {
-    spyOn(TestBed.inject(SplitService), 'initSdk').and.callThrough();
-    const splitConfigWidgets = spyOn(
-      TestBed.inject(SplitService),
-      'getConfigWidgetsTreatment'
-    ).and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector(
-      '#toggle-edit-document'
-    );
-    component.ngOnInit();
-    expect(button).toBeNull();
-    component['split']();
-    expect(button).toBeDefined();
-    expect(splitConfigWidgets).toHaveBeenCalled();
-  });
 });

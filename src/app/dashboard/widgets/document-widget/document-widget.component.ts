@@ -24,7 +24,7 @@ import { UserService } from 'src/app/core/user.service';
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget[dataWidget][editMode]',
+  selector: 'app-document-widget[dataWidget][editMode][showButtonSetting]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
@@ -55,6 +55,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
+
   /**
    * Whether the drawer is open.
    *
@@ -81,9 +84,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
 
-  /** Show setting button widget. */
-  showButtonSetting = false;
-
   /** Columns for list the widget. */
   documentColumns: ColumnFieldsWidget[] = [];
 
@@ -103,7 +103,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.split();
     this.parseDataColumnsWidget();
     this.getDrawerContext();
     this.getDocumentWidget();
@@ -114,22 +113,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     const dataWidget = JSON.parse(this.dataWidget);
     this.documentRithmId = dataWidget.documentRithmId;
     this.documentColumns = dataWidget.columns || [];
-  }
-
-  /**
-   * Split Service for show or hidden widget setting button.
-   */
-  private split(): void {
-    this.splitService.initSdk(this.userService.user.organization);
-    this.splitService.sdkReady$.pipe(first()).subscribe({
-      next: () => {
-        this.showButtonSetting =
-          this.splitService.getConfigWidgetsTreatment() === 'on';
-      },
-      error: (error: unknown) => {
-        this.errorService.logError(error);
-      },
-    });
   }
 
   /** Get context drawer. */
