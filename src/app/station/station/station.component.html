@@ -10,7 +10,7 @@
   <mat-drawer
     #drawer
     mode="over"
-    (openedStart)="isOpenDrawerLeft = false"
+    (openedStart)="toggleDrawerLeft('')"
     position="end"
     disableClose
   >
@@ -291,11 +291,20 @@
                       <div class="flex">
                         <button
                           type="button"
-                          (click)="toggleDrawerLeft('buildDrawer')"
+                          (click)="
+                            drawerLeftContext === 'buildDrawer'
+                              ? toggleDrawerLeft('')
+                              : toggleDrawerLeft('buildDrawer')
+                          "
                           class="px-2 mr-2"
                         >
                           <span
-                            class="fas fa-tools text-secondary-500 fa-lg"
+                            class="fas fa-tools fa-lg"
+                            [ngClass]="[
+                              drawerLeftContext === 'buildDrawer'
+                                ? 'text-brightBlue'
+                                : 'text-secondary-500'
+                            ]"
                           ></span>
                         </button>
                         <mat-divider [vertical]="true"></mat-divider>

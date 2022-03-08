@@ -804,9 +804,11 @@ export class StationComponent
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawerLeft(drawerItem: '' | 'buildDrawer'): void {
-    this.sidenavDrawerService.closeDrawer();
-    this.isOpenDrawerLeft = true;
+    if (drawerItem) {
+      this.sidenavDrawerService.closeDrawer();
+    }
     this.drawerLeftContext = drawerItem;
+    this.isOpenDrawerLeft = drawerItem ? true : false;
   }
 
   /**
