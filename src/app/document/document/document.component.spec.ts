@@ -713,6 +713,7 @@ describe('DocumentComponent', () => {
       'displayError'
     ).and.callThrough();
     component.getFlowButtonName();
+    expect(component.flowButtonName).toBe('Flow');
     expect(spyError).toHaveBeenCalled();
   });
 });
