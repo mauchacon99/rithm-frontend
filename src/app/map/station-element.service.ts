@@ -160,11 +160,16 @@ export class StationElementService {
     ctx.shadowOffsetY = shadowEquation(3);
     //If this station is being dragged right now make the shadow bigger.
     if (
-      (station.hoverItem === StationElementHoverItem.Station &&
-        dragItem === MapDragItem.Station &&
-        station.dragging) ||
-      station.drawerOpened
+      station.hoverItem === StationElementHoverItem.Station &&
+      dragItem === MapDragItem.Station &&
+      station.dragging
     ) {
+      ctx.shadowColor = '#666666';
+      ctx.shadowOffsetX = shadowEquation(7);
+      ctx.shadowOffsetY = shadowEquation(7);
+      ctx.shadowBlur = shadowEquation(10);
+    }
+    if (station.drawerOpened) {
       ctx.shadowColor = '#666666';
       ctx.shadowOffsetX = shadowEquation(7);
       ctx.shadowOffsetY = shadowEquation(7);
