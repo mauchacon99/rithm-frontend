@@ -505,12 +505,9 @@ export class MockDashboardService {
   /**
    * Get list tab documents.
    *
-   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
+  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
