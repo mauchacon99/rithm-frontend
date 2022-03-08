@@ -447,7 +447,9 @@ export class StationGroupElementService {
           this.isTooltipDisplayed = true;
           /* Need to deep copy the boundary points object so that when it gets overwritten
           that doesn't change the position of the tooltip. */
-          this.tooltipPosition = this.mapService.deepCopy(stationGroup.boundaryPoints[positionStart]);
+          this.tooltipPosition = this.mapService.deepCopy(
+            stationGroup.boundaryPoints[positionStart]
+          );
         }
       }
     });
