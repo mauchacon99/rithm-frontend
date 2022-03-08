@@ -7,18 +7,20 @@ import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserService } from 'src/app/core/user.service';
-import { SplitService } from 'src/app/core/split.service';
 
 /**
  * Options menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-options-menu[dashboardRole]',
+  selector: 'app-options-menu[dashboardRole][isManageMember]',
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
 export class OptionsMenuComponent implements OnInit, OnDestroy {
+  /** Parameter for hide or show option manage member. */
+  @Input() isManageMember = false;
+
+  /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /**
@@ -31,9 +33,6 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
 
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
-
-  /** Show or hidden option manage member. */
-  isManageMember = false;
 
   /** Rithm id get for params.*/
   paramRithmId!: string | null;
@@ -57,35 +56,16 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
-    private activatedRoute: ActivatedRoute,
-    private userService: UserService,
-    private splitService: SplitService
+    private activatedRoute: ActivatedRoute
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
-    this.split();
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
-      },
-    });
-  }
-
-  /**
-   * Split Service.
-   */
-  private split(): void {
-    this.splitService.initSdk(this.userService.user.organization);
-    this.splitService.sdkReady$.pipe(first()).subscribe({
-      next: () => {
-        this.isManageMember =
-          this.splitService.getManageUserTreatment() === 'on';
-      },
-      error: (error: unknown) => {
-        this.errorService.logError(error);
       },
     });
   }

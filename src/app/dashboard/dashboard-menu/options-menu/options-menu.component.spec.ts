@@ -58,8 +58,6 @@ describe('OptionsMenuComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: UserService, useClass: MockUserService },
-        { provide: SplitService, useClass: MockSplitService },
       ],
       imports: [
         MatMenuModule,
