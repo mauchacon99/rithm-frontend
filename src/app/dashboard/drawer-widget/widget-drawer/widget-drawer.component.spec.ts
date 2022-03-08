@@ -227,4 +227,26 @@ describe('WidgetDrawerComponent', () => {
     expect(spyRemoveSelectedFile).toHaveBeenCalled();
     expect(component.imageSelected).toBeNull();
   });
+
+  it('should get split for image banner.', () => {
+    const rithmId = '147cf568-27a4-4968-5628-046ccfee24fd';
+    component.ngOnInit();
+    const splitInitMethod = spyOn(
+      TestBed.inject(SplitService),
+      'initSdk'
+    ).and.callThrough();
+    const splitGetSectionImageBanner = spyOn(
+      TestBed.inject(SplitService),
+      'getSectionImageBanner'
+    ).and.callThrough();
+    const sectionImageBanner = fixture.nativeElement.querySelector(
+      '#section-image-banner'
+    );
+    expect(sectionImageBanner).toBeNull();
+    component['split'](rithmId);
+    expect(sectionImageBanner).toBeDefined();
+    expect(splitInitMethod).toHaveBeenCalledOnceWith(rithmId);
+    expect(splitGetSectionImageBanner).toHaveBeenCalled();
+    expect(component.showImageBanner).toBeTrue();
+  });
 });

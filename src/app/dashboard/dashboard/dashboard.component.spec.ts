@@ -320,6 +320,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should call openDialog', () => {
+    component.isLoading = false;
     component.viewNewDashboard = true;
     component.editMode = true;
     component.dashboardData = {
