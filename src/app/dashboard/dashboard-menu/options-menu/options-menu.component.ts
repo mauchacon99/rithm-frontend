@@ -7,6 +7,8 @@ import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { UserService } from '../../../core/user.service';
+import { SplitService } from 'src/app/core/split.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -30,6 +32,9 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
 
+  /** Show or hidden option manage member. */
+  isManageMember = false;
+
   /** Rithm id get for params.*/
   paramRithmId!: string | null;
 
@@ -52,16 +57,37 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private userService: UserService,
+    private splitService: SplitService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.split();
+    const user = this.userService.user;
+    if (user) {
+      this.splitService.initSdk(user.organization);
+    }
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
+      },
+    });
+  }
+
+  /** Split Service. */
+  private split(): void {
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.isManageMember =
+          this.splitService.getManageUserTreatment() === 'on';
+        console.log(this.splitService.getManageUserTreatment());
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
       },
     });
   }
