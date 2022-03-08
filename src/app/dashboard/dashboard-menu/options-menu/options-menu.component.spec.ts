@@ -368,11 +368,4 @@ describe('OptionsMenuComponent', () => {
     expect(deletePersonalDashboard).toHaveBeenCalled();
     expect(toggleDrawer).toHaveBeenCalled();
   });
-
-  it('should behave...', () => {
-    spyOnProperty(TestBed.inject(SplitService), 'sdkReady$').and.returnValue(()=>{
-      throwError(() => {
-        throw new Error();
-      })
-    });
 });
