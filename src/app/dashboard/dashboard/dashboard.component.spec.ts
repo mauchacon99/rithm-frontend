@@ -48,6 +48,7 @@ import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widg
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+  let splitService: SplitService;
   const dashboardRithmId = '123-951-753-789';
   const dataDashboard = {
     rithmId: '102030405060708090100',
@@ -120,6 +121,7 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    splitService = TestBed.inject(SplitService);
   });
 
   it('should create', () => {
@@ -645,18 +647,28 @@ describe('DashboardComponent', () => {
   }));
 
   it('should call split service', () => {
-    spyOn(TestBed.inject(SplitService), 'initSdk').and.callThrough();
-    const splitConfigWidgets = spyOn(
-      TestBed.inject(SplitService),
+    const dataOrganization = TestBed.inject(UserService).user.organization;
+    const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+    const spyGetManageUserTreatment = spyOn(
+      splitService,
       'getConfigWidgetsTreatment'
     ).and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector(
-      '#toggle-edit-document'
-    );
+    splitService.sdkReady$.next();
     component.ngOnInit();
-    expect(button).toBeNull();
-    component['split']();
-    expect(button).toBeDefined();
-    expect(splitConfigWidgets).toHaveBeenCalled();
+    expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+    expect(spyGetManageUserTreatment).toHaveBeenCalled();
+  });
+
+  it('should catch error the button setting splits ', () => {
+    const dataOrganization = TestBed.inject(UserService).user.organization;
+    const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+    splitService.sdkReady$.error('error');
+    const errorService = spyOn(
+      TestBed.inject(ErrorService),
+      'logError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+    expect(errorService).toHaveBeenCalled();
   });
 });

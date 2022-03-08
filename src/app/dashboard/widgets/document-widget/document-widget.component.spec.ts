@@ -1,12 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import {
-  MockDocumentService,
-  MockErrorService,
-  MockSplitService,
-  MockUserService,
-} from 'src/mocks';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { DocumentWidgetComponent } from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
@@ -16,8 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { SplitService } from 'src/app/core/split.service';
-import { UserService } from 'src/app/core/user.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -37,7 +31,7 @@ describe('DocumentWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
       ],
-      imports: [MatMenuModule, RouterTestingModule],
+      imports: [MatMenuModule, RouterTestingModule, HttpClientModule],
     }).compileComponents();
   });
 

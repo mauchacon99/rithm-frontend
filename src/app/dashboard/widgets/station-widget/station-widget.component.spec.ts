@@ -8,7 +8,6 @@ import {
   MockErrorService,
   MockPopupService,
   MockSplitService,
-  MockUserService,
 } from 'src/mocks';
 import {
   ColumnsDocumentInfo,
@@ -26,7 +25,8 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableModule } from '@angular/material/table';
 import { SplitService } from 'src/app/core/split.service';
-import { UserService } from 'src/app/core/user.service';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -44,12 +44,13 @@ describe('StationWidgetComponent', () => {
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
       ],
-      imports: [MatTableModule],
+      imports: [MatTableModule, HttpClientModule, RouterTestingModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
