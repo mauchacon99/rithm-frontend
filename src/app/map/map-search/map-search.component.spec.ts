@@ -7,7 +7,12 @@ import {
 } from '@angular/core/testing';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import { MockMapService } from 'src/mocks';
-import { MapItemStatus, MapMode, StationInfoDrawerData } from 'src/models';
+import {
+  CenterPanType,
+  MapItemStatus,
+  MapMode,
+  StationInfoDrawerData,
+} from 'src/models';
 import { MapService } from '../map.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -118,7 +123,7 @@ describe('MapSearchComponent', () => {
       TestBed.inject(StationService),
       'updatedStationNameText'
     );
-    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'centerStation');
+    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'center');
     const station = new StationMapElement({
       rithmId: '',
       stationName: 'Untitled Station',
@@ -150,9 +155,12 @@ describe('MapSearchComponent', () => {
     expect(component.filteredStationsStationGroups.length).toEqual(0);
     service.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
     service.centerActive$.subscribe((res) => expect(res).toBe(true));
-    service.centerStationCount$.subscribe((res) => expect(res).toBe(1));
+    service.centerCount$.subscribe((res) => expect(res).toBe(1));
     tick(1);
-    expect(mapServiceSpy).toHaveBeenCalledWith(station, drawerWidth);
+    expect(mapServiceSpy).toHaveBeenCalledWith(
+      CenterPanType.Station,
+      drawerWidth
+    );
   }));
 
   it('should distinguish between element types', () => {
