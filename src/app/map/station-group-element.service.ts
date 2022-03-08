@@ -101,7 +101,7 @@ export class StationGroupElementService {
     this.drawStationGroup(rootStationGroup);
     //If there is a tooltip hovered, draw that in the correct position.
     if (this.isTooltipDisplayed) {
-      //Check if there still hovering over a group boundary.
+      // Check if there still hovering over a group boundary.
       const hover = this.mapService.stationGroupElements.find(
         (stationGroup) =>
           this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
@@ -447,9 +447,7 @@ export class StationGroupElementService {
           this.isTooltipDisplayed = true;
           /* Need to deep copy the boundary points object so that when it gets overwritten
           that doesn't change the position of the tooltip. */
-          this.tooltipPosition = this.mapService.deepCopy(
-            stationGroup.boundaryPoints[positionStart]
-          );
+          this.tooltipPosition = this.mapService.deepCopy(stationGroup.boundaryPoints[positionStart]);
         }
       }
     });
