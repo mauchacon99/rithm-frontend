@@ -42,35 +42,39 @@ describe('MenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('should get splits for the menu', () => {
-    const idOrganization = TestBed.inject(UserService).user.organization;
-    const splitInitMethod = spyOn(
-      TestBed.inject(SplitService),
-      'initSdk'
-    ).and.callThrough();
-    const spyGetManageUserTreatment = spyOn(
-      TestBed.inject(SplitService),
-      'getManageUserTreatment'
-    ).and.callThrough();
-    component.ngOnInit();
-    //component['split']();
-    expect(splitInitMethod).toHaveBeenCalledOnceWith(idOrganization);
-    expect(spyGetManageUserTreatment).toHaveBeenCalled();
-  });
+  fdescribe('Testing split.io', () => {
+    let splitService: SplitService;
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+    });
 
-  xit('should catch error the splits for the menu', () => {
-    const dataOrganization = TestBed.inject(UserService).user.organization;
-    const splitInitMethod = spyOn(
-      TestBed.inject(SplitService),
-      'initSdk'
-    ).and.callThrough();
-    const errorService = spyOn(
-      TestBed.inject(ErrorService),
-      'logError'
-    ).and.callThrough();
-    component.ngOnInit();
-    component['split']();
-    expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-    expect(errorService).toHaveBeenCalled();
+    it('should get splits for the menu', () => {
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+      const spyGetManageUserTreatment = spyOn(
+        splitService,
+        'getManageUserTreatment'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      splitService.sdkReady$.subscribe(() => {
+        expect(spyGetManageUserTreatment).toHaveBeenCalled();
+      });
+    });
+
+    xit('should catch error the splits for the menu', () => {
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(
+        splitService,
+        'initSdk'
+      ).and.callThrough();
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+    });
   });
 });
