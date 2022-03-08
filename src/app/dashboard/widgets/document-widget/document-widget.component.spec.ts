@@ -36,8 +36,6 @@ describe('DocumentWidgetComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: UserService, useClass: MockUserService },
-        { provide: SplitService, useClass: MockSplitService },
       ],
       imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
