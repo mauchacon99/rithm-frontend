@@ -165,8 +165,10 @@ export class StationElementService {
         station.dragging) ||
       station.drawerOpened
     ) {
-      ctx.shadowOffsetY = shadowEquation(20);
-      ctx.shadowBlur = shadowEquation(40);
+      ctx.shadowColor = '#666666';
+      ctx.shadowOffsetX = shadowEquation(7);
+      ctx.shadowOffsetY = shadowEquation(7);
+      ctx.shadowBlur = shadowEquation(10);
     }
 
     //This draws the station card as a rectangle with rounded edges.
