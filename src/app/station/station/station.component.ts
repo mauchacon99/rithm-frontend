@@ -20,12 +20,12 @@ import {
   Question,
   PossibleAnswer,
   FlowLogicRule,
+  InputFrameWidget,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GridsterConfig } from 'angular-gridster2';
-import { InputFrameWidget } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -803,10 +803,7 @@ export class StationComponent
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawerLeft(drawerItem: '' | 'buildDrawer'): void {
-    if (drawerItem) {
-      this.sidenavDrawerService.closeDrawer();
-    }
+  toggleLeftDrawer(drawerItem: '' | 'buildDrawer'): void {
     this.drawerLeftContext = drawerItem;
     this.isOpenDrawerLeft = drawerItem ? true : false;
   }

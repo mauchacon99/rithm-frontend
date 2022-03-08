@@ -7,13 +7,7 @@
   class="h-full info-drawer-station"
 >
   <!-- right match drawer -->
-  <mat-drawer
-    #drawer
-    mode="over"
-    (openedStart)="toggleDrawerLeft('')"
-    position="end"
-    disableClose
-  >
+  <mat-drawer #drawer mode="over" position="end" disableClose>
     <app-detail-drawer
       *ngIf="drawerContext === 'comments' || drawerContext === 'history'"
     ></app-detail-drawer>
@@ -25,7 +19,7 @@
   </mat-drawer>
   <!-- left match drawer -->
   <mat-drawer
-    #drawerStart
+    #leftDrawer
     mode="over"
     position="start"
     [opened]="isOpenDrawerLeft"
@@ -293,8 +287,8 @@
                           type="button"
                           (click)="
                             drawerLeftContext === 'buildDrawer'
-                              ? toggleDrawerLeft('')
-                              : toggleDrawerLeft('buildDrawer')
+                              ? toggleLeftDrawer('')
+                              : toggleLeftDrawer('buildDrawer')
                           "
                           class="px-2 mr-2"
                         >
