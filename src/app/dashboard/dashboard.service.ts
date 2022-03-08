@@ -308,4 +308,37 @@ export class DashboardService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
     );
   }
+
+  /**
+   * Get the list for the groups the stations tabs.
+   *
+   * @returns The list the groups.
+   */
+  getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 5,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: true,
+        totalStations: 2,
+        totalSubGroups: 3,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 9,
+      },
+    ];
+
+    return of(itemListWidgetModal).pipe(delay(1000));
+  }
 }
