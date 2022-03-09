@@ -721,22 +721,7 @@ describe('DashboardComponent', () => {
       expect(component.showButtonSetting).toBeTrue();
     });
 
-    it('should call split service method getDashboardTreatment', () => {
-      component.viewNewDashboard = false;
-      const dataOrganization = TestBed.inject(UserService).user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-      const spyGetManageUserTreatment = spyOn(
-        splitService,
-        'getDashboardTreatment'
-      ).and.callThrough();
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(spyGetManageUserTreatment).toHaveBeenCalled();
-      expect(component.viewNewDashboard).toBeTrue();
-    });
-
-    it('should catch error the button setting splits ', () => {
+    it('should catch split error ', () => {
       const dataOrganization = TestBed.inject(UserService).user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
@@ -746,21 +731,7 @@ describe('DashboardComponent', () => {
         'logError'
       ).and.callThrough();
       component.ngOnInit();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
-
       expect(component.showButtonSetting).toBeFalse();
-    });
-
-    it('should catch error the splits for the menu', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk');
-      splitService.sdkReady$.error('error');
-      const errorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
-      ).and.callThrough();
-      component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
@@ -796,7 +767,8 @@ describe('DashboardComponent', () => {
       const btn = fixture.nativeElement.querySelector('#add-widget-button');
       expect(btn).toBeNull();
     });
-    it('should get splits for the viewNewDashboard and isAddWidget', () => {
+    it('should call split service method getDashboardTreatment', () => {
+      component.viewNewDashboard = false;
       const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk');
       const spyGetDashboardTreatment = spyOn(
@@ -809,6 +781,7 @@ describe('DashboardComponent', () => {
       ).and.callThrough();
       splitService.sdkReady$.next();
       component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetDashboardTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
