@@ -20,7 +20,9 @@ import { MockComponent } from 'ng-mocks';
 import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from 'src/app/dashboard/header/header.component';
 import { PriorityQueueComponent } from 'src/app/dashboard/priority-queue/priority-queue.component';
-import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
+import {
+  PreviouslyStartedDocumentsComponent
+} from '../previously-started-documents/previously-started-documents.component';
 import { MyStationsComponent } from '../my-stations/my-stations.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
@@ -670,5 +672,48 @@ describe('DashboardComponent', () => {
 
     const btn = fixture.nativeElement.querySelector('#add-widget-button');
     expect(btn).toBeNull();
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    let userService: UserService;
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
+    });
+
+    it('should get splits for the viewNewDashboard and isAddWidget', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk');
+      const spyGetDashboardTreatment = spyOn(
+        splitService,
+        'getDashboardTreatment'
+      ).and.returnValue('on');
+      const spyGetDashboardLibraryTreatment = spyOn(
+        splitService,
+        'getDashboardLibraryTreatment'
+      ).and.returnValue('on');
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetDashboardTreatment).toHaveBeenCalled();
+      expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
+      expect(component.viewNewDashboard).toBeTrue();
+      expect(component.isAddWidget).toBeTrue();
+
+    });
+
+    it('should catch error the splits for the menu', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk');
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+    });
   });
 });
