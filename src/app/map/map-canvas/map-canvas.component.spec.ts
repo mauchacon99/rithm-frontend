@@ -416,7 +416,8 @@ describe('MapCanvasComponent', () => {
     component.stations = updatedStations;
     service.stationGroupElements = groups;
     const contextPoint = { x: 117, y: 96 };
-    component.checkStationGroupClick(contextPoint);
+    const point = { x: 85, y: 50 };
+    component.checkStationGroupClick(contextPoint, point);
     groups[1].hoverItem = StationGroupElementHoverItem.Boundary;
     expect(setStatusSpy).toHaveBeenCalled();
     expect(groups[1].disabled).toBe(false);
@@ -457,7 +458,8 @@ describe('MapCanvasComponent', () => {
     component.stations = updatedStations;
     service.stationGroupElements = groups;
     const contextPoint = { x: 606, y: 158 };
-    component.checkStationGroupClick(contextPoint);
+    const point = { x: 560, y: 135 };
+    component.checkStationGroupClick(contextPoint, point);
     expect(setStatusSpy).toHaveBeenCalledTimes(0);
     expect(groups[1].disabled).toBe(true);
     expect(setStationGroupStatusSpy).toHaveBeenCalledTimes(0);
