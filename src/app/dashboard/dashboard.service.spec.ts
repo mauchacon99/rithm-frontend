@@ -677,4 +677,33 @@ describe('DashboardService', () => {
     req.flush(expectDataResponse);
     httpTestingController.verify();
   });
+
+  it('should get list tab groups station', () => {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 5,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: true,
+        totalStations: 2,
+        totalSubGroups: 3,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 9,
+      },
+    ];
+    service.getGroupStationTabList().subscribe((response) => {
+      expect(response).toEqual(itemListWidgetModal);
+    });
+  });
 });
