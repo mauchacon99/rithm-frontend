@@ -3,7 +3,7 @@ import { Subject, first } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from 'src/app/map/map.service';
-import { MapMode, StationInfoDrawerData } from 'src/models';
+import { StationInfoDrawerData } from 'src/models';
 import { StationInfoDrawerComponent } from 'src/app/shared/station-info-drawer/station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
