@@ -27,7 +27,6 @@ import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import {
   ConnectedStationInfo,
-  DocumentAutoFlow,
   MoveDocument,
   QuestionFieldType,
   StationRosterMember,
@@ -716,8 +715,9 @@ describe('DocumentComponent', () => {
           stationId: component.forwardStations[0].rithmId,
         },
       }
-  );
-    
+    );
+  });
+
   it('should get text of flow button', () => {
     const spyFlowButton = spyOn(
       TestBed.inject(StationService),
