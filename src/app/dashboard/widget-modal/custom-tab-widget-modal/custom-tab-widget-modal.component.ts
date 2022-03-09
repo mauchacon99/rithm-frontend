@@ -4,6 +4,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { ItemListWidgetModal } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from 'src/app/core/user.service';
 
 /** Component for Tab Custom in modal add widget. */
 @Component({
@@ -41,7 +42,8 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private userService: UserService
   ) {}
 
   /**
@@ -124,7 +126,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   private getGroupStationTabList(): void {
     this.dashboardService
-      .getGroupStationTabList()
+      .getGroupStationTabList(this.userService.user.organization)
       .pipe(first())
       .subscribe({
         next: (itemsListGroupsStation) => {

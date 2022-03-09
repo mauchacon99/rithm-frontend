@@ -679,31 +679,24 @@ describe('DashboardService', () => {
   });
 
   it('should get list tab groups station', () => {
-    const itemListWidgetModal: ItemListWidgetModal[] = [
+    const nameOrganization = '123-123-123';
+    const expectDataResponse: ItemListWidgetModal[] = [
       {
-        rithmId: '7',
-        name: 'Groupygroup',
-        isChained: false,
-        totalStations: 2,
-        totalSubGroups: 5,
-      },
-      {
-        rithmId: '7',
-        name: 'Groupygroup',
-        isChained: true,
-        totalStations: 2,
-        totalSubGroups: 3,
-      },
-      {
-        rithmId: '7',
-        name: 'Groupygroup',
+        rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        name: 'Group Name',
         isChained: false,
         totalStations: 2,
         totalSubGroups: 9,
       },
     ];
-    service.getGroupStationTabList().subscribe((response) => {
-      expect(response).toEqual(itemListWidgetModal);
+    service.getGroupStationTabList(nameOrganization).subscribe((response) => {
+      expect(response).toEqual(expectDataResponse);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups?name=${nameOrganization}`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectDataResponse);
+    httpTestingController.verify();
   });
 });
