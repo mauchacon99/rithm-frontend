@@ -34,6 +34,6 @@ export class MockSplitService {
    * @returns Split treatment.
    */
   public getDashboardLibraryTreatment(): string {
-    return this.splitClient.getTreatment('dashboard_library_split');
+    return 'on';
   }
 }

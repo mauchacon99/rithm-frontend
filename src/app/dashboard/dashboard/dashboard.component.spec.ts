@@ -686,11 +686,11 @@ describe('DashboardComponent', () => {
       const spyGetDashboardTreatment = spyOn(
         splitService,
         'getDashboardTreatment'
-      ).and.returnValue('on');
+      ).and.callThrough();
       const spyGetDashboardLibraryTreatment = spyOn(
         splitService,
         'getDashboardLibraryTreatment'
-      ).and.returnValue('on');
+      ).and.callThrough();
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
