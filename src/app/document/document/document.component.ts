@@ -4,10 +4,11 @@ import {
   OnDestroy,
   ViewChild,
   AfterViewChecked,
-  ChangeDetectorRef,
   EventEmitter,
   Output,
   Input,
+  ChangeDetectorRef,
+  Inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -63,36 +64,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     /** When assign new worker, reload list of documents in widget when click to see list. */
     isReloadListDocuments: boolean;
   }>();
-
-  /**
-   * Whether to show the backdrop for the comment and history drawers.
-   *
-   * @returns Whether to show the backdrop.
-   */
-  get drawerHasBackdrop(): boolean {
-    return this.sidenavDrawerService.drawerHasBackdrop;
-  }
-
-  /**
-   * Is the current user an admin.
-   *
-   * @returns Validate if user is admin.
-   */
-  get isUserAdmin(): boolean {
-    return this.userService.isAdmin;
-  }
-
-  /**
-   * Is the current user an owner or an admin for this document.
-   *
-   * @returns Validate if user is owner or admin of current document.
-   */
-  get isUserAdminOrOwner(): boolean {
-    const ownerDocument = this.documentInformation.stationOwners?.find(
-      (owner) => this.userService.user.rithmId === owner.rithmId
-    );
-    return !!ownerDocument || this.userService.isAdmin;
-  }
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -154,7 +125,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private readonly changeDetectorR: ChangeDetectorRef,
+    @Inject(ChangeDetectorRef) private changeDetectorR: ChangeDetectorRef,
     private userService: UserService
   ) {
     this.documentForm = this.fb.group({
@@ -177,6 +148,36 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.stationId = this.stationRithmIdWidget;
       this.getDocumentStationData();
     }
+  }
+
+  /**
+   * Whether to show the backdrop for the comment and history drawers.
+   *
+   * @returns Whether to show the backdrop.
+   */
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Is the current user an admin.
+   *
+   * @returns Validate if user is admin.
+   */
+  get isUserAdmin(): boolean {
+    return this.userService.isAdmin;
+  }
+
+  /**
+   * Is the current user an owner or an admin for this document.
+   *
+   * @returns Validate if user is owner or admin of current document.
+   */
+  get isUserAdminOrOwner(): boolean {
+    const ownerDocument = this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    );
+    return !!ownerDocument || this.userService.isAdmin;
   }
 
   /** Subscribe to drawerContext$. */
@@ -428,33 +429,72 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Save document answers and auto flow.
    */
-  autoFlowDocument(): void {
+  saveAnswersFlowDocument(): void {
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
+    this.saveDocumentAnswer();
+  }
+
+  /**
+   * Save document answers (isolate request).
+   */
+  private saveDocumentAnswer(): void {
+    this.documentService
+      .saveDocumentAnswer(
+        this.documentInformation.documentRithmId,
+        this.documentAnswer
+      )
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.updateDocumentName();
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end saving answers and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update document name (isolate request).
+   */
+  private updateDocumentName(): void {
+    this.documentService
+      .updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      )
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.autoFlowContainer();
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end updating container's name and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * AutoFlow Container (isolated request).
+   */
+  private autoFlowContainer(): void {
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
       // Parameter temporary testMode.
       testMode: false,
     };
-
-    const requestArray = [
-      // Save the document answers.
-      this.documentService.saveDocumentAnswer(
-        this.documentInformation.documentRithmId,
-        this.documentAnswer
-      ),
-      // Update the document name.
-      this.documentService.updateDocumentName(
-        this.documentInformation.documentRithmId,
-        this.documentName
-      ),
-
-      // Flow a document.
-      this.documentService.autoFlowDocument(documentAutoFlow),
-    ];
-
-    forkJoin(requestArray)
+    this.documentService
+      .autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
         next: () => {
@@ -464,7 +504,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            "Something went wrong on our end flowing the container and we're looking into it. Please try again in a little while.",
             error
           );
         },
