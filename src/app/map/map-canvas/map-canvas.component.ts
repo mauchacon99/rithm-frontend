@@ -1909,7 +1909,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
             stationGroup.checkElementHover(eventContextPoint, this.context);
-            //If cursor is over a group boundary or name.
+            //If cursor is over a group boundary or option button.
             if (
               stationGroup.hoverItem ===
                 StationGroupElementHoverItem.Boundary ||
@@ -2187,7 +2187,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
-   * @param point The position of mouse click event.
+   * @param point The position of mouse click event, used to calculate where to open option menu.
    */
   checkStationGroupClick(contextPoint: Point, point: Point): void {
     // Loop through groups to find the group that was clicked.
@@ -2249,7 +2249,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
       if (
         stationGroup.hoverItem === StationGroupElementHoverItem.ButtonOption &&
-        this.mapMode !== MapMode.View
+        this.mapMode === MapMode.Build
       ) {
         //set mousePoint to the tracked cursor position.
         this.mapService.currentMousePoint$.next(point);

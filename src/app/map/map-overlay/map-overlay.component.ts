@@ -187,7 +187,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.mapService.mapMode$.value !== MapMode.View &&
           this.mapService.mapMode$.value !== MapMode.StationGroupAdd
         ) {
-          //On right clicked open the option menu for the new station.
+          //On click of station group option button, the edit station group menu opens.
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
         }
       });
@@ -538,7 +538,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
 
   /**
    * Method called when a user clicks the edit station group.
-   * Sets the map to add station mode in preparation for a station to be selected.
    */
   editStationGroup(): void {
     this.mapService.matMenuStatus$.next(true);
