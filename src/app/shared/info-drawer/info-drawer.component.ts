@@ -6,6 +6,7 @@ import { MapService } from 'src/app/map/map.service';
 import { MapMode, StationInfoDrawerData } from 'src/models';
 import { StationInfoDrawerComponent } from 'src/app/shared/station-info-drawer/station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Component for info drawer.
@@ -30,7 +31,8 @@ export class InfoDrawerComponent implements OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
-    private stationService: StationService
+    private stationService: StationService,
+    private errorService: ErrorService
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -97,7 +99,14 @@ export class InfoDrawerComponent implements OnDestroy {
           this.stationDrawer.flowButtonName
         )
         .pipe(first())
-        .subscribe();
+        .subscribe({
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          },
+        });
     }
     this.drawerMode = '';
   }
