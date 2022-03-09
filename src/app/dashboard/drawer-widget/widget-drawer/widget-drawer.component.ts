@@ -10,9 +10,12 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
 import { DashboardItem, WidgetType } from 'src/models';
+import { SplitService } from 'src/app/core/split.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for widget drawer.
@@ -42,6 +45,9 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Widget type of opened widget-drawer.*/
   widgetType!: WidgetType;
 
+  /** Show section image banner. */
+  showImageBanner = false;
+
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
@@ -51,15 +57,35 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private splitService: SplitService,
+    private errorService: ErrorService,
+    private userService: UserService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.split();
     this.subscribeDrawerContext$();
     this.changeDetector.detectChanges();
+  }
+
+  /**
+   * Split Service for show or hidden section Image banner.
+   */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showImageBanner =
+          this.splitService.getStationUploadBannerTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /** Get drawer context the drawers. */

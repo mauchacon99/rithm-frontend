@@ -92,11 +92,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Error Loading dashboard. */
   errorLoadingDashboard = false;
 
+  /** View the button Add Widget in edit mode. */
+  isAddWidget = false;
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
+
+  /** Show setting button widget. */
+  showButtonSetting = false;
 
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
@@ -158,10 +164,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscribeDrawerDataWidget$();
     this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
-    const user = this.userService.user;
-    if (user) {
-      this.splitService.initSdk(user.organization);
-    }
 
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
@@ -207,13 +209,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Split Service. */
   private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        const treatment = this.splitService.getDashboardTreatment();
-        this.viewNewDashboard = treatment === 'on';
+        this.viewNewDashboard =
+          this.splitService.getDashboardTreatment() === 'on';
+        this.isAddWidget =
+          this.splitService.getDashboardLibraryTreatment() === 'on';
         if (this.viewNewDashboard) {
           this.getParams();
         }
+        this.showButtonSetting =
+          this.splitService.getConfigWidgetsTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

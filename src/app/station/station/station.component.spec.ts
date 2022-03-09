@@ -12,6 +12,7 @@ import { DetailDrawerComponent } from 'src/app/shared/detail-drawer/detail-drawe
 import { DocumentInfoHeaderComponent } from 'src/app/shared/document-info-header/document-info-header.component';
 import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/shared/station-info-header/station-info-header.component';
+import { BuildDrawerComponent } from 'src/app/station/build-drawer/build-drawer.component';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import {
@@ -79,6 +80,7 @@ describe('StationComponent', () => {
         MockComponent(ToolbarComponent),
         MockComponent(StationTemplateComponent),
         MockComponent(InputFrameWidgetComponent),
+        MockComponent(BuildDrawerComponent),
       ],
       imports: [
         NoopAnimationsModule,
