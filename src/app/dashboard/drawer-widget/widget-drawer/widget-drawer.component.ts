@@ -80,7 +80,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         this.showImageBanner =
-          this.splitService.getSectionImageBanner() === 'on';
+          this.splitService.getStationUploadBannerTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

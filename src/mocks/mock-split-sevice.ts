@@ -41,7 +41,7 @@ export class MockSplitService {
    *
    * @returns Split treatment.
    */
-  public getSectionImageBanner(): string {
+  public getStationUploadBannerTreatment(): string {
     return 'on';
   }
 }
