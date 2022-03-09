@@ -24,6 +24,7 @@
         </div>
       </div>
       <app-options-menu
+        [isManageMember]="isManageMember"
         [dashboardRole]="dashboardRole"
         [isDashboardListOptions]="true"
       ></app-options-menu>
@@ -68,6 +69,7 @@
           <div class="w-full flex justify-between items-center ml-5">
             {{ dashboard.name }}
             <app-options-menu
+              [isManageMember]="isManageMember"
               [dashboardRole]="dashboardRole"
               [isDashboardListOptions]="false"
               [rithmId]="dashboard.rithmId"
