@@ -2189,7 +2189,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param contextPoint Calculated position of click.
    * @param point The position of mouse click event.
    */
-  checkStationGroupClick(contextPoint: Point, point : Point): void {
+  checkStationGroupClick(contextPoint: Point, point: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
@@ -2260,7 +2260,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         });
         return;
       }
-
     }
   }
 
