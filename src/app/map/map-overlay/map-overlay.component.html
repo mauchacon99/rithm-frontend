@@ -179,11 +179,20 @@
   </div>
   <div *ngIf="clickMode === matMenulist.NewStation">
     <button
-      class="text-left w-full pl-4 p-3 hover:bg-secondary-50"
+      class="text-left w-full pl-4 px-3 py-2 hover:bg-secondary-50"
       (click)="addStation()"
     >
       <i class="fas fa-plus"></i>
       <span class="pl-2">Add new station</span>
+    </button>
+  </div>
+  <div *ngIf="clickMode === matMenulist.EditStationGroup">
+    <button
+      class="text-left w-full px-3 py-2 hover:bg-secondary-50"
+      (click)="editStationGroup()"
+    >
+      <i class="fas fa-pen"></i>
+      <span class="pl-2"> Edit Station Group</span>
     </button>
   </div>
 </mat-menu>
