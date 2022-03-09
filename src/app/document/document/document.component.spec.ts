@@ -689,4 +689,31 @@ describe('DocumentComponent', () => {
       isReloadListDocuments: false,
     });
   });
+
+  it('should get text of flow button', () => {
+    const spyFlowButton = spyOn(
+      TestBed.inject(StationService),
+      'getFlowButtonText'
+    ).and.callThrough();
+    expect(component.flowButtonName).toBeFalsy();
+    component.getFlowButtonName();
+    expect(spyFlowButton).toHaveBeenCalledOnceWith(
+      component.documentInformation.stationRithmId
+    );
+  });
+
+  it('should catch error when unable to get flow button text', () => {
+    spyOn(TestBed.inject(StationService), 'getFlowButtonText').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getFlowButtonName();
+    expect(component.flowButtonName).toBe('Flow');
+    expect(spyError).toHaveBeenCalled();
+  });
 });
