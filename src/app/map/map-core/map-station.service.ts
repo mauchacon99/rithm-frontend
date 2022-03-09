@@ -8,13 +8,10 @@ import { ConnectionMapElement, StationMapElement } from 'src/helpers';
  * Service for the map station behavior.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MapStationService {
-
-  constructor(
-    private mapService: MapService
-  ) {}
+  constructor(private mapService: MapService) {}
 
   /**
    * Update the canvas points for each station.
@@ -29,12 +26,14 @@ export class MapStationService {
     //Also update the boundary canvas points.
     if (this.mapService.boundaryElement) {
       //Update the canvas points of the boundary.
-      this.mapService.boundaryElement.minCanvasPoint = this.mapService.getCanvasPoint(
-        this.mapService.boundaryElement.minMapPoint
-      );
-      this.mapService.boundaryElement.maxCanvasPoint = this.mapService.getCanvasPoint(
-        this.mapService.boundaryElement.maxMapPoint
-      );
+      this.mapService.boundaryElement.minCanvasPoint =
+        this.mapService.getCanvasPoint(
+          this.mapService.boundaryElement.minMapPoint
+        );
+      this.mapService.boundaryElement.maxCanvasPoint =
+        this.mapService.getCanvasPoint(
+          this.mapService.boundaryElement.maxMapPoint
+        );
     }
   }
 
@@ -43,7 +42,7 @@ export class MapStationService {
    *
    * @param coords The coordinates where the station will be placed.
    */
-   createNewStation(coords: Point): void {
+  createNewStation(coords: Point): void {
     //Set the coordinates used for mapPoint.
     const mapCoords = this.mapService.getMapPoint(coords);
     //Create new stationMapElement with default data.
@@ -106,16 +105,18 @@ export class MapStationService {
         //The connecting station is found in a group, and the newStation is not found in that group.
         if (
           stationGroupIndex >= 0 &&
-          !this.mapService.stationGroupElements[stationGroupIndex].stations.includes(
-            newStation.rithmId
-          )
+          !this.mapService.stationGroupElements[
+            stationGroupIndex
+          ].stations.includes(newStation.rithmId)
         ) {
           //push newStation to the stations array of the same group as the connecting station.
           this.mapService.stationGroupElements[stationGroupIndex].stations.push(
             newStation.rithmId
           );
           //Unless group is new, mark it as updated.
-          this.mapService.stationGroupElements[stationGroupIndex].markAsUpdated();
+          this.mapService.stationGroupElements[
+            stationGroupIndex
+          ].markAsUpdated();
         }
         //if isAddingConnected property is true, set it to false.
         this.mapService.disableConnectedStationMode();
@@ -126,20 +127,23 @@ export class MapStationService {
     this.mapService.stationElements.push(newStation);
 
     // Find the Root Station Group index.
-    const isReadOnlyRootStationGroupIndex = this.mapService.stationGroupElements.findIndex(
-      (stationGroup) => stationGroup.isReadOnlyRootStationGroup
-    );
+    const isReadOnlyRootStationGroupIndex =
+      this.mapService.stationGroupElements.findIndex(
+        (stationGroup) => stationGroup.isReadOnlyRootStationGroup
+      );
 
     if (isReadOnlyRootStationGroupIndex !== -1) {
       // Updating the stations in the Root station group.
-      this.mapService.stationGroupElements[isReadOnlyRootStationGroupIndex].stations.push(
-        newStation.rithmId
-      );
+      this.mapService.stationGroupElements[
+        isReadOnlyRootStationGroupIndex
+      ].stations.push(newStation.rithmId);
     }
 
     //Update the map boundary.
     if (this.mapService.boundaryElement) {
-      this.mapService.boundaryElement.updatePoints(this.mapService.stationElements);
+      this.mapService.boundaryElement.updatePoints(
+        this.mapService.stationElements
+      );
     }
     //Note a change in map data.
     this.mapService.mapDataReceived$.next(true);
@@ -155,11 +159,13 @@ export class MapStationService {
     const index = this.mapService.stationElements.findIndex(
       (e) => e.rithmId === stationId
     );
-    //If there is a station that matches stationId.
+    // If there is a station that matches stationId.
     if (index >= 0) {
       /* If the station is newly created, remove it from the stationElements array,
       otherwise mark that station as deleted. */
-      if (this.mapService.stationElements[index].status === MapItemStatus.Created) {
+      if (
+        this.mapService.stationElements[index].status === MapItemStatus.Created
+      ) {
         this.mapService.stationElements.splice(index, 1);
       } else {
         this.mapService.stationElements[index].markAsDeleted();
