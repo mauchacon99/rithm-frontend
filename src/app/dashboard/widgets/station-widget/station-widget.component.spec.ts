@@ -414,6 +414,7 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should show a gear icon in edit mode', () => {
+    component.showButtonSetting = true;
     component.isLoading = false;
     component.failedLoadWidget = false;
     component.isDocument = false;
@@ -437,6 +438,7 @@ describe('StationWidgetComponent', () => {
     component.failedLoadWidget = false;
     component.isDocument = false;
     component.editMode = true;
+    component.showButtonSetting = true;
     fixture.detectChanges();
     spyOn(component.toggleDrawer, 'emit');
     spyOn(component, 'toggleEditStation').and.callThrough();

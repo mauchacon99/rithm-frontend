@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SplitFactory } from '@splitsoftware/splitio-browserjs';
 import * as SplitIO from '@splitsoftware/splitio-browserjs/types/splitio';
 import { Subject } from 'rxjs';
+
 /** Split.io service. */
 @Injectable({
   providedIn: 'root',
@@ -50,11 +51,40 @@ export class SplitService {
   }
 
   /**
+   * Get the widget settings config.
+   *
+   * @returns Split treatment.
+   */
+  public getConfigWidgetsTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_widget_settings_split');
+  }
+
+  /**
+   * Get the dashboard library split.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardLibraryTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_library_split');
+  }
+
+  /**
    * Get the option the menu dashboard for hidden o show manage members.
    *
    * @returns Split treatment.
    */
   public getManageUserTreatment(): string {
     return this.splitClient.getTreatment('dashboard_manage_users_split');
+  }
+
+  /**
+   * Get the section Image banner.
+   *
+   * @returns Split treatment.
+   */
+  public getStationUploadBannerTreatment(): string {
+    return this.splitClient.getTreatment(
+      'dashboard_station_banner_upload_split'
+    );
   }
 }
