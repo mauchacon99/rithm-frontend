@@ -45,4 +45,13 @@ export class MockSplitService {
   public getManageUserTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section Image banner.
+   *
+   * @returns Split treatment.
+   */
+  public getStationUploadBannerTreatment(): string {
+    return 'on';
+  }
 }
