@@ -119,6 +119,7 @@ describe('DashboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+    component.dashboardData = dataDashboard;
     fixture.detectChanges();
   });
 
@@ -302,7 +303,6 @@ describe('DashboardComponent', () => {
       okButtonText: 'Yes',
       cancelButtonText: 'No',
     };
-    component.dashboardData = dataDashboard;
     component.dashboardDataCopy = dataDashboard;
     const spyMethod = spyOn(
       TestBed.inject(PopupService),
@@ -425,7 +425,6 @@ describe('DashboardComponent', () => {
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
-      component.dashboardData = dataDashboard;
       component.dashboardDataCopy = dataDashboard;
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyMethod = spyOn(component, 'changedOptions').and.callThrough();
@@ -437,7 +436,6 @@ describe('DashboardComponent', () => {
 
     it('should toggle drawer if drawer open is different a menuDashboard when update dashboard', () => {
       component.drawerContext = 'stationWidget';
-      component.dashboardData = dataDashboard;
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       component.updateDashboard();
@@ -457,7 +455,6 @@ describe('DashboardComponent', () => {
         maxWidth: '1500px',
         data: dataDashboard.rithmId,
       };
-      component.dashboardData = dataDashboard;
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
@@ -516,7 +513,6 @@ describe('DashboardComponent', () => {
 
   it('should update dashboard widgets', () => {
     const quantityElementsWidget = 2;
-    component.dashboardData = dataDashboard;
     const editDataWidget = {
       widgetItem: {
         rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
@@ -544,7 +540,6 @@ describe('DashboardComponent', () => {
 
   it('should subscribe to DashboardService.updateDataWidget$', () => {
     const quantityElementsWidget = 2;
-    component.dashboardData = dataDashboard;
     const spyMethod = spyOn(component, 'updateDashboardWidget');
     const expectEditDataWidget = {
       widgetItem: dataDashboard.widgets[0],
@@ -649,18 +644,23 @@ describe('DashboardComponent', () => {
     expect(spyService).toHaveBeenCalled();
   }));
 
-  it('should max character the input if equal to 45 characters', () => {
+  it('should show buttons and input when editMode is true and show new dashboard', () => {
     component.viewNewDashboard = true;
     component.editMode = true;
     component.isLoading = false;
     component.errorLoadingDashboard = false;
     component.isCreateNewDashboard = false;
-    component.dashboardData = dataDashboard;
     fixture.detectChanges();
-    const inputNameDashboard =
-      fixture.debugElement.nativeElement.querySelector('#name-dashboard');
-    console.log('PASO', inputNameDashboard.maxlength);
+    const inputNameDashboard = fixture.debugElement.nativeElement.querySelector(
+      '#name-dashboard-input'
+    );
+    const buttonSave =
+      fixture.debugElement.nativeElement.querySelector('#save-button');
+    const buttonCancel =
+      fixture.debugElement.nativeElement.querySelector('#cancel-button');
 
-    expect(inputNameDashboard.maxlength).toBe(45);
+    expect(inputNameDashboard).toBeTruthy();
+    expect(buttonSave).toBeTruthy();
+    expect(buttonCancel).toBeTruthy();
   });
 });
