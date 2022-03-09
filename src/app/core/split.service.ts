@@ -51,6 +51,15 @@ export class SplitService {
   }
 
   /**
+   * Get the widget settings config.
+   *
+   * @returns Split treatment.
+   */
+  public getConfigWidgetsTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_widget_settings_split');
+  }
+
+  /**
    * Get the dashboard library split.
    *
    * @returns Split treatment.
@@ -66,5 +75,16 @@ export class SplitService {
    */
   public getManageUserTreatment(): string {
     return this.splitClient.getTreatment('dashboard_manage_users_split');
+  }
+
+  /**
+   * Get the section Image banner.
+   *
+   * @returns Split treatment.
+   */
+  public getStationUploadBannerTreatment(): string {
+    return this.splitClient.getTreatment(
+      'dashboard_station_banner_upload_split'
+    );
   }
 }

@@ -22,11 +22,17 @@ import { takeUntil } from 'rxjs/operators';
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget[dataWidget][editMode]',
+  selector: 'app-document-widget[dataWidget][editMode][showButtonSetting]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
 export class DocumentWidgetComponent implements OnInit, OnDestroy {
+  /** Edit mode toggle from dashboard. */
+  @Input() editMode = false;
+
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
+
   /** Data widget. */
   private _dataWidget = '';
 
@@ -46,9 +52,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   get dataWidget(): string {
     return this._dataWidget;
   }
-
-  /** Edit mode toggle from dashboard. */
-  @Input() editMode = false;
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();

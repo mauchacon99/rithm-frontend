@@ -66,7 +66,7 @@
             Document not created!
           </div>
         </div>
-        <div *ngIf="editMode" id="gear-icon">
+        <div *ngIf="editMode && showButtonSetting" id="gear-icon">
           <button
             mat-icon-button
             [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
