@@ -64,19 +64,22 @@ export class StationGroupMapElement {
       /* If cursor is hovering over a group boundary set hoverItem to that,
       if cursor is over group name, set hoverItem to that,
       otherwise set it to none. */
-      if (
-        this.pathButtons !== undefined &&
-        this.status === MapItemStatus.Pending
-      ) {
+      if (this.pathButtons !== undefined && this.pathButtons.length > 0) {
         for (const iconButton of this.pathButtons) {
           // If the mouse hovers over the icon button then hoverItem changes.
           if (
             this.isPointInStationGroupPendingButtons(point, iconButton, ctx)
           ) {
             this.hoverItem = iconButton.typeButton;
-            break;
+            if (this.status === MapItemStatus.Pending) break;
+          } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
+            this.hoverItem = StationGroupElementHoverItem.Boundary;
+          } else {
+            this.hoverItem = StationGroupElementHoverItem.None;
           }
         }
+        //Restore the saved context state and undo the changes to it.
+        ctx.restore();
       } else if (ctx.isPointInStroke(this.path, point.x, point.y)) {
         this.hoverItem = StationGroupElementHoverItem.Boundary;
       } else {
