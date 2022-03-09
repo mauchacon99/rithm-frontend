@@ -31,6 +31,10 @@
   }
 }
 
+::ng-deep .mat-menu-panel {
+  min-height: auto !important;
+}
+
 ::ng-deep .mat-drawer-content.static {
   position: static !important;
 }
