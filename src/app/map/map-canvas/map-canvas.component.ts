@@ -2090,7 +2090,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Check if click was on a station group boundary.
-    this.checkStationGroupClick(contextPoint);
+    this.checkStationGroupClick(contextPoint, point);
 
     // Accepted or Cancel a new station group.
     if (
@@ -2129,23 +2129,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapService.updateCreatedStationGroup(stationGroupPending.rithmId);
       }
       return;
-    }
-
-    // Loop through groups to find the group that was clicked.
-    for (const stationGroup of this.stationGroups) {
-      if (
-        stationGroup.hoverItem === StationGroupElementHoverItem.ButtonOption &&
-        this.mapMode !== MapMode.View
-      ) {
-        //set mousePoint to the tracked cursor position.
-        this.mapService.currentMousePoint$.next(point);
-        //On clicked opening the option menu for the edit station group.
-        this.mapService.stationButtonClick$.next({
-          click: MatMenuOption.EditStationGroup,
-          data: [],
-        });
-        return;
-      }
     }
   }
 
@@ -2204,8 +2187,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
+   * @param point The position of mouse click event.
    */
-  checkStationGroupClick(contextPoint: Point): void {
+  checkStationGroupClick(contextPoint: Point, point : Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
@@ -2263,6 +2247,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
       }
+      if (
+        stationGroup.hoverItem === StationGroupElementHoverItem.ButtonOption &&
+        this.mapMode !== MapMode.View
+      ) {
+        //set mousePoint to the tracked cursor position.
+        this.mapService.currentMousePoint$.next(point);
+        //On clicked opening the option menu for the edit station group.
+        this.mapService.stationButtonClick$.next({
+          click: MatMenuOption.EditStationGroup,
+          data: [],
+        });
+        return;
+      }
+
     }
   }
 
