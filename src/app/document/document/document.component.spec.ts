@@ -32,7 +32,7 @@ import {
   QuestionFieldType,
   StationRosterMember,
 } from 'src/models';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
 import { MapComponent } from 'src/app/map/map/map.component';
@@ -473,53 +473,54 @@ describe('DocumentComponent', () => {
     );
   });
 
-  it('should called service to save answers and auto flow the document', () => {
+  it('should called service to save answers and then auto flow the container', async () => {
     const expectedAnswer = component.documentAnswer;
-
-    const expectAutoFlow: DocumentAutoFlow = {
-      stationRithmId: component.documentInformation.stationRithmId,
-      documentRithmId: component.documentInformation.documentRithmId,
-      testMode: false,
-    };
-
     const documentService = TestBed.inject(DocumentService);
+
+    const spySaveContainerAnswers = spyOn(
+      TestBed.inject(DocumentService),
+      'saveDocumentAnswer'
+    ).and.returnValue(of([]));
+
+    const spyUpdateContainerName = spyOn(
+      TestBed.inject(DocumentService),
+      'updateDocumentName'
+    ).and.returnValue(of('New container Name'));
+
+    const spySaveAutoFlowContainer = spyOn(
+      TestBed.inject(DocumentService),
+      'autoFlowDocument'
+    ).and.callThrough();
+
     documentService.documentName$.next({
       baseName: 'New Document Name',
       appendedName: '',
     });
     const documentName = 'New Document Name';
 
-    const spySaveAnswerDocument = spyOn(
-      TestBed.inject(DocumentService),
-      'saveDocumentAnswer'
-    ).and.callThrough();
-    const spyUpdateDocumentName = spyOn(
-      TestBed.inject(DocumentService),
-      'updateDocumentName'
-    ).and.callThrough();
-    const spySaveAutoFlowDocument = spyOn(
-      TestBed.inject(DocumentService),
-      'autoFlowDocument'
-    ).and.callThrough();
+    component.saveAnswersFlowDocument();
 
-    component.autoFlowDocument();
-
-    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(
+    expect(spySaveContainerAnswers).toHaveBeenCalledOnceWith(
       component.documentInformation.documentRithmId,
       expectedAnswer
     );
-    expect(spyUpdateDocumentName).toHaveBeenCalledOnceWith(
+
+    expect(spyUpdateContainerName).toHaveBeenCalledOnceWith(
       component.documentInformation.documentRithmId,
       documentName
     );
-    expect(spySaveAutoFlowDocument).toHaveBeenCalledOnceWith(expectAutoFlow);
+
+    expect(spySaveAutoFlowContainer).toHaveBeenCalled();
   });
 
   it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
     component.documentLoading = false;
     component.documentForm.controls['documentTemplateForm'].setValue('Dev');
     fixture.detectChanges();
-    const spyMethod = spyOn(component, 'autoFlowDocument').and.callThrough();
+    const spyMethod = spyOn(
+      component,
+      'saveAnswersFlowDocument'
+    ).and.callThrough();
     const button =
       fixture.debugElement.nativeElement.querySelector('#document-flow');
 
@@ -539,19 +540,19 @@ describe('DocumentComponent', () => {
 
     xit('should redirect to map if forkJoin run successfully and user is an admin', () => {
       //testing postponed
-      component.autoFlowDocument();
+      component.saveAnswersFlowDocument();
       expect(routerNavigateSpy).toHaveBeenCalledOnceWith('map');
     });
 
     xit('should redirect to dashboard if forkJoin run successfully and user is not an admin', () => {
       //testing postponed
-      component.autoFlowDocument();
+      component.saveAnswersFlowDocument();
       expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
     });
 
     xit('should not redirect if some petition is wrong', () => {
       //testing postponed
-      component.autoFlowDocument();
+      component.saveAnswersFlowDocument();
       expect(routerNavigateSpy).not.toHaveBeenCalled();
     });
   });
