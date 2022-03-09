@@ -27,14 +27,14 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./document-widget.component.scss'],
 })
 export class DocumentWidgetComponent implements OnInit, OnDestroy {
-  /** Data widget. */
-  private _dataWidget = '';
-
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
+
+  /** Data widget. */
+  private _dataWidget = '';
 
   /** Set data for document widget. */
   @Input() set dataWidget(value: string) {

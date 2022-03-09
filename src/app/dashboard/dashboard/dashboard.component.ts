@@ -41,9 +41,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
 
-  /** Show setting button widget. */
-  showButtonSetting = false;
-
   /**
    * Whether the signed in user is an admin or not.
    *
@@ -103,6 +100,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
+
+  /** Show setting button widget. */
+  showButtonSetting = false;
 
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */

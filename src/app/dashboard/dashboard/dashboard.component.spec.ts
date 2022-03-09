@@ -656,14 +656,14 @@ describe('DashboardComponent', () => {
       component.showButtonSetting = false;
       const dataOrganization = TestBed.inject(UserService).user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-      const spyGetManageUserTreatment = spyOn(
+      const spyGetConfigWidgetsTreatment = spyOn(
         splitService,
         'getConfigWidgetsTreatment'
       ).and.callThrough();
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(spyGetManageUserTreatment).toHaveBeenCalled();
+      expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(component.showButtonSetting).toBeTrue();
     });
 

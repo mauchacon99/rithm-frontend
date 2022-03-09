@@ -7,7 +7,6 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
-  MockUserService,
 } from 'src/mocks';
 import {
   ColumnsDocumentInfo,
@@ -24,7 +23,6 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableModule } from '@angular/material/table';
-import { UserService } from 'src/app/core/user.service';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -48,7 +46,6 @@ describe('StationWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
