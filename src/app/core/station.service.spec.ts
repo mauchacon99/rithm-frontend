@@ -1122,5 +1122,13 @@ describe('StationService', () => {
     service.getFlowButtonText(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
