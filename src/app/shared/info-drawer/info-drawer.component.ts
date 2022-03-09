@@ -88,10 +88,7 @@ export class InfoDrawerComponent implements OnDestroy {
       this.mapService.isDrawerOpened$.next(false);
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
-    if (
-      drawerItem === 'stationInfo' &&
-      !this.isDrawerOpen
-    ) {
+    if (drawerItem === 'stationInfo' && !this.isDrawerOpen) {
       this.stationService
         .updateFlowButtonText(
           this.stationDrawer.stationRithmId,
