@@ -642,14 +642,14 @@ export class StationService {
   updateFlowButtonText(
     stationRithmId: string,
     flowButtonText: string
-  ): Observable<StandardStringJSON> {
+  ): Observable<string> {
     const standardBody: StandardStringJSON = { data: flowButtonText };
     return this.http
       .put<StandardStringJSON>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationRithmId}`,
         standardBody
       )
-      .pipe(map((response) => response));
+      .pipe(map((response) => response.data));
   }
 
   /**

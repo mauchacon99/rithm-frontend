@@ -1104,7 +1104,7 @@ describe('StationService', () => {
     service
       .updateFlowButtonText(stationId, flowButtonText)
       .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
+        expect(response).toEqual(expectedResponse.data);
       });
     const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`;
     const req = httpTestingController.expectOne(router);
