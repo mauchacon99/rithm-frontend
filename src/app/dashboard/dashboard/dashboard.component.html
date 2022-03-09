@@ -188,8 +188,10 @@
               >
               </app-station-widget>
               <app-document-widget
-                *ngIf="item.widgetType === widgetType.Document ||
-                  item.widgetType === widgetType.DocumentListBanner"
+                *ngIf="
+                  item.widgetType === widgetType.Document ||
+                  item.widgetType === widgetType.DocumentListBanner
+                "
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
                 [image]="item.image"
