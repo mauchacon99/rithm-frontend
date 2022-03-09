@@ -90,8 +90,7 @@ export class InfoDrawerComponent implements OnDestroy {
     }
     if (
       drawerItem === 'stationInfo' &&
-      !this.isDrawerOpen &&
-      this.mapService.mapMode$.value === MapMode.Build
+      !this.isDrawerOpen
     ) {
       this.stationService
         .updateFlowButtonText(
