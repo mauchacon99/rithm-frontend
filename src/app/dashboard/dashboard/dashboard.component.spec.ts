@@ -325,6 +325,7 @@ describe('DashboardComponent', () => {
     component.errorLoadingDashboard = false;
     component.isCreateNewDashboard = false;
     component.isLoading = false;
+    component.isAddWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
       name: 'Organization 1',
@@ -643,10 +644,13 @@ describe('DashboardComponent', () => {
     expect(component.editMode).toBeTrue();
     expect(spyService).toHaveBeenCalled();
   }));
+
   describe('Testing split.io', () => {
     let splitService: SplitService;
+    let userService: UserService;
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
     });
     it('should call split service', () => {
       component.showButtonSetting = false;
@@ -681,6 +685,7 @@ describe('DashboardComponent', () => {
     it('should catch error the button setting splits ', () => {
       const dataOrganization = TestBed.inject(UserService).user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
       splitService.sdkReady$.error('error');
       const errorService = spyOn(
         TestBed.inject(ErrorService),
@@ -689,7 +694,64 @@ describe('DashboardComponent', () => {
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
+
       expect(component.showButtonSetting).toBeFalse();
     });
+
+it('should catch error the splits for the menu', () => {
+  const dataOrganization = userService.user.organization;
+  const splitInitMethod = spyOn(splitService, 'initSdk');
+      expect(component.isAddWidget).toBeFalse();
+      expect(component.viewNewDashboard).toBeFalse();
+    });
+
+  it('should not show the button add widget in edit mode', () => {
+    component.viewNewDashboard = true;
+    component.editMode = true;
+    component.isAddWidget = false;
+    component.dashboardData = {
+      rithmId: '123654-789654-7852',
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
+    fixture.detectChanges();
+
+    const btn = fixture.nativeElement.querySelector('#add-widget-button');
+    expect(btn).toBeNull();
   });
+    it('should get splits for the viewNewDashboard and isAddWidget', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk');
+      const spyGetDashboardTreatment = spyOn(
+        splitService,
+        'getDashboardTreatment'
+      ).and.callThrough();
+      const spyGetDashboardLibraryTreatment = spyOn(
+        splitService,
+        'getDashboardLibraryTreatment'
+      ).and.callThrough();
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetDashboardTreatment).toHaveBeenCalled();
+      expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
+      expect(component.viewNewDashboard).toBeTrue();
+      expect(component.isAddWidget).toBeTrue();
+    });
+});
 });

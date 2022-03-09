@@ -95,6 +95,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Error Loading dashboard. */
   errorLoadingDashboard = false;
 
+  /** View the button Add Widget in edit mode. */
+  isAddWidget = false;
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
@@ -211,6 +214,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: () => {
         this.viewNewDashboard =
           this.splitService.getDashboardTreatment() === 'on';
+        this.isAddWidget =
+          this.splitService.getDashboardLibraryTreatment() === 'on';
         if (this.viewNewDashboard) {
           this.getParams();
         }
