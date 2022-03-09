@@ -649,6 +649,7 @@ describe('DashboardComponent', () => {
       splitService = TestBed.inject(SplitService);
     });
     it('should call split service', () => {
+      component.showButtonSetting = false;
       const dataOrganization = TestBed.inject(UserService).user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
       const spyGetManageUserTreatment = spyOn(
@@ -659,6 +660,22 @@ describe('DashboardComponent', () => {
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetManageUserTreatment).toHaveBeenCalled();
+      expect(component.showButtonSetting).toBeTrue();
+    });
+
+    it('should call split service method getDashboardTreatment', () => {
+      component.viewNewDashboard = false;
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+      const spyGetManageUserTreatment = spyOn(
+        splitService,
+        'getDashboardTreatment'
+      ).and.callThrough();
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetManageUserTreatment).toHaveBeenCalled();
+      expect(component.viewNewDashboard).toBeTrue();
     });
 
     it('should catch error the button setting splits ', () => {
@@ -672,6 +689,7 @@ describe('DashboardComponent', () => {
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
+      expect(component.showButtonSetting).toBeFalse();
     });
   });
 });
