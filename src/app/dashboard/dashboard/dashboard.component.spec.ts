@@ -20,9 +20,7 @@ import { MockComponent } from 'ng-mocks';
 import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from 'src/app/dashboard/header/header.component';
 import { PriorityQueueComponent } from 'src/app/dashboard/priority-queue/priority-queue.component';
-import {
-  PreviouslyStartedDocumentsComponent
-} from '../previously-started-documents/previously-started-documents.component';
+import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
 import { MyStationsComponent } from '../my-stations/my-stations.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
@@ -700,7 +698,6 @@ describe('DashboardComponent', () => {
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
       expect(component.viewNewDashboard).toBeTrue();
       expect(component.isAddWidget).toBeTrue();
-
     });
 
     it('should catch error the splits for the menu', () => {
