@@ -6,8 +6,16 @@ import { MockComponent } from 'ng-mocks';
 import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-widget-drawer.component';
 import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockPopupService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockPopupService,
+  MockSplitService,
+  MockUserService,
+} from 'src/mocks';
 import { WidgetType } from 'src/models';
+import { ErrorService } from 'src/app/core/error.service';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -23,6 +31,9 @@ describe('WidgetDrawerComponent', () => {
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
@@ -136,6 +147,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should show section upload image and defined input in button', () => {
+    component.showImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
     fixture.detectChanges();
     const uploadImageButton = fixture.debugElement.nativeElement.querySelector(
@@ -150,6 +162,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should remove image selected', () => {
+    component.showImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
     component.imageSelected = new File(new Array<Blob>(), 'image', {
       type: 'image/jpeg',
@@ -175,6 +188,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should show alert delete and remove image in widget', async () => {
+    component.showImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
     component.imageSelected = new File([''], 'name', { type: 'text/png' });
     fixture.detectChanges();
@@ -212,5 +226,56 @@ describe('WidgetDrawerComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataExpect);
     expect(spyRemoveSelectedFile).toHaveBeenCalled();
     expect(component.imageSelected).toBeNull();
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+    });
+
+    it('should get split for image banner.', () => {
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(
+        TestBed.inject(SplitService),
+        'initSdk'
+      ).and.callThrough();
+
+      const method = spyOn(
+        TestBed.inject(SplitService),
+        'getStationUploadBannerTreatment'
+      ).and.callThrough();
+
+      const sectionImageBanner = fixture.nativeElement.querySelector(
+        '#section-image-banner'
+      );
+      expect(sectionImageBanner).toBeNull();
+
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(sectionImageBanner).toBeDefined();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+      expect(component.showImageBanner).toBeTrue();
+    });
+
+    it('should show error if get split fail.', () => {
+      component.ngOnInit();
+      const splitInitMethod = spyOn(
+        TestBed.inject(SplitService),
+        'initSdk'
+      ).and.callThrough();
+
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+
+      splitService.sdkReady$.error('error');
+
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalled();
+      expect(errorService).toHaveBeenCalled();
+    });
   });
 });
