@@ -1,5 +1,7 @@
-
-<div *ngIf="isMobile && !mobileSearchOpen" class="bg-white shadow-md rounded border border-solid mb-2">
+<div
+  *ngIf="isMobile && !mobileSearchOpen"
+  class="bg-white shadow-md rounded border border-solid mb-2"
+>
   <button
     class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300"
     id="mobileSearchButton"
@@ -14,7 +16,7 @@
 <div
   class="bg-white"
   [ngClass]="{
-    'relative': !isMobile,
+    relative: !isMobile,
     'fixed left-0 top-calc right-0 h-full': mobileSearchOpen
   }"
   *ngIf="!isMobile || mobileSearchOpen"
