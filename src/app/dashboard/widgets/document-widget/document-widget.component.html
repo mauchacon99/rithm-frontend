@@ -26,7 +26,12 @@
   </ng-container>
 
   <!-- Header widget -->
-  <div class="w-full p-2 flex flex-col h-full">
+  <div
+    class="w-full px-2 pb-2 flex flex-col h-full"
+    [ngClass]="{
+      'pt-2': widgetType !== typesWidget.DocumentListBanner
+    }"
+  >
     <!--  Header Container -->
     <div>
       <div class="flex justify-between items-center">
