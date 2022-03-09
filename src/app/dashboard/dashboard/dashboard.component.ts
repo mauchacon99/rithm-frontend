@@ -92,6 +92,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Error Loading dashboard. */
   errorLoadingDashboard = false;
 
+  /** View the button Add Widget in edit mode. */
+  isAddWidget = false;
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
@@ -209,8 +212,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private split(): void {
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        const treatment = this.splitService.getDashboardTreatment();
-        this.viewNewDashboard = treatment === 'on';
+        this.viewNewDashboard =
+          this.splitService.getDashboardTreatment() === 'on';
+        this.isAddWidget =
+          this.splitService.getDashboardLibraryTreatment() === 'on';
         if (this.viewNewDashboard) {
           this.getParams();
         }
@@ -539,7 +544,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openDialogAddWidget(): void {
     this.toggleDrawerOnlyForWidgets();
     this.dialog.open(AddWidgetModalComponent, {
-      panelClass: ['w-11/12', 'sm:w-4/5'],
+      panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
       data: this.dashboardData.rithmId,
     });

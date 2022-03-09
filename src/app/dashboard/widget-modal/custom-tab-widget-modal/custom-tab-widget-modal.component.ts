@@ -27,9 +27,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
-  /** Variable to show if the error getting tab document list. */
-  errorLoadingDocumentTab = false;
-
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
 
@@ -39,30 +36,8 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Error loading petition station tab. */
   errorLoadingStationTab = false;
 
-  /* Value to simulate list of groups waiting final method will be incorporated. */
-  itemListWidgetModalGroups: ItemListWidgetModal[] = [
-    {
-      rithmId: '7',
-      name: 'Groupygroup',
-      isChained: false,
-      totalStations: 2,
-      totalSubGroups: 5,
-    },
-    {
-      rithmId: '7',
-      name: 'Groupygroup',
-      isChained: true,
-      totalStations: 2,
-      totalSubGroups: 3,
-    },
-    {
-      rithmId: '7',
-      name: 'Groupygroup',
-      isChained: false,
-      totalStations: 2,
-      totalSubGroups: 9,
-    },
-  ];
+  /** Variable to show if the error getting tab document list. */
+  errorLoadingDocumentTab = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -75,10 +50,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   ngOnInit(): void {
     this.getDocumentTabList();
     this.getStationTabList();
-    /*Temporal function to simulate list of groups waiting final method will be incorporated. */
-    this.dataSourceTableGroup = new MatTableDataSource(
-      this.itemListWidgetModalGroups
-    );
+    this.getGroupStationTabList();
   }
 
   /**
@@ -98,7 +70,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
     this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
-      .getDocumentTabList(this.dashboardRithmId)
+      .getDocumentTabList()
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
@@ -139,6 +111,28 @@ export class CustomTabWidgetModalComponent implements OnInit {
         error: (error: unknown) => {
           this.isLoadingStationTab = false;
           this.errorLoadingStationTab = true;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the list for the groups the stations tabs.
+   */
+  private getGroupStationTabList(): void {
+    this.dashboardService
+      .getGroupStationTabList()
+      .pipe(first())
+      .subscribe({
+        next: (itemsListGroupsStation) => {
+          this.dataSourceTableGroup = new MatTableDataSource(
+            itemsListGroupsStation
+          );
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

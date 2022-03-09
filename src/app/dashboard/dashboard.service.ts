@@ -265,37 +265,12 @@ export class DashboardService {
   /**
    * Get list tab documents.
    *
-   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
-    const itemListWidgetModal: ItemListWidgetModal[] = [
-      {
-        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        name: 'Document Name',
-        stationName: 'Stationy Name that is namey',
-        stationGroupName: 'Groupygroup',
-        isChained: false,
-      },
-      {
-        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        name: 'Document Name',
-        stationName: 'Stationy Name that is namey',
-        stationGroupName: 'Groupygroup',
-        isChained: true,
-      },
-      {
-        rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        name: 'Document Name',
-        stationName: 'Stationy Name that is namey',
-        stationGroupName: 'Groupygroup',
-        isChained: false,
-      },
-    ];
-    return of(itemListWidgetModal).pipe(delay(1000));
+  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
+    return this.http.get<ItemListWidgetModal[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+    );
   }
 
   /**
@@ -307,5 +282,38 @@ export class DashboardService {
     return this.http.get<ItemListWidgetModal[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
     );
+  }
+
+  /**
+   * Get the list for the groups the stations tabs.
+   *
+   * @returns The list the groups.
+   */
+  getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 5,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: true,
+        totalStations: 2,
+        totalSubGroups: 3,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 9,
+      },
+    ];
+
+    return of(itemListWidgetModal).pipe(delay(1000));
   }
 }

@@ -505,12 +505,9 @@ export class MockDashboardService {
   /**
    * Get list tab documents.
    *
-   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
+  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
@@ -550,6 +547,39 @@ export class MockDashboardService {
         groupName: 'Groupygroup',
         isChained: false,
         totalDocuments: 2,
+      },
+    ];
+
+    return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Get the list for the groups the stations tabs.
+   *
+   * @returns The list the groups.
+   */
+  getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
+    const itemListWidgetModal: ItemListWidgetModal[] = [
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 5,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: true,
+        totalStations: 2,
+        totalSubGroups: 3,
+      },
+      {
+        rithmId: '7',
+        name: 'Groupygroup',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 9,
       },
     ];
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as SplitIO from '@splitsoftware/splitio-browserjs/types/splitio';
 import { Subject } from 'rxjs';
+
 /** Split.io service. */
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,24 @@ export class MockSplitService {
    * @returns Split treatment.
    */
   public getDashboardTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the dashboard library split.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardLibraryTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the option the menu dashboard for hidden o show manage members.
+   *
+   * @returns Split treatment.
+   */
+  public getManageUserTreatment(): string {
     return 'on';
   }
 }

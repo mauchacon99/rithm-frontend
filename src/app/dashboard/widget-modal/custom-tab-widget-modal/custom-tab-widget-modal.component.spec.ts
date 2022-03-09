@@ -12,6 +12,7 @@ import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -35,6 +36,7 @@ describe('CustomTabWidgetModalComponent', () => {
         MatTabsModule,
         NoopAnimationsModule,
         MatTableModule,
+        MatInputModule,
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
@@ -166,5 +168,32 @@ describe('CustomTabWidgetModalComponent', () => {
     );
     expect(errorMessage).toBeTruthy();
     expect(component.errorLoadingDocumentTab).toBeTrue();
+  });
+
+  it('should get list data for groups the stations', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getGroupStationTabList'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error for list tab groups the stations', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getGroupStationTabList'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 });

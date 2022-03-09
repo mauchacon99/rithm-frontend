@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, MatMenuOption, Point, User } from 'src/models';
+import { CenterPanType, MapMode, MatMenuOption, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -182,6 +182,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         ) {
           //On right clicked open the option menu for the new station.
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+        } else if (
+          clickRes.click === MatMenuOption.EditStationGroup &&
+          this.mapService.mapMode$.value !== MapMode.View &&
+          this.mapService.mapMode$.value !== MapMode.StationGroupAdd
+        ) {
+          //On click of station group option button, the edit station group menu opens.
+          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
         }
       });
 
@@ -355,7 +362,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Increment centerCount to show that more centering needs to be done.
     this.mapService.centerCount$.next(1);
     //Call method to run logic for centering.
-    this.mapService.center();
+    this.mapService.center(CenterPanType.MapCenter);
   }
 
   /**
@@ -399,6 +406,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     if (this.clickMode === MatMenuOption.OptionButton) {
       this.menuX = point.x - 15;
       this.menuY = point.y + 63;
+    } else if (this.clickMode === MatMenuOption.EditStationGroup) {
+      // for edit station group option click on map.
+      this.menuX = point.x + 10;
+      this.menuY = point.y + 30;
     } else {
       // for add new station on right click.
       this.menuX = point.x;
@@ -522,6 +533,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const coords = { x: this.menuX - 5, y: this.menuY - 65 };
     // creates new station.
     this.mapService.createNewStation(coords);
+    this.mapService.matMenuStatus$.next(true);
+  }
+
+  /**
+   * Method called when a user clicks the edit station group.
+   */
+  editStationGroup(): void {
     this.mapService.matMenuStatus$.next(true);
   }
 
