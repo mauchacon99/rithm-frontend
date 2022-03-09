@@ -108,7 +108,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
     //Check the screen's DPI.
     const pixelRatio = window.devicePixelRatio || 1;
 
-    return window.innerWidth <= 450 * pixelRatio;
+    return window.innerWidth <= 650 * pixelRatio;
   }
 
   /**

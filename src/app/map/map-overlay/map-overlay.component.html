@@ -73,10 +73,7 @@
             Publish
           </button>
         </span>
-        <app-map-search
-          class="fixed md:static z-20 top-36 -mt-1"
-          [isLoading]="mapDataLoading"
-        ></app-map-search>
+
       </div>
     </mat-drawer-content>
   </mat-drawer-container>
@@ -107,6 +104,10 @@
     View only. Zoom in to edit.
   </div>
 </div>
+<app-map-search
+  class="absolute z-20 top-36 right-2"
+  [isLoading]="mapDataLoading"
+></app-map-search>
 <div class="absolute flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">
   <div class="bg-white shadow-md rounded border border-solid mb-2">
     <button
