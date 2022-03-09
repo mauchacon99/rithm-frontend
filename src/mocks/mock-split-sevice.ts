@@ -74,4 +74,13 @@ export class MockSplitService {
   public getStationUploadBannerTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the station document split.
+   *
+   * @returns Split treatment.
+   */
+  public getStationDocumentTreatment(): string {
+    return 'on';
+  }
 }
