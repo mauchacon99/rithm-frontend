@@ -10,4 +10,7 @@ export enum MatMenuOption {
 
   /** For map to add new station on map. */
   NewStation,
+
+  /** For map to edit station group option button. */
+  EditStationGroup,
 }
