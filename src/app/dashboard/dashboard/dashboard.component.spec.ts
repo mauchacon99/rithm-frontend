@@ -323,6 +323,9 @@ describe('DashboardComponent', () => {
     component.isLoading = false;
     component.viewNewDashboard = true;
     component.editMode = true;
+    component.errorLoadingDashboard = false;
+    component.isCreateNewDashboard = false;
+    component.isLoading = false;
     component.isAddWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
@@ -703,8 +706,69 @@ describe('DashboardComponent', () => {
       splitService = TestBed.inject(SplitService);
       userService = TestBed.inject(UserService);
     });
+    it('should call split service', () => {
+      component.showButtonSetting = false;
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+      const spyGetConfigWidgetsTreatment = spyOn(
+        splitService,
+        'getConfigWidgetsTreatment'
+      ).and.callThrough();
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
+      expect(component.showButtonSetting).toBeTrue();
+    });
 
-    it('should get splits for the viewNewDashboard and isAddWidget', () => {
+    it('should catch split error ', () => {
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(component.showButtonSetting).toBeFalse();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+      expect(component.isAddWidget).toBeFalse();
+      expect(component.viewNewDashboard).toBeFalse();
+    });
+
+    it('should not show the button add widget in edit mode', () => {
+      component.viewNewDashboard = true;
+      component.editMode = true;
+      component.isAddWidget = false;
+      component.dashboardData = {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 1',
+        type: RoleDashboardMenu.Company,
+        widgets: [
+          {
+            rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      };
+      fixture.detectChanges();
+
+      const btn = fixture.nativeElement.querySelector('#add-widget-button');
+      expect(btn).toBeNull();
+    });
+    it('should call split service method getDashboardTreatment', () => {
+      component.viewNewDashboard = false;
       const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk');
       const spyGetDashboardTreatment = spyOn(
@@ -718,25 +782,9 @@ describe('DashboardComponent', () => {
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetDashboardTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
-      expect(component.viewNewDashboard).toBeTrue();
-      expect(component.isAddWidget).toBeTrue();
-    });
-
-    it('should catch error the splits for the menu', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk');
-      splitService.sdkReady$.error('error');
-      const errorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
-      ).and.callThrough();
-      component.ngOnInit();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
-      expect(component.isAddWidget).toBeFalse();
-      expect(component.viewNewDashboard).toBeFalse();
     });
   });
 });

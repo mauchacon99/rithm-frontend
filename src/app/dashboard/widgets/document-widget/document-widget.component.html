@@ -23,7 +23,7 @@
       <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
         {{ dataDocumentWidget.documentName }}
       </h3>
-      <div *ngIf="editMode" id="gear-icon-document">
+      <div *ngIf="editMode && showButtonSetting" id="gear-icon-document">
         <button
           mat-icon-button
           [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
