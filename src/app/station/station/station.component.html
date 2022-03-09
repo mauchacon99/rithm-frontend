@@ -7,7 +7,7 @@
   class="h-full info-drawer-station"
 >
   <!-- right match drawer -->
-  <mat-drawer #drawer mode="over" position="end" disableClose>
+  <mat-drawer #rightDrawer mode="over" position="end" disableClose>
     <app-detail-drawer
       *ngIf="drawerContext === 'comments' || drawerContext === 'history'"
     ></app-detail-drawer>

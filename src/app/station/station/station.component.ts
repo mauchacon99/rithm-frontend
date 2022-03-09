@@ -45,7 +45,7 @@ export class StationComponent
   implements OnInit, OnDestroy, AfterContentChecked
 {
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('drawer', { static: true })
+  @ViewChild('rightDrawer', { static: true })
   drawer!: MatDrawer;
 
   /** Indicate error when saving flow rule. */
