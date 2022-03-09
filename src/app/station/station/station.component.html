@@ -25,9 +25,7 @@
     [opened]="isOpenDrawerLeft"
     disableClose
   >
-    <app-build-drawer
-      *ngIf="drawerLeftContext === 'buildDrawer'"
-    ></app-build-drawer>
+    <app-build-drawer></app-build-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
@@ -285,20 +283,12 @@
                       <div class="flex">
                         <button
                           type="button"
-                          (click)="
-                            drawerLeftContext === 'buildDrawer'
-                              ? toggleLeftDrawer('')
-                              : toggleLeftDrawer('buildDrawer')
-                          "
+                          (click)="toggleLeftDrawer()"
                           class="px-2 mr-2"
                         >
                           <span
-                            class="fas fa-tools fa-lg"
-                            [ngClass]="[
-                              drawerLeftContext === 'buildDrawer'
-                                ? 'text-brightBlue'
-                                : 'text-secondary-500'
-                            ]"
+                            class="fas fa-tools fa-lg text-secondary-500"
+                            [ngClass]="{ 'text-accent-600': isOpenDrawerLeft }"
                           ></span>
                         </button>
                         <mat-divider [vertical]="true"></mat-divider>

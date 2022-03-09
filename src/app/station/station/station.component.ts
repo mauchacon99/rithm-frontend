@@ -109,9 +109,6 @@ export class StationComponent
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
-  /** The context of what is open in the right side drawer. */
-  drawerLeftContext: '' | 'buildDrawer' = '';
-
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'scrollVertical',
@@ -800,12 +797,9 @@ export class StationComponent
 
   /**
    * Toggles the open state for drawer mode.
-   *
-   * @param drawerItem The drawer item to toggle.
    */
-  toggleLeftDrawer(drawerItem: '' | 'buildDrawer'): void {
-    this.drawerLeftContext = drawerItem;
-    this.isOpenDrawerLeft = drawerItem ? true : false;
+  toggleLeftDrawer(): void {
+    this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
   }
 
   /**
