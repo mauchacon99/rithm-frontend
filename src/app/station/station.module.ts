@@ -33,6 +33,7 @@ import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-fie
 import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.module';
 import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.module';
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
+import { DataLinkFieldModule } from 'src/app/shared/fields/data-link-field/data-link-field.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
@@ -78,6 +79,7 @@ import { BuildDrawerComponent } from './build-drawer/build-drawer.component';
     DateFieldModule,
     FileFieldModule,
     SelectFieldModule,
+    DataLinkFieldModule,
     MatTooltipModule,
     GridsterModule,
     MatDividerModule,
