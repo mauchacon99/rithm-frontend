@@ -67,7 +67,7 @@ describe('FileFieldComponent', () => {
   });
 
   it('should require an input in file field', () => {
-    const file = component.fileFieldForm.controls['file'];
+    const file = component.fileFieldForm.controls['fileType'];
     expect(component.field.questionType).toBeTruthy();
     expect(file.valid).toBeFalse();
     expect(file.hasError('required')).toBeTrue();

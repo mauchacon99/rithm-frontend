@@ -26,4 +26,13 @@ export class MockSplitService {
   public getDashboardTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the option the menu dashboard for hidden o show manage members.
+   *
+   * @returns Split treatment.
+   */
+  public getManageUserTreatment(): string {
+    return 'on';
+  }
 }

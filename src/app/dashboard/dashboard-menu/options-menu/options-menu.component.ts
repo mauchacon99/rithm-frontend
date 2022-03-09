@@ -12,11 +12,15 @@ import { PopupService } from 'src/app/core/popup.service';
  * Options menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-options-menu[dashboardRole]',
+  selector: 'app-options-menu[dashboardRole][isManageMember]',
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
 export class OptionsMenuComponent implements OnInit, OnDestroy {
+  /** Parameter for hide or show option manage member. */
+  @Input() isManageMember = false;
+
+  /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /**
