@@ -30,6 +30,15 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Data widget. */
   private _dataWidget = '';
 
+  /** Edit mode toggle from dashboard. */
+  @Input() editMode = false;
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
+
   /** Set data for document widget. */
   @Input() set dataWidget(value: string) {
     this._dataWidget = value;
@@ -46,15 +55,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   get dataWidget(): string {
     return this._dataWidget;
   }
-
-  /** Edit mode toggle from dashboard. */
-  @Input() editMode = false;
-
-  /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<number>();
-
-  /** Show setting button widget. */
-  @Input() showButtonSetting = false;
 
   /**
    * Whether the drawer is open.
