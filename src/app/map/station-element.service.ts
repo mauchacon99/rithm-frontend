@@ -164,10 +164,8 @@ export class StationElementService {
       dragItem === MapDragItem.Station &&
       station.dragging
     ) {
-      ctx.shadowColor = '#666666';
-      ctx.shadowOffsetX = shadowEquation(7);
-      ctx.shadowOffsetY = shadowEquation(7);
-      ctx.shadowBlur = shadowEquation(10);
+      ctx.shadowOffsetY = shadowEquation(20);
+      ctx.shadowBlur = shadowEquation(40);
     }
     if (station.drawerOpened) {
       ctx.shadowColor = '#666666';
