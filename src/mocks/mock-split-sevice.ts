@@ -39,7 +39,8 @@ export class MockSplitService {
     return 'on';
   }
 
-  /** Get the dashboard library split.
+  /**
+   * Get the dashboard library split.
    *
    * @returns Split treatment.
    */

@@ -59,7 +59,8 @@ export class SplitService {
     return this.splitClient.getTreatment('dashboard_widget_settings_split');
   }
 
-  /** Get the dashboard library split.
+  /**
+   * Get the dashboard library split.
    *
    * @returns Split treatment.
    */
