@@ -67,4 +67,15 @@ export class SplitService {
   public getManageUserTreatment(): string {
     return this.splitClient.getTreatment('dashboard_manage_users_split');
   }
+
+  /**
+   * Get the section Image banner.
+   *
+   * @returns Split treatment.
+   */
+  public getStationUploadBannerTreatment(): string {
+    return this.splitClient.getTreatment(
+      'dashboard_station_banner_upload_split'
+    );
+  }
 }
