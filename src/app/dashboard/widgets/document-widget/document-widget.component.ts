@@ -13,6 +13,7 @@ import {
   ColumnFieldsWidget,
   DocumentWidget,
   QuestionFieldType,
+  WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -22,11 +23,17 @@ import { takeUntil } from 'rxjs/operators';
  * Component for list field the document how widget.
  */
 @Component({
-  selector: 'app-document-widget[dataWidget][editMode]',
+  selector: 'app-document-widget[dataWidget][editMode][widgetType]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
 export class DocumentWidgetComponent implements OnInit, OnDestroy {
+  /** To load dom by WidgetType. */
+  @Input() widgetType: WidgetType = WidgetType.Document;
+
+  /** Image to banner. */
+  @Input() image: string | File | null | undefined;
+
   /** Data widget. */
   private _dataWidget = '';
 
@@ -66,6 +73,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Data document list for widget. */
   dataDocumentWidget!: DocumentWidget;
+
+  /** Enum with types widget station. */
+  typesWidget = WidgetType;
 
   /** Type of drawer opened. */
   drawerContext!: string;
