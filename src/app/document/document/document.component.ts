@@ -142,6 +142,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** The all document answers the document actually. */
   documentAnswer: DocumentAnswer[] = [];
 
+  /** Get flow button name. */
+  flowButtonName = '';
+
   constructor(
     private documentService: DocumentService,
     private stationService: StationService,
@@ -532,6 +535,27 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           },
         });
     }
+  }
+
+  /**
+   * Get flow button name.
+   */
+  getFlowButtonName(): void {
+    this.stationService
+      .getFlowButtonText(this.documentInformation.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (flowButtonText) => {
+          this.flowButtonName = flowButtonText || 'Flow';
+        },
+        error: (error: unknown) => {
+          this.flowButtonName = 'Flow';
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
