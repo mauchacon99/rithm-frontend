@@ -148,4 +148,69 @@ describe('WidgetDrawerComponent', () => {
     );
     expect(uploadImageInput).toBeDefined();
   });
+
+  it('should remove image selected', () => {
+    component.widgetType = WidgetType.StationTableBanner;
+    component.imageSelected = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    fixture.detectChanges();
+    const spyOnRemoveSelectedFile = spyOn(
+      component,
+      'removeSelectedFile'
+    ).and.callThrough();
+    component.removeSelectedFile();
+    expect(spyOnRemoveSelectedFile).toHaveBeenCalledOnceWith();
+    expect(component.imageSelected).toBeNull();
+    expect(component.fileInputFile.nativeElement.value).toBe('');
+  });
+
+  it('should call onSelectFile', () => {
+    const spyMethod = spyOn(component, 'onSelectFile').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'text/png' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.onSelectFile(mockEvt as unknown as Event);
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.imageSelected).not.toBeNull();
+  });
+
+  it('should show alert delete and remove image in widget', async () => {
+    component.widgetType = WidgetType.StationTableBanner;
+    component.imageSelected = new File([''], 'name', { type: 'text/png' });
+    fixture.detectChanges();
+
+    const dataExpect = {
+      title: 'Remove Image?',
+      message: 'This cannot be undone.',
+      important: true,
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+    };
+
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    const spyConfirmImageDelete = spyOn(
+      component,
+      'confirmImageDelete'
+    ).and.callThrough();
+
+    const spyRemoveSelectedFile = spyOn(
+      component,
+      'removeSelectedFile'
+    ).and.callThrough();
+
+    const btnDelete = fixture.nativeElement.querySelector(
+      '#remove-selected-image'
+    );
+
+    await component.confirmImageDelete();
+    expect(btnDelete).toBeTruthy();
+    expect(spyConfirmImageDelete).toHaveBeenCalled();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataExpect);
+    expect(spyRemoveSelectedFile).toHaveBeenCalled();
+    expect(component.imageSelected).toBeNull();
+  });
 });

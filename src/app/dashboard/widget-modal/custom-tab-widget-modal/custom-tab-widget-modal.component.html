@@ -1,4 +1,28 @@
-<div class="mt-10 tabs-group">
+<!-- Search Input   -->
+<div class="mt-4 bg-white">
+  <div>
+    To build a custom widget, first select what item you'd like to pull data
+    from.
+  </div>
+  <div class="pt-2">
+    <mat-form-field class="w-full sm:w-80 search-tabs" appearance="outline">
+      <input
+        type="text"
+        matInput
+        placeholder="Search"
+        id="search-tabs"
+        data-testid="search-tabs"
+        maxlength="55"
+      />
+      <span matPrefix
+        ><i class="fas fa-search p-1 text-secondary-300"></i
+      ></span>
+    </mat-form-field>
+  </div>
+</div>
+
+<!-- Tabs Group -->
+<div class="tabs-group">
   <mat-button-toggle-group
     #colorToggle="matButtonToggleGroup"
     value="primary"
@@ -31,8 +55,49 @@
   </mat-button-toggle-group>
 
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
-    <mat-tab> Content 1 </mat-tab>
-    <mat-tab> Content 2 </mat-tab>
-    <mat-tab> Content 3 </mat-tab>
+    <mat-tab>
+      <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain documents.
+        </p>
+      </div>
+      <div *ngIf="isLoadingDocumentTab" class="loading">
+        <app-loading-indicator
+          id="loading-tab-document-list"
+        ></app-loading-indicator>
+      </div>
+      <div *ngIf="!errorLoadingDocumentTab && !isLoadingDocumentTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableDocument"
+          [itemType]="'document'"
+        ></app-item-list-widget-modal>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain stations.
+        </p>
+      </div>
+      <div
+        *ngIf="isLoadingStationTab"
+        id="loading-station-list-tab"
+        class="loading"
+      >
+        <app-loading-indicator></app-loading-indicator>
+      </div>
+      <div *ngIf="!errorLoadingStationTab && !isLoadingStationTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableStations"
+          [itemType]="'station'"
+        ></app-item-list-widget-modal>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <app-item-list-widget-modal
+        [itemListWidgetModal]="dataSourceTableGroup"
+        [itemType]="'group'"
+      ></app-item-list-widget-modal>
+    </mat-tab>
   </mat-tab-group>
 </div>

@@ -37,11 +37,11 @@ import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 export class DateFieldComponent
   implements OnInit, ControlValueAccessor, Validator
 {
-  /** The form to add this field in the template. */
-  dateFieldForm!: FormGroup;
-
   /** The document field to display. */
   @Input() field!: Question;
+
+  /** The form to add this field in the template. */
+  dateFieldForm!: FormGroup;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;

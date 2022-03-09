@@ -4,7 +4,8 @@
     appearance="outline"
     [ngClass]="{
       'long-text': field.questionType === fieldTypeEnum.LongText,
-      'information-field': field.questionType === fieldTypeEnum.Instructions
+      'information-field': field.questionType === fieldTypeEnum.Instructions,
+      widgetItem: widgetItem
     }"
   >
     <mat-label>{{ labelTag }}</mat-label>
@@ -77,6 +78,10 @@
         *ngIf="field.questionType === fieldTypeEnum.Instructions"
         class="fas fa-sticky-note"
       ></i>
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.File"
+        class="fa-solid fa-tag"
+      ></i>
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
       <button mat-icon-button (click)="removeField(field)">
@@ -87,20 +92,30 @@
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput"
         matInput
-        type="{{ toolBar ? 'text' : field.questionType }}"
+        type="{{
+          toolBar || field.questionType === fieldTypeEnum.File
+            ? 'text'
+            : field.questionType
+        }}"
         [required]="field.isRequired"
         [formControlName]="field.questionType"
         autocomplete="off"
         (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        [readonly]="widgetItem"
       />
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && isInput"
         matInput
-        type="{{ toolBar ? 'text' : field.questionType }}"
+        type="{{
+          toolBar || field.questionType === fieldTypeEnum.File
+            ? 'text'
+            : field.questionType
+        }}"
         [required]="field.isRequired"
         [formControlName]="field.questionType"
         autocomplete="off"
         (keyup)="updateFieldAnswer()"
+        [readonly]="widgetItem"
       />
       <textarea
         *ngIf="field.questionType === fieldTypeEnum.Instructions && !isInput"
@@ -119,11 +134,16 @@
       <input
         *ngIf="field.questionType !== fieldTypeEnum.LongText"
         matInput
-        type="{{ toolBar ? 'text' : field.questionType }}"
+        type="{{
+          toolBar || field.questionType === fieldTypeEnum.File
+            ? 'text'
+            : field.questionType
+        }}"
         [required]="field.isRequired"
         [formControlName]="field.questionType"
         autocomplete="off"
         (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        [readonly]="widgetItem"
       />
       <textarea
         *ngIf="field.questionType === fieldTypeEnum.LongText"

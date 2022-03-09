@@ -44,6 +44,7 @@ import {
   CHAIN_CORNER_RADIUS,
   SCALE_REDUCED_RENDER,
   CONNECTION_LINE_WIDTH_ZOOM_OUT,
+  ICON_STATION_GROUP_OPTION,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -62,6 +63,12 @@ export class StationGroupElementService {
 
   /** The default offset value for the pending station group animation. */
   private offset = 0;
+
+  /** The location a tooltip should be drawn. */
+  private tooltipPosition: Point = { x: -1, y: -1 };
+
+  /** Whether a tooltip should be drawn. */
+  private isTooltipDisplayed = false;
 
   /** The Dimensions of the canvas. */
   canvasDimensions: {
@@ -93,6 +100,24 @@ export class StationGroupElementService {
     }
     //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
+    //If there is a tooltip hovered, draw that in the correct position.
+    if (this.isTooltipDisplayed) {
+      // Check if there still hovering over a group boundary.
+      const hover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+          stationGroup.disabled &&
+          !stationGroup.selected &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      );
+      if (hover) {
+        this.drawStationGroupToolTip(this.tooltipPosition);
+      } else {
+        this.isTooltipDisplayed = false;
+        this.tooltipPosition = { x: -1, y: -1 };
+      }
+    }
   }
 
   /**
@@ -142,16 +167,6 @@ export class StationGroupElementService {
       // Render station group name depending on the zoom level.
       if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
         this.drawStationGroupName(stationGroup);
-      }
-
-      if (
-        (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-        stationGroup.disabled &&
-        !stationGroup.selected &&
-        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-      ) {
-        this.drawStationGroupToolTip(stationGroup);
       }
     }
   }
@@ -228,18 +243,16 @@ export class StationGroupElementService {
   /**
    * Draws the station group tooltip on the map for a station group.
    *
-   * @param stationGroup The station group for which to draw the tooltip.
+   * @param pointStart The point at which tooltip begins.
    */
-  drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
+  drawStationGroupToolTip(pointStart: Point): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the tooltip if context is not defined');
     }
     const ctx = this.canvasContext;
 
-    const startingX = stationGroup.boundaryPoints[0].x;
-    const startingY =
-      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y -
-      65 * this.mapScale;
+    const startingX = pointStart.x;
+    const startingY = pointStart.y - 65 * this.mapScale;
 
     const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
     const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
@@ -379,6 +392,8 @@ export class StationGroupElementService {
 
     // Delete the line under the station group name.
     newTitle.forEach((title, index) => {
+      let positionStart = newPosition - index;
+      let positionEnd = newPosition - index - 1;
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When deleting the station group name at the top of the group we deleting from the highest to the lowest position but
       at the bottom of the group we delete from the lowest to the highest position. */
@@ -390,28 +405,23 @@ export class StationGroupElementService {
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
       ) {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition + index - 1],
-          stationGroup.boundaryPoints[newPosition + index],
-          stationGroup,
-          false,
-          titleEnd
-        );
-      } else {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition - index],
-          stationGroup.boundaryPoints[newPosition - index - 1],
-          stationGroup,
-          false,
-          titleEnd
-        );
+        positionStart = newPosition + index - 1;
+        positionEnd = newPosition + index;
       }
+      this.paintOrDeleteLineStationGroupName(
+        title,
+        stationGroup.boundaryPoints[positionStart],
+        stationGroup.boundaryPoints[positionEnd],
+        stationGroup,
+        false,
+        titleEnd
+      );
     });
 
     // Paint the station group name.
     newTitle.forEach((title, index) => {
+      let positionStart = newPosition - index;
+      let positionEnd = newPosition - index - 1;
       // If the point Start is Corner Bottom-left or Bottom-right.
       /* When painting the station group name at the top of the group we painting from the highest to the lowest position but
       at the bottom of the group we paint from the lowest to the highest position. */
@@ -423,23 +433,32 @@ export class StationGroupElementService {
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomLeft ||
         stationGroup.boundaryPoints[newPosition].corner === Corner.BottomRight
       ) {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition + index - 1],
-          stationGroup.boundaryPoints[newPosition + index],
-          stationGroup,
-          true,
-          titleEnd
-        );
-      } else {
-        this.paintOrDeleteLineStationGroupName(
-          title,
-          stationGroup.boundaryPoints[newPosition - index],
-          stationGroup.boundaryPoints[newPosition - index - 1],
-          stationGroup,
-          true,
-          titleEnd
-        );
+        positionStart = newPosition + index - 1;
+        positionEnd = newPosition + index;
+      }
+      this.paintOrDeleteLineStationGroupName(
+        title,
+        stationGroup.boundaryPoints[positionStart],
+        stationGroup.boundaryPoints[positionEnd],
+        stationGroup,
+        true,
+        titleEnd
+      );
+      if (index === 0) {
+        //If station group is not available to add to pending group, display a tooltip on hover.
+        if (
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled &&
+          !stationGroup.selected &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ) {
+          this.isTooltipDisplayed = true;
+          /* Need to deep copy the boundary points object so that when it gets overwritten
+          that doesn't change the position of the tooltip. */
+          this.tooltipPosition = this.mapService.deepCopy(
+            stationGroup.boundaryPoints[positionStart]
+          );
+        }
       }
     });
   }
@@ -698,13 +717,15 @@ export class StationGroupElementService {
    * @param pointEnd The end point of the line.
    * @param displacement The Amount of displacement.
    * @param coordinate The coordinate to move, if true the coordinate is X else the coordinate is Y.
+   * @param IsPath If calculated for a path.
    * @returns The new Point on line.
    */
   movePointOnLine(
     pointStart: Point,
     pointEnd: Point,
     displacement: number,
-    coordinate = true
+    coordinate = true,
+    IsPath = false
   ): Point {
     const newPoint = { ...pointStart };
 
@@ -724,10 +745,21 @@ export class StationGroupElementService {
 
     // If true the coordinate is X else the coordinate is Y.
     if (coordinate) {
-      // x-coordinate displacement.
-      newPoint.x += displacement;
-      // The point-slope equation evaluating X.
-      newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      if (
+        this.mapService.getMapX(pointStart.x) >
+          this.mapService.getMapX(pointEnd.x) &&
+        IsPath
+      ) {
+        // x-coordinate displacement.
+        newPoint.x -= displacement;
+        // The point-slope equation evaluating X.
+        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      } else {
+        // x-coordinate displacement.
+        newPoint.x += displacement;
+        // The point-slope equation evaluating X.
+        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+      }
     } else {
       // If the Start point in y-coordinate is greater than the End point in y-coordinate
       // Then subtract the displacement to the new position, or sum the displacement to the new position..
@@ -1014,6 +1046,30 @@ export class StationGroupElementService {
             stationGroup
           );
         }
+        if (
+          this.mapService.mapMode$.value !== MapMode.View &&
+          stationGroup.status !== MapItemStatus.Pending
+        ) {
+          const IconSpan = stationGroup.isChained ? 5.5 : 1;
+          // If status of the station group option button.
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * IconSpan * this.mapScale;
+          // Reset pathButtons of the station group.
+          stationGroup.pathButtons = [];
+          // Paint the Option Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.ButtonOption,
+            stationGroup,
+            ICON_STATION_GROUP_OPTION,
+            this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? NODE_HOVER_COLOR
+              : MAP_SELECTED
+          );
+        }
       }
     } else {
       // Delete the line under the station group name.
@@ -1024,9 +1080,14 @@ export class StationGroupElementService {
           STATION_GROUP_NAME_PADDING +
           (stationGroup.status === MapItemStatus.Pending
             ? GROUP_CHARACTER_SIZE * 12
+            : this.mapService.mapMode$.value !== MapMode.View &&
+              stationGroup.isChained
+            ? GROUP_CHARACTER_SIZE * 7
+            : this.mapService.mapMode$.value !== MapMode.View
+            ? GROUP_CHARACTER_SIZE * 2
             : GROUP_CHARACTER_SIZE) *
             this.mapScale,
-        //This dynamically sets the hight of the rectangle based on the hight of the text.
+        // This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
           STATION_GROUP_NAME_PADDING
       );
@@ -1062,13 +1123,12 @@ export class StationGroupElementService {
     displacedMap = true
   ): void {
     this.canvasContext = this.mapService.canvasContext;
-
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group icon if context is not defined'
       );
     }
-    //Calculation of the slope of the line.
+    // Calculation of the slope of the line.
     const m = this.slopeLine(pointStart, pointEnd);
 
     // Move the point on the line to paint on the map.
@@ -1105,7 +1165,8 @@ export class StationGroupElementService {
         y: pointEnd.y,
       },
       newDisplacement,
-      Math.abs(m) < Math.PI / 3
+      Math.abs(m) < Math.PI / 3,
+      true
     );
 
     //If icon and hoverColor are defined.
@@ -1113,15 +1174,25 @@ export class StationGroupElementService {
       const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
 
       // Font selected to paint the icon.
+      /* Icons increase in size when hovered with the exception of the option icon while in
+      stationGroupAdd mode. */
+      const hoverFontSize =
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        typeButton === 'buttonOption'
+          ? 2
+          : 2.5;
       // If the icon is hover we increase the font by 0.5.
       this.canvasContext.font = `${
-        fontSize * (stationGroup.hoverItem === typeButton ? 2.5 : 2)
+        fontSize * (stationGroup.hoverItem === typeButton ? hoverFontSize : 2)
       }px "FontAwesome"`;
 
       // Hovering changes the color of the icon.
       this.canvasContext.fillStyle =
         stationGroup.hoverItem === typeButton
           ? hoverColor
+          : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            typeButton === 'buttonOption'
+          ? NODE_HOVER_COLOR
           : BUTTON_DEFAULT_COLOR;
 
       // Paint the icon on the map.

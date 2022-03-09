@@ -1,1 +1,20 @@
-<p>input-frame-widget works!</p>
+<ng-container *ngIf="stationViewMode === 'edit'; else previewMode">
+  <div *ngFor="let field of fields" class="min-h-[48.5px]">
+    <app-text-field
+      [field]="field"
+      [isStation]="true"
+      [labelTag]="field.prompt"
+      [widgetItem]="true"
+    ></app-text-field>
+  </div>
+</ng-container>
+<ng-template #previewMode>
+  <div *ngFor="let field of fields" class="min-h-[48.5px]">
+    <app-text-field
+      [field]="field"
+      [isStation]="false"
+      [labelTag]="field.prompt"
+      [widgetItem]="true"
+    ></app-text-field>
+  </div>
+</ng-template>

@@ -19,8 +19,9 @@
       <!--      Station drawer-->
       <app-station-widget-drawer
         *ngIf="drawerMode === 'stationWidget'"
-        (setWidgetIndex)="setWidgetIndex($event)"
-        (widgetType)="setWidgetType($event)"
+        (getWidgetIndex)="setWidgetIndex($event)"
+        (getWidgetItem)="setWidgetItem($event)"
+        [image]="imageSelected"
       >
       </app-station-widget-drawer>
 
@@ -44,8 +45,9 @@
         id="upload-image-button"
         data-testid="upload-image-button"
         (click)="fileInput.click()"
+        [disabled]="imageSelected"
       >
-        <i class="fa fa-cloud-upload"></i>
+        <i class="fa fa-upload"></i>
         Upload image
         <input
           #fileInput
@@ -53,8 +55,22 @@
           accept="image/png,image/jpeg"
           id="upload-image-input"
           [hidden]="true"
+          (change)="onSelectFile($event)"
         />
       </button>
+
+      <div class="w-full flex mt-5 items-center" *ngIf="imageSelected">
+        <span class="text-accent-500 truncate">{{ imageSelected.name }}</span>
+        <button
+          mat-icon-button
+          class="text-secondary-500"
+          id="remove-selected-image"
+          data-testid="remove-selected-image"
+          (click)="confirmImageDelete()"
+        >
+          <i class="fa fa-times text-base text-secondary-400"></i>
+        </button>
+      </div>
     </div>
 
     <div class="w-full px-3 py-4 border-t border-secondary-100 text-left">

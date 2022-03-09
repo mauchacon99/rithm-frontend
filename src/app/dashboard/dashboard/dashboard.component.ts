@@ -361,7 +361,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             JSON.stringify(this.dashboardData)
           );
           this.isLoading = false;
-          this.configEditMode();
+          this.getQueryParams();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
@@ -404,6 +404,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
           error
         );
       },
+    });
+  }
+
+  /** Get query params to toggle edit mode. */
+  private getQueryParams(): void {
+    this.route.queryParams.pipe(first()).subscribe((queryParams) => {
+      this.editMode = queryParams['editMode'] === 'true';
+      this.configEditMode();
     });
   }
 
@@ -531,7 +539,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openDialogAddWidget(): void {
     this.toggleDrawerOnlyForWidgets();
     this.dialog.open(AddWidgetModalComponent, {
-      panelClass: ['w-11/12', 'sm:w-4/5'],
+      panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
       data: this.dashboardData.rithmId,
     });

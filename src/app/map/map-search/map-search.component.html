@@ -1,24 +1,55 @@
-<div class="bg-white relative">
+<div *ngIf="isMobile && !mobileSearchOpen">
+  <div class="bg-white shadow-md rounded border border-solid mb-2">
+    <button
+      class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300"
+      id="centerButton"
+      data-testid="center"
+      [disabled]="isLoading"
+      (click)="toggleMobileSearch()"
+    >
+      <i class="fas fa-search cursor-pointer"></i>
+    </button>
+  </div>
+</div>
+
+<div
+  class="bg-white"
+  [ngClass]="{
+    relative: !isMobile,
+    'fixed left-0 top-calc right-0 h-full': mobileSearchOpen
+  }"
+  *ngIf="!isMobile || mobileSearchOpen"
+>
   <i
-    class="fas text-sm absolute left-3 top-3 z-40 text-secondary-300"
-    [ngClass]="
-      searchText !== '' && isDrawerOpen
-        ? ' fa-arrow-left cursor-pointer '
-        : ' fa-search '
-    "
+    class="fas absolute z-40 text-secondary-300"
+    [ngClass]="{
+      'fa-arrow-left cursor-pointer': searchText !== '' && isDrawerOpen,
+      'fa-search': !(searchText !== '' && isDrawerOpen),
+      'p-4 left-4 top-4': isMobile,
+      'text-sm left-3 top-3': !isMobile
+    }"
     (click)="returnSearchText()"
   ></i>
   <i
-    *ngIf="searchText !== '' || searchText.length !== 0"
-    class="fas fa-times text-sm absolute right-3 top-3 z-40 cursor-pointer text-secondary-300"
-    (click)="clearSearchText()"
+    *ngIf="searchText !== '' || searchText.length !== 0 || isMobile"
+    class="fas fa-times absolute z-40 cursor-pointer text-secondary-300"
+    [ngClass]="{
+      'text-xl p-3 right-4 top-4': isMobile,
+      'text-sm right-3 top-3': !isMobile
+    }"
+    (click)="isMobile ? closeMobileSearch() : clearSearchText()"
   ></i>
-  <mat-form-field class="example-full-width text-sm" appearance="fill">
+  <mat-form-field
+    class="text-sm w-full"
+    [ngClass]="{ 'px-4 pt-4': isMobile }"
+    appearance="fill"
+  >
     <input
       #inputText
       type="text"
       matInput
       [matAutocomplete]="auto"
+      [matAutocompleteDisabled]="isMobile"
       [(ngModel)]="searchText"
       (ngModelChange)="searchStationsStationGroups()"
       placeholder="Search"
@@ -31,25 +62,55 @@
     >
       <mat-option
         class="text-sm"
-        *ngFor="let option of filteredStations"
+        *ngFor="let option of filteredStationsStationGroups"
         [value]="option"
         (click)="openDrawer(option)"
+        (onSelectionChange)="openDrawer(option)"
       >
         <span
-          *ngIf="option.stationName"
+          *ngIf="isStation(option)"
           class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
         <span
-          *ngIf="option.title"
+          *ngIf="!isStation(option)"
           class="group bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
-        <span class="inlin-block w-44">
-          {{ option.title ? option.title : option.stationName }}
+        <span class="inline-block w-44">
+          {{ optionTitle }}
           <span class="block text-secondary-300 text-xs">{{
-            option.title ? 'Group' : 'Station'
+            !isStation(option) ? 'Group' : 'Station'
           }}</span>
         </span>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+  <div *ngIf="isMobile" class="overflow-auto w-full h-calc px-4 mt-2">
+    <div
+      *ngFor="let option of filteredStationsStationGroups"
+      class="flex flex-row py-2"
+      [ngClass]="{
+        ' border-b border-b-secondary-100':
+          option !==
+          filteredStationsStationGroups[
+            filteredStationsStationGroups.length - 1
+          ]
+      }"
+      (click)="openDrawerMobileSearch(option)"
+    >
+      <div
+        *ngIf="isStation(option)"
+        class="station bg-contain bg-no-repeat w-5 h-4 inline-block self-center mr-2"
+      ></div>
+      <div
+        *ngIf="!isStation(option)"
+        class="group bg-contain bg-no-repeat w-5 h-4 inline-block self-center mr-2"
+      ></div>
+      <span class="inline-block w-full">
+        {{ optionTitle }}
+        <span class="block text-secondary-300 text-xs">{{
+          !isStation(option) ? 'Group' : 'Station'
+        }}</span>
+      </span>
+    </div>
+  </div>
 </div>

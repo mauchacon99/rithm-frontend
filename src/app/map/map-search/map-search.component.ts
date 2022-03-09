@@ -1,8 +1,10 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnDestroy,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -10,6 +12,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import {
+  CenterPanType,
   MapMode,
   StationGroupInfoDrawerData,
   StationInfoDrawerData,
@@ -24,7 +27,7 @@ import { MapService } from '../map.service';
   templateUrl: './map-search.component.html',
   styleUrls: ['./map-search.component.scss'],
 })
-export class MapSearchComponent implements OnDestroy {
+export class MapSearchComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -35,8 +38,10 @@ export class MapSearchComponent implements OnDestroy {
   @ViewChild('inputText') search!: ElementRef;
 
   /** List of filtered stations based on search text. */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filteredStations: any[] = [];
+  filteredStationsStationGroups: (
+    | StationMapElement
+    | StationGroupMapElement
+  )[] = [];
 
   /** Search text. */
   searchText = '';
@@ -46,6 +51,12 @@ export class MapSearchComponent implements OnDestroy {
 
   /** On false used to store previous search text before station drawer opens. */
   searchInput = true;
+
+  /** Set autocomplete option title as either station name or group title. */
+  optionTitle = '';
+
+  /** Is the mobile search open? */
+  mobileSearchOpen = false;
 
   constructor(
     private mapService: MapService,
@@ -60,6 +71,15 @@ export class MapSearchComponent implements OnDestroy {
           this.searchText = '';
         }
       });
+  }
+
+  /**
+   * Initializes the correct view height parameters.
+   */
+  ngOnInit(): void {
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--mobilesearchvh', `${vh}px`);
   }
 
   /**
@@ -80,6 +100,72 @@ export class MapSearchComponent implements OnDestroy {
   }
 
   /**
+   * Whether the screen width is below a certain amount.
+   *
+   * @returns True if width is below a certain amount.
+   */
+  get isMobile(): boolean {
+    return window.innerWidth <= 450;
+  }
+
+  /**
+   * Needed to resize a mobile browser when the scrollbar hides.
+   */
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    if (!this.isMobile) {
+      this.mobileSearchOpen = false;
+    }
+
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--mobilesearchvh', `${vh}px`);
+  }
+
+  /**
+   * Helper method to determine type of an element in the filteredStationsStationGroups array.
+   *
+   * @param option The element to check.
+   * @returns True if the option is a stationMapElement.
+   */
+  isStation(option: StationMapElement | StationGroupMapElement): boolean {
+    if (option instanceof StationMapElement) {
+      this.optionTitle = option.stationName;
+      return true;
+    } else {
+      this.optionTitle = option.title;
+      return false;
+    }
+  }
+
+  /**
+   * Toggles the mobile search overlay.
+   */
+  toggleMobileSearch(): void {
+    this.mobileSearchOpen = !this.mobileSearchOpen;
+  }
+
+  /**
+   * Closes the mobile search overlay and clears the search text.
+   */
+  closeMobileSearch(): void {
+    this.toggleMobileSearch();
+    this.clearSearchText();
+  }
+
+  /**
+   * Closes the mobile search overlay and opens the drawer for a given station.
+   *
+   * @param option The station or station group who's drawer will be opened.
+   */
+  openDrawerMobileSearch(
+    option: StationMapElement | StationGroupMapElement
+  ): void {
+    this.toggleMobileSearch();
+    this.openDrawer(option);
+  }
+
+  /**
    * Display station name when it's selected.
    *
    * @param displayItem The selected item.
@@ -92,8 +178,8 @@ export class MapSearchComponent implements OnDestroy {
       return '';
     }
     return 'stationName' in displayItem
-      ? displayItem?.stationName
-      : displayItem?.title;
+      ? displayItem.stationName
+      : displayItem.title;
   }
 
   /**
@@ -102,7 +188,7 @@ export class MapSearchComponent implements OnDestroy {
    */
   searchStationsStationGroups(): void {
     this.searchText === '' || this.searchText.length === 0
-      ? (this.filteredStations = [])
+      ? (this.filteredStationsStationGroups = [])
       : this.filterStationsStationGroups(
           this.searchText.toString().toLowerCase()
         );
@@ -117,9 +203,10 @@ export class MapSearchComponent implements OnDestroy {
       this.sidenavDrawerService.closeDrawer();
     }
     this.searchText = '';
-    this.filteredStations = [];
+    this.filteredStationsStationGroups = [];
     this.mapService.handleDrawerClose();
     this.searchInput = true;
+    this.optionTitle = '';
   }
 
   /**
@@ -135,25 +222,27 @@ export class MapSearchComponent implements OnDestroy {
       ...this.mapService.stationElements,
       ...this.mapService.stationGroupElements,
     ];
-    this.filteredStations = stationsStationGroups.filter((item) => {
-      // If the item is a station.
-      if (item instanceof StationMapElement) {
-        return item.stationName
-          .toLowerCase()
-          .includes(searchText.toString().toLowerCase());
-        // If the item is a station group.
-      } else if (item instanceof StationGroupMapElement) {
-        if (item.title) {
-          return item.title
+    this.filteredStationsStationGroups = stationsStationGroups.filter(
+      (item) => {
+        // If the item is a station.
+        if (item instanceof StationMapElement) {
+          return item.stationName
             .toLowerCase()
             .includes(searchText.toString().toLowerCase());
+          // If the item is a station group.
+        } else if (item instanceof StationGroupMapElement) {
+          if (item.title) {
+            return item.title
+              .toLowerCase()
+              .includes(searchText.toString().toLowerCase());
+          } else {
+            return;
+          }
         } else {
-          return;
+          throw new Error('Item is not defined as a station or station group.');
         }
-      } else {
-        throw new Error('Item is not defined as a station or station group.');
       }
-    });
+    );
   }
 
   /**
@@ -179,7 +268,7 @@ export class MapSearchComponent implements OnDestroy {
       this.mapService.handleDrawerClose();
       this.searchInput = true;
     }
-    this.filteredStations = [];
+    this.filteredStationsStationGroups = [];
     setTimeout(() => {
       this.search.nativeElement.value = this.placeHolderText;
       this.search.nativeElement.focus();
@@ -219,12 +308,12 @@ export class MapSearchComponent implements OnDestroy {
       );
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
-      //Increment centerStationCount to show that more centering of station needs to be done.
-      this.mapService.centerStationCount$.next(1);
+      //Increment centerCount to show that more centering of station needs to be done.
+      this.mapService.centerCount$.next(1);
       //Call method to run logic for centering of the station.
       setTimeout(() => {
-        this.mapService.centerStation(
-          drawerItem,
+        this.mapService.center(
+          CenterPanType.Station,
           drawer[0] ? drawer[0].clientWidth : 0
         );
       }, 1);
@@ -238,18 +327,18 @@ export class MapSearchComponent implements OnDestroy {
         stationGroupStatus: drawerItem.status,
         isChained: drawerItem.isChained,
       };
-      //Open station group info drawer when clicked on station group boundary or name.
+      //Open station group info drawer when station group is selected.
       this.sidenavDrawerService.openDrawer(
         'stationGroupInfo',
         dataInformationDrawer
       );
       drawerItem.drawerOpened = true;
-      //Increment centerStationGroupCount to show that more centering of station needs to be done.
-      this.mapService.centerStationGroupCount$.next(1);
+      //Increment centerCount to show that more centering of station group needs to be done.
+      this.mapService.centerCount$.next(1);
       //Call method to run logic for centering of the station group.
       setTimeout(() => {
-        this.mapService.centerStationGroup(
-          drawerItem,
+        this.mapService.center(
+          CenterPanType.StationGroup,
           drawer[0] ? drawer[0].clientWidth : 0
         );
       }, 1);

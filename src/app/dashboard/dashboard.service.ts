@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -265,26 +265,22 @@ export class DashboardService {
   /**
    * Get list tab documents.
    *
-   * @param dashboardRithmId The specific dashboard rithmId to get item list widget.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dashboardRithmId: string
-  ): Observable<ItemListWidgetModal[]> {
-    const itemListWidgetModal: ItemListWidgetModal[] = [
-      {
-        documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
-        stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-        groupRithmId: '7',
-        stationName: 'Station Name that is name',
-        groupName: 'Group group',
-        isChainedGroup: true,
-        totalDocuments: 5,
-        totalStations: 5,
-        totalSubGroups: 5,
-      },
-    ];
-    return of(itemListWidgetModal).pipe(delay(1000));
+  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
+    return this.http.get<ItemListWidgetModal[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+    );
+  }
+
+  /**
+   * Get the list for the station tabs.
+   *
+   * @returns The list.
+   */
+  getStationTabList(): Observable<ItemListWidgetModal[]> {
+    return this.http.get<ItemListWidgetModal[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
+    );
   }
 }
