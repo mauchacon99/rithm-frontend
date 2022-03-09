@@ -39,6 +39,10 @@
   position: static !important;
 }
 
+::ng-deep .app-map-search.fixed {
+  position: fixed !important;
+}
+
 //Needed for the center-map icon.
 .fa-stack-1x {
   font-size: 0.5rem;
