@@ -58,15 +58,15 @@ export class FileFieldComponent
    */
   ngOnInit(): void {
     this.fileFieldForm = this.fb.group({
-      file: [this.fieldValue, []],
+      [this.field.questionType]: [this.fieldValue, []],
     });
 
     if (this.field.isRequired) {
-      this.fileFieldForm.get('file')?.setValidators([Validators.required]);
+      this.fileFieldForm.get('fileType')?.setValidators([Validators.required]);
     }
 
-    this.fileFieldForm.get('file')?.markAsTouched();
-    this.fileFieldForm.get('file')?.updateValueAndValidity();
+    this.fileFieldForm.get('fileType')?.markAsTouched();
+    this.fileFieldForm.get('fileType')?.updateValueAndValidity();
   }
 
   /**

@@ -1,6 +1,6 @@
 <!-- Document list item tab -->
 <div *ngIf="!itemListWidgetModal?.data?.length; else tableWidgetModal">
-  <p class="sm:pt-5 text-center">There are not {{ itemType }}s to show.</p>
+  <p class="pt-5 text-center">There are not {{ itemType }}s to show.</p>
 </div>
 <ng-template #tableWidgetModal>
   <div class="sm:pt-5 overflow-scroll scrollbar">
