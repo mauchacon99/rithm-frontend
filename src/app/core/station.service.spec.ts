@@ -1114,4 +1114,13 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return the flow button text', () => {
+    const expectedResponse: StandardStringJSON = {
+      data: 'Flow',
+    };
+    service.getFlowButtonText(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
 });

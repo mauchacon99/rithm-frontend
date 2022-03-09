@@ -101,6 +101,12 @@ export class ToolbarComponent {
       dataTestId: 'add-instructions',
     },
     {
+      name: 'Data Link',
+      icon: 'fas fa-database',
+      typeString: this.fieldTypeEnum.DataLink,
+      dataTestId: 'add-data-link',
+    },
+    {
       name: 'File Upload',
       icon: 'fa-solid fa-arrow-up-from-bracket',
       typeString: this.fieldTypeEnum.File,
