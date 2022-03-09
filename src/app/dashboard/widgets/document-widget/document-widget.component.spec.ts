@@ -148,6 +148,7 @@ describe('DocumentWidgetComponent', () => {
   });
 
   it('should show a gear icon in edit mode', () => {
+    component.showButtonSetting = true;
     component.dataDocumentWidget = {
       documentName: 'Untitled Document',
       documentRithmId,
@@ -187,6 +188,7 @@ describe('DocumentWidgetComponent', () => {
       component.isLoading = false;
       component.failedLoadWidget = false;
       component.editMode = true;
+      component.showButtonSetting = true;
 
       component.dataDocumentWidget = {
         documentName: 'Untitled Document',
