@@ -1018,7 +1018,7 @@ export class MockStationService {
   updateFlowButtonText(
     stationRithmId: string,
     flowButtonText: string
-  ): Observable<StandardStringJSON> {
+  ): Observable<string> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -1032,7 +1032,7 @@ export class MockStationService {
       const expectedResponse: StandardStringJSON = {
         data: flowButtonText,
       };
-      return of(expectedResponse).pipe(delay(1000));
+      return of(expectedResponse.data).pipe(delay(1000));
     }
   }
 
