@@ -696,6 +696,8 @@ describe('DocumentComponent', () => {
       'getFlowButtonText'
     ).and.callThrough();
     expect(component.flowButtonName).toBeFalsy();
+    component['stationId'] = component.documentInformation.stationRithmId;
+    fixture.detectChanges();
     component.getFlowButtonName();
     expect(spyFlowButton).toHaveBeenCalledOnceWith(
       component.documentInformation.stationRithmId

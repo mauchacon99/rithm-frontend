@@ -1127,6 +1127,7 @@ describe('StationService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`
     );
     expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
 
     req.flush(expectedResponse);
     httpTestingController.verify();

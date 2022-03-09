@@ -659,9 +659,11 @@ export class StationService {
    * @returns The flow button text.
    */
   getFlowButtonText(stationRithmId: string): Observable<string> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
     return this.http
       .get<StandardStringJSON>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationRithmId}`
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button`,
+        { params }
       )
       .pipe(map((response) => response.data));
   }
