@@ -711,6 +711,8 @@ describe('DashboardComponent', () => {
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
+      expect(component.isAddWidget).toBeFalse();
+      expect(component.viewNewDashboard).toBeFalse();
     });
   });
 });

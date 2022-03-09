@@ -58,4 +58,13 @@ export class SplitService {
   public getDashboardLibraryTreatment(): string {
     return this.splitClient.getTreatment('dashboard_library_split');
   }
+
+  /**
+   * Get the option the menu dashboard for hidden o show manage members.
+   *
+   * @returns Split treatment.
+   */
+  public getManageUserTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_manage_users_split');
+  }
 }
