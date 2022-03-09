@@ -287,12 +287,11 @@ export class DashboardService {
   /**
    * Get the list for the groups the stations tabs.
    *
-   * @param name Name of the station group.
    * @returns The list the groups.
    */
-  getGroupStationTabList(name: string): Observable<ItemListWidgetModal[]> {
+  getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
     return this.http.get<ItemListWidgetModal[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups?name=${name}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups`
     );
   }
 }

@@ -1,11 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { CustomTabWidgetModalComponent } from './custom-tab-widget-modal.component';
-import {
-  MockDashboardService,
-  MockErrorService,
-  MockUserService,
-} from 'src/mocks';
+import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { throwError } from 'rxjs';
@@ -17,7 +13,6 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { UserService } from 'src/app/core/user.service';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -47,7 +42,6 @@ describe('CustomTabWidgetModalComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
