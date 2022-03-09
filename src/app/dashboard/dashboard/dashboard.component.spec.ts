@@ -452,6 +452,11 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggle drawer for close drawer when show dialog add new widget', () => {
+      const dataExpectModal = {
+        panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
+        maxWidth: '1500px',
+        data: dataDashboard.rithmId,
+      };
       component.dashboardData = dataDashboard;
       const drawerContext = 'stationWidget';
       sidenavDrawer.drawerContext$.next(drawerContext);
@@ -461,7 +466,10 @@ describe('DashboardComponent', () => {
       const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
       component.openDialogAddWidget();
       expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
-      expect(spyDialog).toHaveBeenCalled();
+      expect(spyDialog).toHaveBeenCalledOnceWith(
+        AddWidgetModalComponent,
+        dataExpectModal
+      );
     });
   });
 
@@ -640,4 +648,19 @@ describe('DashboardComponent', () => {
     expect(component.editMode).toBeTrue();
     expect(spyService).toHaveBeenCalled();
   }));
+
+  it('should max character the input if equal to 45 characters', () => {
+    component.viewNewDashboard = true;
+    component.editMode = true;
+    component.isLoading = false;
+    component.errorLoadingDashboard = false;
+    component.isCreateNewDashboard = false;
+    component.dashboardData = dataDashboard;
+    fixture.detectChanges();
+    const inputNameDashboard =
+      fixture.debugElement.nativeElement.querySelector('#name-dashboard');
+    console.log('PASO', inputNameDashboard.maxlength);
+
+    expect(inputNameDashboard.maxlength).toBe(45);
+  });
 });
