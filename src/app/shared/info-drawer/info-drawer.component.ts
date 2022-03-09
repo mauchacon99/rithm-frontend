@@ -102,7 +102,8 @@ export class InfoDrawerComponent implements OnDestroy {
         .subscribe({
           error: (error: unknown) => {
             this.errorService.displayError(
-              'Something went wrong on our end when updating the flow button text and we are looking into it. Please try again in a little while',
+              'Something went wrong on our end when updating the flow button text and we are looking into it. \
+              Please try again in a little while',
               error
             );
           },
