@@ -48,4 +48,13 @@ export class SplitService {
   public getStationDocumentTreatment(): string {
     return this.splitClient.getTreatment('Station-Document-Widgets');
   }
+
+  /**
+   * Get the option the menu dashboard for hidden o show manage members.
+   *
+   * @returns Split treatment.
+   */
+  public getManageUserTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_manage_users_split');
+  }
 }
