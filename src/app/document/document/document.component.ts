@@ -279,24 +279,17 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Navigates user forward on a chained Flow when exist a single forward station.
    */
   navigateForward(): void {
-    if (
-      this.documentInformation.isChained &&
-      this.forwardStations.length === 1
-    ) {
-      if (this.isWidget) this.widgetReloadListDocuments(true, false);
-      this.router
-        .navigate([`/document/${this.documentInformation.documentRithmId}`], {
-          queryParams: {
-            documentId: this.documentInformation.documentRithmId,
-            stationId: this.forwardStations[0].rithmId,
-          },
-        })
-        .then(() => {
-          this.getParams();
-        });
-    } else {
-      this.navigateBack(true);
-    }
+    if (this.isWidget) this.widgetReloadListDocuments(true, false);
+    this.router
+      .navigate([`/document/${this.documentInformation.documentRithmId}`], {
+        queryParams: {
+          documentId: this.documentInformation.documentRithmId,
+          stationId: this.forwardStations[0].rithmId,
+        },
+      })
+      .then(() => {
+        this.getParams();
+      });
   }
 
   /**
@@ -480,7 +473,14 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          this.navigateForward();
+          if (
+            this.documentInformation.isChained &&
+            this.forwardStations.length === 1
+          ) {
+            this.navigateForward();
+          } else {
+            this.navigateBack();
+          }
         },
         error: (error: unknown) => {
           this.documentLoading = false;
