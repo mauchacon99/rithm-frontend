@@ -241,9 +241,9 @@ describe('WidgetDrawerComponent', () => {
         'initSdk'
       ).and.callThrough();
 
-      const splitGetSectionImageBanner = spyOn(
+      const method = spyOn(
         TestBed.inject(SplitService),
-        'getSectionImageBanner'
+        'getStationUploadBannerTreatment'
       ).and.callThrough();
 
       const sectionImageBanner = fixture.nativeElement.querySelector(
@@ -255,7 +255,7 @@ describe('WidgetDrawerComponent', () => {
       component.ngOnInit();
       expect(sectionImageBanner).toBeDefined();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(splitGetSectionImageBanner).toHaveBeenCalled();
+      expect(method).toHaveBeenCalled();
       expect(component.showImageBanner).toBeTrue();
     });
 
