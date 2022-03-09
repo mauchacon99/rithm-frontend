@@ -95,7 +95,9 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingGroupTab" id="error-group-list-tab">
-        <p class="text-error-500 text-center">Error: failed to obtain groups.</p>
+        <p class="text-error-500 text-center">
+          Error: failed to obtain groups.
+        </p>
       </div>
       <div *ngIf="!errorLoadingGroupTab">
         <app-item-list-widget-modal
