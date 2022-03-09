@@ -31,7 +31,8 @@ import { MatTableDataSource } from '@angular/material/table';
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[dataWidget][editMode][widgetType]',
+  selector:
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -43,6 +44,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** To load dom by WidgetType. */
   @Input() widgetType: WidgetType = WidgetType.Station;
+
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();

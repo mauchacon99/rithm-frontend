@@ -17,7 +17,9 @@ export class MockSplitService {
    * @param userId User id of logged in user.
    */
   // eslint-disable-next-line
-  public initSdk(userId: string): void {}
+  public initSdk(userId: string): void {
+    this.sdkReady$.next();
+  }
 
   /**
    * Get the dashboard split.
@@ -25,6 +27,15 @@ export class MockSplitService {
    * @returns Split treatment.
    */
   public getDashboardTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the widget settings config.
+   *
+   * @returns Split treatment.
+   */
+  public getConfigWidgetsTreatment(): string {
     return 'on';
   }
 

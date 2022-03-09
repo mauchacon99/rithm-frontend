@@ -51,6 +51,15 @@ export class SplitService {
   }
 
   /**
+   * Get the widget settings config.
+   *
+   * @returns Split treatment.
+   */
+  public getConfigWidgetsTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_widget_settings_split');
+  }
+
+  /**
    * Get the dashboard library split.
    *
    * @returns Split treatment.
