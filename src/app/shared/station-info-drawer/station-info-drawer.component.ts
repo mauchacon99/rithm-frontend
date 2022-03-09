@@ -21,6 +21,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MapStationService } from 'src/app/map/map-core/map-station.service';
 
 /**
  * Component for info station.
@@ -145,6 +146,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private router: Router,
     private mapService: MapService,
+    private mapStationService: MapStationService,
     private documentService: DocumentService,
     private dialog: MatDialog,
     private route: ActivatedRoute
@@ -656,7 +658,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (response) {
       if (this.openedFromMap) {
         this.mapService.removeAllStationConnections(this.stationRithmId);
-        this.mapService.deleteStation(this.stationRithmId);
+        this.mapStationService.deleteStation(this.stationRithmId);
         this.sidenavDrawerService.closeDrawer();
       } else {
         this.stationService
