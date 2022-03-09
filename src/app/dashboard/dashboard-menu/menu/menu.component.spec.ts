@@ -58,6 +58,7 @@ describe('MenuComponent', () => {
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetManageUserTreatment).toHaveBeenCalled();
+      expect(component.isManageMember).toBeTrue();
     });
 
     it('should catch error the splits for the menu', () => {
@@ -71,6 +72,7 @@ describe('MenuComponent', () => {
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
+      expect(component.isManageMember).toBeFalse();
     });
   });
 });
