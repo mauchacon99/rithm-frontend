@@ -48,7 +48,7 @@ export class DataLinkFieldComponent
   /** The list of all stations. */
   stations: Station[] = [];
 
-  /**Filtered Form Field List */
+  /**Filtered form station List. */
   filteredStations$: Observable<Station[]> | undefined;
 
   /* Loading in input auto-complete the list of all stations. */
