@@ -497,7 +497,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
-        next: (data: string[]) => {
+        next: (data) => {
           this.documentLoading = false;
           if (
             !this.isWidget &&
