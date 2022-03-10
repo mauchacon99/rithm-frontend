@@ -20,18 +20,18 @@ import {
   Question,
   PossibleAnswer,
   FlowLogicRule,
+  InputFrameWidget,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GridsterConfig } from 'angular-gridster2';
+import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-import { GridsterConfig } from 'angular-gridster2';
-import { InputFrameWidget } from '../../../models/input-frame-widget';
 
 /**
  * Main component for viewing a station.
@@ -45,7 +45,7 @@ export class StationComponent
   implements OnInit, OnDestroy, AfterContentChecked
 {
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('drawer', { static: true })
+  @ViewChild('rightDrawer', { static: true })
   drawer!: MatDrawer;
 
   /** Indicate error when saving flow rule. */
@@ -102,6 +102,9 @@ export class StationComponent
 
   /** Flag that show if is setting mode. */
   settingMode = false;
+
+  /** Flag showing if the right drawer is open. */
+  isOpenDrawerLeft = false;
 
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
@@ -322,8 +325,8 @@ export class StationComponent
     this.splitService.initSdk(orgRithmId);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        const treatment = this.splitService.getStationDocumentTreatment();
-        this.viewNewStation = treatment === 'on';
+        this.viewNewStation =
+          this.splitService.getStationDocumentTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -790,6 +793,13 @@ export class StationComponent
   /** Remove widgets from the gridster in layout mode. */
   removeWidgets(): void {
     this.inputFrameWidgetItems.length = 0;
+  }
+
+  /**
+   * Toggles the open state for drawer mode.
+   */
+  toggleLeftDrawer(): void {
+    this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
   }
 
   /**

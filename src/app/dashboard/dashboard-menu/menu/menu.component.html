@@ -4,9 +4,11 @@
 <div>
   <mat-accordion>
     <app-expansion-menu
+      [isManageMember]="isManageMember"
       [dashboardRole]="dashboardRole.Company"
     ></app-expansion-menu>
     <app-expansion-menu
+      [isManageMember]="isManageMember"
       [dashboardRole]="dashboardRole.Personal"
     ></app-expansion-menu>
   </mat-accordion>

@@ -243,7 +243,7 @@ describe('TextFieldComponent', () => {
     });
 
     it('should not require an input in file field', () => {
-      const file = component.textFieldForm.controls['file'];
+      const file = component.textFieldForm.controls['fileType'];
       expect(file.valid).toBeTrue();
       expect(file.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();

@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -642,14 +642,14 @@ export class StationService {
   updateFlowButtonText(
     stationRithmId: string,
     flowButtonText: string
-  ): Observable<StandardStringJSON> {
+  ): Observable<string> {
     const standardBody: StandardStringJSON = { data: flowButtonText };
     return this.http
       .put<StandardStringJSON>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationRithmId}`,
         standardBody
       )
-      .pipe(map((response) => response));
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -659,20 +659,12 @@ export class StationService {
    * @returns The flow button text.
    */
   getFlowButtonText(stationRithmId: string): Observable<string> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot get the flow button text.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StandardStringJSON = {
-        data: 'Flow',
-      };
-      return of(expectedResponse.data).pipe(delay(1000));
-    }
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button`,
+        { params }
+      )
+      .pipe(map((response) => response.data));
   }
 }

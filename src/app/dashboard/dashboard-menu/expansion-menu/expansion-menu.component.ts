@@ -11,11 +11,14 @@ import { Router } from '@angular/router';
  * Expansion menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-expansion-menu[dashboardRole]',
+  selector: 'app-expansion-menu[dashboardRole][isManageMember]',
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })
 export class ExpansionMenuComponent implements OnInit {
+  /** Parameter for hide or show option manage member. */
+  @Input() isManageMember = false;
+
   /** Type dashboard. */
   @Input() dashboardRole!: RoleDashboardMenu;
 
