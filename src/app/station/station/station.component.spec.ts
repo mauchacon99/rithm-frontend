@@ -578,6 +578,19 @@ describe('StationComponent', () => {
     expect(component.layoutMode).toBeFalsy();
   });
 
+  it('should hide the drawer on the left if it is open when you click the Settings button', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    component.isOpenDrawerLeft = true;
+    fixture.detectChanges();
+    const btnSetting = fixture.nativeElement.querySelector(
+      '#button-mode-setting'
+    );
+    expect(btnSetting).toBeTruthy();
+    btnSetting.click();
+    expect(component.isOpenDrawerLeft).toBeFalsy();
+  });
+
   it('should show layout mode when click in button Layout', () => {
     component.viewNewStation = true;
     component.editMode = true;
@@ -604,6 +617,30 @@ describe('StationComponent', () => {
     expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
     expect(component.options.resizable?.enabled).toBeTrue();
     expect(component.options.draggable?.enabled).toBeTrue();
+  });
+
+  it('should call the function that changes to setting mode and should hidden drawer-left', () => {
+    const modeConfig = 'setting';
+    component.viewNewStation = true;
+    component.editMode = true;
+    component.isOpenDrawerLeft = true;
+    fixture.detectChanges();
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
+    component.setGridMode(modeConfig);
+    expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(component.isOpenDrawerLeft).toBeFalsy();
+  });
+
+  it('should call the function that changes to preview mode and should hidden drawer-left', () => {
+    const modeConfig = 'preview';
+    component.viewNewStation = true;
+    component.editMode = true;
+    component.isOpenDrawerLeft = true;
+    fixture.detectChanges();
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
+    component.setGridMode(modeConfig);
+    expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(component.isOpenDrawerLeft).toBeFalsy();
   });
 
   it('should call the function that changes to setting mode in edit mode', () => {
