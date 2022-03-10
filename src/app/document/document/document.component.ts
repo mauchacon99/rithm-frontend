@@ -518,7 +518,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
                 this.getParams();
               });
           } else {
-            this.navigateBack();
+            this.navigateBack(true);
           }
         },
         error: (error: unknown) => {
