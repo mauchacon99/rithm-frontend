@@ -461,8 +461,8 @@ export class MapService {
    * Updates pendingStationGroup with the current selected stations and groups.
    */
   updatePendingStationGroup(): void {
-    //Set up blank/edit pending group.
-    let newGroup = new StationGroupMapElement({
+    //Set up blank pending group.
+    const newGroup = new StationGroupMapElement({
       rithmId: uuidv4(),
       title: 'Pending',
       stations: [],
@@ -471,24 +471,6 @@ export class MapService {
       isChained: false,
       isReadOnlyRootStationGroup: false,
     });
-    if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      const editStationGroup = this.stationGroupElements.find(
-        (group) => group.status === MapItemStatus.Pending
-      );
-      if (!editStationGroup) {
-        throw new Error(`There is not any station group with status pending.`);
-      }
-      //Set up pending group for edit.
-      newGroup = new StationGroupMapElement({
-        rithmId: editStationGroup.rithmId,
-        title: editStationGroup.title,
-        stations: editStationGroup.stations,
-        subStationGroups: editStationGroup.subStationGroups,
-        status: MapItemStatus.Pending,
-        isChained: editStationGroup.isChained,
-        isReadOnlyRootStationGroup: false,
-      });
-    }
 
     /* There should only ever be one pending group in the stationGroupElements array,
     recursively delete every pending group that already exists so we can add a new one. */
@@ -1789,6 +1771,7 @@ export class MapService {
     }
     this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
     this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
+
     this.resetSelectedStationGroupStationStatus();
   }
 }
