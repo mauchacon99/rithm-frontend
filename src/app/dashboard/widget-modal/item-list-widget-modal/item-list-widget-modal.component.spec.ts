@@ -24,4 +24,21 @@ describe('ItemListWidgetModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should test emit value', () => {
+    const element = {
+      rithmId: 'string',
+      name: 'string',
+      totalDocuments: 0,
+      groupName: 'string',
+      isChained: false,
+      totalStations: 0,
+      totalSubGroups: 0,
+      stationName: 'string',
+      stationGroupName: 'string',
+    };
+    const emitCall = spyOn(component.itemSelected, 'emit');
+    component.selectTypeElement(element);
+    expect(emitCall).toHaveBeenCalled();
+  });
 });
