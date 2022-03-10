@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -290,30 +290,8 @@ export class DashboardService {
    * @returns The list the groups.
    */
   getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
-    const itemListWidgetModal: ItemListWidgetModal[] = [
-      {
-        rithmId: '7',
-        name: 'Groupygroup',
-        isChained: false,
-        totalStations: 2,
-        totalSubGroups: 5,
-      },
-      {
-        rithmId: '7',
-        name: 'Groupygroup',
-        isChained: true,
-        totalStations: 2,
-        totalSubGroups: 3,
-      },
-      {
-        rithmId: '7',
-        name: 'Groupygroup',
-        isChained: false,
-        totalStations: 2,
-        totalSubGroups: 9,
-      },
-    ];
-
-    return of(itemListWidgetModal).pipe(delay(1000));
+    return this.http.get<ItemListWidgetModal[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups`
+    );
   }
 }

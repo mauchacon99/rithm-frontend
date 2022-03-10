@@ -542,6 +542,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Method called when a user clicks the edit station group.
    */
   editStationGroup(): void {
+    this.mapService.stationGroupOptionButtonClick$.next({
+      click: true,
+      data: this.mapService.stationButtonClick$.value.data,
+    });
     this.mapService.matMenuStatus$.next(true);
   }
 

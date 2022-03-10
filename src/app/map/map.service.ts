@@ -143,6 +143,12 @@ export class MapService {
   /** The Station rithm Id centered on the map. */
   centerStationRithmId$ = new BehaviorSubject('');
 
+  /** If station group option button was clicked. */
+  stationGroupOptionButtonClick$ = new BehaviorSubject({
+    click: false,
+    data: {},
+  });
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -455,7 +461,7 @@ export class MapService {
    * Updates pendingStationGroup with the current selected stations and groups.
    */
   updatePendingStationGroup(): void {
-    //Set up blank pending group.
+    //Set up blank/edit pending group.
     let newGroup = new StationGroupMapElement({
       rithmId: uuidv4(),
       title: 'Pending',
@@ -466,24 +472,22 @@ export class MapService {
       isReadOnlyRootStationGroup: false,
     });
     if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      const stationGroup1 = this.stationGroupElements.find(
+      const editStationGroup = this.stationGroupElements.find(
         (group) => group.status === MapItemStatus.Pending
       );
-      if (!stationGroup1) {
+      if (!editStationGroup) {
         throw new Error(`There is not any station group with status pending.`);
       }
-      if (stationGroup1) {
-        //Set up pending group for edit.
-        newGroup = new StationGroupMapElement({
-          rithmId: stationGroup1.rithmId,
-          title: stationGroup1.title,
-          stations: stationGroup1.stations,
-          subStationGroups: stationGroup1.subStationGroups,
-          status: MapItemStatus.Pending,
-          isChained: stationGroup1.isChained,
-          isReadOnlyRootStationGroup: false,
-        });
-      }
+      //Set up pending group for edit.
+      newGroup = new StationGroupMapElement({
+        rithmId: editStationGroup.rithmId,
+        title: editStationGroup.title,
+        stations: editStationGroup.stations,
+        subStationGroups: editStationGroup.subStationGroups,
+        status: MapItemStatus.Pending,
+        isChained: editStationGroup.isChained,
+        isReadOnlyRootStationGroup: false,
+      });
     }
 
     /* There should only ever be one pending group in the stationGroupElements array,
@@ -787,30 +791,6 @@ export class MapService {
         this.stationElements[stationIndex].disabled = false;
       });
     });
-  }
-
-  /**
-   * Revert the changes made across station group edit mode.
-   */
-  revertStationGroup(): void {
-    if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      const stationGroup = this.stationGroupElements.find(
-        (group) => group.status === MapItemStatus.Pending
-      );
-      if (!stationGroup) {
-        throw new Error(`A start station was not found for`);
-      }
-      const group = this.storedStationGroupElements.find(
-        (gr) => gr.rithmId === stationGroup.rithmId
-      );
-      if (group) {
-        const groupIndex = this.stationGroupElements.findIndex(
-          (gr) => gr.rithmId === stationGroup.rithmId
-        );
-        this.stationGroupElements[groupIndex] = group;
-        this.stationGroupElements[groupIndex].status = MapItemStatus.Normal;
-      }
-    }
   }
 
   /**
@@ -1807,13 +1787,8 @@ export class MapService {
     if (stationGroupIndex === -1) {
       throw new Error(`There is not any station group with this rithmId.`);
     }
-    if (this.mapMode$.value === MapMode.StationGroupAdd) {
-      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
-      this.stationGroupElements[stationGroupIndex].status =
-        MapItemStatus.Created;
-    } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      this.stationGroupElements[stationGroupIndex].markAsUpdated();
-    }
+    this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+    this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
     this.resetSelectedStationGroupStationStatus();
   }
 }

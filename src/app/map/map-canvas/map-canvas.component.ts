@@ -278,6 +278,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((stationRithmId) => {
         this.centerStationRithmId = stationRithmId;
       });
+
+    this.mapService.stationGroupOptionButtonClick$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((optionData) => {
+        if (optionData.click && optionData.data) {
+          this.updateStationGroup(optionData.data as StationGroupMapElement);
+        }
+      });
   }
 
   /**
@@ -2076,11 +2084,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
-            // if (this.mapMode === MapMode.StationGroupAdd) {
-            //   this.mapService.updatePendingStationGroup();
-            // } else if (this.mapMode === MapMode.StationGroupEdit) {
-            //   this.mapService.updatePendingStationGroup1();
-            // }
+            // Add animate effect for pending station group.
             this.animatePendingGroup();
           }
           return;
@@ -2131,13 +2135,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             (stationGroup) => stationGroup.selected
           )
         ) {
-          if (this.mapMode === MapMode.StationGroupAdd) {
-            this.mapService.resetSelectedStationGroupStationStatus();
-            this.mapService.updatePendingStationGroup();
-          } else if (this.mapMode === MapMode.StationGroupEdit) {
-            this.mapService.resetSelectedStationGroupStationStatus();
-            this.mapService.revertStationGroup();
-          }
+          this.mapService.resetSelectedStationGroupStationStatus();
+          this.mapService.updatePendingStationGroup();
         }
       } else if (
         stationGroupPending.hoverItem ===
@@ -2190,8 +2189,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param contextPoint Calculated position of click.
    */
   checkConnectionClick(contextPoint: Point): void {
-    this.updateStationGroup();
-    return;
     //Loop through connections to find the connection that was clicked.
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
@@ -2237,11 +2234,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.stationGroupSelectStatus(stationGroup);
             //Set station group status of parent and child station group and respective stations.
             this.mapService.setStationGroupStatus(stationGroup);
-            // if (this.mapMode === MapMode.StationGroupAdd) {
-            //   this.mapService.updatePendingStationGroup();
-            // } else if (this.mapMode === MapMode.StationGroupEdit) {
-            //   this.mapService.updatePendingStationGroup1();
-            // }
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
             this.animatePendingGroup();
@@ -2284,7 +2276,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //On clicked opening the option menu for the edit station group.
         this.mapService.stationButtonClick$.next({
           click: MatMenuOption.EditStationGroup,
-          data: [],
+          data: stationGroup,
         });
         return;
       }
@@ -2483,16 +2475,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update the status to create for a new station group.
+   * Updates the station group and set status of available and unavailable map elements.
    *
+   * @param stationGroup The station group to be edited.
    */
-  updateStationGroup(): void {
+  updateStationGroup(stationGroup: StationGroupMapElement): void {
     this.mapService.mapMode$.next(MapMode.StationGroupEdit);
-    const stationGroup = this.stationGroups.find(
-      (group) =>
-        group.rithmId?.toString().toLowerCase() ===
-        '19a2820b-4394-411e-a4e3-85c8f795c08f'
-    );
     if (!stationGroup) {
       throw new Error(`There is not any station group with status pending.`);
     }
