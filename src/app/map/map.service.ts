@@ -143,6 +143,12 @@ export class MapService {
   /** The Station rithm Id centered on the map. */
   centerStationRithmId$ = new BehaviorSubject('');
 
+  /** If station group option button was clicked. */
+  stationGroupOptionButtonClick$ = new BehaviorSubject({
+    click: false,
+    data: {},
+  });
+
   constructor(private http: HttpClient) {}
 
   /**

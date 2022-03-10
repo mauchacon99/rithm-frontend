@@ -149,6 +149,12 @@ export class MockMapService {
   /** The number of times this.center() should be called. It will continually be incremented until centering is done.*/
   centerCount$ = new BehaviorSubject(0);
 
+  /** If station group option button was clicked. */
+  stationGroupOptionButtonClick$ = new BehaviorSubject({
+    click: false,
+    data: {},
+  });
+
   /**
    * Creates a new `MockMapService`.
    *
