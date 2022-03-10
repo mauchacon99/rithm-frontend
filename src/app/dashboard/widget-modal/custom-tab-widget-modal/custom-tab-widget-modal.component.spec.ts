@@ -13,6 +13,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import { SelectedItemWidgetModel } from 'src/models';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -197,6 +198,15 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should catch error group list tabs and show message ', async () => {
+    component.indexTab = 3; // group tab
+    component.errorLoadingGroupTab = true;
+    await fixture.detectChanges();
+    const errorLoadingStationTab = fixture.nativeElement.querySelector(
+      '#error-group-list-tab'
+    );
+    expect(errorLoadingStationTab).toBeTruthy();
+  });
   it('should display loading indicator in group list tab', async () => {
     component.indexTab = 2; // group tab
     component.isLoadingGroupTab = true;
@@ -204,5 +214,25 @@ describe('CustomTabWidgetModalComponent', () => {
     const LoadingGrouTab =
       fixture.nativeElement.querySelector('#loading-tab-group');
     expect(LoadingGrouTab).toBeTruthy();
+  });
+
+  it('should test emit value', () => {
+    const expectedValue: SelectedItemWidgetModel = {
+      itemType: 'station',
+      itemList: {
+        rithmId: 'string',
+        name: 'string',
+        totalDocuments: 0,
+        groupName: 'string',
+        isChained: false,
+        totalStations: 0,
+        totalSubGroups: 0,
+        stationName: 'string',
+        stationGroupName: 'string',
+      },
+    };
+    const emitCall = spyOn(component.itemSelected, 'emit');
+    component.selectTypeElement(expectedValue);
+    expect(emitCall).toHaveBeenCalled();
   });
 });
