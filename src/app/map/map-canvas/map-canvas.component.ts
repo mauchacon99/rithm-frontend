@@ -9,11 +9,6 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
-  ConnectionMapElement,
-  StationGroupMapElement,
-  StationMapElement,
-} from 'src/helpers';
-import {
   MapMode,
   Point,
   MapDragItem,
@@ -52,6 +47,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { MapStationService } from '../map-core/map-station.service';
+import { ConnectionMapElement, StationGroupMapElement, StationMapElement } from 'src/helpers';
 
 /**
  * Component for the main `<canvas>` element used for the map.

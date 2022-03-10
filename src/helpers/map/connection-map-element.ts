@@ -6,7 +6,7 @@ import {
   STATION_WIDTH,
 } from 'src/app/map/map-constants';
 import { StationMapElement } from 'src/helpers';
-import { Point } from '../models';
+import { Point } from 'src/models';
 
 /**
  * Represents all information about a connection line between any two stations.
