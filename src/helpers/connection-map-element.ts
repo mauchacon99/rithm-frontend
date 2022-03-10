@@ -36,6 +36,9 @@ export interface ConnectionMapElement {
 
   /** Whether the user is currently hovering over this connection. */
   hovering: boolean;
+
+  /** Whether the connection line has to be highlighted or not. */
+  highlighted: boolean;
 }
 
 /**
@@ -62,6 +65,7 @@ export class ConnectionMapElement {
     this.setEndPoint(connectionEndStation.canvasPoint, scale);
     this.path = this.getConnectionLine(this.startPoint, this.endPoint, scale);
     this.hovering = false;
+    this.highlighted = false;
   }
 
   /**

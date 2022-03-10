@@ -184,6 +184,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         ) {
           //On right clicked open the option menu for the new station.
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+        } else if (
+          clickRes.click === MatMenuOption.EditStationGroup &&
+          this.mapService.mapMode$.value !== MapMode.View &&
+          this.mapService.mapMode$.value !== MapMode.StationGroupAdd
+        ) {
+          //On click of station group option button, the edit station group menu opens.
+          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
         }
       });
 
@@ -401,6 +408,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     if (this.clickMode === MatMenuOption.OptionButton) {
       this.menuX = point.x - 15;
       this.menuY = point.y + 63;
+    } else if (this.clickMode === MatMenuOption.EditStationGroup) {
+      // for edit station group option click on map.
+      this.menuX = point.x + 10;
+      this.menuY = point.y + 30;
     } else {
       // for add new station on right click.
       this.menuX = point.x;
@@ -524,6 +535,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const coords = { x: this.menuX - 5, y: this.menuY - 65 };
     // creates new station.
     this.mapStationService.createNewStation(coords);
+    this.mapService.matMenuStatus$.next(true);
+  }
+
+  /**
+   * Method called when a user clicks the edit station group.
+   */
+  editStationGroup(): void {
     this.mapService.matMenuStatus$.next(true);
   }
 

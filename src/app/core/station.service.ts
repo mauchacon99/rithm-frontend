@@ -642,13 +642,29 @@ export class StationService {
   updateFlowButtonText(
     stationRithmId: string,
     flowButtonText: string
-  ): Observable<StandardStringJSON> {
+  ): Observable<string> {
     const standardBody: StandardStringJSON = { data: flowButtonText };
     return this.http
       .put<StandardStringJSON>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationRithmId}`,
         standardBody
       )
-      .pipe(map((response) => response));
+      .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get the flow button text.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The flow button text.
+   */
+  getFlowButtonText(stationRithmId: string): Observable<string> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button`,
+        { params }
+      )
+      .pipe(map((response) => response.data));
   }
 }

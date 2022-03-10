@@ -622,7 +622,6 @@ describe('DashboardService', () => {
   });
 
   it('should get list tab documents', () => {
-    const dashboardRithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
@@ -646,9 +645,15 @@ describe('DashboardService', () => {
         isChained: false,
       },
     ];
-    service.getDocumentTabList(dashboardRithmId).subscribe((response) => {
+    service.getDocumentTabList().subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(itemListWidgetModal);
+    httpTestingController.verify();
   });
 
   it('should get tab list for stations', () => {
@@ -667,6 +672,27 @@ describe('DashboardService', () => {
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectDataResponse);
+    httpTestingController.verify();
+  });
+
+  it('should get list tab groups station', () => {
+    const expectDataResponse: ItemListWidgetModal[] = [
+      {
+        rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+        name: 'Group Name',
+        isChained: false,
+        totalStations: 2,
+        totalSubGroups: 9,
+      },
+    ];
+    service.getGroupStationTabList().subscribe((response) => {
+      expect(response).toEqual(expectDataResponse);
+    });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(expectDataResponse);

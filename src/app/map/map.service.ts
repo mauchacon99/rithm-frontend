@@ -728,7 +728,7 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-  private deepCopy<T>(source: T): T {
+  deepCopy<T>(source: T): T {
     return Array.isArray(source)
       ? source.map((item) => this.deepCopy(item))
       : source instanceof Date

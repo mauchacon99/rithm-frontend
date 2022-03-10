@@ -12,12 +12,14 @@ import { DetailDrawerComponent } from 'src/app/shared/detail-drawer/detail-drawe
 import { DocumentInfoHeaderComponent } from 'src/app/shared/document-info-header/document-info-header.component';
 import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/shared/station-info-header/station-info-header.component';
+import { BuildDrawerComponent } from 'src/app/station/build-drawer/build-drawer.component';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import {
   MockDocumentService,
   MockErrorService,
   MockStationService,
+  MockSplitService,
 } from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
@@ -47,13 +49,23 @@ import { MatDividerModule } from '@angular/material/divider';
 import { GridsterModule } from 'angular-gridster2';
 import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
+import { SplitService } from 'src/app/core/split.service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
   let stationInject: StationService;
   const formBuilder = new FormBuilder();
-
+  const question: Question = {
+    rithmId: '3j4k-3h2j-hj4j',
+    prompt: 'Label #1',
+    questionType: QuestionFieldType.ShortText,
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    children: [],
+    originalStationRithmId: '3j4k-3h2j-hj4j',
+  };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -68,6 +80,7 @@ describe('StationComponent', () => {
         MockComponent(ToolbarComponent),
         MockComponent(StationTemplateComponent),
         MockComponent(InputFrameWidgetComponent),
+        MockComponent(BuildDrawerComponent),
       ],
       imports: [
         NoopAnimationsModule,
@@ -95,6 +108,7 @@ describe('StationComponent', () => {
           useClass: DocumentInfoHeaderComponent,
         },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
@@ -187,16 +201,7 @@ describe('StationComponent', () => {
   });
 
   it('should move previous field from private/all expansion panel to the template area', () => {
-    const previousField: Question = {
-      rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Label #1',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false,
-      children: [],
-      originalStationRithmId: '3j4k-3h2j-hj4j',
-    };
+    const previousField = question;
     component.movePreviousFieldToTemplate(previousField);
     fixture.detectChanges();
     expect(component.stationInformation.questions).toHaveSize(1);
@@ -296,6 +301,23 @@ describe('StationComponent', () => {
     );
   });
 
+  it('should show error message when get previous and next stations', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getPreviousAndNextStations'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getPreviousAndNextStations();
+    expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
   it('should call sidenav service in the init life cycle', () => {
     const spySideNav = spyOn(TestBed.inject(SidenavDrawerService), 'setDrawer');
 
@@ -329,6 +351,50 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions[0].children).toHaveSize(5);
   });
 
+  it('should evaluate in questions when a possible answer will be empty', () => {
+    const fieldType: QuestionFieldType = QuestionFieldType.CheckList;
+    component.addQuestion(fieldType);
+    expect(component.stationInformation.questions[0].children).toHaveSize(0);
+  });
+
+  it('should listen the station question when exists', () => {
+    component.stationInformation.questions = [question];
+    fixture.detectChanges();
+    stationInject.stationQuestion$.next(question);
+    const prevQuestion = component.stationInformation.questions.find(
+      (field) => field.rithmId === question.rithmId
+    );
+    expect(prevQuestion).toBeTruthy();
+  });
+
+  it('should listen the station question when there are possible answers', () => {
+    component.stationInformation.questions = [
+      {
+        rithmId: '3j4k-3h2j-hj6j',
+        prompt: 'Label #1',
+        questionType: QuestionFieldType.ShortText,
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false,
+        children: [],
+        originalStationRithmId: '3j4k-3h2j-hj4j',
+        possibleAnswers: [
+          {
+            rithmId: '3j4k-3h2j-hj41',
+            text: 'Option 1',
+            default: false,
+          },
+        ],
+      },
+    ];
+    fixture.detectChanges();
+    stationInject.stationQuestion$.next(question);
+    const prevQuestion = component.stationInformation.questions.find(
+      (field) => field.rithmId === question.rithmId
+    );
+    expect(prevQuestion).toBeFalsy();
+  });
+
   it('should update text of flow button', () => {
     const flowButtonName = '';
     expect(flowButtonName).toBe('');
@@ -337,7 +403,7 @@ describe('StationComponent', () => {
     expect(component.stationInformation.flowButton).toBe('Flow');
   });
 
-  it('should call the method that detect change tabs.', () => {
+  it('should call the method that change tabs to Flow Logic tab.', () => {
     const tabsIndex = {
       index: 1,
     } as MatTabChangeEvent;
@@ -350,7 +416,20 @@ describe('StationComponent', () => {
     expect(spyTabsChange).toHaveBeenCalledWith(tabsIndex);
   });
 
-  it('should call the method that returns new flow logic rules.', () => {
+  it('should call the method that change tabs to Contain tab.', () => {
+    const tabsIndex = {
+      index: 0,
+    } as MatTabChangeEvent;
+    const spyTabsChange = spyOn(
+      component,
+      'tabSelectedChanged'
+    ).and.callThrough();
+    component.tabSelectedChanged(tabsIndex);
+    expect(component.isFlowLogicTab).toBeFalsy();
+    expect(spyTabsChange).toHaveBeenCalledWith(tabsIndex);
+  });
+
+  it('should call the method that returns flow logic rules when is updated.', () => {
     const stationFlowLogic: FlowLogicRule = {
       stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
       destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
@@ -376,12 +455,71 @@ describe('StationComponent', () => {
         subRules: [],
       },
     };
+    component.pendingFlowLogicRules = [stationFlowLogic];
+    const flowLogicStation = component.pendingFlowLogicRules.findIndex(
+      (flowRule) =>
+        flowRule.destinationStationRithmID ===
+          stationFlowLogic.destinationStationRithmID &&
+        flowRule.stationRithmId === stationFlowLogic.stationRithmId
+    );
     const spyNewRulesStation = spyOn(
       component,
       'addFlowLogicRule'
     ).and.callThrough();
     component.addFlowLogicRule(stationFlowLogic);
+    expect(flowLogicStation).toBeGreaterThanOrEqual(0);
     expect(spyNewRulesStation).toHaveBeenCalledWith(stationFlowLogic);
+  });
+
+  it('should call the method that returns new flow logic rules when is added.', () => {
+    const stationFlowLogic: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRule: {
+        ruleType: RuleType.Or,
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              questionType: QuestionFieldType.ShortText,
+              value: 'birthday',
+              text: 'test',
+            },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              questionType: QuestionFieldType.ShortText,
+              value: '5/27/1982',
+              text: 'test',
+            },
+          },
+        ],
+        subRules: [],
+      },
+    };
+    const flowLogicStation = component.pendingFlowLogicRules.findIndex(
+      (flowRule) =>
+        flowRule.destinationStationRithmID ===
+          stationFlowLogic.destinationStationRithmID &&
+        flowRule.stationRithmId === stationFlowLogic.stationRithmId
+    );
+    const spyNewRulesStation = spyOn(
+      component,
+      'addFlowLogicRule'
+    ).and.callThrough();
+    component.addFlowLogicRule(stationFlowLogic);
+    expect(flowLogicStation).toBeLessThanOrEqual(-1);
+    expect(spyNewRulesStation).toHaveBeenCalledWith(stationFlowLogic);
+  });
+
+  it('should call the method that add new rules and flow logic is null', () => {
+    const spyNewRulesStation = spyOn(
+      component,
+      'addFlowLogicRule'
+    ).and.callThrough();
+    component.addFlowLogicRule(null);
+    expect(spyNewRulesStation).toHaveBeenCalledWith(null);
+    expect(component.pendingFlowLogicRules.length).toEqual(0);
   });
 
   it('should saved the flow logic rules in current station', () => {
@@ -518,6 +656,29 @@ describe('StationComponent', () => {
     await component.cancelStationChanges();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
     expect(component.editMode).toBeFalsy();
+  });
+
+  it('should call the function that return data about current station', () => {
+    const spyStationInfo = spyOn(
+      TestBed.inject(StationService),
+      'getStationInfo'
+    ).and.callThrough();
+    component['getStationInfo'](component.stationRithmId);
+    expect(spyStationInfo).toHaveBeenCalled();
+  });
+
+  it('should show error message when return data about current station', () => {
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getStationInfo'](component.stationRithmId);
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 
   it('should change the edit mode and set grid mode', () => {

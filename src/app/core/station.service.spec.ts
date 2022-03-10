@@ -1104,12 +1104,30 @@ describe('StationService', () => {
     service
       .updateFlowButtonText(stationId, flowButtonText)
       .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
+        expect(response).toEqual(expectedResponse.data);
       });
     const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`;
     const req = httpTestingController.expectOne(router);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the flow button text', () => {
+    const expectedResponse: StandardStringJSON = {
+      data: 'Flow',
+    };
+    service.getFlowButtonText(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
 
     req.flush(expectedResponse);
     httpTestingController.verify();

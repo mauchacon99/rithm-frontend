@@ -1911,9 +1911,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
             stationGroup.checkElementHover(eventContextPoint, this.context);
-            //If cursor is over a group boundary or name.
+            //If cursor is over a group boundary or option button.
             if (
-              stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+              stationGroup.hoverItem ===
+                StationGroupElementHoverItem.Boundary ||
+              (stationGroup.hoverItem ===
+                StationGroupElementHoverItem.ButtonOption &&
+                this.mapMode !== MapMode.View)
             ) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -2088,7 +2092,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Check if click was on a station group boundary.
-    this.checkStationGroupClick(contextPoint);
+    this.checkStationGroupClick(contextPoint, point);
 
     // Accepted or Cancel a new station group.
     if (
@@ -2185,12 +2189,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
+   * @param point The position of mouse click event, used to calculate where to open option menu.
    */
-  checkStationGroupClick(contextPoint: Point): void {
+  checkStationGroupClick(contextPoint: Point, point: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.status !== MapItemStatus.Pending) {
         stationGroup.checkElementHover(contextPoint, this.context);
+
         //If MapMode is StationGroupAdd we select the group.
         if (this.mapMode === MapMode.StationGroupAdd) {
           //If the cursor is over the group boundary and the group is not disabled.
@@ -2242,6 +2248,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             break;
           }
         }
+      }
+      if (
+        stationGroup.hoverItem === StationGroupElementHoverItem.ButtonOption &&
+        this.mapMode === MapMode.Build
+      ) {
+        //set mousePoint to the tracked cursor position.
+        this.mapService.currentMousePoint$.next(point);
+        //On clicked opening the option menu for the edit station group.
+        this.mapService.stationButtonClick$.next({
+          click: MatMenuOption.EditStationGroup,
+          data: [],
+        });
+        return;
       }
     }
   }
