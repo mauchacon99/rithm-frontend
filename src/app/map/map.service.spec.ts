@@ -716,8 +716,8 @@ describe('MapService', () => {
     );
 
     service.updateCreatedStationGroup(rithmId);
-    expect(service.stationGroupElements[1].title).toEqual(' Sub RithmGroup');
-    expect(service.stationGroupElements[1].status).toBe(MapItemStatus.Normal);
+    expect(service.stationGroupElements[1].title).toEqual('Untitled Group');
+    expect(service.stationGroupElements[1].status).toBe(MapItemStatus.Created);
     expect(resetSelectedStationGroupStationStatusSpy).toHaveBeenCalled();
 
     expect(service.stationGroupElements[0].status).not.toBe(
