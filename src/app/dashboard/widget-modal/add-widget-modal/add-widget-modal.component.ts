@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SelectedItemWidgetModel } from 'src/models';
 
@@ -9,16 +9,13 @@ import { SelectedItemWidgetModel } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
-  /** The type of item clicked on for list-widget-modal to display. */
-  @Output() itemSelected = new EventEmitter<SelectedItemWidgetModel>();
-
   /** Tab Parents selected. */
   tabParentSelect = 0;
 
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
-  /** */
+  /** The element type to be shown. */
   identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
 
   constructor(
@@ -39,7 +36,6 @@ export class AddWidgetModalComponent {
    * @param element The type of element.
    */
   selectTypeElement(element: SelectedItemWidgetModel): void {
-    this.itemSelected.emit(element);
     this.identifyShowElement = element.itemType;
   }
 }

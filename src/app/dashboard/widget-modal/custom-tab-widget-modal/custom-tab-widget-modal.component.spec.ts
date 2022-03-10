@@ -13,7 +13,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-list-widget-modal.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { SelectedItemWidgetModel } from '../../../../models';
+import { SelectedItemWidgetModel } from 'src/models';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;

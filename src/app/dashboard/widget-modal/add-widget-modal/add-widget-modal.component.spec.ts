@@ -74,9 +74,8 @@ describe('AddWidgetModalComponent', () => {
       },
     };
     const showElement = expectedValue.itemType;
-    const emitCall = spyOn(component.itemSelected, 'emit');
+    expect(component.identifyShowElement).toBe('tabs');
     component.selectTypeElement(expectedValue);
     expect(showElement).toBe('station');
-    expect(emitCall).toHaveBeenCalled();
   });
 });
