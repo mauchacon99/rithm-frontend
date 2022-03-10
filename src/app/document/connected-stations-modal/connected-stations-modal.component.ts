@@ -7,7 +7,7 @@ import {
   Station,
 } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
-import { first, Observable, Subject } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
@@ -84,11 +84,11 @@ export class ConnectedStationsModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.isAdmin ? this.getAllStations() : this.getConnectedStations();
-    this.subscribeToAutocomplete$();
+    this.listenAutocomplete$();
   }
 
-  /** Subscribe to listen changes in autocomplete. */
-  private subscribeToAutocomplete$(): void {
+  /** Listen changes in autocomplete. */
+  private listenAutocomplete$(): void {
     this.filteredOptionsAutocomplete$ = this.formMoveDocument.valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value.name)),

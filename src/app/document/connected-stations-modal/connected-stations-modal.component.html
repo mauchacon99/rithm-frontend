@@ -22,8 +22,17 @@
   <mat-form-field class="w-4/5" appearance="outline">
     <mat-label> {{ label }} </mat-label>
 
-    <input matInput [formControl]="formMoveDocument" [matAutocomplete]="auto" />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <input
+      matInput
+      [formControl]="formMoveDocument"
+      data-testid="input-autocomplete"
+      id="input-autocomplete"
+      [matAutocomplete]="autocompleteMoveDocument"
+    />
+    <mat-autocomplete
+      #autocompleteMoveDocument="matAutocomplete"
+      [displayWith]="displayFn"
+    >
       <mat-option
         class="text-sm"
         *ngFor="let station of filteredOptionsAutocomplete$ | async"
