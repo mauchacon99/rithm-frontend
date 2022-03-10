@@ -785,4 +785,25 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+
+    /**
+   * Save Buttons Settings.
+   */
+     async saveButtonSettings(): Promise<void> {
+      this.stationService
+        .updateFlowButtonText(
+          this.stationRithmId,
+          this.flowButtonName
+        )
+        .pipe(first())
+        .subscribe({
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              'Something went wrong on our end when updating the flow button text and we are looking into it. \
+                Please try again in a little while',
+              error
+            );
+          },
+        });
+    }
 }

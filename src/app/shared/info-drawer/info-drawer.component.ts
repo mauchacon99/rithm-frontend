@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
-import { Subject, first } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from 'src/app/map/map.service';
@@ -56,15 +56,6 @@ export class InfoDrawerComponent implements OnDestroy {
   }
 
   /**
-   * Whether the info-drawer is opened.
-   *
-   * @returns Return true if info-drawer is opened, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
-  }
-
-  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -87,23 +78,6 @@ export class InfoDrawerComponent implements OnDestroy {
     ) {
       this.mapService.isDrawerOpened$.next(false);
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
-    }
-    if (drawerItem === 'stationInfo' && !this.isDrawerOpen) {
-      this.stationService
-        .updateFlowButtonText(
-          this.stationDrawer.stationRithmId,
-          this.stationDrawer.flowButtonName
-        )
-        .pipe(first())
-        .subscribe({
-          error: (error: unknown) => {
-            this.errorService.displayError(
-              'Something went wrong on our end when updating the flow button text and we are looking into it. \
-              Please try again in a little while',
-              error
-            );
-          },
-        });
     }
     this.drawerMode = '';
   }
