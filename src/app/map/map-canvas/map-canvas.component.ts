@@ -282,8 +282,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.stationGroupOptionButtonClick$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((optionData) => {
-        if (optionData.click && optionData.data) {
-          this.updateStationGroup(optionData.data as StationGroupMapElement);
+        if (optionData.click && optionData.data instanceof StationGroupMapElement) {
+          this.updateStationGroup(optionData.data);
         }
       });
   }
