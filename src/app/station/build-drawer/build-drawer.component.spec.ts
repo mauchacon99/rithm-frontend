@@ -28,7 +28,7 @@ describe('BuildDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create mat-selection-list and mat-list-option and a possible selection to an item', async () => {
+  it('should create mat-selection-list and mat-list-option and a possible selection to an item', () => {
     const categoryItem = fixture.debugElement.queryAll(
       By.directive(MatListOption)
     );
