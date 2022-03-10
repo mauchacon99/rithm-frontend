@@ -129,8 +129,8 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     this.formColumns.reset();
     this.documentFields = [];
     const dataForm: string[] = [];
-    this.questions.map((questionList) => {
-      questionList.questions.map((question) => {
+    this.questions?.map((questionList) => {
+      questionList.questions?.map((question) => {
         this.documentFields.push({
           name: question.prompt,
           questionId: question.rithmId,
@@ -141,7 +141,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       });
     });
     if (this.documentColumns.length) {
-      this.documentColumns.map((column) => {
+      this.documentColumns?.map((column) => {
         dataForm.push(column.questionId as string);
       });
     }
@@ -151,7 +151,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Update widget. */
   updateWidget(): void {
     this.documentColumns = [];
-    this.formColumns.value.map((questionId: string) => {
+    this.formColumns.value?.map((questionId: string) => {
       this.documentColumns.push({
         name: 'Question Document',
         questionId,

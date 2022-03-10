@@ -31,7 +31,8 @@ import { MatTableDataSource } from '@angular/material/table';
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget[dataWidget][editMode][widgetType]',
+  selector:
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -44,37 +45,14 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** To load dom by WidgetType. */
   @Input() widgetType: WidgetType = WidgetType.Station;
 
-  /** If expand or not the widget. */
-  @Output() expandWidget = new EventEmitter<boolean>();
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
 
   /** Image setter. */
   private _image!: string | null;
 
   /** Image to banner. */
-  @Input() set image(value: string | File | null | undefined) {
-    if (value && typeof value !== 'string') {
-      const reader = new FileReader();
-      reader.readAsDataURL(value);
-
-      reader.onload = () => {
-        this._image = reader.result as string;
-      };
-    } else {
-      this._image = value as string;
-    }
-  }
-
-  /**
-   * Get image.
-   *
-   * @returns String or NUll of the image.
-   */
-  get image(): string | null | undefined {
-    return this._image;
-  }
-
-  /** Open drawer. */
-  @Output() toggleDrawer = new EventEmitter<number>();
+  @Input() image: string | File | null | undefined;
 
   /** Data widget. */
   private _dataWidget = '';
@@ -116,6 +94,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   get editMode(): boolean {
     return this._editMode;
   }
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
