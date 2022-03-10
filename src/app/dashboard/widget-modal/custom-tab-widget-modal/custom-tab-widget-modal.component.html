@@ -68,6 +68,7 @@
       </div>
       <div *ngIf="!errorLoadingDocumentTab && !isLoadingDocumentTab">
         <app-item-list-widget-modal
+          (itemSelected)="selectTypeElement($event)"
           [itemListWidgetModal]="dataSourceTableDocument"
           [itemType]="'document'"
         ></app-item-list-widget-modal>
@@ -88,16 +89,23 @@
       </div>
       <div *ngIf="!errorLoadingStationTab && !isLoadingStationTab">
         <app-item-list-widget-modal
+          (itemSelected)="selectTypeElement($event)"
           [itemListWidgetModal]="dataSourceTableStations"
           [itemType]="'station'"
         ></app-item-list-widget-modal>
       </div>
     </mat-tab>
     <mat-tab>
-      <app-item-list-widget-modal
-        [itemListWidgetModal]="dataSourceTableGroup"
-        [itemType]="'group'"
-      ></app-item-list-widget-modal>
+      <div *ngIf="isLoadingGroupTab" class="loading">
+        <app-loading-indicator id="loading-tab-group"></app-loading-indicator>
+      </div>
+      <div *ngIf="!isLoadingGroupTab">
+        <app-item-list-widget-modal
+          (itemSelected)="selectTypeElement($event)"
+          [itemListWidgetModal]="dataSourceTableGroup"
+          [itemType]="'group'"
+        ></app-item-list-widget-modal>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>

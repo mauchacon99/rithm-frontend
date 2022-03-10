@@ -40,7 +40,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     return (
       this.mapMode === MapMode.Build ||
       this.mapMode === MapMode.StationAdd ||
-      this.mapMode === MapMode.StationGroupAdd
+      this.mapMode === MapMode.StationGroupAdd ||
+      this.mapMode === MapMode.StationGroupEdit
     );
   }
 
@@ -59,7 +60,10 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get stationGroupAddActive(): boolean {
-    return this.mapMode === MapMode.StationGroupAdd;
+    return (
+      this.mapMode === MapMode.StationGroupAdd ||
+      this.mapMode === MapMode.StationGroupEdit
+    );
   }
 
   constructor(
