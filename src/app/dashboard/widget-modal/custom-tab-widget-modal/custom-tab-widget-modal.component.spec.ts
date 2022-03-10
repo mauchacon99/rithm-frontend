@@ -206,4 +206,12 @@ describe('CustomTabWidgetModalComponent', () => {
     );
     expect(errorLoadingStationTab).toBeTruthy();
   });
+  it('should display loading indicator in group list tab', async () => {
+    component.indexTab = 2; // group tab
+    component.isLoadingGroupTab = true;
+    await fixture.detectChanges();
+    const LoadingGrouTab =
+      fixture.nativeElement.querySelector('#loading-tab-group');
+    expect(LoadingGrouTab).toBeTruthy();
+  });
 });

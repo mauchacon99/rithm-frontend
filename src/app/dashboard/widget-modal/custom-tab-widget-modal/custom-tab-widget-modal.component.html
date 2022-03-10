@@ -99,7 +99,10 @@
           Error: failed to obtain groups.
         </p>
       </div>
-      <div *ngIf="!errorLoadingGroupTab">
+      <div *ngIf="isLoadingGroupTab" class="loading">
+        <app-loading-indicator id="loading-tab-group"></app-loading-indicator>
+      </div>
+      <div *ngIf="!isLoadingGroupTab && !errorLoadingGroupTab">
         <app-item-list-widget-modal
           [itemListWidgetModal]="dataSourceTableGroup"
           [itemType]="'group'"
