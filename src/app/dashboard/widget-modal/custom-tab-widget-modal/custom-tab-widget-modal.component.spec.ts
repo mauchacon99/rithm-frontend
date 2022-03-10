@@ -197,6 +197,15 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should display loading indicator in group list tab', async () => {
+    component.indexTab = 2; // group tab
+    component.isLoadingGroupTab = true;
+    await fixture.detectChanges();
+    const LoadingGrouTab =
+      fixture.nativeElement.querySelector('#loading-tab-group');
+    expect(LoadingGrouTab).toBeTruthy();
+  });
+
   it('should test emit value', () => {
     const expectedValue = 'station';
     const emitCall = spyOn(component.itemSelected, 'emit');

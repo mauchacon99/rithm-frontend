@@ -36,6 +36,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Whether the getting tab document list is loading. */
   isLoadingDocumentTab = false;
 
+  /** Whether the getting tab group list is loading. */
+  isLoadingGroupTab = false;
+
   /** Error loading petition station tab. */
   errorLoadingStationTab = false;
 
@@ -126,6 +129,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Get the list for the groups the stations tabs.
    */
   private getGroupStationTabList(): void {
+    this.isLoadingGroupTab = true;
     this.dashboardService
       .getGroupStationTabList()
       .pipe(first())
@@ -134,8 +138,10 @@ export class CustomTabWidgetModalComponent implements OnInit {
           this.dataSourceTableGroup = new MatTableDataSource(
             itemsListGroupsStation
           );
+          this.isLoadingGroupTab = false;
         },
         error: (error: unknown) => {
+          this.isLoadingGroupTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

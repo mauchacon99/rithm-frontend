@@ -320,8 +320,12 @@ describe('DashboardComponent', () => {
   });
 
   it('should call openDialog', () => {
+    component.isLoading = false;
     component.viewNewDashboard = true;
     component.editMode = true;
+    component.errorLoadingDashboard = false;
+    component.isCreateNewDashboard = false;
+    component.isLoading = false;
     component.isAddWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
@@ -698,44 +702,60 @@ describe('DashboardComponent', () => {
   describe('Testing split.io', () => {
     let splitService: SplitService;
     let userService: UserService;
+
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
       userService = TestBed.inject(UserService);
     });
 
-    it('should get splits for the viewNewDashboard and isAddWidget', () => {
+    it('should call split service and treatments', () => {
       const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk');
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      // showButtonSetting
+      const spyGetConfigWidgetsTreatment = spyOn(
+        splitService,
+        'getConfigWidgetsTreatment'
+      ).and.callThrough();
+      // viewNewDashboard
       const spyGetDashboardTreatment = spyOn(
         splitService,
         'getDashboardTreatment'
       ).and.callThrough();
+      // isAddWidget
       const spyGetDashboardLibraryTreatment = spyOn(
         splitService,
         'getDashboardLibraryTreatment'
       ).and.callThrough();
+
       splitService.sdkReady$.next();
       component.ngOnInit();
+
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
-      expect(component.viewNewDashboard).toBeTrue();
       expect(component.isAddWidget).toBeTrue();
+      expect(component.viewNewDashboard).toBeTrue();
+      expect(component.showButtonSetting).toBeTrue();
     });
 
-    it('should catch error the splits for the menu', () => {
+    it('should catch split error ', () => {
       const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk');
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
       splitService.sdkReady$.error('error');
       const errorService = spyOn(
         TestBed.inject(ErrorService),
         'logError'
       ).and.callThrough();
       component.ngOnInit();
+
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.viewNewDashboard).toBeFalse();
+      expect(component.showButtonSetting).toBeFalse();
     });
   });
 });

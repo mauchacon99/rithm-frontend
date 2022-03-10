@@ -23,18 +23,9 @@
   }"
 >
   <!--  Banner image-->
-  <div
-    *ngIf="widgetType === typesWidget.StationTableBanner"
-    class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col"
-  >
-    <i *ngIf="!image" class="fas text-[60px] text-secondary-300 fa-image"></i>
-    <img
-      *ngIf="image"
-      [src]="image"
-      class="w-full h-full object-cover"
-      alt="Image station"
-    />
-  </div>
+  <ng-container *ngIf="widgetType === typesWidget.StationTableBanner">
+    <app-banner-image-widget [image]="image"></app-banner-image-widget>
+  </ng-container>
   <!-- Header widget -->
   <div
     class="w-full px-2 pb-2 flex flex-col h-full"
@@ -66,7 +57,7 @@
             Document not created!
           </div>
         </div>
-        <div *ngIf="editMode" id="gear-icon">
+        <div *ngIf="editMode && showButtonSetting" id="gear-icon">
           <button
             mat-icon-button
             [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
