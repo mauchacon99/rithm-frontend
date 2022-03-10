@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { ItemListWidgetModal } from 'src/models';
+import { ItemListWidgetModal, SelectedItemWidgetModel } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -14,6 +14,9 @@ import { MatTableDataSource } from '@angular/material/table';
 export class CustomTabWidgetModalComponent implements OnInit {
   /* Dashboard rithm Id. */
   @Input() dashboardRithmId!: string;
+
+  /** The type of item clicked on for list-widget-modal to display. */
+  @Output() itemSelected = new EventEmitter<SelectedItemWidgetModel>();
 
   /** Index default in tabs. */
   indexTab = 0;
@@ -41,6 +44,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /** Variable to show if the error getting tab document list. */
   errorLoadingDocumentTab = false;
+
+  /** Variable to show if the error getting tab document list. */
+  errorLoadingGroupTab = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -126,18 +132,21 @@ export class CustomTabWidgetModalComponent implements OnInit {
    * Get the list for the groups the stations tabs.
    */
   private getGroupStationTabList(): void {
+    this.errorLoadingGroupTab = false;
     this.isLoadingGroupTab = true;
     this.dashboardService
       .getGroupStationTabList()
       .pipe(first())
       .subscribe({
         next: (itemsListGroupsStation) => {
+          this.errorLoadingGroupTab = false;
           this.dataSourceTableGroup = new MatTableDataSource(
             itemsListGroupsStation
           );
           this.isLoadingGroupTab = false;
         },
         error: (error: unknown) => {
+          this.errorLoadingGroupTab = true;
           this.isLoadingGroupTab = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -145,5 +154,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Sending the type for the selected element.
+   *
+   * @param element The type of element.
+   */
+  selectTypeElement(element: SelectedItemWidgetModel): void {
+    this.itemSelected.emit(element);
   }
 }

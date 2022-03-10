@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SelectedItemWidgetModel } from 'src/models';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -14,6 +15,9 @@ export class AddWidgetModalComponent {
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
+  /** The element type to be shown. */
+  identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
+
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
     @Inject(MAT_DIALOG_DATA) public matData: string
@@ -24,5 +28,14 @@ export class AddWidgetModalComponent {
   /** Close add widgets modal. */
   closeModal(): void {
     this.dialogRef.close();
+  }
+
+  /**
+   * Getting the type for the selected element.
+   *
+   * @param element The type of element.
+   */
+  selectTypeElement(element: SelectedItemWidgetModel): void {
+    this.identifyShowElement = element.itemType;
   }
 }
