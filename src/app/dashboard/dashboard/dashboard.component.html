@@ -186,15 +186,22 @@
                 [widgetType]="item.widgetType"
                 [image]="item.image"
                 [editMode]="editMode"
+                [showButtonSetting]="showButtonSetting"
                 (toggleDrawer)="
                   toggleWidgetDrawer('stationWidget', item, index, $event)
                 "
               >
               </app-station-widget>
               <app-document-widget
-                *ngIf="item.widgetType === widgetType.Document"
+                *ngIf="
+                  item.widgetType === widgetType.Document ||
+                  item.widgetType === widgetType.DocumentListBanner
+                "
                 [dataWidget]="item.data"
+                [widgetType]="item.widgetType"
+                [image]="item.image"
                 [editMode]="editMode"
+                [showButtonSetting]="showButtonSetting"
                 (toggleDrawer)="
                   toggleWidgetDrawer('documentWidget', item, index, $event)
                 "

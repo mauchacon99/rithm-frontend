@@ -94,10 +94,15 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <app-item-list-widget-modal
-        [itemListWidgetModal]="dataSourceTableGroup"
-        [itemType]="'group'"
-      ></app-item-list-widget-modal>
+      <div *ngIf="isLoadingGroupTab" class="loading">
+        <app-loading-indicator id="loading-tab-group"></app-loading-indicator>
+      </div>
+      <div *ngIf="!isLoadingGroupTab">
+        <app-item-list-widget-modal
+          [itemListWidgetModal]="dataSourceTableGroup"
+          [itemType]="'group'"
+        ></app-item-list-widget-modal>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>

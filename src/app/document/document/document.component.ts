@@ -558,7 +558,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   getFlowButtonName(): void {
     this.stationService
-      .getFlowButtonText(this.documentInformation.stationRithmId)
+      .getFlowButtonText(this.stationId)
       .pipe(first())
       .subscribe({
         next: (flowButtonText) => {
