@@ -17,7 +17,9 @@ export class MockSplitService {
    * @param userId User id of logged in user.
    */
   // eslint-disable-next-line
-  public initSdk(userId: string): void {}
+  public initSdk(userId: string): void {
+    this.sdkReady$.next();
+  }
 
   /**
    * Get the dashboard split.
@@ -25,6 +27,15 @@ export class MockSplitService {
    * @returns Split treatment.
    */
   public getDashboardTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the widget settings config.
+   *
+   * @returns Split treatment.
+   */
+  public getConfigWidgetsTreatment(): string {
     return 'on';
   }
 
@@ -38,11 +49,29 @@ export class MockSplitService {
   }
 
   /**
-   * Get the option the menu dashboard for hidden o show manage members.
+   * Get the station document split.
+   *
+   * @returns Split treatment.
+   */
+  public getStationDocumentTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the option the menu dashboard for hidden or show manage members.
    *
    * @returns Split treatment.
    */
   public getManageUserTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the section Image banner.
+   *
+   * @returns Split treatment.
+   */
+  public getStationUploadBannerTreatment(): string {
     return 'on';
   }
 }
