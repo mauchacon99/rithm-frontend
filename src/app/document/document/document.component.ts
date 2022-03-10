@@ -280,23 +280,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Navigates user forward on a chained Flow when exist a single forward station.
-   */
-  navigateForward(): void {
-    if (this.isWidget) this.widgetReloadListDocuments(true, false);
-    this.router
-      .navigate([`/document/${this.documentInformation.documentRithmId}`], {
-        queryParams: {
-          documentId: this.documentInformation.documentRithmId,
-          stationId: this.forwardStations[0].rithmId,
-        },
-      })
-      .then(() => {
-        this.getParams();
-      });
-  }
-
-  /**
    * Emit reload list of documents in station widget.
    *
    * @param isReturnListDocuments Return to list of documents, true to reload list.
@@ -514,13 +497,26 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (data: string[]) => {
           this.documentLoading = false;
           if (
+            !this.isWidget &&
             this.documentInformation.isChained &&
-            this.forwardStations.length === 1
+            data.length === 1
           ) {
-            this.navigateForward();
+            this.router
+              .navigate(
+                [`/document/${this.documentInformation.documentRithmId}`],
+                {
+                  queryParams: {
+                    documentId: this.documentInformation.documentRithmId,
+                    stationId: data[0],
+                  },
+                }
+              )
+              .then(() => {
+                this.getParams();
+              });
           } else {
             this.navigateBack();
           }

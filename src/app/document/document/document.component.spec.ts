@@ -26,7 +26,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import {
-  ConnectedStationInfo,
   MoveDocument,
   QuestionFieldType,
   StationRosterMember,
@@ -49,12 +48,6 @@ describe('DocumentComponent', () => {
     isWorker: true,
     isOwner: false,
   };
-  const forwardStations: ConnectedStationInfo[] = [
-    {
-      rithmId: '123132132',
-      name: 'TestFlow',
-    },
-  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -695,27 +688,6 @@ describe('DocumentComponent', () => {
       isReturnListDocuments: true,
       isReloadListDocuments: false,
     });
-  });
-
-  it('should navigate forward to the next station', () => {
-    const testingRouterForward = spyOn(
-      TestBed.inject(Router),
-      'navigate'
-    ).and.returnValue(Promise.resolve(true));
-
-    component.documentInformation.isChained = true;
-    component.forwardStations = forwardStations;
-
-    component.navigateForward();
-    expect(testingRouterForward).toHaveBeenCalledWith(
-      [`/document/${component.documentInformation.documentRithmId}`],
-      {
-        queryParams: {
-          documentId: component.documentInformation.documentRithmId,
-          stationId: component.forwardStations[0].rithmId,
-        },
-      }
-    );
   });
 
   it('should get text of flow button', () => {
