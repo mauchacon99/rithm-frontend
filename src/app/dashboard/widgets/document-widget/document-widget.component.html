@@ -35,7 +35,7 @@
     <div>
       <div class="flex justify-between items-center">
         <h3 *ngIf="dataDocumentWidget" class="font-semibold truncate">
-          {{ dataDocumentWidget.documentName }}
+          {{ dataDocumentWidget.documentName || 'Untitled Document' }}
         </h3>
         <div *ngIf="editMode && showButtonSetting" id="gear-icon-document">
           <button
