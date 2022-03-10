@@ -147,7 +147,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.documentId = this.documentRithmIdWidget;
       this.stationId = this.stationRithmIdWidget;
       this.getDocumentStationData();
-      this.getFlowButtonName();
     }
   }
 
@@ -240,7 +239,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.stationId = params.stationId;
           this.getDocumentStationData();
           this.getConnectedStations();
-          this.getFlowButtonName();
         }
       },
       error: (error: unknown) => {
@@ -309,6 +307,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         next: async (document) => {
           if (document) {
             this.documentInformation = document;
+            /** Get the name for the flow button. */
+            this.getFlowButtonName();
           }
           // Get the allow the previous button for the document.
           this.allowPreviousButton = await lastValueFrom(
