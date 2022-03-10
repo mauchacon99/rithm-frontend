@@ -95,7 +95,6 @@ describe('StationComponent', () => {
         MatExpansionModule,
         MatDividerModule,
         GridsterModule,
-        MatDividerModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
