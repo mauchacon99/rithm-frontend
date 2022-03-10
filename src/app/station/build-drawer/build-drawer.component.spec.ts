@@ -28,17 +28,27 @@ describe('BuildDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create mat-selection-list and mat-list-option and a possible selection to an item', () => {
+  it('should create mat-selection-list', () => {
+    const categoriesList = fixture.debugElement.query(
+      By.directive(MatSelectionList)
+    );
+    expect(categoriesList).toBeTruthy();
+  });
+
+  it('should create mat-list-option', () => {
+    const categoryItem = fixture.debugElement.queryAll(
+      By.directive(MatListOption)
+    );
+    expect(categoryItem.length).toEqual(component.buildCategories.length);
+  });
+
+  it('should make a possible selection to an item of list categories', () => {
     const categoryItem = fixture.debugElement.queryAll(
       By.directive(MatListOption)
     );
     const categoriesList = fixture.debugElement.query(
       By.directive(MatSelectionList)
     );
-
-    expect(categoriesList).toBeTruthy();
-    expect(categoryItem.length).toEqual(4);
-
     const categorySelected =
       categoryItem[2].injector.get<MatListOption>(MatListOption);
     const categoriesListSelected =
@@ -46,7 +56,7 @@ describe('BuildDrawerComponent', () => {
         MatSelectionList
       ).selectedOptions;
 
-    expect(categoriesListSelected.selected.length).toBe(0);
+    expect(categoriesListSelected.selected.length).toBe(1);
     expect(categoryItem[2].nativeElement.getAttribute('aria-selected')).toBe(
       'false'
     );

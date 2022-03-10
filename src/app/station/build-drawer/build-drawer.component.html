@@ -2,9 +2,10 @@
   <section class="px-4 border-b-2 border-secondary-300 build-categories">
     <mat-selection-list class="md:mb-8" [multiple]="false" #buildCategory>
       <mat-list-option
-        *ngFor="let category of buildCategories"
+        *ngFor="let category of buildCategories; let i = index"
         class="px-3 py-2 hover:bg-accent-100 rounded-sm"
         [value]="category"
+        [selected]="i === 0"
       >
         <p class="text-xs">{{ category }}</p>
       </mat-list-option>
