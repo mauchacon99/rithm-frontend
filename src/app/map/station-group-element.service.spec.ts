@@ -150,26 +150,6 @@ describe('StationGroupElementService', () => {
     expect(movedPointInX).toEqual(pointExpectX);
   });
 
-  it('should move a point by the y-coordinate over the line', () => {
-    const pointStart: Point = { x: 10.1, y: -5.1 };
-    const pointEnd: Point = { x: 29.0, y: -1.1 };
-    const pointExpectY: Point = {
-      x:
-        (pointStart.y + GROUP_CHARACTER_SIZE - pointEnd.y) /
-          service.slopeLine(pointStart, pointEnd) +
-        pointEnd.x,
-      y: pointStart.y + GROUP_CHARACTER_SIZE,
-    };
-    const movedPointInY = service.movePointOnLine(
-      pointStart,
-      pointEnd,
-      GROUP_CHARACTER_SIZE,
-      false
-    );
-
-    expect(movedPointInY).toEqual(pointExpectY);
-  });
-
   it('should return the position of the points that make the first straight line', () => {
     service.canvasDimensions = {
       width: 1200,

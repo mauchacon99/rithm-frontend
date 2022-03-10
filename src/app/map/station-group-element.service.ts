@@ -373,7 +373,8 @@ export class StationGroupElementService {
     const newTitle = this.splitStationGroupName(
       stationGroup.title,
       newPosition,
-      stationGroup.boundaryPoints
+      stationGroup.boundaryPoints,
+      stationGroup.isChained
     );
 
     // Append * if station group is updated.
@@ -709,7 +710,6 @@ export class StationGroupElementService {
    * @param pointStart The start point of the line.
    * @param pointEnd The end point of the line.
    * @param displacement The Amount of displacement.
-   * @param coordinate The coordinate to move, if true the coordinate is X else the coordinate is Y.
    * @param IsPath If calculated for a path.
    * @returns The new Point on line.
    */
@@ -717,16 +717,19 @@ export class StationGroupElementService {
     pointStart: Point,
     pointEnd: Point,
     displacement: number,
-    coordinate = true,
     IsPath = false
   ): Point {
     const newPoint = { ...pointStart };
 
     // Calculate the slope between two points.
     const m = this.slopeLine(pointStart, pointEnd);
+    // Calculate the projection of the displacement in x.
+    const newDisplacement = IsPath
+      ? displacement * Math.cos(Math.atan(m))
+      : displacement;
     // If the slope is infinity.
     if (Math.abs(m) === Math.PI / 2) {
-      if (coordinate) {
+      if (!IsPath) {
         //  The x-coordinate is shifted because when we use the rotate it moves in y-coordinate.
         newPoint.x += displacement;
       } else {
@@ -736,38 +739,20 @@ export class StationGroupElementService {
       return newPoint;
     }
 
-    // If true the coordinate is X else the coordinate is Y.
-    if (coordinate) {
-      if (
-        this.mapService.getMapX(pointStart.x) >
-          this.mapService.getMapX(pointEnd.x) &&
-        IsPath
-      ) {
-        // x-coordinate displacement.
-        newPoint.x -= displacement;
-        // The point-slope equation evaluating X.
-        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
-      } else {
-        // x-coordinate displacement.
-        newPoint.x += displacement;
-        // The point-slope equation evaluating X.
-        newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
-      }
+    if (
+      this.mapService.getMapX(pointStart.x) >
+        this.mapService.getMapX(pointEnd.x) &&
+      IsPath
+    ) {
+      // x-coordinate displacement.
+      newPoint.x -= newDisplacement;
+      // The point-slope equation evaluating X.
+      newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
     } else {
-      // If the Start point in y-coordinate is greater than the End point in y-coordinate
-      // Then subtract the displacement to the new position, or sum the displacement to the new position..
-      if (
-        this.mapService.getMapX(pointStart.y) >
-        this.mapService.getMapX(pointEnd.y)
-      ) {
-        // Y-coordinate displacement.
-        newPoint.y -= displacement;
-      } else {
-        // Y-coordinate displacement.
-        newPoint.y += displacement;
-      }
-      // The point-slope equation evaluating Y.
-      newPoint.x = (newPoint.y - pointEnd.y) / m + pointEnd.x;
+      // x-coordinate displacement.
+      newPoint.x += newDisplacement;
+      // The point-slope equation evaluating X.
+      newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
     }
     return newPoint;
   }
@@ -874,12 +859,14 @@ export class StationGroupElementService {
    * @param title The station group name.
    * @param position The better position in the array the points.
    * @param points The arrays points.
+   * @param isChained If the station group name include chained icon.
    * @returns The array with split title.
    */
   splitStationGroupName(
     title: string,
     position: number,
-    points: Point[]
+    points: Point[],
+    isChained = false
   ): string[] {
     // Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
@@ -933,6 +920,17 @@ export class StationGroupElementService {
     } else {
       newTitle.push(title);
     }
+    // We take into account the chain icon and option Button.
+    if (isChained) {
+      const titleAllWidthWithChainIcon =
+        this.canvasContext.measureText(newTitle[newTitle.length - 1]).width +
+        (STATION_GROUP_NAME_PADDING * 2 + CHAIN_GRID_NINE) * this.mapScale;
+      // If the width of the title plus the CHAIN_GRID_NINE are greater than the distance, we split title.
+      if (titleAllWidthWithChainIcon > distanceLine) {
+        newTitle.push(' ');
+      }
+    }
+
     return newTitle;
   }
 
@@ -1121,8 +1119,6 @@ export class StationGroupElementService {
         'Cannot draw station group icon if context is not defined'
       );
     }
-    // Calculation of the slope of the line.
-    const m = this.slopeLine(pointStart, pointEnd);
 
     // Move the point on the line to paint on the map.
     const newPoint = this.movePointOnLine(
@@ -1137,16 +1133,6 @@ export class StationGroupElementService {
       displacement
     );
 
-    // Calculation of the new displacement as a function of the slope of the line.
-    // If the slope is greater than pi/3 we adjust the icon multiplied by 3.
-    const newDisplacement =
-      displacement +
-      (Math.abs(m) === Math.PI / 2
-        ? 0
-        : Math.abs(m) < Math.PI / 3
-        ? -STATION_GROUP_DISPLACEMENT * this.mapScale
-        : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
-
     // Moves the point on the line to delimit where the hover zone begins.
     const newUnRotatedPointStart = this.movePointOnLine(
       {
@@ -1157,8 +1143,7 @@ export class StationGroupElementService {
         x: pointEnd.x,
         y: pointEnd.y,
       },
-      newDisplacement,
-      Math.abs(m) < Math.PI / 3,
+      displacement,
       true
     );
 
@@ -1194,12 +1179,10 @@ export class StationGroupElementService {
         displacedMap ? newPoint.x - pointStart.x : newPoint.x,
         this.canvasContext.measureText(icon).fontBoundingBoxDescent
       );
-      // If the slope is 0 then we do a displacement by the x-coordinate so that it does not overlap the station group name.
-      const displacementX = m === 0 ? GROUP_CHARACTER_SIZE * this.mapScale : 0;
       const path = new Path2D();
       // Create a circle over the icon button for hovering.
       path.arc(
-        newUnRotatedPointStart.x + displacementX,
+        newUnRotatedPointStart.x,
         newUnRotatedPointStart.y,
         ICON_STATION_GROUP_PATH_RADIUS * this.mapScale,
         0,
