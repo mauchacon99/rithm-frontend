@@ -71,6 +71,31 @@ export class DataLinkFieldComponent
   }
 
   /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.stationLoading = true;
+    this.stationService
+      .getAllStations()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = stations;
+          this.filterStations();
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -160,30 +185,5 @@ export class DataLinkFieldComponent
       startWith(''),
       map((value) => this._filter(value))
     );
-  }
-
-  /**
-   * Get the list of all stations.
-   */
-  private getAllStations(): void {
-    this.stationLoading = true;
-    this.stationService
-      .getAllStations()
-      .pipe(first())
-      .subscribe({
-        next: (stations) => {
-          this.stations = stations;
-          this.filterStations();
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Failed to get all stations for this data link field.',
-            error,
-            false
-          );
-        },
-      });
   }
 }
