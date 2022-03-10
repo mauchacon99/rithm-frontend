@@ -322,22 +322,11 @@ export class DocumentService {
    * @param documentAutoFlow Params for add flow to Document.
    * @returns Returns an empty observable.
    */
-  autoFlowDocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
-    if (!documentAutoFlow) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Unable to flow the document, invalid parameters.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return this.http.post<void>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`,
-        documentAutoFlow
-      );
-    }
+  autoFlowDocument(documentAutoFlow: DocumentAutoFlow): Observable<string[]> {
+    return this.http.post<string[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`,
+      documentAutoFlow
+    );
   }
 
   /**
