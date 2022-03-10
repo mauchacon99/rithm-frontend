@@ -147,6 +147,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.documentId = this.documentRithmIdWidget;
       this.stationId = this.stationRithmIdWidget;
       this.getDocumentStationData();
+      this.getFlowButtonName();
     }
   }
 
@@ -239,6 +240,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.stationId = params.stationId;
           this.getDocumentStationData();
           this.getConnectedStations();
+          this.getFlowButtonName();
         }
       },
       error: (error: unknown) => {
