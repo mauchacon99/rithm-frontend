@@ -93,7 +93,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     return (
       this.currentMode === MapMode.Build ||
       this.currentMode === MapMode.StationAdd ||
-      this.currentMode === MapMode.StationGroupAdd
+      this.currentMode === MapMode.StationGroupAdd ||
+      this.currentMode === MapMode.StationGroupEdit
     );
   }
 
@@ -105,7 +106,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   get isStationOrStationGroupAdd(): boolean {
     return (
       this.currentMode === MapMode.StationAdd ||
-      this.currentMode === MapMode.StationGroupAdd
+      this.currentMode === MapMode.StationGroupAdd ||
+      this.currentMode === MapMode.StationGroupEdit
     );
   }
 
@@ -540,6 +542,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Method called when a user clicks the edit station group.
    */
   editStationGroup(): void {
+    this.mapService.stationGroupOptionButtonClick$.next({
+      click: true,
+      data: this.mapService.stationButtonClick$.value.data,
+    });
     this.mapService.matMenuStatus$.next(true);
   }
 
