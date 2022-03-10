@@ -28,12 +28,7 @@
     <mat-drawer-content [ngClass]="{ static: mapElementDrawer.opened }">
       <div
         *ngIf="mapScale > zoomBuild && isAdmin"
-        class="flex justify-end items-center space-x-2.5 mx-2 overflow-hidden"
-        [ngClass]="
-          mapElementDrawer.opened
-            ? 'absolute z-20 right-0 pt-2 h-15 pr-3'
-            : 'md:m-2 py-2 h-12'
-        "
+        class="flex justify-end items-center space-x-2.5 m-2 md:mr-64 overflow-hidden py-2 h-12"
       >
         <span
           [class.invisible]="mapElementDrawer.opened"
@@ -104,7 +99,10 @@
   </div>
 </div>
 <app-map-search
-  class="absolute z-20 top-36 right-2"
+  class="absolute z-40 py-2 right-2"
+  [ngClass]="{
+    'mr-3': mapElementDrawer.opened
+  }"
   [isLoading]="mapDataLoading"
 ></app-map-search>
 <div class="absolute flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">

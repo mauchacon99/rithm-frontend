@@ -1,3 +1,9 @@
+<!-- Prevent safari from zooming in on input. -->
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
+
 <div
   *ngIf="isMobile && !mobileSearchOpen"
   class="bg-white shadow-md rounded border border-solid mb-2 block md:hidden"
@@ -14,7 +20,7 @@
 </div>
 
 <div
-  class="bg-white hidden md:block"
+  class="bg-white"
   [ngClass]="{
     relative: !isMobile,
     'fixed left-0 top-calc right-0 h-full': mobileSearchOpen
