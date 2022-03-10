@@ -1,12 +1,11 @@
 <div [formGroup]="dataLinkFieldForm">
-  <div class="flex justify-start flex-col">
-    <span class="text-primary-500 text-xs mb-2"
-      >DATA LINK |
-      <a
-        href="javascript: void(0)"
-        class="underline cursor-pointer text-accent-500"
-        >Help</a
-      ></span
+  <div class="flex flex-row justify-start text-xs space-x-2 mb-2">
+    <span class="text-primary-500">DATA LINK</span>
+    <mat-divider [vertical]="true"></mat-divider>
+    <a
+      href="javascript: void(0)"
+      class="underline cursor-pointer text-accent-500"
+      >Help</a
     >
   </div>
   <mat-form-field class="w-full" appearance="outline">

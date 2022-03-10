@@ -12,6 +12,7 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { Question, QuestionFieldType } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DataLinkFieldComponent } from './data-link-field.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 describe('DataLinkFieldComponent', () => {
   let component: DataLinkFieldComponent;
@@ -48,6 +49,7 @@ describe('DataLinkFieldComponent', () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
         MatAutocompleteModule,
+        MatDividerModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
