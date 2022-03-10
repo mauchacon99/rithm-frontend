@@ -130,6 +130,15 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('Should emit getWidgetItem', () => {
+    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
+    const spySetWidgetType = spyOn(component.getWidgetItem, 'emit');
+    component.ngOnInit();
+    expect(spySetWidgetType).toHaveBeenCalledOnceWith(
+      dataEditWidget.widgetItem
+    );
+  });
+
   describe('Test function loadColumnsSelect', () => {
     const questions: QuestionList[] = [
       {
