@@ -10,6 +10,7 @@ import { MockComponent } from 'ng-mocks';
 import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SelectedItemWidgetModel } from 'src/models';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -55,5 +56,26 @@ describe('AddWidgetModalComponent', () => {
     btnClose.click();
     expect(spyMethod).toHaveBeenCalled();
     expect(spyMatDialogRef).toHaveBeenCalled();
+  });
+
+  it('should test emit value', () => {
+    const expectedValue: SelectedItemWidgetModel = {
+      itemType: 'station',
+      itemList: {
+        rithmId: 'string',
+        name: 'string',
+        totalDocuments: 0,
+        groupName: 'string',
+        isChained: false,
+        totalStations: 0,
+        totalSubGroups: 0,
+        stationName: 'string',
+        stationGroupName: 'string',
+      },
+    };
+    const showElement = expectedValue.itemType;
+    expect(component.identifyShowElement).toBe('tabs');
+    component.selectTypeElement(expectedValue);
+    expect(showElement).toBe('station');
   });
 });
