@@ -31,7 +31,7 @@ export class AddWidgetModalComponent {
   }
 
   /**
-   * Sending the type for the selected element.
+   * Getting the type for the selected element.
    *
    * @param element The type of element.
    */
