@@ -196,4 +196,11 @@ describe('CustomTabWidgetModalComponent', () => {
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should test emit value', () => {
+    const expectedValue = 'station';
+    const emitCall = spyOn(component.itemSelected, 'emit');
+    component.selectTypeElement(expectedValue);
+    expect(emitCall).toHaveBeenCalled();
+  });
 });

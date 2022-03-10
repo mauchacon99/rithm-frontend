@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { ItemListWidgetModal } from 'src/models';
+import { ItemListWidgetModal, SelectedItemWidgetModel } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -14,6 +14,9 @@ import { MatTableDataSource } from '@angular/material/table';
 export class CustomTabWidgetModalComponent implements OnInit {
   /* Dashboard rithm Id. */
   @Input() dashboardRithmId!: string;
+
+  /** The type of item clicked on for list-widget-modal to display. */
+  @Output() itemSelected = new EventEmitter<SelectedItemWidgetModel>();
 
   /** Index default in tabs. */
   indexTab = 0;
@@ -139,5 +142,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Sending the type for the selected element.
+   *
+   * @param element The type of element.
+   */
+  selectTypeElement(element: SelectedItemWidgetModel): void {
+    this.itemSelected.emit(element);
   }
 }

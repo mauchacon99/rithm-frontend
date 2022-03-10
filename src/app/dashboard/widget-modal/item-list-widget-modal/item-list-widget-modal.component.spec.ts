@@ -24,4 +24,10 @@ describe('ItemListWidgetModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should test emit value', () => {
+    const emitCall = spyOn(component.itemSelected, 'emit');
+    component.selectTypeElement();
+    expect(emitCall).toHaveBeenCalled();
+  });
 });
