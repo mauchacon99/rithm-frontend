@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { CenterPanType, MapMode, MatMenuOption, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { StationMapElement } from 'src/helpers';
+import { ServiceStationMethods, StationMapElement } from 'src/helpers';
 import {
   BUTTON_ZOOM_COUNT_INCREMENT,
   DEFAULT_SCALE,
@@ -18,7 +18,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDrawer } from '@angular/material/sidenav';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { MapStationService } from '../map-core/map-station.service';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -131,7 +130,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
-    private mapStationService: MapStationService,
+    private serviceStationMethods: ServiceStationMethods,
     private popupService: PopupService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -466,7 +465,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         this.openedMenuStation.rithmId
       );
       //Delete the station.
-      this.mapStationService.deleteStation(this.openedMenuStation.rithmId);
+      this.serviceStationMethods.deleteStation(this.openedMenuStation.rithmId);
       //TODO: Update to check that the drawer being closed is the drawer that is deleted.
       //Close drawer so that user can't access deleted station anymore.
       this.sidenavDrawerService.closeDrawer();
@@ -534,7 +533,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     // calculates current mouse point in map for adding new station.
     const coords = { x: this.menuX - 5, y: this.menuY - 65 };
     // creates new station.
-    this.mapStationService.createNewStation(coords);
+    this.serviceStationMethods.createNewStation(coords);
     this.mapService.matMenuStatus$.next(true);
   }
 

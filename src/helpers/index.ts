@@ -7,3 +7,4 @@ export * from './map/station-group-map-element';
 export * from './map/station-map-element';
 export * from './map/boundary-map-element';
 export * from './map/connection-map-element';
+export * from './map/service/service-station-methods';

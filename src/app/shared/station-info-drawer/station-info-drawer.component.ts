@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { UtcTimeConversion } from 'src/helpers';
+import { ServiceStationMethods, UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
@@ -21,7 +21,6 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MapStationService } from 'src/app/map/map-core/map-station.service';
 
 /**
  * Component for info station.
@@ -146,7 +145,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private router: Router,
     private mapService: MapService,
-    private mapStationService: MapStationService,
+    private serviceStationMethods: ServiceStationMethods,
     private documentService: DocumentService,
     private dialog: MatDialog,
     private route: ActivatedRoute
@@ -658,7 +657,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (response) {
       if (this.openedFromMap) {
         this.mapService.removeAllStationConnections(this.stationRithmId);
-        this.mapStationService.deleteStation(this.stationRithmId);
+        this.serviceStationMethods.deleteStation(this.stationRithmId);
         this.sidenavDrawerService.closeDrawer();
       } else {
         this.stationService

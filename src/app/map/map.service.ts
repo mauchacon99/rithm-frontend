@@ -33,10 +33,10 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   BoundaryMapElement,
   ConnectionMapElement,
+  ServiceStationMethods,
   StationGroupMapElement,
   StationMapElement,
 } from 'src/helpers';
-import { MapStationService } from './map-core/map-station.service';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
@@ -146,7 +146,7 @@ export class MapService {
 
   constructor(
     private http: HttpClient,
-    private mapStationService: MapStationService
+    private serviceStationMethods: ServiceStationMethods
   ) {}
 
   /**
@@ -210,7 +210,7 @@ export class MapService {
     //Trigger logic to set map boundary box.
     this.setBoundary();
     //Trigger logic to use station map points and update stationCanvasPoints accordingly.
-    this.mapStationService.updateStationCanvasPoints();
+    this.serviceStationMethods.updateStationCanvasPoints();
   }
 
   /**
