@@ -347,13 +347,13 @@ export class StationElementService {
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     ctx.font = `normal ${fontSize}px Montserrat`;
     ctx.fillText(
-      isEditMode ? 'Cannot remove station' : 'Cannot add station to',
+      isEditMode ? 'Cannot have an' : 'Cannot add station to',
       startingX + scaledTooltipPadding,
       startingY + 12 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
     );
     ctx.fillText(
-      isEditMode ? 'from current selection' : 'current selection',
+      isEditMode ? 'empty Station Group' : 'current selection',
       startingX + scaledTooltipPadding,
       startingY + 32 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
