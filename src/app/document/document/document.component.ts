@@ -48,7 +48,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('subHeaderComponent')
   subHeaderComponent!: SubHeaderComponent;
 
-  /** The Document how widget. */
+  /** Whether de container is displayed inside a widget or not. */
   @Input() isWidget = false;
 
   /** Id for station in widget. */
@@ -499,9 +499,29 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (data) => {
           this.documentLoading = false;
-          this.navigateBack(true);
+          if (
+            !this.isWidget &&
+            this.documentInformation.isChained &&
+            data.length === 1
+          ) {
+            this.router
+              .navigate(
+                [`/document/${this.documentInformation.documentRithmId}`],
+                {
+                  queryParams: {
+                    documentId: this.documentInformation.documentRithmId,
+                    stationId: data[0],
+                  },
+                }
+              )
+              .then(() => {
+                this.getParams();
+              });
+          } else {
+            this.navigateBack(true);
+          }
         },
         error: (error: unknown) => {
           this.documentLoading = false;
