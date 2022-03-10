@@ -2081,6 +2081,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ) {
           //If the station is clickable.
           if (!station.disabled) {
+            //Stop de-selecting station in station group edit mode when it contains only one station.
+            if (
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.stationElements.filter((e) => e.selected)
+                .length === 1 &&
+              station.selected
+            ) {
+              return;
+            }
             //If station is not disabled, should be able to select it and based on it's selection should disable other stations
             //and station group as per the criteria.
             this.mapService.setStationGroupStationStatus();

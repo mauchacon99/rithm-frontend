@@ -92,11 +92,15 @@ export class StationElementService {
     //Draw the card itself.
     this.drawStationCard(station, dragItem);
     if (
-      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-      station.disabled &&
-      !station.selected &&
-      station.hoverItem !== StationElementHoverItem.None
+      (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        station.disabled &&
+        !station.selected &&
+        station.hoverItem !== StationElementHoverItem.None) ||
+      (this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+        station.hoverItem !== StationElementHoverItem.None &&
+        this.mapService.stationElements.filter((e) => e.selected).length ===
+          1 &&
+        station.selected)
     ) {
       this.drawStationToolTip(station);
     }
@@ -270,6 +274,14 @@ export class StationElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw tooltip if context is not defined');
     }
+
+    //Stop de-selecting station in station group edit mode when it contains only one station.
+    const isEditMode =
+      station.hoverItem !== StationElementHoverItem.None &&
+      this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+      this.mapService.stationElements.filter((e) => e.selected).length === 1 &&
+      station.selected;
+
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -335,13 +347,13 @@ export class StationElementService {
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     ctx.font = `normal ${fontSize}px Montserrat`;
     ctx.fillText(
-      'Cannot add station to',
+      isEditMode ? 'Cannot remove station' : 'Cannot add station to',
       startingX + scaledTooltipPadding,
       startingY + 12 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
     );
     ctx.fillText(
-      'current selection',
+      isEditMode ? 'from current selection' : 'current selection',
       startingX + scaledTooltipPadding,
       startingY + 32 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
