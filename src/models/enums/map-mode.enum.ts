@@ -13,4 +13,7 @@ export enum MapMode {
 
   /** The map is waiting for a location to be selected for a new station group. */
   StationGroupAdd,
+
+  /** The map is waiting for a location to be selected for a edit station group. */
+  StationGroupEdit,
 }
