@@ -25,6 +25,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { HttpClientModule } from '@angular/common/http';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
+import { FormsModule } from '@angular/forms';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -52,6 +53,7 @@ describe('ConnectedStationsModalComponent', () => {
         MatDialogModule,
         MatButtonModule,
         MatSelectModule,
+        FormsModule,
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),

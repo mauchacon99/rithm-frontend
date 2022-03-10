@@ -4,7 +4,7 @@ import { DocumentComponent } from './document/document.component';
 import { CommonModule } from '@angular/common';
 import { DocumentRoutingModule } from './document-routing.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DocumentFieldComponent } from './document-field/document-field.component';
 import { DocumentTemplateComponent } from './document-template/document-template.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -26,6 +26,8 @@ import { DocumentInfoHeaderModule } from 'src/app/shared/document-info-header/do
 import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fields.module';
 import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
 import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { MatButtonModule } from '@angular/material/button';
     PreviousFieldsModule,
     InfoDrawerModule,
     MatButtonModule,
+    MatAutocompleteModule,
+    MatInputModule,
   ],
   exports: [DocumentComponent],
 })

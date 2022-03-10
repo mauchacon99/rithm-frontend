@@ -21,11 +21,17 @@
   <!-- Select -->
   <mat-form-field class="w-4/5" appearance="outline">
     <mat-label> {{ label }} </mat-label>
-    <mat-select [(value)]="selectedStation">
-      <mat-option *ngFor="let station of stations" [value]="station.rithmId">
+
+    <input matInput [formControl]="formMoveDocument" [matAutocomplete]="auto" />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option
+        class="text-sm"
+        *ngFor="let station of filteredOptionsAutocomplete$ | async"
+        [value]="station"
+      >
         {{ station.name }}
       </mat-option>
-    </mat-select>
+    </mat-autocomplete>
   </mat-form-field>
 </div>
 <div *ngIf="connectedError" id="stations-error">
@@ -50,7 +56,9 @@
     color="accent"
     data-testid="connected-modal-move"
     id="connected-modal-move"
-    [disabled]="selectedStation === '' || selectedStation === null"
+    [disabled]="
+      formMoveDocument.invalid || checkTypeof || connectedStationLoading
+    "
     (click)="moveDocument()"
   >
     Move
