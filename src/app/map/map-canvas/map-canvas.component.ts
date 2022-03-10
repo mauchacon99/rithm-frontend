@@ -279,6 +279,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.centerStationRithmId = stationRithmId;
       });
 
+    //This subscribe shows if any station group has to be edited.
     this.mapService.stationGroupOptionButtonClick$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((optionData) => {
