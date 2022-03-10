@@ -789,7 +789,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Save Buttons Settings.
    */
-  async saveButtonSettings(): Promise<void> {
+  saveButtonSettings(): void {
     this.stationService
       .updateFlowButtonText(this.stationRithmId, this.flowButtonName)
       .pipe(first())

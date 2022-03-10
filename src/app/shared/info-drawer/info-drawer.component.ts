@@ -4,9 +4,6 @@ import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from 'src/app/map/map.service';
 import { StationInfoDrawerData } from 'src/models';
-import { StationInfoDrawerComponent } from 'src/app/shared/station-info-drawer/station-info-drawer.component';
-import { StationService } from 'src/app/core/station.service';
-import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Component for info drawer.
@@ -17,9 +14,6 @@ import { ErrorService } from 'src/app/core/error.service';
   styleUrls: ['./info-drawer.component.scss'],
 })
 export class InfoDrawerComponent implements OnDestroy {
-  @ViewChild(StationInfoDrawerComponent, { static: false })
-  stationDrawer!: StationInfoDrawerComponent;
-
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -30,9 +24,7 @@ export class InfoDrawerComponent implements OnDestroy {
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
-    private mapService: MapService,
-    private stationService: StationService,
-    private errorService: ErrorService
+    private mapService: MapService
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
