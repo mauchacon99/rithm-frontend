@@ -49,7 +49,16 @@ export class MockSplitService {
   }
 
   /**
-   * Get the option the menu dashboard for hidden o show manage members.
+   * Get the station document split.
+   *
+   * @returns Split treatment.
+   */
+  public getStationDocumentTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the option the menu dashboard for hidden or show manage members.
    *
    * @returns Split treatment.
    */
@@ -63,15 +72,6 @@ export class MockSplitService {
    * @returns Split treatment.
    */
   public getStationUploadBannerTreatment(): string {
-    return 'on';
-  }
-
-  /**
-   * Get the station document split.
-   *
-   * @returns Split treatment.
-   */
-  public getStationDocumentTreatment(): string {
     return 'on';
   }
 }

@@ -131,7 +131,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Set document fields dynamic. */
   private setDocumentFields(): void {
     this.documentFields = [];
-    this.questions.map((question) => {
+    this.questions?.map((question) => {
       this.documentFields.push({
         name: question.prompt,
         value: question.rithmId,
@@ -219,7 +219,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     const newStationColumn: ColumnFieldsWidget[] = [];
     this.stationColumns.map((column) => {
       if (column.questionId) {
-        this.questions.map((question) => {
+        this.questions?.map((question) => {
           if (column.questionId === question.rithmId) {
             newStationColumn.push(column);
           }

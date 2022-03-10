@@ -69,7 +69,7 @@ export class SplitService {
   }
 
   /**
-   * Get the option the menu dashboard for hidden o show manage members.
+   * Get the option the menu dashboard for hidden or show manage members.
    *
    * @returns Split treatment.
    */
