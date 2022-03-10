@@ -43,6 +43,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ItemListWidgetModalComponent } from './widget-modal/item-list-widget-modal/item-list-widget-modal.component';
 import { BannerImageWidgetComponent } from './widgets/banner-image-widget/banner-image-widget.component';
+import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-widget-modal.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { BannerImageWidgetComponent } from './widgets/banner-image-widget/banner
     CustomTabWidgetModalComponent,
     ItemListWidgetModalComponent,
     BannerImageWidgetComponent,
+    ListWidgetModalComponent,
   ],
   imports: [
     CommonModule,
