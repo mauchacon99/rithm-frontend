@@ -653,6 +653,7 @@ describe('DashboardService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents?name=${nameToSearch}`
     );
     expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('name')).toEqual(nameToSearch);
     req.flush(itemListWidgetModal);
     httpTestingController.verify();
   });
@@ -676,6 +677,7 @@ describe('DashboardService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations?name=${nameToSearch}`
     );
     expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('name')).toEqual(nameToSearch);
     req.flush(expectDataResponse);
     httpTestingController.verify();
   });
@@ -698,6 +700,7 @@ describe('DashboardService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups?name=${nameToSearch}`
     );
     expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('name')).toEqual(nameToSearch);
     req.flush(expectDataResponse);
     httpTestingController.verify();
   });

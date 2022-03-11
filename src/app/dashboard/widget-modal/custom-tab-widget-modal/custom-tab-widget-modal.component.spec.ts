@@ -237,4 +237,45 @@ describe('CustomTabWidgetModalComponent', () => {
     component.selectTypeElement(expectedValue);
     expect(emitCall).toHaveBeenCalled();
   });
+
+  it('should call service to get document tab list', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentTabList'
+    ).and.callThrough();
+
+    const testPromise = new Promise(() => {
+      component.getSearchResult();
+    });
+    testPromise.then(() => {
+      expect(spyService).toHaveBeenCalled();
+    });
+  });
+
+  it('should call service to get group stations tab list', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getGroupStationTabList'
+    ).and.callThrough();
+
+    const testPromise = new Promise(() => {
+      component.getSearchResult();
+    });
+    testPromise.then(() => {
+      expect(spyService).toHaveBeenCalled();
+    });
+  });
+  it('should call service to get stations tab list', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getStationTabList'
+    ).and.callThrough();
+
+    const testPromise = new Promise(() => {
+      component.getSearchResult();
+    });
+    testPromise.then(() => {
+      expect(spyService).toHaveBeenCalled();
+    });
+  });
 });

@@ -80,13 +80,12 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /**
    * Get list tab documents.
    *
-   * @param name Name to get match documents.
    */
-  private getDocumentTabList(name = ''): void {
+  private getDocumentTabList(): void {
     this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
-      .getDocumentTabList(name)
+      .getDocumentTabList(this.searchTab)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
@@ -110,13 +109,12 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /**
    * Get the station tab list.
    *
-   * @param name Name to get match stations.
    */
-  private getStationTabList(name = ''): void {
+  private getStationTabList(): void {
     this.isLoadingStationTab = true;
     this.errorLoadingStationTab = false;
     this.dashboardService
-      .getStationTabList(name)
+      .getStationTabList(this.searchTab)
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
@@ -140,13 +138,12 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /**
    * Get the list for the groups the stations tabs.
    *
-   * @param name Name to get match stations groups.
    */
-  private getGroupStationTabList(name = ''): void {
+  private getGroupStationTabList(): void {
     this.errorLoadingGroupTab = false;
     this.isLoadingGroupTab = true;
     this.dashboardService
-      .getGroupStationTabList(name)
+      .getGroupStationTabList(this.searchTab)
       .pipe(first())
       .subscribe({
         next: (itemsListGroupsStation) => {
@@ -182,11 +179,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   getSearchResult(): void {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
-      if (this.searchTab !== '') {
-        this.getDocumentTabList(this.searchTab);
-        this.getGroupStationTabList(this.searchTab);
-        this.getStationTabList(this.searchTab);
-      }
+      this.getDocumentTabList();
+      this.getGroupStationTabList();
+      this.getStationTabList();
     }, 750);
   }
 }
