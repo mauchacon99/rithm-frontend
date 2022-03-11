@@ -1,28 +1,35 @@
+<!-- Toggle template by widgetType -->
 <ng-container
   *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
 ></ng-container>
 
+<!-- Card of the document widget -->
 <ng-template let-description="description" let-title="title" #cardOfWidget>
   <div
     class="h-[290px] w-full rounded border border-secondary-100 cursor-pointer"
+    matRipple
   >
     <div
       class="py-3 px-5 bg-secondary-50 rounded-t h-4/6 border-b border-b-secondary-100"
       [ngSwitch]="widgetType"
     >
-      <ng-container
-        *ngSwitchCase="enumWidgetType.Document"
-        [ngTemplateOutlet]="previewListBanner"
-      ></ng-container>
-      <ng-container
-        *ngSwitchCase="enumWidgetType.DocumentListBanner"
-        [ngTemplateOutlet]="previewList"
-      ></ng-container>
+      <!-- Type default -->
       <ng-container
         *ngSwitchDefault
         [ngTemplateOutlet]="previewDefault"
       ></ng-container>
+      <!-- Type document-list -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.Document"
+        [ngTemplateOutlet]="previewListBanner"
+      ></ng-container>
+      <!-- Type document-list-banner -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.DocumentListBanner"
+        [ngTemplateOutlet]="previewList"
+      ></ng-container>
     </div>
+    <!-- Info of card. -->
     <div class="p-2 overflow-auto h-2/6 scrollbar">
       <p class="text-sm font-semibold">{{ title }}</p>
       <p class="text-xs">{{ description }}</p>
@@ -30,6 +37,7 @@
   </div>
 </ng-template>
 
+<!-- Preview widget type document-default -->
 <ng-template #previewDefault>
   <div
     class="h-full w-full rounded bg-white flex flex-col justify-center items-center"
@@ -38,6 +46,7 @@
   </div>
 </ng-template>
 
+<!-- Preview widget type document-list-banner -->
 <ng-template #previewListBanner>
   <div class="h-full w-full rounded bg-white overflow-hidden">
     <div
@@ -49,6 +58,7 @@
   </div>
 </ng-template>
 
+<!-- Preview widget type document-list -->
 <ng-template #previewList>
   <div class="h-full w-full rounded bg-white p-2 overflow-hidden">
     <p class="text-xs font-semibold">Document Name</p>

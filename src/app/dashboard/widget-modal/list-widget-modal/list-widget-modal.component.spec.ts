@@ -3,7 +3,7 @@ import { MockComponent } from 'ng-mocks';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
-import { SelectedItemWidgetModel } from '../../../../models';
+import { SelectedItemWidgetModel } from 'src/models';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
