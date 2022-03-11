@@ -198,6 +198,15 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should catch error group list tabs and show message ', async () => {
+    component.indexTab = 3; // group tab
+    component.errorLoadingGroupTab = true;
+    await fixture.detectChanges();
+    const errorLoadingStationTab = fixture.nativeElement.querySelector(
+      '#error-group-list-tab'
+    );
+    expect(errorLoadingStationTab).toBeTruthy();
+  });
   it('should display loading indicator in group list tab', async () => {
     component.indexTab = 2; // group tab
     component.isLoadingGroupTab = true;
