@@ -33,9 +33,12 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   BoundaryMapElement,
   ConnectionMapElement,
-  ServiceStationMethods,
   StationGroupMapElement,
   StationMapElement,
+  MapHelper,
+  MapConnectionHelper,
+  MapStationGroupHelper,
+  MapStationHelper
 } from 'src/helpers';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
@@ -150,9 +153,22 @@ export class MapService {
     data: {},
   });
 
+  /** T. */
+  mapHelper = new MapHelper();
+
+  /** T. */
+  mapConnectionHelper = new MapConnectionHelper(this.mapHelper);
+
+  /** T. */
+  mapStationHelper = new MapStationHelper(this.mapHelper);
+
+  /** T. */
+  mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
+
   constructor(
     private http: HttpClient
   ) { }
+
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -202,6 +218,7 @@ export class MapService {
    * Converts station data so it can be drawn on the canvas.
    */
   private useStationData(): void {
+    /* // old.
     //Turns station data into StationMapElements and sets this.stationElements to that.
     this.stationElements = this.mapData.stations.map(
       (e) => new StationMapElement(e)
@@ -215,15 +232,36 @@ export class MapService {
     //Trigger logic to set map boundary box.
     this.setBoundary();
     //Trigger logic to use station map points and update stationCanvasPoints accordingly.
-    //this.serviceStationMethods.updateStationCanvasPoints();
+    this.updateStationCanvasPoints(); */
+
+    // new.
+    //Turns station data into StationMapElements and sets this.stationElements to that.
+    this.mapStationHelper.stationElements = this.mapData.stations.map(
+      (e) => new StationMapElement(e)
+    );
+    //Turns group data into StationMapElements and sets this.flowElements to that.
+    this.mapStationGroupHelper.stationGroupElements = this.mapData.stationGroups.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    //Trigger logic to set connections based on station data.
+    this.mapConnectionHelper.setConnections(this.mapStationHelper);
+    //Trigger logic to set map boundary box.
+    this.mapHelper.setBoundary(this.mapStationHelper);
+    //Trigger logic to use station map points and update stationCanvasPoints accordingly.
+    this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
+
+    this.stationElements = this.mapStationHelper.stationElements;
+    this.stationGroupElements = this.mapStationGroupHelper.stationGroupElements;
+    this.connectionElements = this.mapConnectionHelper.connectionElements;
+    this.boundaryElement = this.mapHelper.boundaryElement;
   }
 
   /**
    * Sets the boundary element based on info from this.stationElements.
    */
-  setBoundary(): void {
-    this.boundaryElement = new BoundaryMapElement(this.stationElements);
-  }
+  /*   setBoundary(): void {
+      this.boundaryElement = new BoundaryMapElement(this.stationElements);
+    } */
 
   /**
    * Updates the mapPoints of the map boundary.
@@ -237,38 +275,38 @@ export class MapService {
   /**
    * Fills in connections array with info from this.stationElements.
    */
-  setConnections(): void {
-    //To avoid duplicating any connections, make sure this.connectionElements starts as an empty array.
-    this.connectionElements = [];
-    //Loop through stationElements.
-    for (const station of this.stationElements) {
-      //Loop through the nextStations array of each station.
-      for (const connection of station.nextStations) {
-        //Find the station with the same rithmId as connection.
-        const outgoingStation = this.stationElements.find(
-          (foundStation) => foundStation.rithmId === connection
-        );
+  /*   setConnections(): void {
+      //To avoid duplicating any connections, make sure this.connectionElements starts as an empty array.
+      this.connectionElements = [];
+      //Loop through stationElements.
+      for (const station of this.stationElements) {
+        //Loop through the nextStations array of each station.
+        for (const connection of station.nextStations) {
+          //Find the station with the same rithmId as connection.
+          const outgoingStation = this.stationElements.find(
+            (foundStation) => foundStation.rithmId === connection
+          );
 
-        if (!outgoingStation) {
-          throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
-            nextStations of the station${station.stationName}: ${station.rithmId}.`);
-        }
+          if (!outgoingStation) {
+            throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
+              nextStations of the station${station.stationName}: ${station.rithmId}.`);
+          }
 
-        //Create a new connectionMapElement using the station and outgoingStation data.
-        const lineInfo = new ConnectionMapElement(
-          station,
-          outgoingStation,
-          this.mapScale$.value
-        );
+          //Create a new connectionMapElement using the station and outgoingStation data.
+          const lineInfo = new ConnectionMapElement(
+            station,
+            outgoingStation,
+            this.mapHelper.mapScale$.value
+          );
 
-        /* Make sure we aren't duplicating and connections already inside connectionElements.
-        The connection elements array will get filled in as the station elements for loop progresses. */
-        if (!this.connectionElements.includes(lineInfo)) {
-          this.connectionElements.push(lineInfo);
+          /* Make sure we aren't duplicating and connections already inside connectionElements.
+          The connection elements array will get filled in as the station elements for loop progresses.
+          if (!this.connectionElements.includes(lineInfo)) {
+            this.connectionElements.push(lineInfo);
+          }
         }
       }
-    }
-  }
+    } */
 
   /**
    * Update information used to draw a connection when a connection has changed.
@@ -280,17 +318,17 @@ export class MapService {
     for (const connection of this.connectionElements) {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
-        connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+        connection.setStartPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
-        connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+        connection.setEndPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
         connection.startPoint,
         connection.endPoint,
-        this.mapScale$.value
+        this.mapHelper.mapScale$.value
       );
     }
   }
@@ -980,8 +1018,8 @@ export class MapService {
   ): void {
     //Reset zoomCount and return if attempting to zoom past min or max scale.
     if (
-      (this.mapScale$.value <= MIN_SCALE && !zoomingIn) ||
-      (this.mapScale$.value >= MAX_SCALE && zoomingIn)
+      (this.mapHelper.mapScale$.value <= MIN_SCALE && !zoomingIn) ||
+      (this.mapHelper.mapScale$.value >= MAX_SCALE && zoomingIn)
     ) {
       this.zoomCount$.next(0);
       return;
@@ -989,7 +1027,7 @@ export class MapService {
 
     // Reset zoomCount and return if attempting to zoom out past a certain point while not in view mode.
     if (
-      this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
+      this.mapHelper.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
       !zoomingIn &&
       this.mapMode$.value !== MapMode.View
     ) {
@@ -1004,8 +1042,8 @@ export class MapService {
     When we zoom out we make the scale smaller, when we zoom in we make it larger.
     zoomAmount is set up to be exponential. */
     const newScale = zoomingIn
-      ? this.mapScale$.value / zoomAmount
-      : this.mapScale$.value * zoomAmount;
+      ? this.mapHelper.mapScale$.value / zoomAmount
+      : this.mapHelper.mapScale$.value * zoomAmount;
 
     //We have translateLogic in a const so that we don't have to repeat code for both x and y coords.
     const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
@@ -1014,7 +1052,7 @@ export class MapService {
         //Return amount to translate a given coord based on the arithmetic.
         return Math.round(
           //current scale to new scale
-          (zoomOrigin[coord] / this.mapScale$.value -
+          (zoomOrigin[coord] / this.mapHelper.mapScale$.value -
             zoomOrigin[coord] / newScale) *
           translateDirection
         );
@@ -1024,19 +1062,19 @@ export class MapService {
         return Math.round(
           //new scale to current scale
           (zoomOrigin[coord] / newScale -
-            zoomOrigin[coord] / this.mapScale$.value) *
+            zoomOrigin[coord] / this.mapHelper.mapScale$.value) *
           translateDirection
         );
       }
     };
 
     //Subtract the number returned from translateLogic from x coord of currentCanvasPoint to pan the map that amount.
-    this.currentCanvasPoint$.value.x -= translateLogic(zoomingIn, 'x');
+    this.mapHelper.currentCanvasPoint$.value.x -= translateLogic(zoomingIn, 'x');
     //Subtract the number returned from translateLogic from y coord of currentCanvasPoint to pan the map that amount.
-    this.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
+    this.mapHelper.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
 
     //Set the mapScale to the new scale as long as it isn't above or below the max or min allowed.
-    this.mapScale$.next(
+    this.mapHelper.mapScale$.next(
       zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale)
     );
   }
@@ -1086,8 +1124,8 @@ export class MapService {
         canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT &&
         canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH &&
         zoomInBox < minPoint.x &&
-        this.mapScale$.value < MAX_SCALE) ||
-      this.mapScale$.value < SCALE_REDUCED_RENDER
+        this.mapHelper.mapScale$.value < MAX_SCALE) ||
+      this.mapHelper.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       //Increment the zoomCount. This lets handleZoom know we need to zoom in.
       this.zoomCount$.next(this.zoomCount$.value + 1);
@@ -1103,7 +1141,7 @@ export class MapService {
         canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT ||
         canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH ||
         zoomOutBox > minPoint.x) &&
-      this.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
+      this.mapHelper.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
     ) {
       //Decrement the zoomCount. This lets handleZoom know we need to zoom out.
       this.zoomCount$.next(this.zoomCount$.value - 1);
@@ -1131,14 +1169,14 @@ export class MapService {
 
     //On Init, immediately set the currentCanvasPoint to the center of the map.
     if (onInit) {
-      this.currentCanvasPoint$.next(adjustedCenter);
+      this.mapHelper.currentCanvasPoint$.next(adjustedCenter);
       return;
     }
 
     //How far away is the currentCanvasPoint from the map center?
     const totalPanNeeded = {
-      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
+      x: this.mapHelper.currentCanvasPoint$.value.x - adjustedCenter.x,
+      y: this.mapHelper.currentCanvasPoint$.value.y - adjustedCenter.y,
     };
 
     //initialize variable needed to set panVelocity.
@@ -1161,7 +1199,7 @@ export class MapService {
       this.centerCount$.next(this.centerCount$.value + 1);
     } else {
       //After the animation is finished, jump to the map center.
-      this.currentCanvasPoint$.next(adjustedCenter);
+      this.mapHelper.currentCanvasPoint$.next(adjustedCenter);
       //Cancel panning by setting panVelocity to 0,0.
       this.centerPanVelocity$.next({ x: 0, y: 0 });
     }
@@ -1263,7 +1301,7 @@ export class MapService {
       const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
 
       //Determine the map center point of station group to pan it to the center.
-      const groupCenterMapPoint = this.getMapPoint({
+      const groupCenterMapPoint = this.mapHelper.getMapPoint({
         x: (minX + maxX) / 2,
         y: (minY + maxY) / 2,
       });
@@ -1272,9 +1310,9 @@ export class MapService {
       adjustedCenter = {
         x:
           groupCenterMapPoint.x +
-          drawerWidth / 2 / this.mapScale$.value -
-          canvasCenter.x / this.mapScale$.value,
-        y: groupCenterMapPoint.y - canvasCenter.y / this.mapScale$.value,
+          drawerWidth / 2 / this.mapHelper.mapScale$.value -
+          canvasCenter.x / this.mapHelper.mapScale$.value,
+        y: groupCenterMapPoint.y - canvasCenter.y / this.mapHelper.mapScale$.value,
       };
       //If selected station needs to be pan to center.
     } else if (panType === CenterPanType.Station) {
@@ -1286,13 +1324,13 @@ export class MapService {
       adjustedCenter = {
         x:
           openedStation.mapPoint.x +
-          drawerWidth / 2 / this.mapScale$.value +
-          STATION_PAN_CENTER_WIDTH / this.mapScale$.value -
-          canvasCenter.x / this.mapScale$.value,
+          drawerWidth / 2 / this.mapHelper.mapScale$.value +
+          STATION_PAN_CENTER_WIDTH / this.mapHelper.mapScale$.value -
+          canvasCenter.x / this.mapHelper.mapScale$.value,
         y:
           openedStation.mapPoint.y +
-          STATION_PAN_CENTER_HEIGHT / this.mapScale$.value -
-          canvasCenter.y / this.mapScale$.value,
+          STATION_PAN_CENTER_HEIGHT / this.mapHelper.mapScale$.value -
+          canvasCenter.y / this.mapHelper.mapScale$.value,
       };
       //If selected map center needs to be pan to center.
     } else if (panType === CenterPanType.MapCenter) {
@@ -1301,8 +1339,8 @@ export class MapService {
 
       //Get the point that currentCanvasPoint needs to be set to.
       adjustedCenter = {
-        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
+        x: adjustedCenter.x - canvasCenter.x / this.mapHelper.mapScale$.value,
+        y: adjustedCenter.y - canvasCenter.y / this.mapHelper.mapScale$.value,
       };
     }
     return adjustedCenter;
@@ -1358,7 +1396,7 @@ export class MapService {
    * @returns The x-coordinate for the canvas.
    */
   getCanvasX(mapX: number): number {
-    return (mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value;
+    return (mapX - this.mapHelper.currentCanvasPoint$.value.x) * this.mapHelper.mapScale$.value;
   }
 
   /**
@@ -1368,7 +1406,7 @@ export class MapService {
    * @returns The y-coordinate for the canvas.
    */
   getCanvasY(mapY: number): number {
-    return (mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value;
+    return (mapY - this.mapHelper.currentCanvasPoint$.value.y) * this.mapHelper.mapScale$.value;
   }
 
   /**
@@ -1379,8 +1417,8 @@ export class MapService {
    */
   getCanvasPoint(mapPoint: Point): Point {
     return {
-      x: this.getCanvasX(mapPoint.x),
-      y: this.getCanvasY(mapPoint.y),
+      x: this.mapHelper.getCanvasX(mapPoint.x),
+      y: this.mapHelper.getCanvasY(mapPoint.y),
     };
   }
 
@@ -1415,7 +1453,7 @@ export class MapService {
    */
   getMapX(canvasX: number): number {
     return Math.floor(
-      canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x
+      canvasX * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.x
     );
   }
 
@@ -1427,7 +1465,7 @@ export class MapService {
    */
   getMapY(canvasY: number): number {
     return Math.floor(
-      canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y
+      canvasY * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.y
     );
   }
 
@@ -1439,8 +1477,8 @@ export class MapService {
    */
   getMapPoint(canvasPoint: Point): Point {
     return {
-      x: this.getMapX(canvasPoint.x),
-      y: this.getMapY(canvasPoint.y),
+      x: this.mapHelper.getMapX(canvasPoint.x),
+      y: this.mapHelper.getMapY(canvasPoint.y),
     };
   }
 
@@ -1448,71 +1486,78 @@ export class MapService {
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
-    this.validateConnections();
-    this.validateStationsBelongToExactlyOneStationGroup();
-    this.validateStationGroupsBelongToExactlyOneStationGroup();
+    /*   // old.
+      this.validateConnections();
+      this.validateStationsBelongToExactlyOneStationGroup();
+      this.validateStationGroupsBelongToExactlyOneStationGroup(); */
+
+    // new.
+    this.mapConnectionHelper.validateConnections(this.mapStationHelper);
+    this.mapStationHelper.validateStationsBelongToExactlyOneStationGroup(this.mapStationGroupHelper);
+    this.mapStationGroupHelper.validateStationGroupsBelongToExactlyOneStationGroup();
   }
 
   /**
    * Validates that all connections exist and are made in both origin station and destination station.
    */
-  private validateConnections(): void {
-    for (const station of this.stationElements) {
-      for (const outgoingStationId of station.nextStations) {
-        const outgoingConnectedStation = this.stationElements.find(
-          (stationElement) => stationElement.rithmId === outgoingStationId
-        );
-        if (!outgoingConnectedStation) {
-          // eslint-disable-next-line no-console
-          console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
-           but no station element was found with that id.`);
-        } else {
-          if (
-            !outgoingConnectedStation.previousStations.includes(station.rithmId)
-          ) {
+  /*   private validateConnections(): void {
+      for (const station of this.stationElements) {
+        for (const outgoingStationId of station.nextStations) {
+          const outgoingConnectedStation = this.stationElements.find(
+            (stationElement) => stationElement.rithmId === outgoingStationId
+          );
+          if (!outgoingConnectedStation) {
             // eslint-disable-next-line no-console
-            console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
-              ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
-              previous stations.`);
+            console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
+             but no station element was found with that id.`);
+          } else {
+            if (
+              !outgoingConnectedStation.previousStations.includes(station.rithmId)
+            ) {
+              // eslint-disable-next-line no-console
+              console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
+                ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
+                previous stations.`);
+            }
           }
         }
       }
-    }
-  }
+    } */
 
   /**
    * Validates that stations belong to exactly one immediate parent station group.
    */
-  private validateStationsBelongToExactlyOneStationGroup(): void {
-    // Each station should belong to exactly one station group.
-    for (const station of this.stationElements) {
-      const stationGroupsThatContainThisStation =
-        this.stationGroupElements.filter((stationGroup) =>
-          stationGroup.stations.includes(station.rithmId)
-        );
-      if (stationGroupsThatContainThisStation.length > 1) {
-        const stationGroupDetails: string = stationGroupsThatContainThisStation
-          .map(
-            (stationGroupInfo) =>
-              `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`
-          )
-          .toString();
-        // eslint-disable-next-line no-console,max-len
-        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
-          ${stationGroupDetails}`);
-      } else if (!stationGroupsThatContainThisStation.length) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `No station groups contain the station: ${station.stationName}: ${station.rithmId}`
-        );
+  /*   private validateStationsBelongToExactlyOneStationGroup(): void {
+      // Each station should belong to exactly one station group.
+      for (const station of this.stationElements) {
+        const stationGroupsThatContainThisStation =
+          this.stationGroupElements.filter((stationGroup) =>
+            stationGroup.stations.includes(station.rithmId)
+          );
+        if (stationGroupsThatContainThisStation.length > 1) {
+          const stationGroupDetails: string = stationGroupsThatContainThisStation
+            .map(
+              (stationGroupInfo) =>
+                `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`
+            )
+            .toString();
+          // eslint-disable-next-line no-console,max-len
+          console.error(`The station ${station.rithmId}:
+          ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
+            ${stationGroupDetails}`);
+        } else if (!stationGroupsThatContainThisStation.length) {
+          // eslint-disable-next-line no-console
+          console.error(
+            `No station groups contain the station: ${station.stationName}: ${station.rithmId}`
+          );
+        }
       }
-    }
-  }
+    } */
 
   /**
    * Validates that station groups belong to exactly one immediate parent station group.
    */
-  private validateStationGroupsBelongToExactlyOneStationGroup(): void {
+  /* private validateStationGroupsBelongToExactlyOneStationGroup(): void {
     // Each station group should belong to exactly one station group.
     for (const stationGroup of this.stationGroupElements) {
       const stationGroupsThatContainThisStationGroup =
@@ -1523,7 +1568,8 @@ export class MapService {
         // eslint-disable-next-line no-console
         console.error(
           // eslint-disable-next-line max-len
-          `The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${stationGroupsThatContainThisStationGroup.length} station groups!`
+          `The station group ${stationGroup.rithmId}:
+          ${stationGroup.title} is contained in ${stationGroupsThatContainThisStationGroup.length} station groups!`
         );
       } else if (
         !stationGroupsThatContainThisStationGroup.length &&
@@ -1535,7 +1581,7 @@ export class MapService {
         );
       }
     }
-  }
+  } */
 
   /**
    * Disable publish button until some changes in map/station.
@@ -1612,4 +1658,181 @@ export class MapService {
 
     this.resetSelectedStationGroupStationStatus();
   }
+
+  /**
+   * Updates the status of a station to deleted.
+   *
+   * @param stationId The station for which status has to be set to delete.
+   */
+  deleteStation(stationId: string): void {
+    //Get the index of the stationElement that matches the stationId.
+    const index = this.stationElements.findIndex(
+      (e) => e.rithmId === stationId
+    );
+    // If there is a station that matches stationId.
+    if (index >= 0) {
+      /* If the station is newly created, remove it from the stationElements array,
+      otherwise mark that station as deleted. */
+      if (
+        this.stationElements[index].status === MapItemStatus.Created
+      ) {
+        this.stationElements.splice(index, 1);
+      } else {
+        this.stationElements[index].markAsDeleted();
+      }
+    }
+    //Loop through and change the.mapService stationGroupElements array.
+    this.stationGroupElements.map((stationGroup) => {
+      //Find the station group that includes the station.
+      if (stationGroup.stations.includes(stationId)) {
+        //Remove the station from the group.
+        stationGroup.stations = stationGroup.stations.filter(
+          (stn) => stn !== stationId
+        );
+        //Unless group is new, mark it as updated.
+        stationGroup.markAsUpdated();
+      }
+    });
+    //Note a change in map data.
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Create a new Station. Add connection if station is built off "Add Connected Station".
+   *
+   * @param coords The coordinates where the station will be placed.
+   */
+  createNewStation(
+    coords: Point,
+
+  ): void {
+    //Set the coordinates used for mapPoint.
+    const mapCoords = this.mapHelper.getMapPoint(coords);
+    //Create new stationMapElement with default data.
+    const newStation = new StationMapElement({
+      rithmId: uuidv4(),
+      stationName: 'Untitled Station',
+      mapPoint: mapCoords,
+      noOfDocuments: 0,
+      previousStations: [],
+      nextStations: [],
+      status: MapItemStatus.Created,
+      notes: '',
+    });
+
+    // Find the station that has isAddingConnected set to true.
+    const connectedStations = this.stationElements.filter(
+      (station) => station.isAddingConnected
+    );
+    //Make sure there isn't more than one station with isAddingConnected = true.
+    if (connectedStations.length === 1) {
+      //find the index of the station whose rithmId matches the connectedStation const.
+      const stationIndex = this.stationElements.findIndex(
+        (station) => station.rithmId === connectedStations[0].rithmId
+      );
+      //Find the index of the station group that incudes the station matching connectedStation.
+      const stationGroupIndex = this.stationGroupElements.findIndex(
+        (stationGroup) =>
+          stationGroup.stations.includes(connectedStations[0].rithmId)
+      );
+      //If a station matching connectedStation was found.
+      if (stationIndex >= 0) {
+        //Reset connecting station's isAddingConnected.
+        this.stationElements[stationIndex].isAddingConnected = false;
+        //Add the new station to the nextStations array of the connecting station.
+        this.stationElements[stationIndex].nextStations.push(
+          newStation.rithmId
+        );
+        //Add the connecting station to the previousStations array of the new station.
+        newStation.previousStations.push(
+          this.stationElements[stationIndex].rithmId
+        );
+
+        //Use the connecting station and the next station to create a new connectedMapElement.
+        const lineInfo = new ConnectionMapElement(
+          this.stationElements[stationIndex],
+          newStation,
+          this.mapHelper.mapScale$.value
+        );
+
+        /* Make sure we aren't duplicating and connections already inside connectionElements.
+        The connection elements array will get filled in as the station elements for loop progresses. */
+        if (!this.connectionElements.includes(lineInfo)) {
+          this.connectionElements.push(lineInfo);
+        }
+        //Set mapMode back to build from addStation.
+        this.mapMode$.next(MapMode.Build);
+        //Unless station is new, it should be marked as updated.
+        this.stationElements[stationIndex].markAsUpdated();
+
+        //The connecting station is found in a group, and the newStation is not found in that group.
+        if (
+          stationGroupIndex >= 0 &&
+          !this.stationGroupElements[
+            stationGroupIndex
+          ].stations.includes(newStation.rithmId)
+        ) {
+          //push newStation to the stations array of the same group as the connecting station.
+          this.stationGroupElements[stationGroupIndex].stations.push(
+            newStation.rithmId
+          );
+          //Unless group is new, mark it as updated.
+          this.stationGroupElements[
+            stationGroupIndex
+          ].markAsUpdated();
+        }
+        //if isAddingConnected property is true, set it to false.
+        this.disableConnectedStationMode();
+      }
+    }
+
+    //Update the stationElements array.
+    this.stationElements.push(newStation);
+
+    // Find the Root Station Group index.
+    const isReadOnlyRootStationGroupIndex =
+      this.stationGroupElements.findIndex(
+        (stationGroup) => stationGroup.isReadOnlyRootStationGroup
+      );
+
+    if (isReadOnlyRootStationGroupIndex !== -1) {
+      // Updating the stations in the Root station group.
+      this.stationGroupElements[
+        isReadOnlyRootStationGroupIndex
+      ].stations.push(newStation.rithmId);
+    }
+
+    //Update the map boundary.
+    if (this.boundaryElement) {
+      this.boundaryElement.updatePoints(
+        this.stationElements
+      );
+    }
+    //Note a change in map data.
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Update the canvas points for each station.
+   */
+  /*  updateStationCanvasPoints(): void {
+     this.stationElements.forEach((station) => {
+       station.canvasPoint = this.mapHelper.getCanvasPoint(station.mapPoint);
+       //Update the connection lines as the stations are updated.
+       this.updateConnection(station);
+     });
+
+     //Also update the boundary canvas points.
+     if (this.boundaryElement) {
+       //Update the canvas points of the boundary.
+       this.boundaryElement.minCanvasPoint =
+         this.mapHelper.getCanvasPoint(
+           this.boundaryElement.minMapPoint
+         );
+       this.boundaryElement.maxCanvasPoint =
+         this.mapHelper.getCanvasPoint(
+           this.boundaryElement.maxMapPoint
+         );
+     }
+   } */
 }

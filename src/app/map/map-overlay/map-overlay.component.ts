@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { CenterPanType, MapMode, MatMenuOption, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { ServiceStationMethods, StationMapElement } from 'src/helpers';
+import { StationMapElement } from 'src/helpers';
 import {
   BUTTON_ZOOM_COUNT_INCREMENT,
   DEFAULT_SCALE,
@@ -132,7 +132,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
-    private serviceStationMethods: ServiceStationMethods,
     private popupService: PopupService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -159,7 +158,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       });
 
     //Track the map scale as it changes.
-    this.mapService.mapScale$
+    this.mapService.mapHelper.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
@@ -343,10 +342,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const confirm = !this.mapHasChanges
       ? true
       : await this.popupService.confirm({
-          title: 'Confirmation',
-          message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-          okButtonText: 'Confirm',
-        });
+        title: 'Confirmation',
+        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+        okButtonText: 'Confirm',
+      });
     //If user accepts, or there are no changes.
     if (confirm) {
       //Call method to run logic for cancelling.
@@ -467,7 +466,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         this.openedMenuStation.rithmId
       );
       //Delete the station.
-      this.serviceStationMethods.deleteStation(this.openedMenuStation.rithmId);
+      this.mapService.deleteStation(this.openedMenuStation.rithmId);
       //TODO: Update to check that the drawer being closed is the drawer that is deleted.
       //Close drawer so that user can't access deleted station anymore.
       this.sidenavDrawerService.closeDrawer();
@@ -535,7 +534,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     // calculates current mouse point in map for adding new station.
     const coords = { x: this.menuX - 5, y: this.menuY - 65 };
     // creates new station.
-    this.serviceStationMethods.createNewStation(coords);
+    this.mapService.createNewStation(coords);
     this.mapService.matMenuStatus$.next(true);
   }
 

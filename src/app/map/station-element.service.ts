@@ -67,7 +67,7 @@ export class StationElementService {
 
   constructor(private mapService: MapService) {
     //set this.mapScale to match the behavior subject in mapService.
-    this.mapService.mapScale$.subscribe((scale) => {
+    this.mapService.mapHelper.mapScale$.subscribe((scale) => {
       this.mapScale = scale;
     });
   }
@@ -218,30 +218,30 @@ export class StationElementService {
     ctx.fillStyle =
       (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
         this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-      station.disabled &&
-      !station.selected
+        station.disabled &&
+        !station.selected
         ? MAP_DISABLED
         : MAP_DEFAULT_COLOR;
     //The outline of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
-      !station.dragging
+        (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
+        !station.dragging
         ? MAP_SELECTED
         : ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-            station.selected) ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+          station.selected) ||
           ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
             this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
             station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled)
-        ? MAP_SELECTED
-        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          ? MAP_SELECTED
+          : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
             this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-          station.disabled &&
-          !station.selected
-        ? MAP_DISABLED_STROKE
-        : MAP_DEFAULT_COLOR;
+            station.disabled &&
+            !station.selected
+            ? MAP_DISABLED_STROKE
+            : MAP_DEFAULT_COLOR;
     if (
       (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
         (station.selected ||
@@ -367,8 +367,8 @@ export class StationElementService {
     ctx.fillStyle =
       (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
         this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-      station.disabled &&
-      !station.selected
+        station.disabled &&
+        !station.selected
         ? MAP_DISABLE_TEXT_COLOR
         : 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
@@ -496,13 +496,13 @@ export class StationElementService {
     //Color the circle different if it's being hovered over. Don't color differently if dragging a node.
     ctx.fillStyle =
       station.hoverItem === StationElementHoverItem.Badge &&
-      dragItem !== MapDragItem.Node &&
-      !station.dragging
+        dragItem !== MapDragItem.Node &&
+        !station.dragging
         ? BADGE_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
           this.mapService.mapMode$.value === MapMode.StationGroupEdit
-        ? MAP_DISABLE_BADGE_BUTTON_COLOR
-        : BADGE_DEFAULT_COLOR;
+          ? MAP_DISABLE_BADGE_BUTTON_COLOR
+          : BADGE_DEFAULT_COLOR;
     ctx.fill();
     //Set the style of the font.
     const fontSize = Math.ceil(16 * this.mapScale);
@@ -613,13 +613,13 @@ export class StationElementService {
     //Color the circles differently if hovering over them. Don't color differently if dragging a node.
     ctx.fillStyle =
       station.hoverItem === StationElementHoverItem.Button &&
-      dragItem !== MapDragItem.Node &&
-      !station.dragging
+        dragItem !== MapDragItem.Node &&
+        !station.dragging
         ? BUTTON_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
           this.mapService.mapMode$.value === MapMode.StationGroupEdit
-        ? MAP_DISABLE_BADGE_BUTTON_COLOR
-        : buttonColor;
+          ? MAP_DISABLE_BADGE_BUTTON_COLOR
+          : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -666,14 +666,14 @@ export class StationElementService {
     ctx.fillStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
-      station.isAddingConnected
+        station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : station.hoverItem === StationElementHoverItem.Node &&
           dragItem !== MapDragItem.Node &&
           this.mapService.mapMode$.value !== MapMode.StationGroupAdd &&
           this.mapService.mapMode$.value !== MapMode.StationGroupEdit
-        ? NODE_HOVER_COLOR
-        : NODE_DEFAULT_COLOR;
+          ? NODE_HOVER_COLOR
+          : NODE_DEFAULT_COLOR;
     ctx.fill();
     //If dragging a connection, draw a line to cursor from the node.
     if (
@@ -693,12 +693,12 @@ export class StationElementService {
     ctx.strokeStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
-      station.isAddingConnected
+        station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
           this.mapService.mapMode$.value === MapMode.StationGroupEdit
-        ? MAP_DISABLE_BADGE_BUTTON_COLOR
-        : NODE_HOVER_COLOR;
+          ? MAP_DISABLE_BADGE_BUTTON_COLOR
+          : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
   }

@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { ServiceStationMethods, UtcTimeConversion } from 'src/helpers';
+import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
@@ -145,7 +145,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private router: Router,
     private mapService: MapService,
-    private serviceStationMethods: ServiceStationMethods,
     private documentService: DocumentService,
     private dialog: MatDialog,
     private route: ActivatedRoute
@@ -263,7 +262,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   get displayCreateDocumentButton(): boolean {
     return (
       this.stationDocumentGenerationStatus ===
-        DocumentGenerationStatus.Manual &&
+      DocumentGenerationStatus.Manual &&
       (this.mapMode === 0 || this.mapMode === undefined) &&
       !this.locallyCreated &&
       (this.isUserAdminOrOwner || this.isWorker)
@@ -298,10 +297,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       status === 'None' && statusNew.checked
         ? DocumentGenerationStatus.None
         : status === 'None' && !statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : status === 'Manual' && statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : DocumentGenerationStatus.None;
+          ? DocumentGenerationStatus.Manual
+          : status === 'Manual' && statusNew.checked
+            ? DocumentGenerationStatus.Manual
+            : DocumentGenerationStatus.None;
 
     this.updateStationDocumentGenerationStatus(this.stationRithmId, value);
   }
@@ -657,7 +656,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (response) {
       if (this.openedFromMap) {
         this.mapService.removeAllStationConnections(this.stationRithmId);
-        this.serviceStationMethods.deleteStation(this.stationRithmId);
+        this.mapService.deleteStation(this.stationRithmId);
         this.sidenavDrawerService.closeDrawer();
       } else {
         this.stationService

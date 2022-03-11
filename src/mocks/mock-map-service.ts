@@ -14,6 +14,8 @@ import {
 import {
   BoundaryMapElement,
   ConnectionMapElement,
+  MapConnectionHelper,
+  MapHelper,
   StationGroupMapElement,
   StationMapElement,
 } from 'src/helpers';
@@ -155,6 +157,12 @@ export class MockMapService {
     data: {},
   });
 
+  /** T. */
+  mapHelper = new MapHelper();
+
+  /** T. */
+  mapConnection = new MapConnectionHelper(this.mapHelper);
+
   /**
    * Creates a new `MockMapService`.
    *
@@ -275,7 +283,7 @@ export class MockMapService {
    * @param coords The coordinates where the station will be placed.
    */
   // eslint-disable-next-line
-  createNewStation(coords: Point): void {}
+  createNewStation(coords: Point): void { }
 
   /**
    * Updates station status to delete.
@@ -283,19 +291,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void {}
+  deleteStation(station: StationMapElement): void { }
 
   /**
    * Enters build mode for the map.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buildMap(): void {}
+  buildMap(): void { }
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void {}
+  cancelMapChanges(): void { }
 
   /**
    * Publishes local map changes to the server.
@@ -330,7 +338,7 @@ export class MockMapService {
     zoomingIn: boolean,
     zoomOrigin = this.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
-  ): void {}
+  ): void { }
   /* eslint-enable */
 
   /**
@@ -360,7 +368,7 @@ export class MockMapService {
    */
   getCanvasX(mapX: number): number {
     return Math.floor(
-      (mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value
+      (mapX - this.mapHelper.currentCanvasPoint$.value.x) * this.mapHelper.mapScale$.value
     );
   }
 
@@ -372,7 +380,7 @@ export class MockMapService {
    */
   getCanvasY(mapY: number): number {
     return Math.floor(
-      (mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value
+      (mapY - this.mapHelper.currentCanvasPoint$.value.y) * this.mapHelper.mapScale$.value
     );
   }
 
@@ -384,8 +392,8 @@ export class MockMapService {
    */
   getCanvasPoint(mapPoint: Point): Point {
     return {
-      x: this.getCanvasX(mapPoint.x),
-      y: this.getCanvasY(mapPoint.y),
+      x: this.mapHelper.getCanvasX(mapPoint.x),
+      y: this.mapHelper.getCanvasY(mapPoint.y),
     };
   }
 
@@ -397,7 +405,7 @@ export class MockMapService {
    */
   getMapX(canvasX: number): number {
     return Math.floor(
-      canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x
+      canvasX * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.x
     );
   }
 
@@ -409,7 +417,7 @@ export class MockMapService {
    */
   getMapY(canvasY: number): number {
     return Math.floor(
-      canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y
+      canvasY * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.y
     );
   }
 
@@ -421,8 +429,8 @@ export class MockMapService {
    */
   getMapPoint(canvasPoint: Point): Point {
     return {
-      x: this.getMapX(canvasPoint.x),
-      y: this.getMapY(canvasPoint.y),
+      x: this.mapHelper.getMapX(canvasPoint.x),
+      y: this.mapHelper.getMapY(canvasPoint.y),
     };
   }
 
@@ -608,20 +616,20 @@ export class MockMapService {
     return Array.isArray(source)
       ? source.map((item) => this.deepCopy(item))
       : source instanceof Date
-      ? new Date(source.getTime())
-      : source && typeof source === 'object'
-      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-          Object.defineProperty(
-            o,
-            prop,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Object.getOwnPropertyDescriptor(source, prop)!
-          );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-          return o;
-        }, Object.create(Object.getPrototypeOf(source)))
-      : (source as T);
+        ? new Date(source.getTime())
+        : source && typeof source === 'object'
+          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+            Object.defineProperty(
+              o,
+              prop,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              Object.getOwnPropertyDescriptor(source, prop)!
+            );
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+            return o;
+          }, Object.create(Object.getPrototypeOf(source)))
+          : (source as T);
   }
 
   /**
@@ -794,7 +802,7 @@ export class MockMapService {
    */
   updateStationCanvasPoints(): void {
     this.stationElements.forEach((station) => {
-      station.canvasPoint = this.getCanvasPoint(station.mapPoint);
+      station.canvasPoint = this.mapHelper.getCanvasPoint(station.mapPoint);
       //Update the connection lines as the stations are updated.
       this.updateConnection(station);
     });
@@ -810,17 +818,17 @@ export class MockMapService {
     for (const connection of this.connectionElements) {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
-        connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+        connection.setStartPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
-        connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+        connection.setEndPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
         connection.startPoint,
         connection.endPoint,
-        this.mapScale$.value
+        this.mapHelper.mapScale$.value
       );
     }
   }
@@ -932,8 +940,8 @@ export class MockMapService {
         canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT &&
         canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH &&
         zoomInBox < minPoint.x &&
-        this.mapScale$.value < MAX_SCALE) ||
-      this.mapScale$.value < SCALE_REDUCED_RENDER
+        this.mapHelper.mapScale$.value < MAX_SCALE) ||
+      this.mapHelper.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       //Increment the zoomCount. This lets handleZoom know we need to zoom in.
       this.zoomCount$.next(this.zoomCount$.value + 1);
@@ -949,7 +957,7 @@ export class MockMapService {
         canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT ||
         canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH ||
         zoomOutBox > minPoint.x) &&
-      this.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
+      this.mapHelper.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
     ) {
       //Decrement the zoomCount. This lets handleZoom know we need to zoom out.
       this.zoomCount$.next(this.zoomCount$.value - 1);
@@ -1050,14 +1058,14 @@ export class MockMapService {
 
     //On Init, immediately set the currentCanvasPoint to the center of the map.
     if (onInit) {
-      this.currentCanvasPoint$.next(adjustedCenter);
+      this.mapHelper.currentCanvasPoint$.next(adjustedCenter);
       return;
     }
 
     //How far away is the currentCanvasPoint from the map center?
     const totalPanNeeded = {
-      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
+      x: this.mapHelper.currentCanvasPoint$.value.x - adjustedCenter.x,
+      y: this.mapHelper.currentCanvasPoint$.value.y - adjustedCenter.y,
     };
 
     //initialize variable needed to set panVelocity.
@@ -1171,7 +1179,7 @@ export class MockMapService {
       const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
 
       //Determine the map center point of station group to pan it to the center.
-      const groupCenterMapPoint = this.getMapPoint({
+      const groupCenterMapPoint = this.mapHelper.getMapPoint({
         x: (minX + maxX) / 2,
         y: (minY + maxY) / 2,
       });
@@ -1180,9 +1188,9 @@ export class MockMapService {
       adjustedCenter = {
         x:
           groupCenterMapPoint.x +
-          drawerWidth / 2 / this.mapScale$.value -
-          canvasCenter.x / this.mapScale$.value,
-        y: groupCenterMapPoint.y - canvasCenter.y / this.mapScale$.value,
+          drawerWidth / 2 / this.mapHelper.mapScale$.value -
+          canvasCenter.x / this.mapHelper.mapScale$.value,
+        y: groupCenterMapPoint.y - canvasCenter.y / this.mapHelper.mapScale$.value,
       };
       //If selected station needs to be pan to center.
     } else if (panType === CenterPanType.Station) {
@@ -1194,13 +1202,13 @@ export class MockMapService {
       adjustedCenter = {
         x:
           openedStation.mapPoint.x +
-          drawerWidth / 2 / this.mapScale$.value +
-          STATION_PAN_CENTER_WIDTH / this.mapScale$.value -
-          canvasCenter.x / this.mapScale$.value,
+          drawerWidth / 2 / this.mapHelper.mapScale$.value +
+          STATION_PAN_CENTER_WIDTH / this.mapHelper.mapScale$.value -
+          canvasCenter.x / this.mapHelper.mapScale$.value,
         y:
           openedStation.mapPoint.y +
-          STATION_PAN_CENTER_HEIGHT / this.mapScale$.value -
-          canvasCenter.y / this.mapScale$.value,
+          STATION_PAN_CENTER_HEIGHT / this.mapHelper.mapScale$.value -
+          canvasCenter.y / this.mapHelper.mapScale$.value,
       };
       //If selected map center needs to be pan to center.
     } else if (panType === CenterPanType.MapCenter) {
@@ -1209,8 +1217,8 @@ export class MockMapService {
 
       //Get the point that currentCanvasPoint needs to be set to.
       adjustedCenter = {
-        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
+        x: adjustedCenter.x - canvasCenter.x / this.mapHelper.mapScale$.value,
+        y: adjustedCenter.y - canvasCenter.y / this.mapHelper.mapScale$.value,
       };
     }
     return adjustedCenter;
