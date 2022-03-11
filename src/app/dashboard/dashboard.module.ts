@@ -44,6 +44,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ItemListWidgetModalComponent } from './widget-modal/item-list-widget-modal/item-list-widget-modal.component';
 import { BannerImageWidgetComponent } from './widgets/banner-image-widget/banner-image-widget.component';
 import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-widget-modal.component';
+import { StationWidgetTemplateModalComponent } from './widget-modal/station-widget-template-modal/station-widget-template-modal.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-
     ItemListWidgetModalComponent,
     BannerImageWidgetComponent,
     ListWidgetModalComponent,
+    StationWidgetTemplateModalComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { StationWidgetTemplateModalComponent } from '../station-widget-template-modal/station-widget-template-modal.component';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
 
@@ -8,7 +10,10 @@ describe('ListWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ListWidgetModalComponent],
+      declarations: [
+        ListWidgetModalComponent,
+        MockComponent(StationWidgetTemplateModalComponent),
+      ],
     }).compileComponents();
   });
 

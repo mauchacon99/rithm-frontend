@@ -1,0 +1,62 @@
+<!--Station-->
+<div
+  class="bg-white rounded border border-secondary-50 cursor-pointer shadow-sm hover:shadow-md"
+  *ngIf="renderWidgetType === widgetType.Station"
+>
+  <div class="flex items-center justify-center bg-secondary-50 h-[275px] py-5">
+    <div class="w-10/12 bg-white h-[245px] py-5 rounded shadow">
+      <div class="px-4">
+        <span class="font-bold">Station name</span> <br />
+        <span class="text-sm">Subtitle</span>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7]">
+            <td *ngFor="let j of [1, 2, 3, 4]"><div class="bar"></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="p-3 lg:p-5">
+    <span class="font-bold">Table</span>
+    <p class="text-sm">
+      Build a custom table with specific values from each document in the
+      station.
+    </p>
+  </div>
+</div>
+
+<!--Station-table-banner-widget-->
+<div
+  class="bg-white rounded border border-secondary-50 cursor-pointer shadow-sm hover:shadow-md"
+  *ngIf="renderWidgetType === widgetType.StationTableBanner"
+>
+  <div class="flex items-center justify-center bg-secondary-50 h-[275px] py-5">
+    <div class="w-10/12 bg-white h-[245px] rounded shadow">
+      <div
+        class="w-full h-[90px] bg-secondary-100 flex items-center justify-center rounded-t"
+      >
+        <i class="fas text-[60px] text-secondary-300 fa-image"></i>
+      </div>
+      <div class="px-4 mt-5">
+        <span class="font-bold">Station name</span> <br />
+        <span class="text-sm">Subtitle</span>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let i of [1, 2, 3]">
+            <td *ngFor="let j of [1, 2, 3, 4]"><div class="bar"></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="p-3 lg:p-5">
+    <span class="font-bold">Table With Banner Image</span>
+    <p class="text-sm">
+      Build a custom table with specific values from each document in the
+      station.
+    </p>
+  </div>
+</div>
