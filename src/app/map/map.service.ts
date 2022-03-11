@@ -477,7 +477,7 @@ export class MapService {
         (group) => group.status === MapItemStatus.Pending
       );
       if (!editStationGroup) {
-        throw new Error(`There is not any station group with status pending.`);
+        throw new Error(`There is no station group with status pending.`);
       }
       //Set up pending group for edit.
       newGroup = new StationGroupMapElement({
