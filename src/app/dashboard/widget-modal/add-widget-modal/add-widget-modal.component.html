@@ -38,5 +38,7 @@
 </mat-tab-group>
 
 <div *ngIf="identifyShowElement !== 'tabs'">
-  <app-list-widget-modal></app-list-widget-modal>
+  <app-list-widget-modal
+    [itemWidgetModalSelected]="itemWidgetModalSelected"
+  ></app-list-widget-modal>
 </div>

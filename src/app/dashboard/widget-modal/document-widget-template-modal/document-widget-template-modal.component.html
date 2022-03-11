@@ -2,23 +2,64 @@
   *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
 ></ng-container>
 
-<ng-template
-  let-image="image"
-  let-description="description"
-  let-title="title"
-  #cardOfWidget
->
+<ng-template let-description="description" let-title="title" #cardOfWidget>
   <div
-    class="h-[280px] w-full rounded border border-secondary-100 cursor-pointer"
+    class="h-[290px] w-full rounded border border-secondary-100 cursor-pointer"
   >
     <div
       class="py-3 px-5 bg-secondary-50 rounded-t h-4/6 border-b border-b-secondary-100"
+      [ngSwitch]="widgetType"
     >
-      <img class="h-full w-full rounded" [src]="image" [alt]="title" />
+      <ng-container
+        *ngSwitchCase="enumWidgetType.Document"
+        [ngTemplateOutlet]="previewListBanner"
+      ></ng-container>
+      <ng-container
+        *ngSwitchCase="enumWidgetType.DocumentListBanner"
+        [ngTemplateOutlet]="previewList"
+      ></ng-container>
+      <ng-container
+        *ngSwitchDefault
+        [ngTemplateOutlet]="previewDefault"
+      ></ng-container>
     </div>
-    <div class="p-2">
+    <div class="p-2 overflow-auto h-2/6 scrollbar">
       <p class="text-sm font-semibold">{{ title }}</p>
       <p class="text-xs">{{ description }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #previewDefault>
+  <div
+    class="h-full w-full rounded bg-white flex flex-col justify-center items-center"
+  >
+    <i class="fas fa-file text-7xl text-secondary-500 animate-pulse"></i>
+  </div>
+</ng-template>
+
+<ng-template #previewListBanner>
+  <div class="h-full w-full rounded bg-white overflow-hidden">
+    <div
+      class="h-2/5 bg-secondary-100 flex flex-col justify-center items-center"
+    >
+      <i class="fas fa-image text-3xl text-secondary-500 animate-pulse"></i>
+    </div>
+    <ng-container *ngTemplateOutlet="previewList"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #previewList>
+  <div class="h-full w-full rounded bg-white p-2 overflow-hidden">
+    <p class="text-xs font-semibold">Document Name</p>
+    <div
+      class="py-2 border-b border-b-secondary-50 animate-pulse"
+      *ngFor="let bars of [0, 0, 0, 0]"
+    >
+      <div class="w-2/4">
+        <div class="h-2 bg-secondary-100 rounded"></div>
+        <div class="w-4/5 h-2 bg-secondary-50 rounded mt-2"></div>
+      </div>
     </div>
   </div>
 </ng-template>
