@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WidgetType } from 'src/models';
 
 /**
  * The component for list widget modal.
@@ -8,4 +9,7 @@ import { Component } from '@angular/core';
   templateUrl: './list-widget-modal.component.html',
   styleUrls: ['./list-widget-modal.component.scss'],
 })
-export class ListWidgetModalComponent {}
+export class ListWidgetModalComponent {
+  /** Enum widget types. */
+  widgetType = WidgetType;
+}

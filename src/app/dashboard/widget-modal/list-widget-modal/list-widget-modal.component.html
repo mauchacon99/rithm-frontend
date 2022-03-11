@@ -1,1 +1,24 @@
-<p>list-widget-modal works!</p>
+<div class="pt-3">
+  <hr class="text-secondary-100" />
+  <!--  default section-->
+  <div class="py-6">
+    <p class="font-semibold">Default</p>
+    <div class="grid grid-cols-4 gap-4 pt-5">
+      <app-document-widget-template-modal
+        widgetType="default"
+      ></app-document-widget-template-modal>
+    </div>
+  </div>
+  <hr class="text-secondary-100" />
+  <div class="py-6">
+    <p class="font-semibold">Lists</p>
+    <div class="grid grid-cols-4 gap-4 pt-5">
+      <app-document-widget-template-modal
+        [widgetType]="widgetType.DocumentListBanner"
+      ></app-document-widget-template-modal>
+      <app-document-widget-template-modal
+        [widgetType]="widgetType.Document"
+      ></app-document-widget-template-modal>
+    </div>
+  </div>
+</div>

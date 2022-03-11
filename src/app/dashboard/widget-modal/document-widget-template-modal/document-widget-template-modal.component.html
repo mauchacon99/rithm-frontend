@@ -1,0 +1,24 @@
+<ng-container
+  *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
+></ng-container>
+
+<ng-template
+  let-image="image"
+  let-description="description"
+  let-title="title"
+  #cardOfWidget
+>
+  <div
+    class="h-[280px] w-full rounded border border-secondary-100 cursor-pointer"
+  >
+    <div
+      class="py-3 px-5 bg-secondary-50 rounded-t h-4/6 border-b border-b-secondary-100"
+    >
+      <img class="h-full w-full rounded" [src]="image" [alt]="title" />
+    </div>
+    <div class="p-2">
+      <p class="text-sm font-semibold">{{ title }}</p>
+      <p class="text-xs">{{ description }}</p>
+    </div>
+  </div>
+</ng-template>
