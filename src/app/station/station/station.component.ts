@@ -806,6 +806,9 @@ export class StationComponent
    */
   toggleLeftDrawer(): void {
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
+    if (this.settingMode) {
+      this.setGridMode('layout');
+    }
   }
 
   /**
