@@ -276,17 +276,20 @@ describe('DocumentInfoHeaderComponent', () => {
   });
 
   it('should executed method for assigned user in document', () => {
+    component.isWidget = true;
     const userService: UserService = TestBed.inject(UserService);
     const spyMethod = spyOn(
       TestBed.inject(DocumentService),
       'assignUserToDocument'
     ).and.callThrough();
+    const spyEmit = spyOn(component.isReloadListDocuments, 'emit');
     component.assignUserToDocument();
     expect(spyMethod).toHaveBeenCalledOnceWith(
       userService.user.rithmId,
       component.stationRithmId,
       component.documentRithmId
     );
+    expect(spyEmit).toHaveBeenCalledOnceWith(true);
   });
 
   it('should catch error in petition to assign to user in document', () => {

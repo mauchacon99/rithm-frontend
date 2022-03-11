@@ -376,7 +376,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.loadingAssignUser = false;
-          this.ngOnInit();
           this.displayAssignUserError = false;
         },
         error: (error: unknown) => {
