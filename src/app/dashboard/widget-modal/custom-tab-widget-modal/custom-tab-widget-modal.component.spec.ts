@@ -14,6 +14,7 @@ import { ItemListWidgetModalComponent } from '../item-list-widget-modal/item-lis
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { SelectedItemWidgetModel } from 'src/models';
+import { FormsModule } from '@angular/forms';
 
 describe('CustomTabWidgetModalComponent', () => {
   let component: CustomTabWidgetModalComponent;
@@ -38,6 +39,7 @@ describe('CustomTabWidgetModalComponent', () => {
         NoopAnimationsModule,
         MatTableModule,
         MatInputModule,
+        FormsModule,
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },

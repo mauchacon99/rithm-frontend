@@ -30,6 +30,12 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
+  // Init a timeout variable to be used in method get results.
+  timeout = setTimeout(() => '', 1000);
+
+  /** Value to search. */
+  searchTab = '';
+
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
 
@@ -71,12 +77,13 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /**
    * Get list tab documents.
    *
+   * @param name Name to get match documents.
    */
-  private getDocumentTabList(): void {
+  private getDocumentTabList(name = ''): void {
     this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
-      .getDocumentTabList()
+      .getDocumentTabList(name)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
@@ -99,12 +106,14 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /**
    * Get the station tab list.
+   *
+   * @param name Name to get match stations.
    */
-  private getStationTabList(): void {
+  private getStationTabList(name = ''): void {
     this.isLoadingStationTab = true;
     this.errorLoadingStationTab = false;
     this.dashboardService
-      .getStationTabList()
+      .getStationTabList(name)
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
@@ -127,11 +136,13 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /**
    * Get the list for the groups the stations tabs.
+   *
+   * @param name Name to get match stations groups.
    */
-  private getGroupStationTabList(): void {
+  private getGroupStationTabList(name = ''): void {
     this.isLoadingGroupTab = true;
     this.dashboardService
-      .getGroupStationTabList()
+      .getGroupStationTabList(name)
       .pipe(first())
       .subscribe({
         next: (itemsListGroupsStation) => {
@@ -157,5 +168,19 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   selectTypeElement(element: SelectedItemWidgetModel): void {
     this.itemSelected.emit(element);
+  }
+
+  /**
+   * Sending search value to get mach result.
+   */
+  getSearchResult(): void {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      if (this.searchTab !== '') {
+        this.getDocumentTabList(this.searchTab);
+        this.getGroupStationTabList(this.searchTab);
+        this.getStationTabList(this.searchTab);
+      }
+    }, 750);
   }
 }

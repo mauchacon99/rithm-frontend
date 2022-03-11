@@ -622,6 +622,7 @@ describe('DashboardService', () => {
   });
 
   it('should get list tab documents', () => {
+    const nameToSearch = 'document';
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
@@ -645,11 +646,11 @@ describe('DashboardService', () => {
         isChained: false,
       },
     ];
-    service.getDocumentTabList().subscribe((response) => {
+    service.getDocumentTabList(nameToSearch).subscribe((response) => {
       expect(response).toEqual(itemListWidgetModal);
     });
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents?name=${nameToSearch}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(itemListWidgetModal);
@@ -657,6 +658,7 @@ describe('DashboardService', () => {
   });
 
   it('should get tab list for stations', () => {
+    const nameToSearch = 'station';
     const expectDataResponse: ItemListWidgetModal[] = [
       {
         rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
@@ -666,12 +668,12 @@ describe('DashboardService', () => {
         totalDocuments: 2,
       },
     ];
-    service.getStationTabList().subscribe((response) => {
+    service.getStationTabList(nameToSearch).subscribe((response) => {
       expect(response).toEqual(expectDataResponse);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations?name=${nameToSearch}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(expectDataResponse);
@@ -679,6 +681,7 @@ describe('DashboardService', () => {
   });
 
   it('should get list tab groups station', () => {
+    const nameToSearch = 'group';
     const expectDataResponse: ItemListWidgetModal[] = [
       {
         rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
@@ -688,11 +691,11 @@ describe('DashboardService', () => {
         totalSubGroups: 9,
       },
     ];
-    service.getGroupStationTabList().subscribe((response) => {
+    service.getGroupStationTabList(nameToSearch).subscribe((response) => {
       expect(response).toEqual(expectDataResponse);
     });
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups?name=${nameToSearch}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(expectDataResponse);
