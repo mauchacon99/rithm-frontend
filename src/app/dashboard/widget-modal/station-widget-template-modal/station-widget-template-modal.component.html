@@ -1,72 +1,84 @@
-<!--Station-->
-<div
-  class="bg-white rounded border border-secondary-50 cursor-pointer shadow-sm hover:shadow-md"
-  *ngIf="widgetType === enumWidgetType.Station"
->
-  <div class="flex items-center justify-center bg-secondary-50 h-[275px] py-5">
-    <div class="w-10/12 bg-white h-[245px] py-5 rounded shadow">
+<!-- Toggle template by widgetType -->
+<ng-container
+  *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
+></ng-container>
+
+<!-- Card of the station widget -->
+<ng-template let-description="description" let-title="title" #cardOfWidget>
+  <div
+    class="h-[300px] w-full rounded border border-secondary-100 cursor-pointer"
+    matRipple
+  >
+    <div
+      class="py-3 px-5 bg-secondary-50 rounded-t h-4/6 border-b border-b-secondary-100"
+      [ngSwitch]="widgetType"
+    >
+      <!-- Type station -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.Station"
+        [ngTemplateOutlet]="station"
+      ></ng-container>
+      <!-- Type StationTableBanner -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.StationTableBanner"
+        [ngTemplateOutlet]="stationTableBanner"
+      ></ng-container>
+    </div>
+    <!-- Info of card. -->
+    <div class="p-2 overflow-auto h-2/6 scrollbar">
+      <p class="text-sm font-semibold">{{ title }}</p>
+      <p class="text-xs">{{ description }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Preview widget type station -->
+<ng-template #station>
+  <div class="h-full w-full rounded overflow-hidden">
+    <div class="w-full bg-white h-full py-5 rounded shadow">
       <div class="px-4">
         <span class="font-bold">Station name</span> <br />
         <span class="text-sm">Subtitle</span>
       </div>
-      <table class="table">
-        <tbody>
-          <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7]">
-            <td *ngFor="let j of [1, 2, 3, 4]">
-              <div
-                class="w-10/12 h-[6px] bg-secondary-100 border-b border-b-secondary-50 rounded animate-pulse"
-              ></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="w-full px-2">
+        <div
+          class="flex gap-x-2 animate-pulse border-b border-b-secondary-50"
+          *ngFor="let i of [0, 0, 0, 0, 0, 0]"
+        >
+          <ng-container *ngTemplateOutlet="bars"></ng-container>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="p-3 lg:p-5">
-    <span class="font-bold">Table</span>
-    <p class="text-sm">
-      Build a custom table with specific values from each document in the
-      station.
-    </p>
-  </div>
-</div>
+</ng-template>
 
-<!--Station-table-banner-widget-->
-<div
-  class="bg-white rounded border border-secondary-50 cursor-pointer shadow-sm hover:shadow-md"
-  *ngIf="widgetType === enumWidgetType.StationTableBanner"
->
-  <div class="flex items-center justify-center bg-secondary-50 h-[275px] py-5">
-    <div class="w-10/12 bg-white h-[245px] rounded shadow">
+<!-- Preview widget type stationTableBanner -->
+<ng-template #stationTableBanner>
+  <div class="h-full w-full rounded bg-white overflow-hidden">
+    <div
+      class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
+    >
+      <i class="fas text-[60px] text-secondary-300 fa-image animate-pulse"></i>
+    </div>
+    <div class="px-4">
+      <span class="font-bold">Station name</span> <br />
+      <span class="text-sm">Subtitle</span>
+    </div>
+    <div class="w-full px-2">
       <div
-        class="w-full h-[90px] bg-secondary-100 flex items-center justify-center rounded-t"
+        class="flex gap-x-2 animate-pulse border-b border-b-secondary-50"
+        *ngFor="let i of [0, 0, 0]"
       >
-        <i
-          class="fas text-[60px] text-secondary-300 fa-image animate-pulse"
-        ></i>
+        <ng-container *ngTemplateOutlet="bars"></ng-container>
       </div>
-      <div class="px-4 mt-5">
-        <span class="font-bold">Station name</span> <br />
-        <span class="text-sm">Subtitle</span>
-      </div>
-      <table class="table">
-        <tbody>
-          <tr *ngFor="let i of [1, 2, 3]">
-            <td *ngFor="let j of [1, 2, 3, 4]">
-              <div
-                class="w-10/12 h-[6px] bg-secondary-100 border-b border-b-secondary-50 rounded animate-pulse"
-              ></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
-  <div class="p-3 lg:p-5">
-    <span class="font-bold">Table With Banner Image</span>
-    <p class="text-sm">
-      Build a custom table with specific values from each document in the
-      station.
-    </p>
-  </div>
-</div>
+</ng-template>
+
+<!-- Bars -->
+<ng-template #bars>
+  <div
+    class="w-[20%] h-2 bg-secondary-50 rounded m-1"
+    *ngFor="let i of [0, 0, 0, 0]"
+  ></div>
+</ng-template>
