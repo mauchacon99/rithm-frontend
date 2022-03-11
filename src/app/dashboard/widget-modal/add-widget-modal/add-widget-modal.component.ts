@@ -9,9 +9,6 @@ import { SelectedItemWidgetModel } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
-  /** Tab Parents selected. */
-  tabParentSelect = 0;
-
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
@@ -20,6 +17,9 @@ export class AddWidgetModalComponent {
 
   /** Selected item to show list widget. */
   itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Tab Parents selected. */
+  tabParentSelect = 0;
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,

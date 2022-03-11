@@ -4,6 +4,7 @@ import { StationWidgetTemplateModalComponent } from 'src/app/dashboard/widget-mo
 import { SelectedItemWidgetModel } from 'src/models';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
+import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
@@ -29,6 +30,7 @@ describe('ListWidgetModalComponent', () => {
       declarations: [
         ListWidgetModalComponent,
         MockComponent(StationWidgetTemplateModalComponent),
+        MockComponent(DocumentWidgetTemplateModalComponent),
       ],
     }).compileComponents();
   });

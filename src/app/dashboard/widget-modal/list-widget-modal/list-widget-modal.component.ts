@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SelectedItemWidgetModel } from 'src/models';
-import { WidgetType } from 'src/models/enums';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /**
  * The component for list widget modal.
