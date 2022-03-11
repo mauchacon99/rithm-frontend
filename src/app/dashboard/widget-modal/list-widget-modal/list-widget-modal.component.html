@@ -1,3 +1,17 @@
+<!--header-->
+<div class="pt-3">
+  <h3 class="text-lg font-semibold">
+    <span class="capitalize">{{ itemWidgetModalSelected.itemType }}</span>
+    Templates
+  </h3>
+  <p class="text-base">
+    Selected Document:
+    <span class="font-semibold">{{
+      itemWidgetModalSelected.itemList.name
+    }}</span>
+  </p>
+</div>
+
 <!--document section-->
 <section *ngIf="itemWidgetModalSelected.itemType === 'document'" class="pt-3">
   <hr class="text-secondary-100" />
