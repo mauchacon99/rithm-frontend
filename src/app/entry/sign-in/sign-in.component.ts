@@ -45,12 +45,12 @@ export class SignInComponent implements OnInit {
    * Checks for query params and makes necessary request if present.
    */
   ngOnInit(): void {
-    this.userService.isSignedIn().then((isSignedIn) => {
-      if (isSignedIn) {
-        this.router.navigate(['dashboard']);
-      } else {
-        this.route.queryParamMap.pipe(first()).subscribe({
-          next: (params) => {
+    this.route.queryParamMap.pipe(first()).subscribe({
+      next: (params) => {
+        this.userService.isSignedIn().then((isSignedIn) => {
+          if (isSignedIn) {
+            this.router.navigate(['dashboard']);
+          } else {
             const emailLinkParams = new EmailLinkParams(params);
 
             if (emailLinkParams.type && !emailLinkParams.valid) {
@@ -75,12 +75,12 @@ export class SignInComponent implements OnInit {
                 });
               }
             }
-          },
-          error: (error: unknown) => {
-            this.showInvalidLinkMessage(error);
-          },
+          }
         });
-      }
+      },
+      error: (error: unknown) => {
+        this.showInvalidLinkMessage(error);
+      },
     });
   }
 
@@ -103,7 +103,6 @@ export class SignInComponent implements OnInit {
     this.isLoading = true;
     const formValues = this.signInForm.value;
     this.invalidCredentials = false;
-
     this.userService
       .signIn(formValues.email, formValues.password)
       .pipe(first())

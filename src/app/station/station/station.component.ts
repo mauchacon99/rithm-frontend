@@ -718,6 +718,12 @@ export class StationComponent
       this.layoutMode = false;
       this.settingMode = false;
     }
+
+    /*If the parameter 'mode' is different 'layout' hidden the drawer left.*/
+    if (mode !== 'layout') {
+      this.isOpenDrawerLeft = false;
+    }
+
     /* Make the grid visible.*/
     this.options.displayGrid = enabledMode ? 'always' : 'none';
     /* Resizing is performed. */
@@ -798,6 +804,9 @@ export class StationComponent
    */
   toggleLeftDrawer(): void {
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
+    if (this.settingMode) {
+      this.setGridMode('layout');
+    }
   }
 
   /**

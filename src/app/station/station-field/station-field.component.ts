@@ -89,6 +89,18 @@ export class StationFieldComponent
     value: '',
   };
 
+  /** Data link field to display. */
+  dataLinkField: Question = {
+    rithmId: '',
+    prompt: 'Available Stations',
+    questionType: QuestionFieldType.DataLink,
+    isReadOnly: false,
+    isRequired: true,
+    isPrivate: false,
+    children: [],
+    value: '',
+  };
+
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[] = [];
 
