@@ -9,11 +9,6 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
-  ConnectionMapElement,
-  StationGroupMapElement,
-  StationMapElement,
-} from 'src/helpers';
-import {
   MapMode,
   Point,
   MapDragItem,
@@ -51,6 +46,12 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
+import {
+  ConnectionMapElement,
+  ServiceStationMethods,
+  StationGroupMapElement,
+  StationMapElement,
+} from 'src/helpers';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -170,6 +171,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
+    private serviceStationMethods: ServiceStationMethods,
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
     private stationGroupElementService: StationGroupElementService,
@@ -1007,7 +1009,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
 
       //Update station and connection positions.
-      this.mapService.updateStationCanvasPoints();
+      this.serviceStationMethods.updateStationCanvasPoints();
 
       // Draw the station groups
       this.stationGroupElementService.drawStationGroups();
@@ -2029,7 +2031,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       coords.y = Math.floor(point.y - (STATION_HEIGHT / 2) * this.scale);
 
       //create a new station at click.
-      this.mapService.createNewStation(coords);
+      this.serviceStationMethods.createNewStation(coords);
 
       //After clicking, set to build mode.
       this.mapService.mapMode$.next(MapMode.Build);

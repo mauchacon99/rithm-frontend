@@ -4,7 +4,7 @@ import {
   MapItemStatus,
   Point,
   PathButton,
-} from '../models';
+} from 'src/models';
 
 export interface StationGroupMapElement extends StationGroupMapData {
   /** The points used for the boundary shape of the station group (the points used for the convex hull). */
