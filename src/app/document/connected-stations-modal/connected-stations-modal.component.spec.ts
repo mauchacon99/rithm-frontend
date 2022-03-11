@@ -5,26 +5,28 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { of, throwError } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockComponent } from 'ng-mocks';
+import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import { StationService } from 'src/app/core/station.service';
+import { ConnectedStationInfo, MoveDocument, Station } from 'src/models';
 import { ConnectedStationsModalComponent } from './connected-stations-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService } from 'src/mocks/mock-error-service';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
-import { of, throwError } from 'rxjs';
-import { MoveDocument } from 'src/models';
-import { RouterTestingModule } from '@angular/router/testing';
-import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
-import { MockComponent } from 'ng-mocks';
-import { Router } from '@angular/router';
+import { UserService } from 'src/app/core/user.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { HttpClientModule } from '@angular/common/http';
-import { StationService } from 'src/app/core/station.service';
-import { UserService } from 'src/app/core/user.service';
+import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -41,6 +43,27 @@ describe('ConnectedStationsModalComponent', () => {
     close: () => {},
   });
 
+  const station = {
+    allowAllOrgWorkers: false,
+    allowExternalWorkers: true,
+    allowPreviousButton: false,
+    altStationButtons: false,
+    createdByRithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
+    createdDateUTC: '2022-01-28T21:20:55.37',
+    dueDate: null,
+    flowButton: null,
+    instructions: '',
+    isChained: false,
+    name: "Path of Mand'alor",
+    priority: 0,
+    questions: [],
+    rithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+    stationOwners: [],
+    updatedByRithmId: 'a3f2e8ef-c7cc-4eaf-8833-d6385d4b35f9',
+    updatedDateUTC: '2022-03-07T23:16:09.4977559',
+    workers: [],
+  } as ConnectedStationInfo | Station;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -51,7 +74,9 @@ describe('ConnectedStationsModalComponent', () => {
         NoopAnimationsModule,
         MatDialogModule,
         MatButtonModule,
-        MatSelectModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
@@ -81,12 +106,15 @@ describe('ConnectedStationsModalComponent', () => {
   });
 
   it('should activate the move document button', () => {
+    component.connectedStationLoading = false;
     const btnMoveDocument = fixture.nativeElement.querySelector(
       '#connected-modal-move'
     );
     expect(btnMoveDocument.disabled).toBeTruthy();
-    component.selectedStation = stationId;
+
+    component.formMoveDocument.setValue(station);
     fixture.detectChanges();
+
     expect(btnMoveDocument.disabled).toBeFalsy();
   });
 
@@ -122,11 +150,11 @@ describe('ConnectedStationsModalComponent', () => {
   it('should call the service to move the document to another station', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
-    component.selectedStation = '123-654-789';
+    component.formMoveDocument.setValue(station);
 
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
-      toStationRithmIds: ['123-654-789'],
+      toStationRithmIds: [station.rithmId],
       documentRithmId: documentId,
     };
     const spyMoveDocument = spyOn(
@@ -140,7 +168,7 @@ describe('ConnectedStationsModalComponent', () => {
   it('should catch an error when moving the document if an error occurs', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
-    component.selectedStation = '123-654-789';
+    component.formMoveDocument.setValue(station);
 
     spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(
       throwError(() => {
@@ -176,11 +204,11 @@ describe('ConnectedStationsModalComponent', () => {
   it('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
-    component.selectedStation = '123-654-789';
+    component.formMoveDocument.setValue(station);
 
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
-      toStationRithmIds: ['123-654-789'],
+      toStationRithmIds: [station.rithmId],
       documentRithmId: documentId,
     };
     const spyMoveDocument = spyOn(
@@ -246,5 +274,30 @@ describe('ConnectedStationsModalComponent', () => {
       );
     component.ngOnInit();
     expect(connectedStationLoading).toBeTruthy();
+  });
+
+  it('should check typeof of the formMoveDocument', () => {
+    component.formMoveDocument.setValue('');
+    expect(component.checkTypeof).toBeTrue();
+  });
+
+  it('should listen to autocomplete input', () => {
+    const spyForm = spyOn(
+      component.formMoveDocument.valueChanges,
+      'pipe'
+    ).and.callThrough();
+    component['listenAutocomplete$']();
+    expect(spyForm).toHaveBeenCalled();
+  });
+
+  it('should return filter data to autocomplete', () => {
+    component.stations = [station];
+    const expectData = component['filterAutocomplete'](station.name);
+    expect(expectData).toEqual([station]);
+  });
+
+  it('should return name station to display', () => {
+    const expectData = component.displayFn(station);
+    expect(expectData).toEqual(station.name);
   });
 });

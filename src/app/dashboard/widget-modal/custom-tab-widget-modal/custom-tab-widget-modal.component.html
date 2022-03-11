@@ -68,6 +68,7 @@
       </div>
       <div *ngIf="!errorLoadingDocumentTab && !isLoadingDocumentTab">
         <app-item-list-widget-modal
+          (itemSelected)="selectTypeElement($event)"
           [itemListWidgetModal]="dataSourceTableDocument"
           [itemType]="'document'"
         ></app-item-list-widget-modal>
@@ -88,17 +89,24 @@
       </div>
       <div *ngIf="!errorLoadingStationTab && !isLoadingStationTab">
         <app-item-list-widget-modal
+          (itemSelected)="selectTypeElement($event)"
           [itemListWidgetModal]="dataSourceTableStations"
           [itemType]="'station'"
         ></app-item-list-widget-modal>
       </div>
     </mat-tab>
     <mat-tab>
+      <div *ngIf="errorLoadingGroupTab" id="error-group-list-tab">
+        <p class="text-error-500 text-center">
+          Error: failed to obtain groups.
+        </p>
+      </div>
       <div *ngIf="isLoadingGroupTab" class="loading">
         <app-loading-indicator id="loading-tab-group"></app-loading-indicator>
       </div>
-      <div *ngIf="!isLoadingGroupTab">
+      <div *ngIf="!isLoadingGroupTab && !errorLoadingGroupTab">
         <app-item-list-widget-modal
+          (itemSelected)="selectTypeElement($event)"
           [itemListWidgetModal]="dataSourceTableGroup"
           [itemType]="'group'"
         ></app-item-list-widget-modal>
