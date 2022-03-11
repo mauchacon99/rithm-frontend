@@ -312,6 +312,29 @@ export class MapService {
         this.mapScale$.value
       );
     }
+    this.connectionHighlight();
+  }
+
+  /**
+   * If station is selected then connection highlight set to true.
+   *
+   */
+  connectionHighlight(): void {
+    const station = this.stationElements.find((e) => e.drawerOpened);
+    if (!station) {
+      return;
+    }
+    this.connectionElements.map((e) => (e.highlighted = false));
+    for (const connection of this.connectionElements) {
+      //On station drawer opened, set the connection highlight start point true.
+      if (connection.startStationRithmId === station.rithmId) {
+        connection.highlighted = station.drawerOpened;
+      }
+      //On station drawer opened, set the connection highlight end point true.
+      if (connection.endStationRithmId === station.rithmId) {
+        connection.highlighted = station.drawerOpened;
+      }
+    }
   }
 
   /**
@@ -1755,6 +1778,8 @@ export class MapService {
       });
       this.mapDataReceived$.next(true);
     }
+    //On station drawer closed, set the connection highlight point false.
+    this.connectionElements.map((e) => (e.highlighted = false));
   }
 
   /**
