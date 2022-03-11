@@ -6,6 +6,7 @@
       [required]="field.isRequired"
       [formControlName]="this.field.questionType"
       (selectionChange)="updateFieldAnswer()"
+      (openedChange)="multiSelectOpenOrClose($event)"
     >
       <mat-option
         *ngFor="let possibleAnswer of field?.possibleAnswers"

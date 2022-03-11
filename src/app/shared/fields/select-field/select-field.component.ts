@@ -75,6 +75,7 @@ export class SelectFieldComponent
 
     this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
     this.selectFieldForm.get(this.field.questionType)?.updateValueAndValidity();
+    this.multiSelectOpenOrClose(false);
   }
 
   /**
@@ -213,5 +214,15 @@ export class SelectFieldComponent
         break;
     }
     return fieldVal;
+  }
+
+  /**
+   * Checks if it should open or close the options in the multiple selection.
+   *
+   * @param opened Receive the value when it should open or close.
+   * @returns A string value.
+   */
+  multiSelectOpenOrClose(opened: unknown): string {
+    return opened ? 'opened' : 'closed';
   }
 }
