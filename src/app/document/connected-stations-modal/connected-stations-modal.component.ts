@@ -7,12 +7,14 @@ import {
   Station,
 } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
-import { first } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
+import { FormControl, Validators } from '@angular/forms';
+import { map, startWith } from 'rxjs/operators';
 
 /**
  * Component for connected stations.
@@ -23,11 +25,20 @@ import { UserService } from 'src/app/core/user.service';
   styleUrls: ['./connected-stations-modal.component.scss'],
 })
 export class ConnectedStationsModalComponent implements OnInit {
-  /** The title Modal. */
-  title = 'Where would you like to move this document?';
+  /**
+   * Disable button to move document.
+   *
+   * @returns True when it's not an object.
+   */
+  get checkTypeof(): boolean {
+    return typeof this.formMoveDocument.value !== 'object';
+  }
 
-  /** The Label Select of modal. */
-  label = 'Select Station';
+  /** Data filtered to show autocomplete. */
+  filteredOptionsAutocomplete$!: Observable<ConnectedStationInfo[] | Station[]>;
+
+  /** The selected Station for move document. */
+  formMoveDocument = new FormControl('', Validators.required);
 
   /** The list of previous and following stations or the list of all stations. */
   stations: ConnectedStationInfo[] | Station[] = [];
@@ -38,17 +49,20 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Station rithmId. */
   stationRithmId = '';
 
-  /** The selected Station for move document. */
-  selectedStation = '';
-
-  /* Load if exists error in the stations. */
+  /** Load if exists error in the stations. */
   connectedError = false;
 
-  /* Loading in modal the list of connected stations or the list of all stations. */
+  /** Loading in modal the list of connected stations or the list of all stations. */
   connectedStationLoading = false;
 
   /** Enable error message if move document request fails. */
   moveDocumentError = false;
+
+  /** The title Modal. */
+  title = 'Where would you like to move this document?';
+
+  /** The Label Select of modal. */
+  label = 'Select Station';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
@@ -70,6 +84,45 @@ export class ConnectedStationsModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.isAdmin ? this.getAllStations() : this.getConnectedStations();
+    this.listenAutocomplete$();
+  }
+
+  /** Listen changes in autocomplete. */
+  private listenAutocomplete$(): void {
+    this.filteredOptionsAutocomplete$ = this.formMoveDocument.valueChanges.pipe(
+      startWith(''),
+      map((value) => (typeof value === 'string' ? value : value.name)),
+      map((value) => this.filterAutocomplete(value))
+    );
+  }
+
+  /**
+   * Filter data on autocomplete input.
+   *
+   * @param value String to filter.
+   * @returns Data filtered.
+   */
+  private filterAutocomplete(
+    value: string
+  ): ConnectedStationInfo[] | Station[] {
+    const filterValue = value.toLowerCase();
+    const dataFiltered = [] as ConnectedStationInfo[];
+    this.stations.map((station) => {
+      if (station.name.toLowerCase().includes(filterValue)) {
+        dataFiltered.push(station);
+      }
+    });
+    return dataFiltered;
+  }
+
+  /**
+   * Display the name of station in input autocomplete.
+   *
+   * @param station Object of station.
+   * @returns String to show.
+   */
+  displayFn(station: ConnectedStationInfo | Station): string {
+    return station && station.name ? station.name : '';
   }
 
   /**
@@ -137,9 +190,10 @@ export class ConnectedStationsModalComponent implements OnInit {
    */
   moveDocument(): void {
     this.moveDocumentError = false;
+    this.connectedStationLoading = true;
     const moveDocument: MoveDocument = {
       fromStationRithmId: this.stationRithmId,
-      toStationRithmIds: [this.selectedStation],
+      toStationRithmIds: [this.formMoveDocument.value?.rithmId],
       documentRithmId: this.documentRithmId,
     };
     this.documentService
@@ -149,11 +203,13 @@ export class ConnectedStationsModalComponent implements OnInit {
         next: () => {
           this.popupService.notify('The document has been moved successfully');
           this.moveDocumentError = false;
+          this.connectedStationLoading = false;
           this.matDialogRef.close();
           this.router.navigateByUrl('dashboard');
         },
         error: (error: unknown) => {
           this.moveDocumentError = true;
+          this.connectedStationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
