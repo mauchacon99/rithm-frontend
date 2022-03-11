@@ -138,7 +138,7 @@ describe('StationGroupElementService', () => {
       x: pointStart.x + GROUP_CHARACTER_SIZE,
       y:
         service.slopeLine(pointStart, pointEnd) *
-        (pointStart.x + GROUP_CHARACTER_SIZE - pointEnd.x) +
+          (pointStart.x + GROUP_CHARACTER_SIZE - pointEnd.x) +
         pointEnd.y,
     };
     const movedPointInX = service.movePointOnLine(
@@ -156,7 +156,7 @@ describe('StationGroupElementService', () => {
     const pointExpectY: Point = {
       x:
         (pointStart.y + GROUP_CHARACTER_SIZE - pointEnd.y) /
-        service.slopeLine(pointStart, pointEnd) +
+          service.slopeLine(pointStart, pointEnd) +
         pointEnd.x,
       y: pointStart.y + GROUP_CHARACTER_SIZE,
     };
@@ -256,7 +256,8 @@ describe('StationGroupElementService', () => {
     const expectPositionStations = [0, 2];
     const expectPoints: Point[] = [];
     expectPositionStations.forEach((positionStation) => {
-      const scaledPadding = STATION_GROUP_PADDING * mapService.mapHelper.mapScale$.value;
+      const scaledPadding =
+        STATION_GROUP_PADDING * mapService.mapHelper.mapScale$.value;
       const maxX =
         mapService.stationElements[positionStation].canvasPoint.x +
         STATION_WIDTH * mapService.mapHelper.mapScale$.value;
@@ -312,7 +313,8 @@ describe('StationGroupElementService', () => {
       { x: 240, y: 87, corner: Corner.TopLeft },
       { x: 240, y: 129, corner: Corner.TopLeft },
     ];
-    const padding = STATION_GROUP_PADDING * mapService.mapHelper.mapScale$.value;
+    const padding =
+      STATION_GROUP_PADDING * mapService.mapHelper.mapScale$.value;
     const expectPoints: Point[] = [
       { x: -186 - padding, y: -3 + padding, corner: Corner.BottomLeft },
       { x: -104 - padding, y: 299 + padding, corner: Corner.BottomLeft },

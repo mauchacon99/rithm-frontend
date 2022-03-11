@@ -38,7 +38,7 @@ import {
   MapHelper,
   MapConnectionHelper,
   MapStationGroupHelper,
-  MapStationHelper
+  MapStationHelper,
 } from 'src/helpers';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
@@ -165,10 +165,7 @@ export class MapService {
   /** T. */
   mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
 
-  constructor(
-    private http: HttpClient
-  ) { }
-
+  constructor(private http: HttpClient) {}
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -240,9 +237,8 @@ export class MapService {
       (e) => new StationMapElement(e)
     );
     //Turns group data into StationMapElements and sets this.flowElements to that.
-    this.mapStationGroupHelper.stationGroupElements = this.mapData.stationGroups.map(
-      (e) => new StationGroupMapElement(e)
-    );
+    this.mapStationGroupHelper.stationGroupElements =
+      this.mapData.stationGroups.map((e) => new StationGroupMapElement(e));
     //Trigger logic to set connections based on station data.
     this.mapConnectionHelper.setConnections(this.mapStationHelper);
     //Trigger logic to set map boundary box.
@@ -318,11 +314,17 @@ export class MapService {
     for (const connection of this.connectionElements) {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
-        connection.setStartPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
+        connection.setStartPoint(
+          station.canvasPoint,
+          this.mapHelper.mapScale$.value
+        );
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
-        connection.setEndPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
+        connection.setEndPoint(
+          station.canvasPoint,
+          this.mapHelper.mapScale$.value
+        );
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
@@ -775,20 +777,20 @@ export class MapService {
     return Array.isArray(source)
       ? source.map((item) => this.deepCopy(item))
       : source instanceof Date
-        ? new Date(source.getTime())
-        : source && typeof source === 'object'
-          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-            Object.defineProperty(
-              o,
-              prop,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              Object.getOwnPropertyDescriptor(source, prop)!
-            );
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-            return o;
-          }, Object.create(Object.getPrototypeOf(source)))
-          : (source as T);
+      ? new Date(source.getTime())
+      : source && typeof source === 'object'
+      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+          Object.defineProperty(
+            o,
+            prop,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.getOwnPropertyDescriptor(source, prop)!
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+          return o;
+        }, Object.create(Object.getPrototypeOf(source)))
+      : (source as T);
   }
 
   /**
@@ -1027,7 +1029,8 @@ export class MapService {
 
     // Reset zoomCount and return if attempting to zoom out past a certain point while not in view mode.
     if (
-      this.mapHelper.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
+      this.mapHelper.mapScale$.value <=
+        SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
       !zoomingIn &&
       this.mapMode$.value !== MapMode.View
     ) {
@@ -1054,7 +1057,7 @@ export class MapService {
           //current scale to new scale
           (zoomOrigin[coord] / this.mapHelper.mapScale$.value -
             zoomOrigin[coord] / newScale) *
-          translateDirection
+            translateDirection
         );
         //If zooming out.
       } else {
@@ -1063,15 +1066,21 @@ export class MapService {
           //new scale to current scale
           (zoomOrigin[coord] / newScale -
             zoomOrigin[coord] / this.mapHelper.mapScale$.value) *
-          translateDirection
+            translateDirection
         );
       }
     };
 
     //Subtract the number returned from translateLogic from x coord of currentCanvasPoint to pan the map that amount.
-    this.mapHelper.currentCanvasPoint$.value.x -= translateLogic(zoomingIn, 'x');
+    this.mapHelper.currentCanvasPoint$.value.x -= translateLogic(
+      zoomingIn,
+      'x'
+    );
     //Subtract the number returned from translateLogic from y coord of currentCanvasPoint to pan the map that amount.
-    this.mapHelper.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
+    this.mapHelper.currentCanvasPoint$.value.y -= translateLogic(
+      zoomingIn,
+      'y'
+    );
 
     //Set the mapScale to the new scale as long as it isn't above or below the max or min allowed.
     this.mapHelper.mapScale$.next(
@@ -1312,7 +1321,9 @@ export class MapService {
           groupCenterMapPoint.x +
           drawerWidth / 2 / this.mapHelper.mapScale$.value -
           canvasCenter.x / this.mapHelper.mapScale$.value,
-        y: groupCenterMapPoint.y - canvasCenter.y / this.mapHelper.mapScale$.value,
+        y:
+          groupCenterMapPoint.y -
+          canvasCenter.y / this.mapHelper.mapScale$.value,
       };
       //If selected station needs to be pan to center.
     } else if (panType === CenterPanType.Station) {
@@ -1396,7 +1407,10 @@ export class MapService {
    * @returns The x-coordinate for the canvas.
    */
   getCanvasX(mapX: number): number {
-    return (mapX - this.mapHelper.currentCanvasPoint$.value.x) * this.mapHelper.mapScale$.value;
+    return (
+      (mapX - this.mapHelper.currentCanvasPoint$.value.x) *
+      this.mapHelper.mapScale$.value
+    );
   }
 
   /**
@@ -1406,7 +1420,10 @@ export class MapService {
    * @returns The y-coordinate for the canvas.
    */
   getCanvasY(mapY: number): number {
-    return (mapY - this.mapHelper.currentCanvasPoint$.value.y) * this.mapHelper.mapScale$.value;
+    return (
+      (mapY - this.mapHelper.currentCanvasPoint$.value.y) *
+      this.mapHelper.mapScale$.value
+    );
   }
 
   /**
@@ -1453,7 +1470,8 @@ export class MapService {
    */
   getMapX(canvasX: number): number {
     return Math.floor(
-      canvasX * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.x
+      canvasX * (1 / this.mapHelper.mapScale$.value) +
+        this.mapHelper.currentCanvasPoint$.value.x
     );
   }
 
@@ -1465,7 +1483,8 @@ export class MapService {
    */
   getMapY(canvasY: number): number {
     return Math.floor(
-      canvasY * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.y
+      canvasY * (1 / this.mapHelper.mapScale$.value) +
+        this.mapHelper.currentCanvasPoint$.value.y
     );
   }
 
@@ -1493,7 +1512,9 @@ export class MapService {
 
     // new.
     this.mapConnectionHelper.validateConnections(this.mapStationHelper);
-    this.mapStationHelper.validateStationsBelongToExactlyOneStationGroup(this.mapStationGroupHelper);
+    this.mapStationHelper.validateStationsBelongToExactlyOneStationGroup(
+      this.mapStationGroupHelper
+    );
     this.mapStationGroupHelper.validateStationGroupsBelongToExactlyOneStationGroup();
   }
 
@@ -1673,9 +1694,7 @@ export class MapService {
     if (index >= 0) {
       /* If the station is newly created, remove it from the stationElements array,
       otherwise mark that station as deleted. */
-      if (
-        this.stationElements[index].status === MapItemStatus.Created
-      ) {
+      if (this.stationElements[index].status === MapItemStatus.Created) {
         this.stationElements.splice(index, 1);
       } else {
         this.stationElements[index].markAsDeleted();
@@ -1702,10 +1721,7 @@ export class MapService {
    *
    * @param coords The coordinates where the station will be placed.
    */
-  createNewStation(
-    coords: Point,
-
-  ): void {
+  createNewStation(coords: Point): void {
     //Set the coordinates used for mapPoint.
     const mapCoords = this.mapHelper.getMapPoint(coords);
     //Create new stationMapElement with default data.
@@ -1768,18 +1784,16 @@ export class MapService {
         //The connecting station is found in a group, and the newStation is not found in that group.
         if (
           stationGroupIndex >= 0 &&
-          !this.stationGroupElements[
-            stationGroupIndex
-          ].stations.includes(newStation.rithmId)
+          !this.stationGroupElements[stationGroupIndex].stations.includes(
+            newStation.rithmId
+          )
         ) {
           //push newStation to the stations array of the same group as the connecting station.
           this.stationGroupElements[stationGroupIndex].stations.push(
             newStation.rithmId
           );
           //Unless group is new, mark it as updated.
-          this.stationGroupElements[
-            stationGroupIndex
-          ].markAsUpdated();
+          this.stationGroupElements[stationGroupIndex].markAsUpdated();
         }
         //if isAddingConnected property is true, set it to false.
         this.disableConnectedStationMode();
@@ -1790,23 +1804,20 @@ export class MapService {
     this.stationElements.push(newStation);
 
     // Find the Root Station Group index.
-    const isReadOnlyRootStationGroupIndex =
-      this.stationGroupElements.findIndex(
-        (stationGroup) => stationGroup.isReadOnlyRootStationGroup
-      );
+    const isReadOnlyRootStationGroupIndex = this.stationGroupElements.findIndex(
+      (stationGroup) => stationGroup.isReadOnlyRootStationGroup
+    );
 
     if (isReadOnlyRootStationGroupIndex !== -1) {
       // Updating the stations in the Root station group.
-      this.stationGroupElements[
-        isReadOnlyRootStationGroupIndex
-      ].stations.push(newStation.rithmId);
+      this.stationGroupElements[isReadOnlyRootStationGroupIndex].stations.push(
+        newStation.rithmId
+      );
     }
 
     //Update the map boundary.
     if (this.boundaryElement) {
-      this.boundaryElement.updatePoints(
-        this.stationElements
-      );
+      this.boundaryElement.updatePoints(this.stationElements);
     }
     //Note a change in map data.
     this.mapDataReceived$.next(true);

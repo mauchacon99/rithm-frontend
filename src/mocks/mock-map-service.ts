@@ -283,7 +283,7 @@ export class MockMapService {
    * @param coords The coordinates where the station will be placed.
    */
   // eslint-disable-next-line
-  createNewStation(coords: Point): void { }
+  createNewStation(coords: Point): void {}
 
   /**
    * Updates station status to delete.
@@ -291,19 +291,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void { }
+  deleteStation(station: StationMapElement): void {}
 
   /**
    * Enters build mode for the map.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buildMap(): void { }
+  buildMap(): void {}
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void { }
+  cancelMapChanges(): void {}
 
   /**
    * Publishes local map changes to the server.
@@ -338,7 +338,7 @@ export class MockMapService {
     zoomingIn: boolean,
     zoomOrigin = this.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
-  ): void { }
+  ): void {}
   /* eslint-enable */
 
   /**
@@ -368,7 +368,8 @@ export class MockMapService {
    */
   getCanvasX(mapX: number): number {
     return Math.floor(
-      (mapX - this.mapHelper.currentCanvasPoint$.value.x) * this.mapHelper.mapScale$.value
+      (mapX - this.mapHelper.currentCanvasPoint$.value.x) *
+        this.mapHelper.mapScale$.value
     );
   }
 
@@ -380,7 +381,8 @@ export class MockMapService {
    */
   getCanvasY(mapY: number): number {
     return Math.floor(
-      (mapY - this.mapHelper.currentCanvasPoint$.value.y) * this.mapHelper.mapScale$.value
+      (mapY - this.mapHelper.currentCanvasPoint$.value.y) *
+        this.mapHelper.mapScale$.value
     );
   }
 
@@ -405,7 +407,8 @@ export class MockMapService {
    */
   getMapX(canvasX: number): number {
     return Math.floor(
-      canvasX * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.x
+      canvasX * (1 / this.mapHelper.mapScale$.value) +
+        this.mapHelper.currentCanvasPoint$.value.x
     );
   }
 
@@ -417,7 +420,8 @@ export class MockMapService {
    */
   getMapY(canvasY: number): number {
     return Math.floor(
-      canvasY * (1 / this.mapHelper.mapScale$.value) + this.mapHelper.currentCanvasPoint$.value.y
+      canvasY * (1 / this.mapHelper.mapScale$.value) +
+        this.mapHelper.currentCanvasPoint$.value.y
     );
   }
 
@@ -616,20 +620,20 @@ export class MockMapService {
     return Array.isArray(source)
       ? source.map((item) => this.deepCopy(item))
       : source instanceof Date
-        ? new Date(source.getTime())
-        : source && typeof source === 'object'
-          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-            Object.defineProperty(
-              o,
-              prop,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              Object.getOwnPropertyDescriptor(source, prop)!
-            );
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-            return o;
-          }, Object.create(Object.getPrototypeOf(source)))
-          : (source as T);
+      ? new Date(source.getTime())
+      : source && typeof source === 'object'
+      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+          Object.defineProperty(
+            o,
+            prop,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.getOwnPropertyDescriptor(source, prop)!
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+          return o;
+        }, Object.create(Object.getPrototypeOf(source)))
+      : (source as T);
   }
 
   /**
@@ -818,11 +822,17 @@ export class MockMapService {
     for (const connection of this.connectionElements) {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
-        connection.setStartPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
+        connection.setStartPoint(
+          station.canvasPoint,
+          this.mapHelper.mapScale$.value
+        );
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
-        connection.setEndPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
+        connection.setEndPoint(
+          station.canvasPoint,
+          this.mapHelper.mapScale$.value
+        );
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
@@ -1190,7 +1200,9 @@ export class MockMapService {
           groupCenterMapPoint.x +
           drawerWidth / 2 / this.mapHelper.mapScale$.value -
           canvasCenter.x / this.mapHelper.mapScale$.value,
-        y: groupCenterMapPoint.y - canvasCenter.y / this.mapHelper.mapScale$.value,
+        y:
+          groupCenterMapPoint.y -
+          canvasCenter.y / this.mapHelper.mapScale$.value,
       };
       //If selected station needs to be pan to center.
     } else if (panType === CenterPanType.Station) {

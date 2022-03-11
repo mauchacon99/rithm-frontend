@@ -1,18 +1,17 @@
-import { StationGroupMapElement } from "src/helpers";
-import { MapHelper } from "./map-helper";
+import { StationGroupMapElement } from 'src/helpers';
+import { MapHelper } from './map-helper';
 
 /**
  * Represents methods that handle station data for the Map.
  */
 export class MapStationGroupHelper {
-
   /** The station group elements displayed on the map. */
   stationGroupElements: StationGroupMapElement[] = [];
 
   /** An array that stores a backup of stationGroupElements when buildMap is called. */
   storedStationGroupElements: StationGroupMapElement[] = [];
 
-  constructor(mapHelper: MapHelper) { }
+  constructor(mapHelper: MapHelper) {}
 
   /**
    * Validates that station groups belong to exactly one immediate parent station group.
@@ -41,5 +40,4 @@ export class MapStationGroupHelper {
       }
     }
   }
-
 }

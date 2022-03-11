@@ -7,21 +7,22 @@ import { MapStationGroupHelper } from 'src/helpers';
  * Represents methods that handle station data for the Map.
  */
 export class MapStationHelper {
-
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
   /** An array that stores a backup of stationElements when buildMap is called. */
   storedStationElements: StationMapElement[] = [];
 
-  constructor(private mapHelper: MapHelper) { }
+  constructor(private mapHelper: MapHelper) {}
 
   /**
    * Validates that stations belong to exactly one immediate parent station group.
    *
    * @param stationGroupHelper T.
    */
-  validateStationsBelongToExactlyOneStationGroup(stationGroupHelper: MapStationGroupHelper): void {
+  validateStationsBelongToExactlyOneStationGroup(
+    stationGroupHelper: MapStationGroupHelper
+  ): void {
     // Each station should belong to exactly one station group.
     for (const station of this.stationElements) {
       const stationGroupsThatContainThisStation =
@@ -72,5 +73,4 @@ export class MapStationHelper {
         );
     }
   }
-
 }

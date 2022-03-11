@@ -1,18 +1,21 @@
-import { ConnectionMapElement, MapHelper, StationMapElement } from "src/helpers";
-import { MapStationHelper } from "./map-station-helper";
+import {
+  ConnectionMapElement,
+  MapHelper,
+  StationMapElement,
+} from 'src/helpers';
+import { MapStationHelper } from './map-station-helper';
 
 /**
  * Represents methods that handle connection data for the Map.
  */
 export class MapConnectionHelper {
-
   /** Data for connection line paths between stations. */
   connectionElements: ConnectionMapElement[] = [];
 
   /** An array that stores a backup of connectionElements when buildMap is called. */
   storedConnectionElements: ConnectionMapElement[] = [];
 
-  constructor(private mapHelper: MapHelper) { }
+  constructor(private mapHelper: MapHelper) {}
 
   /**
    * Update information used to draw a connection when a connection has changed.
@@ -24,11 +27,17 @@ export class MapConnectionHelper {
     for (const connection of this.connectionElements) {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
-        connection.setStartPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
+        connection.setStartPoint(
+          station.canvasPoint,
+          this.mapHelper.mapScale$.value
+        );
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
-        connection.setEndPoint(station.canvasPoint, this.mapHelper.mapScale$.value);
+        connection.setEndPoint(
+          station.canvasPoint,
+          this.mapHelper.mapScale$.value
+        );
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
@@ -105,5 +114,4 @@ export class MapConnectionHelper {
       }
     }
   }
-
 }

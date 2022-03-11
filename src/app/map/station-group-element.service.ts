@@ -79,7 +79,9 @@ export class StationGroupElementService {
 
   constructor(private mapService: MapService) {
     //set this.mapScale to match the behavior subject in mapService.
-    this.mapService.mapHelper.mapScale$.subscribe((scale) => (this.mapScale = scale));
+    this.mapService.mapHelper.mapScale$.subscribe(
+      (scale) => (this.mapScale = scale)
+    );
   }
 
   /**
@@ -197,22 +199,22 @@ export class StationGroupElementService {
     ctx.strokeStyle =
       (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
         this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-        stationGroup.selected &&
-        stationGroup.status !== MapItemStatus.Pending
+      stationGroup.selected &&
+      stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
-          ? MAP_DISABLED_STROKE
-          : (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+        ? MAP_DISABLED_STROKE
+        : (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
             stationGroup.drawerOpened) &&
-            stationGroup.status !== MapItemStatus.Pending
-            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-              this.mapService.mapMode$.value === MapMode.StationGroupEdit
-              ? MAP_SELECTED
-              : NODE_HOVER_COLOR
-            : CONNECTION_DEFAULT_COLOR;
+          stationGroup.status !== MapItemStatus.Pending
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     if (
       (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
         this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
@@ -343,18 +345,18 @@ export class StationGroupElementService {
     // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.selected ||
-        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-          !stationGroup.disabled &&
-          (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-            this.mapService.mapMode$.value === MapMode.StationGroupEdit))
+      (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+        !stationGroup.disabled &&
+        (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit))
         ? MAP_SELECTED
         : stationGroup.disabled &&
           (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
             this.mapService.mapMode$.value === MapMode.StationGroupEdit)
-          ? MAP_DISABLED_STROKE
-          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-            ? NODE_HOVER_COLOR
-            : BUTTON_DEFAULT_COLOR;
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ? NODE_HOVER_COLOR
+        : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     const isItalic =
       stationGroup.status === MapItemStatus.Updated ? 'italic bold' : 'bold';
@@ -373,7 +375,7 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-      STATION_GROUP_PADDING * this.mapScale
+        STATION_GROUP_PADDING * this.mapScale
     );
 
     // Split station group name.
@@ -511,7 +513,8 @@ export class StationGroupElementService {
       const scaledPadding =
         STATION_GROUP_PADDING * this.mapService.mapHelper.mapScale$.value;
       const maxX =
-        station.canvasPoint.x + STATION_WIDTH * this.mapService.mapHelper.mapScale$.value;
+        station.canvasPoint.x +
+        STATION_WIDTH * this.mapService.mapHelper.mapScale$.value;
       const maxY =
         station.canvasPoint.y +
         STATION_HEIGHT * this.mapService.mapHelper.mapScale$.value;
@@ -578,7 +581,8 @@ export class StationGroupElementService {
    */
   getPaddedStationGroupBoundaryPoints(boundaryPoints: Point[]): Point[] {
     const updatedBoundaryPoints = [...boundaryPoints]; // Deep copy
-    const padding = STATION_GROUP_PADDING * this.mapService.mapHelper.mapScale$.value;
+    const padding =
+      STATION_GROUP_PADDING * this.mapService.mapHelper.mapScale$.value;
     for (const point of updatedBoundaryPoints) {
       if (point.corner === Corner.TopLeft) {
         point.x -= padding;
@@ -747,7 +751,7 @@ export class StationGroupElementService {
     if (coordinate) {
       if (
         this.mapService.mapHelper.getMapX(pointStart.x) >
-        this.mapService.mapHelper.getMapX(pointEnd.x) &&
+          this.mapService.mapHelper.getMapX(pointEnd.x) &&
         IsPath
       ) {
         // x-coordinate displacement.
@@ -1022,8 +1026,8 @@ export class StationGroupElementService {
           const titleWidth =
             this.canvasContext.measureText(title).width +
             GROUP_CHARACTER_SIZE *
-            (stationGroup.isChained ? 5 : 2) *
-            this.mapScale;
+              (stationGroup.isChained ? 5 : 2) *
+              this.mapScale;
 
           // Reset pathButtons of the station group.
           stationGroup.pathButtons = [];
@@ -1080,19 +1084,19 @@ export class StationGroupElementService {
         -STATION_GROUP_DISPLACEMENT,
         -STATION_GROUP_DISPLACEMENT,
         this.canvasContext.measureText(title).width +
-        STATION_GROUP_NAME_PADDING +
-        (stationGroup.status === MapItemStatus.Pending
-          ? GROUP_CHARACTER_SIZE * 12
-          : this.mapService.mapMode$.value !== MapMode.View &&
-            stationGroup.isChained
+          STATION_GROUP_NAME_PADDING +
+          (stationGroup.status === MapItemStatus.Pending
+            ? GROUP_CHARACTER_SIZE * 12
+            : this.mapService.mapMode$.value !== MapMode.View &&
+              stationGroup.isChained
             ? GROUP_CHARACTER_SIZE * 7
             : this.mapService.mapMode$.value !== MapMode.View
-              ? GROUP_CHARACTER_SIZE * 2
-              : GROUP_CHARACTER_SIZE) *
-        this.mapScale,
+            ? GROUP_CHARACTER_SIZE * 2
+            : GROUP_CHARACTER_SIZE) *
+            this.mapScale,
         // This dynamically sets the hight of the rectangle based on the hight of the text.
         this.canvasContext.measureText(title).fontBoundingBoxDescent +
-        STATION_GROUP_NAME_PADDING
+          STATION_GROUP_NAME_PADDING
       );
     }
 
@@ -1154,8 +1158,8 @@ export class StationGroupElementService {
       (Math.abs(m) === Math.PI / 2
         ? 0
         : Math.abs(m) < Math.PI / 3
-          ? -STATION_GROUP_DISPLACEMENT * this.mapScale
-          : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
+        ? -STATION_GROUP_DISPLACEMENT * this.mapScale
+        : -STATION_GROUP_DISPLACEMENT * 3 * this.mapScale);
 
     // Moves the point on the line to delimit where the hover zone begins.
     const newUnRotatedPointStart = this.movePointOnLine(
@@ -1181,12 +1185,13 @@ export class StationGroupElementService {
       stationGroupAdd mode. */
       const hoverFontSize =
         this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          typeButton === 'buttonOption'
+        typeButton === 'buttonOption'
           ? 2
           : 2.5;
       // If the icon is hover we increase the font by 0.5.
-      this.canvasContext.font = `${fontSize * (stationGroup.hoverItem === typeButton ? hoverFontSize : 2)
-        }px "FontAwesome"`;
+      this.canvasContext.font = `${
+        fontSize * (stationGroup.hoverItem === typeButton ? hoverFontSize : 2)
+      }px "FontAwesome"`;
 
       // Hovering changes the color of the icon.
       this.canvasContext.fillStyle =
@@ -1194,8 +1199,8 @@ export class StationGroupElementService {
           ? hoverColor
           : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
             typeButton === 'buttonOption'
-            ? NODE_HOVER_COLOR
-            : BUTTON_DEFAULT_COLOR;
+          ? NODE_HOVER_COLOR
+          : BUTTON_DEFAULT_COLOR;
 
       // Paint the icon on the map.
       this.canvasContext.fillText(
@@ -1281,21 +1286,21 @@ export class StationGroupElementService {
     ctx.strokeStyle =
       (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
         this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-        stationGroup.selected &&
-        stationGroup.status !== MapItemStatus.Pending
+      stationGroup.selected &&
+      stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
-          ? MAP_DISABLED_STROKE
-          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-            stationGroup.status !== MapItemStatus.Pending
-            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-              this.mapService.mapMode$.value === MapMode.StationGroupEdit
-              ? MAP_SELECTED
-              : NODE_HOVER_COLOR
-            : CONNECTION_DEFAULT_COLOR;
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          stationGroup.status !== MapItemStatus.Pending
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     ctx.moveTo(point.x, point.y);
     ctx.clearRect(
       point.x,

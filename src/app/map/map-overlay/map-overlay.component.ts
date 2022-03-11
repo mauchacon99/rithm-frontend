@@ -342,10 +342,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const confirm = !this.mapHasChanges
       ? true
       : await this.popupService.confirm({
-        title: 'Confirmation',
-        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-        okButtonText: 'Confirm',
-      });
+          title: 'Confirmation',
+          message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+          okButtonText: 'Confirm',
+        });
     //If user accepts, or there are no changes.
     if (confirm) {
       //Call method to run logic for cancelling.

@@ -1,14 +1,13 @@
-import { BehaviorSubject } from "rxjs";
-import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from "src/app/map/map-constants";
-import { BoundaryMapElement } from "src/helpers";
-import { Point } from "src/models";
-import { MapStationHelper } from "./map-station-helper";
+import { BehaviorSubject } from 'rxjs';
+import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from 'src/app/map/map-constants';
+import { BoundaryMapElement } from 'src/helpers';
+import { Point } from 'src/models';
+import { MapStationHelper } from './map-station-helper';
 
 /**
  * Represents methods that handle for the Map.
  */
 export class MapHelper {
-
   /** The current scale of the map. Default is 1. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
 
@@ -22,8 +21,6 @@ export class MapHelper {
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(
     DEFAULT_CANVAS_POINT
   );
-
-
 
   /**
    * Gets the point on the canvas for a given map point.
@@ -101,7 +98,8 @@ export class MapHelper {
    * @param stationHelper T.
    */
   setBoundary(stationHelper: MapStationHelper): void {
-    this.boundaryElement = new BoundaryMapElement(stationHelper.stationElements);
+    this.boundaryElement = new BoundaryMapElement(
+      stationHelper.stationElements
+    );
   }
-
 }
