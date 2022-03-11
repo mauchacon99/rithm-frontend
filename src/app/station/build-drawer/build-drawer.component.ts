@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 /**
  *
  */
@@ -9,6 +8,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./build-drawer.component.scss'],
 })
 export class BuildDrawerComponent {
+  buildCategories: string[] = [
+    'Form Inputs',
+    'Previous Fields',
+    'Components',
+    'Integrations',
+  ];
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
 }
