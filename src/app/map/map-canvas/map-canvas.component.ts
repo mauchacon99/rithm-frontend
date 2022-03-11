@@ -1157,7 +1157,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
     }
 
-    //Set to width or height depending on which is longer.
+    // Set to width or height depending on which is longer.
     const screenDimension =
       window.innerWidth > window.innerHeight
         ? window.innerWidth
