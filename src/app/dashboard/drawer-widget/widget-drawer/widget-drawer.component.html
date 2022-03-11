@@ -29,6 +29,8 @@
       <app-document-widget-drawer
         *ngIf="drawerMode === 'documentWidget'"
         (setWidgetIndex)="setWidgetIndex($event)"
+        (getWidgetItem)="setWidgetItem($event)"
+        [image]="imageSelected"
       >
       </app-document-widget-drawer>
     </div>
@@ -36,7 +38,9 @@
     <div
       class="border-t border-solid border-secondary-100 py-5 pl-5"
       *ngIf="
-        widgetType === widgetTypeEnum.StationTableBanner && showImageBanner
+        (widgetType === widgetTypeEnum.StationTableBanner ||
+          widgetType === widgetTypeEnum.DocumentListBanner) &&
+        showImageBanner
       "
       id="section-image-banner"
     >
