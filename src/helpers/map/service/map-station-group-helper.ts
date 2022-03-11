@@ -11,7 +11,10 @@ export class MapStationGroupHelper {
   /** An array that stores a backup of stationGroupElements when buildMap is called. */
   storedStationGroupElements: StationGroupMapElement[] = [];
 
-  constructor(mapHelper: MapHelper) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(mapHelper: MapHelper) {
+    // TODO: constructor.
+  }
 
   /**
    * Validates that station groups belong to exactly one immediate parent station group.
