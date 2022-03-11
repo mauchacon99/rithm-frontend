@@ -21,12 +21,12 @@
       <!-- Type document-list -->
       <ng-container
         *ngSwitchCase="enumWidgetType.Document"
-        [ngTemplateOutlet]="previewListBanner"
+        [ngTemplateOutlet]="previewList"
       ></ng-container>
       <!-- Type document-list-banner -->
       <ng-container
         *ngSwitchCase="enumWidgetType.DocumentListBanner"
-        [ngTemplateOutlet]="previewList"
+        [ngTemplateOutlet]="previewListBanner"
       ></ng-container>
     </div>
     <!-- Info of card. -->
