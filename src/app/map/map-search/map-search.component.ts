@@ -105,10 +105,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
    * @returns True if width is below a certain amount.
    */
   get isMobile(): boolean {
-    //Check the screen's DPI.
-    const pixelRatio = window.devicePixelRatio || 1;
-
-    return window.innerWidth <= 650 * pixelRatio;
+    return window.innerWidth <= 765;
   }
 
   /**
