@@ -47,24 +47,34 @@
           ></app-text-field>
         </div>
         <div *ngIf="field.questionType !== 'instructions'">
-          <app-text-field
-            [field]="labelField"
-            [formControlName]="field.questionType"
-            [toolBar]="true"
-            [labelTag]="'Name your field'"
-            [validateMask]="false"
-          ></app-text-field>
-          <button
-            *ngIf="field.questionType === fieldType.File"
-            mat-stroked-button
-            class="ml-2"
-            color="accent"
-            [disabled]="true"
-            data-testid="upload-button-disabled"
+          <ng-container
+            *ngIf="field.questionType === fieldType.DataLink; else textField"
           >
-            <i class="fas fa-arrow-up-from-bracket"></i>
-            <span class="text-base"> Upload </span>
-          </button>
+            <app-data-link-field
+              [field]="dataLinkField"
+              [formControlName]="field.questionType"
+            ></app-data-link-field>
+          </ng-container>
+          <ng-template #textField>
+            <app-text-field
+              [field]="labelField"
+              [formControlName]="field.questionType"
+              [toolBar]="true"
+              [labelTag]="'Name your field'"
+              [validateMask]="false"
+            ></app-text-field>
+            <button
+              *ngIf="field.questionType === fieldType.File"
+              mat-stroked-button
+              class="ml-2"
+              color="accent"
+              [disabled]="true"
+              data-testid="upload-button-disabled"
+            >
+              <i class="fas fa-arrow-up-from-bracket"></i>
+              <span class="text-base"> Upload </span>
+            </button>
+          </ng-template>
         </div>
         <!-- Options/Items -->
         <ng-container
@@ -120,7 +130,10 @@
         [ngClass]="{
           'space-x-reverse': stationRithmId !== field.originalStationRithmId
         }"
-        *ngIf="field.questionType !== 'instructions'"
+        *ngIf="
+          field.questionType !== 'instructions' &&
+          field.questionType !== fieldType.DataLink
+        "
       >
         <div
           [ngClass]="{
