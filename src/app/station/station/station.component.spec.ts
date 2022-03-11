@@ -724,4 +724,36 @@ describe('StationComponent', () => {
     expect(spyRemove).toHaveBeenCalled();
     expect(component.inputFrameWidgetItems.length).toBeLessThanOrEqual(0);
   });
+
+  it('should open drawer left when click in button toggle-left-drawer  ', () => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    component.isOpenDrawerLeft = false;
+    fixture.detectChanges();
+    const btnToggleLeftDrawer =
+      fixture.debugElement.nativeElement.querySelector(
+        '#button-toggle-left-drawer'
+      );
+    expect(btnToggleLeftDrawer).toBeTruthy();
+    const spyToggleLeftDrawer = spyOn(
+      component,
+      'toggleLeftDrawer'
+    ).and.callThrough();
+    btnToggleLeftDrawer.click();
+    expect(spyToggleLeftDrawer).toHaveBeenCalled();
+    expect(component.isOpenDrawerLeft).toBeTruthy();
+  });
+
+  it('should call the function that switches setGridMode  in the toggleDrawer function if is modeSetting is true', () => {
+    component.settingMode = true;
+    const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
+    const spyToggleLeftDrawer = spyOn(
+      component,
+      'toggleLeftDrawer'
+    ).and.callThrough();
+    component.toggleLeftDrawer();
+    component.setGridMode('layout');
+    expect(spyToggleLeftDrawer).toHaveBeenCalled();
+    expect(spyGridMode).toHaveBeenCalledWith('layout');
+  });
 });
