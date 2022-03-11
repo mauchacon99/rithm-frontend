@@ -92,7 +92,8 @@ export class StationElementService {
     //Draw the card itself.
     this.drawStationCard(station, dragItem);
     if (
-      (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
         station.disabled &&
         !station.selected &&
         station.hoverItem !== StationElementHoverItem.None) ||

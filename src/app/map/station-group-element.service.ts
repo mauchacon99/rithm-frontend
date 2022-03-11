@@ -447,7 +447,8 @@ export class StationGroupElementService {
       if (index === 0) {
         //If station group is not available to add to pending group, display a tooltip on hover.
         if (
-          this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           !stationGroup.selected &&
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
