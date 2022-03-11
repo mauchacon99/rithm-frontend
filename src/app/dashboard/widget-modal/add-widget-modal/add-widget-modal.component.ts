@@ -18,6 +18,9 @@ export class AddWidgetModalComponent {
   /** The element type to be shown. */
   identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
 
+  /** Selected item to show list widget. */
+  itemWidgetModalSelected!: SelectedItemWidgetModel;
+
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
     @Inject(MAT_DIALOG_DATA) public matData: string
@@ -36,6 +39,7 @@ export class AddWidgetModalComponent {
    * @param element The type of element.
    */
   selectTypeElement(element: SelectedItemWidgetModel): void {
+    this.itemWidgetModalSelected = element;
     this.identifyShowElement = element.itemType;
   }
 }

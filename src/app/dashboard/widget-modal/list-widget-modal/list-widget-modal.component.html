@@ -1,32 +1,37 @@
 <div class="w-full">
   <!--Section for show document template-->
-  <section *ngIf="selectedWidgetType === 'document'">
+  <section *ngIf="itemWidgetModalSelected.itemType === 'document'">
     <app-station-widget-template-modal
-      [renderWidgetType]="widgetType.Document"
+      [widgetType]="enumWidgetType.Document"
     ></app-station-widget-template-modal>
   </section>
 
   <!--Section for show station template-->
-  <section *ngIf="selectedWidgetType === 'station'">
-    <div class="flex flex-wrap gap-4">
-      <div class="w-11/12 md:w-2/5 lg:w-1/4 h-96">
-        <app-station-widget-template-modal
-          [renderWidgetType]="widgetType.Station"
-        ></app-station-widget-template-modal>
-      </div>
+  <section *ngIf="itemWidgetModalSelected.itemType === 'station'">
+    <hr class="text-secondary-100" />
+    <div class="py-10">
+      <p class="font-semibold mb-5">Tables</p>
+      <div class="flex flex-wrap gap-4">
+        <div class="w-11/12 md:w-2/5 lg:w-1/4 h-96">
+          <app-station-widget-template-modal
+            [widgetType]="enumWidgetType.Station"
+          ></app-station-widget-template-modal>
+        </div>
 
-      <div class="w-11/12 md:w-2/5 lg:w-1/4 h-96">
-        <app-station-widget-template-modal
-          [renderWidgetType]="widgetType.StationTableBanner"
-        ></app-station-widget-template-modal>
+        <div class="w-11/12 md:w-2/5 lg:w-1/4 h-96">
+          <app-station-widget-template-modal
+            [widgetType]="enumWidgetType.StationTableBanner"
+          ></app-station-widget-template-modal>
+        </div>
       </div>
     </div>
+    <hr class="text-secondary-100" />
   </section>
 
   <!--Section for show group template-->
-  <section *ngIf="selectedWidgetType === 'group'">
+  <section *ngIf="itemWidgetModalSelected.itemType === 'group'">
     <app-station-widget-template-modal
-      [renderWidgetType]="widgetType.StationGroup"
+      [widgetType]="enumWidgetType.StationGroup"
     ></app-station-widget-template-modal>
   </section>
 </div>
