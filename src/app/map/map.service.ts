@@ -1793,4 +1793,24 @@ export class MapService {
 
     this.resetSelectedStationGroupStationStatus();
   }
+
+  /**
+   * Revert the changes made across station group in edit mode.
+   *
+   * @param tempGroup The station group which should be replaced with updated when cancel button clicked.
+   */
+  revertStationGroup(tempGroup: StationGroupMapElement): void {
+    if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      const groupIndex = this.stationGroupElements.findIndex(
+        (group) => group.rithmId === tempGroup.rithmId
+      );
+      if (groupIndex === -1) {
+        throw new Error(
+          `There is no station group available to replace tempGroup.`
+        );
+      }
+      this.stationGroupElements[groupIndex] = tempGroup;
+      this.mapDataReceived$.next(true);
+    }
+  }
 }

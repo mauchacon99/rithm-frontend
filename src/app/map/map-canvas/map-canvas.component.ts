@@ -159,6 +159,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
+  /** The copy of station group which is being edited. */
+  private tempStationGroup: unknown = null;
+
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
    *
@@ -2141,15 +2144,37 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         stationGroupPending.hoverItem ===
         StationGroupElementHoverItem.ButtonCancel
       ) {
-        this.mapService.mapMode$.next(MapMode.Build);
         if (
           this.mapService.stationElements.some((station) => station.selected) ||
           this.mapService.stationGroupElements.some(
             (stationGroup) => stationGroup.selected
           )
         ) {
+          if (this.mapMode === MapMode.StationGroupAdd) {
+            this.mapService.updatePendingStationGroup();
+          } else if (this.mapMode === MapMode.StationGroupEdit) {
+            const groupIndex = this.stationGroups.findIndex(
+              (group) => group.status === MapItemStatus.Pending
+            );
+            if (groupIndex === -1) {
+              throw new Error(`There is no station group with status pending.`);
+            }
+            this.tempStationGroup = new StationGroupMapElement(
+              this.tempStationGroup as StationGroupMapElement
+            );
+            if (
+              this.tempStationGroup instanceof StationGroupMapElement &&
+              this.stationGroups[groupIndex].rithmId ===
+                this.tempStationGroup.rithmId
+            ) {
+              this.mapService.revertStationGroup(
+                this.tempStationGroup as StationGroupMapElement
+              );
+              this.tempStationGroup = {};
+            }
+          }
           this.mapService.resetSelectedStationGroupStationStatus();
-          this.mapService.updatePendingStationGroup();
+          this.mapService.mapMode$.next(MapMode.Build);
         }
       } else if (
         stationGroupPending.hoverItem ===
@@ -2495,8 +2520,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   updateStationGroup(stationGroup: StationGroupMapElement): void {
     this.mapService.mapMode$.next(MapMode.StationGroupEdit);
     if (!stationGroup) {
-      throw new Error(`There is not any station group with status pending.`);
+      throw new Error(`There is no station group with status pending.`);
     }
+    this.tempStationGroup = { ...stationGroup } as StationGroupMapElement;
     stationGroup.status = MapItemStatus.Pending;
     stationGroup.selected = true;
     this.mapService.setStationGroupStationStatus();
