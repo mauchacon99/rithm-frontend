@@ -16,12 +16,12 @@
       <!-- Type station -->
       <ng-container
         *ngSwitchCase="enumWidgetType.Station"
-        [ngTemplateOutlet]="station"
+        [ngTemplateOutlet]="previewStation"
       ></ng-container>
       <!-- Type StationTableBanner -->
       <ng-container
         *ngSwitchCase="enumWidgetType.StationTableBanner"
-        [ngTemplateOutlet]="stationTableBanner"
+        [ngTemplateOutlet]="previewStationTableBanner"
       ></ng-container>
     </div>
     <!-- Info of card. -->
@@ -33,19 +33,22 @@
 </ng-template>
 
 <!-- Preview widget type station -->
-<ng-template #station>
+<ng-template #previewStation>
   <div class="h-full w-full rounded overflow-hidden">
-    <div class="w-full bg-white h-full py-5 rounded shadow">
+    <div class="w-full bg-white h-full py-1 rounded shadow">
       <div class="px-4">
-        <span class="font-bold">Station name</span> <br />
-        <span class="text-sm">Subtitle</span>
+        <span class="text-sm font-semibold">Station name</span> <br />
+        <span class="text-xs">Subtitle</span>
       </div>
       <div class="w-full px-2">
         <div
           class="flex gap-x-2 animate-pulse border-b border-b-secondary-50"
           *ngFor="let i of [0, 0, 0, 0, 0, 0]"
         >
-          <ng-container *ngTemplateOutlet="bars"></ng-container>
+          <div
+            class="w-[20%] h-2 bg-secondary-50 rounded m-1"
+            *ngFor="let i of [0, 0, 0, 0]"
+          ></div>
         </div>
       </div>
     </div>
@@ -53,32 +56,13 @@
 </ng-template>
 
 <!-- Preview widget type stationTableBanner -->
-<ng-template #stationTableBanner>
+<ng-template #previewStationTableBanner>
   <div class="h-full w-full rounded bg-white overflow-hidden">
     <div
       class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
     >
-      <i class="fas text-[60px] text-secondary-300 fa-image animate-pulse"></i>
+      <i class="fas text-3xl text-secondary-300 fa-image animate-pulse"></i>
     </div>
-    <div class="px-4">
-      <span class="font-bold">Station name</span> <br />
-      <span class="text-sm">Subtitle</span>
-    </div>
-    <div class="w-full px-2">
-      <div
-        class="flex gap-x-2 animate-pulse border-b border-b-secondary-50"
-        *ngFor="let i of [0, 0, 0]"
-      >
-        <ng-container *ngTemplateOutlet="bars"></ng-container>
-      </div>
-    </div>
+    <ng-container *ngTemplateOutlet="previewStation"></ng-container>
   </div>
-</ng-template>
-
-<!-- Bars -->
-<ng-template #bars>
-  <div
-    class="w-[20%] h-2 bg-secondary-50 rounded m-1"
-    *ngFor="let i of [0, 0, 0, 0]"
-  ></div>
 </ng-template>
