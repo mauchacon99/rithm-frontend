@@ -1,18 +1,18 @@
 import { BehaviorSubject } from 'rxjs';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from 'src/app/map/map-constants';
 import { BoundaryMapElement } from 'src/helpers';
-import { Point } from 'src/models';
+import { MapMode, Point } from 'src/models';
 import { MapStationHelper } from './map-station-helper';
 
 /**
  * Represents methods that handle for the Map.
  */
 export class MapHelper {
-  /** The current scale of the map. Default is 1. */
-  mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
-
   /** An object containing the data needed to properly display and interact with the map boundary box. */
   boundaryElement?: BoundaryMapElement;
+
+  /** The rendering context for the canvas element for the map. */
+  canvasContext?: CanvasRenderingContext2D;
 
   /**
    * The coordinate at which the canvas is currently rendering in regards to the overall map.
@@ -21,6 +21,34 @@ export class MapHelper {
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(
     DEFAULT_CANVAS_POINT
   );
+
+  /** The current scale of the map. Default is 1. */
+  mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
+
+  /** The current mode of interaction on the map. Default is View. */
+  mapMode$ = new BehaviorSubject(MapMode.View);
+
+  /**
+   * Gets the center point of the canvas.
+   *
+   * @returns The center point of the canvas.
+   */
+  getCanvasCenterPoint(): Point {
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot get center point of canvas when canvas context is not set'
+      );
+    }
+
+    //Get the canvas dimensions.
+    const canvasBoundingRect =
+      this.canvasContext?.canvas.getBoundingClientRect();
+    //Return half the width and height of the canvas.
+    return {
+      x: canvasBoundingRect.width / 2,
+      y: canvasBoundingRect.height / 2,
+    };
+  }
 
   /**
    * Gets the point on the canvas for a given map point.
@@ -53,6 +81,29 @@ export class MapHelper {
    */
   getCanvasY(mapY: number): number {
     return (mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value;
+  }
+
+  /**
+   * Find's the center of a user's map by looking at the mapPoints of the furthest left, top, right and bottom stations.
+   *
+   * @returns The center point of the map.
+   */
+  getMapCenterPoint(): Point {
+    if (!this.boundaryElement) {
+      throw new Error(
+        'Cannot get center point of map if map boundaries are not defined.'
+      );
+    }
+
+    //Use the min and max mapPoints of the boundary element to find the middle.
+    const minPoint = this.boundaryElement.minMapPoint;
+    const maxPoint = this.boundaryElement.maxMapPoint;
+
+    const center: Point = {
+      x: Math.floor((minPoint.x + maxPoint.x) / 2),
+      y: Math.floor((minPoint.y + maxPoint.y) / 2),
+    };
+    return center;
   }
 
   /**
@@ -95,11 +146,48 @@ export class MapHelper {
   /**
    * Sets the boundary element based on info from this.stationElements.
    *
-   * @param stationHelper T.
+   * @param stationHelper The map station helper reference.
    */
   setBoundary(stationHelper: MapStationHelper): void {
     this.boundaryElement = new BoundaryMapElement(
       stationHelper.stationElements
     );
+  }
+
+  /**
+   * Registers the canvas rendering context from the component for use elsewhere.
+   *
+   * @param canvasContext The rendering context for the canvas element.
+   */
+  registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
+    this.canvasContext = canvasContext;
+  }
+
+  /**
+   * Deep copy an array or object to retain type.
+   * This helper method is added to allow us to create copies of arrays and objects instead of referencing them.
+   * TODO: Separate this into separate file since it's not specific to the map.
+   *
+   * @param source The array or object to copy.
+   * @returns The copied array or object.
+   */
+  deepCopy<T>(source: T): T {
+    return Array.isArray(source)
+      ? source.map((item) => this.deepCopy(item))
+      : source instanceof Date
+      ? new Date(source.getTime())
+      : source && typeof source === 'object'
+      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+          Object.defineProperty(
+            o,
+            prop,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.getOwnPropertyDescriptor(source, prop)!
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+          return o;
+        }, Object.create(Object.getPrototypeOf(source)))
+      : (source as T);
   }
 }

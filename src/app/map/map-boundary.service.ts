@@ -25,6 +25,7 @@ export class MapBoundaryService {
   drawBox(minBoundaryCoords: Point, maxBoundaryCoords: Point): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw boundary line if context is not defined');
     }

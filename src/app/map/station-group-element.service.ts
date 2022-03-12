@@ -181,6 +181,7 @@ export class StationGroupElementService {
   drawStationGroupBoundaryLine(stationGroup: StationGroupMapElement): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group boundary line if context is not defined'
@@ -335,6 +336,7 @@ export class StationGroupElementService {
   drawStationGroupName(stationGroup: StationGroupMapElement): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group name if context is not defined'
@@ -457,7 +459,7 @@ export class StationGroupElementService {
           this.isTooltipDisplayed = true;
           /* Need to deep copy the boundary points object so that when it gets overwritten
           that doesn't change the position of the tooltip. */
-          this.tooltipPosition = this.mapService.deepCopy(
+          this.tooltipPosition = this.mapService.mapHelper.deepCopy(
             stationGroup.boundaryPoints[positionStart]
           );
         }
@@ -894,6 +896,7 @@ export class StationGroupElementService {
   ): string[] {
     // Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot split station group name if context is not defined'
@@ -967,6 +970,7 @@ export class StationGroupElementService {
   ): void {
     // Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot paint or delete station group name on line if context is not defined'
@@ -1130,6 +1134,7 @@ export class StationGroupElementService {
     displacedMap = true
   ): void {
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group icon if context is not defined'

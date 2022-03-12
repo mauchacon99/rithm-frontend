@@ -64,24 +64,6 @@ export class MapService {
   /** Informs the map when station group elements have changed. */
   stationGroupElementsChanged$ = new BehaviorSubject(false);
 
-  /** The station elements displayed on the map. */
-  stationElements: StationMapElement[] = [];
-
-  /** An array that stores a backup of stationElements when buildMap is called. */
-  storedStationElements: StationMapElement[] = [];
-
-  /** The station group elements displayed on the map. */
-  stationGroupElements: StationGroupMapElement[] = [];
-
-  /** An array that stores a backup of stationGroupElements when buildMap is called. */
-  storedStationGroupElements: StationGroupMapElement[] = [];
-
-  /** Data for connection line paths between stations. */
-  connectionElements: ConnectionMapElement[] = [];
-
-  /** An array that stores a backup of connectionElements when buildMap is called. */
-  storedConnectionElements: ConnectionMapElement[] = [];
-
   /** An object containing the data needed to properly display and interact with the map boundary box. */
   boundaryElement?: BoundaryMapElement;
 
@@ -153,19 +135,67 @@ export class MapService {
     data: {},
   });
 
-  /** T. */
+  /** The Map Helper. */
   mapHelper = new MapHelper();
 
-  /** T. */
+  /** The Map Connection Helper. */
   mapConnectionHelper = new MapConnectionHelper(this.mapHelper);
 
-  /** T. */
+  /** The Map Station Helper. */
   mapStationHelper = new MapStationHelper(this.mapHelper);
 
-  /** T. */
+  /** The Station Group Helper. */
   mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
 
   constructor(private http: HttpClient) {}
+
+  /**
+   * Getter The stations groups Elements.
+   *
+   * @returns The stations groups Elements.
+   */
+  get stationGroupElements(): StationGroupMapElement[] {
+    return this.mapStationGroupHelper.stationGroupElements;
+  }
+
+  /**
+   * Setter The stations groups Elements.
+   */
+  set stationGroupElements(stationsGroups: StationGroupMapElement[]) {
+    this.mapStationGroupHelper.stationGroupElements = stationsGroups;
+  }
+
+  /**
+   * Getter The connection Elements.
+   *
+   * @returns ConnectionElements.
+   */
+  get connectionElements(): ConnectionMapElement[] {
+    return this.mapConnectionHelper.connectionElements;
+  }
+
+  /**
+   * Setter The connection Elements.
+   */
+  set connectionElements(connections: ConnectionMapElement[]) {
+    this.mapConnectionHelper.connectionElements = connections;
+  }
+
+  /**
+   * Getter The station Element.
+   *
+   * @returns ConnectionElements.
+   */
+  get stationElements(): StationMapElement[] {
+    return this.mapStationHelper.stationElements;
+  }
+
+  /**
+   * Setter The connection Elements.
+   */
+  set stationElements(stations: StationMapElement[]) {
+    this.mapStationHelper.stationElements = stations;
+  }
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -215,22 +245,6 @@ export class MapService {
    * Converts station data so it can be drawn on the canvas.
    */
   private useStationData(): void {
-    /* // old.
-    //Turns station data into StationMapElements and sets this.stationElements to that.
-    this.stationElements = this.mapData.stations.map(
-      (e) => new StationMapElement(e)
-    );
-    //Turns group data into StationMapElements and sets this.flowElements to that.
-    this.stationGroupElements = this.mapData.stationGroups.map(
-      (e) => new StationGroupMapElement(e)
-    );
-    //Trigger logic to set connections based on station data.
-    this.setConnections();
-    //Trigger logic to set map boundary box.
-    this.setBoundary();
-    //Trigger logic to use station map points and update stationCanvasPoints accordingly.
-    this.updateStationCanvasPoints(); */
-
     // new.
     //Turns station data into StationMapElements and sets this.stationElements to that.
     this.mapStationHelper.stationElements = this.mapData.stations.map(
@@ -244,20 +258,12 @@ export class MapService {
     //Trigger logic to set map boundary box.
     this.mapHelper.setBoundary(this.mapStationHelper);
     //Trigger logic to use station map points and update stationCanvasPoints accordingly.
-    this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
+    this.updateStationCanvasPoints();
 
+    // (remove)
     this.stationElements = this.mapStationHelper.stationElements;
-    this.stationGroupElements = this.mapStationGroupHelper.stationGroupElements;
-    this.connectionElements = this.mapConnectionHelper.connectionElements;
     this.boundaryElement = this.mapHelper.boundaryElement;
   }
-
-  /**
-   * Sets the boundary element based on info from this.stationElements.
-   */
-  /*   setBoundary(): void {
-      this.boundaryElement = new BoundaryMapElement(this.stationElements);
-    } */
 
   /**
    * Updates the mapPoints of the map boundary.
@@ -267,42 +273,6 @@ export class MapService {
       this.boundaryElement.updatePoints(this.stationElements);
     }
   }
-
-  /**
-   * Fills in connections array with info from this.stationElements.
-   */
-  /*   setConnections(): void {
-      //To avoid duplicating any connections, make sure this.connectionElements starts as an empty array.
-      this.connectionElements = [];
-      //Loop through stationElements.
-      for (const station of this.stationElements) {
-        //Loop through the nextStations array of each station.
-        for (const connection of station.nextStations) {
-          //Find the station with the same rithmId as connection.
-          const outgoingStation = this.stationElements.find(
-            (foundStation) => foundStation.rithmId === connection
-          );
-
-          if (!outgoingStation) {
-            throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
-              nextStations of the station${station.stationName}: ${station.rithmId}.`);
-          }
-
-          //Create a new connectionMapElement using the station and outgoingStation data.
-          const lineInfo = new ConnectionMapElement(
-            station,
-            outgoingStation,
-            this.mapHelper.mapScale$.value
-          );
-
-          /* Make sure we aren't duplicating and connections already inside connectionElements.
-          The connection elements array will get filled in as the station elements for loop progresses.
-          if (!this.connectionElements.includes(lineInfo)) {
-            this.connectionElements.push(lineInfo);
-          }
-        }
-      }
-    } */
 
   /**
    * Update information used to draw a connection when a connection has changed.
@@ -766,69 +736,28 @@ export class MapService {
   }
 
   /**
-   * Deep copy an array or object to retain type.
-   * This helper method is added to allow us to create copies of arrays and objects instead of referencing them.
-   * TODO: Separate this into separate file since it's not specific to the map.
-   *
-   * @param source The array or object to copy.
-   * @returns The copied array or object.
-   */
-  deepCopy<T>(source: T): T {
-    return Array.isArray(source)
-      ? source.map((item) => this.deepCopy(item))
-      : source instanceof Date
-      ? new Date(source.getTime())
-      : source && typeof source === 'object'
-      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-          Object.defineProperty(
-            o,
-            prop,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Object.getOwnPropertyDescriptor(source, prop)!
-          );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-          return o;
-        }, Object.create(Object.getPrototypeOf(source)))
-      : (source as T);
-  }
-
-  /**
    * Enters build mode for the map.
    */
   buildMap(): void {
-    //Create copies of all the stations, groups and connections so we can revert to those copies if we cancel our changes.
-    this.storedStationElements = this.deepCopy(this.stationElements);
-    this.storedStationGroupElements = this.deepCopy(this.stationGroupElements);
-    this.storedConnectionElements = this.deepCopy(this.connectionElements);
+    //(remove).
     //Set mapMode to build.
     this.mapMode$.next(MapMode.Build);
+
+    //Create copies of all the stations, groups and connections so we can revert to those copies if we cancel our changes.
+    this.mapStationHelper.stationsDeepCopy();
+    this.mapStationGroupHelper.stationGroupsDeepCopy();
+    this.mapConnectionHelper.connectionsDeepCopy();
+    //Set mapMode to build.
+    this.mapHelper.mapMode$.next(MapMode.Build);
   }
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    //Make sure that there are copies stored.
-    if (this.storedStationElements.length > 0) {
-      //Revert stationElements to a copy of storedStationElements and reset storedStationElements.
-      this.stationElements = this.deepCopy(this.storedStationElements);
-      this.storedStationElements = [];
-    }
-    //Make sure that there are copies stored.
-    if (this.storedStationGroupElements.length > 0) {
-      //Revert stationGroupElements to a copy of storedStationGroupElements and reset storedStationGroupElements.
-      this.stationGroupElements = this.deepCopy(
-        this.storedStationGroupElements
-      );
-      this.storedStationGroupElements = [];
-    }
-    //Make sure that there are copies stored.
-    if (this.storedConnectionElements.length > 0) {
-      //Revert connectionElements to a copy of storedConnectionElements and reset storedConnectionElements.
-      this.connectionElements = this.deepCopy(this.storedConnectionElements);
-      this.storedConnectionElements = [];
-    }
+    this.mapStationHelper.cancelStationsChanges();
+    this.mapStationGroupHelper.cancelStationGroupsChanges();
+    this.mapConnectionHelper.cancelConnectionsChanges();
     //Set mapMode to view.
     this.mapMode$.next(MapMode.View);
     //Note a change in map data.
@@ -961,7 +890,10 @@ export class MapService {
    * @param pinch Remove delay if zoom is a pinch zoom.
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  handleZoom(pinch: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
+  handleZoom(
+    pinch: boolean,
+    zoomOrigin = this.mapHelper.getCanvasCenterPoint()
+  ): void {
     //We put our logic in a const so we can call it later.
     const zoomLogic = () => {
       //zoomCount can be positive or negative.
@@ -1015,7 +947,7 @@ export class MapService {
    */
   zoom(
     zoomingIn: boolean,
-    zoomOrigin = this.getCanvasCenterPoint(),
+    zoomOrigin = this.mapHelper.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
   ): void {
     //Reset zoomCount and return if attempting to zoom past min or max scale.
@@ -1293,7 +1225,7 @@ export class MapService {
   ): Point {
     let adjustedCenter = { x: 0, y: 0 };
     //Get the point that currentCanvasPoint needs to be set to.
-    const canvasCenter = this.getCanvasCenterPoint();
+    const canvasCenter = this.mapHelper.getCanvasCenterPoint();
 
     //If selected station group needs to be pan to center.
     if (panType === CenterPanType.StationGroup) {
@@ -1346,7 +1278,7 @@ export class MapService {
       //If selected map center needs to be pan to center.
     } else if (panType === CenterPanType.MapCenter) {
       //Get the center of the map and the center of the canvas.
-      adjustedCenter = this.getMapCenterPoint();
+      adjustedCenter = this.mapHelper.getMapCenterPoint();
 
       //Get the point that currentCanvasPoint needs to be set to.
       adjustedCenter = {
@@ -1379,137 +1311,9 @@ export class MapService {
   }
 
   /**
-   * Gets the center point of the canvas.
-   *
-   * @returns The center point of the canvas.
-   */
-  getCanvasCenterPoint(): Point {
-    if (!this.canvasContext) {
-      throw new Error(
-        'Cannot get center point of canvas when canvas context is not set'
-      );
-    }
-
-    //Get the canvas dimensions.
-    const canvasBoundingRect =
-      this.canvasContext?.canvas.getBoundingClientRect();
-    //Return half the width and height of the canvas.
-    return {
-      x: canvasBoundingRect.width / 2,
-      y: canvasBoundingRect.height / 2,
-    };
-  }
-
-  /**
-   * Gets the x-coordinate on the canvas for a given map x-coordinate.
-   *
-   * @param mapX The x-coordinate on the map.
-   * @returns The x-coordinate for the canvas.
-   */
-  getCanvasX(mapX: number): number {
-    return (
-      (mapX - this.mapHelper.currentCanvasPoint$.value.x) *
-      this.mapHelper.mapScale$.value
-    );
-  }
-
-  /**
-   * Gets the y-coordinate on the canvas for a given map y-coordinate.
-   *
-   * @param mapY The y-coordinate on the map.
-   * @returns The y-coordinate for the canvas.
-   */
-  getCanvasY(mapY: number): number {
-    return (
-      (mapY - this.mapHelper.currentCanvasPoint$.value.y) *
-      this.mapHelper.mapScale$.value
-    );
-  }
-
-  /**
-   * Gets the point on the canvas for a given map point.
-   *
-   * @param mapPoint The point on the map.
-   * @returns The point for the canvas.
-   */
-  getCanvasPoint(mapPoint: Point): Point {
-    return {
-      x: this.mapHelper.getCanvasX(mapPoint.x),
-      y: this.mapHelper.getCanvasY(mapPoint.y),
-    };
-  }
-
-  /**
-   * Find's the center of a user's map by looking at the mapPoints of the furthest left, top, right and bottom stations.
-   *
-   * @returns The center point of the map.
-   */
-  getMapCenterPoint(): Point {
-    if (!this.boundaryElement) {
-      throw new Error(
-        'Cannot get center point of map if map boundaries are not defined.'
-      );
-    }
-
-    //Use the min and max mapPoints of the boundary element to find the middle.
-    const minPoint = this.boundaryElement.minMapPoint;
-    const maxPoint = this.boundaryElement.maxMapPoint;
-
-    const center: Point = {
-      x: Math.floor((minPoint.x + maxPoint.x) / 2),
-      y: Math.floor((minPoint.y + maxPoint.y) / 2),
-    };
-    return center;
-  }
-
-  /**
-   * Gets the x-coordinate on the map for a given canvas x-coordinate.
-   *
-   * @param canvasX The x-coordinate on the canvas.
-   * @returns The x-coordinate for the map.
-   */
-  getMapX(canvasX: number): number {
-    return Math.floor(
-      canvasX * (1 / this.mapHelper.mapScale$.value) +
-        this.mapHelper.currentCanvasPoint$.value.x
-    );
-  }
-
-  /**
-   * Gets the y-coordinate on the map for a given canvas y-coordinate.
-   *
-   * @param canvasY The y-coordinate on the canvas.
-   * @returns The y-coordinate for the map.
-   */
-  getMapY(canvasY: number): number {
-    return Math.floor(
-      canvasY * (1 / this.mapHelper.mapScale$.value) +
-        this.mapHelper.currentCanvasPoint$.value.y
-    );
-  }
-
-  /**
-   * Gets the point on the map for a given canvas point.
-   *
-   * @param canvasPoint The point on the canvas.
-   * @returns The point for the map.
-   */
-  getMapPoint(canvasPoint: Point): Point {
-    return {
-      x: this.mapHelper.getMapX(canvasPoint.x),
-      y: this.mapHelper.getMapY(canvasPoint.y),
-    };
-  }
-
-  /**
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
-    /*   // old.
-      this.validateConnections();
-      this.validateStationsBelongToExactlyOneStationGroup();
-      this.validateStationGroupsBelongToExactlyOneStationGroup(); */
-
     // new.
     this.mapConnectionHelper.validateConnections(this.mapStationHelper);
     this.mapStationHelper.validateStationsBelongToExactlyOneStationGroup(
@@ -1517,92 +1321,6 @@ export class MapService {
     );
     this.mapStationGroupHelper.validateStationGroupsBelongToExactlyOneStationGroup();
   }
-
-  /**
-   * Validates that all connections exist and are made in both origin station and destination station.
-   */
-  /*   private validateConnections(): void {
-      for (const station of this.stationElements) {
-        for (const outgoingStationId of station.nextStations) {
-          const outgoingConnectedStation = this.stationElements.find(
-            (stationElement) => stationElement.rithmId === outgoingStationId
-          );
-          if (!outgoingConnectedStation) {
-            // eslint-disable-next-line no-console
-            console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
-             but no station element was found with that id.`);
-          } else {
-            if (
-              !outgoingConnectedStation.previousStations.includes(station.rithmId)
-            ) {
-              // eslint-disable-next-line no-console
-              console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
-                ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
-                previous stations.`);
-            }
-          }
-        }
-      }
-    } */
-
-  /**
-   * Validates that stations belong to exactly one immediate parent station group.
-   */
-  /*   private validateStationsBelongToExactlyOneStationGroup(): void {
-      // Each station should belong to exactly one station group.
-      for (const station of this.stationElements) {
-        const stationGroupsThatContainThisStation =
-          this.stationGroupElements.filter((stationGroup) =>
-            stationGroup.stations.includes(station.rithmId)
-          );
-        if (stationGroupsThatContainThisStation.length > 1) {
-          const stationGroupDetails: string = stationGroupsThatContainThisStation
-            .map(
-              (stationGroupInfo) =>
-                `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`
-            )
-            .toString();
-          // eslint-disable-next-line no-console,max-len
-          console.error(`The station ${station.rithmId}:
-          ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
-            ${stationGroupDetails}`);
-        } else if (!stationGroupsThatContainThisStation.length) {
-          // eslint-disable-next-line no-console
-          console.error(
-            `No station groups contain the station: ${station.stationName}: ${station.rithmId}`
-          );
-        }
-      }
-    } */
-
-  /**
-   * Validates that station groups belong to exactly one immediate parent station group.
-   */
-  /* private validateStationGroupsBelongToExactlyOneStationGroup(): void {
-    // Each station group should belong to exactly one station group.
-    for (const stationGroup of this.stationGroupElements) {
-      const stationGroupsThatContainThisStationGroup =
-        this.stationGroupElements.filter((stationGroupElement) =>
-          stationGroupElement.subStationGroups.includes(stationGroup.rithmId)
-        );
-      if (stationGroupsThatContainThisStationGroup.length > 1) {
-        // eslint-disable-next-line no-console
-        console.error(
-          // eslint-disable-next-line max-len
-          `The station group ${stationGroup.rithmId}:
-          ${stationGroup.title} is contained in ${stationGroupsThatContainThisStationGroup.length} station groups!`
-        );
-      } else if (
-        !stationGroupsThatContainThisStationGroup.length &&
-        !stationGroup.isReadOnlyRootStationGroup
-      ) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `No station groups contain the station group: ${stationGroup.title} ${stationGroup.rithmId}`
-        );
-      }
-    }
-  } */
 
   /**
    * Disable publish button until some changes in map/station.
@@ -1616,7 +1334,7 @@ export class MapService {
     );
     for (const updatedStation of updatedStations) {
       //Find any stored stations that match the updated station.
-      const storedStation = this.storedStationElements.find(
+      const storedStation = this.mapStationHelper.storedStationElements.find(
         (station) => station.rithmId === updatedStation.rithmId
       );
       if (!storedStation) {
@@ -1641,7 +1359,6 @@ export class MapService {
 
   /**
    * Set drawerOpened property of respective map element to false when any drawer is closed.
-   *
    */
   handleDrawerClose(): void {
     if (this.stationElements.some((e) => e.drawerOpened)) {
@@ -1826,24 +1543,7 @@ export class MapService {
   /**
    * Update the canvas points for each station.
    */
-  /*  updateStationCanvasPoints(): void {
-     this.stationElements.forEach((station) => {
-       station.canvasPoint = this.mapHelper.getCanvasPoint(station.mapPoint);
-       //Update the connection lines as the stations are updated.
-       this.updateConnection(station);
-     });
-
-     //Also update the boundary canvas points.
-     if (this.boundaryElement) {
-       //Update the canvas points of the boundary.
-       this.boundaryElement.minCanvasPoint =
-         this.mapHelper.getCanvasPoint(
-           this.boundaryElement.minMapPoint
-         );
-       this.boundaryElement.maxCanvasPoint =
-         this.mapHelper.getCanvasPoint(
-           this.boundaryElement.maxMapPoint
-         );
-     }
-   } */
+  updateStationCanvasPoints(): void {
+    this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
+  }
 }

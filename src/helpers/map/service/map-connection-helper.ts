@@ -51,7 +51,7 @@ export class MapConnectionHelper {
   /**
    * Fills in connections array with info from this.stationElements.
    *
-   * @param stationHelper T.
+   * @param stationHelper The map station helper reference.
    */
   setConnections(stationHelper: MapStationHelper): void {
     //To avoid duplicating any connections, make sure this.connectionElements starts as an empty array.
@@ -89,7 +89,7 @@ export class MapConnectionHelper {
   /**
    * Validates that all connections exist and are made in both origin station and destination station.
    *
-   * @param stationHelper T.
+   * @param stationHelper The map station helper reference.
    */
   validateConnections(stationHelper: MapStationHelper): void {
     for (const station of stationHelper.stationElements) {
@@ -113,5 +113,28 @@ export class MapConnectionHelper {
         }
       }
     }
+  }
+
+  /**
+   * Cancels local connections changes.
+   */
+  cancelConnectionsChanges(): void {
+    //Make sure that there are copies stored.
+    if (this.storedConnectionElements.length > 0) {
+      //Revert connectionElements to a copy of storedConnectionElements and reset storedConnectionElements.
+      this.connectionElements = this.mapHelper.deepCopy(
+        this.storedConnectionElements
+      );
+      this.storedConnectionElements = [];
+    }
+  }
+
+  /**
+   * Copy the connection Elements in storedConnectionElements.
+   */
+  connectionsDeepCopy(): void {
+    this.storedConnectionElements = this.mapHelper.deepCopy(
+      this.connectionElements
+    );
   }
 }

@@ -1,6 +1,5 @@
 import { StationGroupMapElement } from 'src/helpers';
 import { MapHelper } from './map-helper';
-
 /**
  * Represents methods that handle station data for the Map.
  */
@@ -11,10 +10,7 @@ export class MapStationGroupHelper {
   /** An array that stores a backup of stationGroupElements when buildMap is called. */
   storedStationGroupElements: StationGroupMapElement[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(mapHelper: MapHelper) {
-    // TODO: constructor.
-  }
+  constructor(private mapHelper: MapHelper) {}
 
   /**
    * Validates that station groups belong to exactly one immediate parent station group.
@@ -42,5 +38,28 @@ export class MapStationGroupHelper {
         );
       }
     }
+  }
+
+  /**
+   * Cancels local station groups changes.
+   */
+  cancelStationGroupsChanges(): void {
+    //Make sure that there are copies stored.
+    if (this.storedStationGroupElements.length > 0) {
+      //Revert stationGroupElements to a copy of storedStationGroupElements and reset storedStationGroupElements.
+      this.stationGroupElements = this.mapHelper.deepCopy(
+        this.storedStationGroupElements
+      );
+      this.storedStationGroupElements = [];
+    }
+  }
+
+  /**
+   * Copy the station group Elements in stationGroupElements.
+   */
+  stationGroupsDeepCopy(): void {
+    this.stationGroupElements = this.mapHelper.deepCopy(
+      this.stationGroupElements
+    );
   }
 }

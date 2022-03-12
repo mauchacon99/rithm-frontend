@@ -303,6 +303,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       '2d'
     ) as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
+    this.mapService.mapHelper.registerCanvasContext(this.context);
 
     //Sets the canvas to the size and DPI of the screen.
     this.setCanvasSize();
@@ -1009,9 +1010,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
 
       //Update station and connection positions.
-      this.mapService.mapStationHelper.updateStationCanvasPoints(
-        this.mapService.mapConnectionHelper
-      );
+      this.mapService.updateStationCanvasPoints();
 
       // Draw the station groups
       this.stationGroupElementService.drawStationGroups();

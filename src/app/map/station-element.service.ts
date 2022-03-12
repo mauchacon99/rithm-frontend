@@ -88,6 +88,7 @@ export class StationElementService {
   ): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
+    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
 
     //Draw the card itself.
     this.drawStationCard(station, dragItem);

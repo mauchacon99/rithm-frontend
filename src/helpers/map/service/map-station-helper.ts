@@ -18,7 +18,7 @@ export class MapStationHelper {
   /**
    * Validates that stations belong to exactly one immediate parent station group.
    *
-   * @param stationGroupHelper T.
+   * @param stationGroupHelper The map station group helper reference.
    */
   validateStationsBelongToExactlyOneStationGroup(
     stationGroupHelper: MapStationGroupHelper
@@ -51,7 +51,7 @@ export class MapStationHelper {
   /**
    * Update the canvas points for each station.
    *
-   * @param mapConnectionHelper T.
+   * @param mapConnectionHelper The map connection helper reference.
    */
   updateStationCanvasPoints(mapConnectionHelper: MapConnectionHelper): void {
     this.stationElements.forEach((station) => {
@@ -72,5 +72,26 @@ export class MapStationHelper {
           this.mapHelper.boundaryElement.maxMapPoint
         );
     }
+  }
+
+  /**
+   * Cancels local stations changes.
+   */
+  cancelStationsChanges(): void {
+    //Make sure that there are copies stored.
+    if (this.storedStationElements.length > 0) {
+      //Revert stationElements to a copy of storedStationElements and reset storedStationElements.
+      this.stationElements = this.mapHelper.deepCopy(
+        this.storedStationElements
+      );
+      this.storedStationElements = [];
+    }
+  }
+
+  /**
+   * Copy the stations Elements in storedStationElements.
+   */
+  stationsDeepCopy(): void {
+    this.storedStationElements = this.mapHelper.deepCopy(this.stationElements);
   }
 }

@@ -168,11 +168,11 @@ describe('MapService', () => {
       stationElementsArray[0].rithmId
     );
 
-    service.stationElements = stationElementsArray;
+    service.mapStationHelper.stationElements = stationElementsArray;
 
-    service.setConnections();
+    service.mapConnectionHelper.setConnections(service.mapStationHelper);
 
-    expect(service.connectionElements.length).toEqual(3);
+    expect(service.mapConnectionHelper.connectionElements.length).toEqual(3);
   });
 
   xit('should restore previous data when cancelled', () => {

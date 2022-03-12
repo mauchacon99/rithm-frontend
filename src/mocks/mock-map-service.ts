@@ -16,6 +16,8 @@ import {
   ConnectionMapElement,
   MapConnectionHelper,
   MapHelper,
+  MapStationGroupHelper,
+  MapStationHelper,
   StationGroupMapElement,
   StationMapElement,
 } from 'src/helpers';
@@ -157,11 +159,17 @@ export class MockMapService {
     data: {},
   });
 
-  /** T. */
+  /** The Map Helper. */
   mapHelper = new MapHelper();
 
-  /** T. */
-  mapConnection = new MapConnectionHelper(this.mapHelper);
+  /** The Map Connection Helper. */
+  mapConnectionHelper = new MapConnectionHelper(this.mapHelper);
+
+  /** The Map Station Helper. */
+  mapStationHelper = new MapStationHelper(this.mapHelper);
+
+  /** The Station Group Helper. */
+  mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
 
   /**
    * Creates a new `MockMapService`.
@@ -336,107 +344,10 @@ export class MockMapService {
   zoom(
     /* eslint-disable */
     zoomingIn: boolean,
-    zoomOrigin = this.getCanvasCenterPoint(),
+    zoomOrigin = this.mapHelper.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
   ): void {}
   /* eslint-enable */
-
-  /**
-   * Gets the center point of the canvas.
-   *
-   * @returns The center point of the canvas.
-   */
-  getCanvasCenterPoint(): Point {
-    if (!this.canvasContext) {
-      throw new Error(
-        'Cannot get center point of canvas when canvas context is not set'
-      );
-    }
-    const canvasBoundingRect =
-      this.canvasContext?.canvas.getBoundingClientRect();
-    return {
-      x: canvasBoundingRect.width / 2,
-      y: canvasBoundingRect.height / 2,
-    };
-  }
-
-  /**
-   * Gets the x-coordinate on the canvas for a given map x-coordinate.
-   *
-   * @param mapX The x-coordinate on the map.
-   * @returns The x-coordinate for the canvas.
-   */
-  getCanvasX(mapX: number): number {
-    return Math.floor(
-      (mapX - this.mapHelper.currentCanvasPoint$.value.x) *
-        this.mapHelper.mapScale$.value
-    );
-  }
-
-  /**
-   * Gets the y-coordinate on the canvas for a given map y-coordinate.
-   *
-   * @param mapY The y-coordinate on the map.
-   * @returns The y-coordinate for the canvas.
-   */
-  getCanvasY(mapY: number): number {
-    return Math.floor(
-      (mapY - this.mapHelper.currentCanvasPoint$.value.y) *
-        this.mapHelper.mapScale$.value
-    );
-  }
-
-  /**
-   * Gets the point on the canvas for a given map point.
-   *
-   * @param mapPoint The point on the map.
-   * @returns The point for the canvas.
-   */
-  getCanvasPoint(mapPoint: Point): Point {
-    return {
-      x: this.mapHelper.getCanvasX(mapPoint.x),
-      y: this.mapHelper.getCanvasY(mapPoint.y),
-    };
-  }
-
-  /**
-   * Gets the x-coordinate on the map for a given canvas x-coordinate.
-   *
-   * @param canvasX The x-coordinate on the canvas.
-   * @returns The x-coordinate for the map.
-   */
-  getMapX(canvasX: number): number {
-    return Math.floor(
-      canvasX * (1 / this.mapHelper.mapScale$.value) +
-        this.mapHelper.currentCanvasPoint$.value.x
-    );
-  }
-
-  /**
-   * Gets the y-coordinate on the map for a given canvas y-coordinate.
-   *
-   * @param canvasY The y-coordinate on the canvas.
-   * @returns The y-coordinate for the map.
-   */
-  getMapY(canvasY: number): number {
-    return Math.floor(
-      canvasY * (1 / this.mapHelper.mapScale$.value) +
-        this.mapHelper.currentCanvasPoint$.value.y
-    );
-  }
-
-  /**
-   * Gets the point on the map for a given canvas point.
-   *
-   * @param canvasPoint The point on the canvas.
-   * @returns The point for the map.
-   */
-  getMapPoint(canvasPoint: Point): Point {
-    return {
-      x: this.mapHelper.getMapX(canvasPoint.x),
-      y: this.mapHelper.getMapY(canvasPoint.y),
-    };
-  }
 
   /**
    * Disable publish button until some changes in map/station.
@@ -609,34 +520,6 @@ export class MockMapService {
   }
 
   /**
-   * Deep copy an array or object to retain type.
-   * This helper method is added to allow us to create copies of arrays and objects instead of referencing them.
-   * TODO: Separate this into separate file since it's not specific to the map.
-   *
-   * @param source The array or object to copy.
-   * @returns The copied array or object.
-   */
-  deepCopy<T>(source: T): T {
-    return Array.isArray(source)
-      ? source.map((item) => this.deepCopy(item))
-      : source instanceof Date
-      ? new Date(source.getTime())
-      : source && typeof source === 'object'
-      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-          Object.defineProperty(
-            o,
-            prop,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Object.getOwnPropertyDescriptor(source, prop)!
-          );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-          return o;
-        }, Object.create(Object.getPrototypeOf(source)))
-      : (source as T);
-  }
-
-  /**
    * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
    */
   setStationGroupStationStatus(): void {
@@ -805,11 +688,7 @@ export class MockMapService {
    * Update the canvas points for each station.
    */
   updateStationCanvasPoints(): void {
-    this.stationElements.forEach((station) => {
-      station.canvasPoint = this.mapHelper.getCanvasPoint(station.mapPoint);
-      //Update the connection lines as the stations are updated.
-      this.updateConnection(station);
-    });
+    this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
   }
 
   /**
@@ -1006,7 +885,10 @@ export class MockMapService {
    * @param pinch Remove delay if zoom is a pinch zoom.
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  handleZoom(pinch: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
+  handleZoom(
+    pinch: boolean,
+    zoomOrigin = this.mapHelper.getCanvasCenterPoint()
+  ): void {
     //We put our logic in a const so we can call it later.
     const zoomLogic = () => {
       //zoomCount can be positive or negative.
@@ -1172,7 +1054,7 @@ export class MockMapService {
   ): Point {
     let adjustedCenter = { x: 0, y: 0 };
     //Get the point that currentCanvasPoint needs to be set to.
-    const canvasCenter = this.getCanvasCenterPoint();
+    const canvasCenter = this.mapHelper.getCanvasCenterPoint();
 
     //If selected station group needs to be pan to center.
     if (panType === CenterPanType.StationGroup) {
@@ -1225,7 +1107,7 @@ export class MockMapService {
       //If selected map center needs to be pan to center.
     } else if (panType === CenterPanType.MapCenter) {
       //Get the center of the map and the center of the canvas.
-      adjustedCenter = this.getMapCenterPoint();
+      adjustedCenter = this.mapHelper.getMapCenterPoint();
 
       //Get the point that currentCanvasPoint needs to be set to.
       adjustedCenter = {
@@ -1234,28 +1116,5 @@ export class MockMapService {
       };
     }
     return adjustedCenter;
-  }
-
-  /**
-   * Find's the center of a user's map by looking at the mapPoints of the furthest left, top, right and bottom stations.
-   *
-   * @returns The center point of the map.
-   */
-  getMapCenterPoint(): Point {
-    if (!this.boundaryElement) {
-      throw new Error(
-        'Cannot get center point of map if map boundaries are not defined.'
-      );
-    }
-
-    //Use the min and max mapPoints of the boundary element to find the middle.
-    const minPoint = this.boundaryElement.minMapPoint;
-    const maxPoint = this.boundaryElement.maxMapPoint;
-
-    const center: Point = {
-      x: Math.floor((minPoint.x + maxPoint.x) / 2),
-      y: Math.floor((minPoint.y + maxPoint.y) / 2),
-    };
-    return center;
   }
 }
