@@ -48,6 +48,7 @@
           <p
             [ngClass]="{ 'warn-text': document.isEscalated }"
             class="leading-7 truncate whitespace-nowrap"
+            [matTooltip]="document.documentName"
           >
             <!-- Escalated icon -->
             <i
