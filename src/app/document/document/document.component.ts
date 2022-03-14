@@ -317,6 +317,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         next: async (document) => {
           if (document) {
             this.documentInformation = document;
+            /** Get the name for the flow button. */
+            this.getFlowButtonName();
           }
           // Get the allow the previous button for the document.
           this.allowPreviousButton = await lastValueFrom(
