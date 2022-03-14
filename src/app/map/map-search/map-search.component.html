@@ -1,15 +1,22 @@
-<div *ngIf="isMobile && !mobileSearchOpen">
-  <div class="bg-white shadow-md rounded border border-solid mb-2">
-    <button
-      class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300"
-      id="centerButton"
-      data-testid="center"
-      [disabled]="isLoading"
-      (click)="toggleMobileSearch()"
-    >
-      <i class="fas fa-search cursor-pointer"></i>
-    </button>
-  </div>
+<!-- Prevent safari from zooming in on input. -->
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
+
+<div
+  *ngIf="isMobile && !mobileSearchOpen"
+  class="bg-white shadow-md rounded border border-solid mb-2"
+>
+  <button
+    class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300"
+    id="mobileSearchButton"
+    data-testid="mobileSearch"
+    [disabled]="isLoading"
+    (click)="toggleMobileSearch()"
+  >
+    <i class="fas fa-search cursor-pointer"></i>
+  </button>
 </div>
 
 <div
@@ -21,12 +28,10 @@
   *ngIf="!isMobile || mobileSearchOpen"
 >
   <i
-    class="fas absolute z-40 text-secondary-300"
+    class="fas absolute z-40 text-secondary-300 p-4 md:p-0 left-4 top-4 md:text-sm md:left-3 md:top-3"
     [ngClass]="{
       'fa-arrow-left cursor-pointer': searchText !== '' && isDrawerOpen,
-      'fa-search': !(searchText !== '' && isDrawerOpen),
-      'p-4 left-4 top-4': isMobile,
-      'text-sm left-3 top-3': !isMobile
+      'fa-search': !(searchText !== '' && isDrawerOpen)
     }"
     (click)="returnSearchText()"
   ></i>

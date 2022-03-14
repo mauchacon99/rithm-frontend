@@ -10,6 +10,8 @@ import { MockComponent } from 'ng-mocks';
 import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SelectedItemWidgetModel } from 'src/models';
+import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -30,6 +32,7 @@ describe('AddWidgetModalComponent', () => {
       declarations: [
         AddWidgetModalComponent,
         MockComponent(CustomTabWidgetModalComponent),
+        MockComponent(ListWidgetModalComponent),
       ],
     }).compileComponents();
   });
@@ -55,5 +58,48 @@ describe('AddWidgetModalComponent', () => {
     btnClose.click();
     expect(spyMethod).toHaveBeenCalled();
     expect(spyMatDialogRef).toHaveBeenCalled();
+  });
+
+  it('should test emit value', () => {
+    const expectedValue: SelectedItemWidgetModel = {
+      itemType: 'station',
+      itemList: {
+        rithmId: 'string',
+        name: 'string',
+        totalDocuments: 0,
+        groupName: 'string',
+        isChained: false,
+        totalStations: 0,
+        totalSubGroups: 0,
+        stationName: 'string',
+        stationGroupName: 'string',
+      },
+    };
+    const showElement = expectedValue.itemType;
+    expect(component.identifyShowElement).toBe('tabs');
+    component.selectTypeElement(expectedValue);
+    expect(showElement).toBe('station');
+  });
+
+  it('should show and return button to custom lists', () => {
+    const spyMethod = spyOn(component, 'returnCustomLists').and.callThrough();
+    component.identifyShowElement = 'document';
+    fixture.detectChanges();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeTruthy();
+    btnReturnCustom.click();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.identifyShowElement).toEqual('tabs');
+  });
+
+  it('should not show return button to custom lists', () => {
+    component.identifyShowElement = 'tabs';
+    fixture.detectChanges();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeNull();
   });
 });

@@ -1,7 +1,19 @@
 <!-- Header Add Widgets Modal -->
 <div>
   <div class="flex justify-between items-center">
-    <h3 class="font-semibold">Widget Builder</h3>
+    <h3 class="font-semibold" *ngIf="identifyShowElement === 'tabs'">
+      Widget Builder
+    </h3>
+    <button
+      *ngIf="identifyShowElement !== 'tabs'"
+      data-testid="return-custom-lists"
+      id="return-custom-lists"
+      mat-icon-button
+      class="text-secondary-500"
+      (click)="returnCustomLists()"
+    >
+      <i class="fas fa-arrow-left text-lg"></i>
+    </button>
     <button
       data-testid="close-widget-builder"
       id="close-widget-builder"
@@ -16,6 +28,7 @@
 
 <!-- Content Add Widgets Modal -->
 <mat-tab-group
+  *ngIf="identifyShowElement === 'tabs'"
   class="tabs-custom-pre-build pt-2"
   [selectedIndex]="tabParentSelect"
   (selectedIndexChange)="tabParentSelect = $event"
@@ -23,6 +36,7 @@
   <!-- Tab Custom widget -->
   <mat-tab label="Custom" aria-label="Custom">
     <app-custom-tab-widget-modal
+      (itemSelected)="selectTypeElement($event)"
       [dashboardRithmId]="dashboardRithmId"
     ></app-custom-tab-widget-modal>
   </mat-tab>
@@ -32,3 +46,10 @@
     <div class="py-4">Content for Pre built tab</div>
   </mat-tab>
 </mat-tab-group>
+
+<!-- Display detail of the item selected in multiple tabs -->
+<div *ngIf="identifyShowElement !== 'tabs'">
+  <app-list-widget-modal
+    [itemWidgetModalSelected]="itemWidgetModalSelected"
+  ></app-list-widget-modal>
+</div>

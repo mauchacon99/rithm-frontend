@@ -143,6 +143,12 @@ export class MapService {
   /** The Station rithm Id centered on the map. */
   centerStationRithmId$ = new BehaviorSubject('');
 
+  /** If station group option button was clicked. */
+  stationGroupOptionButtonClick$ = new BehaviorSubject({
+    click: false,
+    data: {},
+  });
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -294,10 +300,14 @@ export class MapService {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
         connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+        //If station is selected then connection highlight set to true.
+        if (station.drawerOpened) connection.highlighted = true;
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
         connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+        //If station is selected then connection highlight set to true.
+        if (station.drawerOpened) connection.highlighted = true;
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
@@ -1749,6 +1759,8 @@ export class MapService {
       });
       this.mapDataReceived$.next(true);
     }
+    //On station drawer closed, set the connection highlight point false.
+    this.connectionElements.map((e) => (e.highlighted = false));
   }
 
   /**

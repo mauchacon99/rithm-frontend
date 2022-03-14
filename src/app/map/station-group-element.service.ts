@@ -105,7 +105,8 @@ export class StationGroupElementService {
       // Check if there still hovering over a group boundary.
       const hover = this.mapService.stationGroupElements.find(
         (stationGroup) =>
-          this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           !stationGroup.selected &&
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
@@ -194,23 +195,27 @@ export class StationGroupElementService {
       stationGroup.status !== MapItemStatus.Pending ? 0 : -this.offset;
     ctx.beginPath();
     ctx.strokeStyle =
-      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
       stationGroup.selected &&
       stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
         ? MAP_DISABLED_STROKE
         : (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
             stationGroup.drawerOpened) &&
           stationGroup.status !== MapItemStatus.Pending
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit
           ? MAP_SELECTED
           : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     if (
-      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
       stationGroup.status !== MapItemStatus.Pending &&
       (stationGroup.selected ||
         (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
@@ -340,10 +345,12 @@ export class StationGroupElementService {
       stationGroup.selected ||
       (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
         !stationGroup.disabled &&
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit))
         ? MAP_SELECTED
         : stationGroup.disabled &&
-          this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit)
         ? MAP_DISABLED_STROKE
         : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
         ? NODE_HOVER_COLOR
@@ -994,11 +1001,29 @@ export class StationGroupElementService {
       );
       // If end of title, draw any group icons.
       if (endOfTitle) {
+        // If isChained is set to true.
+        if (stationGroup.isChained) {
+          const titleWidth =
+            this.canvasContext.measureText(title).width +
+            GROUP_CHARACTER_SIZE * 1 * this.mapScale;
+          // Reset pathButtons of stationGroup.
+          stationGroup.pathButtons = [];
+          // Paint the Chained Icon on the map.
+          this.drawStationGroupIcon(
+            pointStart,
+            pointEnd,
+            titleWidth,
+            StationGroupElementHoverItem.Boundary,
+            stationGroup
+          );
+        }
         // If status of the station group is pending.
         if (stationGroup.status === MapItemStatus.Pending) {
           const titleWidth =
             this.canvasContext.measureText(title).width +
-            GROUP_CHARACTER_SIZE * 2 * this.mapScale;
+            GROUP_CHARACTER_SIZE *
+              (stationGroup.isChained ? 5 : 2) *
+              this.mapScale;
 
           // Reset pathButtons of the station group.
           stationGroup.pathButtons = [];
@@ -1023,22 +1048,6 @@ export class StationGroupElementService {
             MAP_SELECTED
           );
         }
-        // If isChained is set to true.
-        if (stationGroup.isChained) {
-          const titleWidth =
-            this.canvasContext.measureText(title).width +
-            GROUP_CHARACTER_SIZE * 1 * this.mapScale;
-          // Reset pathButtons of stationGroup.
-          stationGroup.pathButtons = [];
-          // Paint the Chained Icon on the map.
-          this.drawStationGroupIcon(
-            pointStart,
-            pointEnd,
-            titleWidth,
-            StationGroupElementHoverItem.Boundary,
-            stationGroup
-          );
-        }
         if (
           this.mapService.mapMode$.value !== MapMode.View &&
           stationGroup.status !== MapItemStatus.Pending
@@ -1058,7 +1067,8 @@ export class StationGroupElementService {
             StationGroupElementHoverItem.ButtonOption,
             stationGroup,
             ICON_STATION_GROUP_OPTION,
-            this.mapService.mapMode$.value === MapMode.StationGroupAdd
+            this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit
               ? NODE_HOVER_COLOR
               : MAP_SELECTED
           );
@@ -1270,17 +1280,20 @@ export class StationGroupElementService {
         ? Math.ceil(2 * this.mapScale)
         : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     ctx.strokeStyle =
-      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
       stationGroup.selected &&
       stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
           stationGroup.disabled &&
           stationGroup.status !== MapItemStatus.Pending
         ? MAP_DISABLED_STROKE
         : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
           stationGroup.status !== MapItemStatus.Pending
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit
           ? MAP_SELECTED
           : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
