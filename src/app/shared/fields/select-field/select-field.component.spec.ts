@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
+import { MatSelectHarness } from '@angular/material/select/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
 
 import { SelectFieldComponent } from './select-field.component';
 import { MockDocumentService } from 'src/mocks';
@@ -45,6 +48,7 @@ describe('SelectFieldComponent', () => {
   let component: SelectFieldComponent;
   let fixture: ComponentFixture<SelectFieldComponent>;
   const formBuilder = new FormBuilder();
+  let loader: HarnessLoader;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -66,12 +70,31 @@ describe('SelectFieldComponent', () => {
     fixture = TestBed.createComponent(SelectFieldComponent);
     component = fixture.componentInstance;
     component.field = FIELD;
-
     fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create the select', async () => {
+    const selects = await loader.getAllHarnesses(MatSelectHarness);
+    expect(selects.length).toBe(1);
+  });
+
+  it('should be able to check whether a select is in multi-selection mode', async () => {
+    const select = await loader.getHarness(MatSelectHarness);
+    expect(await select.isMultiple()).toBe(false);
+  });
+
+  it('should be able to open and close a select', async () => {
+    const select = await loader.getHarness(MatSelectHarness);
+    expect(await select.isOpen()).toBe(false);
+    await select.open();
+    expect(await select.isOpen()).toBe(true);
+    await select.close();
+    expect(await select.isOpen()).toBe(false);
   });
 
   xit('should require an input in select field', () => {
