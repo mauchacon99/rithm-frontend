@@ -588,4 +588,39 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(loadingComponent).toBeNull();
   });
+
+
+  it('should change name on settings button', () => {
+    component.stationRithmId = stationId;
+    component.flowButtonName = 'New button name';
+    const updateButtonNameSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateFlowButtonText'
+    ).and.callThrough();
+
+    component.saveButtonSettings();
+
+    expect(updateButtonNameSpy).toHaveBeenCalledWith(component.stationRithmId, component.flowButtonName);
+  });
+
+  it('should display error message on change settings button', () => {
+    component.stationRithmId = stationId;
+    component.flowButtonName = 'New button name';
+    const updateButtonNameSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateFlowButtonText'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      }
+      ));
+      const spyError = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+    component.saveButtonSettings();
+
+    expect(updateButtonNameSpy).toHaveBeenCalledWith(component.stationRithmId, component.flowButtonName);
+    expect(spyError).toHaveBeenCalled();
+  });
 });
