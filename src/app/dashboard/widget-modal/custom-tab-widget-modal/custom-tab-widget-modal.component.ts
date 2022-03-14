@@ -33,9 +33,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
   // Init a timeout variable to be used in method get results.
   timeout = setTimeout(() => '', 1000);
 
-  /** Value to search. */
-  searchTab = '';
-
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
 
@@ -53,6 +50,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /** Variable to show if the error getting tab document list. */
   errorLoadingGroupTab = false;
+
+  /** Value to search. */
+  searchTab = '';
 
   constructor(
     private dashboardService: DashboardService,
