@@ -8,7 +8,6 @@ import { WidgetType } from 'src/models';
   styleUrls: ['./station-widget-template-modal.component.scss'],
 })
 export class StationWidgetTemplateModalComponent {
-  /** Widget type for render. */
   /** Type of widget to show. */
   @Input() widgetType: WidgetType.Station | WidgetType.StationTableBanner =
     WidgetType.Station;
