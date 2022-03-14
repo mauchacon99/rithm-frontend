@@ -1157,7 +1157,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
     }
 
-    //Set to width or height depending on which is longer.
+    // Set to width or height depending on which is longer.
     const screenDimension =
       window.innerWidth > window.innerHeight
         ? window.innerWidth
@@ -2235,6 +2235,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
             !stationGroup.disabled
           ) {
+            // return if the only group present inside the editing group. So that avoid creating an empty group
+            if (
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.isLastStationGroup
+            ) {
+              return;
+            }
             //Set status of station group to true or false depending upon current status also update status of
             //other stations and station group as per the selection criteria.
             stationGroup.selected = !stationGroup.selected;
@@ -2328,6 +2335,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.stations[stationIndex].disabled = false;
           });
         }
+      });
+      // Set stationGroup's selection status to all groups which belongs to selected station Group.
+      stationGroup.subStationGroups.forEach((subStationGroupId) => {
+        const stationGroupIndex = this.stationGroups.findIndex(
+          (group) => group.rithmId === subStationGroupId
+        );
+        this.stationGroups[stationGroupIndex].disabled = false;
       });
     }
   }

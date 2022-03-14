@@ -111,8 +111,17 @@ export class StationGroupElementService {
           !stationGroup.selected &&
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
       );
+      const isLastGroupHover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          this.mapService.isLastStationGroup
+      );
       if (hover) {
         this.drawStationGroupToolTip(this.tooltipPosition);
+      } else if (isLastGroupHover) {
+        //If hover over the last group then, should update the message.
+        this.drawStationGroupToolTip(this.tooltipPosition, true);
       } else {
         this.isTooltipDisplayed = false;
         this.tooltipPosition = { x: -1, y: -1 };
@@ -244,8 +253,9 @@ export class StationGroupElementService {
    * Draws the station group tooltip on the map for a station group.
    *
    * @param pointStart The point at which tooltip begins.
+   * @param editMode Check for station edit mode to update message.
    */
-  drawStationGroupToolTip(pointStart: Point): void {
+  drawStationGroupToolTip(pointStart: Point, editMode = false): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the tooltip if context is not defined');
     }
@@ -312,13 +322,13 @@ export class StationGroupElementService {
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     ctx.font = `normal ${fontSize}px Montserrat`;
     ctx.fillText(
-      'Cannot add group to',
+      editMode ? 'Cannot have an' : 'Cannot add group to',
       startingX + scaledTooltipPadding,
       startingY + 12 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
     );
     ctx.fillText(
-      'current selection',
+      editMode ? 'empty Station Group' : 'current selection',
       startingX + scaledTooltipPadding,
       startingY + 32 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
@@ -447,11 +457,14 @@ export class StationGroupElementService {
       if (index === 0) {
         //If station group is not available to add to pending group, display a tooltip on hover.
         if (
-          (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
             this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-          stationGroup.disabled &&
-          !stationGroup.selected &&
-          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+            stationGroup.disabled &&
+            !stationGroup.selected &&
+            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary) ||
+          (this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+            this.mapService.isLastStationGroup)
         ) {
           this.isTooltipDisplayed = true;
           /* Need to deep copy the boundary points object so that when it gets overwritten
@@ -1181,7 +1194,8 @@ export class StationGroupElementService {
       /* Icons increase in size when hovered with the exception of the option icon while in
       stationGroupAdd mode. */
       const hoverFontSize =
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+          this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
         typeButton === 'buttonOption'
           ? 2
           : 2.5;
@@ -1194,7 +1208,8 @@ export class StationGroupElementService {
       this.canvasContext.fillStyle =
         stationGroup.hoverItem === typeButton
           ? hoverColor
-          : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
             typeButton === 'buttonOption'
           ? NODE_HOVER_COLOR
           : BUTTON_DEFAULT_COLOR;

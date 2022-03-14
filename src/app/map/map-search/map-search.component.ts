@@ -105,7 +105,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
    * @returns True if width is below a certain amount.
    */
   get isMobile(): boolean {
-    return window.innerWidth <= 450;
+    return window.innerWidth <= 765;
   }
 
   /**
