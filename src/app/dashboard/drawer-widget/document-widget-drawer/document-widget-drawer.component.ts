@@ -5,6 +5,7 @@ import {
   ViewEncapsulation,
   OnInit,
   Output,
+  Input,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -30,8 +31,19 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
+  /** Image to banner. */
+  @Input() set image(value: File | null) {
+    if (this.widgetItem && this.widgetItem.image !== value) {
+      this.widgetItem.image = value;
+      this.updateWidget();
+    }
+  }
+
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
+
+  /** WidgetType of item. */
+  @Output() getWidgetItem = new EventEmitter<DashboardItem>();
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -94,6 +106,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.documentColumns = dataWidget.columns || [];
           this.documentRithmId = dataWidget.documentRithmId;
           this.setWidgetIndex.emit(this.widgetIndex);
+          this.getWidgetItem.emit(this.widgetItem);
           this.getDocumentWidget();
         }
       });

@@ -5,6 +5,16 @@
       Widget Builder
     </h3>
     <button
+      *ngIf="identifyShowElement !== 'tabs'"
+      data-testid="return-custom-lists"
+      id="return-custom-lists"
+      mat-icon-button
+      class="text-secondary-500"
+      (click)="returnCustomLists()"
+    >
+      <i class="fas fa-arrow-left text-lg"></i>
+    </button>
+    <button
       data-testid="close-widget-builder"
       id="close-widget-builder"
       mat-icon-button
@@ -37,6 +47,9 @@
   </mat-tab>
 </mat-tab-group>
 
+<!-- Display detail of the item selected in multiple tabs -->
 <div *ngIf="identifyShowElement !== 'tabs'">
-  <app-list-widget-modal></app-list-widget-modal>
+  <app-list-widget-modal
+    [itemWidgetModalSelected]="itemWidgetModalSelected"
+  ></app-list-widget-modal>
 </div>

@@ -9,14 +9,17 @@ import { SelectedItemWidgetModel } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
-  /** Tab Parents selected. */
-  tabParentSelect = 0;
-
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
   /** The element type to be shown. */
   identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
+
+  /** Selected item to show list widget. */
+  itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Tab Parents selected. */
+  tabParentSelect = 0;
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
@@ -36,6 +39,12 @@ export class AddWidgetModalComponent {
    * @param element The type of element.
    */
   selectTypeElement(element: SelectedItemWidgetModel): void {
+    this.itemWidgetModalSelected = element;
     this.identifyShowElement = element.itemType;
+  }
+
+  /** Return to widget list when identifyShowElement is not tabs. */
+  returnCustomLists(): void {
+    this.identifyShowElement = 'tabs';
   }
 }
