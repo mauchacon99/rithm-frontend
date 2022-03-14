@@ -406,6 +406,10 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
+    // Reload widget for show new values in widget.
+    if (this.isWidget) {
+      this.widgetReloadListDocuments(false, true);
+    }
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
