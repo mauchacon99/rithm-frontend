@@ -16,6 +16,9 @@
   }
 
   .loading {
-    @apply flex items-center justify-center min-h-[45vh];
+    @apply flex items-center justify-center min-h-[150px];
+    @media only screen and (max-width: 600px) {
+      @apply min-h-[45vh];
+    }
   }
 }
