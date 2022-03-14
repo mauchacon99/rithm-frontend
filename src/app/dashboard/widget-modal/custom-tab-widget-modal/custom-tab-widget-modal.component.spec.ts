@@ -278,4 +278,15 @@ describe('CustomTabWidgetModalComponent', () => {
       expect(spyService).toHaveBeenCalled();
     });
   });
+
+  it('should call method depending active tab', () => {
+    const spyService = spyOn(component, 'getSearchResultTab').and.callThrough();
+
+    const testPromise = new Promise(() => {
+      component.getSearchResult();
+    });
+    testPromise.then(() => {
+      expect(spyService).toHaveBeenCalled();
+    });
+  });
 });

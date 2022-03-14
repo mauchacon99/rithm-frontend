@@ -75,6 +75,8 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   selectedTab(index: number): void {
     this.indexTab = index;
+    this.searchTab = '';
+    this.getSearchResultTab();
   }
 
   /**
@@ -179,9 +181,26 @@ export class CustomTabWidgetModalComponent implements OnInit {
   getSearchResult(): void {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
-      this.getDocumentTabList();
-      this.getGroupStationTabList();
-      this.getStationTabList();
+      this.getSearchResultTab();
     }, 750);
+  }
+
+  /**
+   * Sending search value to get mach result depending active tab.
+   */
+  getSearchResultTab(): void {
+    switch (this.indexTab) {
+      case 0:
+        this.getDocumentTabList();
+        break;
+      case 1:
+        this.getStationTabList();
+        break;
+      case 2:
+        this.getGroupStationTabList();
+        break;
+      default:
+        break;
+    }
   }
 }
