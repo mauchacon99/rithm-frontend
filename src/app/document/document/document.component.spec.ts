@@ -739,7 +739,7 @@ describe('DocumentComponent', () => {
     component.getFlowButtonName();
     expect(flowBtnTextSpy).toHaveBeenCalledOnceWith(stationId);
   });
-  
+
   it('should emit and set new user for document', () => {
     const expectDataUser = {
       email: 'bokatan.kryze@inpivota.com',
