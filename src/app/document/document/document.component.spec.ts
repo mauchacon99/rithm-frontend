@@ -739,4 +739,19 @@ describe('DocumentComponent', () => {
     component.getFlowButtonName();
     expect(flowBtnTextSpy).toHaveBeenCalledOnceWith(stationId);
   });
+  
+  it('should emit and set new user for document', () => {
+    const expectDataUser = {
+      email: 'bokatan.kryze@inpivota.com',
+      firstName: 'Bo-Katan',
+      isAssigned: true,
+      lastName: 'Kryze',
+      rithmId: 'a3f2e8ef-c7cc-4eaf-8833-d6385d4b35f9',
+    };
+    expect(component.documentInformation.currentAssignedUser).toBe(user);
+    component.setNewAssignedUser(expectDataUser);
+    expect(component.documentInformation.currentAssignedUser).toBe(
+      expectDataUser
+    );
+  });
 });

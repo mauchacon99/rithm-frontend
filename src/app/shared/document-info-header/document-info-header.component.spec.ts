@@ -14,11 +14,15 @@ import {
 } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentName, StationRosterMember } from 'src/models';
+import {
+  DocumentName,
+  DocumentStationInformation,
+  StationRosterMember,
+} from 'src/models';
 import { UserService } from 'src/app/core/user.service';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -276,17 +280,25 @@ describe('DocumentInfoHeaderComponent', () => {
   });
 
   it('should executed method for assigned user in document', () => {
+    component.isWidget = true;
     const userService: UserService = TestBed.inject(UserService);
     const spyMethod = spyOn(
       TestBed.inject(DocumentService),
       'assignUserToDocument'
+    ).and.returnValue(of(true));
+    const spyGetAssignedUser = spyOn(
+      TestBed.inject(DocumentService),
+      'getAssignedUserToDocument'
     ).and.callThrough();
+    const spyEmit = spyOn(component.isReloadListDocuments, 'emit');
     component.assignUserToDocument();
     expect(spyMethod).toHaveBeenCalledOnceWith(
       userService.user.rithmId,
       component.stationRithmId,
       component.documentRithmId
     );
+    expect(spyGetAssignedUser).toHaveBeenCalled();
+    expect(spyEmit).toHaveBeenCalledOnceWith(true);
   });
 
   it('should catch error in petition to assign to user in document', () => {
@@ -336,5 +348,38 @@ describe('DocumentInfoHeaderComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#assign-user-error');
     expect(component.displayAssignUserError).toBeTrue();
     expect(errorMessage).toBeTruthy();
+  });
+
+  it('should call method for render assigned User to document', () => {
+    const getAssignedUserSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getAssignedUserToDocument'
+    ).and.callThrough();
+    component['getAssignedUserToDocument']();
+
+    expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(
+      (component.documentInformation as DocumentStationInformation)
+        .documentRithmId,
+      (component.documentInformation as DocumentStationInformation)
+        .stationRithmId,
+      true
+    );
+  });
+
+  it('should catch error in the service get user assigned', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getAssignedUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getAssignedUserToDocument']();
+    expect(spyError).toHaveBeenCalled();
   });
 });
