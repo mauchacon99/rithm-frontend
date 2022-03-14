@@ -1832,5 +1832,4 @@ export class MapService {
       this.stationElements.filter((e) => e.selected && !e.disabled).length === 0
     );
   }
-
 }
