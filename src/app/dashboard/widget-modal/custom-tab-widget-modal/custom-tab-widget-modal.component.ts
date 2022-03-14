@@ -30,6 +30,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
+  // Init a timeout variable to be used in method get results.
+  timeout = setTimeout(() => '', 1000);
+
   /** Loading indicator tab station. */
   isLoadingStationTab = false;
 
@@ -48,6 +51,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** Variable to show if the error getting tab document list. */
   errorLoadingGroupTab = false;
 
+  /** Value to search. */
+  searchTab = '';
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -58,8 +64,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocumentTabList();
-    this.getStationTabList();
-    this.getGroupStationTabList();
   }
 
   /**
@@ -69,6 +73,8 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   selectedTab(index: number): void {
     this.indexTab = index;
+    this.searchTab = '';
+    this.getSearchResultTab();
   }
 
   /**
@@ -79,7 +85,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
     this.errorLoadingDocumentTab = false;
     this.isLoadingDocumentTab = true;
     this.dashboardService
-      .getDocumentTabList()
+      .getDocumentTabList(this.searchTab)
       .pipe(first())
       .subscribe({
         next: (itemsListDocument) => {
@@ -102,12 +108,13 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /**
    * Get the station tab list.
+   *
    */
   private getStationTabList(): void {
     this.isLoadingStationTab = true;
     this.errorLoadingStationTab = false;
     this.dashboardService
-      .getStationTabList()
+      .getStationTabList(this.searchTab)
       .pipe(first())
       .subscribe({
         next: (itemsListStation) => {
@@ -130,12 +137,13 @@ export class CustomTabWidgetModalComponent implements OnInit {
 
   /**
    * Get the list for the groups the stations tabs.
+   *
    */
   private getGroupStationTabList(): void {
     this.errorLoadingGroupTab = false;
     this.isLoadingGroupTab = true;
     this.dashboardService
-      .getGroupStationTabList()
+      .getGroupStationTabList(this.searchTab)
       .pipe(first())
       .subscribe({
         next: (itemsListGroupsStation) => {
@@ -163,5 +171,37 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   selectTypeElement(element: SelectedItemWidgetModel): void {
     this.itemSelected.emit(element);
+  }
+
+  /**
+   * Sending search value to get mach result.
+   */
+  getSearchResult(): void {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.getSearchResultTab();
+    }, 750);
+  }
+
+  /**
+   * Sending search value to get mach result depending active tab.
+   */
+  private getSearchResultTab(): void {
+    switch (this.indexTab) {
+      case 0:
+        this.getDocumentTabList();
+        break;
+      case 1:
+        this.getStationTabList();
+        break;
+      case 2:
+        this.getGroupStationTabList();
+        break;
+      default:
+        this.getDocumentTabList();
+        this.getStationTabList();
+        this.getGroupStationTabList();
+        break;
+    }
   }
 }
