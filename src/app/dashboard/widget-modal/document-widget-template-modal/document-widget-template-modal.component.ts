@@ -23,7 +23,7 @@ export class DocumentWidgetTemplateModalComponent {
   dataTemplate = {
     ['default']: {
       title: 'Default',
-      description: 'Maintain the default document styling..',
+      description: 'Maintain the default document styling.',
     },
     [this.enumWidgetType.DocumentListBanner]: {
       title: 'List with Banner Image',
