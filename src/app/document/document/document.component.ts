@@ -25,6 +25,7 @@ import {
   ConnectedStationInfo,
   DocumentAutoFlow,
   MoveDocument,
+  StationRosterMember,
 } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
@@ -293,6 +294,15 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       isReturnListDocuments,
       isReloadListDocuments,
     });
+  }
+
+  /**
+   * Set new user for document.
+   *
+   * @param newUserAssigned New User Assigned to document.
+   */
+  setNewAssignedUser(newUserAssigned: StationRosterMember): void {
+    this.documentInformation.currentAssignedUser = newUserAssigned;
   }
 
   /**
