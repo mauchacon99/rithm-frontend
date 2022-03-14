@@ -300,10 +300,14 @@ export class MapService {
       //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
         connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+        //If station is selected then connection highlight set to true.
+        if (station.drawerOpened) connection.highlighted = true;
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
         connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+        //If station is selected then connection highlight set to true.
+        if (station.drawerOpened) connection.highlighted = true;
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
@@ -311,29 +315,6 @@ export class MapService {
         connection.endPoint,
         this.mapScale$.value
       );
-    }
-    this.connectionHighlight();
-  }
-
-  /**
-   * If station is selected then connection highlight set to true.
-   *
-   */
-  connectionHighlight(): void {
-    const station = this.stationElements.find((e) => e.drawerOpened);
-    if (!station) {
-      return;
-    }
-    this.connectionElements.map((e) => (e.highlighted = false));
-    for (const connection of this.connectionElements) {
-      //On station drawer opened, set the connection highlight start point true.
-      if (connection.startStationRithmId === station.rithmId) {
-        connection.highlighted = station.drawerOpened;
-      }
-      //On station drawer opened, set the connection highlight end point true.
-      if (connection.endStationRithmId === station.rithmId) {
-        connection.highlighted = station.drawerOpened;
-      }
     }
   }
 
