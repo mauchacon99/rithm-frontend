@@ -1,32 +1,46 @@
-<div class="w-full pt-3">
-  <!--document section-->
-  <section *ngIf="itemWidgetModalSelected.itemType === 'document'">
-    <hr class="text-secondary-100" />
-    <!-- Document type default -->
-    <div class="py-6">
-      <p class="font-semibold">Default</p>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-        <app-document-widget-template-modal
-          widgetType="default"
-        ></app-document-widget-template-modal>
-      </div>
+<!--header-->
+<div class="pt-3">
+  <h3 class="text-lg font-semibold">
+    {{ itemWidgetModalSelected.itemType | titlecase }}
+    Templates
+  </h3>
+  <p class="text-base">
+    Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
+    <span class="font-semibold">{{
+      itemWidgetModalSelected.itemList.name ||
+        'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
+    }}</span>
+  </p>
+</div>
+
+<!--document section-->
+<section *ngIf="itemWidgetModalSelected.itemType === 'document'" class="pt-3">
+  <hr class="text-secondary-100" />
+  <!-- Document type default -->
+  <div class="py-6">
+    <p class="font-semibold">Default</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+      <app-document-widget-template-modal
+        widgetType="default"
+      ></app-document-widget-template-modal>
     </div>
-    <hr class="text-secondary-100" />
-    <!-- Document types list -->
-    <div class="py-6">
-      <p class="font-semibold">Lists</p>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-        <!-- Widget card type document-list -->
-        <app-document-widget-template-modal
-          [widgetType]="enumWidgetType.Document"
-        ></app-document-widget-template-modal>
-        <!-- Widget card type document-list-banner -->
-        <app-document-widget-template-modal
-          [widgetType]="enumWidgetType.DocumentListBanner"
-        ></app-document-widget-template-modal>
-      </div>
+  </div>
+  <hr class="text-secondary-100" />
+  <!-- Document types list -->
+  <div class="py-6">
+    <p class="font-semibold">Lists</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+      <!-- Widget card type document-list -->
+      <app-document-widget-template-modal
+        [widgetType]="enumWidgetType.Document"
+      ></app-document-widget-template-modal>
+      <!-- Widget card type document-list-banner -->
+      <app-document-widget-template-modal
+        [widgetType]="enumWidgetType.DocumentListBanner"
+      ></app-document-widget-template-modal>
     </div>
-  </section>
+  </div>
+</section>
 
   <!--Section for show station template-->
   <section *ngIf="itemWidgetModalSelected.itemType === 'station'">
@@ -50,4 +64,3 @@
 
   <!--Section for show group template-->
   <section *ngIf="itemWidgetModalSelected.itemType === 'group'"></section>
-</div>
