@@ -754,4 +754,19 @@ describe('DocumentComponent', () => {
       expectDataUser
     );
   });
+
+  it('should emit event for executed petition and refresh widget', () => {
+    component.isWidget = true;
+    const spyEmit = spyOn(component.returnDocumentsWidget, 'emit');
+    const spyMethod = spyOn(
+      component,
+      'widgetReloadListDocuments'
+    ).and.callThrough();
+    component.saveDocumentChanges();
+    expect(spyMethod).toHaveBeenCalledOnceWith(false, true);
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      isReturnListDocuments: false,
+      isReloadListDocuments: true,
+    });
+  });
 });
