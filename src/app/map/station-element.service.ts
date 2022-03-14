@@ -101,7 +101,8 @@ export class StationElementService {
         station.hoverItem !== StationElementHoverItem.None &&
         this.mapService.stationElements.filter((e) => e.selected).length ===
           1 &&
-        station.selected)
+        station.selected &&
+        !station.disabled)
     ) {
       this.drawStationToolTip(station);
     }
@@ -281,7 +282,8 @@ export class StationElementService {
       station.hoverItem !== StationElementHoverItem.None &&
       this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
       this.mapService.stationElements.filter((e) => e.selected).length === 1 &&
-      station.selected;
+      station.selected &&
+      !station.disabled;
 
     const ctx = this.canvasContext;
 

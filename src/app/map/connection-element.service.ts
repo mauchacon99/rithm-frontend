@@ -5,6 +5,7 @@ import {
   CONNECTION_LINE_WIDTH,
   CONNECTION_LINE_WIDTH_ZOOM_OUT,
   DEFAULT_SCALE,
+  MAP_SELECTED,
   NODE_HOVER_COLOR,
   SCALE_REDUCED_RENDER,
 } from './map-constants';
@@ -53,9 +54,12 @@ export class ConnectionElementService {
       this.mapScale > SCALE_REDUCED_RENDER
         ? CONNECTION_LINE_WIDTH
         : CONNECTION_LINE_WIDTH_ZOOM_OUT;
-    ctx.strokeStyle = connection.hovering
-      ? NODE_HOVER_COLOR
-      : CONNECTION_DEFAULT_COLOR;
+    ctx.strokeStyle =
+      connection.highlighted && !connection.hovering
+        ? MAP_SELECTED
+        : connection.hovering
+        ? NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     //use the path information in connection to draw the connection line.
     ctx.stroke(connection.path);
     ctx.restore();
