@@ -54,6 +54,9 @@ export class DataLinkFieldComponent
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
+  /** Current station's fields as options for the select base value. */
+  currentfields: Question[] = [];
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -61,13 +64,28 @@ export class DataLinkFieldComponent
   ) {}
 
   /**
+   * Listen the currentQuestions Service.
+   */
+  private subscribeCurrentQuestions(): void {
+    this.stationService.currentQuestions$
+      .pipe(first())
+      .subscribe((questions) => {
+        if (questions.length) {
+          this.currentfields = questions;
+        }
+      });
+  }
+
+  /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
     this.dataLinkFieldForm = this.fb.group({
       [this.field.questionType]: [this.fieldValue, []],
+      selectBaseValue: ['', []],
     });
     this.getAllStations();
+    this.subscribeCurrentQuestions();
   }
 
   /**

@@ -1,4 +1,4 @@
-<div [formGroup]="dataLinkFieldForm">
+<div [formGroup]="dataLinkFieldForm" class="flex flex-col">
   <div class="flex flex-row justify-start text-xs space-x-2 mb-2">
     <span class="text-primary-500">DATA LINK</span>
     <mat-divider [vertical]="true"></mat-divider>
@@ -8,7 +8,8 @@
       >Help</a
     >
   </div>
-  <mat-form-field class="w-full" appearance="outline">
+  <!-- Avalaible Stations  -->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
     <mat-label>{{ field.prompt }}</mat-label>
     <div matPrefix class="icon">
       <!-- Data link icon -->
@@ -34,5 +35,14 @@
         <p *ngIf="option.name">{{ option.name }}</p>
       </mat-option>
     </mat-autocomplete>
+  </mat-form-field>
+  <!-- Base Value-->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label> Base Value</mat-label>
+    <mat-select formControlName="selectBaseValue">
+      <mat-option *ngFor="let item of currentfields" [value]="item.rithmId">
+        {{ item.prompt }}</mat-option
+      >
+    </mat-select>
   </mat-form-field>
 </div>

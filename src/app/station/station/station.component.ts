@@ -477,6 +477,13 @@ export class StationComponent
     ) {
       newQuestion.possibleAnswers = [];
     }
+    if (fieldType === QuestionFieldType.DataLink) {
+      /** Only questions that come with the rithmId of getStationInfo. */
+      const questionsEnabled = this.stationInformation.questions.filter(
+        (question) => question.rithmId.length > 14
+      );
+      this.stationService.setStationQuestionsInDataLink(questionsEnabled);
+    }
     this.stationInformation.questions.push(newQuestion);
     this.stationService.touchStationForm();
   }
