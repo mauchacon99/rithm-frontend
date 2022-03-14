@@ -289,4 +289,34 @@ describe('CustomTabWidgetModalComponent', () => {
       expect(spyService).toHaveBeenCalled();
     });
   });
+
+  it('should call method depending documents active tab', () => {
+    component.indexTab = 0;
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentTabList'
+    ).and.callThrough();
+    component.getSearchResultTab();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should call method depending stations active tab', () => {
+    component.indexTab = 1;
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getStationTabList'
+    ).and.callThrough();
+    component.getSearchResultTab();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should call method depending groups active tab', () => {
+    component.indexTab = 2;
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getGroupStationTabList'
+    ).and.callThrough();
+    component.getSearchResultTab();
+    expect(spyService).toHaveBeenCalled();
+  });
 });

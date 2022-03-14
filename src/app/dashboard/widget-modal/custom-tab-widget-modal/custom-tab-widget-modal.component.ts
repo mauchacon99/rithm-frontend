@@ -200,6 +200,9 @@ export class CustomTabWidgetModalComponent implements OnInit {
         this.getGroupStationTabList();
         break;
       default:
+        this.getDocumentTabList();
+        this.getStationTabList();
+        this.getGroupStationTabList();
         break;
     }
   }
