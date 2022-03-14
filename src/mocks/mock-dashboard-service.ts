@@ -505,9 +505,10 @@ export class MockDashboardService {
   /**
    * Get list tab documents.
    *
+   * @param name Name to get match documents.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
+  getDocumentTabList(name: string): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
@@ -537,9 +538,10 @@ export class MockDashboardService {
   /**
    * Get the list for the station tabs.
    *
+   * @param name Name to get match stations.
    * @returns The list.
    */
-  getStationTabList(): Observable<ItemListWidgetModal[]> {
+  getStationTabList(name: string): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
@@ -556,9 +558,10 @@ export class MockDashboardService {
   /**
    * Get the list for the groups the stations tabs.
    *
+   * @param name Name to get match group stations.
    * @returns The list the groups.
    */
-  getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
+  getGroupStationTabList(name: string): Observable<ItemListWidgetModal[]> {
     const itemListWidgetModal: ItemListWidgetModal[] = [
       {
         rithmId: '7',
