@@ -42,25 +42,25 @@
   </div>
 </section>
 
-  <!--Section for show station template-->
-  <section *ngIf="itemWidgetModalSelected.itemType === 'station'">
-    <hr class="text-secondary-100" />
-    <!-- Stations types list -->
-    <div class="py-6">
-      <p class="font-semibold">Tables</p>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-        <!-- Widget card type station -->
-        <app-station-widget-template-modal
-          [widgetType]="enumWidgetType.Station"
-        ></app-station-widget-template-modal>
-        <!-- Widget card type StationTableBanner -->
-        <app-station-widget-template-modal
-          [widgetType]="enumWidgetType.StationTableBanner"
-        ></app-station-widget-template-modal>
-      </div>
+<!--Section for show station template-->
+<section *ngIf="itemWidgetModalSelected.itemType === 'station'">
+  <hr class="text-secondary-100" />
+  <!-- Stations types list -->
+  <div class="py-6">
+    <p class="font-semibold">Tables</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+      <!-- Widget card type station -->
+      <app-station-widget-template-modal
+        [widgetType]="enumWidgetType.Station"
+      ></app-station-widget-template-modal>
+      <!-- Widget card type StationTableBanner -->
+      <app-station-widget-template-modal
+        [widgetType]="enumWidgetType.StationTableBanner"
+      ></app-station-widget-template-modal>
     </div>
-    <hr class="text-secondary-100" />
-  </section>
+  </div>
+  <hr class="text-secondary-100" />
+</section>
 
-  <!--Section for show group template-->
-  <section *ngIf="itemWidgetModalSelected.itemType === 'group'"></section>
+<!--Section for show group template-->
+<section *ngIf="itemWidgetModalSelected.itemType === 'group'"></section>
