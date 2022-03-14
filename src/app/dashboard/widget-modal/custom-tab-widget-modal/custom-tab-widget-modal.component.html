@@ -59,7 +59,7 @@
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
     <mat-tab>
       <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain documents.
         </p>
       </div>
@@ -78,7 +78,7 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain stations.
         </p>
       </div>
@@ -99,7 +99,7 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingGroupTab" id="error-group-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain groups.
         </p>
       </div>

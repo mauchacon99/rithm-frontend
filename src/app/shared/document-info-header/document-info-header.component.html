@@ -198,6 +198,8 @@
     <ng-template #startButton>
       <div class="py-2">
         <button
+          *ngIf="!loadingAssignUser"
+          type="button"
           mat-stroked-button
           (click)="assignUserToDocument()"
           data-testid="start-document-button"
@@ -224,6 +226,7 @@
     </ng-template>
 
     <button
+      type="button"
       mat-icon-button
       data-testid="return-document-button"
       id="return-document-button"
