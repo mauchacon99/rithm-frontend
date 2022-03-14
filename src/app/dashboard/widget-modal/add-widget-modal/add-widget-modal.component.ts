@@ -42,4 +42,9 @@ export class AddWidgetModalComponent {
     this.itemWidgetModalSelected = element;
     this.identifyShowElement = element.itemType;
   }
+
+  /** Return to widget list when identifyShowElement is not tabs. */
+  returnCustomLists(): void {
+    this.identifyShowElement = 'tabs';
+  }
 }
