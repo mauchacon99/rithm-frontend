@@ -1,13 +1,14 @@
 <!--header-->
 <div class="pt-3">
   <h3 class="text-lg font-semibold">
-    <span class="capitalize">{{ itemWidgetModalSelected.itemType }}</span>
+    {{ itemWidgetModalSelected.itemType | titlecase }}
     Templates
   </h3>
   <p class="text-base">
-    Selected Document:
+    Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
     <span class="font-semibold">{{
-      itemWidgetModalSelected.itemList.name
+      itemWidgetModalSelected.itemList.name ||
+        'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
     }}</span>
   </p>
 </div>
