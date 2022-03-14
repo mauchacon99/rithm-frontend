@@ -186,7 +186,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /**
    * Sending search value to get mach result depending active tab.
    */
-  getSearchResultTab(): void {
+  private getSearchResultTab(): void {
     switch (this.indexTab) {
       case 0:
         this.getDocumentTabList();

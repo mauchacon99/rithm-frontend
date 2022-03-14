@@ -90,7 +90,11 @@ describe('CustomTabWidgetModalComponent', () => {
   it('should selected index tabs', () => {
     const indexTab = 1;
     const spyTabs = spyOn(component, 'selectedTab').and.callThrough();
-    const spyService = spyOn(component, 'getSearchResultTab').and.callThrough();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const spyService = spyOn<any>(
+      component,
+      'getSearchResultTab'
+    ).and.callThrough();
     const btnTab = fixture.nativeElement.querySelector('#tab-button-station');
     expect(btnTab).toBeTruthy();
     btnTab.click();
@@ -115,7 +119,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(DashboardService),
       'getStationTabList'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -134,7 +138,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyError).toHaveBeenCalled();
     expect(component.errorLoadingStationTab).toBeTrue();
   });
@@ -192,7 +196,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -276,7 +280,11 @@ describe('CustomTabWidgetModalComponent', () => {
   });
 
   it('should call method depending active tab', () => {
-    const spyService = spyOn(component, 'getSearchResultTab').and.callThrough();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const spyService = spyOn<any>(
+      component,
+      'getSearchResultTab'
+    ).and.callThrough();
 
     const testPromise = new Promise(() => {
       component.getSearchResult();
@@ -292,7 +300,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(DashboardService),
       'getDocumentTabList'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -302,7 +310,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(DashboardService),
       'getStationTabList'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -312,7 +320,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(DashboardService),
       'getGroupStationTabList'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -330,7 +338,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(DashboardService),
       'getDocumentTabList'
     ).and.callThrough();
-    component.getSearchResultTab();
+    component['getSearchResultTab']();
     expect(spyServiceDocument).toHaveBeenCalled();
     expect(spyServiceGroup).toHaveBeenCalled();
     expect(spyServiceStation).toHaveBeenCalled();
