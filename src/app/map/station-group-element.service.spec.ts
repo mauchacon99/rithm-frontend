@@ -51,7 +51,7 @@ describe('StationGroupElementService', () => {
       stations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
       subStationGroups: [],
       status: MapItemStatus.Normal,
-      isReadOnlyRootStationGroup: true,
+      isReadOnlyRootStationGroup: false,
       isChained: false,
     },
     {
@@ -209,21 +209,6 @@ describe('StationGroupElementService', () => {
     ];
     points.sort(service.comparePoints);
     expect(points).toEqual(expectPoints);
-  });
-
-  it('should call of the method drawStationGroups', () => {
-    mapService.stationGroupElements = stationGroupsMapData.map(
-      (e) => new StationGroupMapElement(e)
-    );
-
-    const drawStationGroupSpy = spyOn(
-      TestBed.inject(StationGroupElementService),
-      'drawStationGroup'
-    );
-    service.drawStationGroups();
-    expect(drawStationGroupSpy).toHaveBeenCalledOnceWith(
-      mapService.stationGroupElements[0]
-    );
   });
 
   it('should get the station points for a station group', () => {
@@ -419,6 +404,13 @@ describe('StationGroupElementService', () => {
     expect(drawStationGroupBoundaryLineSpy).toHaveBeenCalled();
     expect(drawStationGroupNameSpy).not.toHaveBeenCalled();
 
+    // Reset the spy calls.
+    getStationPointsForStationGroupSpy.calls.reset();
+    getSubStationGroupPointsForStationGroupSpy.calls.reset();
+    getConvexHullSpy.calls.reset();
+    setStationGroupBoundaryPathSpy.calls.reset();
+    drawStationGroupBoundaryLineSpy.calls.reset();
+
     // When the station group name is visible.
     mapService.mapScale$.next(DEFAULT_SCALE);
     service.drawStationGroup(mapService.stationGroupElements[0]);
@@ -497,6 +489,23 @@ describe('StationGroupElementService', () => {
     const pointStart = { x: 0, y: 0 };
     expect(() => service.drawStationGroupToolTip(pointStart)).toThrow(
       new Error('Cannot draw the tooltip if context is not defined')
+    );
+  });
+
+  it('should return Throw Error in the method drawStationGroups', () => {
+    mapService.stationGroupElements = [
+      new StationGroupMapElement(stationGroupsMapData[1]),
+    ];
+
+    expect(() => service.drawStationGroups()).toThrow(
+      new Error('Root station group could not be found')
+    );
+
+    mapService.stationGroupElements = stationGroupsMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    expect(() => service.drawStationGroups()).toThrow(
+      new Error('Cannot draw station groups if context is not defined')
     );
   });
 });

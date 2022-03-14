@@ -123,7 +123,7 @@ export class StationGroupMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created station group as deleted. ' +
-        'You should instead remove it from the array of station groups.'
+          'You should instead remove it from the array of station groups.'
       );
     }
   }
