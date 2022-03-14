@@ -64,8 +64,6 @@ export class CustomTabWidgetModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocumentTabList();
-    this.getStationTabList();
-    this.getGroupStationTabList();
   }
 
   /**

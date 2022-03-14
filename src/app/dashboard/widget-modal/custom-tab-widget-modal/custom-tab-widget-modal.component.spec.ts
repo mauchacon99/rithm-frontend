@@ -90,10 +90,12 @@ describe('CustomTabWidgetModalComponent', () => {
   it('should selected index tabs', () => {
     const indexTab = 1;
     const spyTabs = spyOn(component, 'selectedTab').and.callThrough();
+    const spyService = spyOn(component, 'getSearchResultTab').and.callThrough();
     const btnTab = fixture.nativeElement.querySelector('#tab-button-station');
     expect(btnTab).toBeTruthy();
     btnTab.click();
     expect(spyTabs).toHaveBeenCalledOnceWith(indexTab);
+    expect(spyService).toHaveBeenCalled();
     expect(component.indexTab).toBe(indexTab);
   });
 
@@ -108,15 +110,17 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(loadingIndicator).toBeTruthy();
   });
   it('should get list tab stations', () => {
+    component.indexTab = 1;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'getStationTabList'
     ).and.callThrough();
-    component.ngOnInit();
+    component.getSearchResultTab();
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should get list tab stations error ', () => {
+    component.indexTab = 1;
     spyOn(
       TestBed.inject(DashboardService),
       'getStationTabList'
@@ -130,7 +134,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component.getSearchResultTab();
     expect(spyError).toHaveBeenCalled();
     expect(component.errorLoadingStationTab).toBeTrue();
   });
@@ -173,16 +177,8 @@ describe('CustomTabWidgetModalComponent', () => {
     expect(component.errorLoadingDocumentTab).toBeTrue();
   });
 
-  it('should get list data for groups the stations', () => {
-    const spyService = spyOn(
-      TestBed.inject(DashboardService),
-      'getGroupStationTabList'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
-  });
-
   it('should catch error for list tab groups the stations', () => {
+    component.indexTab = 2;
     spyOn(
       TestBed.inject(DashboardService),
       'getGroupStationTabList'
@@ -196,7 +192,7 @@ describe('CustomTabWidgetModalComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component.getSearchResultTab();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -318,5 +314,25 @@ describe('CustomTabWidgetModalComponent', () => {
     ).and.callThrough();
     component.getSearchResultTab();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should call method depending groups active tab case default', () => {
+    component.indexTab = 4;
+    const spyServiceGroup = spyOn(
+      TestBed.inject(DashboardService),
+      'getGroupStationTabList'
+    ).and.callThrough();
+    const spyServiceStation = spyOn(
+      TestBed.inject(DashboardService),
+      'getStationTabList'
+    ).and.callThrough();
+    const spyServiceDocument = spyOn(
+      TestBed.inject(DashboardService),
+      'getDocumentTabList'
+    ).and.callThrough();
+    component.getSearchResultTab();
+    expect(spyServiceDocument).toHaveBeenCalled();
+    expect(spyServiceGroup).toHaveBeenCalled();
+    expect(spyServiceStation).toHaveBeenCalled();
   });
 });
