@@ -416,7 +416,7 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(expectValue).toBeFalse();
   });
 
-  fit('should button disable if user not admin and not worker and not owner', () => {
+  it('should button disable if user not admin and not worker and not owner', () => {
     component.isWidget = true;
     component.documentInformation.stationOwners = [];
     component.documentInformation.workers = [];
@@ -424,7 +424,6 @@ describe('DocumentInfoHeaderComponent', () => {
       false
     );
     const expectValue = component.isAdminOrWorkerOrOwner();
-    expect(expectValue).toBeFalse();
     spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
       rithmId: '',
       firstName: '',
@@ -437,13 +436,29 @@ describe('DocumentInfoHeaderComponent', () => {
     const button = fixture.debugElement.nativeElement.querySelector(
       '#start-document-button'
     );
-
+    expect(expectValue).toBeFalse();
     expect(button).toBeTruthy();
-    console.log('PASO',button.disabled);
+    expect(button.disabled).toBeTrue();
+  });
 
+  it('should button not disabled if user is admin', () => {
+    component.isWidget = true;
+    spyOnProperty(TestBed.inject(UserService), 'isAdmin').and.returnValue(true);
+    const expectValue = component.isAdminOrWorkerOrOwner();
+    spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    });
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#start-document-button'
+    );
+    expect(expectValue).toBeTrue();
+    expect(button).toBeTruthy();
     expect(button.disabled).toBeFalse();
-    const spyMethodValidator = spyOn(component, 'isAdminOrWorkerOrOwner');
-    button.click();
-    expect(spyMethodValidator).toHaveBeenCalledOnceWith();
   });
 });
