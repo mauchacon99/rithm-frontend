@@ -9,14 +9,14 @@ import { SelectedItemWidgetModel } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
-  /** Selected item to show list widget. */
-  itemWidgetModalSelected!: SelectedItemWidgetModel;
-
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
   /** The element type to be shown. */
   identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
+
+  /** Selected item to show list widget. */
+  itemWidgetModalSelected!: SelectedItemWidgetModel;
 
   /** Tab Parents selected. */
   tabParentSelect = 0;

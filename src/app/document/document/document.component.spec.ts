@@ -719,6 +719,27 @@ describe('DocumentComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should get data about the document, station and get the name for the flow button', () => {
+    const stationId = component.documentInformation.stationRithmId;
+    const documentId = component.documentInformation.documentRithmId;
+    component['stationId'] = stationId;
+    component['documentId'] = documentId;
+
+    const documentStationSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getDocumentInfo'
+    ).and.callThrough();
+    const flowBtnTextSpy = spyOn(
+      TestBed.inject(StationService),
+      'getFlowButtonText'
+    ).and.callThrough();
+
+    component['getDocumentStationData']();
+    expect(documentStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
+    component.getFlowButtonName();
+    expect(flowBtnTextSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
   it('should emit and set new user for document', () => {
     const expectDataUser = {
       email: 'bokatan.kryze@inpivota.com',
@@ -732,5 +753,20 @@ describe('DocumentComponent', () => {
     expect(component.documentInformation.currentAssignedUser).toBe(
       expectDataUser
     );
+  });
+
+  it('should emit event for executed petition and refresh widget', () => {
+    component.isWidget = true;
+    const spyEmit = spyOn(component.returnDocumentsWidget, 'emit');
+    const spyMethod = spyOn(
+      component,
+      'widgetReloadListDocuments'
+    ).and.callThrough();
+    component.saveDocumentChanges();
+    expect(spyMethod).toHaveBeenCalledOnceWith(false, true);
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      isReturnListDocuments: false,
+      isReloadListDocuments: true,
+    });
   });
 });

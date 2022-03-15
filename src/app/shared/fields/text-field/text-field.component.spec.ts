@@ -93,21 +93,12 @@ describe('TextFieldComponent', () => {
   });
 
   it('should update the stationQuestion Bsubject ', () => {
-    const updatedQuestion: Question = {
-      rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Fake question 4',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [],
-    };
     const stationSpy = spyOn(
       TestBed.inject(StationService),
       'updateStationQuestionInTemplate'
     );
-    component.updateFieldPrompt(updatedQuestion);
-    expect(stationSpy).toHaveBeenCalledOnceWith(updatedQuestion);
+    component.updateFieldPrompt();
+    expect(stationSpy).toHaveBeenCalledOnceWith(component.field);
   });
 
   describe('should require fields when is in Station', () => {
