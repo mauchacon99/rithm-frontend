@@ -196,6 +196,27 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Get is user is admin or worker or owner in document.
+   *
+   * @returns If is admin or worker or owner in document.
+   */
+  isAdminOrWorkerOrOwner(): boolean {
+    this.documentInformation.stationOwners=[];
+    this.documentInformation.workers=[];
+    console.log(this.userService.isAdmin);
+
+    return this.userService.isAdmin
+      ? true
+      : this.documentInformation.stationOwners?.find(
+          (owner) => owner.rithmId === this.userService.user.rithmId
+        )
+      ? true
+      : !!this.documentInformation.workers?.find(
+          (worker) => worker.rithmId === this.userService.user.rithmId
+        );
+  }
+
   /** Get Document Appended Fields from Behaviour Subject. */
   private subscribeDocumentStationNameFields$() {
     this.stationService.documentStationNameFields$

@@ -198,6 +198,7 @@
     <ng-template #startButton>
       <div class="py-2">
         <button
+          [disabled]="!isAdminOrWorkerOrOwner()"
           *ngIf="!loadingAssignUser"
           type="button"
           mat-stroked-button
@@ -208,6 +209,13 @@
         >
           Start Document
         </button>
+        <div
+          *ngIf="!isAdminOrWorkerOrOwner()"
+          class="text-xs pt-2"
+          id="user-not-assign-document"
+        >
+          User is not admin and does not belong to the document!
+        </div>
         <div *ngIf="loadingAssignUser" class="w-24 items-center py-2">
           <app-loading-indicator
             id="assign-user-loading"
@@ -217,7 +225,6 @@
         <div
           *ngIf="displayAssignUserError"
           class="text-error-500 text-xs px-[15px] pt-2"
-          data-testid="assign-user-error"
           id="assign-user-error"
         >
           User not assigned!
