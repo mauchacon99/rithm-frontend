@@ -7,12 +7,14 @@
   <div class="pt-2">
     <mat-form-field class="w-full sm:w-80 search-tabs" appearance="outline">
       <input
+        [(ngModel)]="searchTab"
         type="text"
         matInput
         placeholder="Search"
         id="search-tabs"
         data-testid="search-tabs"
         maxlength="55"
+        (keyup)="getSearchResult()"
       />
       <span matPrefix
         ><i class="fas fa-search p-1 text-secondary-300"></i
@@ -57,7 +59,7 @@
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
     <mat-tab>
       <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain documents.
         </p>
       </div>
@@ -76,7 +78,7 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain stations.
         </p>
       </div>
@@ -97,7 +99,7 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingGroupTab" id="error-group-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain groups.
         </p>
       </div>

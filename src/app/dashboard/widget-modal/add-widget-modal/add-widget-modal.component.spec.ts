@@ -11,6 +11,8 @@ import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/cu
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SelectedItemWidgetModel } from 'src/models';
+import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
+import { DescriptionWidgetModalComponent } from '../description-widget-modal/description-widget-modal.component';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -31,6 +33,8 @@ describe('AddWidgetModalComponent', () => {
       declarations: [
         AddWidgetModalComponent,
         MockComponent(CustomTabWidgetModalComponent),
+        MockComponent(ListWidgetModalComponent),
+        MockComponent(DescriptionWidgetModalComponent),
       ],
     }).compileComponents();
   });
@@ -77,5 +81,27 @@ describe('AddWidgetModalComponent', () => {
     expect(component.identifyShowElement).toBe('tabs');
     component.selectTypeElement(expectedValue);
     expect(showElement).toBe('station');
+  });
+
+  it('should show and return button to custom lists', () => {
+    const spyMethod = spyOn(component, 'returnCustomLists').and.callThrough();
+    component.identifyShowElement = 'document';
+    fixture.detectChanges();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeTruthy();
+    btnReturnCustom.click();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.identifyShowElement).toEqual('tabs');
+  });
+
+  it('should not show return button to custom lists', () => {
+    component.identifyShowElement = 'tabs';
+    fixture.detectChanges();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeNull();
   });
 });
