@@ -51,6 +51,9 @@ export class DataLinkFieldComponent
   /**Filtered form station List. */
   filteredStations$: Observable<Station[]> | undefined;
 
+  /** The list of selected station questions. */
+  questions: Question[] = [];
+
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
@@ -66,6 +69,7 @@ export class DataLinkFieldComponent
   ngOnInit(): void {
     this.dataLinkFieldForm = this.fb.group({
       [this.field.questionType]: [this.fieldValue, []],
+      selectedMatchingValue: ['', []],
     });
     this.getAllStations();
   }
@@ -93,6 +97,34 @@ export class DataLinkFieldComponent
           );
         },
       });
+  }
+
+  /**
+   * Get station questions.
+   *
+   * @param nameStation The name station selected.
+   */
+  getStationQuestions(nameStation: string): void {
+    this.questions = [];
+    const stationRithmId = this.stations.find(
+      (station) => station.name === nameStation
+    )?.rithmId;
+    if (stationRithmId) {
+      this.stationService
+        .getStationQuestions(stationRithmId)
+        .pipe(first())
+        .subscribe({
+          next: (questions) => {
+            this.questions = questions;
+          },
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              'Failed to get station questions for this data link field.',
+              error
+            );
+          },
+        });
+    }
   }
 
   /**

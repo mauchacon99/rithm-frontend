@@ -21,7 +21,11 @@
       [formControlName]="field.questionType"
       [matAutocomplete]="auto"
     />
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+    <mat-autocomplete
+      autoActiveFirstOption
+      #auto="matAutocomplete"
+      (optionSelected)="getStationQuestions($event.option.value)"
+    >
       <mat-option *ngIf="stationLoading" class="flex justify-center">
         <app-loading-indicator [inlineText]="'Loading...'">
         </app-loading-indicator>
@@ -34,5 +38,20 @@
         <p *ngIf="option.name">{{ option.name }}</p>
       </mat-option>
     </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label> Matching Value </mat-label>
+    <mat-select
+      [disabled]="!questions.length"
+      formControlName="questionSelected"
+    >
+      <mat-option
+        class="text-sm"
+        *ngFor="let option of questions"
+        [value]="option.prompt"
+      >
+        <p *ngIf="option.prompt">{{ option.prompt }}</p>
+      </mat-option>
+    </mat-select>
   </mat-form-field>
 </div>
