@@ -89,18 +89,6 @@ export class StationFieldComponent
     value: '',
   };
 
-  /** The field for adding an option to a selectable fieldQuestionType. */
-  selectableOption: Question = {
-    rithmId: '',
-    prompt: 'Add Option',
-    questionType: QuestionFieldType.ShortText,
-    isReadOnly: false,
-    isRequired: true,
-    isPrivate: false,
-    children: [],
-    isPossibleAnswer: true,
-  };
-
   /** Data link field to display. */
   dataLinkField: Question = {
     rithmId: '',
@@ -237,16 +225,26 @@ export class StationFieldComponent
     const answerRithmId = `ans-${genRanHex(8)}-${genRanHex(4)}-${genRanHex(
       4
     )}-${genRanHex(4)}-${genRanHex(12)}`;
-    this.selectableOption.prompt =
-      fieldType === QuestionFieldType.MultiSelect ||
-      fieldType === QuestionFieldType.Select
-        ? 'Add option'
-        : fieldType === QuestionFieldType.CheckList
-        ? 'Add item'
-        : '';
-    this.selectableOption.rithmId = this.field.rithmId;
-    this.selectableOption.originalStationRithmId = answerRithmId;
-    this.options.push(this.selectableOption);
+    /** Generate a new isolated option to add in the array of options. */
+    const selectableOption: Question = {
+      rithmId: '',
+      prompt:
+        fieldType === QuestionFieldType.MultiSelect ||
+        fieldType === QuestionFieldType.Select
+          ? 'Add option'
+          : fieldType === QuestionFieldType.CheckList
+          ? 'Add item'
+          : '',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      isPossibleAnswer: true,
+    };
+    selectableOption.rithmId = this.field.rithmId;
+    selectableOption.originalStationRithmId = answerRithmId;
+    this.options.push(selectableOption);
   }
 
   /**
