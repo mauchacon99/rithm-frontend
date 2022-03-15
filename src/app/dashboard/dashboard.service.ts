@@ -107,9 +107,12 @@ export class DashboardService {
    * @returns A list of worker roster of a station.
    */
   getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
-    // eslint-disable-next-line max-len
+    const params = new HttpParams().set('stationRithmId', stationId);
     return this.http.get<StationRosterMember[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${stationId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster`,
+      {
+        params,
+      }
     );
   }
 
@@ -120,9 +123,12 @@ export class DashboardService {
    * @returns A list of station owner roster of a station.
    */
   getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
-    // eslint-disable-next-line max-len
+    const params = new HttpParams().set('stationRithmId', stationId);
     return this.http.get<StationRosterMember[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${stationId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster`,
+      {
+        params,
+      }
     );
   }
 
@@ -265,33 +271,48 @@ export class DashboardService {
   /**
    * Get list tab documents.
    *
+   * @param name Name to get match documents.
    * @returns The item list widget modal.
    */
-  getDocumentTabList(): Observable<ItemListWidgetModal[]> {
+  getDocumentTabList(name: string): Observable<ItemListWidgetModal[]> {
+    const params = new HttpParams().set('name', name);
     return this.http.get<ItemListWidgetModal[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-documents`,
+      {
+        params,
+      }
     );
   }
 
   /**
    * Get the list for the station tabs.
    *
+   * @param name Name to get match stations.
    * @returns The list.
    */
-  getStationTabList(): Observable<ItemListWidgetModal[]> {
+  getStationTabList(name: string): Observable<ItemListWidgetModal[]> {
+    const params = new HttpParams().set('name', name);
     return this.http.get<ItemListWidgetModal[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stations`,
+      {
+        params,
+      }
     );
   }
 
   /**
    * Get the list for the groups the stations tabs.
    *
+   * @param name Name to get match group stations.
    * @returns The list the groups.
    */
-  getGroupStationTabList(): Observable<ItemListWidgetModal[]> {
+  getGroupStationTabList(name: string): Observable<ItemListWidgetModal[]> {
+    const params = new HttpParams().set('name', name);
     return this.http.get<ItemListWidgetModal[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/library-stationgroups`,
+      {
+        params,
+      }
     );
   }
 }

@@ -68,6 +68,7 @@
           >
           </app-station-info-header>
           <app-document-info-header
+            (sendNewUserAssigned)="setNewAssignedUser($event)"
             [isWidget]="isWidget"
             (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
             [documentInformation]="documentInformation"
@@ -172,7 +173,7 @@
                   "
                   (click)="saveAnswersFlowDocument()"
                 >
-                  Flow
+                  {{ flowButtonName }}
                 </button>
               </div>
               <div *ngIf="!isWidget" class="relative hidden lg:block">

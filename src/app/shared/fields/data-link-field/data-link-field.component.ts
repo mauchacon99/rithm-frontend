@@ -213,7 +213,7 @@ export class DataLinkFieldComponent
     /** Set the filter List for auto searching. */
     this.filteredStations$ = this.dataLinkFieldForm.controls[
       this.field.questionType
-    ].valueChanges.pipe(
+    ]?.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
     );
