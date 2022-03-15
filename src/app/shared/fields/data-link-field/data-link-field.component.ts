@@ -55,7 +55,7 @@ export class DataLinkFieldComponent
   stationLoading = false;
 
   /** Current station's fields as options for the select base value. */
-  currentfields: Question[] = [];
+  currentStationQuestions: Question[] = [];
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -67,15 +67,13 @@ export class DataLinkFieldComponent
   ) {}
 
   /**
-   * Listen the currentQuestions Service.
+   * Listen the currentStationQuestions Service.
    */
-  private subscribeCurrentQuestions(): void {
-    this.stationService.currentQuestions$
+  private subscribeCurrentStationQuestions(): void {
+    this.stationService.currentStationQuestions$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((questions) => {
-        if (questions.length) {
-          this.currentfields = questions;
-        }
+        this.currentStationQuestions = questions;
       });
   }
 
@@ -87,8 +85,8 @@ export class DataLinkFieldComponent
       [this.field.questionType]: [this.fieldValue, []],
       selectBaseValue: ['', []],
     });
+    this.subscribeCurrentStationQuestions();
     this.getAllStations();
-    this.subscribeCurrentQuestions();
   }
 
   /**

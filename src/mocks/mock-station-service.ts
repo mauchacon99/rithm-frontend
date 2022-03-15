@@ -38,8 +38,8 @@ export class MockStationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be set when adding a dataLink type field on the station page. */
-  currentQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
 
   /**
    * Gets a station information.
@@ -671,12 +671,12 @@ export class MockStationService {
   }
 
   /**
-   * Set the station questions in the data link field.
+   * Update the station questions in the data link field.
    *
-   * @param questions The current questions to be set in data link field.
+   * @param questions The current questions to be updated in data link field.
    */
-  setStationQuestionsInDataLink(questions: Question[]): void {
-    this.currentQuestions$.next(questions);
+  updateCurrentStationQuestions(questions: Question[]): void {
+    this.currentStationQuestions$.next(questions);
   }
 
   /**
