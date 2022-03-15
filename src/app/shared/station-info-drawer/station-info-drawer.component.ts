@@ -739,7 +739,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Update StationInfoDrawer in the station name.
    */
   updateStationInfoDrawerName(): void {
+    this.stationName =
+      this.stationName.length > 0 ? this.stationName : 'Untitled Station';
     this.stationService.updatedStationNameText(this.stationName);
+    if (
+      this.openedFromMap &&
+      (this.mapMode === this.mapModeEnum.Build ||
+        this.mapMode === this.mapModeEnum.StationAdd)
+    ) {
+      this.reportNewStationMapChange();
+    }
   }
 
   /**
