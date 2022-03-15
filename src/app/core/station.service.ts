@@ -47,6 +47,9 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -333,6 +336,15 @@ export class StationService {
    */
   updateStationQuestionInTemplate(question: Question): void {
     this.stationQuestion$.next(question);
+  }
+
+  /**
+   * Update the station questions in the data link field.
+   *
+   * @param questions The current questions to be updated in data link field.
+   */
+  updateCurrentStationQuestions(questions: Question[]): void {
+    this.currentStationQuestions$.next(questions);
   }
 
   /**
