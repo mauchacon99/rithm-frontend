@@ -11,5 +11,84 @@
       </mat-list-option>
     </mat-selection-list>
   </section>
-  <section class="px-4 pt-6 w-72 overflow-y-auto categories-content"></section>
+  <section class="px-4 pb-5 pt-3 w-72 overflow-y-auto categories-content">
+    <div
+      class="form-input-category-container"
+      data-testid="form-input-category-container"
+      *ngIf="buildCategory.selectedOptions.selected[0]?.value === 'Form Inputs'"
+    >
+      <div
+        class="flex m-2 p-2 items-center justify-center border-[1px] border-solid border-primary-100 form-input-category-item"
+        *ngFor="let formInput of formInputsCategory; let i = index"
+      >
+        <p class="text-sm text-primary-900 text-center grow-[9]">
+          {{ formInput }}
+        </p>
+        <span
+          class="fa-regular fa-object-group fa-lg grow-[1]"
+          *ngIf="formInput === 'Input Frame'"
+        ></span>
+        <span
+          class="fa-solid fa-font fa-lg grow-[1]"
+          *ngIf="formInput === 'Short Text'"
+        ></span>
+        <span
+          class="fa-solid fa-paragraph fa-lg grow-[1]"
+          *ngIf="formInput === 'Long Text'"
+        ></span>
+        <span
+          class="fa-solid fa-at fa-lg grow-[1]"
+          *ngIf="formInput === 'Email'"
+        ></span>
+        <span
+          class="fa-solid fa-link fa-lg grow-[1]"
+          *ngIf="formInput === 'URL'"
+        ></span>
+        <span
+          class="fa-regular fa-address-card fa-lg grow-[1]"
+          *ngIf="formInput === 'Address'"
+        ></span>
+        <span
+          class="fa-solid fa-calendar-day fa-lg grow-[1]"
+          *ngIf="formInput === 'Date'"
+        ></span>
+        <span
+          class="fa-solid fa-chevron-circle-down fa-lg grow-[1]"
+          *ngIf="formInput === 'Single Select'"
+        ></span>
+        <span
+          class="fa-solid fa-chevron-circle-down fa-lg grow-[1]"
+          *ngIf="formInput === 'Multiselect'"
+        ></span>
+        <span
+          class="fa-solid fa-list fa-lg grow-[1]"
+          *ngIf="formInput === 'Checklist'"
+        ></span>
+        <span
+          class="fa-regular fa-square-check fa-lg grow-[1]"
+          *ngIf="formInput === 'Checkbox'"
+        ></span>
+        <span
+          class="fa-solid fa-calculator fa-lg grow-[1]"
+          *ngIf="formInput === 'Number'"
+        ></span>
+        <span
+          class="fa-solid fa-phone-flip fa-lg grow-[1]"
+          *ngIf="formInput === 'Phone Number'"
+        ></span>
+        <span
+          class="fa-solid fa-money-bill-wave fa-lg grow-[1]"
+          *ngIf="formInput === 'Currency'"
+        ></span>
+        <span
+          class="fa-solid fa-file fa-lg grow-[1]"
+          *ngIf="formInput === 'Child Document'"
+        ></span>
+        <span
+          class="fa-solid fa-wrench fa-lg grow-[1]"
+          *ngIf="formInput === 'Custom Field'"
+        ></span>
+      </div>
+    </div>
+  </section>
 </div>
