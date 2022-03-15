@@ -42,8 +42,8 @@
   <mat-form-field class="w-full" appearance="outline">
     <mat-label> Matching Value </mat-label>
     <mat-select
-      [disabled]="!questions.length"
-      formControlName="questionSelected"
+      [attr.disabled]="!questions.length"
+      formControlName="selectedMatchingValue"
     >
       <mat-option
         class="text-sm"
