@@ -12,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SelectedItemWidgetModel } from 'src/models';
 import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
+import { DescriptionWidgetModalComponent } from '../description-widget-modal/description-widget-modal.component';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -33,6 +34,7 @@ describe('AddWidgetModalComponent', () => {
         AddWidgetModalComponent,
         MockComponent(CustomTabWidgetModalComponent),
         MockComponent(ListWidgetModalComponent),
+        MockComponent(DescriptionWidgetModalComponent),
       ],
     }).compileComponents();
   });
