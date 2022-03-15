@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WidgetType } from 'src/models';
 
 /** Station widget-template. */
@@ -11,6 +11,9 @@ export class StationWidgetTemplateModalComponent {
   /** Type of widget to show. */
   @Input() widgetType: WidgetType.Station | WidgetType.StationTableBanner =
     WidgetType.Station;
+
+  /** Title preview widget selected emit. */
+  @Output() previewWidgetSelected = new EventEmitter<string>();
 
   /** Widget type for validation. */
   enumWidgetType = WidgetType;
@@ -28,4 +31,9 @@ export class StationWidgetTemplateModalComponent {
         'Build a custom table with specific values from each document in the station.',
     },
   };
+
+  /** Emit preview widget selected. */
+  emitPreviewWidgetSelected(): void {
+    this.previewWidgetSelected.emit(this.dataTemplate[this.widgetType].title);
+  }
 }

@@ -21,6 +21,7 @@
     <p class="font-semibold">Default</p>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <app-document-widget-template-modal
+        (previewWidgetSelected)="emitPreviewWidgetSelected($event)"
         widgetType="default"
       ></app-document-widget-template-modal>
     </div>
@@ -32,10 +33,12 @@
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <!-- Widget card type document-list -->
       <app-document-widget-template-modal
+        (previewWidgetSelected)="emitPreviewWidgetSelected($event)"
         [widgetType]="enumWidgetType.Document"
       ></app-document-widget-template-modal>
       <!-- Widget card type document-list-banner -->
       <app-document-widget-template-modal
+        (previewWidgetSelected)="emitPreviewWidgetSelected($event)"
         [widgetType]="enumWidgetType.DocumentListBanner"
       ></app-document-widget-template-modal>
     </div>
@@ -51,10 +54,12 @@
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <!-- Widget card type station -->
       <app-station-widget-template-modal
+        (previewWidgetSelected)="emitPreviewWidgetSelected($event)"
         [widgetType]="enumWidgetType.Station"
       ></app-station-widget-template-modal>
       <!-- Widget card type StationTableBanner -->
       <app-station-widget-template-modal
+        (previewWidgetSelected)="emitPreviewWidgetSelected($event)"
         [widgetType]="enumWidgetType.StationTableBanner"
       ></app-station-widget-template-modal>
     </div>

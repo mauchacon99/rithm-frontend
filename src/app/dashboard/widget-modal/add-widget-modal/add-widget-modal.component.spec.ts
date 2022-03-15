@@ -96,6 +96,24 @@ describe('AddWidgetModalComponent', () => {
     expect(component.identifyShowElement).toEqual('tabs');
   });
 
+  it('should return to app-list-widget-modal', () => {
+    component.identifyShowElement = 'document';
+    component.titlePreviewWidgetSelected = 'list';
+    fixture.detectChanges();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeTruthy();
+    btnReturnCustom.click();
+    expect(component.titlePreviewWidgetSelected).toEqual('');
+    expect(component.identifyShowElement).toEqual('document');
+  });
+
+  it('should set title preview widget selected', () => {
+    component.previewWidgetSelected('list');
+    expect(component.titlePreviewWidgetSelected).toEqual('list');
+  });
+
   it('should not show return button to custom lists', () => {
     component.identifyShowElement = 'tabs';
     fixture.detectChanges();

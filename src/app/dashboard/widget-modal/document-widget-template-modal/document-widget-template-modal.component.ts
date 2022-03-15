@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WidgetType } from 'src/models';
 
 /**
@@ -15,6 +15,9 @@ export class DocumentWidgetTemplateModalComponent {
     | WidgetType.Document
     | WidgetType.DocumentListBanner
     | 'default' = 'default';
+
+  /** Title preview widget selected emit. */
+  @Output() previewWidgetSelected = new EventEmitter<string>();
 
   /** Enum widgetType. */
   enumWidgetType = WidgetType;
@@ -35,4 +38,9 @@ export class DocumentWidgetTemplateModalComponent {
       description: 'Display all the values associated with a document.',
     },
   };
+
+  /** Emit preview widget selected. */
+  emitPreviewWidgetSelected(): void {
+    this.previewWidgetSelected.emit(this.dataTemplate[this.widgetType].title);
+  }
 }

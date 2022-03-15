@@ -21,4 +21,16 @@ describe('DocumentWidgetTemplateModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit previewWidgetSelected', () => {
+    const spyEmit = spyOn(
+      component.previewWidgetSelected,
+      'emit'
+    ).and.callThrough();
+    component.widgetType = 'default';
+    component.emitPreviewWidgetSelected();
+    expect(spyEmit).toHaveBeenCalledOnceWith(
+      component.dataTemplate['default'].title
+    );
+  });
 });
