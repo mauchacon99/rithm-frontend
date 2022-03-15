@@ -159,9 +159,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
-  /** The copy of station group which is being edited. */
-  private tempStationGroup: unknown = null;
-
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
    *
@@ -2159,18 +2156,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             if (groupIndex === -1) {
               throw new Error(`There is no station group with status pending.`);
             }
-            this.tempStationGroup = new StationGroupMapElement(
-              this.tempStationGroup as StationGroupMapElement
-            );
             if (
-              this.tempStationGroup instanceof StationGroupMapElement &&
+              this.mapService.tempStationGroup$.value instanceof
+                StationGroupMapElement &&
               this.stationGroups[groupIndex].rithmId ===
-                this.tempStationGroup.rithmId
+                this.mapService.tempStationGroup$.value.rithmId
             ) {
-              this.mapService.revertStationGroup(
-                this.tempStationGroup as StationGroupMapElement
-              );
-              this.tempStationGroup = {};
+              this.mapService.revertStationGroup();
             }
           }
           this.mapService.resetSelectedStationGroupStationStatus();
@@ -2536,7 +2528,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!stationGroup) {
       throw new Error(`There is no station group with status pending.`);
     }
-    this.tempStationGroup = { ...stationGroup } as StationGroupMapElement;
+    this.mapService.tempStationGroup$.next(
+      new StationGroupMapElement({ ...stationGroup }) as StationGroupMapElement
+    );
     stationGroup.status = MapItemStatus.Pending;
     stationGroup.selected = true;
     this.mapService.setStationGroupStationStatus();

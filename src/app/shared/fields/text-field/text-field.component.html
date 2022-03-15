@@ -100,7 +100,7 @@
         [required]="field.isRequired"
         [formControlName]="field.questionType"
         autocomplete="off"
-        (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        (change)="updateFieldPrompt()"
         [readonly]="widgetItem"
       />
       <input
@@ -126,7 +126,7 @@
           field.isRequired || field.questionType === fieldTypeEnum.Instructions
         "
         [formControlName]="field.questionType"
-        (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        (change)="updateFieldPrompt()"
       >
       </textarea>
     </div>
@@ -142,7 +142,7 @@
         [required]="field.isRequired"
         [formControlName]="field.questionType"
         autocomplete="off"
-        (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        (change)="updateFieldAnswer()"
         [readonly]="widgetItem"
       />
       <textarea
@@ -152,7 +152,7 @@
         spellcheck="true"
         [required]="field.isRequired"
         [formControlName]="field.questionType"
-        (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+        (change)="updateFieldAnswer()"
       >
       </textarea>
     </ng-template>

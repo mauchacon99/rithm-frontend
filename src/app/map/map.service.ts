@@ -149,6 +149,9 @@ export class MapService {
     data: {},
   });
 
+  /** The copy of station group which is being edited. */
+  tempStationGroup$ = new BehaviorSubject({});
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -1803,19 +1806,23 @@ export class MapService {
   /**
    * Revert the changes made across station group in edit mode.
    *
-   * @param tempGroup The station group which should be replaced with updated when cancel button clicked.
    */
-  revertStationGroup(tempGroup: StationGroupMapElement): void {
+  revertStationGroup(): void {
     if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      if (!(this.tempStationGroup$.value instanceof StationGroupMapElement)) {
+        throw new Error(`There is no temporary station group available.`);
+      }
+      const rithmId = this.tempStationGroup$.value.rithmId;
       const groupIndex = this.stationGroupElements.findIndex(
-        (group) => group.rithmId === tempGroup.rithmId
+        (group) => group.rithmId === rithmId
       );
       if (groupIndex === -1) {
         throw new Error(
           `There is no station group available to replace tempGroup.`
         );
       }
-      this.stationGroupElements[groupIndex] = tempGroup;
+      this.stationGroupElements[groupIndex] = this.tempStationGroup$.value;
+      this.tempStationGroup$.next({});
       this.mapDataReceived$.next(true);
     }
   }

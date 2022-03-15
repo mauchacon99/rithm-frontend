@@ -317,6 +317,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         next: async (document) => {
           if (document) {
             this.documentInformation = document;
+            /** Get the name for the flow button. */
+            this.getFlowButtonName();
           }
           // Get the allow the previous button for the document.
           this.allowPreviousButton = await lastValueFrom(
@@ -404,6 +406,10 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
+    // Reload widget for show new values in widget.
+    if (this.isWidget) {
+      this.widgetReloadListDocuments(false, true);
+    }
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
