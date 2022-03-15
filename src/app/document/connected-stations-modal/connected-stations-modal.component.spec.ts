@@ -84,6 +84,7 @@ describe('ConnectedStationsModalComponent', () => {
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
+        { provide: MatDialogRef, useValue: { close } },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: UserService, useClass: MockUserService },
@@ -299,5 +300,16 @@ describe('ConnectedStationsModalComponent', () => {
   it('should return name station to display', () => {
     const expectData = component.displayFn(station);
     expect(expectData).toEqual(station.name);
+  });
+
+  it('should close the rule modal when connected-modal-close clicked', () => {
+    const buttonClose = fixture.debugElement.nativeElement.querySelector(
+      '#connected-modal-close'
+    );
+    expect(buttonClose).toBeTruthy();
+    buttonClose.click();
+    expect(component.dialogRef.close).toHaveBeenCalled();
+    expect(buttonClose).toBeTruthy();
+    expect(component.dialogRef.close).toHaveBeenCalled();
   });
 });
