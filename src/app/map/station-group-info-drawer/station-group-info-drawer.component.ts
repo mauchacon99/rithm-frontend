@@ -3,7 +3,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from '../map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { FormBuilder } from '@angular/forms';
 import { MapMode, StationGroupInfoDrawerData } from 'src/models';
 
 /**
@@ -55,7 +54,6 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
-    private fb: FormBuilder,
     private popupService: PopupService
   ) {
     //Subscribe to the mapMode on the mapService.
@@ -125,6 +123,8 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     const index = this.mapService.stationGroupElements.findIndex(
       (stGroup) => stGroup.rithmId === this.stationGroupRithmId
     );
+    this.groupName =
+      this.groupName.length > 0 ? this.groupName : 'Untitled Group';
     this.mapService.stationGroupElements[index].title = this.groupName;
     this.mapService.stationGroupElements[index].isChained = this.isChained;
     this.mapService.stationGroupElements[index].markAsUpdated();
