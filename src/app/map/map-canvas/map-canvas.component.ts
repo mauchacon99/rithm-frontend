@@ -2213,62 +2213,60 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   checkStationGroupClick(contextPoint: Point, point: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
-      if (stationGroup.status !== MapItemStatus.Pending) {
-        stationGroup.checkElementHover(contextPoint, this.context);
+      stationGroup.checkElementHover(contextPoint, this.context);
 
-        //If MapMode is StationGroupAdd we select the group.
+      //If MapMode is StationGroupAdd we select the group.
+      if (
+        (this.mapMode === MapMode.StationGroupAdd ||
+          this.mapMode === MapMode.StationGroupEdit) &&
+        stationGroup.status !== MapItemStatus.Pending
+      ) {
+        //If the cursor is over the group boundary and the group is not disabled.
         if (
-          this.mapMode === MapMode.StationGroupAdd ||
-          this.mapMode === MapMode.StationGroupEdit
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          !stationGroup.disabled
         ) {
-          //If the cursor is over the group boundary and the group is not disabled.
-          if (
-            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-            !stationGroup.disabled
-          ) {
-            //Set status of station group to true or false depending upon current status also update status of
-            //other stations and station group as per the selection criteria.
-            stationGroup.selected = !stationGroup.selected;
-            if (stationGroup.selected) {
-              this.mapService.setStationGroupStationStatus();
-            }
-            // To make sure it's not disabled and should allow user to undo previous action.
-            stationGroup.disabled = false;
-            //Set current station group status and respective station's.
-            this.stationGroupSelectStatus(stationGroup);
-            //Set station group status of parent and child station group and respective stations.
-            this.mapService.setStationGroupStatus(stationGroup);
-            //Draw the boundary for the pending stationGroup.
-            this.mapService.updatePendingStationGroup();
-            this.animatePendingGroup();
-            break;
+          //Set status of station group to true or false depending upon current status also update status of
+          //other stations and station group as per the selection criteria.
+          stationGroup.selected = !stationGroup.selected;
+          if (stationGroup.selected) {
+            this.mapService.setStationGroupStationStatus();
           }
-        } else if (
-          this.mapMode === MapMode.View ||
-          this.mapMode === MapMode.Build
-        ) {
-          //If map mode is view or build, then should open station group info drawer.
-          if (
-            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-          ) {
-            //Set this variable to use the information from passed in station group.
-            const dataInformationDrawer: StationGroupInfoDrawerData = {
-              stationGroupRithmId: stationGroup.rithmId,
-              stationGroupName: stationGroup.title,
-              editMode: this.mapMode === MapMode.Build,
-              numberOfStations: stationGroup.stations.length,
-              numberOfSubgroups: stationGroup.subStationGroups.length,
-              stationGroupStatus: stationGroup.status,
-              isChained: stationGroup.isChained,
-            };
-            //Open station group info drawer when clicked on station group boundary or name.
-            this.sidenavDrawerService.openDrawer(
-              'stationGroupInfo',
-              dataInformationDrawer
-            );
-            this.mapService.isDrawerOpened$.next(true);
-            break;
-          }
+          // To make sure it's not disabled and should allow user to undo previous action.
+          stationGroup.disabled = false;
+          //Set current station group status and respective station's.
+          this.stationGroupSelectStatus(stationGroup);
+          //Set station group status of parent and child station group and respective stations.
+          this.mapService.setStationGroupStatus(stationGroup);
+          //Draw the boundary for the pending stationGroup.
+          this.mapService.updatePendingStationGroup();
+          this.animatePendingGroup();
+          break;
+        }
+      } else if (
+        this.mapMode === MapMode.View ||
+        this.mapMode === MapMode.Build ||
+        stationGroup.status === MapItemStatus.Pending
+      ) {
+        //If map mode is view or build, then should open station group info drawer.
+        if (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary) {
+          //Set this variable to use the information from passed in station group.
+          const dataInformationDrawer: StationGroupInfoDrawerData = {
+            stationGroupRithmId: stationGroup.rithmId,
+            stationGroupName: stationGroup.title,
+            editMode: this.mapMode === MapMode.Build,
+            numberOfStations: stationGroup.stations.length,
+            numberOfSubgroups: stationGroup.subStationGroups.length,
+            stationGroupStatus: stationGroup.status,
+            isChained: stationGroup.isChained,
+          };
+          //Open station group info drawer when clicked on station group boundary or name.
+          this.sidenavDrawerService.openDrawer(
+            'stationGroupInfo',
+            dataInformationDrawer
+          );
+          this.mapService.isDrawerOpened$.next(true);
+          break;
         }
       }
       if (
