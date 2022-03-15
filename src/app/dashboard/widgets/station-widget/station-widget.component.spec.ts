@@ -366,10 +366,12 @@ describe('StationWidgetComponent', () => {
     });
 
     it('should return of list the documents', () => {
-      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      const spyMethodViewDocument = spyOn(component, 'viewDocument').and.callThrough();
+      const spyMethodToggleExpandWidget = spyOn(component, 'toggleExpandWidget').and.callThrough();
       component.failedLoadWidget = false;
       component.isDocument = true;
       component.isLoading = false;
+      component.isExpandWidget = true;
       fixture.detectChanges();
       const btnReturnDocuments =
         fixture.debugElement.nativeElement.querySelector(
@@ -388,7 +390,8 @@ describe('StationWidgetComponent', () => {
       expect(documentDetail).toBeNull();
       expect(showDocs).toBeTruthy();
       expect(component.documentIdSelected).toBe('');
-      expect(spyMethod).toHaveBeenCalledOnceWith('');
+      expect(spyMethodViewDocument).toHaveBeenCalledOnceWith('');
+      expect(spyMethodToggleExpandWidget).toHaveBeenCalled();
     });
   });
 
