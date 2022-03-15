@@ -366,8 +366,14 @@ describe('StationWidgetComponent', () => {
     });
 
     it('should return of list the documents', () => {
-      const spyMethodViewDocument = spyOn(component, 'viewDocument').and.callThrough();
-      const spyMethodToggleExpandWidget = spyOn(component, 'toggleExpandWidget').and.callThrough();
+      const spyMethodViewDocument = spyOn(
+        component,
+        'viewDocument'
+      ).and.callThrough();
+      const spyMethodToggleExpandWidget = spyOn(
+        component,
+        'toggleExpandWidget'
+      ).and.callThrough();
       component.failedLoadWidget = false;
       component.isDocument = true;
       component.isLoading = false;
