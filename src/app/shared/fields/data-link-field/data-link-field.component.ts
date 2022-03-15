@@ -51,7 +51,7 @@ export class DataLinkFieldComponent
   /**Filtered form station List. */
   filteredStations$: Observable<Station[]> | undefined;
 
-  /** The list of selected station questions. */
+  /** The list of selected station questions for the select matching value.*/
   questions: Question[] = [];
 
   /* Loading in input auto-complete the list of all stations. */
@@ -100,7 +100,7 @@ export class DataLinkFieldComponent
   }
 
   /**
-   * Get station questions.
+   * Get station questions for select matching value.
    *
    * @param nameStation The name station selected.
    */
