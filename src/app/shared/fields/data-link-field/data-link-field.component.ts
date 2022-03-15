@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -8,7 +8,7 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { first, map, Observable, startWith } from 'rxjs';
+import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { Question, Station } from 'src/models';
@@ -34,7 +34,7 @@ import { Question, Station } from 'src/models';
   ],
 })
 export class DataLinkFieldComponent
-  implements OnInit, ControlValueAccessor, Validator
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   /** The form to add this field in the template. */
   dataLinkFieldForm!: FormGroup;
@@ -57,11 +57,28 @@ export class DataLinkFieldComponent
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
+  /** Current station's fields as options for the select base value. */
+  currentStationQuestions: Question[] = [];
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService
   ) {}
+
+  /**
+   * Listen the currentStationQuestions Service.
+   */
+  private subscribeCurrentStationQuestions(): void {
+    this.stationService.currentStationQuestions$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        this.currentStationQuestions = questions;
+      });
+  }
 
   /**
    * Set up FormBuilder group.
@@ -70,7 +87,9 @@ export class DataLinkFieldComponent
     this.dataLinkFieldForm = this.fb.group({
       [this.field.questionType]: [this.fieldValue, []],
       selectedMatchingValue: ['', []],
+      selectBaseValue: ['', []],
     });
+    this.subscribeCurrentStationQuestions();
     this.getAllStations();
   }
 
@@ -217,5 +236,13 @@ export class DataLinkFieldComponent
       startWith(''),
       map((value) => this._filter(value))
     );
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
