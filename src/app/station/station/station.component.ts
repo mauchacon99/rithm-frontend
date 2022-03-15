@@ -476,9 +476,9 @@ export class StationComponent
       newQuestion.possibleAnswers = [];
     }
     if (fieldType === QuestionFieldType.DataLink) {
-      /** Only questions that come with the rithmId of getStationInfo. */
+      /* All questions except the same question. */
       const questionsEnabled = this.stationInformation.questions.filter(
-        (question) => question.rithmId.length > 14
+        (question) => question.rithmId !== newQuestion.rithmId
       );
       this.stationService.setStationQuestionsInDataLink(questionsEnabled);
     }
