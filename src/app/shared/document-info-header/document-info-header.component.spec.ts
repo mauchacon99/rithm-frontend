@@ -382,4 +382,68 @@ describe('DocumentInfoHeaderComponent', () => {
     component['getAssignedUserToDocument']();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should return true if user is admin', () => {
+    spyOnProperty(TestBed.inject(UserService), 'isAdmin').and.returnValue(true);
+    const expectValue = component.isAdminOrWorkerOrOwner();
+    expect(expectValue).toBeTrue();
+  });
+
+  it('should return true if user is not admin and id not assigned in array stationOwners but yes in workers', () => {
+    component.documentInformation.stationOwners = [];
+    component.documentInformation.workers = [
+      {
+        rithmId: '123',
+        firstName: 'Dev',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+      },
+    ];
+    spyOnProperty(TestBed.inject(UserService), 'isAdmin').and.returnValue(
+      false
+    );
+    const expectValue = component.isAdminOrWorkerOrOwner();
+    expect(expectValue).toBeTrue();
+  });
+
+  it('should return true if user is not admin and id not assigned in array stationOwners and empty array workers', () => {
+    component.documentInformation.stationOwners = [];
+    component.documentInformation.workers = [];
+    spyOnProperty(TestBed.inject(UserService), 'isAdmin').and.returnValue(
+      false
+    );
+    const expectValue = component.isAdminOrWorkerOrOwner();
+    expect(expectValue).toBeFalse();
+  });
+
+  fit('should button disable if user not admin and not worker and not owner', () => {
+    component.isWidget = true;
+    component.documentInformation.stationOwners = [];
+    component.documentInformation.workers = [];
+    spyOnProperty(TestBed.inject(UserService), 'isAdmin').and.returnValue(
+      false
+    );
+    const expectValue = component.isAdminOrWorkerOrOwner();
+    expect(expectValue).toBeFalse();
+    spyOnProperty(component, 'currentAssignedUserDocument').and.returnValue({
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    });
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#start-document-button'
+    );
+
+    expect(button).toBeTruthy();
+    console.log('PASO',button.disabled);
+
+    expect(button.disabled).toBeFalse();
+    const spyMethodValidator = spyOn(component, 'isAdminOrWorkerOrOwner');
+    button.click();
+    expect(spyMethodValidator).toHaveBeenCalledOnceWith();
+  });
 });

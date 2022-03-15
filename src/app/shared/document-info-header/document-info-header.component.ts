@@ -202,10 +202,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @returns If is admin or worker or owner in document.
    */
   isAdminOrWorkerOrOwner(): boolean {
-    this.documentInformation.stationOwners=[];
-    this.documentInformation.workers=[];
-    console.log(this.userService.isAdmin);
-
     return this.userService.isAdmin
       ? true
       : this.documentInformation.stationOwners?.find(
