@@ -16,10 +16,12 @@
   }
 
   .loading {
-    @apply flex items-center justify-center min-h-[250px];
+    @apply flex items-center justify-center;
 
-    @media only screen and (max-width: 600px) {
-      @apply min-h-[45vh];
+    @media only screen and (max-width: 640px) {
+      min-height:45vh !important;
+    }
+    @media only screen and (min-width: 641px) {
+      min-height:250px !important;
     }
   }
-}
