@@ -46,6 +46,7 @@ import { BannerImageWidgetComponent } from './widgets/banner-image-widget/banner
 import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-widget-modal.component';
 import { StationWidgetTemplateModalComponent } from './widget-modal/station-widget-template-modal/station-widget-template-modal.component';
 import { DocumentWidgetTemplateModalComponent } from './widget-modal/document-widget-template-modal/document-widget-template-modal.component';
+import { DescriptionWidgetModalComponent } from './widget-modal/description-widget-modal/description-widget-modal.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { DocumentWidgetTemplateModalComponent } from './widget-modal/document-wi
     ListWidgetModalComponent,
     StationWidgetTemplateModalComponent,
     DocumentWidgetTemplateModalComponent,
+    DescriptionWidgetModalComponent,
   ],
   imports: [
     CommonModule,
