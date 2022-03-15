@@ -476,11 +476,9 @@ export class StationComponent
       newQuestion.possibleAnswers = [];
     }
     if (fieldType === QuestionFieldType.DataLink) {
-      /* All questions except the same question. */
-      const questionsEnabled = this.stationInformation.questions.filter(
-        (question) => question.rithmId !== newQuestion.rithmId
+      this.stationService.setStationQuestionsInDataLink(
+        this.stationInformation.questions
       );
-      this.stationService.setStationQuestionsInDataLink(questionsEnabled);
     }
     this.stationInformation.questions.push(newQuestion);
     this.stationService.touchStationForm();

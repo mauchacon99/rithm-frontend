@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -8,7 +8,7 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { first, map, Observable, startWith } from 'rxjs';
+import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { Question, Station } from 'src/models';
@@ -34,7 +34,7 @@ import { Question, Station } from 'src/models';
   ],
 })
 export class DataLinkFieldComponent
-  implements OnInit, ControlValueAccessor, Validator
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   /** The form to add this field in the template. */
   dataLinkFieldForm!: FormGroup;
@@ -57,6 +57,9 @@ export class DataLinkFieldComponent
   /** Current station's fields as options for the select base value. */
   currentfields: Question[] = [];
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -68,7 +71,7 @@ export class DataLinkFieldComponent
    */
   private subscribeCurrentQuestions(): void {
     this.stationService.currentQuestions$
-      .pipe(first())
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((questions) => {
         if (questions.length) {
           this.currentfields = questions;
@@ -203,5 +206,13 @@ export class DataLinkFieldComponent
       startWith(''),
       map((value) => this._filter(value))
     );
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -40,9 +40,11 @@
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
     <mat-label> Base Value</mat-label>
     <mat-select formControlName="selectBaseValue">
-      <mat-option *ngFor="let item of currentfields" [value]="item.rithmId">
-        {{ item.prompt }}</mat-option
-      >
+      <ng-container *ngFor="let item of currentfields">
+        <mat-option *ngIf="item.prompt" [value]="item.rithmId">
+          {{ item.prompt }}
+        </mat-option>
+      </ng-container>
     </mat-select>
   </mat-form-field>
 </div>
