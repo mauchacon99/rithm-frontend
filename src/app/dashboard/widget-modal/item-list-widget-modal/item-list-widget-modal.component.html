@@ -3,89 +3,85 @@
   <p class="pt-5 text-center">There are not {{ itemType }}s to show.</p>
 </div>
 <ng-template #tableWidgetModal>
-  <div class="sm:pt-5 overflow-scroll scrollbar">
-    <table
-      mat-table
-      [dataSource]="itemListWidgetModal"
-      class="w-full table-container"
-    >
-      <ng-container [matColumnDef]="'mainInformation'">
-        <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-          <span class="text-base font-semibold text-accent-600">{{
-            element.name || 'Untitled Document'
-          }}</span
-          ><br />
-          <span
-            class="text-xs text-secondary-500"
-            *ngIf="itemType === 'document'"
-            >{{ 'Current Station: ' + element.stationName }}</span
-          >
-          <span
-            class="text-xs text-secondary-500"
-            *ngIf="itemType === 'station'"
-            >{{ element.totalDocuments + ' Documents' }}</span
-          >
-          <span
-            class="text-xs text-secondary-500"
-            *ngIf="itemType === 'group'"
-            >{{ element.totalStations + ' Stations' }}</span
-          >
-        </td>
-      </ng-container>
+  <table
+    mat-table
+    [dataSource]="itemListWidgetModal"
+    class="w-full table-container"
+  >
+    <ng-container [matColumnDef]="'mainInformation'">
+      <td mat-cell class="min-w-[150px]" *matCellDef="let element">
+        <span class="text-base font-semibold text-accent-600">{{
+          element.name || 'Untitled Document'
+        }}</span
+        ><br />
+        <span
+          class="text-xs text-secondary-500"
+          *ngIf="itemType === 'document'"
+          >{{ 'Current Station: ' + element.stationName }}</span
+        >
+        <span
+          class="text-xs text-secondary-500"
+          *ngIf="itemType === 'station'"
+          >{{ element.totalDocuments + ' Documents' }}</span
+        >
+        <span class="text-xs text-secondary-500" *ngIf="itemType === 'group'">{{
+          element.totalStations + ' Stations'
+        }}</span>
+      </td>
+    </ng-container>
 
-      <ng-container [matColumnDef]="'generalInformation'">
-        <td mat-cell class="min-w-[150px]" *matCellDef="let element">
-          <div *ngIf="itemType !== 'group'">
-            <span class="text-base font-semibold">
-              {{
-                (itemType === 'document'
-                  ? element.stationGroupName
-                  : element.groupName) || "Doesn't have a group"
-              }}
-            </span>
-            <br />
-          </div>
-
-          <span
-            [ngClass]="{
-              'text-xs text-secondary-500': itemType !== 'group',
-              'text-base font-semibold': itemType === 'group'
-            }"
-          >
-            Group Type:
-            {{ element.isChained ? 'Chained' : 'Not Chained' }}
+    <ng-container [matColumnDef]="'generalInformation'">
+      <td mat-cell class="min-w-[150px]" *matCellDef="let element">
+        <div *ngIf="itemType !== 'group'">
+          <span class="text-base font-semibold">
+            {{
+              (itemType === 'document'
+                ? element.stationGroupName
+                : element.groupName) || "Doesn't have a group"
+            }}
           </span>
           <br />
+        </div>
 
-          <span class="text-xs text-secondary-500" *ngIf="itemType === 'group'">
-            {{ element.totalSubGroups }} Sub groups
-          </span>
-        </td>
-      </ng-container>
+        <span
+          [ngClass]="{
+            'text-xs text-secondary-500': itemType !== 'group',
+            'text-base font-semibold': itemType === 'group'
+          }"
+        >
+          Group Type:
+          {{ element.isChained ? 'Chained' : 'Not Chained' }}
+        </span>
+        <br />
 
-      <ng-container [matColumnDef]="'action'" stickyEnd class="custom-action">
-        <td mat-cell class="pr-0 min-w-[50px]" *matCellDef="let element">
-          <span class="text-xs text-secondary-500">
-            <div class="text-right">
-              <button
-                mat-icon-button
-                class="text-secondary-500"
-                data-testid="show-document-widget-tab"
-                id="show-document-widget"
-                (click)="selectTypeElement(element)"
-              >
-                <i class="fas text-lg fa-angle-right"></i>
-              </button>
-            </div>
-          </span>
-        </td>
-      </ng-container>
+        <span class="text-xs text-secondary-500" *ngIf="itemType === 'group'">
+          {{ element.totalSubGroups }} Sub groups
+        </span>
+      </td>
+    </ng-container>
 
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumnsTableDocument"
-        class="hover:bg-secondary-50"
-      ></tr>
-    </table>
-  </div>
+    <ng-container [matColumnDef]="'action'" stickyEnd class="custom-action">
+      <td mat-cell class="pr-0 min-w-[50px]" *matCellDef="let element">
+        <span class="text-xs text-secondary-500">
+          <div class="text-right">
+            <button
+              mat-icon-button
+              class="text-secondary-500"
+              data-testid="show-document-widget-tab"
+              id="show-document-widget"
+              (click)="selectTypeElement(element)"
+            >
+              <i class="fas text-lg fa-angle-right"></i>
+            </button>
+          </div>
+        </span>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumnsTableDocument"
+      class="hover:bg-secondary-50"
+    ></tr>
+  </table>
 </ng-template>

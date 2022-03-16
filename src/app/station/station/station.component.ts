@@ -434,6 +434,10 @@ export class StationComponent
             );
             this.inputFrameWidgetItems[0].questions =
               this.stationInformation.questions;
+            /** Update the current station questions whenever it changes. */
+            this.stationService.updateCurrentStationQuestions(
+              this.stationInformation.questions
+            );
           }
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;

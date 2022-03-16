@@ -41,11 +41,6 @@
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
                 (keyup)="updateStationInfoDrawerName()"
-                (ngModelChange)="
-                  mapMode === mapModeEnum.Build
-                    ? reportNewStationMapChange()
-                    : null
-                "
               />
             </mat-form-field>
           </ng-template>
