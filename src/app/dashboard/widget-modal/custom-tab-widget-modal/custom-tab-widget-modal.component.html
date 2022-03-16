@@ -27,11 +27,11 @@
 <div class="tabs-group">
   <mat-button-toggle-group
     #colorToggle="matButtonToggleGroup"
-    value="primary"
+    value="{{ indexTab }}"
     class="button-group"
   >
     <mat-button-toggle
-      value="primary"
+      value="0"
       (click)="selectedTab(0)"
       data-testid="tab-button-document"
       id="tab-button-document"
@@ -39,7 +39,7 @@
       Documents
     </mat-button-toggle>
     <mat-button-toggle
-      value="accent"
+      value="1"
       (click)="selectedTab(1)"
       data-testid="tab-button-station"
       id="tab-button-station"
@@ -47,7 +47,7 @@
       Stations
     </mat-button-toggle>
     <mat-button-toggle
-      value="accent"
+      value="2"
       (click)="selectedTab(2)"
       data-testid="tab-button-flow"
       id="tab-button-flow"
