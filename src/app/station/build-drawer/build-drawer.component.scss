@@ -1,3 +1,12 @@
 .build-categories .mat-list-single-selected-option {
   @apply bg-accent-100;
 }
+.previous-field {
+  .mat-expansion-panel {
+    display: inline;
+  }
+
+  .mat-expansion-panel-header {
+    padding: 0px 0px;
+  }
+}

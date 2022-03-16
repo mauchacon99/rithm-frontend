@@ -23,5 +23,27 @@
       </mat-list-option>
     </mat-selection-list>
   </section>
-  <section class="px-4 pt-6 w-72 overflow-y-auto categories-content"></section>
+  <section class="px-4 pt-6 w-72 overflow-y-auto categories-content">
+    <div
+      class="previous-field"
+      *ngIf="
+        buildCategory.selectedOptions.selected[0]?.value === 'Previous Fields'
+      "
+    >
+      <mat-accordion multi>
+        <mat-expansion-panel togglePosition="before" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-sm"> All </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- Options here -->
+        </mat-expansion-panel>
+        <mat-expansion-panel togglePosition="before" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-sm"> Private </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- Options here -->
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </section>
 </div>
