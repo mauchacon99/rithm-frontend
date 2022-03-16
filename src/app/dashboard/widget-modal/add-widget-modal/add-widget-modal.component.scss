@@ -13,7 +13,13 @@
     }
   }
 
+  ::ng-deep .mat-tab-body-wrapper {
+    height: 100% !important;
+  }
+
   ::ng-deep mat-ink-bar.mat-ink-bar {
     background-color: #1e4994 !important;
   }
+
+  height: calc(100% - 40px) !important;
 }

@@ -1,4 +1,16 @@
 <div class="flex flex-col h-full">
+  <section class="flex flex-row justify-between items-center drawerHeader">
+    <p class="font-semibold text-base p-3 text-primary-900">Station Builder</p>
+    <button
+      type="button"
+      id="button-close-drawer"
+      data-testid="button-close-drawer"
+      (click)="handleCloseDrawer()"
+      class="px-2 mr-2 rounded-full h-8 w-8 hover:bg-secondary-50"
+    >
+      <span class="fa-solid fa-xmark fa-lg text-secondary-500"></span>
+    </button>
+  </section>
   <section class="px-4 border-b-2 border-secondary-300 build-categories">
     <mat-selection-list class="md:mb-8" [multiple]="false" #buildCategory>
       <mat-list-option
