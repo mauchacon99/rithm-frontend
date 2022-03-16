@@ -51,11 +51,15 @@
 <!-- Display detail of the item selected in multiple tabs -->
 <div *ngIf="identifyShowElement !== 'tabs'">
   <app-list-widget-modal
+    *ngIf="!previewWidgetTypeSelected"
     [itemWidgetModalSelected]="itemWidgetModalSelected"
+    (previewWidgetSelected)="previewWidgetTypeSelected = $event"
   ></app-list-widget-modal>
 
   <app-description-widget-modal
+    *ngIf="previewWidgetTypeSelected"
     [itemWidgetModalSelected]="itemWidgetModalSelected"
+    [widgetType]="previewWidgetTypeSelected"
   >
   </app-description-widget-modal>
 </div>
