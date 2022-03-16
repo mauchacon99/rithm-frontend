@@ -74,4 +74,13 @@ export class MockSplitService {
   public getStationUploadBannerTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section Admin Portal.
+   *
+   * @returns Split treatment.
+   */
+  public getAdminPortalTreatment(): string {
+    return 'on';
+  }
 }

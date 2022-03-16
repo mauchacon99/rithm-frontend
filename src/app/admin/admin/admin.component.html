@@ -1,3 +1,10 @@
 <div class="page textured-bg pb-0">
-  <app-organization-management></app-organization-management>
+  <app-organization-management
+    *ngIf="showAdminPortal; else permissionDenied"
+  ></app-organization-management>
+  <ng-template #permissionDenied id="admin-permission-denied">
+    <div class="text-center py-28">
+      <h3>Permission denied.</h3>
+    </div></ng-template
+  >
 </div>
