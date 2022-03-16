@@ -9,7 +9,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
 
-fdescribe('BuildDrawerComponent', () => {
+describe('BuildDrawerComponent', () => {
   let component: BuildDrawerComponent;
   let fixture: ComponentFixture<BuildDrawerComponent>;
   let categoriesList: DebugElement;

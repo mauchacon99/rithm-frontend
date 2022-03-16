@@ -17,9 +17,6 @@ import { CustomField, QuestionFieldType } from 'src/models';
   styleUrls: ['./build-drawer.component.scss'],
 })
 export class BuildDrawerComponent implements OnInit {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(private changeDetector: ChangeDetectorRef) {}
-
   /**
    * Init Component to detect changes.
    */
@@ -144,6 +141,9 @@ export class BuildDrawerComponent implements OnInit {
       dataTestId: 'add-custom-field',
     },
   ];
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   /**
    * Functions to control changes on selection list.
