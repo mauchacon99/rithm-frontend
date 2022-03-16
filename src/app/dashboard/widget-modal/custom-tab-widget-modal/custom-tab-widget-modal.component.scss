@@ -15,7 +15,19 @@
     }
   }
 
-  .loading {
-    @apply flex items-center justify-center min-h-[250px];
+  height: calc(100% - 170px) !important;
+
+  .mat-tab-group {
+    @media only screen and (max-width: 830px) {
+      height: calc(100% - 45px) !important;
+    }
+
+    @media only screen and (min-width: 831px) {
+      height: calc(100% - 20px) !important;
+    }
   }
+}
+
+.loading {
+  @apply flex items-center justify-center h-full;
 }
