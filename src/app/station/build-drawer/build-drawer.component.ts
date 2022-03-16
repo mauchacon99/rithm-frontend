@@ -18,29 +18,23 @@ import { CustomField, QuestionFieldType } from 'src/models';
 })
 export class BuildDrawerComponent implements OnInit {
   /**
-   * Init Component to detect changes.
-   */
-  ngOnInit(): void {
-    this.changeDetector.detectChanges();
-  }
-
-  /**
    * Event Emitter that executes toggle logic from station component.
    */
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
-
-  buildCategories: string[] = [
-    'Form Inputs',
-    'Previous Fields',
-    'Components',
-    'Integrations',
-  ];
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
   /** The current category selected. */
   categorySelected = 'Form Inputs';
+
+  /** List of categories to selection.  */
+  buildCategories: string[] = [
+    'Form Inputs',
+    'Previous Fields',
+    'Components',
+    'Integrations',
+  ];
 
   /** Custom fields to form input category data. */
   customFields: CustomField[] = [
@@ -143,6 +137,13 @@ export class BuildDrawerComponent implements OnInit {
   ];
 
   constructor(private changeDetector: ChangeDetectorRef) {}
+
+  /**
+   * Init Component to detect changes.
+   */
+  ngOnInit(): void {
+    this.changeDetector.detectChanges();
+  }
 
   /**
    * Functions to control changes on selection list.
