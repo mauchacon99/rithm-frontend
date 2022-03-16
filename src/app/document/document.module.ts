@@ -28,6 +28,7 @@ import { DocumentInfoHeaderModule } from 'src/app/shared/document-info-header/do
 import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fields.module';
 import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
 import { DocumentComponent } from './document/document.component';
+import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.module';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { DocumentComponent } from './document/document.component';
     MatButtonModule,
     MatAutocompleteModule,
     MatInputModule,
+    FileFieldModule,
   ],
   exports: [DocumentComponent],
 })

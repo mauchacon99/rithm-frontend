@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   HostListener,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -142,7 +144,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private popupService: PopupService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private elementRef: ElementRef,
+    private renderer: Renderer2
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -307,6 +311,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
       this.editMode = true;
+      for (const gridsterItem of this.elementRef.nativeElement.querySelectorAll(
+        'gridster-item'
+      )) {
+        this.renderer.removeClass(
+          gridsterItem,
+          'gridster-item-mobile-expanded'
+        );
+      }
       this.configEditMode();
     }
   }
@@ -508,14 +520,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param isExpandWidget Boolean if is expand widget.
    */
   toggleExpandWidget(widgetIndex: number, isExpandWidget: boolean): void {
+    const gridsterItem = this.elementRef.nativeElement.querySelector(
+      '#gridster-item-' + widgetIndex
+    );
     if (isExpandWidget) {
       this.dashboardData.widgets[widgetIndex].rows++;
       this.dashboardData.widgets[widgetIndex].layerIndex = 2;
+      this.renderer.addClass(gridsterItem, 'gridster-item-mobile-expanded');
     } else {
       this.dashboardData.widgets[widgetIndex].layerIndex = 1;
       this.dashboardData.widgets[widgetIndex] = JSON.parse(
         JSON.stringify(this.dashboardDataCopy)
       ).widgets[widgetIndex];
+      this.renderer.removeClass(gridsterItem, 'gridster-item-mobile-expanded');
     }
     this.changedOptions();
   }
