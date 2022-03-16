@@ -13,6 +13,7 @@ import { Question, QuestionFieldType } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DataLinkFieldComponent } from './data-link-field.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
 
 describe('DataLinkFieldComponent', () => {
   let component: DataLinkFieldComponent;
@@ -50,6 +51,7 @@ describe('DataLinkFieldComponent', () => {
         NoopAnimationsModule,
         MatAutocompleteModule,
         MatDividerModule,
+        MatSelectModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
