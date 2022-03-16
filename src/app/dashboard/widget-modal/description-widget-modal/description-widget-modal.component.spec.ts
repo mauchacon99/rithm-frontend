@@ -46,4 +46,13 @@ describe('DescriptionWidgetModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set data template', () => {
+    const expectedDataTemplate =
+      TestBed.inject(DashboardService).dataTemplatePreviewWidgetModal;
+    expect(component.dataTemplate).toEqual(expectedDataTemplate);
+    expect(component.dataTemplate[component.widgetType]).toEqual(
+      expectedDataTemplate[widgetType]
+    );
+  });
 });

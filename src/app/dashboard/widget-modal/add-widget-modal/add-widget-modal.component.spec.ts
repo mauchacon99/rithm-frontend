@@ -99,6 +99,15 @@ describe('AddWidgetModalComponent', () => {
     expect(component.identifyShowElement).toEqual('tabs');
   });
 
+  it('should not show return button to custom lists', () => {
+    component.identifyShowElement = 'tabs';
+    fixture.detectChanges();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeNull();
+  });
+
   it('should return to app-list-widget-modal', () => {
     component.identifyShowElement = 'document';
     component.previewWidgetTypeSelected = 'defaultDocument';
@@ -110,14 +119,5 @@ describe('AddWidgetModalComponent', () => {
     btnReturnCustom.click();
     expect(component.previewWidgetTypeSelected).toBeNull();
     expect(component.identifyShowElement).toEqual('document');
-  });
-
-  it('should not show return button to custom lists', () => {
-    component.identifyShowElement = 'tabs';
-    fixture.detectChanges();
-    const btnReturnCustom = fixture.nativeElement.querySelector(
-      '#return-custom-lists'
-    );
-    expect(btnReturnCustom).toBeNull();
   });
 });

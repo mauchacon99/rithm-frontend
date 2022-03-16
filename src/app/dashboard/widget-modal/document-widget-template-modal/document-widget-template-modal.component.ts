@@ -24,6 +24,6 @@ export class DocumentWidgetTemplateModalComponent {
   dataTemplate;
 
   constructor(private dashboardService: DashboardService) {
-    this.dataTemplate = this.dashboardService.dataTemplatePreviewWidgetModal;
+    this.dataTemplate = dashboardService.dataTemplatePreviewWidgetModal;
   }
 }

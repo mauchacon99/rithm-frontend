@@ -72,6 +72,7 @@ export class MockDashboardService {
       description:
         'Build a custom table with specific values from each document in the station.',
     },
+    // groups data
     [WidgetType.StationGroup]: {
       title: '',
       description: '',
