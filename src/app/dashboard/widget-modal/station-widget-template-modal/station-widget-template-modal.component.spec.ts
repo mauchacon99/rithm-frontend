@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StationWidgetTemplateModalComponent } from './station-widget-template-modal.component';
-import { WidgetType } from 'src/models';
+import { MockDashboardService } from 'src/mocks';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 describe('StationWidgetTemplateModalComponent', () => {
   let component: StationWidgetTemplateModalComponent;
@@ -10,6 +11,9 @@ describe('StationWidgetTemplateModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationWidgetTemplateModalComponent],
+      providers: [
+        { provide: DashboardService, useClass: MockDashboardService },
+      ],
     }).compileComponents();
   });
 
@@ -21,17 +25,5 @@ describe('StationWidgetTemplateModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should emit previewWidgetSelected', () => {
-    const spyEmit = spyOn(
-      component.previewWidgetSelected,
-      'emit'
-    ).and.callThrough();
-    component.widgetType = WidgetType.Station;
-    component.emitPreviewWidgetSelected();
-    expect(spyEmit).toHaveBeenCalledOnceWith(
-      component.dataTemplate[WidgetType.Station].title
-    );
   });
 });

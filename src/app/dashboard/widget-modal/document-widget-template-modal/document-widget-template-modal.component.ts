@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { WidgetType } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /**
  * The component for templates widgets of the document.
@@ -14,33 +15,15 @@ export class DocumentWidgetTemplateModalComponent {
   @Input() widgetType:
     | WidgetType.Document
     | WidgetType.DocumentListBanner
-    | 'default' = 'default';
-
-  /** Title preview widget selected emit. */
-  @Output() previewWidgetSelected = new EventEmitter<string>();
+    | 'defaultDocument' = 'defaultDocument';
 
   /** Enum widgetType. */
   enumWidgetType = WidgetType;
 
   /** Data static for each template by widgetType. */
-  dataTemplate = {
-    ['default']: {
-      title: 'Default',
-      description: 'Maintain the default document styling.',
-    },
-    [this.enumWidgetType.DocumentListBanner]: {
-      title: 'List with Banner Image',
-      description:
-        'Display all the values associated with a document along with a custom banner image.',
-    },
-    [this.enumWidgetType.Document]: {
-      title: 'List',
-      description: 'Display all the values associated with a document.',
-    },
-  };
+  dataTemplate;
 
-  /** Emit preview widget selected. */
-  emitPreviewWidgetSelected(): void {
-    this.previewWidgetSelected.emit(this.dataTemplate[this.widgetType].title);
+  constructor(private dashboardService: DashboardService) {
+    this.dataTemplate = this.dashboardService.dataTemplatePreviewWidgetModal;
   }
 }

@@ -13,6 +13,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SelectedItemWidgetModel } from 'src/models';
 import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
 import { DescriptionWidgetModalComponent } from '../description-widget-modal/description-widget-modal.component';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MockDashboardService } from 'src/mocks';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -27,6 +29,7 @@ describe('AddWidgetModalComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         { provide: MatDialogRef, useValue: { close } },
+        { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
       ],
       imports: [MatTabsModule, NoopAnimationsModule, MatDialogModule],
@@ -98,20 +101,15 @@ describe('AddWidgetModalComponent', () => {
 
   it('should return to app-list-widget-modal', () => {
     component.identifyShowElement = 'document';
-    component.titlePreviewWidgetSelected = 'list';
+    component.previewWidgetTypeSelected = 'defaultDocument';
     fixture.detectChanges();
     const btnReturnCustom = fixture.nativeElement.querySelector(
       '#return-custom-lists'
     );
     expect(btnReturnCustom).toBeTruthy();
     btnReturnCustom.click();
-    expect(component.titlePreviewWidgetSelected).toEqual('');
+    expect(component.previewWidgetTypeSelected).toBeNull();
     expect(component.identifyShowElement).toEqual('document');
-  });
-
-  it('should set title preview widget selected', () => {
-    component.previewWidgetSelected('list');
-    expect(component.titlePreviewWidgetSelected).toEqual('list');
   });
 
   it('should not show return button to custom lists', () => {

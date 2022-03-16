@@ -14,7 +14,9 @@ export class ListWidgetModalComponent {
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
 
   /** Title preview widget selected emit. */
-  @Output() previewWidgetSelected = new EventEmitter<string>();
+  @Output() previewWidgetSelected = new EventEmitter<
+    WidgetType | 'defaultDocument'
+  >();
 
   /** Enum widget types. */
   enumWidgetType = WidgetType;
@@ -22,9 +24,9 @@ export class ListWidgetModalComponent {
   /**
    * Emit preview widget selected.
    *
-   * @param titlePreviewWidgetSelected String title preview widget selected.
+   * @param widgetType Widget type selected.
    */
-  emitPreviewWidgetSelected(titlePreviewWidgetSelected: string): void {
-    this.previewWidgetSelected.emit(titlePreviewWidgetSelected);
+  emitPreviewWidgetSelected(widgetType: WidgetType | 'defaultDocument'): void {
+    this.previewWidgetSelected.emit(widgetType);
   }
 }

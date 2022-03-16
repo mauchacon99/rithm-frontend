@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DescriptionWidgetModalComponent } from './description-widget-modal.component';
-import { SelectedItemWidgetModel } from '../../../../models';
+import { SelectedItemWidgetModel } from 'src/models';
+import { MockDashboardService } from 'src/mocks';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
@@ -22,9 +24,14 @@ describe('DescriptionWidgetModalComponent', () => {
     },
   };
 
+  const widgetType = 'defaultDocument';
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DescriptionWidgetModalComponent],
+      providers: [
+        { provide: DashboardService, useClass: MockDashboardService },
+      ],
     }).compileComponents();
   });
 
@@ -32,6 +39,7 @@ describe('DescriptionWidgetModalComponent', () => {
     fixture = TestBed.createComponent(DescriptionWidgetModalComponent);
     component = fixture.componentInstance;
     component.itemWidgetModalSelected = itemWidgetModalSelected;
+    component.widgetType = widgetType;
     fixture.detectChanges();
   });
 

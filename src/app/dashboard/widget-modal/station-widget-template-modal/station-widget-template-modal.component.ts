@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { WidgetType } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /** Station widget-template. */
 @Component({
@@ -12,28 +13,13 @@ export class StationWidgetTemplateModalComponent {
   @Input() widgetType: WidgetType.Station | WidgetType.StationTableBanner =
     WidgetType.Station;
 
-  /** Title preview widget selected emit. */
-  @Output() previewWidgetSelected = new EventEmitter<string>();
-
   /** Widget type for validation. */
   enumWidgetType = WidgetType;
 
   /** Data static for each template by widgetType. */
-  dataTemplate = {
-    [this.enumWidgetType.Station]: {
-      title: 'Table',
-      description:
-        'Build a custom table with specific values from each document in the station.',
-    },
-    [this.enumWidgetType.StationTableBanner]: {
-      title: 'Table With Banner Image',
-      description:
-        'Build a custom table with specific values from each document in the station.',
-    },
-  };
+  dataTemplate;
 
-  /** Emit preview widget selected. */
-  emitPreviewWidgetSelected(): void {
-    this.previewWidgetSelected.emit(this.dataTemplate[this.widgetType].title);
+  constructor(private dashboardService: DashboardService) {
+    this.dataTemplate = this.dashboardService.dataTemplatePreviewWidgetModal;
   }
 }

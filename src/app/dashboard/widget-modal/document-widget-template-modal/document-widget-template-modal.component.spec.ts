@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DocumentWidgetTemplateModalComponent } from './document-widget-template-modal.component';
+import { MockDashboardService } from 'src/mocks';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 describe('DocumentWidgetTemplateModalComponent', () => {
   let component: DocumentWidgetTemplateModalComponent;
@@ -9,6 +11,9 @@ describe('DocumentWidgetTemplateModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentWidgetTemplateModalComponent],
+      providers: [
+        { provide: DashboardService, useClass: MockDashboardService },
+      ],
     }).compileComponents();
   });
 
@@ -20,17 +25,5 @@ describe('DocumentWidgetTemplateModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should emit previewWidgetSelected', () => {
-    const spyEmit = spyOn(
-      component.previewWidgetSelected,
-      'emit'
-    ).and.callThrough();
-    component.widgetType = 'default';
-    component.emitPreviewWidgetSelected();
-    expect(spyEmit).toHaveBeenCalledOnceWith(
-      component.dataTemplate['default'].title
-    );
   });
 });

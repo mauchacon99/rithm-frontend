@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SelectedItemWidgetModel } from 'src/models';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -13,7 +13,7 @@ export class AddWidgetModalComponent {
   itemWidgetModalSelected!: SelectedItemWidgetModel;
 
   /** Title of preview widget selected. */
-  titlePreviewWidgetSelected!: string;
+  previewWidgetTypeSelected: WidgetType | 'defaultDocument' | null = null;
 
   /** Dashboard rithm id. */
   dashboardRithmId = '';
@@ -48,17 +48,8 @@ export class AddWidgetModalComponent {
 
   /** Return to widget list when identifyShowElement is not tabs. */
   returnCustomLists(): void {
-    this.titlePreviewWidgetSelected
-      ? (this.titlePreviewWidgetSelected = '')
+    this.previewWidgetTypeSelected
+      ? (this.previewWidgetTypeSelected = null)
       : (this.identifyShowElement = 'tabs');
-  }
-
-  /**
-   * Set title of preview widget selected.
-   *
-   * @param titlePreviewWidget String of title.
-   */
-  previewWidgetSelected(titlePreviewWidget: string): void {
-    this.titlePreviewWidgetSelected = titlePreviewWidget;
   }
 }
