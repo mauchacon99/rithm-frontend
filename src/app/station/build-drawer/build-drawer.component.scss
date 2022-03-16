@@ -3,6 +3,13 @@
 }
 
 /* stylelint-disable-next-line */
-.categories-content::-webkit-scrollbar {
-  display: none;
+/* stylelint-disable-next-line */
+.categories-content {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+  /* stylelint-disable-next-line */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

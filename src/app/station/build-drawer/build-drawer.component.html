@@ -16,7 +16,7 @@
       class="md:mb-8"
       [multiple]="false"
       #buildCategory
-      (selectionChange)="handleSelectionChange($event)"
+      (selectionChange)="handleCategoryChange($event)"
     >
       <mat-list-option
         *ngFor="let category of buildCategories; let i = index"
@@ -28,20 +28,24 @@
       </mat-list-option>
     </mat-selection-list>
   </section>
-  <section class="px-4 pb-5 pt-3 w-72 overflow-y-auto categories-content">
+  <section
+    class="px-4 pb-5 pt-3 w-72 overflow-y-auto categories-content"
+    [ngSwitch]="categorySelected"
+  >
     <div
-      class="form-input-category-container"
-      data-testid="form-input-category-container"
-      *ngIf="categorySelected === 'Form Inputs'"
+      id="custom-fields-container"
+      data-testid="custom-fields-container"
+      *ngSwitchCase="'Form Inputs'"
     >
       <div
-        class="flex m-2 p-2 items-center justify-center border-[1px] border-solid border-primary-100 form-input-category-item"
-        *ngFor="let formInput of formInputsCategory; let i = index"
+        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        data-testid="custom-fields-item"
+        *ngFor="let field of customFields"
       >
-        <p class="text-sm ml-auto text-primary-900 text-center">
-          {{ formInput.name }}
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ field.name }}
         </p>
-        <span class="{{ formInput.icon }} fa-lg ml-auto"></span>
+        <span class="{{ field.icon }} fa-lg ml-auto"></span>
       </div>
     </div>
   </section>

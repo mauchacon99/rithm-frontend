@@ -9,7 +9,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
 
-describe('BuildDrawerComponent', () => {
+fdescribe('BuildDrawerComponent', () => {
   let component: BuildDrawerComponent;
   let fixture: ComponentFixture<BuildDrawerComponent>;
   let categoriesList: DebugElement;
@@ -83,14 +83,14 @@ describe('BuildDrawerComponent', () => {
     expect(categoriesListSelected.selected.length).toBe(1);
     fixture.detectChanges();
 
-    const formInputs = fixture.debugElement.nativeElement.querySelector(
-      '.form-input-category-container'
+    const formInputs = fixture.nativeElement.querySelector(
+      '#custom-fields-container'
     );
     expect(formInputs).toBeTruthy();
-    expect(component.formInputsCategory.length).toBe(16);
+    expect(component.customFields.length).toBe(16);
     const formInputCategoryList =
       fixture.debugElement.nativeElement.querySelectorAll(
-        '.form-input-category-item'
+        '[data-testid="custom-fields-item"]'
       );
     expect(formInputCategoryList.length).toBe(16);
   });
@@ -99,21 +99,21 @@ describe('BuildDrawerComponent', () => {
     component.categorySelected = 'Components';
     fixture.detectChanges();
     const formInputsC = fixture.debugElement.nativeElement.querySelector(
-      '.form-input-category-container'
+      '#custom-fields-container'
     );
     expect(formInputsC).toBeFalsy();
 
     component.categorySelected = 'Previous Fields';
     fixture.detectChanges();
     const formInputsPF = fixture.debugElement.nativeElement.querySelector(
-      '.form-input-category-container'
+      '#custom-fields-container'
     );
     expect(formInputsPF).toBeFalsy();
 
     component.categorySelected = 'Integrations';
     fixture.detectChanges();
     const formInputsI = fixture.debugElement.nativeElement.querySelector(
-      '.form-input-category-container'
+      '#custom-fields-container'
     );
     expect(formInputsI).toBeFalsy();
   });

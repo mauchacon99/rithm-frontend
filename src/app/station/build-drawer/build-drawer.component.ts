@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
-import { QuestionFieldType } from 'src/models';
+import { CustomField, QuestionFieldType } from 'src/models';
 
 /**
  *
@@ -45,8 +45,8 @@ export class BuildDrawerComponent implements OnInit {
   /** The current category selected. */
   categorySelected = 'Form Inputs';
 
-  /** Form Input Category Data. */
-  formInputsCategory = [
+  /** Custom Fields to Form Input Category Data. */
+  customFields: CustomField[] = [
     {
       name: 'Input Frame',
       icon: 'fa-regular fa-object-group',
@@ -150,7 +150,7 @@ export class BuildDrawerComponent implements OnInit {
    *
    * @param selectionData Data send by mat-selection-list EventEmitter.
    */
-  handleSelectionChange(selectionData: MatSelectionListChange): void {
+  handleCategoryChange(selectionData: MatSelectionListChange): void {
     this.categorySelected = selectionData.options[0].value;
   }
 
