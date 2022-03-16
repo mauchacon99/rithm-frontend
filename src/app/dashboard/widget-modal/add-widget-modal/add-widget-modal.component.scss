@@ -1,4 +1,6 @@
 .tabs-custom-pre-build {
+  @apply h-full;
+
   ::ng-deep .mat-tab-header {
     .mat-tab-label:hover {
       @apply text-accent-500;
@@ -13,7 +15,15 @@
     }
   }
 
+  ::ng-deep .mat-tab-body-wrapper {
+    height: 100% !important;
+  }
+
   ::ng-deep mat-ink-bar.mat-ink-bar {
     background-color: #1e4994 !important;
   }
+}
+
+.height-container {
+  height: calc(100% - 40px) !important;
 }
