@@ -12,7 +12,12 @@
     </button>
   </section>
   <section class="px-4 border-b-2 border-secondary-300 build-categories">
-    <mat-selection-list class="md:mb-8" [multiple]="false" #buildCategory>
+    <mat-selection-list
+      class="md:mb-8"
+      [multiple]="false"
+      #buildCategory
+      (selectionChange)="handleCategoryChange($event)"
+    >
       <mat-list-option
         *ngFor="let category of buildCategories; let i = index"
         class="px-3 py-2 hover:bg-accent-100 rounded-sm"
@@ -23,5 +28,25 @@
       </mat-list-option>
     </mat-selection-list>
   </section>
-  <section class="px-4 pt-6 w-72 overflow-y-auto categories-content"></section>
+  <section
+    class="px-4 py-5 w-72 overflow-y-auto categories-content"
+    [ngSwitch]="categorySelected"
+  >
+    <div
+      id="custom-fields-container"
+      data-testid="custom-fields-container"
+      *ngSwitchCase="'Form Inputs'"
+    >
+      <div
+        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        data-testid="custom-fields-item"
+        *ngFor="let field of customFields"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ field.name }}
+        </p>
+        <span class="{{ field.icon }} fa-lg ml-auto"></span>
+      </div>
+    </div>
+  </section>
 </div>
