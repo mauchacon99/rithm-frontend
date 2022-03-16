@@ -341,6 +341,16 @@ describe('RuleModalComponent', () => {
 
       expect(stepperComponent.selectedIndex).toBe(3);
     });
+    it('should close the modal when close-modal-btn clicked and edit rule', () => {
+      component.editRuleMode = true;
+      const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+      const spyMethod = spyOn(component, 'closeModal').and.callThrough();
+      const btnClose = fixture.nativeElement.querySelector('#close-modal-btn');
+      expect(btnClose).toBeTruthy();
+      btnClose.click();
+      expect(spyMethod).toHaveBeenCalled();
+      expect(spyMatDialogRef).toHaveBeenCalled();
+    });
   });
 
   describe('Display field due to the operator type', () => {
@@ -422,7 +432,9 @@ describe('RuleModalComponent', () => {
       expect(component.operatorList).toEqual(component.textGroup);
     });
   });
-  it('should close the modal when close-modal-btn clicked', () => {
+  it('should close the modal when close-modal-btn clicked and is new rule', () => {
+    component.editRuleMode = false;
+    component.ruleModalLoading = false;
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
     const spyMethod = spyOn(component, 'closeModal').and.callThrough();
     const btnClose = fixture.nativeElement.querySelector('#close-modal-btn');
