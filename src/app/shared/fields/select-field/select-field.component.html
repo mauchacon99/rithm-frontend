@@ -2,17 +2,20 @@
   <mat-form-field class="w-full" appearance="outline">
     <mat-label>{{ field?.prompt }}</mat-label>
     <mat-select
+      #selectField
       [multiple]="field.questionType === fieldTypeEnum.MultiSelect"
       [required]="field.isRequired"
       [formControlName]="this.field.questionType"
       (selectionChange)="updateFieldAnswer()"
     >
-      <mat-option
-        *ngFor="let possibleAnswer of field?.possibleAnswers"
-        [value]="possibleAnswer.text"
-      >
-        {{ possibleAnswer.text }}
-      </mat-option>
+      <div class="possibleAnswers" (mouseleave)="selectField.close()">
+        <mat-option
+          *ngFor="let possibleAnswer of field?.possibleAnswers"
+          [value]="possibleAnswer.text"
+        >
+          {{ possibleAnswer.text }}
+        </mat-option>
+      </div>
     </mat-select>
   </mat-form-field>
 </div>

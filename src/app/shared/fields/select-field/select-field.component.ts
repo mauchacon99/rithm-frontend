@@ -60,7 +60,6 @@ export class SelectFieldComponent
         [],
       ],
     });
-
     //Logic to determine if a field should be required, and the validators to give it.
     const validators: ValidatorFn[] = [];
 

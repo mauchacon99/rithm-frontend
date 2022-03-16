@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { WidgetType } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /** Station widget-template. */
 @Component({
@@ -16,16 +17,9 @@ export class StationWidgetTemplateModalComponent {
   enumWidgetType = WidgetType;
 
   /** Data static for each template by widgetType. */
-  dataTemplate = {
-    [this.enumWidgetType.Station]: {
-      title: 'Table',
-      description:
-        'Build a custom table with specific values from each document in the station.',
-    },
-    [this.enumWidgetType.StationTableBanner]: {
-      title: 'Table With Banner Image',
-      description:
-        'Build a custom table with specific values from each document in the station.',
-    },
-  };
+  dataTemplate;
+
+  constructor(private dashboardService: DashboardService) {
+    this.dataTemplate = dashboardService.dataTemplatePreviewWidgetModal;
+  }
 }
