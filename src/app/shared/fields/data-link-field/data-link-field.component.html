@@ -41,10 +41,15 @@
     </mat-autocomplete>
   </mat-form-field>
   <!-- Matching Value -->
-  <mat-form-field class="w-full" appearance="outline">
-    <mat-label> Matching Value </mat-label>
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label
+      >{{ questionLoading ? 'Loading Questions' : nameLabelMatchingValue }}
+      <i *ngIf="questionLoading" class="fa-solid fa-spin fa-spinner fa-2x1">
+      </i>
+    </mat-label>
+
     <mat-select
-      [attr.disabled]="!questions.length"
+      [disabled]="!questions.length || questionLoading"
       formControlName="selectedMatchingValue"
     >
       <mat-option

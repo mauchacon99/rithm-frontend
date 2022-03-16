@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
-import { throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
@@ -155,5 +155,17 @@ describe('DataLinkFieldComponent', () => {
     ).and.callThrough();
     component.getStationQuestions('Fake data link');
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should change the name of Label MatchingValue to : not question found', () => {
+    component.stations = [STATIONS];
+    component.questionLoading = true;
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(of([]));
+    component.getStationQuestions('Fake data link');
+    expect(component.nameLabelMatchingValue).toEqual('Not Questions Found');
+    expect(component.questionLoading).toBeFalsy();
   });
 });

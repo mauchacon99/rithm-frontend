@@ -54,11 +54,17 @@ export class DataLinkFieldComponent
   /** The list of selected station questions for the select matching value.*/
   questions: Question[] = [];
 
+  /** Current station's fields as options for the select base value. */
+  currentStationQuestions: Question[] = [];
+
+  /* The name for matching value  label  */
+  nameLabelMatchingValue = 'Matching Value';
+
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
-  /** Current station's fields as options for the select base value. */
-  currentStationQuestions: Question[] = [];
+  /* Loading in input  the station questions selected . */
+  questionLoading = false;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -125,6 +131,7 @@ export class DataLinkFieldComponent
    */
   getStationQuestions(nameStation: string): void {
     this.questions = [];
+    this.questionLoading = true;
     const stationRithmId = this.stations.find(
       (station) => station.name === nameStation
     )?.rithmId;
@@ -134,9 +141,15 @@ export class DataLinkFieldComponent
         .pipe(first())
         .subscribe({
           next: (questions) => {
+            this.questionLoading = false;
+            /** Update label name Matching Value if question array is empty. */
+            this.nameLabelMatchingValue = !questions.length
+              ? 'Not Questions Found'
+              : 'Matching Value';
             this.questions = questions;
           },
           error: (error: unknown) => {
+            this.questionLoading = false;
             this.errorService.displayError(
               'Failed to get station questions for this data link field.',
               error
