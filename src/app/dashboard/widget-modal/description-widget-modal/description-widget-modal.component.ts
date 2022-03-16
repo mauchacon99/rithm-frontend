@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { SelectedItemWidgetModel } from 'src/models';
+import { Component, Input, OnInit } from '@angular/core';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
+import { DashboardService } from '../../dashboard.service';
 
 /** Description widget modal. */
 @Component({
@@ -7,7 +8,25 @@ import { SelectedItemWidgetModel } from 'src/models';
   templateUrl: './description-widget-modal.component.html',
   styleUrls: ['./description-widget-modal.component.scss'],
 })
-export class DescriptionWidgetModalComponent {
+export class DescriptionWidgetModalComponent implements OnInit{
+
   /** Widget item selected. */
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Data Description for description-widget-modal.  */
+   dataDescriptionTemplate!:unknown;
+
+  /** Data widget for app-document-widget. */
+  dataWidget!:string;
+
+  constructor(private dashboardService:DashboardService){}
+
+  /** Initial method. */
+  ngOnInit(): void {
+    this.dataDescriptionTemplate = this.dashboardService.dataDescriptionTemplate[widgetType];
+    this.dataWidget = JSON.stringify({
+      documentRithmId:this.itemWidgetModalSelected.itemList.rithmId,
+      columns:[]
+    });
+  }
 }
