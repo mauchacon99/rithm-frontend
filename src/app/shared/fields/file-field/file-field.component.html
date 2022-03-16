@@ -1,5 +1,9 @@
 <div [formGroup]="fileFieldForm">
-  <mat-form-field class="w-full" appearance="outline">
+  <mat-form-field
+    class="w-full"
+    appearance="outline"
+    *ngIf="isStation; else titleFileField"
+  >
     <mat-label> {{ field.prompt }} </mat-label>
     <div matPrefix class="icon">
       <!-- Text Icons -->
@@ -13,8 +17,12 @@
       (dateChange)="updateFieldAnswer()"
     />
   </mat-form-field>
+  <ng-template #titleFileField>
+    <p class="text-sm pb-4">{{ field.prompt }}</p>
+  </ng-template>
   <button
     mat-stroked-button
+    type="button"
     class="ml-2"
     color="accent"
     data-testid="upload-button"
