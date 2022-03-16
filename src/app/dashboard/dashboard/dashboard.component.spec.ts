@@ -15,7 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { throwError } from 'rxjs';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, MockService } from 'ng-mocks';
 
 import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from 'src/app/dashboard/header/header.component';
@@ -44,6 +44,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -93,6 +94,8 @@ describe('DashboardComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        Renderer2,
+        { provide: ElementRef, useValue: MockService(ElementRef) },
       ],
       imports: [
         MatSidenavModule,
@@ -496,23 +499,34 @@ describe('DashboardComponent', () => {
         },
       ],
     };
+    let renderer: Renderer2;
+
+    beforeEach(() => {
+      renderer = fixture.componentRef.injector.get<Renderer2>(
+        Renderer2 as Type<Renderer2>
+      );
+    });
 
     it('should expand widget', () => {
+      const spyRenderer = spyOn(renderer, 'addClass');
       component.dashboardDataCopy = dashboardData;
       component.dashboardData = dashboardData;
       component.toggleExpandWidget(0, true);
 
       expect(component.dashboardData.widgets[0].rows).toEqual(3);
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(2);
+      expect(spyRenderer).toHaveBeenCalled();
     });
 
     it('should not expand widget', () => {
+      const spyRenderer = spyOn(renderer, 'removeClass');
       component.dashboardDataCopy = dashboardData;
       component.dashboardData = dashboardData;
       component.toggleExpandWidget(0, false);
 
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
+      expect(spyRenderer).toHaveBeenCalled();
     });
   });
 

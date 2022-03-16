@@ -149,6 +149,9 @@ export class MapService {
     data: {},
   });
 
+  /** The copy of station group which is being edited. */
+  tempStationGroup$ = new BehaviorSubject({});
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -466,7 +469,7 @@ export class MapService {
    */
   updatePendingStationGroup(): void {
     //Set up blank pending group.
-    const newGroup = new StationGroupMapElement({
+    let newGroup = new StationGroupMapElement({
       rithmId: uuidv4(),
       title: 'Pending',
       stations: [],
@@ -475,6 +478,25 @@ export class MapService {
       isChained: false,
       isReadOnlyRootStationGroup: false,
     });
+
+    if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      const editStationGroup = this.stationGroupElements.find(
+        (group) => group.status === MapItemStatus.Pending
+      );
+      if (!editStationGroup) {
+        throw new Error(`There is no station group with status pending.`);
+      }
+      //Set up pending group for edit.
+      newGroup = new StationGroupMapElement({
+        rithmId: editStationGroup.rithmId,
+        title: editStationGroup.title,
+        stations: editStationGroup.stations,
+        subStationGroups: editStationGroup.subStationGroups,
+        status: MapItemStatus.Pending,
+        isChained: editStationGroup.isChained,
+        isReadOnlyRootStationGroup: false,
+      });
+    }
 
     /* There should only ever be one pending group in the stationGroupElements array,
     recursively delete every pending group that already exists so we can add a new one. */
@@ -1779,5 +1801,71 @@ export class MapService {
     this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
 
     this.resetSelectedStationGroupStationStatus();
+  }
+
+  /**
+   * Revert the changes made across station group in edit mode.
+   *
+   */
+  revertStationGroup(): void {
+    if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      if (!(this.tempStationGroup$.value instanceof StationGroupMapElement)) {
+        throw new Error(`There is no temporary station group available.`);
+      }
+      const rithmId = this.tempStationGroup$.value.rithmId;
+      const groupIndex = this.stationGroupElements.findIndex(
+        (group) => group.rithmId === rithmId
+      );
+      if (groupIndex === -1) {
+        throw new Error(
+          `There is no station group available to replace tempGroup.`
+        );
+      }
+      this.stationGroupElements[groupIndex] = this.tempStationGroup$.value;
+      this.tempStationGroup$.next({});
+      //Remove station rithm id's from other groups to make make sure a station has got only one parent.
+      this.stationGroupElements[groupIndex].stations.map((stationRithmId) => {
+        this.stationGroupElements.map((group) => {
+          if (
+            group.stations.includes(stationRithmId) &&
+            group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+          ) {
+            group.stations = group.stations.filter(
+              (stationId) => stationId !== stationRithmId
+            );
+          }
+        });
+      });
+      //Remove station group rithm id's from other groups to make sure a group has got only one parent.
+      this.stationGroupElements[groupIndex].subStationGroups.map(
+        (subGroupRithmId) => {
+          this.stationGroupElements.map((group) => {
+            if (
+              group.subStationGroups.includes(subGroupRithmId) &&
+              group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+            ) {
+              group.subStationGroups = group.subStationGroups.filter(
+                (groupId) => groupId !== subGroupRithmId
+              );
+            }
+          });
+        }
+      );
+      this.resetSelectedStationGroupStationStatus();
+      this.mapDataReceived$.next(true);
+    }
+  }
+
+  /**
+   * Whether the last station group to be de-selected.
+   *
+   * @returns True if the last station group to be de-selected, false otherwise.
+   */
+  get isLastStationGroup(): boolean {
+    return (
+      this.stationGroupElements.filter((e) => e.selected && !e.disabled)
+        .length === 1 &&
+      this.stationElements.filter((e) => e.selected && !e.disabled).length === 0
+    );
   }
 }

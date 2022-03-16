@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /**
@@ -13,6 +13,20 @@ export class ListWidgetModalComponent {
   /** Item widget modal selected. */
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
 
+  /** Title preview widget selected emit. */
+  @Output() previewWidgetSelected = new EventEmitter<
+    WidgetType | 'defaultDocument'
+  >();
+
   /** Enum widget types. */
   enumWidgetType = WidgetType;
+
+  /**
+   * Emit preview widget selected.
+   *
+   * @param widgetType Widget type selected.
+   */
+  emitPreviewWidgetSelected(widgetType: WidgetType | 'defaultDocument'): void {
+    this.previewWidgetSelected.emit(widgetType);
+  }
 }

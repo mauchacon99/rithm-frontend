@@ -1,7 +1,19 @@
 <div class="mt-5">
-  <span class="font-semibold text-2xl">{{dataDescriptionTemplate.title}}</span> <br>
-  <p class="text-sm mt-1">Selected Document: <span class="font-bold text-sm">{{itemWidgetModalSelected.itemList.name}}</span> </p>
-  <br>
+<!--header-->
+<div class="pt-3">
+  <h3 class="text-lg font-semibold">
+    {{ dataTemplate[widgetType].title | titlecase }}
+    Template
+  </h3>
+  <p class="text-base">
+    Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
+    <span class="font-semibold">{{
+      itemWidgetModalSelected.itemList.name ||
+        'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
+    }}</span>
+  </p>
+</div>
+
   <div class="w-full flex flex-wrap-reverse md:flex-nowrap">
     <div class="w-full md:w-3/5 md:p-5">
       <br /> <br />
@@ -12,7 +24,7 @@
             <span>Type</span>
           </div>
           <div class="w-2/4">
-            <span class="text-sm">{{dataDescriptionTemplate.type}}</span>
+            <span class="text-sm">{{dataDescriptionTemplate}}</span>
           </div>
         </div>
 
@@ -21,7 +33,7 @@
             <span>Customizable Data</span>
           </div>
           <div class="w-2/4">
-            <span>{{dataDescriptionTemplate.customizable}}</span>
+            <span>{{dataDescriptionTemplate}}</span>
           </div>
         </div>
 
@@ -30,7 +42,7 @@
             <span>Description</span>
           </div>
           <div class="w-2/4">
-            <span class="w-52">{{dataDescriptionTemplate.description}}</span>
+            <span class="w-52">{{dataDescriptionTemplate}}</span>
           </div>
         </div>
       </div>
@@ -41,9 +53,8 @@
         [dataWidget]="dataWidget"
         [editMode]="false"
         [showButtonSetting]="false"
-        [widgetType]="dataDescriptionTemplate.widgetType"
+        [widgetType]="dataDescriptionTemplate"
         ></app-document-widget>
       </div>
     </div>
   </div>
-</div>
