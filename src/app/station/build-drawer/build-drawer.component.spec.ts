@@ -12,7 +12,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
 import { DebugElement } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
 
 describe('BuildDrawerComponent', () => {
   let component: BuildDrawerComponent;
@@ -20,7 +19,6 @@ describe('BuildDrawerComponent', () => {
   let categoriesList: DebugElement;
   let categoryItem: DebugElement[];
   let categorySelected: MatListOption;
-  let categoriesListSelected: SelectionModel<MatListOption>;
 
   let loader: HarnessLoader;
 
