@@ -2172,8 +2172,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         stationGroupPending.hoverItem ===
         StationGroupElementHoverItem.ButtonAccept
       ) {
-        this.mapService.mapMode$.next(MapMode.Build);
         this.mapService.updateCreatedStationGroup(stationGroupPending.rithmId);
+        this.mapService.mapMode$.next(MapMode.Build);
       }
       return;
     }
