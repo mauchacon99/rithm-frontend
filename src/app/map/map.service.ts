@@ -1868,4 +1868,17 @@ export class MapService {
       this.stationElements.filter((e) => e.selected && !e.disabled).length === 0
     );
   }
+
+  /**
+   * Checks the map when station is selected and its in the center of the map.
+   *
+   * @param panType Determines the area of the map to be pan to center.
+   * @param drawerWidth Width of the opened drawer.
+   * @returns True if the option is a selected station is center of the map.
+   */
+  checkCenter(panType: CenterPanType, drawerWidth = 0): boolean {
+    const adjustCenter = this.getAdjustedCenter(panType, drawerWidth);
+    const canvasPoint = this.currentCanvasPoint$.value;
+    return adjustCenter.x === canvasPoint.x && adjustCenter.y === canvasPoint.y;
+  }
 }

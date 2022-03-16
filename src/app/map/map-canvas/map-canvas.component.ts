@@ -2441,6 +2441,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
+    station.drawerOpened = true;
     this.mapService.isDrawerOpened$.next(true);
   }
 
