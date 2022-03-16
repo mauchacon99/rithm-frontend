@@ -2081,6 +2081,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ) {
           //If the station is clickable.
           if (!station.disabled) {
+            //Stop de-selecting station in station group edit mode when it contains only one station.
+            if (
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.stationElements.filter((e) => e.selected)
+                .length === 1 &&
+              station.selected
+            ) {
+              return;
+            }
             //If station is not disabled, should be able to select it and based on it's selection should disable other stations
             //and station group as per the criteria.
             this.mapService.setStationGroupStationStatus();
@@ -2226,6 +2235,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
             !stationGroup.disabled
           ) {
+            // return if the only group present inside the editing group. So that avoid creating an empty group
+            if (
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.isLastStationGroup
+            ) {
+              return;
+            }
             //Set status of station group to true or false depending upon current status also update status of
             //other stations and station group as per the selection criteria.
             stationGroup.selected = !stationGroup.selected;
@@ -2319,6 +2335,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.stations[stationIndex].disabled = false;
           });
         }
+      });
+      // Set stationGroup's selection status to all groups which belongs to selected station Group.
+      stationGroup.subStationGroups.forEach((subStationGroupId) => {
+        const stationGroupIndex = this.stationGroups.findIndex(
+          (group) => group.rithmId === subStationGroupId
+        );
+        this.stationGroups[stationGroupIndex].disabled = false;
       });
     }
   }
