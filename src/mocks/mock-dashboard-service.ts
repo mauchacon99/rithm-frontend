@@ -30,6 +30,7 @@ export class MockDashboardService {
   /** Update specific widget and data. */
   updateDataWidget$ = new Subject<EditDataWidget>();
 
+  /** Data static of info about document. */
   columnsDocumentInfo: {
     /** Name to show in dom. */
     name: string;

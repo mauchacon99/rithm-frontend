@@ -12,7 +12,7 @@ export class DescriptionWidgetModalComponent {
   /** Widget item selected. */
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
 
-  /** Title preview widget item selected. */
+  /** Widget type to preview widget selected. */
   @Input() widgetType!: WidgetType | 'defaultDocument';
 
   /** Data static for each template by widgetType. */
