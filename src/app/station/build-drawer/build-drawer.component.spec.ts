@@ -117,4 +117,19 @@ describe('BuildDrawerComponent', () => {
     );
     expect(formInputsI).toBeFalsy();
   });
+
+  it('should close drawer when closeButton is pressed', () => {
+    const btnCloseDrawer = fixture.debugElement.nativeElement.querySelector(
+      '#button-close-drawer'
+    );
+    expect(btnCloseDrawer).toBeTruthy();
+
+    const spyCloseDrawer = spyOn(
+      component,
+      'handleCloseDrawer'
+    ).and.callThrough();
+
+    btnCloseDrawer.click();
+    expect(spyCloseDrawer).toHaveBeenCalled();
+  });
 });

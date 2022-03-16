@@ -1,6 +1,8 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+
+import { Component, Output, EventEmitter, ChangeDetectorRef, OnInit } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
 import { QuestionFieldType } from 'src/models';
+
 /**
  *
  */
@@ -10,6 +12,21 @@ import { QuestionFieldType } from 'src/models';
   styleUrls: ['./build-drawer.component.scss'],
 })
 export class BuildDrawerComponent implements OnInit {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor(private changeDetector: ChangeDetectorRef) {}
+  
+  /**
+   * Init Component to detect changes.
+   */
+  ngOnInit(): void {
+    this.changeDetector.detectChanges();
+  }
+  
+  /**
+   * Event Emitter that executes toggle logic from station component.
+   */
+  @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
+  
   buildCategories: string[] = [
     'Form Inputs',
     'Previous Fields',
@@ -19,7 +36,11 @@ export class BuildDrawerComponent implements OnInit {
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
+  
+  /** The current category selected. */
+  categorySelected = 'Form Inputs';
 
+  /** Form Input Category Data */
   formInputsCategory = [
     {
       name: 'Input Frame',
@@ -118,19 +139,7 @@ export class BuildDrawerComponent implements OnInit {
       dataTestId: 'add-custom-field',
     },
   ];
-
-  categorySelected = 'Form Inputs';
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(private changeDetector: ChangeDetectorRef) {}
-
-  /**
-   * Init Component to detect changes.
-   */
-  ngOnInit(): void {
-    this.changeDetector.detectChanges();
-  }
-
+    
   /**
    * Functions to control changes on selection list.
    *
@@ -138,5 +147,13 @@ export class BuildDrawerComponent implements OnInit {
    */
   handleSelectionChange(selectionData: MatSelectionListChange): void {
     this.categorySelected = selectionData.options[0].value;
+  }
+  
+
+  /**
+   * Function to handle Close Drawer button.
+   */
+  handleCloseDrawer(): void {
+    this.toggleDrawer.emit();
   }
 }
