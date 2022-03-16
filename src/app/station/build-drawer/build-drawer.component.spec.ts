@@ -1,3 +1,5 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatListModule,
@@ -11,7 +13,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
-import { DebugElement } from '@angular/core';
 
 describe('BuildDrawerComponent', () => {
   let component: BuildDrawerComponent;
@@ -19,6 +20,7 @@ describe('BuildDrawerComponent', () => {
   let categoriesList: DebugElement;
   let categoryItem: DebugElement[];
   let categorySelected: MatListOption;
+  let categoriesListSelected: SelectionModel<MatListOption>;
 
   let loader: HarnessLoader;
 
@@ -35,6 +37,13 @@ describe('BuildDrawerComponent', () => {
     fixture.detectChanges();
     categoriesList = fixture.debugElement.query(By.directive(MatSelectionList));
     categoryItem = fixture.debugElement.queryAll(By.directive(MatListOption));
+    categorySelected =
+      categoryItem[0]?.injector.get<MatListOption>(MatListOption);
+    categoriesListSelected =
+      categoriesList.injector.get<MatSelectionList>(
+        MatSelectionList
+      ).selectedOptions;
+    fixture.detectChanges();
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
@@ -51,25 +60,70 @@ describe('BuildDrawerComponent', () => {
   });
 
   it('should make a possible selection to an item of list categories', () => {
-    const categoryNewSelected =
+    categorySelected =
       categoryItem[2].injector.get<MatListOption>(MatListOption);
-    const categoriesNewListSelected =
+    categoriesListSelected =
       categoriesList.injector.get<MatSelectionList>(
         MatSelectionList
       ).selectedOptions;
 
-    expect(categoriesNewListSelected.selected.length).toBe(1);
+    expect(categoriesListSelected.selected.length).toBe(1);
     expect(categoryItem[2].nativeElement.getAttribute('aria-selected')).toBe(
       'false'
     );
 
-    categoryNewSelected.toggle();
+    categorySelected.toggle();
     fixture.detectChanges();
 
     expect(categoryItem[2].nativeElement.getAttribute('aria-selected')).toBe(
       'true'
     );
-    expect(categoriesNewListSelected.selected.length).toBe(1);
+    expect(categoriesListSelected.selected.length).toBe(1);
+  });
+
+  it('should show a list of custom fields when selecting FormsInputCategory', () => {
+    categorySelected =
+      categoryItem[0].injector.get<MatListOption>(MatListOption);
+    categoriesListSelected =
+      categoriesList.injector.get<MatSelectionList>(
+        MatSelectionList
+      ).selectedOptions;
+    expect(categoriesListSelected.selected.length).toBe(1);
+    fixture.detectChanges();
+
+    const formInputs = fixture.nativeElement.querySelector(
+      '#custom-fields-container'
+    );
+    expect(formInputs).toBeTruthy();
+    expect(component.customFields.length).toBe(16);
+    const formInputCategoryList =
+      fixture.debugElement.nativeElement.querySelectorAll(
+        '[data-testid="custom-fields-item"]'
+      );
+    expect(formInputCategoryList.length).toBe(16);
+  });
+
+  xit('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
+    component.categorySelected = 'Components';
+    fixture.detectChanges();
+    const formInputsC = fixture.debugElement.nativeElement.querySelector(
+      '#custom-fields-container'
+    );
+    expect(formInputsC).toBeFalsy();
+
+    component.categorySelected = 'Previous Fields';
+    fixture.detectChanges();
+    const formInputsPF = fixture.debugElement.nativeElement.querySelector(
+      '#custom-fields-container'
+    );
+    expect(formInputsPF).toBeFalsy();
+
+    component.categorySelected = 'Integrations';
+    fixture.detectChanges();
+    const formInputsI = fixture.debugElement.nativeElement.querySelector(
+      '#custom-fields-container'
+    );
+    expect(formInputsI).toBeFalsy();
   });
 
   it('should close drawer when closeButton is pressed', () => {

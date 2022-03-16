@@ -12,7 +12,12 @@
     </button>
   </section>
   <section class="px-4 border-b-2 border-secondary-300 build-categories">
-    <mat-selection-list class="md:mb-8" [multiple]="false" #buildCategory>
+    <mat-selection-list
+      class="md:mb-8"
+      [multiple]="false"
+      #buildCategory
+      (selectionChange)="handleCategoryChange($event)"
+    >
       <mat-list-option
         *ngFor="let category of buildCategories; let i = index"
         class="px-3 py-2 hover:bg-accent-100 rounded-sm"
@@ -23,13 +28,27 @@
       </mat-list-option>
     </mat-selection-list>
   </section>
-  <section class="px-4 pt-6 w-72 overflow-y-auto categories-content">
+  <section
+    class="px-4 py-5 w-72 overflow-y-auto categories-content"
+    [ngSwitch]="buildCategory.selectedOptions.selected[0]?.value"
+  >
     <div
-      class="previous-field"
-      *ngIf="
-        buildCategory.selectedOptions.selected[0]?.value === 'Previous Fields'
-      "
+      id="custom-fields-container"
+      data-testid="custom-fields-container"
+      *ngSwitchCase="'Form Inputs'"
     >
+      <div
+        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        data-testid="custom-fields-item"
+        *ngFor="let field of customFields"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ field.name }}
+        </p>
+        <span class="{{ field.icon }} fa-lg ml-auto"></span>
+      </div>
+    </div>
+    <div class="previous-field" *ngSwitchCase="'Previous Fields'">
       <mat-accordion multi>
         <mat-expansion-panel togglePosition="before" [expanded]="true">
           <mat-expansion-panel-header>

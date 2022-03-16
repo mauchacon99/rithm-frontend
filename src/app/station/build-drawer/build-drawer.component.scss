@@ -1,6 +1,7 @@
 .build-categories .mat-list-single-selected-option {
   @apply bg-accent-100;
 }
+
 .previous-field {
   .mat-expansion-panel {
     display: inline;
@@ -8,5 +9,16 @@
 
   .mat-expansion-panel-header {
     padding: 0px 0px;
+  }
+}
+
+/* stylelint-disable-next-line */
+.categories-content {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+  /* stylelint-disable-next-line */
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
