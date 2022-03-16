@@ -51,11 +51,20 @@ export class DataLinkFieldComponent
   /**Filtered form station List. */
   filteredStations$: Observable<Station[]> | undefined;
 
-  /* Loading in input auto-complete the list of all stations. */
-  stationLoading = false;
+  /** The list of selected station questions for the select matching value.*/
+  questions: Question[] = [];
 
   /** Current station's fields as options for the select base value. */
   currentStationQuestions: Question[] = [];
+
+  /* The name for matching value  label  */
+  matchingValueLabel = 'Matching Value';
+
+  /* Loading in input auto-complete the list of all stations. */
+  stationLoading = false;
+
+  /* Loading in input  the station questions selected . */
+  questionLoading = false;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -83,6 +92,7 @@ export class DataLinkFieldComponent
   ngOnInit(): void {
     this.dataLinkFieldForm = this.fb.group({
       [this.field.questionType]: [this.fieldValue, []],
+      selectedMatchingValue: ['', []],
       selectBaseValue: ['', []],
     });
     this.subscribeCurrentStationQuestions();
@@ -112,6 +122,41 @@ export class DataLinkFieldComponent
           );
         },
       });
+  }
+
+  /**
+   * Get station questions for select matching value.
+   *
+   * @param nameStation The name station selected.
+   */
+  getStationQuestions(nameStation: string): void {
+    this.questions = [];
+    this.questionLoading = true;
+    const stationRithmId = this.stations.find(
+      (station) => station.name === nameStation
+    )?.rithmId;
+    if (stationRithmId) {
+      this.stationService
+        .getStationQuestions(stationRithmId)
+        .pipe(first())
+        .subscribe({
+          next: (questions) => {
+            this.questionLoading = false;
+            /** Update label name Matching Value if question array is empty. */
+            this.matchingValueLabel = !questions.length
+              ? 'Not Questions Found'
+              : 'Matching Value';
+            this.questions = questions;
+          },
+          error: (error: unknown) => {
+            this.questionLoading = false;
+            this.errorService.displayError(
+              'Failed to get station questions for this data link field.',
+              error
+            );
+          },
+        });
+    }
   }
 
   /**
