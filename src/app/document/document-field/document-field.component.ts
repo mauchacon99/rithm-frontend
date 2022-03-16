@@ -48,6 +48,7 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
       dateFieldForm: this.fb.control(''),
       checkFieldForm: this.fb.control(''),
       nestedFieldForm: this.fb.control(''),
+      fileFieldForm: this.fb.control(''),
     });
   }
 
