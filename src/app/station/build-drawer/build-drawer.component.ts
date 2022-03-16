@@ -42,7 +42,7 @@ export class BuildDrawerComponent implements OnInit {
   /** The current category selected. */
   categorySelected = 'Form Inputs';
 
-  /** Custom Fields to Form Input Category Data. */
+  /** Custom fields to form input category data. */
   customFields: CustomField[] = [
     {
       name: 'Input Frame',
@@ -142,7 +142,6 @@ export class BuildDrawerComponent implements OnInit {
     },
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor(private changeDetector: ChangeDetectorRef) {}
 
   /**
