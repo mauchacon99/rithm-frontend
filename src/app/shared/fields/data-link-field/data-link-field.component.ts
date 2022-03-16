@@ -58,7 +58,7 @@ export class DataLinkFieldComponent
   currentStationQuestions: Question[] = [];
 
   /* The name for matching value  label  */
-  nameLabelMatchingValue = 'Matching Value';
+  matchingValueLabel = 'Matching Value';
 
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
@@ -143,7 +143,7 @@ export class DataLinkFieldComponent
           next: (questions) => {
             this.questionLoading = false;
             /** Update label name Matching Value if question array is empty. */
-            this.nameLabelMatchingValue = !questions.length
+            this.matchingValueLabel = !questions.length
               ? 'Not Questions Found'
               : 'Matching Value';
             this.questions = questions;

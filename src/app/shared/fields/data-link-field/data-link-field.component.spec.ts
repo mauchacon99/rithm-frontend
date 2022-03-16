@@ -165,7 +165,7 @@ describe('DataLinkFieldComponent', () => {
       'getStationQuestions'
     ).and.returnValue(of([]));
     component.getStationQuestions('Fake data link');
-    expect(component.nameLabelMatchingValue).toEqual('Not Questions Found');
+    expect(component.matchingValueLabel).toEqual('Not Questions Found');
     expect(component.questionLoading).toBeFalsy();
   });
 });
