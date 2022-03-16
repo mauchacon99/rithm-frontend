@@ -77,6 +77,10 @@
   class="text-center absolute left-0 right-0 m-auto mt-2 w-auto"
 >
   <div
+    *ngIf="
+      currentMode === mapMode.StationAdd ||
+      currentMode === mapMode.StationGroupAdd
+    "
     class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-sm bg-opacity-90"
   >
     {{

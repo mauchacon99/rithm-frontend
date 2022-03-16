@@ -267,9 +267,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     if (this.reloadDocumentList || reloadDocuments) {
       this.getStationWidgetDocuments();
       this.reloadDocumentList = false;
-      if (this.isExpandWidget) {
-        this.toggleExpandWidget();
-      }
+    }
+    if (this.isExpandWidget) {
+      this.toggleExpandWidget();
     }
   }
 
