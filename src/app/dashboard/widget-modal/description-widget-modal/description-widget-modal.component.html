@@ -1,1 +1,14 @@
-<p>description-widget-modal works!</p>
+<!--header-->
+<div class="pt-3">
+  <h3 class="text-lg font-semibold">
+    {{ dataTemplate[widgetType].title | titlecase }}
+    Template
+  </h3>
+  <p class="text-base">
+    Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
+    <span class="font-semibold">{{
+      itemWidgetModalSelected.itemList.name ||
+        'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
+    }}</span>
+  </p>
+</div>
