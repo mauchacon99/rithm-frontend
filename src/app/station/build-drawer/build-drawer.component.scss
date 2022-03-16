@@ -1,3 +1,8 @@
 .build-categories .mat-list-single-selected-option {
   @apply bg-accent-100;
 }
+
+/* stylelint-disable-next-line */
+.categories-content::-webkit-scrollbar {
+  display: none;
+}

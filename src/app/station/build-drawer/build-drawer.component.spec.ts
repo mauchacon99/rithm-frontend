@@ -96,18 +96,25 @@ describe('BuildDrawerComponent', () => {
   });
 
   it('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
-    categorySelected =
-      categoryItem[2].injector.get<MatListOption>(MatListOption);
-    categoriesListSelected =
-      categoriesList.injector.get<MatSelectionList>(
-        MatSelectionList
-      ).selectedOptions;
-    expect(categoriesListSelected.selected.length).toBe(1);
-    categorySelected.toggle();
+    component.categorySelected = 'Components';
     fixture.detectChanges();
-    const formInputs = fixture.debugElement.nativeElement.querySelector(
+    const formInputsC = fixture.debugElement.nativeElement.querySelector(
       '.form-input-category-container'
     );
-    expect(formInputs).toBeFalsy();
+    expect(formInputsC).toBeFalsy();
+
+    component.categorySelected = 'Previous Fields';
+    fixture.detectChanges();
+    const formInputsPF = fixture.debugElement.nativeElement.querySelector(
+      '.form-input-category-container'
+    );
+    expect(formInputsPF).toBeFalsy();
+
+    component.categorySelected = 'Integrations';
+    fixture.detectChanges();
+    const formInputsI = fixture.debugElement.nativeElement.querySelector(
+      '.form-input-category-container'
+    );
+    expect(formInputsI).toBeFalsy();
   });
 });
