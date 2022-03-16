@@ -27,29 +27,35 @@
 </div>
 
 <!-- Content Add Widgets Modal -->
-<mat-tab-group
-  *ngIf="identifyShowElement === 'tabs'"
-  class="tabs-custom-pre-build pt-2"
-  [selectedIndex]="tabParentSelect"
-  (selectedIndexChange)="tabParentSelect = $event"
->
-  <!-- Tab Custom widget -->
-  <mat-tab label="Custom" aria-label="Custom">
-    <app-custom-tab-widget-modal
-      (itemSelected)="selectTypeElement($event)"
-      [dashboardRithmId]="dashboardRithmId"
-    ></app-custom-tab-widget-modal>
-  </mat-tab>
+<div [hidden]="identifyShowElement !== 'tabs'" class="height-container">
+  <mat-tab-group
+    class="tabs-custom-pre-build pt-2"
+    [selectedIndex]="tabParentSelect"
+    (selectedIndexChange)="tabParentSelect = $event"
+  >
+    <!-- Tab Custom widget -->
+    <mat-tab label="Custom" aria-label="Custom">
+      <app-custom-tab-widget-modal
+        (itemSelected)="selectTypeElement($event)"
+        [dashboardRithmId]="dashboardRithmId"
+      ></app-custom-tab-widget-modal>
+    </mat-tab>
 
-  <!-- Tab Pre Build widget -->
-  <mat-tab label="Pre Built" aria-label="Pre Built">
-    <div class="py-4">Content for Pre built tab</div>
-  </mat-tab>
-</mat-tab-group>
+    <!-- Tab Pre Build widget -->
+    <mat-tab label="Pre Built" aria-label="Pre Built">
+      <div class="py-4">Content for Pre built tab</div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
 
 <!-- Display detail of the item selected in multiple tabs -->
 <div *ngIf="identifyShowElement !== 'tabs'">
   <app-list-widget-modal
     [itemWidgetModalSelected]="itemWidgetModalSelected"
   ></app-list-widget-modal>
+
+  <app-description-widget-modal
+    [itemWidgetModalSelected]="itemWidgetModalSelected"
+  >
+  </app-description-widget-modal>
 </div>

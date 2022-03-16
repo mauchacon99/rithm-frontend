@@ -2081,6 +2081,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ) {
           //If the station is clickable.
           if (!station.disabled) {
+            //Stop de-selecting station in station group edit mode when it contains only one station.
+            if (
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.stationElements.filter((e) => e.selected)
+                .length === 1 &&
+              station.selected
+            ) {
+              return;
+            }
             //If station is not disabled, should be able to select it and based on it's selection should disable other stations
             //and station group as per the criteria.
             this.mapService.setStationGroupStationStatus();
@@ -2132,15 +2141,32 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         stationGroupPending.hoverItem ===
         StationGroupElementHoverItem.ButtonCancel
       ) {
-        this.mapService.mapMode$.next(MapMode.Build);
         if (
           this.mapService.stationElements.some((station) => station.selected) ||
           this.mapService.stationGroupElements.some(
             (stationGroup) => stationGroup.selected
           )
         ) {
-          this.mapService.resetSelectedStationGroupStationStatus();
-          this.mapService.updatePendingStationGroup();
+          if (this.mapMode === MapMode.StationGroupAdd) {
+            this.mapService.resetSelectedStationGroupStationStatus();
+            this.mapService.updatePendingStationGroup();
+          } else if (this.mapMode === MapMode.StationGroupEdit) {
+            const groupIndex = this.stationGroups.findIndex(
+              (group) => group.status === MapItemStatus.Pending
+            );
+            if (groupIndex === -1) {
+              throw new Error(`There is no station group with status pending.`);
+            }
+            if (
+              this.mapService.tempStationGroup$.value instanceof
+                StationGroupMapElement &&
+              this.stationGroups[groupIndex].rithmId ===
+                this.mapService.tempStationGroup$.value.rithmId
+            ) {
+              this.mapService.revertStationGroup();
+            }
+          }
+          this.mapService.mapMode$.next(MapMode.Build);
         }
       } else if (
         stationGroupPending.hoverItem ===
@@ -2226,6 +2252,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
             !stationGroup.disabled
           ) {
+            // return if the only group present inside the editing group. So that avoid creating an empty group
+            if (
+              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.isLastStationGroup
+            ) {
+              return;
+            }
             //Set status of station group to true or false depending upon current status also update status of
             //other stations and station group as per the selection criteria.
             stationGroup.selected = !stationGroup.selected;
@@ -2319,6 +2352,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.stations[stationIndex].disabled = false;
           });
         }
+      });
+      // Set stationGroup's selection status to all groups which belongs to selected station Group.
+      stationGroup.subStationGroups.forEach((subStationGroupId) => {
+        const stationGroupIndex = this.stationGroups.findIndex(
+          (group) => group.rithmId === subStationGroupId
+        );
+        this.stationGroups[stationGroupIndex].disabled = false;
       });
     }
   }
@@ -2486,8 +2526,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   updateStationGroup(stationGroup: StationGroupMapElement): void {
     this.mapService.mapMode$.next(MapMode.StationGroupEdit);
     if (!stationGroup) {
-      throw new Error(`There is not any station group with status pending.`);
+      throw new Error(`There is no station group with status pending.`);
     }
+    this.mapService.tempStationGroup$.next(
+      new StationGroupMapElement({ ...stationGroup }) as StationGroupMapElement
+    );
     stationGroup.status = MapItemStatus.Pending;
     stationGroup.selected = true;
     this.mapService.setStationGroupStationStatus();

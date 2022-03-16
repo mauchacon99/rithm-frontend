@@ -266,26 +266,24 @@ export class StationComponent
     questionIndex: number,
     arrayAnswers: PossibleAnswer[] = []
   ): void {
-    const newAnswer: PossibleAnswer = {
-      rithmId: answer.originalStationRithmId
-        ? answer.originalStationRithmId
-        : '',
-      text: answer.prompt,
-      default: false,
-    };
     if (
-      this.stationInformation.questions[questionIndex].possibleAnswers !==
-      undefined
+      Array.isArray(
+        this.stationInformation.questions[questionIndex].possibleAnswers
+      )
     ) {
       const possibleAnswer = arrayAnswers.find(
-        (a) => a.rithmId === newAnswer.rithmId
+        (a) => a.rithmId === answer.originalStationRithmId
       );
       if (possibleAnswer) {
-        const answerIndex = arrayAnswers.indexOf(possibleAnswer);
-        arrayAnswers[answerIndex] = newAnswer;
+        possibleAnswer.text = answer.prompt;
         this.stationInformation.questions[questionIndex].possibleAnswers =
           arrayAnswers;
       } else {
+        const newAnswer: PossibleAnswer = {
+          rithmId: answer.originalStationRithmId || '',
+          text: answer.prompt,
+          default: false,
+        };
         this.stationInformation.questions[questionIndex].possibleAnswers?.push(
           newAnswer
         );
@@ -436,6 +434,10 @@ export class StationComponent
             );
             this.inputFrameWidgetItems[0].questions =
               this.stationInformation.questions;
+            /** Update the current station questions whenever it changes. */
+            this.stationService.updateCurrentStationQuestions(
+              this.stationInformation.questions
+            );
           }
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;

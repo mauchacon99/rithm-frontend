@@ -195,12 +195,11 @@ export class TextFieldComponent
 
   /**
    * Call the station service to to update field from the current form.
-   *
-   * @param field The field to emit.
    */
-  updateFieldPrompt(field: Question): void {
-    field.prompt = this.textFieldForm.controls[this.field.questionType].value;
-    this.stationService.updateStationQuestionInTemplate(field);
+  updateFieldPrompt(): void {
+    this.field.prompt =
+      this.textFieldForm.controls[this.field.questionType].value;
+    this.stationService.updateStationQuestionInTemplate(this.field);
   }
 
   /**
