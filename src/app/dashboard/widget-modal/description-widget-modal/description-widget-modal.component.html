@@ -1,22 +1,24 @@
 <div class="mt-5">
-<!--header-->
-<div class="pt-3">
-  <h3 class="text-lg font-semibold">
-    {{ dataTemplate[widgetType].title | titlecase }}
-    Template
-  </h3>
-  <p class="text-base">
-    Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
-    <span class="font-semibold">{{
-      itemWidgetModalSelected.itemList.name ||
-        'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
-    }}</span>
-  </p>
-</div>
+  <!--header-->
+  <div class="pt-3">
+    <h3 class="text-lg font-semibold">
+      {{ dataTemplate[widgetType].title | titlecase }}
+      Template
+    </h3>
+    <p class="text-base">
+      Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
+      <span class="font-semibold">{{
+        itemWidgetModalSelected.itemList.name ||
+          'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
+      }}</span>
+    </p>
+  </div>
+  <br />
 
   <div class="w-full flex flex-wrap-reverse md:flex-nowrap">
     <div class="w-full md:w-3/5 md:p-5">
-      <br /> <br />
+      <br />
+      <br />
       <span class="font-bold">List Widget </span>
       <div class="flex flex-col">
         <div class="flex border-t border-secondary-100 py-5">
@@ -24,7 +26,7 @@
             <span>Type</span>
           </div>
           <div class="w-2/4">
-            <span class="text-sm">{{dataDescriptionTemplate}}</span>
+            <span class="text-sm">{{ dataDescriptionTemplate.type }}</span>
           </div>
         </div>
 
@@ -33,7 +35,7 @@
             <span>Customizable Data</span>
           </div>
           <div class="w-2/4">
-            <span>{{dataDescriptionTemplate}}</span>
+            <span>{{ dataDescriptionTemplate.customizable }}</span>
           </div>
         </div>
 
@@ -42,7 +44,7 @@
             <span>Description</span>
           </div>
           <div class="w-2/4">
-            <span class="w-52">{{dataDescriptionTemplate}}</span>
+            <span class="w-52">{{ dataDescriptionTemplate.description }}</span>
           </div>
         </div>
       </div>
@@ -50,11 +52,12 @@
     <div class="w-full md:w-2/5 md:p-8">
       <div class="w-full lg:w-4/5 shadow-md rounded h-[500px]">
         <app-document-widget
-        [dataWidget]="dataWidget"
-        [editMode]="false"
-        [showButtonSetting]="false"
-        [widgetType]="dataDescriptionTemplate"
+          [dataWidget]="dataWidget"
+          [editMode]="false"
+          [showButtonSetting]="false"
+          [widgetType]="widgetTypeWithoutDefault"
         ></app-document-widget>
       </div>
     </div>
   </div>
+</div>

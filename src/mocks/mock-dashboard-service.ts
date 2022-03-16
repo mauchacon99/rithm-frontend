@@ -93,6 +93,42 @@ export class MockDashboardService {
     },
   };
 
+  /** Data description for description-widget-modal. */
+  dataDescriptionTemplate = {
+    // station data
+    [WidgetType.Station]: {
+      type: '',
+      customizable: '',
+      description: ``,
+    },
+    // StationTableBanner data
+    [WidgetType.StationTableBanner]: {
+      type: '',
+      customizable: '',
+      description: ``,
+    },
+    // groups data
+    [WidgetType.StationGroup]: {
+      type: '',
+      customizable: '',
+      description: ``,
+    },
+    // document data
+    [WidgetType.Document]: {
+      type: 'Document Template',
+      customizable: 'List Values',
+      description: `By default, the list widget displays all of the values associated with a document.
+      Values can be optionally be hidden from on the widget in needed.`,
+    },
+    // DocumentListBanner data
+    [WidgetType.DocumentListBanner]: {
+      type: 'Document Template',
+      customizable: 'List Values & Image',
+      description: `Upload an image from the container to display as a banner image.
+      List values can also be optionally hidden from on the widget as needed.`,
+    },
+  };
+
   /**
    * Update data of the widget since drawer station.
    *
