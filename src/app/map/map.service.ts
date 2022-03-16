@@ -1823,6 +1823,35 @@ export class MapService {
       }
       this.stationGroupElements[groupIndex] = this.tempStationGroup$.value;
       this.tempStationGroup$.next({});
+      //Remove station rithm id's from other groups to make make sure a station has got only one parent.
+      this.stationGroupElements[groupIndex].stations.map((stationRithmId) => {
+        this.stationGroupElements.map((group) => {
+          if (
+            group.stations.includes(stationRithmId) &&
+            group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+          ) {
+            group.stations = group.stations.filter(
+              (stationId) => stationId !== stationRithmId
+            );
+          }
+        });
+      });
+      //Remove station group rithm id's from other groups to make sure a group has got only one parent.
+      this.stationGroupElements[groupIndex].subStationGroups.map(
+        (subGroupRithmId) => {
+          this.stationGroupElements.map((group) => {
+            if (
+              group.subStationGroups.includes(subGroupRithmId) &&
+              group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+            ) {
+              group.subStationGroups = group.subStationGroups.filter(
+                (groupId) => groupId !== subGroupRithmId
+              );
+            }
+          });
+        }
+      );
+      this.resetSelectedStationGroupStationStatus();
       this.mapDataReceived$.next(true);
     }
   }

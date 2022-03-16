@@ -2148,6 +2148,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           )
         ) {
           if (this.mapMode === MapMode.StationGroupAdd) {
+            this.mapService.resetSelectedStationGroupStationStatus();
             this.mapService.updatePendingStationGroup();
           } else if (this.mapMode === MapMode.StationGroupEdit) {
             const groupIndex = this.stationGroups.findIndex(
@@ -2165,7 +2166,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.revertStationGroup();
             }
           }
-          this.mapService.resetSelectedStationGroupStationStatus();
           this.mapService.mapMode$.next(MapMode.Build);
         }
       } else if (
