@@ -26,7 +26,12 @@ describe('BuildDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatListModule, MatExpansionModule, DragDropModule, NoopAnimationsModule],
+      imports: [
+        MatListModule,
+        MatExpansionModule,
+        DragDropModule,
+        NoopAnimationsModule,
+      ],
       declarations: [BuildDrawerComponent],
     }).compileComponents();
   });
