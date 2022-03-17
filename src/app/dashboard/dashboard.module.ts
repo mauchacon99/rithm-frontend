@@ -47,6 +47,7 @@ import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-
 import { StationWidgetTemplateModalComponent } from './widget-modal/station-widget-template-modal/station-widget-template-modal.component';
 import { DocumentWidgetTemplateModalComponent } from './widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 import { DescriptionWidgetModalComponent } from './widget-modal/description-widget-modal/description-widget-modal.component';
+import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { DescriptionWidgetModalComponent } from './widget-modal/description-widg
     StationWidgetTemplateModalComponent,
     DocumentWidgetTemplateModalComponent,
     DescriptionWidgetModalComponent,
+    GroupWidgetTemplateModalComponent,
   ],
   imports: [
     CommonModule,

@@ -68,4 +68,17 @@
 </section>
 
 <!--Section for show group template-->
-<section *ngIf="itemWidgetModalSelected.itemType === 'group'"></section>
+<section *ngIf="itemWidgetModalSelected.itemType === 'group'">
+  <hr class="text-secondary-100" />
+  <!-- Stations types list -->
+  <div class="py-6">
+    <p class="font-semibold">Search</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+      <!-- Widget card type group -->
+      <app-group-widget-template-modal
+      [widgetType]="enumWidgetType.GroupSearch">
+      </app-group-widget-template-modal>
+    </div>
+  </div>
+  <hr class="text-secondary-100" />
+</section>
