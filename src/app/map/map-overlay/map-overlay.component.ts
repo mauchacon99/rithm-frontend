@@ -259,10 +259,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   get stationCenter(): boolean {
     const drawer = document.getElementsByTagName('mat-drawer');
     //Call method to run logic for centering of the station.
-    return this.mapService.checkCenter(
-      CenterPanType.Station,
-      drawer[0] ? drawer[0].clientWidth : 0
-    );
+    if (this.mapService.stationElements.some((e) => e.drawerOpened)) {
+      return this.mapService.checkCenter(
+        CenterPanType.Station,
+        drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
+      );
+    }
+    return false;
   }
 
   /**
