@@ -210,8 +210,7 @@
               </app-document-widget>
               <app-group-search-widget
                 *ngIf="
-                  item.widgetType === widgetType.StationGroup ||
-                  item.widgetType === widgetType.StationGroupsList
+                  item.widgetType === widgetType.StationGroupSearch
                 "
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
