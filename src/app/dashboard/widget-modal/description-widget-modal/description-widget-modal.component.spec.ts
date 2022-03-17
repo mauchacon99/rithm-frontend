@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DescriptionWidgetModalComponent } from './description-widget-modal.component';
-import { SelectedItemWidgetModel, WidgetType } from 'src/models';
+import { SelectedItemWidgetModel } from 'src/models';
 import { MockDashboardService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockComponent } from 'ng-mocks';
@@ -59,16 +59,5 @@ describe('DescriptionWidgetModalComponent', () => {
     expect(component.dataTemplate[component.widgetType]).toEqual(
       expectedDataTemplate[widgetType]
     );
-  });
-
-  it('should set data description template', () => {
-    component.widgetType = WidgetType.Document;
-    fixture.detectChanges();
-    const expectedDataTemplate =
-      TestBed.inject(DashboardService).dataDescriptionTemplate[
-        WidgetType.Document
-      ];
-    component.ngOnInit();
-    expect(component.dataDescriptionTemplate).toEqual(expectedDataTemplate);
   });
 });
