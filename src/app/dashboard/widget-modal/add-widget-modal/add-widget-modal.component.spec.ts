@@ -20,7 +20,7 @@ import { DescriptionWidgetModalComponent } from '../description-widget-modal/des
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDashboardService } from 'src/mocks';
 
-fdescribe('AddWidgetModalComponent', () => {
+describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
   let fixture: ComponentFixture<AddWidgetModalComponent>;
   const DIALOG_TEST_DATA: {

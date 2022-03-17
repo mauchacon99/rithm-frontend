@@ -56,7 +56,10 @@
     (previewWidgetSelected)="previewWidgetTypeSelected = $event"
   ></app-list-widget-modal>
 
-  <div class="flex justify-between flex-col h-full" *ngIf="previewWidgetTypeSelected">
+  <div
+    class="flex justify-between flex-col h-full"
+    *ngIf="previewWidgetTypeSelected"
+  >
     <app-description-widget-modal
       [itemWidgetModalSelected]="itemWidgetModalSelected"
       [widgetType]="previewWidgetTypeSelected"
