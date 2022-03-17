@@ -58,7 +58,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
       description: `Upload an image from the container to display as a banner image.
       List values can also be optionally hidden from on the widget as needed.`,
     },
-    // DocumentListBanner data
+    // StationGroupSearch data
     [WidgetType.StationGroupSearch]: {
       type: 'Group Template',
       customizable: 'Search result values',
