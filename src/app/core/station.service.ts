@@ -687,8 +687,8 @@ export class StationService {
    * @param stationGroupRithmId The current station id.
    * @returns The station groups widget.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStationGroupsWidget(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<StationGroupWidgetData> {
     const expectedResponse = {
