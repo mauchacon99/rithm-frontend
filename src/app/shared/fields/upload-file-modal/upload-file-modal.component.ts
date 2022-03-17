@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Reusable component to upload a file from the document.
+ * Reusable component to upload a file from the file-field.
  */
 @Component({
   selector: 'app-upload-file-modal',
