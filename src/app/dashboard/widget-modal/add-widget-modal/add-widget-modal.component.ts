@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SelectedItemWidgetModel } from 'src/models';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -9,14 +9,17 @@ import { SelectedItemWidgetModel } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
+  /** Selected item to show list widget. */
+  itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Title of preview widget selected. */
+  previewWidgetTypeSelected: WidgetType | 'defaultDocument' | null = null;
+
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
   /** The element type to be shown. */
   identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
-
-  /** Selected item to show list widget. */
-  itemWidgetModalSelected!: SelectedItemWidgetModel;
 
   /** Tab Parents selected. */
   tabParentSelect = 0;
@@ -45,6 +48,8 @@ export class AddWidgetModalComponent {
 
   /** Return to widget list when identifyShowElement is not tabs. */
   returnCustomLists(): void {
-    this.identifyShowElement = 'tabs';
+    this.previewWidgetTypeSelected
+      ? (this.previewWidgetTypeSelected = null)
+      : (this.identifyShowElement = 'tabs');
   }
 }

@@ -1,3 +1,24 @@
 .build-categories .mat-list-single-selected-option {
   @apply bg-accent-100;
 }
+
+.previous-fields {
+  .mat-expansion-panel {
+    @apply shadow-none border-none;
+  }
+
+  .mat-expansion-panel-header {
+    @apply px-2;
+  }
+}
+
+/* stylelint-disable-next-line */
+.categories-content {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+  /* stylelint-disable-next-line */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

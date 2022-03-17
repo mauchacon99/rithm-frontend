@@ -12,6 +12,7 @@ import {
   ColumnsDocumentInfo,
   ColumnsLogicWidget,
   ItemListWidgetModal,
+  WidgetType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -34,6 +35,7 @@ export class DashboardService {
   /** Update specific widget and data. */
   updateDataWidget$ = new Subject<EditDataWidget>();
 
+  /** Data static of info about document. */
   columnsDocumentInfo: ColumnsLogicWidget[] = [
     {
       name: 'Document',
@@ -56,6 +58,44 @@ export class DashboardService {
       key: ColumnsDocumentInfo.LastUpdated,
     },
   ];
+
+  /** Data static to preview templates widgets modal. */
+  dataTemplatePreviewWidgetModal = {
+    // station data
+    [WidgetType.Station]: {
+      title: 'Table',
+      description:
+        'Build a custom table with specific values from each document in the station.',
+    },
+    [WidgetType.StationTableBanner]: {
+      title: 'Table With Banner Image',
+      description:
+        'Build a custom table with specific values from each document in the station.',
+    },
+    // groups data
+    [WidgetType.StationGroup]: {
+      title: '',
+      description: '',
+    },
+    // Document data
+    ['defaultDocument']: {
+      title: 'Default',
+      description: 'Maintain the default document styling.',
+    },
+    [WidgetType.DocumentListBanner]: {
+      title: 'List with Banner Image',
+      description:
+        'Display all the values associated with a document along with a custom banner image.',
+    },
+    [WidgetType.Document]: {
+      title: 'List',
+      description: 'Display all the values associated with a document.',
+    },
+    [WidgetType.StationGroupSearch]: {
+      title: 'Station Group',
+      description: 'Display all the values associated with a station group.',
+    },
+  };
 
   constructor(private http: HttpClient) {}
 

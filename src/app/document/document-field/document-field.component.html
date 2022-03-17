@@ -53,6 +53,13 @@
     formControlName="checkFieldForm"
   >
   </app-check-field>
+  <app-file-field
+    *ngIf="field.questionType === fieldTypes.File"
+    [field]="field"
+    [isStation]="false"
+    formControlName="fileFieldForm"
+  >
+  </app-file-field>
   <app-nested-field
     *ngIf="field.children.length > 0"
     [field]="field"
