@@ -386,6 +386,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Cleans up subscription when the component is destroyed. Reset several mapService properties.
    */
   ngOnDestroy(): void {
+    // Undoes the changes in case you are in StationGroupAdd or StationGroupEdit mode.
     this.mapService.cancelMapChanges();
     this.destroyed$.next();
     this.destroyed$.complete();
