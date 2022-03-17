@@ -208,6 +208,14 @@
                 "
               >
               </app-document-widget>
+              <app-group-search-widget
+                *ngIf="item.widgetType === widgetType.StationGroupSearch"
+                [dataWidget]="item.data"
+                [widgetType]="item.widgetType"
+                [editMode]="editMode"
+                [showButtonSetting]="showButtonSetting"
+              >
+              </app-group-search-widget>
             </gridster-item>
           </gridster>
         </div>
