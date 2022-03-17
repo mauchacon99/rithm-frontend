@@ -252,6 +252,18 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether the drawer is opened or not.
+   *
+   * @returns True if any drawer is opened, false otherwise.
+   */
+  get stationDrawerOpened(): boolean {
+    return (
+      this.sidenavDrawerService.isDrawerOpen &&
+      this.drawerMode === 'stationInfo'
+    );
+  }
+
+  /**
    * Whether the station is selected and it's in center of the map.
    *
    * @returns True if the selected station in center of the map, false otherwise.
