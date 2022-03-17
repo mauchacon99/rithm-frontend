@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DescriptionWidgetModalComponent } from './description-widget-modal.component';
-import { SelectedItemWidgetModel } from 'src/models';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { MockDashboardService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockComponent } from 'ng-mocks';
@@ -59,5 +59,22 @@ describe('DescriptionWidgetModalComponent', () => {
     expect(component.dataTemplate[component.widgetType]).toEqual(
       expectedDataTemplate[widgetType]
     );
+  });
+
+  it('should validate that widgetType not be defaultDocument', () => {
+    expect(component.widgetTypeWithoutDefault).toBe(WidgetType.Document);
+    component.widgetType = WidgetType.DocumentListBanner;
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(component.widgetTypeWithoutDefault).toBe(WidgetType.DocumentListBanner);
+  });
+
+  it('should generate dataWidget stringify', () => {
+    const dataWidgetExpected = {
+      documentRithmId: itemWidgetModalSelected.itemList.rithmId,
+      columns: [],
+    };
+    component.ngOnInit();
+    expect(component.dataWidget).toBe(JSON.stringify(dataWidgetExpected));
   });
 });
