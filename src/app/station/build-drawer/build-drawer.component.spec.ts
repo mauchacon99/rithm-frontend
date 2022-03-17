@@ -21,7 +21,6 @@ describe('BuildDrawerComponent', () => {
   let categoryItem: DebugElement[];
   let categorySelected: MatListOption;
   let categoriesListSelected: SelectionModel<MatListOption>;
-
   let loader: HarnessLoader;
 
   beforeEach(async () => {

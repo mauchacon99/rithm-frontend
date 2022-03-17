@@ -4,11 +4,11 @@
 
 .previous-fields {
   .mat-expansion-panel {
-    display: inline;
+    @apply shadow-none border-none;
   }
 
   .mat-expansion-panel-header {
-    padding: 0;
+    @apply px-2;
   }
 }
 
