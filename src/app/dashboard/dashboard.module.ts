@@ -48,6 +48,7 @@ import { StationWidgetTemplateModalComponent } from './widget-modal/station-widg
 import { DocumentWidgetTemplateModalComponent } from './widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 import { DescriptionWidgetModalComponent } from './widget-modal/description-widget-modal/description-widget-modal.component';
 import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-template-modal/group-widget-template-modal.component';
+import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-search-widget.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-t
     DocumentWidgetTemplateModalComponent,
     DescriptionWidgetModalComponent,
     GroupWidgetTemplateModalComponent,
+    GroupSearchWidgetComponent
   ],
   imports: [
     CommonModule,
