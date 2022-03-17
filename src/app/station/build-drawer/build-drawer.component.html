@@ -35,12 +35,16 @@
     <div
       id="custom-fields-container"
       data-testid="custom-fields-container"
+      [cdkDropListData]="customFields"
+      (cdkDropListDropped)="drop($event)"
       *ngSwitchCase="'Form Inputs'"
+      #customFieldsContainer="cdkDropList"
+      cdkDropList
     >
       <div
         class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
         data-testid="custom-fields-item"
-        *ngFor="let field of customFields"
+        *ngFor="let field of customFields" cdkDrag
       >
         <p class="text-lg ml-auto text-primary-900 text-center">
           {{ field.name }}

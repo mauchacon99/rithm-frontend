@@ -7,6 +7,11 @@ import {
 } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CustomField, QuestionFieldType } from 'src/models';
+import {
+  CdkDragDrop,
+  copyArrayItem,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 
 /**
  *
@@ -159,5 +164,27 @@ export class BuildDrawerComponent implements OnInit {
    */
   handleCloseDrawer(): void {
     this.toggleDrawer.emit();
+  }
+
+  /**
+   * Drop this elements of each category.
+   *
+   * @param event Receive the element type DragDrop for move it.
+   */
+  drop(event: CdkDragDrop<CustomField[]>):void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      copyArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
   }
 }
