@@ -509,8 +509,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param editDataWidget Data to edit widget.
    */
   updateDashboardWidget(editDataWidget: EditDataWidget): void {
-    this.dashboardData.widgets[editDataWidget.widgetIndex] =
-      editDataWidget.widgetItem;
+    editDataWidget.isNewWidget
+      ? this.dashboardData.widgets.push(editDataWidget.widgetItem)
+      : (this.dashboardData.widgets[editDataWidget.widgetIndex] =
+          editDataWidget.widgetItem);
+    this.changedOptions();
   }
 
   /**
