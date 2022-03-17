@@ -25,6 +25,6 @@ export class GroupSearchWidgetComponent {
 
   /** Set data for group widget. */
   @Input() set dataWidget(value: string) {
-    this._dataWidget = value;
+    this._dataWidget = JSON.parse(value);
   }
 }
