@@ -66,7 +66,9 @@ describe('DescriptionWidgetModalComponent', () => {
     component.widgetType = WidgetType.DocumentListBanner;
     fixture.detectChanges();
     component.ngOnInit();
-    expect(component.widgetTypeWithoutDefault).toBe(WidgetType.DocumentListBanner);
+    expect(component.widgetTypeWithoutDefault).toBe(
+      WidgetType.DocumentListBanner
+    );
   });
 
   it('should generate dataWidget stringify', () => {
