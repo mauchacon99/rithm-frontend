@@ -82,12 +82,6 @@ describe('BuildDrawerComponent', () => {
   });
 
   it('should show a list of custom fields when selecting FormsInputCategory', () => {
-    categorySelected =
-      categoryItem[0].injector.get<MatListOption>(MatListOption);
-    categoriesListSelected =
-      categoriesList.injector.get<MatSelectionList>(
-        MatSelectionList
-      ).selectedOptions;
     expect(categoriesListSelected.selected.length).toBe(1);
     fixture.detectChanges();
 
@@ -103,27 +97,22 @@ describe('BuildDrawerComponent', () => {
     expect(formInputCategoryList.length).toBe(16);
   });
 
-  xit('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
-    component.categorySelected = 'Components';
+  it('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
+    categorySelected =
+      categoryItem[1].injector.get<MatListOption>(MatListOption);
+    categoriesListSelected =
+      categoriesList.injector.get<MatSelectionList>(
+        MatSelectionList
+      ).selectedOptions;
+    expect(categoriesListSelected.selected.length).toBe(1);
+    categorySelected.toggle();
     fixture.detectChanges();
-    const formInputsC = fixture.debugElement.nativeElement.querySelector(
-      '#custom-fields-container'
-    );
-    expect(formInputsC).toBeFalsy();
 
-    component.categorySelected = 'Previous Fields';
     fixture.detectChanges();
     const formInputsPF = fixture.debugElement.nativeElement.querySelector(
       '#custom-fields-container'
     );
     expect(formInputsPF).toBeFalsy();
-
-    component.categorySelected = 'Integrations';
-    fixture.detectChanges();
-    const formInputsI = fixture.debugElement.nativeElement.querySelector(
-      '#custom-fields-container'
-    );
-    expect(formInputsI).toBeFalsy();
   });
 
   it('should close drawer when closeButton is pressed', () => {
