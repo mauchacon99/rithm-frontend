@@ -62,13 +62,10 @@ describe('DescriptionWidgetModalComponent', () => {
   });
 
   it('should validate that widgetType not be defaultDocument', () => {
-    expect(component.widgetTypeWithoutDefault).toBe(WidgetType.Document);
-    component.widgetType = WidgetType.DocumentListBanner;
+    component.widgetType = 'defaultDocument';
     fixture.detectChanges();
     component.ngOnInit();
-    expect(component.widgetTypeWithoutDefault).toBe(
-      WidgetType.DocumentListBanner
-    );
+    expect(component.widgetTypeWithoutDefault).toBe(WidgetType.Document);
   });
 
   it('should generate dataWidget stringify', () => {
