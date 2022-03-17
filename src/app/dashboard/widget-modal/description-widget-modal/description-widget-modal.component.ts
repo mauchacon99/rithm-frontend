@@ -58,6 +58,13 @@ export class DescriptionWidgetModalComponent implements OnInit {
       description: `Upload an image from the container to display as a banner image.
       List values can also be optionally hidden from on the widget as needed.`,
     },
+    // DocumentListBanner data
+    [WidgetType.StationGroupSearch]: {
+      type: 'Group Template',
+      customizable: 'Search result values',
+      description: `User can query all the values saved on documents within a flow. By default the search results display the document
+      name and the field that matches your search.`,
+    },
   };
 
   /** Widget type without default. */
