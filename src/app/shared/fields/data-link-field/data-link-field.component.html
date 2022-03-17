@@ -8,7 +8,7 @@
       >Help</a
     >
   </div>
-  <!-- Avalaible Stations  -->
+  <!-- Available Stations  -->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
     <mat-label>{{ field.prompt }}</mat-label>
     <div matPrefix class="icon">
@@ -55,7 +55,7 @@
       <mat-option
         class="text-sm"
         *ngFor="let option of questions"
-        [value]="option.prompt"
+        [value]="option.rithmId"
       >
         <p *ngIf="option.prompt">{{ option.prompt }}</p>
       </mat-option>
@@ -70,6 +70,28 @@
           {{ item.prompt }}
         </mat-option>
       </ng-container>
+    </mat-select>
+  </mat-form-field>
+  <!-- Display Fields  -->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label
+      >{{ questionLoading ? 'Loading Questions' : displayFieldsLabel }}
+      <i *ngIf="questionLoading" class="fa-solid fa-spin fa-spinner fa-2x1">
+      </i>
+    </mat-label>
+
+    <mat-select
+      multiple
+      [disabled]="!questions.length || questionLoading"
+      formControlName="selectDisplayFields"
+    >
+      <mat-option
+        class="text-sm"
+        *ngFor="let option of questions"
+        [value]="option.rithmId"
+      >
+        <p *ngIf="option.prompt">{{ option.prompt }}</p>
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
