@@ -178,7 +178,7 @@
             View Station
           </button>
           <button
-            *ngIf="!stationCenter"
+            *ngIf="drawerOpened && !stationCenter"
             id="centerStation"
             class="px-3 py-1 text-accent-500 hidden md:inline-block"
             data-testId="centerStation"

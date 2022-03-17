@@ -130,20 +130,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     return this.mapService.mapHasChanges;
   }
 
-  /**
-   * Whether the station is selected and it's in center of the map.
-   *
-   * @returns True if the selected station in center of the map, false otherwise.
-   */
-  get stationCenter(): boolean {
-    const drawer = document.getElementsByTagName('mat-drawer');
-    //Call method to run logic for centering of the station.
-    return this.mapService.checkCenter(
-      CenterPanType.Station,
-      drawer[0] ? drawer[0].clientWidth : 0
-    );
-  }
-
   constructor(
     private mapService: MapService,
     private popupService: PopupService,
@@ -263,6 +249,20 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
     this.mapService.mapDataReceived$.next(false);
+  }
+
+  /**
+   * Whether the station is selected and it's in center of the map.
+   *
+   * @returns True if the selected station in center of the map, false otherwise.
+   */
+  get stationCenter(): boolean {
+    const drawer = document.getElementsByTagName('mat-drawer');
+    //Call method to run logic for centering of the station.
+    return this.mapService.checkCenter(
+      CenterPanType.Station,
+      drawer[0] ? drawer[0].clientWidth : 0
+    );
   }
 
   /**

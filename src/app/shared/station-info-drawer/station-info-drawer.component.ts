@@ -244,6 +244,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether the drawer is opened or not.
+   *
+   * @returns True if any drawer is opened, false otherwise.
+   */
+  get drawerOpened(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
    * Whether the station is locally created on the map.
    *
    * @returns True if locally created, false otherwise.
