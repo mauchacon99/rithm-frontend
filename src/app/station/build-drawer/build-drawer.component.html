@@ -30,7 +30,7 @@
   </section>
   <section
     class="px-4 py-5 w-72 overflow-y-auto categories-content"
-    [ngSwitch]="buildCategory.selectedOptions.selected[0]?.value"
+    [ngSwitch]="categorySelected"
   >
     <div
       id="custom-fields-container"

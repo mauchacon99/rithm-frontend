@@ -98,16 +98,7 @@ describe('BuildDrawerComponent', () => {
   });
 
   it('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
-    categorySelected =
-      categoryItem[1].injector.get<MatListOption>(MatListOption);
-    categoriesListSelected =
-      categoriesList.injector.get<MatSelectionList>(
-        MatSelectionList
-      ).selectedOptions;
-    expect(categoriesListSelected.selected.length).toBe(1);
-    categorySelected.toggle();
-    fixture.detectChanges();
-
+    component.categorySelected = 'Previous Fields';
     fixture.detectChanges();
     const formInputsPF = fixture.debugElement.nativeElement.querySelector(
       '#custom-fields-container'
@@ -132,24 +123,17 @@ describe('BuildDrawerComponent', () => {
 
   describe('TestExpansionHarness', () => {
     beforeEach(() => {
-      categoriesList = fixture.debugElement.query(
-        By.directive(MatSelectionList)
-      );
-      categorySelected =
-        categoryItem[1].injector.get<MatListOption>(MatListOption);
-      categorySelected.toggle();
+      component.categorySelected = 'Previous Fields';
       fixture.detectChanges();
       loader = TestbedHarnessEnvironment.loader(fixture);
     });
 
     it('should be able to load expansion panels', async () => {
-      expect(categorySelected).toBeTruthy();
       const panels = await loader.getAllHarnesses(MatExpansionPanelHarness);
       expect(panels.length).toBe(2);
     });
 
     it('should be able to toggle expansion state of panel', async () => {
-      expect(categorySelected).toBeTruthy();
       const panel = await loader.getHarness(MatExpansionPanelHarness);
       expect(await panel.isExpanded()).toBe(true);
     });
