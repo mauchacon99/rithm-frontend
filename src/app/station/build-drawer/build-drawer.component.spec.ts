@@ -6,7 +6,7 @@ import {
   MatListOption,
   MatSelectionList,
 } from '@angular/material/list';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
 
@@ -20,7 +20,7 @@ describe('BuildDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatListModule,DragDropModule],
+      imports: [MatListModule, DragDropModule],
       declarations: [BuildDrawerComponent],
     }).compileComponents();
   });
