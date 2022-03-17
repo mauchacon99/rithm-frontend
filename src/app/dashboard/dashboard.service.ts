@@ -91,7 +91,7 @@ export class DashboardService {
       title: 'List',
       description: 'Display all the values associated with a document.',
     },
-    [WidgetType.StationGroupsListBanner]: {
+    [WidgetType.StationGroupsList]: {
       title: 'Station Groups',
       description: 'Display all the values associated with a station groups.',
     },
