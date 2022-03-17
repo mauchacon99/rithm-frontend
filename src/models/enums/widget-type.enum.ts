@@ -12,4 +12,6 @@ export enum WidgetType {
   StationTableBanner = 'station-table-banner-widget',
   /** Widget type DocumentListBanner. */
   DocumentListBanner = 'document-list-banner-widget',
+  /** Widget type StationGroupsListBanner. */
+  StationGroupsListBanner = 'station-group-search-widget',
 }
