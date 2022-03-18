@@ -474,6 +474,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Parse dashboardData widgets rithmId.
+   *
+   * @returns DashboardData parsed.
+   */
+  private parseDashboardData(): DashboardData {
+    const dashboardData = JSON.parse(
+      JSON.stringify(this.dashboardData)
+    ) as DashboardData;
+    dashboardData.widgets.map((widget, index) => {
+      if (widget.rithmId.includes('TEMPID')) {
+        dashboardData.widgets[index].rithmId = '';
+      }
+    });
+    return dashboardData;
+  }
+
   /** Update dashboard. */
   updateDashboard(): void {
     this.toggleDrawerOnlyForWidgets();
@@ -481,8 +498,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
-        ? this.dashboardService.updateOrganizationDashboard(this.dashboardData)
-        : this.dashboardService.updatePersonalDashboard(this.dashboardData);
+        ? this.dashboardService.updateOrganizationDashboard(
+            this.parseDashboardData()
+          )
+        : this.dashboardService.updatePersonalDashboard(
+            this.parseDashboardData()
+          );
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
@@ -562,11 +583,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   openDialogAddWidget(): void {
     this.toggleDrawerOnlyForWidgets();
-    this.dialog.open(AddWidgetModalComponent, {
+    const dialog = this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
       data: this.dashboardData.rithmId,
     });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe((widgetItem: DashboardItem) => {
+        if (widgetItem) {
+          this.dashboardData.widgets.push(widgetItem);
+        }
+      });
   }
 
   /** Clean subscriptions. */
