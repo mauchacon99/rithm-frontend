@@ -4,7 +4,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockErrorService, MockSplitService, MockUserService } from 'src/mocks';
-import { AdminMenuComponent } from 'src/app/admin/admin-menu/admin-menu.component';
+import { AdminMenuComponent } from 'src/app/admin/admin-menu/admin-menu/admin-menu.component';
 import { OrganizationManagementComponent } from 'src/app/admin/organization-management/organization-management.component';
 
 import { AdminComponent } from './admin.component';
