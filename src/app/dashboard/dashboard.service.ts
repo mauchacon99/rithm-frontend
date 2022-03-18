@@ -92,8 +92,9 @@ export class DashboardService {
       description: 'Display all the values associated with a document.',
     },
     [WidgetType.StationGroupSearch]: {
-      title: 'Station Group',
-      description: 'Display all the values associated with a station group.',
+      title: 'Search',
+      description: `User can query all the values saved on documents within a flow. By default the search results display the document
+      name and the field that matches your search.`,
     },
   };
 

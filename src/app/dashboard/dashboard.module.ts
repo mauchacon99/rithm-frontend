@@ -79,7 +79,7 @@ import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-
     DocumentWidgetTemplateModalComponent,
     DescriptionWidgetModalComponent,
     GroupWidgetTemplateModalComponent,
-    GroupSearchWidgetComponent
+    GroupSearchWidgetComponent,
   ],
   imports: [
     CommonModule,

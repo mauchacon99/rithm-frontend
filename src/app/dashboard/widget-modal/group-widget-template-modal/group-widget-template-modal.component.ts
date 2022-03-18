@@ -8,11 +8,14 @@ import { WidgetType } from 'src/models';
 @Component({
   selector: 'app-group-widget-template-modal[widgetType]',
   templateUrl: './group-widget-template-modal.component.html',
-  styleUrls: ['./group-widget-template-modal.component.scss']
+  styleUrls: ['./group-widget-template-modal.component.scss'],
 })
 export class GroupWidgetTemplateModalComponent {
   /** Type of widget to show. */
-  @Input() widgetType:WidgetType = WidgetType.GroupSearch;
+  @Input() widgetType: WidgetType = WidgetType.StationGroupSearch;
+
+  /** Enum widgetType. */
+  enumWidgetType = WidgetType;
 
   /** Data static for each template by widgetType. */
   dataTemplate;

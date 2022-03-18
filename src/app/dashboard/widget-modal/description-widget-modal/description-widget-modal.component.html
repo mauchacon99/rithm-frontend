@@ -12,3 +12,67 @@
     }}</span>
   </p>
 </div>
+
+<div class="w-full flex flex-wrap-reverse md:flex-nowrap gap-4">
+  <div class="w-full md:w-2/4 py-5 md:py-14">
+    <span class="font-bold">List Widget </span>
+    <div class="flex border-t border-secondary-100 py-5 mt-2">
+      <div class="w-2/4">
+        <span>Type</span>
+      </div>
+      <div class="w-2/4">
+        <span>{{
+          dataDescriptionTemplate[widgetTypeWithoutDefault].type
+        }}</span>
+      </div>
+    </div>
+
+    <div class="flex border-t border-secondary-100 py-5">
+      <div class="w-2/4">
+        <span>Customizable Data</span>
+      </div>
+      <div class="w-2/4">
+        <span>{{
+          dataDescriptionTemplate[widgetTypeWithoutDefault].customizable
+        }}</span>
+      </div>
+    </div>
+
+    <div class="flex border-t border-secondary-100 py-5">
+      <div class="w-2/4">
+        <span>Description</span>
+      </div>
+      <div class="w-2/4">
+        <span class="w-52">{{
+          dataDescriptionTemplate[widgetTypeWithoutDefault].description
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="w-full md:w-2/4 py-5">
+    <div class="flex justify-center">
+      <app-document-widget
+        *ngIf="
+          widgetType === enumWidgetType.Document ||
+          widgetType === enumWidgetType.DocumentListBanner ||
+          widgetType === 'defaultDocument'
+        "
+        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md"
+        [dataWidget]="dataWidget"
+        [editMode]="false"
+        [showButtonSetting]="false"
+        [widgetType]="widgetTypeWithoutDefault"
+      ></app-document-widget>
+
+      <app-group-search-widget
+        *ngIf="widgetType === enumWidgetType.StationGroupSearch"
+        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md"
+        [dataWidget]="dataWidget"
+        [editMode]="false"
+        [showButtonSetting]="false"
+        [widgetType]="widgetTypeWithoutDefault"
+      >
+      </app-group-search-widget>
+    </div>
+  </div>
+</div>

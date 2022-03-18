@@ -76,7 +76,9 @@
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <!-- Widget card type group -->
       <app-group-widget-template-modal
-      [widgetType]="enumWidgetType.GroupSearch">
+        (click)="emitPreviewWidgetSelected(enumWidgetType.StationGroupSearch)"
+        [widgetType]="enumWidgetType.StationGroupSearch"
+      >
       </app-group-widget-template-modal>
     </div>
   </div>
