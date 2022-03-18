@@ -689,7 +689,7 @@ export class StationService {
    * @param depth Depth of the sub-stationGroups.
    * @returns The station groups widget.
    */
-  getStationGroupsWidget(
+  getStationGroups(
     stationGroupRithmId: string,
     depth = 1
   ): Observable<StationGroupData> {

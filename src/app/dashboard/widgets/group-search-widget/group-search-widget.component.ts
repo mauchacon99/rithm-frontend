@@ -27,7 +27,7 @@ export class GroupSearchWidgetComponent implements OnInit {
   @Input() dataWidget!: string;
 
   /** Data to station group widget. */
-  dataStationGroupWidget!: StationGroupData;
+  dataStationGroup!: StationGroupData;
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
@@ -43,19 +43,19 @@ export class GroupSearchWidgetComponent implements OnInit {
   ngOnInit(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.getStationGroupsWidget();
+    this.getStationGroups();
   }
 
   /**
    * Get station groups.
    */
-  private getStationGroupsWidget(): void {
+  private getStationGroups(): void {
     this.stationService
-      .getStationGroupsWidget(this.stationGroupRithmId)
+      .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
-        next: (dataStationGroupWidget) => {
-          this.dataStationGroupWidget = dataStationGroupWidget;
+        next: (dataStationGroup) => {
+          this.dataStationGroup = dataStationGroup;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

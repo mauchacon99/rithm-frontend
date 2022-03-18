@@ -34,21 +34,18 @@ describe('GroupSearchWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call service that return station widget data', () => {
+  it('should call service that return station data', () => {
     const spyService = spyOn(
       TestBed.inject(StationService),
-      'getStationGroupsWidget'
+      'getStationGroups'
     ).and.callThrough();
     const expectData = JSON.parse(dataWidget).stationGroupRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
   });
 
-  it('should show error message when request station widget document  data', () => {
-    spyOn(
-      TestBed.inject(StationService),
-      'getStationGroupsWidget'
-    ).and.returnValue(
+  it('should show error message when request station document  data', () => {
+    spyOn(TestBed.inject(StationService), 'getStationGroups').and.returnValue(
       throwError(() => {
         throw new Error();
       })

@@ -16,6 +16,7 @@ import {
   StandardStringJSON,
   DocumentNameField,
   StandardBooleanJSON,
+  StationGroupData,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1136,25 +1137,61 @@ describe('StationService', () => {
 
   it('should return the station group', () => {
     const depth = 1;
-    const expectedResponse = {
+    const expectedResponse: StationGroupData = {
       rithmId: stationId,
       title: 'Station Group',
-      SubStationGroups: [],
+      subStationGroups: ['subStation 1'],
       stations: [
         {
-          rithmId: '3237520-7837-78378-78378',
-          name: 'StationName',
-          workers: [],
-          StationOwners: [],
+          rithmId: '123-321-456',
+          name: 'station 1',
+          workers: [
+            {
+              rithmId: '123-321-456',
+              firstName: 'John',
+              lastName: 'Wayne',
+              email: 'name@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          stationOwners: [
+            {
+              rithmId: '789-798-456',
+              firstName: 'Peter',
+              lastName: 'Doe',
+              email: 'name1@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
         },
       ],
-      admins: [],
-      users: [],
+      users: [
+        {
+          rithmId: '789-798-456',
+          firstName: 'Noah',
+          lastName: 'Smith',
+          email: 'name2@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      admins: [
+        {
+          rithmId: '159-753-456',
+          firstName: 'Taylor',
+          lastName: 'Du',
+          email: 'name3@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
       isChained: true,
       isImplicitRootStationGroup: true,
     };
 
-    service.getStationGroupsWidget(stationId).subscribe((response) => {
+    service.getStationGroups(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
 
