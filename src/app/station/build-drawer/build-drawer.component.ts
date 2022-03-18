@@ -20,7 +20,7 @@ import { CustomField, QuestionFieldType } from 'src/models';
 export class BuildDrawerComponent implements OnInit {
   /** The station id used to get previous fields. */
   @Input() stationId!: string;
-  
+
   /**
    * Event Emitter that executes toggle logic from station component.
    */
