@@ -35,10 +35,21 @@
     <div
       id="custom-fields-container"
       data-testid="custom-fields-container"
+      cdkDropList
+      cdkDropListConnectedTo="station-grid"
       *ngSwitchCase="'Form Inputs'"
     >
       <div
-        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        cdkDrag
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
+        (click)="addNewInputFrame()"
+        data-testid="input-frame-item"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
+        <span class="fa-regular fa-object-group fa-lg ml-auto"></span>
+      </div>
+      <div
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
         data-testid="custom-fields-item"
         *ngFor="let field of customFields"
       >
@@ -47,6 +58,22 @@
         </p>
         <span class="{{ field.icon }} fa-lg ml-auto"></span>
       </div>
+    </div>
+    <div class="previous-fields" *ngSwitchCase="'Previous Fields'">
+      <mat-accordion multi>
+        <mat-expansion-panel togglePosition="before" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-lg"> All </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- Options here -->
+        </mat-expansion-panel>
+        <mat-expansion-panel togglePosition="before" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-lg"> Private </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- Options here -->
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </section>
 </div>
