@@ -107,9 +107,9 @@ export class AddWidgetModalComponent {
   addWidget(): void {
     const minItemRows = this.minItemRowsWidget();
     const widgetType = this.widgetTypeToItem();
-
+    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
     const widgetItem: DashboardItem = {
-      rithmId: '',
+      rithmId,
       cols: 3,
       rows: minItemRows,
       x: 0,

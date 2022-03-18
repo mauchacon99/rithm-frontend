@@ -366,6 +366,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should push new widget to dashboardData', () => {
+    component.dashboardData = dataDashboard;
     const widgetItem = {
       rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
       cols: 3,
@@ -809,5 +810,24 @@ describe('DashboardComponent', () => {
       expect(component.viewNewDashboard).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
     });
+  });
+
+  it('should parse dashboard data to widgets rithmId', () => {
+    const widgetItem = {
+      rithmId: 'TEMPID-147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 4,
+      rows: 1,
+      x: 0,
+      y: 0,
+      widgetType: WidgetType.Station,
+      data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+      minItemCols: 4,
+      minItemRows: 4,
+      maxItemCols: 12,
+      maxItemRows: 12,
+    };
+    component.dashboardData.widgets = [widgetItem];
+    component['parseDashboardData']();
+    expect(component.dashboardData.widgets[0].rithmId).toEqual('');
   });
 });

@@ -474,9 +474,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Parse dashboardData widgets rithmId. */
+  private parseDashboardData(): void {
+    this.dashboardData.widgets.map((widget, index) => {
+      if (widget.rithmId.includes('TEMPID')) {
+        this.dashboardData.widgets[index].rithmId = '';
+      }
+    });
+  }
+
   /** Update dashboard. */
   updateDashboard(): void {
     this.toggleDrawerOnlyForWidgets();
+    this.parseDashboardData();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =

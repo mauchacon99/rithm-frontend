@@ -151,7 +151,7 @@ describe('AddWidgetModalComponent', () => {
 
   describe('Add new widget', () => {
     const expectData: DashboardItem = {
-      rithmId: '',
+      rithmId: 'TEMPID-i3v9',
       cols: 3,
       rows: 1,
       x: 0,
@@ -174,6 +174,7 @@ describe('AddWidgetModalComponent', () => {
     it('should add widget when data it is station table or document list', () => {
       const spyMatDialogRef = spyOn(dialogRef, 'close');
       const spyMethod = spyOn(component, 'addWidget').and.callThrough();
+      const spyMath = spyOn(Math, 'random').and.returnValues(123456789);
       component.previewWidgetTypeSelected = WidgetType.Station;
       expectData.widgetType = WidgetType.Station;
       expectData.rows = 1;
@@ -186,12 +187,14 @@ describe('AddWidgetModalComponent', () => {
       btnAddWidget.click();
 
       expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
+      expect(spyMath).toHaveBeenCalled();
       expect(spyMethod).toHaveBeenCalled();
     });
 
     it('should add widget when data it is station banner or document banner', () => {
       const spyMatDialogRef = spyOn(dialogRef, 'close');
       const spyMethod = spyOn(component, 'addWidget').and.callThrough();
+      const spyMath = spyOn(Math, 'random').and.returnValues(123456789);
       component.previewWidgetTypeSelected = WidgetType.StationTableBanner;
       expectData.widgetType = WidgetType.StationTableBanner;
       expectData.rows = 2;
@@ -204,12 +207,14 @@ describe('AddWidgetModalComponent', () => {
       btnAddWidget.click();
 
       expect(spyMethod).toHaveBeenCalled();
+      expect(spyMath).toHaveBeenCalled();
       expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
     });
 
     it('should add widget when previewWidgetTypeSelected is defaultDocument', () => {
       const spyMatDialogRef = spyOn(dialogRef, 'close');
       const spyMethod = spyOn(component, 'addWidget').and.callThrough();
+      const spyMath = spyOn(Math, 'random').and.returnValues(123456789);
       component.previewWidgetTypeSelected = WidgetType.Document;
       component.itemWidgetModalSelected.itemType = 'document';
       expectData.widgetType = WidgetType.Document;
@@ -223,6 +228,7 @@ describe('AddWidgetModalComponent', () => {
       btnAddWidget.click();
 
       expect(spyMethod).toHaveBeenCalled();
+      expect(spyMath).toHaveBeenCalled();
       expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
     });
   });
