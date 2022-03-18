@@ -106,6 +106,13 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show list of stations groups', () => {
+    component.dataStationGroupWidget.stations.push({
+      rithmId: '3237520-7837-78378-78378',
+      name: 'StationName',
+      workers: [],
+      StationOwners: [],
+    });
+    fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
     );

@@ -12,7 +12,10 @@
 >
 </app-error-widget>
 
-<div class="scrollbar p-2 overflow-auto" *ngIf="dataStationGroupWidget">
+<div
+  class="scrollbar p-2 overflow-auto h-full w-full"
+  *ngIf="dataStationGroupWidget"
+>
   <div
     id="list-stations-groups"
     *ngIf="dataStationGroupWidget.stations.length; else stationGroupsEmpty"
