@@ -1,5 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { WidgetType } from 'src/models';
+import { Component, Input, OnInit } from '@angular/core';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { StationService } from 'src/app/core/station.service';
+import { StationGroupWidgetData, WidgetType } from 'src/models';
 
 /**
  * Component for list field the groups how widget.
@@ -10,7 +13,7 @@ import { WidgetType } from 'src/models';
   templateUrl: './group-search-widget.component.html',
   styleUrls: ['./group-search-widget.component.scss'],
 })
-export class GroupSearchWidgetComponent {
+export class GroupSearchWidgetComponent implements OnInit {
   /** To load dom by WidgetType. */
   @Input() widgetType: WidgetType = WidgetType.StationGroup;
 
@@ -20,11 +23,46 @@ export class GroupSearchWidgetComponent {
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
-  /** Data widget. */
-  private _dataWidget = '';
-
   /** Set data for group widget. */
-  @Input() set dataWidget(value: string) {
-    this._dataWidget = JSON.parse(value);
+  @Input() dataWidget!: string;
+
+  /** Data to station group widget. */
+  dataStationGroupWidget!: StationGroupWidgetData;
+
+  /** StationGroupRithmId for station widget. */
+  stationGroupRithmId = '';
+
+  constructor(
+    private stationService: StationService,
+    private errorService: ErrorService
+  ) {}
+
+  /**
+   * Initial Method.
+   */
+  ngOnInit(): void {
+    const dataWidget = JSON.parse(this.dataWidget);
+    this.stationGroupRithmId = dataWidget.stationGroupRithmId;
+    this.getStationGroupsWidget();
+  }
+
+  /**
+   * Get station groups.
+   */
+  private getStationGroupsWidget(): void {
+    this.stationService
+      .getStationGroupsWidget(this.stationGroupRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (dataStationGroupWidget) => {
+          this.dataStationGroupWidget = dataStationGroupWidget;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
