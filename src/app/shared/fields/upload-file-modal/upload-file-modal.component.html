@@ -3,6 +3,8 @@
   <div class="flex justify-center items-center h-full">
     <h4 class="text-center">Upload File</h4>
   </div>
+  <!-- File upload -->
+  <div class="h-60"></div>
   <div mat-dialog-actions class="flex justify-end space-x-4">
     <!-- Cancel -->
     <button
@@ -12,16 +14,18 @@
       mat-dialog-close
       data-testid="close-modal-btn"
       id="close-modal-btn"
+      (click)="closeModal()"
     >
       Cancel
     </button>
     <!-- Save -->
     <button
       type="button"
-      mat-stroked-button
+      mat-button
       color="accent"
       data-testid="save-modal-btn"
       id="save-modal-btn"
+      class="pl-3 text-secondary-300"
       [disabled]="true"
     >
       Save
