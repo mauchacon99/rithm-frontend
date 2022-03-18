@@ -4,7 +4,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockErrorService, MockSplitService, MockUserService } from 'src/mocks';
-import { OrganizationManagementComponent } from '../organization-management/organization-management.component';
+import { AdminMenuComponent } from 'src/app/admin/admin-menu/admin-menu.component';
+import { OrganizationManagementComponent } from 'src/app/admin/organization-management/organization-management.component';
 
 import { AdminComponent } from './admin.component';
 
@@ -17,6 +18,7 @@ describe('AdminComponent', () => {
       declarations: [
         AdminComponent,
         MockComponent(OrganizationManagementComponent),
+        MockComponent(AdminMenuComponent),
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
