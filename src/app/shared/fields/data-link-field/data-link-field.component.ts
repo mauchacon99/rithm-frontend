@@ -97,7 +97,7 @@ export class DataLinkFieldComponent
       [this.field.questionType]: [this.fieldValue, []],
       selectedMatchingValue: ['', []],
       selectBaseValue: ['', []],
-      selectDisplayFields: ['', []],
+      selectedDisplayFields: ['', []],
     });
     this.subscribeCurrentStationQuestions();
     this.getAllStations();
@@ -154,6 +154,8 @@ export class DataLinkFieldComponent
               this.displayFieldsLabel = 'Display Fields';
             }
             this.questions = questions;
+            this.resetField('selectedDisplayFields', []);
+            this.resetField('selectedMatchingValue', '');
             this.questionLoading = false;
           },
           error: (error: unknown) => {
@@ -165,6 +167,22 @@ export class DataLinkFieldComponent
           },
         });
     }
+  }
+
+  /**
+   * Reset a dataLinkFieldForm value control.
+   *
+   * @param controlName The name control.
+   * @param value Value reset the control.
+   */
+  resetField(
+    controlName:
+      | 'selectedMatchingValue'
+      | 'selectBaseValue'
+      | 'selectedDisplayFields',
+    value: unknown
+  ): void {
+    this.dataLinkFieldForm.controls[controlName].reset(value);
   }
 
   /**
