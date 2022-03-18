@@ -1797,8 +1797,13 @@ export class MapService {
     if (stationGroupIndex === -1) {
       throw new Error(`There is not any station group with this rithmId.`);
     }
-    this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
-    this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
+    if (this.mapMode$.value === MapMode.StationGroupAdd) {
+      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      this.stationGroupElements[stationGroupIndex].status =
+        MapItemStatus.Created;
+    } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+    }
 
     this.resetSelectedStationGroupStationStatus();
   }

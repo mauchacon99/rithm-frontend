@@ -18,11 +18,11 @@ export class DescriptionWidgetModalComponent implements OnInit {
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
-  /** Data widget. */
-  dataWidget!: string;
-
   /** Widget type without default. */
   widgetTypeWithoutDefault!: WidgetType;
+
+  /** Data widget. */
+  dataWidget!: string;
 
   /** Data Description for description-widget-modal.  */
   dataDescriptionTemplate = {
