@@ -219,7 +219,7 @@ describe('PreviousFieldsComponent', () => {
     fixture.detectChanges();
     expect(component.questionsError).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector(
-      '#build-previos-questions-error'
+      '#build-previous-questions-error'
     );
     expect(errorComponent).toBeTruthy();
   });
@@ -239,7 +239,7 @@ describe('PreviousFieldsComponent', () => {
     expect(loading).toBeTruthy();
   });
 
-  it('should show build-previos-questions-empty when the array of all previous questions is empty', () => {
+  it('should show build-previous-questions-empty when the array of all previous questions is empty', () => {
     component.isStation = true;
     component.isPrivate = false;
     component.isBuildDrawer = true;
@@ -254,7 +254,65 @@ describe('PreviousFieldsComponent', () => {
     component['getStationPreviousQuestions']();
     fixture.detectChanges();
     const emptyMessage = fixture.debugElement.nativeElement.querySelector(
-      '#build-previos-questions-empty'
+      '#build-previous-questions-empty'
+    );
+    expect(emptyMessage).toBeTruthy();
+  });
+
+  it('should show error message when request for get private previous questions fails', () => {
+    component.isStation = true;
+    component.isPrivate = true;
+    component.isBuildDrawer = true;
+    component.stationId = stationId;
+
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationPreviousQuestions'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component['getStationPreviousQuestions']();
+    fixture.detectChanges();
+    expect(component.questionsError).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#build-previous-questions-error'
+    );
+    expect(errorComponent).toBeTruthy();
+  });
+
+  it('should show loading indicators while getting private previous questions as build-drawer', () => {
+    component.isStation = true;
+    component.isPrivate = true;
+    component.isBuildDrawer = true;
+    component.stationId = stationId;
+
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loading = fixture.debugElement.nativeElement.querySelector(
+      '#build-previous-fields-loading'
+    );
+    expect(loading).toBeTruthy();
+  });
+
+  it('should show build-previous-questions-empty when the array of private previous questions is empty', () => {
+    component.isStation = true;
+    component.isPrivate = true;
+    component.isBuildDrawer = true;
+    component.stationId = stationId;
+
+    const questions: Question[] = [];
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationPreviousQuestions'
+    ).and.callFake(() => of(questions));
+
+    component['getStationPreviousQuestions']();
+    fixture.detectChanges();
+    const emptyMessage = fixture.debugElement.nativeElement.querySelector(
+      '#build-previous-questions-empty'
     );
     expect(emptyMessage).toBeTruthy();
   });

@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isBuildDrawer; else builDrawerPreviousFields">
+<ng-container *ngIf="!isBuildDrawer; else buildDrawerPreviousFields">
   <div
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"
     *ngIf="!isLoading"
@@ -95,7 +95,7 @@
     ></app-loading-indicator>
   </div>
 </ng-container>
-<ng-template #builDrawerPreviousFields>
+<ng-template #buildDrawerPreviousFields>
   <div *ngIf="isLoading; else previousFields" class="flex justify-center">
     <app-loading-indicator
       id="build-previous-fields-loading"
@@ -120,7 +120,7 @@
     </div>
     <ng-container *ngIf="questions.length === 0 && !questionsError">
       <div
-        id="build-previos-questions-empty"
+        id="build-previous-questions-empty"
         class="font-semibold text-center col-span-full"
       >
         There are no previous fields available
@@ -128,7 +128,7 @@
     </ng-container>
     <ng-container *ngIf="questionsError">
       <div
-        id="build-previos-questions-error"
+        id="build-previous-questions-error"
         class="text-center col-span-full text-error-500"
       >
         Error: unable to retrieve previous fields

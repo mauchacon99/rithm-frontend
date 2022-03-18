@@ -66,13 +66,21 @@
               </app-previous-fields>
             </ng-template>
           </mat-expansion-panel-header>
-          <!-- Options here -->
         </mat-expansion-panel>
         <mat-expansion-panel togglePosition="before" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title class="text-lg"> Private </mat-panel-title>
           </mat-expansion-panel-header>
-          <!-- Options here -->
+          <ng-template matExpansionPanelContent>
+            <app-previous-fields
+              [stationId]="stationId"
+              [isStation]="true"
+              [isPrivate]="true"
+              [isBuildDrawer]="true"
+              [customFields]="customFields"
+            >
+            </app-previous-fields>
+          </ng-template>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
