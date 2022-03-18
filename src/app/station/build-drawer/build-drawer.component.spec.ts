@@ -81,19 +81,25 @@ describe('BuildDrawerComponent', () => {
   });
 
   it('should show a list of custom fields when selecting FormsInputCategory', () => {
-    expect(categoriesListSelected.selected.length).toBe(1);
+    categorySelected =
+      categoryItem[0].injector.get<MatListOption>(MatListOption);
+    categoriesListSelected =
+      categoriesList.injector.get<MatSelectionList>(
+        MatSelectionList
+      ).selectedOptions;
+    expect(categoriesListSelected.selected).toHaveSize(1);
     fixture.detectChanges();
 
     const formInputs = fixture.nativeElement.querySelector(
       '#custom-fields-container'
     );
     expect(formInputs).toBeTruthy();
-    expect(component.customFields.length).toBe(16);
+    expect(component.customFields).toHaveSize(15);
     const formInputCategoryList =
       fixture.debugElement.nativeElement.querySelectorAll(
         '[data-testid="custom-fields-item"]'
       );
-    expect(formInputCategoryList.length).toBe(16);
+    expect(formInputCategoryList).toHaveSize(15);
   });
 
   it('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
