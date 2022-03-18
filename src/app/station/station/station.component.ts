@@ -125,20 +125,7 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: InputFrameWidget[] = [
-    {
-      frameRithmId: '',
-      cols: 6,
-      rows: 4,
-      x: 1,
-      y: 1,
-      minItemRows: 4,
-      minItemCols: 6,
-      questions: [],
-      type: '',
-      data: '',
-    },
-  ];
+  inputFrameWidgetItems: InputFrameWidget[] = [];
 
   /** Loading / Error variables. */
 
@@ -432,8 +419,8 @@ export class StationComponent
             this.stationForm.controls.generalInstructions.setValue(
               stationInfo.instructions
             );
-            this.inputFrameWidgetItems[0].questions =
-              this.stationInformation.questions;
+            // this.inputFrameWidgetItems[0].questions =
+            //   this.stationInformation.questions;
             /** Update the current station questions whenever it changes. */
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
@@ -801,6 +788,25 @@ export class StationComponent
   /** Remove widgets from the gridster in layout mode. */
   removeWidgets(): void {
     this.inputFrameWidgetItems.length = 0;
+  }
+
+  /**
+   * Will add a new input frame in the station grid.
+   */
+  addInputFrame(): void {
+    const inputFrame: InputFrameWidget = {
+      frameRithmId: '',
+      cols: 6,
+      rows: 4,
+      x: 0,
+      y: 0,
+      minItemRows: 4,
+      minItemCols: 6,
+      questions: [],
+      type: '',
+      data: '',
+    };
+    this.inputFrameWidgetItems.push(inputFrame);
   }
 
   /**

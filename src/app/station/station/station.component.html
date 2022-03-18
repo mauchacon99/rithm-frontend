@@ -27,8 +27,9 @@
   >
     <app-build-drawer
       *ngIf="!stationLoading"
-      [stationId]="stationInformation.rithmId"
       (toggleDrawer)="toggleLeftDrawer()"
+      (addInputFrame)="addInputFrame()"
+      [stationId]="stationInformation.rithmId"
     ></app-build-drawer>
   </mat-drawer>
 
@@ -356,7 +357,13 @@
                       </div>
                     </div>
                   </ng-template>
-                  <div class="gridster-container pb-4 w-full">
+                  <div
+                    class="gridster-container pb-4 w-full"
+                    cdkDropList
+                    id="station-grid"
+                    cdkDropListConnectedTo="custom-fields-container"
+                    (cdkDropListDropped)="addInputFrame()"
+                  >
                     <gridster
                       class="p-0 bg-transparent h-screen"
                       [options]="options"
