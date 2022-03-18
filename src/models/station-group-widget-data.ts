@@ -23,8 +23,8 @@ export interface StationGroupWidgetData {
   users: User[];
 
   /** Station group is chained or not. */
-  IsChained: boolean;
+  isChained: boolean;
 
-  /** Station group is IsImplicitRootFlow or not. */
-  IsImplicitRootFlow: boolean;
+  /** Station group is isImplicitRootStationGroup or not. */
+  isImplicitRootStationGroup: boolean;
 }

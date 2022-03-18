@@ -1096,8 +1096,8 @@ export class MockStationService {
       ],
       admins: [],
       users: [],
-      IsChained: true,
-      IsImplicitRootFlow: true,
+      isChained: true,
+      isImplicitRootStationGroup: true,
     };
 
     return of(expectedResponse).pipe(delay(1000));

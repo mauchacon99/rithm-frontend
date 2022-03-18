@@ -20,6 +20,7 @@ import {
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
+const MICROSERVICE_PATH_STATION_GROUP = '/stationservice/api/stationGroup';
 
 describe('StationService', () => {
   let service: StationService;
@@ -1134,8 +1135,9 @@ describe('StationService', () => {
   });
 
   it('should return the station group', () => {
+    const depth = 1;
     const expectedResponse = {
-      rithmId: '6375027-78345-73824-54244',
+      rithmId: stationId,
       title: 'Station Group',
       SubStationGroups: [],
       stations: [
@@ -1148,12 +1150,21 @@ describe('StationService', () => {
       ],
       admins: [],
       users: [],
-      IsChained: true,
-      IsImplicitRootFlow: true,
+      isChained: true,
+      isImplicitRootStationGroup: true,
     };
 
-    service.getStationGroupsWidget('656-651-615-565').subscribe((response) => {
+    service.getStationGroupsWidget(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/hierarchy?stationGroupRithmId=${stationId}&depth=${depth}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
+    expect(req.request.params.get('depth')).toBe('1');
+
+    req.flush(expectedResponse);
   });
 });

@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -22,6 +22,7 @@ import {
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
+const MICROSERVICE_PATH_STATION_GROUP = '/stationservice/api/stationGroup';
 
 /**
  * Service for all station behavior and business logic.
@@ -685,30 +686,20 @@ export class StationService {
    * Get the station groups widget.
    *
    * @param stationGroupRithmId The current station id.
+   * @param depth Depth of the sub-stationGroups.
    * @returns The station groups widget.
    */
   getStationGroupsWidget(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    depth = 1
   ): Observable<StationGroupWidgetData> {
-    const expectedResponse = {
-      rithmId: '6375027-78345-73824-54244',
-      title: 'Station Group',
-      SubStationGroups: [],
-      stations: [
-        {
-          rithmId: '3237520-7837-78378-78378',
-          name: 'StationName',
-          workers: [],
-          StationOwners: [],
-        },
-      ],
-      admins: [],
-      users: [],
-      IsChained: true,
-      IsImplicitRootFlow: true,
-    };
+    const params = new HttpParams()
+      .set('stationGroupRithmId', stationGroupRithmId)
+      .set('depth', depth);
 
-    return of(expectedResponse).pipe(delay(1000));
+    return this.http.get<StationGroupWidgetData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/hierarchy`,
+      { params }
+    );
   }
 }
