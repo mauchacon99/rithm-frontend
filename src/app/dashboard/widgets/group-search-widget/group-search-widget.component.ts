@@ -26,14 +26,14 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Set data for group widget. */
   @Input() dataWidget!: string;
 
-  /** Param for search. */
-  search = '';
-
   /** Data to station group widget. */
   dataStationGroupWidget!: StationGroupWidgetData;
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
+
+  /** Param for search. */
+  search = '';
 
   /** Whether the action to get list station group is loading. */
   isLoading = false;

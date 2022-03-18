@@ -1,21 +1,23 @@
 <div class="w-full p-2">
-
   <!--Loading the widget-->
-<app-loading-widget
-*ngIf="isLoading"
-id="app-loading-indicator-station-group"
-></app-loading-widget>
-<!--Show error in the widget-->
-<app-error-widget
-*ngIf="errorStationGroup"
-id="error-load-widget-station-group"
-[errorMessage]="'Unable to retrieve group data'"
-(tryAgain)="getStationGroupsWidget()"
->
-</app-error-widget>
+  <app-loading-widget
+    *ngIf="isLoading"
+    id="app-loading-indicator-station-group"
+  ></app-loading-widget>
+  <!--Show error in the widget-->
+  <app-error-widget
+    *ngIf="errorStationGroup"
+    id="error-load-widget-station-group"
+    [errorMessage]="'Unable to retrieve group data'"
+    (tryAgain)="getStationGroupsWidget()"
+  >
+  </app-error-widget>
 
   <!-- Header widget -->
-  <div class="flex flex-col input-search">
+  <div
+    class="flex flex-col input-search"
+    *ngIf="!isLoading && !errorStationGroup"
+  >
     <h3 *ngIf="dataStationGroupWidget" class="font-semibold truncate">
       {{ dataStationGroupWidget.title }}
     </h3>
