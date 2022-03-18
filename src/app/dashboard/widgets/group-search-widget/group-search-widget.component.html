@@ -1,3 +1,17 @@
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoading"
+  id="app-loading-indicator-station-group"
+></app-loading-widget>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="errorStationGroup"
+  id="error-load-widget-station-group"
+  [errorMessage]="'Unable to retrieve group data'"
+  (tryAgain)="getStationGroupsWidget()"
+>
+</app-error-widget>
+
 <div class="scrollbar p-2 overflow-auto" *ngIf="dataStationGroupWidget">
   <div
     id="list-stations-groups"
@@ -12,6 +26,8 @@
   </div>
 
   <ng-template #stationGroupsEmpty>
-    <div id="station-group-empty" class="text-sm text-center p-3">No stations found in this group.</div>
+    <div id="station-group-empty" class="text-sm text-center p-3">
+      No stations found in this group.
+    </div>
   </ng-template>
 </div>

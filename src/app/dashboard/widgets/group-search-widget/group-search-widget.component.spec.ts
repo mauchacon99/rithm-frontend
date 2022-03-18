@@ -6,6 +6,9 @@ import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { StationGroupWidgetData } from 'src/models';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { MockComponent } from 'ng-mocks';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -34,7 +37,11 @@ describe('GroupSearchWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GroupSearchWidgetComponent],
+      declarations: [
+        GroupSearchWidgetComponent,
+        MockComponent(LoadingWidgetComponent),
+        MockComponent(ErrorWidgetComponent),
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -78,7 +85,24 @@ describe('GroupSearchWidgetComponent', () => {
       'displayError'
     ).and.callThrough();
     component.ngOnInit();
+    fixture.detectChanges();
+    const errorElement = fixture.debugElement.nativeElement.querySelector(
+      '#error-load-widget-station-group'
+    );
+    expect(errorElement).toBeTruthy();
+    expect(component.errorStationGroup).toBeTrue();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should rendered component loading for widget', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator-station-group'
+    );
+    expect(loadingIndicator).toBeTruthy();
+    expect(component.isLoading).toBeTrue();
   });
 
   it('should show list of stations groups', () => {
