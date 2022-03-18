@@ -11,7 +11,7 @@
     @apply px-2;
   }
 
-   &::ng-deep .mat-expansion-panel-body {
+  &::ng-deep .mat-expansion-panel-body {
     @apply p-0;
   }
 }
