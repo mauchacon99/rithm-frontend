@@ -25,7 +25,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GridsterConfig } from 'angular-gridster2';
+import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -69,6 +69,9 @@ export class StationComponent
 
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** The list of all the input frames in the grid. */
+  inputFrameList: string[] = [];
 
   /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -805,8 +808,10 @@ export class StationComponent
       questions: [],
       type: '',
       data: '',
+      id: this.inputFrameWidgetItems.length,
     };
     this.inputFrameWidgetItems.push(inputFrame);
+    this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
   }
 
   /**
@@ -817,6 +822,17 @@ export class StationComponent
     if (this.settingMode) {
       this.setGridMode('layout');
     }
+  }
+
+  /**
+   * Will track each gridster item.
+   *
+   * @param index Gridster item index.
+   * @param item Gridster item.
+   * @returns Gridster item id.
+   */
+  trackBy(index: number, item: GridsterItem): number {
+    return item.id;
   }
 
   /**
