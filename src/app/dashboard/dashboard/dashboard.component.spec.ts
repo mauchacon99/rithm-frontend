@@ -4,7 +4,7 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { MockComponent, MockService } from 'ng-mocks';
 
 import { DashboardComponent } from './dashboard.component';
@@ -351,12 +351,40 @@ describe('DashboardComponent', () => {
       ],
     };
     fixture.detectChanges();
-    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and
+    .returnValue({
+        afterClosed: () => of(false)
+    } as MatDialogRef<typeof component>);
 
     const btn = fixture.nativeElement.querySelector('#add-widget-button');
     expect(btn).toBeTruthy();
     btn.click();
     expect(spyDialog).toHaveBeenCalled();
+  });
+
+  it('should push new widget to dashboardData', () => {
+    const widgetItem = {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+        cols: 3,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"documentRithmId":"2f568-27a4-4968-04c4f3","columns":[]}',
+        minItemCols: 3,
+        minItemRows: 1,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      }
+    const spyPushWidget = spyOn(component.dashboardData.widgets, 'push').and.callThrough();
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and
+    .returnValue({
+        afterClosed: () => of(widgetItem)
+    } as MatDialogRef<typeof component>);
+    component.openDialogAddWidget();
+    expect(spyPushWidget).toHaveBeenCalledOnceWith(widgetItem);
+    expect(spyDialog).toHaveBeenCalled();
+    expect(component.dashboardData.widgets.length).toEqual(2);
   });
 
   describe('Test for SidenavDrawerService', () => {
@@ -468,7 +496,10 @@ describe('DashboardComponent', () => {
       expect(component.drawerContext).toBe(drawerContext);
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
-      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and
+    .returnValue({
+        afterClosed: () => of(false)
+    } as MatDialogRef<typeof component>);
       component.openDialogAddWidget();
       expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalledOnceWith(
