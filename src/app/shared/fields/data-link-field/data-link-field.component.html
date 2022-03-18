@@ -52,26 +52,25 @@
       [disabled]="!questions.length || questionLoading"
       formControlName="selectedMatchingValue"
     >
-      <ng-container *ngFor="let option of questions">
-        <mat-option
-          *ngIf="option.prompt"
-          class="text-sm"
-          [value]="option.rithmId"
-        >
-          <p>{{ option.prompt }}</p>
-        </mat-option>
-      </ng-container>
+      <mat-option
+        *ngFor="let option of questions"
+        class="text-sm"
+        [value]="option.rithmId"
+      >
+        <p>{{ option.prompt || 'There is not prompt added' }}</p>
+      </mat-option>
     </mat-select>
   </mat-form-field>
   <!-- Base Value-->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
     <mat-label> Base Value </mat-label>
     <mat-select formControlName="selectBaseValue">
-      <ng-container *ngFor="let item of currentStationQuestions">
-        <mat-option *ngIf="item.prompt" [value]="item.rithmId">
-          {{ item.prompt }}
-        </mat-option>
-      </ng-container>
+      <mat-option
+        *ngFor="let item of currentStationQuestions"
+        [value]="item.rithmId"
+      >
+        {{ item.prompt || 'There is not prompt added' }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
   <!-- Display Fields  -->
@@ -88,15 +87,13 @@
       formControlName="selectedDisplayFields"
     >
       <div (mouseleave)="selectDisplayFields.close()">
-        <ng-container *ngFor="let option of questions">
-          <mat-option
-            *ngIf="option.prompt"
-            class="text-sm"
-            [value]="option.rithmId"
-          >
-            <p>{{ option.prompt }}</p>
-          </mat-option>
-        </ng-container>
+        <mat-option
+          *ngFor="let option of questions"
+          class="text-sm"
+          [value]="option.rithmId"
+        >
+          <p>{{ option.prompt || 'There is not prompt added' }}</p>
+        </mat-option>
       </div>
     </mat-select>
   </mat-form-field>
