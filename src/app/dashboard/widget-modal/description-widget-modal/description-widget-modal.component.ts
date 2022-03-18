@@ -4,7 +4,8 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /** Description widget modal. */
 @Component({
-  selector: 'app-description-widget-modal[itemWidgetModalSelected][widgetType]',
+  selector:
+    'app-description-widget-modal[itemWidgetModalSelected][widgetType][dataWidget]',
   templateUrl: './description-widget-modal.component.html',
   styleUrls: ['./description-widget-modal.component.scss'],
 })
@@ -15,14 +16,14 @@ export class DescriptionWidgetModalComponent implements OnInit {
   /** Widget type to preview widget selected. */
   @Input() widgetType: WidgetType | 'defaultDocument' = WidgetType.Document;
 
+  /** Data widget for render widgets. */
+  @Input() dataWidget!: string;
+
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
   /** Widget type without default. */
   widgetTypeWithoutDefault!: WidgetType;
-
-  /** Data widget. */
-  dataWidget!: string;
 
   /** Data Description for description-widget-modal.  */
   dataDescriptionTemplate = {
@@ -67,35 +68,6 @@ export class DescriptionWidgetModalComponent implements OnInit {
     },
   };
 
-  /** Data required for widget. */
-  dataWidgetRequired!: {
-    /** Data required for widget Station. */
-    [WidgetType.Station]: undefined;
-    /** Data required for widget StationTableBanner. */
-    [WidgetType.StationTableBanner]: undefined;
-    /** Data required for widget StationTableBanner. */
-    [WidgetType.StationGroup]: undefined;
-    /** Data required for widget Document. */
-    [WidgetType.Document]: {
-      /** Document rithmID. */
-      documentRithmId: string;
-      /** Columns of document. */
-      columns: [];
-    };
-    /** Data required for widget DocumentListBanner. */
-    [WidgetType.DocumentListBanner]: {
-      /** Document rithmID. */
-      documentRithmId: string;
-      /** Columns of document. */
-      columns: [];
-    };
-    /** Data required for widget StationGroupSearch. */
-    [WidgetType.StationGroupSearch]: {
-      /** Station group. */
-      stationGroup: string;
-    };
-  };
-
   /** Data static for each template by widgetType. */
   dataTemplate;
 
@@ -109,25 +81,5 @@ export class DescriptionWidgetModalComponent implements OnInit {
       this.widgetType === 'defaultDocument'
         ? this.enumWidgetType.Document
         : this.widgetType;
-
-    this.dataWidgetRequired = {
-      [WidgetType.Station]: undefined,
-      [WidgetType.StationTableBanner]: undefined,
-      [WidgetType.StationGroup]: undefined,
-      [WidgetType.Document]: {
-        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [],
-      },
-      [WidgetType.DocumentListBanner]: {
-        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [],
-      },
-      [WidgetType.StationGroupSearch]: {
-        stationGroup: '',
-      },
-    };
-    this.dataWidget = JSON.stringify(
-      this.dataWidgetRequired[this.widgetTypeWithoutDefault]
-    );
   }
 }

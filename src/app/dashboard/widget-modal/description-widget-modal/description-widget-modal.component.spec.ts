@@ -69,13 +69,4 @@ describe('DescriptionWidgetModalComponent', () => {
     component.ngOnInit();
     expect(component.widgetTypeWithoutDefault).toBe(WidgetType.Document);
   });
-
-  it('should generate dataWidget stringify', () => {
-    const dataWidgetExpected = {
-      documentRithmId: itemWidgetModalSelected.itemList.rithmId,
-      columns: [],
-    };
-    component.ngOnInit();
-    expect(component.dataWidget).toBe(JSON.stringify(dataWidgetExpected));
-  });
 });
