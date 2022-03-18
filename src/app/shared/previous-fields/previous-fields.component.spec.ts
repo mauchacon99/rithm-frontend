@@ -219,7 +219,7 @@ describe('PreviousFieldsComponent', () => {
     fixture.detectChanges();
     expect(component.questionsError).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector(
-      '#build-previos-questions-error'
+      '#build-previous-questions-error'
     );
     expect(errorComponent).toBeTruthy();
   });
@@ -239,7 +239,7 @@ describe('PreviousFieldsComponent', () => {
     expect(loading).toBeTruthy();
   });
 
-  it('should show build-previos-questions-empty when the array of all previous questions is empty', () => {
+  it('should show build-previous-questions-empty when the array of all previous questions is empty', () => {
     component.isStation = true;
     component.isPrivate = false;
     component.isBuildDrawer = true;
@@ -254,7 +254,7 @@ describe('PreviousFieldsComponent', () => {
     component['getStationPreviousQuestions']();
     fixture.detectChanges();
     const emptyMessage = fixture.debugElement.nativeElement.querySelector(
-      '#build-previos-questions-empty'
+      '#build-previous-questions-empty'
     );
     expect(emptyMessage).toBeTruthy();
   });
