@@ -827,7 +827,7 @@ describe('DashboardComponent', () => {
       maxItemRows: 12,
     };
     component.dashboardData.widgets = [widgetItem];
-    component['parseDashboardData']();
-    expect(component.dashboardData.widgets[0].rithmId).toEqual('');
+    const expectedData = component['parseDashboardData']();
+    expect(expectedData.widgets[0].rithmId).toEqual('');
   });
 });

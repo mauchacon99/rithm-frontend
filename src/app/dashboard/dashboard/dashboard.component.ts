@@ -474,25 +474,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Parse dashboardData widgets rithmId. */
-  private parseDashboardData(): void {
-    this.dashboardData.widgets.map((widget, index) => {
+  /**
+   * Parse dashboardData widgets rithmId.
+   *
+   * @returns DashboardData parsed.
+   */
+  private parseDashboardData(): DashboardData {
+    const dashboardData = JSON.parse(
+      JSON.stringify(this.dashboardData)
+    ) as DashboardData;
+    dashboardData.widgets.map((widget, index) => {
       if (widget.rithmId.includes('TEMPID')) {
-        this.dashboardData.widgets[index].rithmId = '';
+        dashboardData.widgets[index].rithmId = '';
       }
     });
+    return dashboardData;
   }
 
   /** Update dashboard. */
   updateDashboard(): void {
     this.toggleDrawerOnlyForWidgets();
-    this.parseDashboardData();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
-        ? this.dashboardService.updateOrganizationDashboard(this.dashboardData)
-        : this.dashboardService.updatePersonalDashboard(this.dashboardData);
+        ? this.dashboardService.updateOrganizationDashboard(
+            this.parseDashboardData()
+          )
+        : this.dashboardService.updatePersonalDashboard(
+            this.parseDashboardData()
+          );
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
