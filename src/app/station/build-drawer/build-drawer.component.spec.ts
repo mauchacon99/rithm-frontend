@@ -13,6 +13,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
+import { MockComponent } from 'ng-mocks';
+import { PreviousFieldsComponent } from 'src/app/shared/previous-fields/previous-fields.component';
 
 describe('BuildDrawerComponent', () => {
   let component: BuildDrawerComponent;
@@ -26,7 +28,10 @@ describe('BuildDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MatListModule, MatExpansionModule, NoopAnimationsModule],
-      declarations: [BuildDrawerComponent],
+      declarations: [
+        BuildDrawerComponent,
+        MockComponent(PreviousFieldsComponent),
+      ],
     }).compileComponents();
   });
 

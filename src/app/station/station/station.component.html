@@ -25,7 +25,11 @@
     [opened]="isOpenDrawerLeft"
     disableClose
   >
-    <app-build-drawer (toggleDrawer)="toggleLeftDrawer()"></app-build-drawer>
+    <app-build-drawer
+      *ngIf="!stationLoading"
+      [stationId]="stationInformation.rithmId"
+      (toggleDrawer)="toggleLeftDrawer()"
+    ></app-build-drawer>
   </mat-drawer>
 
   <mat-drawer-content>

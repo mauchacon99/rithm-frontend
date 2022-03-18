@@ -9,7 +9,7 @@ import {
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { Question } from 'src/models';
+import { CustomField, Question } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
@@ -40,6 +40,12 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
 
   /** The question that will be moved to the template area. */
   @Output() private movingQuestion = new EventEmitter<Question>();
+
+  /** Comes from build drawer component or not. */
+  @Input() isBuildDrawer!: boolean;
+
+  /** Custom fields to form input category data from build drawer component. */
+  @Input() customFields: CustomField[] = [];
 
   /** The list of station private/all questions. */
   questions: Question[] = [];
@@ -138,6 +144,19 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Get previous field icon.
+   *
+   * @param fieldType The question type field to get the icon.
+   * @returns String of the icon.
+   */
+  getPreviousFieldIcon(fieldType: QuestionFieldType): string {
+    const customField = this.customFields.find(
+      (item: CustomField) => item.typeString === fieldType
+    );
+    return customField ? customField.icon : '';
   }
 
   /**

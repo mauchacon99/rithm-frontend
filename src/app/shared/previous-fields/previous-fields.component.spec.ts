@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
+import { of, throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -182,5 +183,79 @@ describe('PreviousFieldsComponent', () => {
     ).and.callThrough();
     component.openModalPreviousQuestions(previousQuestion);
     expect(popUpSpy).toHaveBeenCalledOnceWith(dialogConfirm);
+  });
+
+  it('should call getPreviousFieldIcon and return the icon of the previous field', () => {
+    const fieldType = QuestionFieldType.ShortText;
+    const customField = [
+      {
+        name: 'Short Text',
+        icon: 'fa-solid fa-font',
+        typeString: fieldType,
+        dataTestId: 'add-short-text',
+      },
+    ];
+    component.customFields = customField;
+    const icon = 'fa-solid fa-font';
+    const expectedIcon = component.getPreviousFieldIcon(fieldType);
+    expect(expectedIcon).toBe(icon);
+  });
+
+  it('should show error message when request for get all previous questions fails', () => {
+    component.isStation = true;
+    component.isPrivate = false;
+    component.isBuildDrawer = true;
+    component.stationId = stationId;
+
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationPreviousQuestions'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component['getStationPreviousQuestions']();
+    fixture.detectChanges();
+    expect(component.questionsError).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#build-previos-questions-error'
+    );
+    expect(errorComponent).toBeTruthy();
+  });
+
+  it('should show loading indicators while getting previous questions as build-drawer', () => {
+    component.isStation = true;
+    component.isPrivate = false;
+    component.isBuildDrawer = true;
+    component.stationId = stationId;
+
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loading = fixture.debugElement.nativeElement.querySelector(
+      '#build-previous-fields-loading'
+    );
+    expect(loading).toBeTruthy();
+  });
+
+  it('should show build-previos-questions-empty when the array of all previous questions is empty', () => {
+    component.isStation = true;
+    component.isPrivate = false;
+    component.isBuildDrawer = true;
+    component.stationId = stationId;
+
+    const questions: Question[] = [];
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationPreviousQuestions'
+    ).and.callFake(() => of(questions));
+
+    component['getStationPreviousQuestions']();
+    fixture.detectChanges();
+    const emptyMessage = fixture.debugElement.nativeElement.querySelector(
+      '#build-previos-questions-empty'
+    );
+    expect(emptyMessage).toBeTruthy();
   });
 });

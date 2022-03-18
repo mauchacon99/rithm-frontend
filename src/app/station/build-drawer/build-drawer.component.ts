@@ -4,6 +4,7 @@ import {
   EventEmitter,
   ChangeDetectorRef,
   OnInit,
+  Input,
 } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CustomField, QuestionFieldType } from 'src/models';
@@ -12,7 +13,7 @@ import { CustomField, QuestionFieldType } from 'src/models';
  *
  */
 @Component({
-  selector: 'app-build-drawer',
+  selector: 'app-build-drawer[stationId]',
   templateUrl: './build-drawer.component.html',
   styleUrls: ['./build-drawer.component.scss'],
 })
@@ -21,6 +22,9 @@ export class BuildDrawerComponent implements OnInit {
    * Event Emitter that executes toggle logic from station component.
    */
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
+
+  /** The station id used to get previous fields. */
+  @Input() stationId!: string;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
