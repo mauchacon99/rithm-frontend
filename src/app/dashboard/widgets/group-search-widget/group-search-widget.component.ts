@@ -33,7 +33,7 @@ export class GroupSearchWidgetComponent implements OnInit {
   stationGroupRithmId = '';
 
   /** Whether the action to get list station group is loading. */
-  isLoadingStationGroup = false;
+  isLoading = false;
 
   /** Whether the action to get list station group fails. */
   errorStationGroup = false;
@@ -55,20 +55,20 @@ export class GroupSearchWidgetComponent implements OnInit {
   /**
    * Get station groups.
    */
-  private getStationGroupsWidget(): void {
-    this.isLoadingStationGroup = true;
+  getStationGroupsWidget(): void {
+    this.isLoading = true;
     this.errorStationGroup = false;
     this.stationService
       .getStationGroupsWidget(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
         next: (dataStationGroupWidget) => {
-          this.isLoadingStationGroup = false;
+          this.isLoading = false;
           this.errorStationGroup = false;
           this.dataStationGroupWidget = dataStationGroupWidget;
         },
         error: (error: unknown) => {
-          this.isLoadingStationGroup = false;
+          this.isLoading = false;
           this.errorStationGroup = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",

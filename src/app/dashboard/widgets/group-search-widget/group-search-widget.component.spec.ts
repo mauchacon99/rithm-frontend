@@ -70,13 +70,14 @@ describe('GroupSearchWidgetComponent', () => {
       '#error-load-widget-station-group'
     );
     expect(errorElement).toBeTruthy();
+    expect(component.errorStationGroup).toBeTrue();
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should rendered component loading for widget', () => {
-    component.isLoadingStationGroup = true;
+    component.isLoading = true;
     fixture.detectChanges();
-    expect(component.isLoadingStationGroup).toBeTrue();
+    expect(component.isLoading).toBeTrue();
     const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
       '#app-loading-indicator-station-group'
     );
