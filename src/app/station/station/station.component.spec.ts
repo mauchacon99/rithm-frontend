@@ -792,4 +792,10 @@ describe('StationComponent', () => {
     expect(spyToggleLeftDrawer).toHaveBeenCalled();
     expect(spyGridMode).toHaveBeenCalledWith('layout');
   });
+
+  it('Should add a new input frame widget to the array of input frames', () => {
+    expect(component.inputFrameWidgetItems).toHaveSize(0);
+    component.addInputFrame();
+    expect(component.inputFrameWidgetItems).toHaveSize(1);
+  });
 });
