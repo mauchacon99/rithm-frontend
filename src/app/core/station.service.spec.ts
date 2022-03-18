@@ -1132,4 +1132,28 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return the station group', () => {
+    const expectedResponse = {
+      rithmId: '6375027-78345-73824-54244',
+      title: 'Station Group',
+      SubStationGroups: [],
+      stations: [
+        {
+          rithmId: '3237520-7837-78378-78378',
+          name: 'StationName',
+          workers: [],
+          StationOwners: [],
+        },
+      ],
+      admins: [],
+      users: [],
+      IsChained: true,
+      IsImplicitRootFlow: true,
+    };
+
+    service.getStationGroupsWidget('656-651-615-565').subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
 });
