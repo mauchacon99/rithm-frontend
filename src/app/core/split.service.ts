@@ -87,4 +87,13 @@ export class SplitService {
       'dashboard_station_banner_upload_split'
     );
   }
+
+  /**
+   * Get the section Admin Portal.
+   *
+   * @returns Split treatment.
+   */
+  public getAdminPortalTreatment(): string {
+    return this.splitClient.getTreatment('admin_portal_split');
+  }
 }
