@@ -32,7 +32,7 @@ export class AddWidgetModalComponent {
         break;
       case 'group':
         dataWidget = JSON.stringify({
-          stationGroup: '',
+          stationGroupRithmId: '',
         });
         break;
     }

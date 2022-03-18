@@ -33,14 +33,14 @@
     <div class="w-full bg-white h-full py-1 rounded shadow">
       <div class="px-2 leading-3 input-search">
         <span class="text-sm font-semibold">Group Name</span> <br />
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [style.width.px]="130">
           <input
             type="text"
             matInput
             placeholder="Search"
             id="search-tabs"
             data-testid="search-tabs"
-            maxlength="55"
+            [disabled]="true"
           />
           <span matPrefix
             ><i class="fas fa-search p-1 text-secondary-300"></i
