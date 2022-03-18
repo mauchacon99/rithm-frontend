@@ -20,6 +20,9 @@ export class InputFrameWidgetComponent {
   /** Whether the station is in editMode or previewMode. */
   @Input() stationViewMode!: 'edit' | 'preview';
 
+  /** Id of the current Gridster item. */
+  @Input() id!: number;
+
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 

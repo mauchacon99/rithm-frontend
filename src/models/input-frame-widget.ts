@@ -26,4 +26,6 @@ export interface InputFrameWidget {
   type: string;
   /** The data contained in each frame. */
   data: string;
+  /** Id of the item. */
+  id: number;
 }
