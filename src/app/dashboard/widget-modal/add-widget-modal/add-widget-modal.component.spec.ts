@@ -10,11 +10,7 @@ import { MockComponent } from 'ng-mocks';
 import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  EditDataWidget,
-  SelectedItemWidgetModel,
-  WidgetType,
-} from 'src/models';
+import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
 import { DescriptionWidgetModalComponent } from '../description-widget-modal/description-widget-modal.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -65,6 +61,7 @@ describe('AddWidgetModalComponent', () => {
     fixture = TestBed.createComponent(AddWidgetModalComponent);
     component = fixture.componentInstance;
     component.tabParentSelect = 0;
+    component.itemWidgetModalSelected = itemWidgetModalSelected;
     fixture.detectChanges();
   });
 
@@ -153,98 +150,99 @@ describe('AddWidgetModalComponent', () => {
   });
 
   describe('Add new widget', () => {
-    let dashboardService: DashboardService;
-
-    const expectData: EditDataWidget = {
-      widgetIndex: 0,
-      widgetItem: {
-        rithmId: '',
-        cols: 3,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '',
-        minItemRows: 1,
-        minItemCols: 3,
-        image: null,
-      },
-      quantityElementsWidget: 0,
-      isNewWidget: true,
+    const expectData: DashboardItem = {
+      rithmId: '',
+      cols: 3,
+      rows: 1,
+      x: 0,
+      y: 0,
+      widgetType: WidgetType.Station,
+      data: '',
+      minItemRows: 1,
+      minItemCols: 3,
+      image: null,
     };
+
+    let dialogRef: MatDialogRef<unknown>;
 
     beforeEach(() => {
       component.identifyShowElement = 'document';
       component.itemWidgetModalSelected = itemWidgetModalSelected;
-      dashboardService = TestBed.inject(DashboardService);
+      dialogRef = TestBed.inject(MatDialogRef);
     });
 
     it('should add widget when data it is station table or document list', () => {
-      const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+      const spyMatDialogRef = spyOn(dialogRef, 'close');
       const spyMethod = spyOn(component, 'addWidget').and.callThrough();
-      const spyService = spyOn(
-        dashboardService,
-        'updateDashboardWidgets'
-      ).and.callThrough();
       component.previewWidgetTypeSelected = WidgetType.Station;
-      expectData.widgetItem.widgetType = WidgetType.Station;
-      expectData.widgetItem.rows = 1;
-      expectData.widgetItem.minItemRows = 1;
-      expectData.widgetItem.data = component.dataWidget;
+      expectData.widgetType = WidgetType.Station;
+      expectData.rows = 1;
+      expectData.minItemRows = 1;
+      expectData.data = component.dataWidget;
       fixture.detectChanges();
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
       btnAddWidget.click();
 
-      expect(spyMatDialogRef).toHaveBeenCalled();
+      expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
       expect(spyMethod).toHaveBeenCalled();
-      expect(spyService).toHaveBeenCalledOnceWith(expectData);
     });
 
     it('should add widget when data it is station banner or document banner', () => {
-      spyOn(TestBed.inject(MatDialogRef), 'close');
-      const spyService = spyOn(
-        dashboardService,
-        'updateDashboardWidgets'
-      ).and.callThrough();
+      const spyMatDialogRef = spyOn(dialogRef, 'close');
       const spyMethod = spyOn(component, 'addWidget').and.callThrough();
       component.previewWidgetTypeSelected = WidgetType.StationTableBanner;
-      expectData.widgetItem.widgetType = WidgetType.StationTableBanner;
-      expectData.widgetItem.rows = 2;
-      expectData.widgetItem.minItemRows = 2;
+      expectData.widgetType = WidgetType.StationTableBanner;
+      expectData.rows = 2;
+      expectData.minItemRows = 2;
+      expectData.data = component.dataWidget;
       fixture.detectChanges();
-      expectData.widgetItem.data = component.dataWidget;
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
       btnAddWidget.click();
 
       expect(spyMethod).toHaveBeenCalled();
-      expect(spyService).toHaveBeenCalledOnceWith(expectData);
+      expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
     });
 
     it('should add widget when previewWidgetTypeSelected is defaultDocument', () => {
-      spyOn(TestBed.inject(MatDialogRef), 'close');
-      const spyService = spyOn(
-        dashboardService,
-        'updateDashboardWidgets'
-      ).and.callThrough();
+      const spyMatDialogRef = spyOn(dialogRef, 'close');
       const spyMethod = spyOn(component, 'addWidget').and.callThrough();
       component.previewWidgetTypeSelected = WidgetType.Document;
       component.itemWidgetModalSelected.itemType = 'document';
-      expectData.widgetItem.widgetType = WidgetType.Document;
-      expectData.widgetItem.rows = 1;
-      expectData.widgetItem.minItemRows = 1;
+      expectData.widgetType = WidgetType.Document;
+      expectData.rows = 1;
+      expectData.minItemRows = 1;
       fixture.detectChanges();
-      expectData.widgetItem.data = component.dataWidget;
+      expectData.data = component.dataWidget;
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
       btnAddWidget.click();
 
       expect(spyMethod).toHaveBeenCalled();
-      expect(spyService).toHaveBeenCalledOnceWith(expectData);
+      expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
     });
+  });
+
+  it('should return Widget type document when previewWidgetTypeSelected is "defaultDocument"', () => {
+    component.previewWidgetTypeSelected = 'defaultDocument';
+    const responseData = component['widgetTypeToItem']();
+    expect(responseData).toEqual(WidgetType.Document);
+  });
+
+  it('should return 2 minItemRows when widget type are banners image', () => {
+    component.previewWidgetTypeSelected = WidgetType.DocumentListBanner;
+    const responseData = component['minItemRowsWidget']();
+    expect(responseData).toEqual(2);
+  });
+
+  it('should return 1 minItemRows when widget type are not banners image', () => {
+    component.previewWidgetTypeSelected = WidgetType.Station;
+
+    const responseData = component['minItemRowsWidget']();
+    expect(responseData).toEqual(1);
   });
 });

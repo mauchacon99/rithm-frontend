@@ -8,6 +8,4 @@ export interface EditDataWidget {
   widgetItem: DashboardItem;
   /** Number of items to be displayed in the widget to be able to identify in the drawer whether to show alert or not. */
   quantityElementsWidget: number;
-  /** True when update dashboard item with new widget. */
-  isNewWidget?: boolean;
 }

@@ -509,11 +509,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param editDataWidget Data to edit widget.
    */
   updateDashboardWidget(editDataWidget: EditDataWidget): void {
-    editDataWidget.isNewWidget
-      ? this.dashboardData.widgets.push(editDataWidget.widgetItem)
-      : (this.dashboardData.widgets[editDataWidget.widgetIndex] =
-          editDataWidget.widgetItem);
-    this.changedOptions();
+    this.dashboardData.widgets[editDataWidget.widgetIndex] =
+      editDataWidget.widgetItem;
   }
 
   /**
@@ -565,11 +562,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   openDialogAddWidget(): void {
     this.toggleDrawerOnlyForWidgets();
-    this.dialog.open(AddWidgetModalComponent, {
+    const dialog = this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
       data: this.dashboardData.rithmId,
     });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe((widgetItem: DashboardItem) => {
+        if (widgetItem) {
+          this.dashboardData.widgets.push(widgetItem);
+        }
+      });
   }
 
   /** Clean subscriptions. */

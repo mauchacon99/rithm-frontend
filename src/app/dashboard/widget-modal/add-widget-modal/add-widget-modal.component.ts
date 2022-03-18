@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
-import { DashboardService } from '../../dashboard.service';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -52,8 +51,7 @@ export class AddWidgetModalComponent {
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public matData: string,
-    private dashboardService: DashboardService
+    @Inject(MAT_DIALOG_DATA) public matData: string
   ) {
     this.dashboardRithmId = matData;
   }
@@ -80,19 +78,36 @@ export class AddWidgetModalComponent {
       : (this.identifyShowElement = 'tabs');
   }
 
+  /**
+   * Parse item rows for widget.
+   *
+   * @returns A number of minItemRows.
+   */
+  private minItemRowsWidget(): number {
+    return this.previewWidgetTypeSelected ===
+      this.enumWidgetType.DocumentListBanner ||
+      this.previewWidgetTypeSelected === this.enumWidgetType.StationTableBanner
+      ? 2
+      : 1;
+  }
+
+  /**
+   * Parse widget type.
+   *
+   * @returns Only data of interface WidgetType.
+   */
+  private widgetTypeToItem(): WidgetType {
+    return !this.previewWidgetTypeSelected ||
+      this.previewWidgetTypeSelected === 'defaultDocument'
+      ? this.enumWidgetType.Document
+      : this.previewWidgetTypeSelected;
+  }
+
   /** Save widget. */
   addWidget(): void {
-    const minItemRows: number =
-      this.previewWidgetTypeSelected ===
-        this.enumWidgetType.DocumentListBanner ||
-      this.previewWidgetTypeSelected === this.enumWidgetType.StationTableBanner
-        ? 2
-        : 1;
-    const widgetType =
-      !this.previewWidgetTypeSelected ||
-      this.previewWidgetTypeSelected === 'defaultDocument'
-        ? this.enumWidgetType.Document
-        : this.previewWidgetTypeSelected;
+    const minItemRows = this.minItemRowsWidget();
+    const widgetType = this.widgetTypeToItem();
+
     const widgetItem: DashboardItem = {
       rithmId: '',
       cols: 3,
@@ -105,12 +120,6 @@ export class AddWidgetModalComponent {
       minItemCols: 3,
       image: null,
     };
-    this.dialogRef.close();
-    this.dashboardService.updateDashboardWidgets({
-      widgetIndex: 0,
-      widgetItem,
-      quantityElementsWidget: 0,
-      isNewWidget: true,
-    });
+    this.dialogRef.close(widgetItem);
   }
 }

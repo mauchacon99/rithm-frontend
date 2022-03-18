@@ -61,11 +61,12 @@
     *ngIf="previewWidgetTypeSelected"
   >
     <app-description-widget-modal
+      [dataWidget]="dataWidget"
       [itemWidgetModalSelected]="itemWidgetModalSelected"
       [widgetType]="previewWidgetTypeSelected"
     >
     </app-description-widget-modal>
-    <div class="text-right">
+    <div class="text-right pr-3">
       <button
         mat-button
         id="add-widget-button"
