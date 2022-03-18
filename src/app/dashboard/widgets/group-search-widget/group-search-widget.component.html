@@ -11,3 +11,26 @@
   (tryAgain)="getStationGroupsWidget()"
 >
 </app-error-widget>
+
+<div
+  class="scrollbar p-2 overflow-auto h-full w-full"
+  *ngIf="dataStationGroupWidget"
+>
+  <div
+    id="list-stations-groups"
+    *ngIf="dataStationGroupWidget.stations.length; else stationGroupsEmpty"
+  >
+    <div
+      *ngFor="let station of dataStationGroupWidget.stations"
+      class="border-b border-secondary-100 py-3 text-sm font-semibold"
+    >
+      {{ station.name }}
+    </div>
+  </div>
+
+  <ng-template #stationGroupsEmpty>
+    <div id="station-group-empty" class="text-sm text-center p-3">
+      No stations found in this group.
+    </div>
+  </ng-template>
+</div>
