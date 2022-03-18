@@ -1,1 +1,12 @@
-<p>group-search-widget works!</p>
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoadingStationGroup"
+  id="app-loading-indicator-station-group"
+></app-loading-widget>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="errorStationGroup"
+  id="error-load-widget-station-group"
+  [errorMessage]="'Unable to retrieve group data'"
+>
+</app-error-widget>
