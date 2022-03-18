@@ -26,6 +26,9 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Set data for group widget. */
   @Input() dataWidget!: string;
 
+  /** Param for search. */
+  search = '';
+
   /** Data to station group widget. */
   dataStationGroupWidget!: StationGroupWidgetData;
 
@@ -64,5 +67,12 @@ export class GroupSearchWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  /** Search similitude stations by name.*/
+  searchStation(): void {
+    this.dataStationGroupWidget.stations.filter((station) =>
+      station.name.includes(this.search)
+    );
   }
 }
