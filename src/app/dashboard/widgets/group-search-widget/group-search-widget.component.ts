@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationGroupWidgetData, WidgetType } from 'src/models';
+import { StationGroupData, WidgetType } from 'src/models';
 
 /**
  * Component for list field the groups how widget.
@@ -27,7 +27,7 @@ export class GroupSearchWidgetComponent implements OnInit {
   @Input() dataWidget!: string;
 
   /** Data to station group widget. */
-  dataStationGroupWidget!: StationGroupWidgetData;
+  dataStationGroupWidget!: StationGroupData;
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';

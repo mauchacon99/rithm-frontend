@@ -18,7 +18,7 @@ import {
   StandardStringJSON,
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
-  StationGroupWidgetData,
+  StationGroupData,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -692,12 +692,12 @@ export class StationService {
   getStationGroupsWidget(
     stationGroupRithmId: string,
     depth = 1
-  ): Observable<StationGroupWidgetData> {
+  ): Observable<StationGroupData> {
     const params = new HttpParams()
       .set('stationGroupRithmId', stationGroupRithmId)
       .set('depth', depth);
 
-    return this.http.get<StationGroupWidgetData>(
+    return this.http.get<StationGroupData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/hierarchy`,
       { params }
     );
