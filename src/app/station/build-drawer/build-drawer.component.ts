@@ -23,7 +23,7 @@ export class BuildDrawerComponent implements OnInit {
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
 
   /**
-   * Event Emitter that executes toggle logic from station component.
+   * Event Emitter Will add a new input frame in the station grid.
    */
   @Output() addInputFrame: EventEmitter<void> = new EventEmitter();
 
