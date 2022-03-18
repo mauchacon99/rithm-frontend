@@ -82,5 +82,6 @@ describe('GroupSearchWidgetComponent', () => {
       '#app-loading-indicator-station-group'
     );
     expect(loadingIndicator).toBeTruthy();
+    expect(component.isLoading).toBeTrue();
   });
 });
