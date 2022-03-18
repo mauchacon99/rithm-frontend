@@ -5,9 +5,9 @@ import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
-import { LoadingWidgetComponent } from '../loading-widget/loading-widget.component';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { MockComponent } from 'ng-mocks';
-import { ErrorWidgetComponent } from '../error-widget/error-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
