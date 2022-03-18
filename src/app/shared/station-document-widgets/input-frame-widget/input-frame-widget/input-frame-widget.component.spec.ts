@@ -2,7 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InputFrameWidgetComponent } from './input-frame-widget.component';
 
-import { CdkDragDrop, DragDropModule, copyArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  copyArrayItem,
+} from '@angular/cdk/drag-drop';
 import { Question, QuestionFieldType } from 'src/models';
 import { of } from 'rxjs';
 
@@ -44,10 +48,12 @@ describe('InputFrameWidgetComponent', () => {
 
       const cdkEvent = {
         container: { data: firstList, id: 'form-inputs' },
-        previousContainer: { data: secondList, id: 'input-widget'},
+        previousContainer: { data: secondList, id: 'input-widget' },
       } as CdkDragDrop<Question[]>;
 
-     const spyDrag = spyOn(component, 'addElementDrag').and.callFake(() => of(cdkEvent));
+      const spyDrag = spyOn(component, 'addElementDrag').and.callFake(() =>
+        of(cdkEvent)
+      );
       component.addElementDrag(cdkEvent);
       fixture.detectChanges();
 
@@ -55,7 +61,7 @@ describe('InputFrameWidgetComponent', () => {
       expect(cdkEvent.container.data).toEqual(firstList);
       expect(cdkEvent.previousContainer.data).toEqual(secondList);
 
-      copyArrayItem(firstList,secondList,0,0);
+      copyArrayItem(firstList, secondList, 0, 0);
       expect(secondList).toEqual(firstList);
       expect(spyDrag).toHaveBeenCalledOnceWith(cdkEvent);
     });
