@@ -35,6 +35,7 @@
     <div
       id="custom-fields-container"
       data-testid="custom-fields-container"
+      cdkDropListConnectedTo="station-grid"
       *ngSwitchCase="'Form Inputs'"
       #customFieldsContainer="cdkDropList"
       [cdkDropListData]="customFields"
@@ -42,7 +43,16 @@
       cdkDropList
     >
       <div
-        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        cdkDrag
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
+        (click)="addNewInputFrame()"
+        data-testid="input-frame-item-"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
+        <span class="fa-regular fa-object-group fa-lg ml-auto"></span>
+      </div>
+      <div
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
         data-testid="custom-fields-item"
         *ngFor="let field of customFields"
         cdkDrag

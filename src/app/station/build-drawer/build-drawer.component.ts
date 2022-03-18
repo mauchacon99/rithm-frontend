@@ -22,6 +22,11 @@ export class BuildDrawerComponent implements OnInit {
    */
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
 
+  /**
+   * Event Emitter Will add a new input frame in the station grid.
+   */
+  @Output() addInputFrame: EventEmitter<void> = new EventEmitter();
+
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
@@ -38,12 +43,6 @@ export class BuildDrawerComponent implements OnInit {
 
   /** Custom fields to form input category data. */
   customFields: CustomField[] = [
-    {
-      prompt: 'Input Frame',
-      icon: 'fa-regular fa-object-group',
-      questionType: this.fieldTypeEnum.InputFrame,
-      dataTestId: 'add-input-frame',
-    },
     {
       prompt: 'Short Text',
       icon: 'fa-solid fa-font',
@@ -159,5 +158,12 @@ export class BuildDrawerComponent implements OnInit {
    */
   handleCloseDrawer(): void {
     this.toggleDrawer.emit();
+  }
+
+  /**
+   * Will add a new input frame in the station grid.
+   */
+  addNewInputFrame(): void {
+    this.addInputFrame.emit();
   }
 }
