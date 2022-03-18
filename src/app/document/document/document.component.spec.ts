@@ -482,12 +482,15 @@ describe('DocumentComponent', () => {
     const spySaveAutoFlowContainer = spyOn(
       TestBed.inject(DocumentService),
       'autoFlowDocument'
-    ).and.callThrough();
+    ).and.returnValue(of([]));
+
+    const dialogSpy = spyOn(TestBed.inject(PopupService), 'notify');
 
     documentService.documentName$.next({
       baseName: 'New Document Name',
       appendedName: '',
     });
+
     const documentName = 'New Document Name';
 
     component.saveAnswersFlowDocument();
@@ -503,6 +506,9 @@ describe('DocumentComponent', () => {
     );
 
     expect(spySaveAutoFlowContainer).toHaveBeenCalled();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      'The container has flowed successfully'
+    );
   });
 
   it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {

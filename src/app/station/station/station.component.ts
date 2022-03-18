@@ -522,6 +522,7 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = stationQuestions as Question[];
           }
+          this.popupService.notify('Station successfully saved');
         },
         error: (error: unknown) => {
           this.stationLoading = false;
