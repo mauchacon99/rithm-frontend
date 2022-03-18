@@ -6,6 +6,7 @@ import {
   MatListOption,
   MatSelectionList,
 } from '@angular/material/list';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatExpansionPanelHarness } from '@angular/material/expansion/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -25,7 +26,12 @@ describe('BuildDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatListModule, MatExpansionModule, NoopAnimationsModule],
+      imports: [
+        MatListModule,
+        MatExpansionModule,
+        DragDropModule,
+        NoopAnimationsModule,
+      ],
       declarations: [BuildDrawerComponent],
     }).compileComponents();
   });
