@@ -6,6 +6,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FileFieldComponent } from './file-field.component';
+import { UploadFileModalModule } from '../upload-file-modal/upload-file-modal.module';
 @NgModule({
   declarations: [FileFieldComponent],
   imports: [
@@ -15,6 +16,7 @@ import { FileFieldComponent } from './file-field.component';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
+    UploadFileModalModule,
   ],
 
   exports: [FileFieldComponent],
