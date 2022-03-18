@@ -4,7 +4,11 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
@@ -351,9 +355,8 @@ describe('DashboardComponent', () => {
       ],
     };
     fixture.detectChanges();
-    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and
-    .returnValue({
-        afterClosed: () => of(false)
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(false),
     } as MatDialogRef<typeof component>);
 
     const btn = fixture.nativeElement.querySelector('#add-widget-button');
@@ -364,22 +367,24 @@ describe('DashboardComponent', () => {
 
   it('should push new widget to dashboardData', () => {
     const widgetItem = {
-        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
-        cols: 3,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"documentRithmId":"2f568-27a4-4968-04c4f3","columns":[]}',
-        minItemCols: 3,
-        minItemRows: 1,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      }
-    const spyPushWidget = spyOn(component.dashboardData.widgets, 'push').and.callThrough();
-    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and
-    .returnValue({
-        afterClosed: () => of(widgetItem)
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 3,
+      rows: 1,
+      x: 0,
+      y: 0,
+      widgetType: WidgetType.Station,
+      data: '{"documentRithmId":"2f568-27a4-4968-04c4f3","columns":[]}',
+      minItemCols: 3,
+      minItemRows: 1,
+      maxItemCols: 12,
+      maxItemRows: 12,
+    };
+    const spyPushWidget = spyOn(
+      component.dashboardData.widgets,
+      'push'
+    ).and.callThrough();
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(widgetItem),
     } as MatDialogRef<typeof component>);
     component.openDialogAddWidget();
     expect(spyPushWidget).toHaveBeenCalledOnceWith(widgetItem);
@@ -496,10 +501,12 @@ describe('DashboardComponent', () => {
       expect(component.drawerContext).toBe(drawerContext);
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
-      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and
-    .returnValue({
-        afterClosed: () => of(false)
-    } as MatDialogRef<typeof component>);
+      const spyDialog = spyOn(
+        TestBed.inject(MatDialog),
+        'open'
+      ).and.returnValue({
+        afterClosed: () => of(false),
+      } as MatDialogRef<typeof component>);
       component.openDialogAddWidget();
       expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalledOnceWith(
