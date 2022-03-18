@@ -1,9 +1,9 @@
-import { StationListGroupWidget, User } from '.';
+import { StationListGroup, StationRosterMember } from '.';
 
 /**
- * Represents all information about a Rithm user.
+ * Represents all information about station groups.
  */
-export interface StationGroupWidgetData {
+export interface StationGroupData {
   /** The rithm id of group. */
   rithmId: string;
 
@@ -11,16 +11,16 @@ export interface StationGroupWidgetData {
   title: string;
 
   /** Sub groups. */
-  SubStationGroups: this[];
+  subStationGroups: string[];
 
   /** List stations of group. */
-  stations: StationListGroupWidget[];
+  stations: StationListGroup[];
 
   /** List users admins. */
-  admins: User[];
+  admins: StationRosterMember[];
 
   /** List users. */
-  users: User[];
+  users: StationRosterMember[];
 
   /** Station group is chained or not. */
   isChained: boolean;
