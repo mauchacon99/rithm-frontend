@@ -33,25 +33,26 @@
     </mat-form-field>
   </div>
 
-<div
-  class="scrollbar p-2 overflow-auto h-full w-full"
-  *ngIf="dataStationGroupWidget"
->
   <div
-    id="list-stations-groups"
-    *ngIf="dataStationGroupWidget.stations.length; else stationGroupsEmpty"
+    class="scrollbar p-2 overflow-auto h-full w-full"
+    *ngIf="dataStationGroupWidget"
   >
     <div
-      *ngFor="let station of dataStationGroupWidget.stations"
-      class="border-b border-secondary-100 py-3 text-sm font-semibold"
+      id="list-stations-groups"
+      *ngIf="stations.length; else stationGroupsEmpty"
     >
-      {{ station.name }}
+      <div
+        *ngFor="let station of stations"
+        class="border-b border-secondary-100 py-3 text-sm font-semibold"
+      >
+        {{ station.name }}
+      </div>
     </div>
-  </div>
 
-  <ng-template #stationGroupsEmpty>
-    <div id="station-group-empty" class="text-sm text-center p-3">
-      No stations found in this group.
-    </div>
-  </ng-template>
+    <ng-template #stationGroupsEmpty>
+      <div id="station-group-empty" class="text-sm text-center p-3">
+        No stations found in this group.
+      </div>
+    </ng-template>
+  </div>
 </div>

@@ -5,7 +5,7 @@ import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
-import { StationGroupWidgetData } from 'src/models';
+import { StationGroupWidgetData, StationListGroupWidget } from 'src/models';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
@@ -20,18 +20,31 @@ describe('GroupSearchWidgetComponent', () => {
     // eslint-disable-next-line max-len
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
+  const stations: StationListGroupWidget[] = [
+    {
+      rithmId: '3237520-7837-78378-78378',
+      name: 'StationName 1',
+      workers: [],
+      StationOwners: [],
+    },
+    {
+      rithmId: '3227520-7837-78378-78378',
+      name: 'StationName 2',
+      workers: [],
+      StationOwners: [],
+    },
+    {
+      rithmId: '232354527-7337-18378-38378',
+      name: 'StationName 3',
+      workers: [],
+      StationOwners: [],
+    },
+  ];
   const dataStationGroupWidget: StationGroupWidgetData = {
     rithmId: '6375027-78345-73824-54244',
     title: 'Station Group',
     SubStationGroups: [],
-    stations: [
-      {
-        rithmId: '3237520-7837-78378-78378',
-        name: 'StationName',
-        workers: [],
-        StationOwners: [],
-      },
-    ],
+    stations,
     admins: [],
     users: [],
     IsChained: true,
@@ -58,6 +71,7 @@ describe('GroupSearchWidgetComponent', () => {
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
     component.dataStationGroupWidget = dataStationGroupWidget;
+    component.stations = stations;
     fixture.detectChanges();
   });
 
@@ -110,12 +124,17 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show list of stations groups', () => {
-    component.dataStationGroupWidget.stations.push({
-      rithmId: '3237520-7837-78378-78378',
-      name: 'StationName',
-      workers: [],
-      StationOwners: [],
-    });
+    component.dataStationGroupWidget = dataStationGroupWidget;
+    component.stations = [
+      {
+        rithmId: '3237520-7837-78378-78378',
+        name: 'StationName',
+        workers: [],
+        StationOwners: [],
+      },
+    ];
+    component.isLoading = false;
+    component.errorStationGroup = false;
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -128,7 +147,10 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show message list of stations groups empty', () => {
-    component.dataStationGroupWidget.stations = [];
+    component.dataStationGroupWidget = dataStationGroupWidget;
+    component.stations = [];
+    component.isLoading = false;
+    component.errorStationGroup = false;
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -138,5 +160,22 @@ describe('GroupSearchWidgetComponent', () => {
     );
     expect(listStations).toBeNull();
     expect(stationGroupsEmpty).toBeTruthy();
+  });
+
+  it('should search stations', () => {
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.search = 'StationName 3';
+    fixture.detectChanges();
+    const expectedStation = [
+      {
+        rithmId: '232354527-7337-18378-38378',
+        name: 'StationName 3',
+        workers: [],
+        StationOwners: [],
+      },
+    ];
+    component.searchStation();
+    expect(component.stations).toEqual(expectedStation);
   });
 });

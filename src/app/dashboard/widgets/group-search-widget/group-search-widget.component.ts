@@ -2,7 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationGroupWidgetData, WidgetType } from 'src/models';
+import {
+  StationGroupWidgetData,
+  StationListGroupWidget,
+  WidgetType,
+} from 'src/models';
 
 /**
  * Component for list field the groups how widget.
@@ -28,6 +32,8 @@ export class GroupSearchWidgetComponent implements OnInit {
 
   /** Data to station group widget. */
   dataStationGroupWidget!: StationGroupWidgetData;
+
+  stations!: StationListGroupWidget[];
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
@@ -69,6 +75,7 @@ export class GroupSearchWidgetComponent implements OnInit {
           this.isLoading = false;
           this.errorStationGroup = false;
           this.dataStationGroupWidget = dataStationGroupWidget;
+          this.stations = this.dataStationGroupWidget.stations;
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -83,7 +90,7 @@ export class GroupSearchWidgetComponent implements OnInit {
 
   /** Search similitude stations by name.*/
   searchStation(): void {
-    this.dataStationGroupWidget.stations.filter((station) =>
+    this.stations = this.dataStationGroupWidget.stations.filter((station) =>
       station.name.includes(this.search)
     );
   }
