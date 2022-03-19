@@ -20,7 +20,7 @@ import {
   MockPopupService,
   MockStationService,
 } from 'src/mocks';
-import { DialogOptions, Question, QuestionFieldType } from 'src/models';
+import { CustomField, DialogOptions, Question, QuestionFieldType } from 'src/models';
 import { PreviousFieldsComponent } from './previous-fields.component';
 
 describe('PreviousFieldsComponent', () => {
@@ -187,11 +187,11 @@ describe('PreviousFieldsComponent', () => {
 
   it('should call getPreviousFieldIcon and return the icon of the previous field', () => {
     const fieldType = QuestionFieldType.ShortText;
-    const customField = [
+    const customField: CustomField[] = [
       {
-        name: 'Short Text',
+        prompt: 'Short Text',
         icon: 'fa-solid fa-font',
-        typeString: fieldType,
+        questionType: fieldType,
         dataTestId: 'add-short-text',
       },
     ];

@@ -154,7 +154,7 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
    */
   getPreviousFieldIcon(fieldType: QuestionFieldType): string {
     const customField = this.customFields.find(
-      (item: CustomField) => item.typeString === fieldType
+      (item: CustomField) => item.questionType === fieldType
     );
     return customField
       ? customField.icon
