@@ -20,7 +20,12 @@ import {
   MockPopupService,
   MockStationService,
 } from 'src/mocks';
-import { CustomField, DialogOptions, Question, QuestionFieldType } from 'src/models';
+import {
+  CustomField,
+  DialogOptions,
+  Question,
+  QuestionFieldType,
+} from 'src/models';
 import { PreviousFieldsComponent } from './previous-fields.component';
 
 describe('PreviousFieldsComponent', () => {
