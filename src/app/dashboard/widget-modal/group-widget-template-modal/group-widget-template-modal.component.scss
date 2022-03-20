@@ -1,6 +1,7 @@
 .input-search {
   ::ng-deep .mat-form-field {
     height: 40px;
+
     @apply w-full sm:w-[120px] cursor-pointer;
   }
 
