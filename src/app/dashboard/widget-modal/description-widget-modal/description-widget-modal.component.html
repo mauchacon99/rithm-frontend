@@ -52,12 +52,28 @@
   <div class="w-full md:w-2/4 py-5">
     <div class="flex justify-center">
       <app-document-widget
+      *ngIf="
+      widgetType === enumWidgetType.Document ||
+      widgetType === enumWidgetType.DocumentListBanner ||
+      widgetType === 'defaultDocument'
+    "
         class="w-full md:w-3/5 h-[400px] shadow-xl rounded-md"
         [dataWidget]="dataWidget"
         [editMode]="false"
         [showButtonSetting]="false"
         [widgetType]="widgetTypeWithoutDefault"
       ></app-document-widget>
+
+      <app-station-widget
+      *ngIf="widgetType === enumWidgetType.Station ||
+      widgetType === enumWidgetType.StationTableBanner "
+        class="w-full md:w-3/5 h-[400px] shadow-xl rounded-md"
+        [dataWidget]="dataWidget"
+        [editMode]="false"
+        [showButtonSetting]="false"
+        [widgetType]="widgetTypeWithoutDefault"
+      >
+      </app-station-widget>
     </div>
   </div>
 </div>

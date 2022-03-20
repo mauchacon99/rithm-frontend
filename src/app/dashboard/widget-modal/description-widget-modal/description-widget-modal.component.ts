@@ -15,9 +15,6 @@ export class DescriptionWidgetModalComponent implements OnInit {
   /** Widget type to preview widget selected. */
   @Input() widgetType: WidgetType | 'defaultDocument' = WidgetType.Document;
 
-  /** Data widget for app-document-widget. */
-  dataWidget!: string;
-
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
@@ -28,15 +25,17 @@ export class DescriptionWidgetModalComponent implements OnInit {
   dataDescriptionTemplate = {
     // station data
     [WidgetType.Station]: {
-      type: '',
-      customizable: '',
-      description: ``,
+      type: 'Station Template',
+      customizable: 'Table Columns',
+      description: `By default. the table has a single column showing each document in your selected station.
+      Custom banner images can also be added to the widget`,
     },
     // StationTableBanner data
     [WidgetType.StationTableBanner]: {
-      type: '',
-      customizable: '',
-      description: ``,
+      type: 'Station Template',
+      customizable: 'Table Columns & Image',
+      description: `By default. the table has a single column showing each document in your selected station.
+      Additional columns of data can be added as desired. Custom banner images can also be added to the widget`,
     },
     // groups data
     [WidgetType.StationGroup]: {
@@ -80,10 +79,5 @@ export class DescriptionWidgetModalComponent implements OnInit {
       this.widgetType === 'defaultDocument'
         ? this.enumWidgetType.Document
         : this.widgetType;
-
-    this.dataWidget = JSON.stringify({
-      documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-      columns: [],
-    });
   }
 }
