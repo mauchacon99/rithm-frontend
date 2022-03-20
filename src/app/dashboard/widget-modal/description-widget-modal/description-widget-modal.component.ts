@@ -16,6 +16,9 @@ export class DescriptionWidgetModalComponent implements OnInit {
   /** Widget type to preview widget selected. */
   @Input() widgetType: WidgetType | 'defaultDocument' = WidgetType.Document;
 
+  /** Data widget for render widgets. */
+  @Input() dataWidget!: string;
+
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
