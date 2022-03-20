@@ -1,5 +1,8 @@
-import { StationGroupMapElement } from 'src/helpers';
+import { MapStationHelper, StationGroupMapElement } from 'src/helpers';
+import { MapItemStatus, MapMode } from 'src/models';
 import { MapHelper } from './map-helper';
+import { v4 as uuidv4 } from 'uuid';
+
 /**
  * Represents methods that handle station data for the Map.
  */
@@ -61,5 +64,318 @@ export class MapStationGroupHelper {
     this.stationGroupElements = this.mapHelper.deepCopy(
       this.stationGroupElements
     );
+  }
+
+  /**
+   * Delete the station group and find it's parent to move all it's stations and sub groups to parent station group.
+   *
+   * @param stationGroupId The incoming station group Id to be deleted.
+   */
+  removeStationGroup(stationGroupId: string): void {
+    // Find the station group from this.stationGroupElements array.
+    const removedGroup = this.stationGroupElements.find(
+      (group) => group.rithmId === stationGroupId
+    );
+    if (!removedGroup) {
+      throw new Error('Station group was not found.');
+    }
+    //set up a boolean to check if an error needs to be thrown because there is no parent group.
+    let parentGroupFound = false;
+    this.stationGroupElements.forEach((group) => {
+      if (
+        //Find parent station group of incoming station group.
+        group.subStationGroups.includes(removedGroup.rithmId)
+      ) {
+        parentGroupFound = true;
+        //Remove deleting station group Id from it's parent group
+        group.subStationGroups = group.subStationGroups.filter(
+          (groupId) => groupId !== removedGroup.rithmId
+        );
+        //Move all sub station groups of deleted station group to it's parent.
+        group.subStationGroups = group.subStationGroups.concat(
+          removedGroup.subStationGroups
+        );
+        //Move all stations of deleted station group to it's parent.
+        group.stations = group.stations.concat(removedGroup.stations);
+        //Mark parent station group of deleted station group as updated.
+        group.markAsUpdated();
+        //Remove all stations of deleting station group.
+        removedGroup.stations = [];
+        //Remove all sub station groups of deleting station group.
+        removedGroup.subStationGroups = [];
+        //Unless removedGroup has status of created or pending, mark removedGroup as deleted.
+        if (
+          removedGroup.status !== MapItemStatus.Created &&
+          removedGroup.status !== MapItemStatus.Pending
+        ) {
+          removedGroup.markAsDeleted();
+          //Splice created or pending groups out of the stationGroupElements array and remove it from it's parent's subStationGroup array.
+        } else {
+          const subGroupWithoutDeleted = group.subStationGroups.filter(
+            (subGroup) => subGroup !== stationGroupId
+          );
+          group.subStationGroups = subGroupWithoutDeleted;
+          const pendingIndex = this.stationGroupElements.findIndex(
+            (pendingGroup) => {
+              return pendingGroup.rithmId === removedGroup.rithmId;
+            }
+          );
+          this.stationGroupElements.splice(pendingIndex, 1);
+        }
+        //Note a change in map data.
+        this.mapHelper.mapDataReceived$.next(true);
+      }
+    });
+    if (!parentGroupFound) {
+      throw new Error(
+        `No parent station group could be found for ${stationGroupId}.`
+      );
+    }
+  }
+
+  /**
+   * Updates pendingStationGroup with the current selected stations and groups.
+   *
+   * @param stationHelper The map station helper reference.
+   */
+  updatePendingStationGroup(stationHelper: MapStationHelper): void {
+    //Set up blank pending group.
+    let newGroup = new StationGroupMapElement({
+      rithmId: uuidv4(),
+      title: 'Pending',
+      stations: [],
+      subStationGroups: [],
+      status: MapItemStatus.Pending,
+      isChained: false,
+      isReadOnlyRootStationGroup: false,
+    });
+
+    if (this.mapHelper.mapMode$.value === MapMode.StationGroupEdit) {
+      const editStationGroup = this.stationGroupElements.find(
+        (group) => group.status === MapItemStatus.Pending
+      );
+      if (!editStationGroup) {
+        throw new Error(`There is no station group with status pending.`);
+      }
+      //Set up pending group for edit.
+      newGroup = new StationGroupMapElement({
+        rithmId: editStationGroup.rithmId,
+        title: editStationGroup.title,
+        stations: editStationGroup.stations,
+        subStationGroups: editStationGroup.subStationGroups,
+        status: MapItemStatus.Pending,
+        isChained: editStationGroup.isChained,
+        isReadOnlyRootStationGroup: false,
+      });
+    }
+
+    /* There should only ever be one pending group in the stationGroupElements array,
+    recursively delete every pending group that already exists so we can add a new one. */
+    const deletePending = () => {
+      const pendingIndex = this.stationGroupElements.findIndex(
+        (pendingGroup) => {
+          return pendingGroup.status === MapItemStatus.Pending;
+        }
+      );
+      if (pendingIndex !== -1) {
+        this.removeStationGroup(
+          this.stationGroupElements[pendingIndex].rithmId
+        );
+        deletePending();
+      }
+      return;
+    };
+    deletePending();
+
+    //All stations currently selected.
+    const selectedStations = stationHelper.stationElements.filter(
+      (station) => station.selected
+    );
+
+    //All groups currently selected.
+    const selectedGroups = this.stationGroupElements.filter(
+      (group) => group.selected
+    );
+
+    //Filter the selected stations to only contain stations outside the selected groups.
+    const outsideStations = selectedStations.filter((station) => {
+      //Find index of group that contains station.
+      const groupIndex = selectedGroups.findIndex((group) => {
+        return group.stations.includes(station.rithmId);
+      });
+      //if index is -1 return true.
+      return groupIndex === -1;
+    });
+
+    //Filter the selected groups so that only parent groups are in the array.
+    const parentGroups = selectedGroups.filter((group) => {
+      const groupIndex = selectedGroups.findIndex((otherGroup) => {
+        return otherGroup.subStationGroups.includes(group.rithmId);
+      });
+      //if index is -1 return true.
+      return groupIndex === -1;
+    });
+
+    //Set inner stations as disabled.
+    stationHelper.stationElements.map((station) => {
+      if (
+        selectedStations.some((selected) => selected === station) &&
+        !outsideStations.some((outside) => outside === station)
+      ) {
+        return (station.disabled = true);
+      } else if (outsideStations.some((outside) => outside === station)) {
+        return (station.disabled = false);
+      } else {
+        return;
+      }
+    });
+
+    //Set child groups as disabled.
+    this.stationGroupElements.map((stationGroup) => {
+      if (
+        selectedGroups.some((selected) => selected === stationGroup) &&
+        !parentGroups.some((parent) => parent === stationGroup)
+      ) {
+        return (stationGroup.disabled = true);
+      } else if (parentGroups.some((parent) => parent === stationGroup)) {
+        return (stationGroup.disabled = false);
+      } else {
+        return;
+      }
+    });
+
+    //Get the rithmIds of the outsideStations.
+    const outsideStationIds = outsideStations.map((station) => station.rithmId);
+
+    //Get the rithmIds of the parentGroups.
+    const parentGroupIds = parentGroups.map((group) => group.rithmId);
+
+    //Add the station and group ids to the newGroup.
+    newGroup.stations = [...outsideStationIds];
+    newGroup.subStationGroups = [...parentGroupIds];
+
+    //If there are any selected stations or groups in newGroup, add it to the stationGroupElements array.
+    if (newGroup.stations.length > 0 || newGroup.subStationGroups.length > 0) {
+      //set up a boolean to check if an error needs to be thrown because there is no parent group.
+      let parentGroupFound = false;
+      /* Edit the group that will house newGroup to include it in it's list of subgroups,
+      and remove the stations and subgroups contained in newGroup from parent. */
+      this.stationGroupElements.forEach((group) => {
+        if (
+          //Find parent station group that houses stations or subgroups that will be added to newGroup.
+          group.stations.some((station) =>
+            newGroup.stations.includes(station)
+          ) ||
+          group.subStationGroups.some((subGroup) =>
+            newGroup.subStationGroups.includes(subGroup)
+          )
+        ) {
+          parentGroupFound = true;
+          //Remove every station from parent group that newGroup contains.
+          const remainingStations = group.stations.filter((stationId) => {
+            return !newGroup.stations.some(
+              (newGroupStation) => newGroupStation === stationId
+            );
+          });
+          group.stations = remainingStations;
+          //Remove every subGroup from parent group that newGroup contains.
+          const remainingSubGroups = group.subStationGroups.filter(
+            (groupId) => {
+              return !newGroup.subStationGroups.some(
+                (newGroupSubGroup) => newGroupSubGroup === groupId
+              );
+            }
+          );
+          group.subStationGroups = remainingSubGroups;
+          //Add newGroup to list of subgroups.
+          group.subStationGroups.push(newGroup.rithmId);
+          //Mark parent group as updated.
+          group.markAsUpdated();
+        }
+      });
+      if (!parentGroupFound) {
+        throw new Error(`No parent station group could be found.`);
+      }
+      this.stationGroupElements.push(newGroup);
+      //Note a change in map data.
+      this.mapHelper.mapDataReceived$.next(true);
+    }
+  }
+
+  /**
+   * Update the selected status of all parent station-group and stations of incoming station-group id.
+   *
+   * @param stationGroupId The incoming station-group id.
+   */
+  updateParentStationGroup(stationGroupId: string): void {
+    const rootStationGroup = this.stationGroupElements.find(
+      (f) => f.rithmId === stationGroupId
+    );
+    if (rootStationGroup?.isReadOnlyRootStationGroup) {
+      return;
+    }
+    this.stationGroupElements.forEach((stationGroup) => {
+      if (
+        stationGroup.subStationGroups.includes(stationGroupId) &&
+        !stationGroup.isReadOnlyRootStationGroup
+      ) {
+        stationGroup.disabled = false;
+        this.updateParentStationGroup(stationGroup.rithmId);
+      }
+    });
+  }
+
+  /**
+   * Update the selected status of all descendent station-group and stations of incoming station-group.
+   *
+   * @param stationGroup The incoming station-group data.
+   * @param stationHelper The map station helper reference.
+   */
+  updateChildStationGroup(
+    stationGroup: StationGroupMapElement,
+    stationHelper: MapStationHelper
+  ): void {
+    const isSelected = stationGroup.selected;
+    stationGroup.subStationGroups.forEach((subStationGroupId) => {
+      const subStationGroup = this.stationGroupElements.find(
+        (group) => group.rithmId === subStationGroupId
+      );
+      if (!subStationGroup) {
+        throw new Error(
+          `Couldn't find a sub-flow for which an id exists: ${subStationGroupId}`
+        );
+      }
+      subStationGroup.selected = isSelected ? true : false;
+      subStationGroup.stations.map((st) => {
+        const stationIndex = stationHelper.stationElements.findIndex(
+          (station) => station.rithmId === st
+        );
+        stationHelper.stationElements[stationIndex].selected = isSelected
+          ? true
+          : false;
+      });
+      this.updateChildStationGroup(subStationGroup, stationHelper);
+    });
+  }
+
+  /**
+   * Reset disable and true status to false when a station-group is deselected.
+   *
+   * @param stationHelper The map station helper reference.
+   */
+  resetSelectedStationGroupStationStatus(
+    stationHelper: MapStationHelper
+  ): void {
+    this.stationGroupElements.map((stationGroup) => {
+      stationGroup.selected = false;
+      stationGroup.disabled = false;
+      stationGroup.stations.map((station) => {
+        const stationIndex = stationHelper.stationElements.findIndex(
+          (st) => st.rithmId === station
+        );
+        stationHelper.stationElements[stationIndex].selected = false;
+        stationHelper.stationElements[stationIndex].disabled = false;
+      });
+    });
   }
 }

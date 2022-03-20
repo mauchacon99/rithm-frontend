@@ -11,13 +11,9 @@ import {
   CenterPanType,
 } from 'src/models';
 import {
-  ABOVE_MAX,
-  BELOW_MIN,
   DEFAULT_CANVAS_POINT,
   DEFAULT_SCALE,
   MAX_SCALE,
-  MIN_SCALE,
-  SCALE_RENDER_STATION_ELEMENTS,
   ZOOM_VELOCITY,
   DEFAULT_MOUSE_POINT,
   STATION_WIDTH,
@@ -29,7 +25,6 @@ import {
 } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 import {
   BoundaryMapElement,
   ConnectionMapElement,
@@ -272,272 +267,14 @@ export class MapService {
    * Updates the mapPoints of the map boundary.
    */
   updateBoundary(): void {
-    if (this.boundaryElement) {
-      this.boundaryElement.updatePoints(this.stationElements);
-    }
-  }
-
-  /**
-   * Update information used to draw a connection when a connection has changed.
-   *
-   * @param station The station that is being updated.
-   */
-  updateConnection(station: StationMapElement): void {
-    //Loop through the connectionElements array.
-    for (const connection of this.connectionElements) {
-      //If connection start is consistent with the station parameter, update the connections start point.
-      if (connection.startStationRithmId === station.rithmId) {
-        connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
-        //If station is selected then connection highlight set to true.
-        if (station.drawerOpened) connection.highlighted = true;
-      }
-      //If connection end is consistent with the station parameter, update the connections end point.
-      if (connection.endStationRithmId === station.rithmId) {
-        connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
-        //If station is selected then connection highlight set to true.
-        if (station.drawerOpened) connection.highlighted = true;
-      }
-      //Draw the connection using its startPoint and EndPoint.
-      connection.path = connection.getConnectionLine(
-        connection.startPoint,
-        connection.endPoint,
-        this.mapHelper.mapScale$.value
-      );
-    }
+    this.mapHelper.updateBoundary(this.mapStationHelper);
   }
 
   /**
    * Updates pendingStationGroup with the current selected stations and groups.
    */
   updatePendingStationGroup(): void {
-    //Set up blank pending group.
-    let newGroup = new StationGroupMapElement({
-      rithmId: uuidv4(),
-      title: 'Pending',
-      stations: [],
-      subStationGroups: [],
-      status: MapItemStatus.Pending,
-      isChained: false,
-      isReadOnlyRootStationGroup: false,
-    });
-
-    if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      const editStationGroup = this.stationGroupElements.find(
-        (group) => group.status === MapItemStatus.Pending
-      );
-      if (!editStationGroup) {
-        throw new Error(`There is no station group with status pending.`);
-      }
-      //Set up pending group for edit.
-      newGroup = new StationGroupMapElement({
-        rithmId: editStationGroup.rithmId,
-        title: editStationGroup.title,
-        stations: editStationGroup.stations,
-        subStationGroups: editStationGroup.subStationGroups,
-        status: MapItemStatus.Pending,
-        isChained: editStationGroup.isChained,
-        isReadOnlyRootStationGroup: false,
-      });
-    }
-
-    /* There should only ever be one pending group in the stationGroupElements array,
-    recursively delete every pending group that already exists so we can add a new one. */
-    const deletePending = () => {
-      const pendingIndex = this.stationGroupElements.findIndex(
-        (pendingGroup) => {
-          return pendingGroup.status === MapItemStatus.Pending;
-        }
-      );
-      if (pendingIndex !== -1) {
-        this.removeStationGroup(
-          this.stationGroupElements[pendingIndex].rithmId
-        );
-        deletePending();
-      }
-      return;
-    };
-    deletePending();
-
-    //All stations currently selected.
-    const selectedStations = this.stationElements.filter(
-      (station) => station.selected
-    );
-
-    //All groups currently selected.
-    const selectedGroups = this.stationGroupElements.filter(
-      (group) => group.selected
-    );
-
-    //Filter the selected stations to only contain stations outside the selected groups.
-    const outsideStations = selectedStations.filter((station) => {
-      //Find index of group that contains station.
-      const groupIndex = selectedGroups.findIndex((group) => {
-        return group.stations.includes(station.rithmId);
-      });
-      //if index is -1 return true.
-      return groupIndex === -1;
-    });
-
-    //Filter the selected groups so that only parent groups are in the array.
-    const parentGroups = selectedGroups.filter((group) => {
-      const groupIndex = selectedGroups.findIndex((otherGroup) => {
-        return otherGroup.subStationGroups.includes(group.rithmId);
-      });
-      //if index is -1 return true.
-      return groupIndex === -1;
-    });
-
-    //Set inner stations as disabled.
-    this.stationElements.map((station) => {
-      if (
-        selectedStations.some((selected) => selected === station) &&
-        !outsideStations.some((outside) => outside === station)
-      ) {
-        return (station.disabled = true);
-      } else if (outsideStations.some((outside) => outside === station)) {
-        return (station.disabled = false);
-      } else {
-        return;
-      }
-    });
-
-    //Set child groups as disabled.
-    this.stationGroupElements.map((stationGroup) => {
-      if (
-        selectedGroups.some((selected) => selected === stationGroup) &&
-        !parentGroups.some((parent) => parent === stationGroup)
-      ) {
-        return (stationGroup.disabled = true);
-      } else if (parentGroups.some((parent) => parent === stationGroup)) {
-        return (stationGroup.disabled = false);
-      } else {
-        return;
-      }
-    });
-
-    //Get the rithmIds of the outsideStations.
-    const outsideStationIds = outsideStations.map((station) => station.rithmId);
-
-    //Get the rithmIds of the parentGroups.
-    const parentGroupIds = parentGroups.map((group) => group.rithmId);
-
-    //Add the station and group ids to the newGroup.
-    newGroup.stations = [...outsideStationIds];
-    newGroup.subStationGroups = [...parentGroupIds];
-
-    //If there are any selected stations or groups in newGroup, add it to the stationGroupElements array.
-    if (newGroup.stations.length > 0 || newGroup.subStationGroups.length > 0) {
-      //set up a boolean to check if an error needs to be thrown because there is no parent group.
-      let parentGroupFound = false;
-      /* Edit the group that will house newGroup to include it in it's list of subgroups,
-      and remove the stations and subgroups contained in newGroup from parent. */
-      this.stationGroupElements.forEach((group) => {
-        if (
-          //Find parent station group that houses stations or subgroups that will be added to newGroup.
-          group.stations.some((station) =>
-            newGroup.stations.includes(station)
-          ) ||
-          group.subStationGroups.some((subGroup) =>
-            newGroup.subStationGroups.includes(subGroup)
-          )
-        ) {
-          parentGroupFound = true;
-          //Remove every station from parent group that newGroup contains.
-          const remainingStations = group.stations.filter((stationId) => {
-            return !newGroup.stations.some(
-              (newGroupStation) => newGroupStation === stationId
-            );
-          });
-          group.stations = remainingStations;
-          //Remove every subGroup from parent group that newGroup contains.
-          const remainingSubGroups = group.subStationGroups.filter(
-            (groupId) => {
-              return !newGroup.subStationGroups.some(
-                (newGroupSubGroup) => newGroupSubGroup === groupId
-              );
-            }
-          );
-          group.subStationGroups = remainingSubGroups;
-          //Add newGroup to list of subgroups.
-          group.subStationGroups.push(newGroup.rithmId);
-          //Mark parent group as updated.
-          group.markAsUpdated();
-        }
-      });
-      if (!parentGroupFound) {
-        throw new Error(`No parent station group could be found.`);
-      }
-      this.stationGroupElements.push(newGroup);
-      //Note a change in map data.
-      this.mapHelper.mapDataReceived$.next(true);
-    }
-  }
-
-  /**
-   * Delete the station group and find it's parent to move all it's stations and sub groups to parent station group.
-   *
-   * @param stationGroupId The incoming station group Id to be deleted.
-   */
-  removeStationGroup(stationGroupId: string): void {
-    // Find the station group from this.stationGroupElements array.
-    const removedGroup = this.stationGroupElements.find(
-      (group) => group.rithmId === stationGroupId
-    );
-    if (!removedGroup) {
-      throw new Error('Station group was not found.');
-    }
-    //set up a boolean to check if an error needs to be thrown because there is no parent group.
-    let parentGroupFound = false;
-    this.stationGroupElements.forEach((group) => {
-      if (
-        //Find parent station group of incoming station group.
-        group.subStationGroups.includes(removedGroup.rithmId)
-      ) {
-        parentGroupFound = true;
-        //Remove deleting station group Id from it's parent group
-        group.subStationGroups = group.subStationGroups.filter(
-          (groupId) => groupId !== removedGroup.rithmId
-        );
-        //Move all sub station groups of deleted station group to it's parent.
-        group.subStationGroups = group.subStationGroups.concat(
-          removedGroup.subStationGroups
-        );
-        //Move all stations of deleted station group to it's parent.
-        group.stations = group.stations.concat(removedGroup.stations);
-        //Mark parent station group of deleted station group as updated.
-        group.markAsUpdated();
-        //Remove all stations of deleting station group.
-        removedGroup.stations = [];
-        //Remove all sub station groups of deleting station group.
-        removedGroup.subStationGroups = [];
-        //Unless removedGroup has status of created or pending, mark removedGroup as deleted.
-        if (
-          removedGroup.status !== MapItemStatus.Created &&
-          removedGroup.status !== MapItemStatus.Pending
-        ) {
-          removedGroup.markAsDeleted();
-          //Splice created or pending groups out of the stationGroupElements array and remove it from it's parent's subStationGroup array.
-        } else {
-          const subGroupWithoutDeleted = group.subStationGroups.filter(
-            (subGroup) => subGroup !== stationGroupId
-          );
-          group.subStationGroups = subGroupWithoutDeleted;
-          const pendingIndex = this.stationGroupElements.findIndex(
-            (pendingGroup) => {
-              return pendingGroup.rithmId === removedGroup.rithmId;
-            }
-          );
-          this.stationGroupElements.splice(pendingIndex, 1);
-        }
-        //Note a change in map data.
-        this.mapHelper.mapDataReceived$.next(true);
-      }
-    });
-    if (!parentGroupFound) {
-      throw new Error(
-        `No parent station group could be found for ${stationGroupId}.`
-      );
-    }
+    this.mapStationGroupHelper.updatePendingStationGroup(this.mapStationHelper);
   }
 
   /**
@@ -547,9 +284,12 @@ export class MapService {
    */
   setStationGroupStatus(stationGroup: StationGroupMapElement): void {
     //Update parent station-group and respective stations status.
-    this.updateParentStationGroup(stationGroup.rithmId);
+    this.mapStationGroupHelper.updateParentStationGroup(stationGroup.rithmId);
     //Update descendent station-group and respective stations status.
-    this.updateChildStationGroup(stationGroup);
+    this.mapStationGroupHelper.updateChildStationGroup(
+      stationGroup,
+      this.mapStationHelper
+    );
     //Reset status of each station-group and station if nothing(station group or station) has been selected.
     if (
       !this.stationElements.some((st) => st.selected) &&
@@ -557,56 +297,6 @@ export class MapService {
     ) {
       this.resetSelectedStationGroupStationStatus();
     }
-  }
-
-  /**
-   * Update the selected status of all parent station-group and stations of incoming station-group id.
-   *
-   * @param stationGroupId The incoming station-group id.
-   */
-  private updateParentStationGroup(stationGroupId: string): void {
-    const rootStationGroup = this.stationGroupElements.find(
-      (f) => f.rithmId === stationGroupId
-    );
-    if (rootStationGroup?.isReadOnlyRootStationGroup) {
-      return;
-    }
-    this.stationGroupElements.forEach((stationGroup) => {
-      if (
-        stationGroup.subStationGroups.includes(stationGroupId) &&
-        !stationGroup.isReadOnlyRootStationGroup
-      ) {
-        stationGroup.disabled = false;
-        this.updateParentStationGroup(stationGroup.rithmId);
-      }
-    });
-  }
-
-  /**
-   * Update the selected status of all descendent station-group and stations of incoming station-group.
-   *
-   * @param stationGroup The incoming station-group data.
-   */
-  private updateChildStationGroup(stationGroup: StationGroupMapElement): void {
-    const isSelected = stationGroup.selected;
-    stationGroup.subStationGroups.forEach((subStationGroupId) => {
-      const subStationGroup = this.stationGroupElements.find(
-        (group) => group.rithmId === subStationGroupId
-      );
-      if (!subStationGroup) {
-        throw new Error(
-          `Couldn't find a sub-flow for which an id exists: ${subStationGroupId}`
-        );
-      }
-      subStationGroup.selected = isSelected ? true : false;
-      subStationGroup.stations.map((st) => {
-        const stationIndex = this.stationElements.findIndex(
-          (station) => station.rithmId === st
-        );
-        this.stationElements[stationIndex].selected = isSelected ? true : false;
-      });
-      this.updateChildStationGroup(subStationGroup);
-    });
   }
 
   /**
@@ -630,17 +320,9 @@ export class MapService {
    * Reset disable and true status to false when a station-group is deselected.
    */
   resetSelectedStationGroupStationStatus(): void {
-    this.stationGroupElements.map((stationGroup) => {
-      stationGroup.selected = false;
-      stationGroup.disabled = false;
-      stationGroup.stations.map((station) => {
-        const stationIndex = this.stationElements.findIndex(
-          (st) => st.rithmId === station
-        );
-        this.stationElements[stationIndex].selected = false;
-        this.stationElements[stationIndex].disabled = false;
-      });
-    });
+    this.mapStationGroupHelper.resetSelectedStationGroupStationStatus(
+      this.mapStationHelper
+    );
   }
 
   /**
@@ -767,7 +449,7 @@ export class MapService {
     this.mapStationGroupHelper.cancelStationGroupsChanges();
     this.mapConnectionHelper.cancelConnectionsChanges();
     //Set mapMode to view.
-    this.mapMode$.next(MapMode.View);
+    this.mapHelper.mapMode$.next(MapMode.View);
     //Note a change in map data.
     this.mapHelper.mapDataReceived$.next(true);
   }
@@ -842,53 +524,11 @@ export class MapService {
    * @param endStationId The station for which connection end.
    */
   removeConnectionLine(startStationId: string, endStationId: string): void {
-    //Get starting station of the connection line.
-    const startStation = this.stationElements.find(
-      (e) =>
-        e.nextStations.includes(endStationId) && e.rithmId === startStationId
+    this.mapConnectionHelper.removeConnectionLine(
+      startStationId,
+      endStationId,
+      this.mapStationHelper
     );
-    //Get the end station of the connection line.
-    const endStation = this.stationElements.find(
-      (e) =>
-        e.previousStations.includes(startStationId) &&
-        e.rithmId === endStationId
-    );
-
-    if (!startStation) {
-      throw new Error(`A start station was not found for ${startStationId}`);
-    }
-    if (!endStation) {
-      throw new Error(`An end station was not found for ${endStationId}`);
-    }
-
-    // Find the index for the end station in the nextStations array of startStation.
-    const nextStationIndex = startStation.nextStations.findIndex(
-      (e) => e === endStationId
-    );
-    // Find the index for the starting station in the previousStations array of endStation.
-    const prevStationIndex = endStation.previousStations.findIndex(
-      (e) => e === startStationId
-    );
-
-    // Remove station rithm ids from nextStations and previousStations properties.
-    startStation.nextStations.splice(nextStationIndex, 1);
-    endStation.previousStations.splice(prevStationIndex, 1);
-    //Mark the two stations as updated if they aren't new.
-    startStation.markAsUpdated();
-    endStation.markAsUpdated();
-
-    //Find the index of the connection in this.connectionElements.
-    const filteredConnectionIndex = this.connectionElements.findIndex(
-      (e) =>
-        e.startStationRithmId === startStationId &&
-        e.endStationRithmId === endStationId
-    );
-    //Remove the connection from this.connectionElements.
-    if (filteredConnectionIndex !== -1) {
-      this.connectionElements.splice(filteredConnectionIndex, 1);
-    }
-    //Note a change in map data.
-    this.mapHelper.mapDataReceived$.next(true);
   }
 
   /**
@@ -908,7 +548,7 @@ export class MapService {
       //If zoomCount is positive, we're zooming in.
       if (this.zoomCount$.value > 0) {
         //run this.zoom(), marking it as zooming in.
-        this.zoom(true, zoomOrigin);
+        this.mapHelper.zoom(true, zoomOrigin);
         //Decrement the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value - 1);
         //If zoomCount still isn't 0, recursively call this.handleZoom().
@@ -920,7 +560,7 @@ export class MapService {
       //If zoomCount is negative, we're zooming out.
       if (this.zoomCount$.value < 0) {
         //Run this.zoom(), marking it as zooming out.
-        this.zoom(false, zoomOrigin);
+        this.mapHelper.zoom(false, zoomOrigin);
         //Increment the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value + 1);
         //If zoomCount still isn't 0, recursively call this.handleZoom().
@@ -944,88 +584,6 @@ export class MapService {
       //We don't want any delay in response when a user is doing a pinch to zoom.
       zoomLogic();
     }
-  }
-
-  /**
-   * Zooms the map by adjusting the map scale and position.
-   *
-   * @param zoomingIn Zooming in or out?
-   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
-   * @param zoomAmount How much to zoom in/out.
-   */
-  zoom(
-    zoomingIn: boolean,
-    zoomOrigin = this.mapHelper.getCanvasCenterPoint(),
-    zoomAmount = ZOOM_VELOCITY
-  ): void {
-    //Reset zoomCount and return if attempting to zoom past min or max scale.
-    if (
-      (this.mapHelper.mapScale$.value <= MIN_SCALE && !zoomingIn) ||
-      (this.mapHelper.mapScale$.value >= MAX_SCALE && zoomingIn)
-    ) {
-      this.zoomCount$.next(0);
-      return;
-    }
-
-    // Reset zoomCount and return if attempting to zoom out past a certain point while not in view mode.
-    if (
-      this.mapHelper.mapScale$.value <=
-        SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
-      !zoomingIn &&
-      this.mapMode$.value !== MapMode.View
-    ) {
-      this.zoomCount$.next(0);
-      return;
-    }
-
-    //Set so that we can move the currentCanvasPoint closer or further away based on zoom direction.
-    const translateDirection = zoomingIn ? -1 : 1;
-
-    /* What will we change the scale to when we're finished?
-    When we zoom out we make the scale smaller, when we zoom in we make it larger.
-    zoomAmount is set up to be exponential. */
-    const newScale = zoomingIn
-      ? this.mapHelper.mapScale$.value / zoomAmount
-      : this.mapHelper.mapScale$.value * zoomAmount;
-
-    //We have translateLogic in a const so that we don't have to repeat code for both x and y coords.
-    const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
-      //If zooming in.
-      if (zoom) {
-        //Return amount to translate a given coord based on the arithmetic.
-        return Math.round(
-          //current scale to new scale
-          (zoomOrigin[coord] / this.mapHelper.mapScale$.value -
-            zoomOrigin[coord] / newScale) *
-            translateDirection
-        );
-        //If zooming out.
-      } else {
-        //Return amount to translate a given coord based on the arithmetic.
-        return Math.round(
-          //new scale to current scale
-          (zoomOrigin[coord] / newScale -
-            zoomOrigin[coord] / this.mapHelper.mapScale$.value) *
-            translateDirection
-        );
-      }
-    };
-
-    //Subtract the number returned from translateLogic from x coord of currentCanvasPoint to pan the map that amount.
-    this.mapHelper.currentCanvasPoint$.value.x -= translateLogic(
-      zoomingIn,
-      'x'
-    );
-    //Subtract the number returned from translateLogic from y coord of currentCanvasPoint to pan the map that amount.
-    this.mapHelper.currentCanvasPoint$.value.y -= translateLogic(
-      zoomingIn,
-      'y'
-    );
-
-    //Set the mapScale to the new scale as long as it isn't above or below the max or min allowed.
-    this.mapHelper.mapScale$.next(
-      zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale)
-    );
   }
 
   /**

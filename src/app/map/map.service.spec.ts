@@ -374,7 +374,7 @@ describe('MapService', () => {
       (e) => new StationGroupMapElement(e)
     );
     const stationGroupId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
-    service.removeStationGroup(stationGroupId);
+    service.mapStationGroupHelper.removeStationGroup(stationGroupId);
     const removedGroup = service.stationGroupElements.find(
       (group) => group.rithmId === stationGroupId
     );

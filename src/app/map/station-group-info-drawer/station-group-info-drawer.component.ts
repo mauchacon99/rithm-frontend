@@ -144,7 +144,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     //If user confirms.
     if (confirm) {
       //Remove the station group using the method in map.service.
-      this.mapService.removeStationGroup(this.stationGroupRithmId);
+      this.mapService.mapStationGroupHelper.removeStationGroup(
+        this.stationGroupRithmId
+      );
       //Close the drawer.
       this.sidenavDrawerService.toggleDrawer('stationGroupInfo');
     }

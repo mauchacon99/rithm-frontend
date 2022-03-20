@@ -67,7 +67,7 @@ describe('StationGroupInfoDrawerComponent', () => {
   it('should open a confirmation pop up on click of delete station group button and delete on confirmation', async () => {
     const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     const mapServiceSpy = spyOn(
-      TestBed.inject(MapService),
+      TestBed.inject(MapService).mapStationGroupHelper,
       'removeStationGroup'
     );
     const dataToConfirmPopup = {

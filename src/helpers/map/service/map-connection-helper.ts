@@ -137,4 +137,65 @@ export class MapConnectionHelper {
       this.connectionElements
     );
   }
+
+  /**
+   * Removes a single connection between stations.
+   *
+   * @param startStationId The station from which connection starts.
+   * @param endStationId The station for which connection end.
+   * @param stationHelper The map station helper reference.
+   */
+  removeConnectionLine(
+    startStationId: string,
+    endStationId: string,
+    stationHelper: MapStationHelper
+  ): void {
+    //Get starting station of the connection line.
+    const startStation = stationHelper.stationElements.find(
+      (e) =>
+        e.nextStations.includes(endStationId) && e.rithmId === startStationId
+    );
+    //Get the end station of the connection line.
+    const endStation = stationHelper.stationElements.find(
+      (e) =>
+        e.previousStations.includes(startStationId) &&
+        e.rithmId === endStationId
+    );
+
+    if (!startStation) {
+      throw new Error(`A start station was not found for ${startStationId}`);
+    }
+    if (!endStation) {
+      throw new Error(`An end station was not found for ${endStationId}`);
+    }
+
+    // Find the index for the end station in the nextStations array of startStation.
+    const nextStationIndex = startStation.nextStations.findIndex(
+      (e) => e === endStationId
+    );
+    // Find the index for the starting station in the previousStations array of endStation.
+    const prevStationIndex = endStation.previousStations.findIndex(
+      (e) => e === startStationId
+    );
+
+    // Remove station rithm ids from nextStations and previousStations properties.
+    startStation.nextStations.splice(nextStationIndex, 1);
+    endStation.previousStations.splice(prevStationIndex, 1);
+    //Mark the two stations as updated if they aren't new.
+    startStation.markAsUpdated();
+    endStation.markAsUpdated();
+
+    //Find the index of the connection in this.connectionElements.
+    const filteredConnectionIndex = this.connectionElements.findIndex(
+      (e) =>
+        e.startStationRithmId === startStationId &&
+        e.endStationRithmId === endStationId
+    );
+    //Remove the connection from this.connectionElements.
+    if (filteredConnectionIndex !== -1) {
+      this.connectionElements.splice(filteredConnectionIndex, 1);
+    }
+    //Note a change in map data.
+    this.mapHelper.mapDataReceived$.next(true);
+  }
 }
