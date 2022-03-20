@@ -148,7 +148,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     });
 
     //Track when new map changes are made.
-    this.mapService.mapDataReceived$
+    this.mapService.mapHelper.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((received) => {
         //Hide loading indicator once new map data has be received.
@@ -248,7 +248,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
-    this.mapService.mapDataReceived$.next(false);
+    this.mapService.mapHelper.mapDataReceived$.next(false);
   }
 
   /**
@@ -503,7 +503,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   createConnectedStation(): void {
     //run logic to see if connected station mode should be enabled.
-    this.mapService.disableConnectedStationMode();
+    this.mapService.mapStationHelper.disableConnectedStationMode();
     if (!this.openedMenuStation) {
       throw new Error(
         `Attempting to create a new connected station for a station that has not been defined`

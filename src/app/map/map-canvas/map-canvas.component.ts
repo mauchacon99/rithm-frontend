@@ -308,7 +308,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Sets the canvas to the size and DPI of the screen.
     this.setCanvasSize();
 
-    this.mapService.mapDataReceived$
+    this.mapService.mapHelper.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((dataReceived) => {
         //When the mapDataReceived behavior subject changes, update class properties.

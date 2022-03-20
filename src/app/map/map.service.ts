@@ -150,7 +150,7 @@ export class MapService {
   /** The copy of station group which is being edited. */
   tempStationGroup$ = new BehaviorSubject({});
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Getter The stations groups Elements.
@@ -238,7 +238,7 @@ export class MapService {
             this.validateMapData();
           }
           //Note that the map data has been received.
-          this.mapDataReceived$.next(true);
+          this.mapHelper.mapDataReceived$.next(true);
           return data;
         })
       );
@@ -469,7 +469,7 @@ export class MapService {
       }
       this.stationGroupElements.push(newGroup);
       //Note a change in map data.
-      this.mapDataReceived$.next(true);
+      this.mapHelper.mapDataReceived$.next(true);
     }
   }
 
@@ -530,7 +530,7 @@ export class MapService {
           this.stationGroupElements.splice(pendingIndex, 1);
         }
         //Note a change in map data.
-        this.mapDataReceived$.next(true);
+        this.mapHelper.mapDataReceived$.next(true);
       }
     });
     if (!parentGroupFound) {
@@ -740,19 +740,7 @@ export class MapService {
     //Set connectionElements to the filtered array.
     this.connectionElements = filteredConnections;
     //Note a change in map data.
-    this.mapDataReceived$.next(true);
-  }
-
-  /**
-   * Sets isAddingConnected property of station to false if it's true.
-   */
-  disableConnectedStationMode(): void {
-    //looks through the stationElements array and sets isAddingConnected to false on all stations.
-    this.stationElements
-      .filter((station) => station.isAddingConnected)
-      .map((connectedStation) => {
-        connectedStation.isAddingConnected = false;
-      });
+    this.mapHelper.mapDataReceived$.next(true);
   }
 
   /**
@@ -781,7 +769,7 @@ export class MapService {
     //Set mapMode to view.
     this.mapMode$.next(MapMode.View);
     //Note a change in map data.
-    this.mapDataReceived$.next(true);
+    this.mapHelper.mapDataReceived$.next(true);
   }
 
   /**
@@ -841,7 +829,7 @@ export class MapService {
             this.stationGroupElements.forEach(
               (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
             );
-            this.mapDataReceived$.next(true);
+            this.mapHelper.mapDataReceived$.next(true);
           })
         )
     );
@@ -900,7 +888,7 @@ export class MapService {
       this.connectionElements.splice(filteredConnectionIndex, 1);
     }
     //Note a change in map data.
-    this.mapDataReceived$.next(true);
+    this.mapHelper.mapDataReceived$.next(true);
   }
 
   /**
@@ -982,7 +970,7 @@ export class MapService {
     // Reset zoomCount and return if attempting to zoom out past a certain point while not in view mode.
     if (
       this.mapHelper.mapScale$.value <=
-      SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
+        SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
       !zoomingIn &&
       this.mapMode$.value !== MapMode.View
     ) {
@@ -1009,7 +997,7 @@ export class MapService {
           //current scale to new scale
           (zoomOrigin[coord] / this.mapHelper.mapScale$.value -
             zoomOrigin[coord] / newScale) *
-          translateDirection
+            translateDirection
         );
         //If zooming out.
       } else {
@@ -1018,7 +1006,7 @@ export class MapService {
           //new scale to current scale
           (zoomOrigin[coord] / newScale -
             zoomOrigin[coord] / this.mapHelper.mapScale$.value) *
-          translateDirection
+            translateDirection
         );
       }
     };
@@ -1386,7 +1374,7 @@ export class MapService {
       openedStations.forEach((station) => {
         station.drawerOpened = false;
       });
-      this.mapDataReceived$.next(true);
+      this.mapHelper.mapDataReceived$.next(true);
     }
     if (this.stationGroupElements.some((e) => e.drawerOpened)) {
       const openedStationGroups = this.stationGroupElements.filter(
@@ -1395,7 +1383,7 @@ export class MapService {
       openedStationGroups.forEach((group) => {
         group.drawerOpened = false;
       });
-      this.mapDataReceived$.next(true);
+      this.mapHelper.mapDataReceived$.next(true);
     }
     //On station drawer closed, set the connection highlight point false.
     this.connectionElements.map((e) => (e.highlighted = false));
@@ -1473,7 +1461,7 @@ export class MapService {
         }
       );
       this.resetSelectedStationGroupStationStatus();
-      this.mapDataReceived$.next(true);
+      this.mapHelper.mapDataReceived$.next(true);
     }
   }
 
@@ -1488,5 +1476,34 @@ export class MapService {
         .length === 1 &&
       this.stationElements.filter((e) => e.selected && !e.disabled).length === 0
     );
+  }
+
+  /**
+   * Create a new Station. Add connection if station is built off "Add Connected Station".
+   *
+   * @param coords The coordinates where the station will be placed.
+   */
+  createNewStation(coords: Point): void {
+    this.mapStationHelper.createNewStation(
+      coords,
+      this.mapStationGroupHelper,
+      this.mapConnectionHelper
+    );
+  }
+
+  /**
+   * Updates the status of a station to deleted.
+   *
+   * @param stationId The station for which status has to be set to delete.
+   */
+  deleteStation(stationId: string): void {
+    this.mapStationHelper.deleteStation(stationId, this.mapStationGroupHelper);
+  }
+
+  /**
+   * Update the canvas points for each station.
+   */
+  updateStationCanvasPoints(): void {
+    this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
   }
 }

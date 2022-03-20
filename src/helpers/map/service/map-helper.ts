@@ -28,6 +28,9 @@ export class MapHelper {
   /** The current mode of interaction on the map. Default is View. */
   mapMode$ = new BehaviorSubject(MapMode.View);
 
+  /** Notifies when the map data has been received. */
+  mapDataReceived$ = new BehaviorSubject(false);
+
   /**
    * Gets the center point of the canvas.
    *

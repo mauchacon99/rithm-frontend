@@ -391,7 +391,9 @@ describe('MapService', () => {
     );
     expect(removedGroup?.subStationGroups.length).toEqual(0);
     expect(removedGroup?.stations.length).toEqual(0);
-    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
+    service.mapHelper.mapDataReceived$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
   });
 
   it('should add only the parent group to a pending group when a group and subgroup are selected', () => {
@@ -675,7 +677,9 @@ describe('MapService', () => {
       e.drawerOpened = true;
     });
     service.handleDrawerClose();
-    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
+    service.mapHelper.mapDataReceived$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
   });
 
   it('should update the status to created for a new station group.', () => {

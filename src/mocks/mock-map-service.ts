@@ -361,17 +361,6 @@ export class MockMapService {
   }
 
   /**
-   * Set's isAddingConnected property of station to false if it's true.
-   */
-  disableConnectedStationMode(): void {
-    this.stationElements
-      .filter((station) => station.isAddingConnected)
-      .map((connectedStation) => {
-        connectedStation.isAddingConnected = false;
-      });
-  }
-
-  /**
    * Reset disable and true status to false when a station-group is deselected.
    */
   resetSelectedStationGroupStationStatus(): void {
@@ -421,7 +410,7 @@ export class MockMapService {
         //Mark incoming station group as deleted.
         stationGroup.markAsDeleted();
         //Note a change in map data.
-        this.mapDataReceived$.next(true);
+        this.mapHelper.mapDataReceived$.next(true);
       }
     });
   }
@@ -441,7 +430,7 @@ export class MockMapService {
           station.drawerOpened = false;
         });
         this.openedDrawerType$.next('');
-        this.mapDataReceived$.next(true);
+        this.mapHelper.mapDataReceived$.next(true);
       }
     }
   }
@@ -680,7 +669,7 @@ export class MockMapService {
       }
       this.stationGroupElements.push(newGroup);
       //Note a change in map data.
-      this.mapDataReceived$.next(true);
+      this.mapHelper.mapDataReceived$.next(true);
     }
   }
 

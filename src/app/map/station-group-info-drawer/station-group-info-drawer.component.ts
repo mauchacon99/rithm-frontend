@@ -93,7 +93,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
           this.mapService.stationGroupElements[
             currentStationIndex
           ].drawerOpened = true;
-          this.mapService.mapDataReceived$.next(true);
+          this.mapService.mapHelper.mapDataReceived$.next(true);
         }
       });
   }

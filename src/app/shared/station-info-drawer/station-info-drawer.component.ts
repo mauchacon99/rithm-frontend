@@ -189,7 +189,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                   currentStationIndex
                 ].drawerOpened = true;
               }
-              this.mapService.mapDataReceived$.next(true);
+              this.mapService.mapHelper.mapDataReceived$.next(true);
             }
             if (
               this.openedFromMap &&
