@@ -28,6 +28,7 @@
     <app-build-drawer
       (toggleDrawer)="toggleLeftDrawer()"
       (addInputFrame)="addInputFrame()"
+      [inputFrameList]="inputFrameList"
     ></app-build-drawer>
   </mat-drawer>
 
@@ -359,7 +360,7 @@
                     class="gridster-container pb-4 w-full"
                     cdkDropList
                     id="station-grid"
-                    cdkDropListConnectedTo="custom-fields-container"
+                    cdkDropListConnectedTo="input-frame-container"
                     (cdkDropListDropped)="addInputFrame()"
                   >
                     <gridster
@@ -370,11 +371,16 @@
                         [item]="widgetItem"
                         [ngClass]="{ 'widget-item-layout': layoutMode }"
                         class="pt-1"
-                        *ngFor="let widgetItem of inputFrameWidgetItems"
+                        *ngFor="
+                          let widgetItem of inputFrameWidgetItems;
+                          trackBy: trackBy
+                        "
                       >
                         <app-input-frame-widget
                           [fields]="widgetItem.questions"
                           [stationViewMode]="editMode ? 'edit' : 'preview'"
+                          [stationRithmId]="stationRithmId"
+                          [id]="widgetItem.id"
                         ></app-input-frame-widget>
                       </gridster-item>
                     </gridster>
