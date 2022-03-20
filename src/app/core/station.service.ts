@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -18,6 +18,7 @@ import {
   StandardStringJSON,
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
+  StationGroupWidgetData,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -46,6 +47,9 @@ export class StationService {
 
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -333,6 +337,15 @@ export class StationService {
    */
   updateStationQuestionInTemplate(question: Question): void {
     this.stationQuestion$.next(question);
+  }
+
+  /**
+   * Update the station questions in the data link field.
+   *
+   * @param questions The current questions to be updated in data link field.
+   */
+  updateCurrentStationQuestions(questions: Question[]): void {
+    this.currentStationQuestions$.next(questions);
   }
 
   /**
@@ -666,5 +679,36 @@ export class StationService {
         { params }
       )
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get the station groups widget.
+   *
+   * @param stationGroupRithmId The current station id.
+   * @returns The station groups widget.
+   */
+  getStationGroupsWidget(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<StationGroupWidgetData> {
+    const expectedResponse = {
+      rithmId: '6375027-78345-73824-54244',
+      title: 'Station Group',
+      SubStationGroups: [],
+      stations: [
+        {
+          rithmId: '3237520-7837-78378-78378',
+          name: 'StationName',
+          workers: [],
+          StationOwners: [],
+        },
+      ],
+      admins: [],
+      users: [],
+      IsChained: true,
+      IsImplicitRootFlow: true,
+    };
+
+    return of(expectedResponse).pipe(delay(1000));
   }
 }

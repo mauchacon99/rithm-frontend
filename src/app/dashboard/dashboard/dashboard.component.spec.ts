@@ -4,7 +4,11 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
@@ -14,8 +18,8 @@ import { GridsterModule } from 'angular-gridster2';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { throwError } from 'rxjs';
-import { MockComponent } from 'ng-mocks';
+import { of, throwError } from 'rxjs';
+import { MockComponent, MockService } from 'ng-mocks';
 
 import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from 'src/app/dashboard/header/header.component';
@@ -44,6 +48,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -93,6 +98,8 @@ describe('DashboardComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        Renderer2,
+        { provide: ElementRef, useValue: MockService(ElementRef) },
       ],
       imports: [
         MatSidenavModule,
@@ -348,12 +355,42 @@ describe('DashboardComponent', () => {
       ],
     };
     fixture.detectChanges();
-    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(false),
+    } as MatDialogRef<typeof component>);
 
     const btn = fixture.nativeElement.querySelector('#add-widget-button');
     expect(btn).toBeTruthy();
     btn.click();
     expect(spyDialog).toHaveBeenCalled();
+  });
+
+  it('should push new widget to dashboardData', () => {
+    component.dashboardData = dataDashboard;
+    const widgetItem = {
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 3,
+      rows: 1,
+      x: 0,
+      y: 0,
+      widgetType: WidgetType.Station,
+      data: '{"documentRithmId":"2f568-27a4-4968-04c4f3","columns":[]}',
+      minItemCols: 3,
+      minItemRows: 1,
+      maxItemCols: 12,
+      maxItemRows: 12,
+    };
+    const spyPushWidget = spyOn(
+      component.dashboardData.widgets,
+      'push'
+    ).and.callThrough();
+    const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(widgetItem),
+    } as MatDialogRef<typeof component>);
+    component.openDialogAddWidget();
+    expect(spyPushWidget).toHaveBeenCalledOnceWith(widgetItem);
+    expect(spyDialog).toHaveBeenCalled();
+    expect(component.dashboardData.widgets.length).toEqual(2);
   });
 
   describe('Test for SidenavDrawerService', () => {
@@ -465,7 +502,12 @@ describe('DashboardComponent', () => {
       expect(component.drawerContext).toBe(drawerContext);
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
-      const spyDialog = spyOn(TestBed.inject(MatDialog), 'open');
+      const spyDialog = spyOn(
+        TestBed.inject(MatDialog),
+        'open'
+      ).and.returnValue({
+        afterClosed: () => of(false),
+      } as MatDialogRef<typeof component>);
       component.openDialogAddWidget();
       expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalledOnceWith(
@@ -496,23 +538,34 @@ describe('DashboardComponent', () => {
         },
       ],
     };
+    let renderer: Renderer2;
+
+    beforeEach(() => {
+      renderer = fixture.componentRef.injector.get<Renderer2>(
+        Renderer2 as Type<Renderer2>
+      );
+    });
 
     it('should expand widget', () => {
+      const spyRenderer = spyOn(renderer, 'addClass');
       component.dashboardDataCopy = dashboardData;
       component.dashboardData = dashboardData;
       component.toggleExpandWidget(0, true);
 
       expect(component.dashboardData.widgets[0].rows).toEqual(3);
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(2);
+      expect(spyRenderer).toHaveBeenCalled();
     });
 
     it('should not expand widget', () => {
+      const spyRenderer = spyOn(renderer, 'removeClass');
       component.dashboardDataCopy = dashboardData;
       component.dashboardData = dashboardData;
       component.toggleExpandWidget(0, false);
 
       expect(component.dashboardData.widgets[0].layerIndex).toEqual(1);
       expect(component.dashboardData).toEqual(component.dashboardDataCopy);
+      expect(spyRenderer).toHaveBeenCalled();
     });
   });
 
@@ -757,5 +810,24 @@ describe('DashboardComponent', () => {
       expect(component.viewNewDashboard).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
     });
+  });
+
+  it('should parse dashboard data to widgets rithmId', () => {
+    const widgetItem = {
+      rithmId: 'TEMPID-147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 4,
+      rows: 1,
+      x: 0,
+      y: 0,
+      widgetType: WidgetType.Station,
+      data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+      minItemCols: 4,
+      minItemRows: 4,
+      maxItemCols: 12,
+      maxItemRows: 12,
+    };
+    component.dashboardData.widgets = [widgetItem];
+    const expectedData = component['parseDashboardData']();
+    expect(expectedData.widgets[0].rithmId).toEqual('');
   });
 });

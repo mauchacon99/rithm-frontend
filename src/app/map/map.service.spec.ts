@@ -692,7 +692,7 @@ describe('MapService', () => {
       },
       {
         rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
-        title: ' Sub RithmGroup',
+        title: 'Sub RithmGroup',
         organizationRithmId: '',
         stations: [
           'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -716,8 +716,8 @@ describe('MapService', () => {
     );
 
     service.updateCreatedStationGroup(rithmId);
-    expect(service.stationGroupElements[1].title).toEqual('Untitled Group');
-    expect(service.stationGroupElements[1].status).toBe(MapItemStatus.Created);
+    expect(service.stationGroupElements[1].title).toEqual('Sub RithmGroup');
+    expect(service.stationGroupElements[1].status).toBe(MapItemStatus.Normal);
     expect(resetSelectedStationGroupStationStatusSpy).toHaveBeenCalled();
 
     expect(service.stationGroupElements[0].status).not.toBe(

@@ -25,6 +25,7 @@ import {
   ConnectedStationInfo,
   DocumentAutoFlow,
   MoveDocument,
+  StationRosterMember,
 } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
@@ -48,7 +49,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('subHeaderComponent')
   subHeaderComponent!: SubHeaderComponent;
 
-  /** The Document how widget. */
+  /** Whether de container is displayed inside a widget or not. */
   @Input() isWidget = false;
 
   /** Id for station in widget. */
@@ -296,6 +297,15 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Set new user for document.
+   *
+   * @param newUserAssigned New User Assigned to document.
+   */
+  setNewAssignedUser(newUserAssigned: StationRosterMember): void {
+    this.documentInformation.currentAssignedUser = newUserAssigned;
+  }
+
+  /**
    * Get data about the document and station the document is in.
    */
   private getDocumentStationData(): void {
@@ -307,6 +317,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         next: async (document) => {
           if (document) {
             this.documentInformation = document;
+            /** Get the name for the flow button. */
+            this.getFlowButtonName();
           }
           // Get the allow the previous button for the document.
           this.allowPreviousButton = await lastValueFrom(
@@ -394,6 +406,10 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
+    // Reload widget for show new values in widget.
+    if (this.isWidget) {
+      this.widgetReloadListDocuments(false, true);
+    }
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
@@ -497,9 +513,29 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (data) => {
           this.documentLoading = false;
-          this.navigateBack(true);
+          if (
+            !this.isWidget &&
+            this.documentInformation.isChained &&
+            data.length === 1
+          ) {
+            this.router
+              .navigate(
+                [`/document/${this.documentInformation.documentRithmId}`],
+                {
+                  queryParams: {
+                    documentId: this.documentInformation.documentRithmId,
+                    stationId: data[0],
+                  },
+                }
+              )
+              .then(() => {
+                this.getParams();
+              });
+          } else {
+            this.navigateBack(true);
+          }
         },
         error: (error: unknown) => {
           this.documentLoading = false;

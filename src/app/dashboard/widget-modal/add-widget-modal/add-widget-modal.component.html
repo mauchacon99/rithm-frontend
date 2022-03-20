@@ -5,6 +5,16 @@
       Widget Builder
     </h3>
     <button
+      *ngIf="identifyShowElement !== 'tabs'"
+      data-testid="return-custom-lists"
+      id="return-custom-lists"
+      mat-icon-button
+      class="text-secondary-500"
+      (click)="returnCustomLists()"
+    >
+      <i class="fas fa-arrow-left text-lg"></i>
+    </button>
+    <button
       data-testid="close-widget-builder"
       id="close-widget-builder"
       mat-icon-button
@@ -17,26 +27,55 @@
 </div>
 
 <!-- Content Add Widgets Modal -->
-<mat-tab-group
-  *ngIf="identifyShowElement === 'tabs'"
-  class="tabs-custom-pre-build pt-2"
-  [selectedIndex]="tabParentSelect"
-  (selectedIndexChange)="tabParentSelect = $event"
->
-  <!-- Tab Custom widget -->
-  <mat-tab label="Custom" aria-label="Custom">
-    <app-custom-tab-widget-modal
-      (itemSelected)="selectTypeElement($event)"
-      [dashboardRithmId]="dashboardRithmId"
-    ></app-custom-tab-widget-modal>
-  </mat-tab>
+<div [hidden]="identifyShowElement !== 'tabs'" class="height-container">
+  <mat-tab-group
+    class="tabs-custom-pre-build pt-2"
+    [selectedIndex]="tabParentSelect"
+    (selectedIndexChange)="tabParentSelect = $event"
+  >
+    <!-- Tab Custom widget -->
+    <mat-tab label="Custom" aria-label="Custom">
+      <app-custom-tab-widget-modal
+        (itemSelected)="selectTypeElement($event)"
+        [dashboardRithmId]="dashboardRithmId"
+      ></app-custom-tab-widget-modal>
+    </mat-tab>
 
-  <!-- Tab Pre Build widget -->
-  <mat-tab label="Pre Built" aria-label="Pre Built">
-    <div class="py-4">Content for Pre built tab</div>
-  </mat-tab>
-</mat-tab-group>
+    <!-- Tab Pre Build widget -->
+    <mat-tab label="Pre Built" aria-label="Pre Built">
+      <div class="py-4">Content for Pre built tab</div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
 
-<div *ngIf="identifyShowElement !== 'tabs'">
-  <app-list-widget-modal></app-list-widget-modal>
+<!-- Display detail of the item selected in multiple tabs -->
+<div *ngIf="identifyShowElement !== 'tabs'" class="height-container">
+  <app-list-widget-modal
+    *ngIf="!previewWidgetTypeSelected"
+    [itemWidgetModalSelected]="itemWidgetModalSelected"
+    (previewWidgetSelected)="previewWidgetTypeSelected = $event"
+  ></app-list-widget-modal>
+
+  <div
+    class="flex justify-between flex-col h-full"
+    *ngIf="previewWidgetTypeSelected"
+  >
+    <app-description-widget-modal
+      [dataWidget]="dataWidget"
+      [itemWidgetModalSelected]="itemWidgetModalSelected"
+      [widgetType]="previewWidgetTypeSelected"
+    >
+    </app-description-widget-modal>
+    <div class="text-right pr-3 pb-3">
+      <button
+        mat-button
+        id="add-widget-button"
+        data-testid="add-widget-button"
+        class="bg-accent-800 text-secondary-50 drop-shadow-md"
+        (click)="addWidget()"
+      >
+        Add Widget
+      </button>
+    </div>
+  </div>
 </div>

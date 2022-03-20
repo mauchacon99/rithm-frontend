@@ -180,7 +180,7 @@
       {{ stationNameDocument }}
     </p>
   </div>
-  <div class="flex justify-between p-1">
+  <div class="flex justify-between items-center p-1">
     <div *ngIf="currentAssignedUserDocument?.rithmId; else startButton">
       <small
         class="text-secondary-900 font-semibold text-[0.6rem] tracking-[1.5px]"
@@ -198,6 +198,9 @@
     <ng-template #startButton>
       <div class="py-2">
         <button
+          [disabled]="!isAdminOrWorkerOrOwner()"
+          *ngIf="!loadingAssignUser"
+          type="button"
           mat-stroked-button
           (click)="assignUserToDocument()"
           data-testid="start-document-button"
@@ -206,6 +209,13 @@
         >
           Start Document
         </button>
+        <div
+          *ngIf="!isAdminOrWorkerOrOwner()"
+          class="text-xs pt-2"
+          id="user-not-assign-document"
+        >
+          You do not have permission to work on containers at this station.
+        </div>
         <div *ngIf="loadingAssignUser" class="w-24 items-center py-2">
           <app-loading-indicator
             id="assign-user-loading"
@@ -215,7 +225,6 @@
         <div
           *ngIf="displayAssignUserError"
           class="text-error-500 text-xs px-[15px] pt-2"
-          data-testid="assign-user-error"
           id="assign-user-error"
         >
           User not assigned!
@@ -224,6 +233,7 @@
     </ng-template>
 
     <button
+      type="button"
       mat-icon-button
       data-testid="return-document-button"
       id="return-document-button"

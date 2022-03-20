@@ -93,11 +93,17 @@ export class StationElementService {
     //Draw the card itself.
     this.drawStationCard(station, dragItem);
     if (
-      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
+      ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
         this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
-      station.disabled &&
-      !station.selected &&
-      station.hoverItem !== StationElementHoverItem.None
+        station.disabled &&
+        !station.selected &&
+        station.hoverItem !== StationElementHoverItem.None) ||
+      (this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+        station.hoverItem !== StationElementHoverItem.None &&
+        this.mapService.stationElements.filter((e) => e.selected).length ===
+          1 &&
+        station.selected &&
+        !station.disabled)
     ) {
       this.drawStationToolTip(station);
     }
@@ -271,6 +277,15 @@ export class StationElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw tooltip if context is not defined');
     }
+
+    //Stop de-selecting station in station group edit mode when it contains only one station.
+    const isEditMode =
+      station.hoverItem !== StationElementHoverItem.None &&
+      this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+      this.mapService.stationElements.filter((e) => e.selected).length === 1 &&
+      station.selected &&
+      !station.disabled;
+
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -330,19 +345,19 @@ export class StationElementService {
     ctx.globalAlpha = 0.6;
     ctx.stroke();
     ctx.fill();
-    //After the station card is drawn, restore the context to its previously saved state.
+    // After the station card is drawn, restore the context to its previously saved state.
     ctx.restore();
     ctx.fillStyle = MAP_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     ctx.font = `normal ${fontSize}px Montserrat`;
     ctx.fillText(
-      'Cannot add station to',
+      isEditMode ? 'Cannot have an' : 'Cannot add station to',
       startingX + scaledTooltipPadding,
       startingY + 12 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
     );
     ctx.fillText(
-      'current selection',
+      isEditMode ? 'empty Station Group' : 'current selection',
       startingX + scaledTooltipPadding,
       startingY + 32 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
@@ -485,6 +500,8 @@ export class StationElementService {
     const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
+    // The state of the context is saved.
+    ctx.save();
     ctx.beginPath();
     //Draw a circle for the badge.
     ctx.arc(
@@ -517,6 +534,8 @@ export class StationElementService {
       startingY + scaledBadgeMargin + 6 * this.mapScale
     );
     ctx.closePath();
+    // Restore the context to its previously saved state.
+    ctx.restore();
   }
 
   /**
@@ -539,6 +558,8 @@ export class StationElementService {
     const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
+    // The state of the context is saved.
+    ctx.save();
     ctx.beginPath();
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
@@ -551,6 +572,8 @@ export class StationElementService {
       startingY + scaledBadgeMargin
     );
     ctx.closePath();
+    // Restore the context to its previously saved state.
+    ctx.restore();
   }
 
   /**
@@ -580,6 +603,8 @@ export class StationElementService {
 
     const buttonColor = BUTTON_DEFAULT_COLOR;
 
+    // The state of the context is saved.
+    ctx.save();
     ctx.beginPath();
     //Draw a series of 3 circles in a row.
     ctx.arc(
@@ -623,6 +648,8 @@ export class StationElementService {
         : buttonColor;
     ctx.fill();
     ctx.closePath();
+    // Restore the context to its previously saved state.
+    ctx.restore();
   }
 
   /**
@@ -654,8 +681,10 @@ export class StationElementService {
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
     const scaledNodeYMargin = NODE_Y_MARGIN * this.mapScale;
 
+    // The state of the context is saved.
+    ctx.save();
     ctx.beginPath();
-    //draw a circle.
+    // Draw a circle.
     ctx.arc(
       startingX + scaledStationWidth,
       startingY + scaledStationHeight - scaledNodeYMargin,
@@ -663,7 +692,7 @@ export class StationElementService {
       0,
       2 * Math.PI
     );
-    //Change fill color of node if hovering or if dragging.
+    // Change fill color of node if hovering or if dragging.
     ctx.fillStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
@@ -676,7 +705,7 @@ export class StationElementService {
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
     ctx.fill();
-    //If dragging a connection, draw a line to cursor from the node.
+    // If dragging a connection, draw a line to cursor from the node.
     if (
       cursor.x !== -1 &&
       ((station.dragging &&
@@ -690,7 +719,9 @@ export class StationElementService {
       );
       ctx.lineTo(cursor.x, cursor.y);
     }
-    //Change stroke color of node if dragging.
+    // Resets the size of the lineWidth.
+    ctx.lineWidth = 1;
+    // Change stroke color of node if dragging.
     ctx.strokeStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
@@ -702,6 +733,8 @@ export class StationElementService {
         : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
+    // After draw the node, restore the context to its previously saved state.
+    ctx.restore();
   }
 
   /**
@@ -731,6 +764,9 @@ export class StationElementService {
     const scaledIconFullHeight = ICON_FULL_HEIGHT * this.mapScale;
 
     const iconColor = BUTTON_DEFAULT_COLOR;
+
+    // The state of the context is saved.
+    ctx.save();
 
     //This is a complex shape with various lines and curves.
     ctx.beginPath(); //square with missing corner
@@ -811,5 +847,7 @@ export class StationElementService {
     ctx.closePath();
     ctx.fillStyle = iconColor;
     ctx.fill();
+    // Restore the context to its previously saved state.
+    ctx.restore();
   }
 }

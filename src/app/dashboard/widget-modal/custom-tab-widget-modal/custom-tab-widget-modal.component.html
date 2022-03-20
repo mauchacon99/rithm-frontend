@@ -1,18 +1,20 @@
 <!-- Search Input   -->
-<div class="mt-4 bg-white">
+<div class="mt-4">
   <div>
     To build a custom widget, first select what item you'd like to pull data
-    from.
+    from
   </div>
   <div class="pt-2">
     <mat-form-field class="w-full sm:w-80 search-tabs" appearance="outline">
       <input
+        [(ngModel)]="searchTab"
         type="text"
         matInput
         placeholder="Search"
         id="search-tabs"
         data-testid="search-tabs"
         maxlength="55"
+        (keyup)="getSearchResult()"
       />
       <span matPrefix
         ><i class="fas fa-search p-1 text-secondary-300"></i
@@ -25,11 +27,11 @@
 <div class="tabs-group">
   <mat-button-toggle-group
     #colorToggle="matButtonToggleGroup"
-    value="primary"
+    value="{{ indexTab }}"
     class="button-group"
   >
     <mat-button-toggle
-      value="primary"
+      value="0"
       (click)="selectedTab(0)"
       data-testid="tab-button-document"
       id="tab-button-document"
@@ -37,7 +39,7 @@
       Documents
     </mat-button-toggle>
     <mat-button-toggle
-      value="accent"
+      value="1"
       (click)="selectedTab(1)"
       data-testid="tab-button-station"
       id="tab-button-station"
@@ -45,7 +47,7 @@
       Stations
     </mat-button-toggle>
     <mat-button-toggle
-      value="accent"
+      value="2"
       (click)="selectedTab(2)"
       data-testid="tab-button-flow"
       id="tab-button-flow"
@@ -57,7 +59,7 @@
   <mat-tab-group [(selectedIndex)]="indexTab" class="tabs">
     <mat-tab>
       <div *ngIf="errorLoadingDocumentTab" id="error-documents-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain documents.
         </p>
       </div>
@@ -76,7 +78,7 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingStationTab" id="error-station-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain stations.
         </p>
       </div>
@@ -97,7 +99,7 @@
     </mat-tab>
     <mat-tab>
       <div *ngIf="errorLoadingGroupTab" id="error-group-list-tab">
-        <p class="text-error-500 text-center">
+        <p class="text-error-500 text-center pt-5">
           Error: failed to obtain groups.
         </p>
       </div>

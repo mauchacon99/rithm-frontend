@@ -50,6 +50,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Reload list of documents in station-widget when is true. */
   @Output() isReloadListDocuments = new EventEmitter<boolean>();
 
+  /** Send new user assigned for document. */
+  @Output() sendNewUserAssigned = new EventEmitter<StationRosterMember>();
+
   /**
    * Whether the info-drawer is opened.
    *
@@ -191,6 +194,23 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     if (!this.isWidget) {
       this.getStatusDocumentEditable();
     }
+  }
+
+  /**
+   * Get is user is admin or worker or owner in document.
+   *
+   * @returns If is admin or worker or owner in document.
+   */
+  isAdminOrWorkerOrOwner(): boolean {
+    return this.userService.isAdmin
+      ? true
+      : this.documentInformation.stationOwners?.find(
+          (owner) => owner.rithmId === this.userService.user.rithmId
+        )
+      ? true
+      : !!this.documentInformation.workers?.find(
+          (worker) => worker.rithmId === this.userService.user.rithmId
+        );
   }
 
   /** Get Document Appended Fields from Behaviour Subject. */
@@ -375,13 +395,39 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.loadingAssignUser = false;
-          this.ngOnInit();
           this.displayAssignUserError = false;
+          this.getAssignedUserToDocument();
         },
         error: (error: unknown) => {
           this.loadingAssignUser = false;
           this.displayAssignUserError = true;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the user assigned to the document.
+   *
+   */
+  private getAssignedUserToDocument(): void {
+    this.documentService
+      .getAssignedUserToDocument(
+        this.documentRithmId,
+        this.stationRithmId,
+        true
+      )
+      .pipe(first())
+      .subscribe({
+        next: (assignedUser) => {
+          this.loadingAssignUser = false;
+          this.sendNewUserAssigned.emit(assignedUser[0]);
+        },
+        error: (error: unknown) => {
+          this.loadingAssignUser = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

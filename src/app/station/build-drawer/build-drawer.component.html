@@ -1,3 +1,91 @@
 <div class="flex flex-col h-full">
-  <div class="w-72 overflow-y-auto"></div>
+  <section class="flex flex-row justify-between items-center drawerHeader">
+    <p class="font-semibold text-base p-3 text-primary-900">Station Builder</p>
+    <button
+      type="button"
+      id="button-close-drawer"
+      data-testid="button-close-drawer"
+      (click)="handleCloseDrawer()"
+      class="px-2 mr-2 rounded-full h-8 w-8 hover:bg-secondary-50"
+    >
+      <span class="fa-solid fa-xmark fa-lg text-secondary-500"></span>
+    </button>
+  </section>
+  <section class="px-4 border-b-2 border-secondary-300 build-categories">
+    <mat-selection-list
+      class="md:mb-8"
+      [multiple]="false"
+      #buildCategory
+      (selectionChange)="handleCategoryChange($event)"
+    >
+      <mat-list-option
+        *ngFor="let category of buildCategories; let i = index"
+        class="px-3 py-2 hover:bg-accent-100 rounded-sm"
+        [value]="category"
+        [selected]="i === 0"
+      >
+        <p class="text-xs">{{ category }}</p>
+      </mat-list-option>
+    </mat-selection-list>
+  </section>
+  <section
+    class="px-4 py-5 w-72 overflow-y-auto categories-content"
+    [ngSwitch]="categorySelected"
+  >
+    <div
+      *ngSwitchCase="'Form Inputs'"
+      id="input-frame-container"
+      data-testid="input-frame-container"
+      cdkDropList
+      cdkDropListConnectedTo="station-grid"
+      #customFieldsContainer="cdkDropList"
+    >
+      <div
+        cdkDrag
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
+        (click)="addNewInputFrame()"
+        data-testid="input-frame-item"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
+        <span class="fa-regular fa-object-group fa-lg ml-auto"></span>
+      </div>
+    </div>
+    <div
+      *ngSwitchCase="'Form Inputs'"
+      id="custom-fields-container"
+      data-testid="custom-fields-container"
+      cdkDropList
+      [cdkDropListConnectedTo]="inputFrameList"
+      #customFieldsContainer="cdkDropList"
+      [cdkDropListData]="customFields"
+    >
+      <div
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
+        data-testid="custom-fields-item"
+        *ngFor="let field of customFields"
+        cdkDrag
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ field.prompt }}
+        </p>
+        <span class="{{ field.icon }} fa-lg ml-auto"></span>
+      </div>
+    </div>
+    <div class="previous-fields" *ngSwitchCase="'Previous Fields'">
+      <mat-accordion multi>
+        <mat-expansion-panel togglePosition="before" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-lg"> All </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- Options here -->
+        </mat-expansion-panel>
+        <mat-expansion-panel togglePosition="before" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-lg"> Private </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- Options here -->
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </section>
 </div>

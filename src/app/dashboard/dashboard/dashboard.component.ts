@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   HostListener,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -142,7 +144,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private popupService: PopupService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private elementRef: ElementRef,
+    private renderer: Renderer2
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -307,6 +311,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       this.dashboardData = JSON.parse(JSON.stringify(this.dashboardDataCopy));
       this.editMode = true;
+      for (const gridsterItem of this.elementRef.nativeElement.querySelectorAll(
+        'gridster-item'
+      )) {
+        this.renderer.removeClass(
+          gridsterItem,
+          'gridster-item-mobile-expanded'
+        );
+      }
       this.configEditMode();
     }
   }
@@ -462,6 +474,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Parse dashboardData widgets rithmId.
+   *
+   * @returns DashboardData parsed.
+   */
+  private parseDashboardData(): DashboardData {
+    const dashboardData = JSON.parse(
+      JSON.stringify(this.dashboardData)
+    ) as DashboardData;
+    dashboardData.widgets.map((widget, index) => {
+      if (widget.rithmId.includes('TEMPID')) {
+        dashboardData.widgets[index].rithmId = '';
+      }
+    });
+    return dashboardData;
+  }
+
   /** Update dashboard. */
   updateDashboard(): void {
     this.toggleDrawerOnlyForWidgets();
@@ -469,8 +498,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.errorLoadingDashboard = false;
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
-        ? this.dashboardService.updateOrganizationDashboard(this.dashboardData)
-        : this.dashboardService.updatePersonalDashboard(this.dashboardData);
+        ? this.dashboardService.updateOrganizationDashboard(
+            this.parseDashboardData()
+          )
+        : this.dashboardService.updatePersonalDashboard(
+            this.parseDashboardData()
+          );
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
@@ -508,14 +541,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param isExpandWidget Boolean if is expand widget.
    */
   toggleExpandWidget(widgetIndex: number, isExpandWidget: boolean): void {
+    const gridsterItem = this.elementRef.nativeElement.querySelector(
+      '#gridster-item-' + widgetIndex
+    );
     if (isExpandWidget) {
       this.dashboardData.widgets[widgetIndex].rows++;
       this.dashboardData.widgets[widgetIndex].layerIndex = 2;
+      this.renderer.addClass(gridsterItem, 'gridster-item-mobile-expanded');
     } else {
       this.dashboardData.widgets[widgetIndex].layerIndex = 1;
       this.dashboardData.widgets[widgetIndex] = JSON.parse(
         JSON.stringify(this.dashboardDataCopy)
       ).widgets[widgetIndex];
+      this.renderer.removeClass(gridsterItem, 'gridster-item-mobile-expanded');
     }
     this.changedOptions();
   }
@@ -545,11 +583,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   openDialogAddWidget(): void {
     this.toggleDrawerOnlyForWidgets();
-    this.dialog.open(AddWidgetModalComponent, {
+    const dialog = this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
       data: this.dashboardData.rithmId,
     });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe((widgetItem: DashboardItem) => {
+        if (widgetItem) {
+          this.dashboardData.widgets.push(widgetItem);
+        }
+      });
   }
 
   /** Clean subscriptions. */

@@ -38,7 +38,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GridsterModule } from 'angular-gridster2';
 import { MatDividerModule } from '@angular/material/divider';
 import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget.module';
+import { MatListModule } from '@angular/material/list';
 import { BuildDrawerComponent } from './build-drawer/build-drawer.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -84,6 +86,8 @@ import { BuildDrawerComponent } from './build-drawer/build-drawer.component';
     GridsterModule,
     MatDividerModule,
     InputFrameWidgetModule,
+    MatListModule,
+    DragDropModule,
   ],
 })
 export class StationModule {}

@@ -14,6 +14,7 @@ import {
   ForwardPreviousStationsDocument,
   StandardStringJSON,
   StandardBooleanJSON,
+  StationGroupWidgetData,
 } from 'src/models';
 
 /**
@@ -37,6 +38,9 @@ export class MockStationService {
 
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
 
   /**
    * Gets a station information.
@@ -668,6 +672,15 @@ export class MockStationService {
   }
 
   /**
+   * Update the station questions in the data link field.
+   *
+   * @param questions The current questions to be updated in data link field.
+   */
+  updateCurrentStationQuestions(questions: Question[]): void {
+    this.currentStationQuestions$.next(questions);
+  }
+
+  /**
    * Reports a new question to be moved.
    *
    * @param question The question of the station-template to be moved.
@@ -1058,5 +1071,35 @@ export class MockStationService {
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get the station groups widget.
+   *
+   * @param stationGroupRithmId The current station id.
+   * @returns The station groups widget.
+   */
+  getStationGroupsWidget(
+    stationGroupRithmId: string
+  ): Observable<StationGroupWidgetData> {
+    const expectedResponse = {
+      rithmId: '6375027-78345-73824-54244',
+      title: 'Station Group',
+      SubStationGroups: [],
+      stations: [
+        {
+          rithmId: '3237520-7837-78378-78378',
+          name: 'StationName',
+          workers: [],
+          StationOwners: [],
+        },
+      ],
+      admins: [],
+      users: [],
+      IsChained: true,
+      IsImplicitRootFlow: true,
+    };
+
+    return of(expectedResponse).pipe(delay(1000));
   }
 }

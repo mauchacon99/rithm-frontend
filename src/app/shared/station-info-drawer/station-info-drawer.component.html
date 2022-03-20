@@ -41,11 +41,6 @@
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
                 (keyup)="updateStationInfoDrawerName()"
-                (ngModelChange)="
-                  mapMode === mapModeEnum.Build
-                    ? reportNewStationMapChange()
-                    : null
-                "
               />
             </mat-form-field>
           </ng-template>
@@ -120,9 +115,10 @@
                 placeholder="Button Name"
                 id="button-name"
                 [(ngModel)]="flowButtonName"
-                (ngModelChange)="updateFlowButtonName()"
+                (ngModelChange)="saveButtonSettings()"
                 data-testid="button-name"
                 autocomplete="off"
+                [disabled]="openedFromMap && mapMode !== mapModeEnum.Build"
               />
             </mat-form-field>
           </div>

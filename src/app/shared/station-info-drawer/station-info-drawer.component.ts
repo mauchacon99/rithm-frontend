@@ -739,7 +739,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Update StationInfoDrawer in the station name.
    */
   updateStationInfoDrawerName(): void {
+    this.stationName =
+      this.stationName.length > 0 ? this.stationName : 'Untitled Station';
     this.stationService.updatedStationNameText(this.stationName);
+    if (
+      this.openedFromMap &&
+      (this.mapMode === this.mapModeEnum.Build ||
+        this.mapMode === this.mapModeEnum.StationAdd)
+    ) {
+      this.reportNewStationMapChange();
+    }
   }
 
   /**
@@ -784,5 +793,23 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Save Buttons Settings.
+   */
+  saveButtonSettings(): void {
+    this.stationService
+      .updateFlowButtonText(this.stationRithmId, this.flowButtonName)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end when updating the flow button text and we are looking into it. \
+                Please try again in a little while',
+            error
+          );
+        },
+      });
   }
 }

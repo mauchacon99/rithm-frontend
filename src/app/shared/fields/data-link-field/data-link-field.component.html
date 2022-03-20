@@ -1,1 +1,75 @@
-<p>data-link-field works!</p>
+<div [formGroup]="dataLinkFieldForm" class="flex flex-col">
+  <div class="flex flex-row justify-start text-xs space-x-2 mb-2">
+    <span class="text-primary-500">DATA LINK</span>
+    <mat-divider [vertical]="true"></mat-divider>
+    <a
+      href="javascript: void(0)"
+      class="underline cursor-pointer text-accent-500"
+      >Help</a
+    >
+  </div>
+  <!-- Avalaible Stations  -->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label>{{ field.prompt }}</mat-label>
+    <div matPrefix class="icon">
+      <!-- Data link icon -->
+      <i class="fas fa-search"></i>
+    </div>
+    <input
+      id="data-link-search"
+      matInput
+      [required]="field.isRequired"
+      [formControlName]="field.questionType"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete
+      autoActiveFirstOption
+      #auto="matAutocomplete"
+      (optionSelected)="getStationQuestions($event.option.value)"
+    >
+      <mat-option *ngIf="stationLoading" class="flex justify-center">
+        <app-loading-indicator [inlineText]="'Loading...'">
+        </app-loading-indicator>
+      </mat-option>
+      <mat-option
+        class="text-sm"
+        *ngFor="let option of filteredStations$ | async"
+        [value]="option.name"
+      >
+        <p *ngIf="option.name">{{ option.name }}</p>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <!-- Matching Value -->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label
+      >{{ questionLoading ? 'Loading Questions' : matchingValueLabel }}
+      <i *ngIf="questionLoading" class="fa-solid fa-spin fa-spinner fa-2x1">
+      </i>
+    </mat-label>
+
+    <mat-select
+      [disabled]="!questions.length || questionLoading"
+      formControlName="selectedMatchingValue"
+    >
+      <mat-option
+        class="text-sm"
+        *ngFor="let option of questions"
+        [value]="option.prompt"
+      >
+        <p *ngIf="option.prompt">{{ option.prompt }}</p>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!-- Base Value-->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label> Base Value</mat-label>
+    <mat-select formControlName="selectBaseValue">
+      <ng-container *ngFor="let item of currentStationQuestions">
+        <mat-option *ngIf="item.prompt" [value]="item.rithmId">
+          {{ item.prompt }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+</div>
