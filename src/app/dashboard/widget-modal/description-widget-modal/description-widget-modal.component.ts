@@ -4,7 +4,8 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /** Description widget modal. */
 @Component({
-  selector: 'app-description-widget-modal[itemWidgetModalSelected][widgetType]',
+  selector:
+    'app-description-widget-modal[itemWidgetModalSelected][widgetType][dataWidget]',
   templateUrl: './description-widget-modal.component.html',
   styleUrls: ['./description-widget-modal.component.scss'],
 })
