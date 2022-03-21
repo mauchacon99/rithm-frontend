@@ -158,7 +158,7 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
     );
     return customField
       ? customField.icon
-      : 'fa-regular fa-circle-question fa-fade';
+      : 'fa-regular fa-circle-question';
   }
 
   /**
