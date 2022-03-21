@@ -483,7 +483,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const dashboardData = JSON.parse(
       JSON.stringify(this.dashboardData)
     ) as DashboardData;
-    dashboardData.widgets.map(async (widget, index) => {
+    dashboardData.widgets.map((widget, index) => {
       if (widget.rithmId.includes('TEMPID')) {
         dashboardData.widgets[index].rithmId = '';
       }
