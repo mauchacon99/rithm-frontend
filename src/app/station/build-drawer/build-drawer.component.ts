@@ -13,7 +13,7 @@ import { CustomField, QuestionFieldType } from 'src/models';
  *
  */
 @Component({
-  selector: 'app-build-drawer',
+  selector: 'app-build-drawer[stationId]',
   templateUrl: './build-drawer.component.html',
   styleUrls: ['./build-drawer.component.scss'],
 })
@@ -26,6 +26,9 @@ export class BuildDrawerComponent implements OnInit {
 
   /** Event Emitter Will add a new input frame in the station grid. */
   @Output() addInputFrame: EventEmitter<void> = new EventEmitter();
+
+  /** The station id used to get previous fields. */
+  @Input() stationId!: string;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
