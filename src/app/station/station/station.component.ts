@@ -25,7 +25,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GridsterConfig } from 'angular-gridster2';
+import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -69,6 +69,9 @@ export class StationComponent
 
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** The list of all the input frames in the grid. */
+  inputFrameList: string[] = [];
 
   /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -125,20 +128,7 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: InputFrameWidget[] = [
-    {
-      frameRithmId: '',
-      cols: 6,
-      rows: 4,
-      x: 1,
-      y: 1,
-      minItemRows: 4,
-      minItemCols: 6,
-      questions: [],
-      type: '',
-      data: '',
-    },
-  ];
+  inputFrameWidgetItems: InputFrameWidget[] = [];
 
   /** Loading / Error variables. */
 
@@ -432,8 +422,8 @@ export class StationComponent
             this.stationForm.controls.generalInstructions.setValue(
               stationInfo.instructions
             );
-            this.inputFrameWidgetItems[0].questions =
-              this.stationInformation.questions;
+            // this.inputFrameWidgetItems[0].questions =
+            //   this.stationInformation.questions;
             /** Update the current station questions whenever it changes. */
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
@@ -804,6 +794,27 @@ export class StationComponent
   }
 
   /**
+   * Will add a new input frame in the station grid.
+   */
+  addInputFrame(): void {
+    const inputFrame: InputFrameWidget = {
+      frameRithmId: '',
+      cols: 6,
+      rows: 4,
+      x: 0,
+      y: 0,
+      minItemRows: 4,
+      minItemCols: 6,
+      questions: [],
+      type: '',
+      data: '',
+      id: this.inputFrameWidgetItems.length,
+    };
+    this.inputFrameWidgetItems.push(inputFrame);
+    this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
+  }
+
+  /**
    * Toggles the open state for drawer mode.
    */
   toggleLeftDrawer(): void {
@@ -811,6 +822,17 @@ export class StationComponent
     if (this.settingMode) {
       this.setGridMode('layout');
     }
+  }
+
+  /**
+   * Will track each gridster item.
+   *
+   * @param index Gridster item index.
+   * @param item Gridster item.
+   * @returns Gridster item id.
+   */
+  trackBy(index: number, item: GridsterItem): number {
+    return item.id;
   }
 
   /**

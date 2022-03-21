@@ -6,6 +6,12 @@ import {
   MatListOption,
   MatSelectionList,
 } from '@angular/material/list';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatExpansionPanelHarness } from '@angular/material/expansion/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { BuildDrawerComponent } from './build-drawer.component';
 
@@ -16,10 +22,16 @@ describe('BuildDrawerComponent', () => {
   let categoryItem: DebugElement[];
   let categorySelected: MatListOption;
   let categoriesListSelected: SelectionModel<MatListOption>;
+  let loader: HarnessLoader;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatListModule],
+      imports: [
+        MatListModule,
+        MatExpansionModule,
+        DragDropModule,
+        NoopAnimationsModule,
+      ],
       declarations: [BuildDrawerComponent],
     }).compileComponents();
   });
@@ -37,6 +49,7 @@ describe('BuildDrawerComponent', () => {
         MatSelectionList
       ).selectedOptions;
     fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
   it('should create', () => {
@@ -80,42 +93,28 @@ describe('BuildDrawerComponent', () => {
       categoriesList.injector.get<MatSelectionList>(
         MatSelectionList
       ).selectedOptions;
-    expect(categoriesListSelected.selected.length).toBe(1);
+    expect(categoriesListSelected.selected).toHaveSize(1);
     fixture.detectChanges();
 
     const formInputs = fixture.nativeElement.querySelector(
       '#custom-fields-container'
     );
     expect(formInputs).toBeTruthy();
-    expect(component.customFields.length).toBe(16);
+    expect(component.customFields).toHaveSize(15);
     const formInputCategoryList =
       fixture.debugElement.nativeElement.querySelectorAll(
         '[data-testid="custom-fields-item"]'
       );
-    expect(formInputCategoryList.length).toBe(16);
+    expect(formInputCategoryList).toHaveSize(15);
   });
 
   it('should not show list Form Input container when item selected on mat-select is different to Form Inputs', () => {
-    component.categorySelected = 'Components';
-    fixture.detectChanges();
-    const formInputsC = fixture.debugElement.nativeElement.querySelector(
-      '#custom-fields-container'
-    );
-    expect(formInputsC).toBeFalsy();
-
     component.categorySelected = 'Previous Fields';
     fixture.detectChanges();
     const formInputsPF = fixture.debugElement.nativeElement.querySelector(
       '#custom-fields-container'
     );
     expect(formInputsPF).toBeFalsy();
-
-    component.categorySelected = 'Integrations';
-    fixture.detectChanges();
-    const formInputsI = fixture.debugElement.nativeElement.querySelector(
-      '#custom-fields-container'
-    );
-    expect(formInputsI).toBeFalsy();
   });
 
   it('should close drawer when closeButton is pressed', () => {
@@ -131,5 +130,23 @@ describe('BuildDrawerComponent', () => {
 
     btnCloseDrawer.click();
     expect(spyCloseDrawer).toHaveBeenCalled();
+  });
+
+  describe('TestExpansionHarness', () => {
+    beforeEach(() => {
+      component.categorySelected = 'Previous Fields';
+      fixture.detectChanges();
+      loader = TestbedHarnessEnvironment.loader(fixture);
+    });
+
+    it('should be able to load expansion panels', async () => {
+      const panels = await loader.getAllHarnesses(MatExpansionPanelHarness);
+      expect(panels.length).toBe(2);
+    });
+
+    it('should be able to toggle expansion state of panel', async () => {
+      const panel = await loader.getHarness(MatExpansionPanelHarness);
+      expect(await panel.isExpanded()).toBe(true);
+    });
   });
 });

@@ -1,3 +1,14 @@
-<div class="page textured-bg pb-0">
+<div
+  class="page textured-bg pb-0"
+  *ngIf="!showAdminPortal; else newAdminInterface"
+>
   <app-organization-management></app-organization-management>
 </div>
+<ng-template #newAdminInterface id="new-admin-interface">
+  <div class="flex h-full bg-white">
+    <div class="w-[300px] border-r-2 color-border">
+      <app-admin-menu></app-admin-menu>
+    </div>
+    <app-group-hierarchy></app-group-hierarchy>
+  </div>
+</ng-template>

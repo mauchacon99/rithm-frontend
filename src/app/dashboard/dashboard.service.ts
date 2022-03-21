@@ -91,6 +91,11 @@ export class DashboardService {
       title: 'List',
       description: 'Display all the values associated with a document.',
     },
+    [WidgetType.StationGroupSearch]: {
+      title: 'Search',
+      description: `User can query all the values saved on documents within a flow. By default the search results display the document
+      name and the field that matches your search.`,
+    },
   };
 
   constructor(private http: HttpClient) {}
