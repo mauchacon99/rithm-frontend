@@ -33,6 +33,7 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Data to station group widget. */
   dataStationGroupWidget!: StationGroupWidgetData;
 
+/** Data to station group widget to show filtered results. */
   stations!: StationListGroupWidget[];
 
   /** StationGroupRithmId for station widget. */
