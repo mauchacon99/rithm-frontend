@@ -515,7 +515,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: (data) => {
           this.documentLoading = false;
-          this.popupService.notify('The container has saved and flowed successfully');
+          this.popupService.notify(
+            'The container has saved and flowed successfully'
+          );
 
           if (
             !this.isWidget &&

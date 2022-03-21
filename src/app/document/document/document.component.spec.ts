@@ -507,7 +507,7 @@ describe('DocumentComponent', () => {
 
     expect(spySaveAutoFlowContainer).toHaveBeenCalled();
     expect(dialogSpy).toHaveBeenCalledOnceWith(
-      'The container has flowed successfully'
+      'The container has saved and flowed successfully'
     );
   });
 
