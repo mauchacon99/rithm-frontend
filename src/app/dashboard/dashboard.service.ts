@@ -91,6 +91,10 @@ export class DashboardService {
       title: 'List',
       description: 'Display all the values associated with a document.',
     },
+    [WidgetType.StationGroupSearch]: {
+      title: 'Station Group',
+      description: 'Display all the values associated with a station group.',
+    },
   };
 
   constructor(private http: HttpClient) {}

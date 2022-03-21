@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SelectedItemWidgetModel, WidgetType } from 'src/models';
+import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -9,6 +9,28 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
+  /**
+   * Get data widget with stringify.
+   *
+   * @returns Data of widget by typeWidget.
+   */
+  get dataWidget(): string {
+    let dataWidget = '';
+    if (this.itemWidgetModalSelected.itemType === 'document') {
+      dataWidget = JSON.stringify({
+        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        columns: [],
+      });
+    } else if (this.itemWidgetModalSelected.itemType === 'station') {
+      dataWidget = JSON.stringify({
+        stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        columns: [{ name: 'name' }],
+      });
+    }
+
+    return dataWidget;
+  }
+
   /** Selected item to show list widget. */
   itemWidgetModalSelected!: SelectedItemWidgetModel;
 
@@ -23,6 +45,9 @@ export class AddWidgetModalComponent {
 
   /** Tab Parents selected. */
   tabParentSelect = 0;
+
+  /** Enum widget type. */
+  enumWidgetType = WidgetType;
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
@@ -51,5 +76,50 @@ export class AddWidgetModalComponent {
     this.previewWidgetTypeSelected
       ? (this.previewWidgetTypeSelected = null)
       : (this.identifyShowElement = 'tabs');
+  }
+
+  /**
+   * Parse item rows for widget.
+   *
+   * @returns A number of minItemRows.
+   */
+  private minItemRowsWidget(): number {
+    return this.previewWidgetTypeSelected ===
+      this.enumWidgetType.DocumentListBanner ||
+      this.previewWidgetTypeSelected === this.enumWidgetType.StationTableBanner
+      ? 2
+      : 1;
+  }
+
+  /**
+   * Parse widget type.
+   *
+   * @returns Only data of interface WidgetType.
+   */
+  private widgetTypeToItem(): WidgetType {
+    return !this.previewWidgetTypeSelected ||
+      this.previewWidgetTypeSelected === 'defaultDocument'
+      ? this.enumWidgetType.Document
+      : this.previewWidgetTypeSelected;
+  }
+
+  /** Save widget. */
+  addWidget(): void {
+    const minItemRows = this.minItemRowsWidget();
+    const widgetType = this.widgetTypeToItem();
+    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
+    const widgetItem: DashboardItem = {
+      rithmId,
+      cols: 3,
+      rows: minItemRows,
+      x: 0,
+      y: 0,
+      widgetType,
+      data: this.dataWidget,
+      minItemRows,
+      minItemCols: 3,
+      image: null,
+    };
+    this.dialogRef.close(widgetItem);
   }
 }
