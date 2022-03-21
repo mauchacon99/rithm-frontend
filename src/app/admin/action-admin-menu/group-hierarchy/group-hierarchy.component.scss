@@ -1,0 +1,5 @@
+@import 'variables';
+
+.color-border {
+  border-color: map-get($primary-palette, 50);
+}
