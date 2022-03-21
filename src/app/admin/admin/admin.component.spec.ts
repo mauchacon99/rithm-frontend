@@ -8,6 +8,8 @@ import { AdminMenuComponent } from 'src/app/admin/admin-menu/admin-menu/admin-me
 import { OrganizationManagementComponent } from 'src/app/admin/organization-management/organization-management.component';
 
 import { AdminComponent } from './admin.component';
+import { ListAdminOptionMenuType } from 'src/models/list-admin-option-menu';
+import { GroupHierarchyComponent } from '../action-admin-menu/group-hierarchy/group-hierarchy.component';
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
@@ -19,6 +21,7 @@ describe('AdminComponent', () => {
         AdminComponent,
         MockComponent(OrganizationManagementComponent),
         MockComponent(AdminMenuComponent),
+        MockComponent(GroupHierarchyComponent),
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
@@ -37,6 +40,16 @@ describe('AdminComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show Group Hierarchy component', () => {
+    component.showAdminPortal = true;
+    component.itemMenuSelected = ListAdminOptionMenuType.GroupHierarchy;
+    fixture.detectChanges();
+    const groupHierarchyDetail =
+      fixture.debugElement.nativeElement.querySelector('#group-hierarchy');
+    expect(groupHierarchyDetail).toBeTruthy();
+  });
+
   describe('Testing split.io', () => {
     let splitService: SplitService;
     beforeEach(() => {

@@ -1,0 +1,16 @@
+.admin-menu {
+  .mat-list-item-content {
+    padding: 0;
+
+    .mat-list-item {
+      padding: 0 0 0 6px;
+    }
+  }
+
+  .mat-list-item:hover {
+    @apply bg-accent-100;
+  }
+  .mat-list-single-selected-option {
+    @apply bg-accent-100;
+  }
+}

@@ -6,12 +6,14 @@
 </div>
 <ng-template #newAdminInterface id="new-admin-interface">
   <div class="flex h-full bg-white">
-    <div class="w-[300px] border-r-2 color-border">
+    <div class="w-56 border-r-2 color-border">
       <app-admin-menu
         (itemMenuSelected)="getItemSelected($event)"
       ></app-admin-menu>
     </div>
+    {{ itemMenuSelected }}
     <app-group-hierarchy
+      id="group-hierarchy"
       *ngIf="itemMenuSelected === listAdminOptionMenuType.GroupHierarchy"
     ></app-group-hierarchy>
   </div>

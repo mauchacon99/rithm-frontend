@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatListModule } from '@angular/material/list';
 import { AdminMenuComponent } from './admin-menu.component';
 
 describe('AdminMenuComponent', () => {
@@ -9,6 +9,7 @@ describe('AdminMenuComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AdminMenuComponent],
+      imports: [MatListModule],
     }).compileComponents();
   });
 

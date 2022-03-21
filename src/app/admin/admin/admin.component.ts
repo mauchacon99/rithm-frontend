@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
   showAdminPortal = false;
 
   /** Item selected item menu. */
-  itemMenuSelected = '1';
+  itemMenuSelected!: ListAdminOptionMenuType;
 
   listAdminOptionMenuType = ListAdminOptionMenuType;
 
@@ -56,7 +56,7 @@ export class AdminComponent implements OnInit {
    *
    * @param optionSelected Option list menu selected.
    */
-  getItemSelected(optionSelected: string): void {
+  getItemSelected(optionSelected: ListAdminOptionMenuType): void {
     this.itemMenuSelected = optionSelected;
   }
 }
