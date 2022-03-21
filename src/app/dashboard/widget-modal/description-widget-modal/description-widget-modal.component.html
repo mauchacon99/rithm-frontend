@@ -15,7 +15,9 @@
 
 <div class="w-full grid sm:grid-cols-1 lg:grid-cols-2 items-center gap-3">
   <div class="w-full py-5 md:py-14">
-    <span class="font-bold">List Widget </span>
+    <span class="font-bold"
+      >{{ dataDescriptionTemplate[widgetTypeWithoutDefault].title }}
+    </span>
     <div class="flex border-t border-secondary-100 py-5 mt-2">
       <div class="w-2/4">
         <span class="text-sm">Type</span>
@@ -50,14 +52,14 @@
     </div>
   </div>
   <div class="w-full py-5">
-    <div class="flex justify-center">
+    <div class="flex justify-center rounded-md">
       <app-document-widget
         *ngIf="
           widgetType === enumWidgetType.Document ||
           widgetType === enumWidgetType.DocumentListBanner ||
           widgetType === 'defaultDocument'
         "
-        class="w-full md:w-3/5 h-[400px] shadow-xl rounded-md"
+        class="w-full md:w-3/5 h-[400px] shadow-xl rounded-md overflow-hidden"
         [dataWidget]="dataWidget"
         [editMode]="false"
         [showButtonSetting]="false"
@@ -69,16 +71,17 @@
           widgetType === enumWidgetType.Station ||
           widgetType === enumWidgetType.StationTableBanner
         "
-        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md"
+        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
         [dataWidget]="dataWidget"
         [editMode]="false"
         [showButtonSetting]="false"
-        [widgetType]="widgetTypeWithoutDefault" >
+        [widgetType]="widgetTypeWithoutDefault"
+      >
       </app-station-widget>
 
       <app-group-search-widget
         *ngIf="widgetType === enumWidgetType.StationGroupSearch"
-        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md"
+        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
         [dataWidget]="dataWidget"
         [editMode]="false"
         [showButtonSetting]="false"
