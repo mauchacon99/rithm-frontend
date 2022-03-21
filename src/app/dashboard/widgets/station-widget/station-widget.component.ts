@@ -18,6 +18,7 @@ import {
   ColumnsLogicWidget,
   WidgetDocument,
   WidgetType,
+  ImageModelWidget,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -52,7 +53,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   private _image!: string | null;
 
   /** Image to banner. */
-  @Input() image: string | File | null | undefined;
+  @Input() image!: ImageModelWidget;
 
   /** Data widget. */
   private _dataWidget = '';

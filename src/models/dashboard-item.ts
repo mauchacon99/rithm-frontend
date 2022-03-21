@@ -28,6 +28,8 @@ export interface DashboardItem {
   maxItemCols?: number;
   /** Z-index of widget. */
   layerIndex?: 1 | 2;
-  /** Image for show in widget. */
-  image?: string | File | null;
+  /** RithmId of the image. */
+  imageId?: string | null;
+  /** Name of the image. */
+  imageName?: string | null;
 }

@@ -1,11 +1,14 @@
 <div
   class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col"
 >
-  <i *ngIf="!image" class="fas text-[60px] text-secondary-300 fa-image"></i>
+  <i
+    *ngIf="!image || !image.imageId"
+    class="fas text-[60px] text-secondary-300 fa-image"
+  ></i>
   <img
-    *ngIf="image"
-    [src]="image"
+    *ngIf="image && image.imageId"
+    [src]="URL + image.imageId"
     class="w-full h-full object-cover"
-    alt="Image widget"
+    [alt]="image.imageName"
   />
 </div>

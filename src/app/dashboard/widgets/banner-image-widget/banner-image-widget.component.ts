@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { ImageModelWidget } from 'src/models';
+import { environment } from 'src/environments/environment';
 
 /**
  * Component for Banner image widgets.
@@ -9,29 +11,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./banner-image-widget.component.scss'],
 })
 export class BannerImageWidgetComponent {
-  /** Image setter. */
-  private _image!: string | null;
-
   /** Image to banner. */
-  @Input() set image(value: string | File | null | undefined) {
-    if (value && typeof value !== 'string') {
-      const reader = new FileReader();
-      reader.readAsDataURL(value);
+  @Input() image!: ImageModelWidget;
 
-      reader.onload = () => {
-        this._image = reader.result as string;
-      };
-    } else {
-      this._image = value as string;
-    }
-  }
-
-  /**
-   * Get image.
-   *
-   * @returns String or NUll of the image.
-   */
-  get image(): string | null | undefined {
-    return this._image;
-  }
+  URL = `${environment.baseApiUrl}/documentservice/api/document/vaultfile?vaultid=`;
 }

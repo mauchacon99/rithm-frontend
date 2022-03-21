@@ -185,7 +185,10 @@
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
-                [image]="item.image"
+                [image]="{
+                  imageId: item.imageId || null,
+                  imageName: item.imageName || null
+                }"
                 [editMode]="editMode"
                 [showButtonSetting]="showButtonSetting"
                 (toggleDrawer)="
@@ -200,7 +203,10 @@
                 "
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
-                [image]="item.image"
+                [image]="{
+                  imageId: item.imageId || null,
+                  imageName: item.imageName || null
+                }"
                 [editMode]="editMode"
                 [showButtonSetting]="showButtonSetting"
                 (toggleDrawer)="

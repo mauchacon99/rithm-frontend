@@ -65,3 +65,4 @@ export * from './selected-item-widget-model';
 export * from './custom-field';
 export * from './station-list-groups-widget';
 export * from './station-group-widget-data';
+export * from './image-model-widget';

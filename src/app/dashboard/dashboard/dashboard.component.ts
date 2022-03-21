@@ -483,7 +483,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const dashboardData = JSON.parse(
       JSON.stringify(this.dashboardData)
     ) as DashboardData;
-    dashboardData.widgets.map((widget, index) => {
+    dashboardData.widgets.map(async (widget, index) => {
       if (widget.rithmId.includes('TEMPID')) {
         dashboardData.widgets[index].rithmId = '';
       }
@@ -496,14 +496,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
+    const bodyDashboardData = this.parseDashboardData();
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
-        ? this.dashboardService.updateOrganizationDashboard(
-            this.parseDashboardData()
-          )
-        : this.dashboardService.updatePersonalDashboard(
-            this.parseDashboardData()
-          );
+        ? this.dashboardService.updateOrganizationDashboard(bodyDashboardData)
+        : this.dashboardService.updatePersonalDashboard(bodyDashboardData);
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;

@@ -118,7 +118,6 @@ export class AddWidgetModalComponent {
       data: this.dataWidget,
       minItemRows,
       minItemCols: 3,
-      image: null,
     };
     this.dialogRef.close(widgetItem);
   }

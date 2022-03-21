@@ -12,10 +12,11 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import { DashboardItem, WidgetType } from 'src/models';
+import { DashboardItem, ImageModelWidget, WidgetType } from 'src/models';
 import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Component for widget drawer.
@@ -33,11 +34,11 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Emit event for delete widget in dashboard. */
   @Output() deleteWidget = new EventEmitter<number>();
 
-  /** Image selected in input file. */
-  imageSelected: File | null = null;
-
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
+
+  /** Image selected in input file. */
+  imageUploaded!: ImageModelWidget;
 
   /** Validate if the widget is type station-table-banner-widget. */
   widgetTypeEnum = WidgetType;
@@ -47,6 +48,9 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Show section image banner. */
   showImageBanner = false;
+
+  /** While the image its uploading. */
+  isUploading = false;
 
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
@@ -60,7 +64,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     private changeDetector: ChangeDetectorRef,
     private splitService: SplitService,
     private errorService: ErrorService,
-    private userService: UserService
+    private userService: UserService,
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -151,18 +156,40 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    *
    * @param event Event of select image.
    */
-  onSelectFile(event: Event): void {
+  uploadImage(event: Event): void {
+    this.isUploading = true;
     const target = event.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
     if (file) {
-      this.imageSelected = file;
+      this.documentService
+        .uploadImage(file)
+        .pipe(first())
+        .subscribe({
+          next: (imageId) => {
+            this.isUploading = false;
+            this.imageUploaded = {
+              imageId,
+              imageName: file.name,
+            };
+          },
+          error: (error: unknown) => {
+            this.isUploading = false;
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          },
+        });
     }
   }
 
   /** Remove selected file. */
   removeSelectedFile(): void {
-    this.imageSelected = null;
     this.fileInputFile.nativeElement.value = '';
+    this.imageUploaded = {
+      imageId: null,
+      imageName: null,
+    };
   }
 
   /**
@@ -181,7 +208,10 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    */
   setWidgetItem(widgetItem: DashboardItem): void {
     this.widgetType = widgetItem.widgetType;
-    this.imageSelected = widgetItem.image ? (widgetItem.image as File) : null;
+    this.imageUploaded = {
+      imageId: widgetItem.imageId || null,
+      imageName: widgetItem.imageName || null,
+    };
   }
 
   /**

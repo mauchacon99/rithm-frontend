@@ -593,9 +593,11 @@ export class DocumentService {
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('image', file);
-    return this.http.post<StandardStringJSON>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/image`,
-      {image: formData}
-    ).pipe(map((response) => response.data));
+    return this.http
+      .post<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/image`,
+        formData
+      )
+      .pipe(map((response) => response.data));
   }
 }
