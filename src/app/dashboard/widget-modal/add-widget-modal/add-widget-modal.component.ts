@@ -16,18 +16,26 @@ export class AddWidgetModalComponent {
    */
   get dataWidget(): string {
     let dataWidget = '';
-    if (this.itemWidgetModalSelected.itemType === 'document') {
-      dataWidget = JSON.stringify({
-        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [],
-      });
-    } else if (this.itemWidgetModalSelected.itemType === 'station') {
-      dataWidget = JSON.stringify({
-        stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [{ name: 'name' }],
-      });
-    }
 
+    switch (this.itemWidgetModalSelected.itemType) {
+      case 'document':
+        dataWidget = JSON.stringify({
+          documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+          columns: [],
+        });
+        break;
+      case 'station':
+        dataWidget = JSON.stringify({
+          stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+          columns: [{ name: 'name' }],
+        });
+        break;
+      case 'group':
+        dataWidget = JSON.stringify({
+          stationGroupRithmId: '',
+        });
+        break;
+    }
     return dataWidget;
   }
 

@@ -6,6 +6,7 @@ import { DateFieldModule } from 'src/app/shared/fields/date-field/date-field.mod
 import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-field.module';
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
 import { CheckFieldModule } from 'src/app/shared/fields/check-field/check-field.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [InputFrameWidgetComponent],
@@ -16,6 +17,7 @@ import { CheckFieldModule } from 'src/app/shared/fields/check-field/check-field.
     NumberFieldModule,
     SelectFieldModule,
     CheckFieldModule,
+    DragDropModule,
   ],
   exports: [InputFrameWidgetComponent],
 })
