@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SelectedItemWidgetModel } from 'src/models';
+import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /** Dialog Modal for add widgets. */
 @Component({
@@ -9,17 +9,53 @@ import { SelectedItemWidgetModel } from 'src/models';
   styleUrls: ['./add-widget-modal.component.scss'],
 })
 export class AddWidgetModalComponent {
+  /**
+   * Get data widget with stringify.
+   *
+   * @returns Data of widget by typeWidget.
+   */
+  get dataWidget(): string {
+    let dataWidget = '';
+
+    switch (this.itemWidgetModalSelected.itemType) {
+      case 'document':
+        dataWidget = JSON.stringify({
+          documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+          columns: [],
+        });
+        break;
+      case 'station':
+        dataWidget = JSON.stringify({
+          stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+          columns: [{ name: 'name' }],
+        });
+        break;
+      case 'group':
+        dataWidget = JSON.stringify({
+          stationGroupRithmId: '',
+        });
+        break;
+    }
+    return dataWidget;
+  }
+
+  /** Selected item to show list widget. */
+  itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Title of preview widget selected. */
+  previewWidgetTypeSelected: WidgetType | 'defaultDocument' | null = null;
+
   /** Dashboard rithm id. */
   dashboardRithmId = '';
 
   /** The element type to be shown. */
   identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
 
-  /** Selected item to show list widget. */
-  itemWidgetModalSelected!: SelectedItemWidgetModel;
-
   /** Tab Parents selected. */
   tabParentSelect = 0;
+
+  /** Enum widget type. */
+  enumWidgetType = WidgetType;
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
@@ -45,6 +81,53 @@ export class AddWidgetModalComponent {
 
   /** Return to widget list when identifyShowElement is not tabs. */
   returnCustomLists(): void {
-    this.identifyShowElement = 'tabs';
+    this.previewWidgetTypeSelected
+      ? (this.previewWidgetTypeSelected = null)
+      : (this.identifyShowElement = 'tabs');
+  }
+
+  /**
+   * Parse item rows for widget.
+   *
+   * @returns A number of minItemRows.
+   */
+  private minItemRowsWidget(): number {
+    return this.previewWidgetTypeSelected ===
+      this.enumWidgetType.DocumentListBanner ||
+      this.previewWidgetTypeSelected === this.enumWidgetType.StationTableBanner
+      ? 2
+      : 1;
+  }
+
+  /**
+   * Parse widget type.
+   *
+   * @returns Only data of interface WidgetType.
+   */
+  private widgetTypeToItem(): WidgetType {
+    return !this.previewWidgetTypeSelected ||
+      this.previewWidgetTypeSelected === 'defaultDocument'
+      ? this.enumWidgetType.Document
+      : this.previewWidgetTypeSelected;
+  }
+
+  /** Save widget. */
+  addWidget(): void {
+    const minItemRows = this.minItemRowsWidget();
+    const widgetType = this.widgetTypeToItem();
+    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
+    const widgetItem: DashboardItem = {
+      rithmId,
+      cols: 3,
+      rows: minItemRows,
+      x: 0,
+      y: 0,
+      widgetType,
+      data: this.dataWidget,
+      minItemRows,
+      minItemCols: 3,
+      image: null,
+    };
+    this.dialogRef.close(widgetItem);
   }
 }

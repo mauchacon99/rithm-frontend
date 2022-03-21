@@ -149,6 +149,9 @@ export class MapService {
     data: {},
   });
 
+  /** The copy of station group which is being edited. */
+  tempStationGroup$ = new BehaviorSubject({});
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -1794,10 +1797,68 @@ export class MapService {
     if (stationGroupIndex === -1) {
       throw new Error(`There is not any station group with this rithmId.`);
     }
-    this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
-    this.stationGroupElements[stationGroupIndex].status = MapItemStatus.Created;
+    if (this.mapMode$.value === MapMode.StationGroupAdd) {
+      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      this.stationGroupElements[stationGroupIndex].status =
+        MapItemStatus.Created;
+    } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+    }
 
     this.resetSelectedStationGroupStationStatus();
+  }
+
+  /**
+   * Revert the changes made across station group in edit mode.
+   *
+   */
+  revertStationGroup(): void {
+    if (this.mapMode$.value === MapMode.StationGroupEdit) {
+      if (!(this.tempStationGroup$.value instanceof StationGroupMapElement)) {
+        throw new Error(`There is no temporary station group available.`);
+      }
+      const rithmId = this.tempStationGroup$.value.rithmId;
+      const groupIndex = this.stationGroupElements.findIndex(
+        (group) => group.rithmId === rithmId
+      );
+      if (groupIndex === -1) {
+        throw new Error(
+          `There is no station group available to replace tempGroup.`
+        );
+      }
+      this.stationGroupElements[groupIndex] = this.tempStationGroup$.value;
+      this.tempStationGroup$.next({});
+      //Remove station rithm id's from other groups to make make sure a station has got only one parent.
+      this.stationGroupElements[groupIndex].stations.map((stationRithmId) => {
+        this.stationGroupElements.map((group) => {
+          if (
+            group.stations.includes(stationRithmId) &&
+            group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+          ) {
+            group.stations = group.stations.filter(
+              (stationId) => stationId !== stationRithmId
+            );
+          }
+        });
+      });
+      //Remove station group rithm id's from other groups to make sure a group has got only one parent.
+      this.stationGroupElements[groupIndex].subStationGroups.map(
+        (subGroupRithmId) => {
+          this.stationGroupElements.map((group) => {
+            if (
+              group.subStationGroups.includes(subGroupRithmId) &&
+              group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+            ) {
+              group.subStationGroups = group.subStationGroups.filter(
+                (groupId) => groupId !== subGroupRithmId
+              );
+            }
+          });
+        }
+      );
+      this.resetSelectedStationGroupStationStatus();
+      this.mapDataReceived$.next(true);
+    }
   }
 
   /**

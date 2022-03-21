@@ -3,12 +3,12 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { NestedFieldComponent } from 'src/app/shared/fields/nested-field/nested-field.component';
 import { QuestionFieldType } from 'src/models';
-import { CheckFieldComponent } from '../../shared/fields/check-field/check-field.component';
-import { DateFieldComponent } from '../../shared/fields/date-field/date-field.component';
-import { NumberFieldComponent } from '../../shared/fields/number-field/number-field.component';
-import { SelectFieldComponent } from '../../shared/fields/select-field/select-field.component';
-import { TextFieldComponent } from '../../shared/fields/text-field/text-field.component';
-
+import { CheckFieldComponent } from 'src/app/shared/fields/check-field/check-field.component';
+import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
+import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
+import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-field.component';
+import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
+import { FileFieldComponent } from 'src/app/shared/fields/file-field/file-field.component';
 import { DocumentFieldComponent } from './document-field.component';
 
 describe('DocumentFieldComponent', () => {
@@ -34,6 +34,7 @@ describe('DocumentFieldComponent', () => {
         MockComponent(SelectFieldComponent),
         MockComponent(CheckFieldComponent),
         MockComponent(NestedFieldComponent),
+        MockComponent(FileFieldComponent),
       ],
       imports: [ReactiveFormsModule],
       providers: [{ provide: FormBuilder, useValue: formBuilder }],

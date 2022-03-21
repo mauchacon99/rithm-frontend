@@ -21,7 +21,8 @@
     <p class="font-semibold">Default</p>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <app-document-widget-template-modal
-        widgetType="default"
+        (click)="emitPreviewWidgetSelected('defaultDocument')"
+        widgetType="defaultDocument"
       ></app-document-widget-template-modal>
     </div>
   </div>
@@ -32,10 +33,12 @@
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <!-- Widget card type document-list -->
       <app-document-widget-template-modal
+        (click)="emitPreviewWidgetSelected(enumWidgetType.Document)"
         [widgetType]="enumWidgetType.Document"
       ></app-document-widget-template-modal>
       <!-- Widget card type document-list-banner -->
       <app-document-widget-template-modal
+        (click)="emitPreviewWidgetSelected(enumWidgetType.DocumentListBanner)"
         [widgetType]="enumWidgetType.DocumentListBanner"
       ></app-document-widget-template-modal>
     </div>
@@ -51,10 +54,12 @@
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <!-- Widget card type station -->
       <app-station-widget-template-modal
+        (click)="emitPreviewWidgetSelected(enumWidgetType.Station)"
         [widgetType]="enumWidgetType.Station"
       ></app-station-widget-template-modal>
       <!-- Widget card type StationTableBanner -->
       <app-station-widget-template-modal
+        (click)="emitPreviewWidgetSelected(enumWidgetType.StationTableBanner)"
         [widgetType]="enumWidgetType.StationTableBanner"
       ></app-station-widget-template-modal>
     </div>
@@ -63,4 +68,19 @@
 </section>
 
 <!--Section for show group template-->
-<section *ngIf="itemWidgetModalSelected.itemType === 'group'"></section>
+<section *ngIf="itemWidgetModalSelected.itemType === 'group'">
+  <hr class="text-secondary-100" />
+  <!-- Stations types list -->
+  <div class="py-6">
+    <p class="font-semibold">Search</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+      <!-- Widget card type group -->
+      <app-group-widget-template-modal
+        (click)="emitPreviewWidgetSelected(enumWidgetType.StationGroupSearch)"
+        [widgetType]="enumWidgetType.StationGroupSearch"
+      >
+      </app-group-widget-template-modal>
+    </div>
+  </div>
+  <hr class="text-secondary-100" />
+</section>

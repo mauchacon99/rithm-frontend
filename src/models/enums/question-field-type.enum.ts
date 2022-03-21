@@ -64,4 +64,16 @@ export enum QuestionFieldType {
 
   /** Data link input type. */
   DataLink = 'dataLink',
+
+  /** Checkbox input type. */
+  Checkbox = 'checkbox',
+
+  /** Child Document input type. */
+  ChildDocument = 'childDocument',
+
+  /** Custom Field input type. */
+  CustomField = 'customField',
+
+  /** Input Frame input type. */
+  InputFrame = 'inputFrame',
 }

@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { StationWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/station-widget-template-modal/station-widget-template-modal.component';
-import { SelectedItemWidgetModel } from 'src/models';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
+import { GroupWidgetTemplateModalComponent } from '../group-widget-template-modal/group-widget-template-modal.component';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
@@ -31,6 +32,7 @@ describe('ListWidgetModalComponent', () => {
         ListWidgetModalComponent,
         MockComponent(StationWidgetTemplateModalComponent),
         MockComponent(DocumentWidgetTemplateModalComponent),
+        MockComponent(GroupWidgetTemplateModalComponent),
       ],
     }).compileComponents();
   });
@@ -44,5 +46,14 @@ describe('ListWidgetModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit previewWidgetSelected', () => {
+    const spyEmit = spyOn(
+      component.previewWidgetSelected,
+      'emit'
+    ).and.callThrough();
+    component.emitPreviewWidgetSelected(WidgetType.Station);
+    expect(spyEmit).toHaveBeenCalledOnceWith(WidgetType.Station);
   });
 });
