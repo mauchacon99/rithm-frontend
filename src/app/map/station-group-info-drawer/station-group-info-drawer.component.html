@@ -3,13 +3,13 @@
     <div class="w-full py-2">
       <div
         class="px-4 col-span-12 py-2 border-b border-solid border-secondary-50"
-        *ngIf="!isBuilding"
+        *ngIf="!isBuilding && statusOfSubgroup !== isPendingStatus"
       >
         <p>{{ groupName }}</p>
       </div>
       <div
         class="px-4 border-t border-solid border-secondary-50 w-full pt-2"
-        *ngIf="isBuilding"
+        *ngIf="isBuilding || statusOfSubgroup === isPendingStatus"
       >
         <mat-form-field appearance="outline" class="w-full p-0">
           <mat-label>Group Name</mat-label>

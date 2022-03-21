@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from '../map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { MapMode, StationGroupInfoDrawerData } from 'src/models';
+import { MapItemStatus, MapMode, StationGroupInfoDrawerData } from 'src/models';
 
 /**
  * Component for station group info drawer.
@@ -41,6 +41,12 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
 
   /** Number of sub groups included in station group. */
   numberOfSubgroups = 0;
+
+  /** Status of station group. */
+  statusOfSubgroup = MapItemStatus.Normal;
+
+  /** Status of station group. */
+  readonly isPendingStatus = MapItemStatus.Pending;
 
   /**
    * Whether the map is in build mode.
@@ -84,6 +90,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
           this.numberOfSubgroups = infoData.numberOfSubgroups;
           this.editMode = infoData.editMode;
           this.isChained = infoData.isChained;
+          this.statusOfSubgroup = infoData.stationGroupStatus;
 
           this.mapService.handleDrawerClose();
           const currentStationIndex =
