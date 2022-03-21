@@ -1,0 +1,68 @@
+<!-- Toggle template by widgetType -->
+<ng-container
+  *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
+></ng-container>
+
+<!-- Card of the group widget -->
+<ng-template let-description="description" let-title="title" #cardOfWidget>
+  <div
+    class="h-[300px] w-full rounded border border-secondary-100 cursor-pointer"
+    matRipple
+  >
+    <div
+      class="py-3 px-5 bg-secondary-50 rounded-t h-4/6 border-b border-b-secondary-100"
+      [ngSwitch]="widgetType"
+    >
+      <!-- Type search -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.StationGroupSearch"
+        [ngTemplateOutlet]="previewSearchGroup"
+      ></ng-container>
+    </div>
+    <!-- Info of card. -->
+    <div class="p-2 overflow-auto h-2/6 scrollbar">
+      <p class="text-sm font-semibold">{{ title }}</p>
+      <p class="text-xs">{{ description }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Preview widget type groupSearch -->
+<ng-template #previewSearchGroup>
+  <div class="h-full w-full rounded overflow-hidden">
+    <div class="w-full bg-white h-full py-1 rounded shadow">
+      <div class="px-2 leading-3 input-search">
+        <span class="text-sm font-semibold">Group Name</span> <br />
+        <mat-form-field appearance="outline" [style.width.px]="130">
+          <input
+            type="text"
+            matInput
+            placeholder="Search"
+            id="search-tabs"
+            data-testid="search-tabs"
+            [disabled]="true"
+          />
+          <span matPrefix
+            ><i class="fas fa-search p-1 text-secondary-300"></i
+          ></span>
+        </mat-form-field>
+      </div>
+      <ng-container *ngTemplateOutlet="previewList"></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<!-- bars -->
+<ng-template #previewList>
+  <div class="h-full w-full rounded bg-white p-2 overflow-hidden">
+    <div
+      class="py-1 border-b border-b-secondary-50 animate-pulse"
+      *ngFor="let bars of [0, 0, 0]"
+    >
+      <div class="w-2/4">
+        <div class="h-2 bg-secondary-100 rounded"></div>
+        <div class="w-4/5 h-2 bg-secondary-50 rounded mt-2"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

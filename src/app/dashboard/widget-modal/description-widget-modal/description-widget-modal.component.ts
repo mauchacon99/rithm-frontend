@@ -22,8 +22,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
-  /** Data static for each template by widgetType. */
-  dataTemplate;
+  /** Widget type without default. */
+  widgetTypeWithoutDefault!: WidgetType;
 
   /** Data Description for description-widget-modal.  */
   dataDescriptionTemplate = {
@@ -68,8 +68,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
     },
   };
 
-  /** Widget type without default. */
-  widgetTypeWithoutDefault!: WidgetType;
+  /** Data static for each template by widgetType. */
+  dataTemplate;
 
   constructor(private dashboardService: DashboardService) {
     this.dataTemplate = dashboardService.dataTemplatePreviewWidgetModal;
