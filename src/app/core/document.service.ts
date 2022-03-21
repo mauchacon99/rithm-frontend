@@ -583,4 +583,19 @@ export class DocumentService {
       rulesFromStationFlowLogic
     );
   }
+
+  /**
+   * Upload image.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http.post<StandardStringJSON>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/image`,
+      {image: formData}
+    ).pipe(map((response) => response.data));
+  }
 }

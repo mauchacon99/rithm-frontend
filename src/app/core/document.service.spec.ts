@@ -901,4 +901,29 @@ describe('DocumentService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('should upload image', () => {
+    const expectedResponse = {
+      data: 'ewf34tf-3ge343-g34g3e'
+    };
+    const file =  new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    const formData = new FormData();
+    formData.append('image', file);
+    const bodyParameters = { image: formData };
+
+    service.uploadImage(file).subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/image`
+    );
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(bodyParameters);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
 });

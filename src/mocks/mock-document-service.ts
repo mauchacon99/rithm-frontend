@@ -22,6 +22,7 @@ import {
   RuleType,
   DocumentEvent,
   DocumentWidget,
+  StandardStringJSON,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1550,5 +1551,15 @@ export class MockDocumentService {
     } else {
       return of().pipe(delay(1000));
     }
+  }
+
+  /**
+   * Upload image.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  uploadImage(file: File): Observable<string> {
+    return of('ewf34tf-3ge343-g34g3e').pipe(delay(1000));
   }
 }
