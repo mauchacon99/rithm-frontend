@@ -123,6 +123,73 @@ describe('AddWidgetModalComponent', () => {
     expect(component.identifyShowElement).toEqual('document');
   });
 
+  it('should generate dataWidget of itemWidgetModalSelected of each case', () => {
+    component.itemWidgetModalSelected = {
+      itemType: 'station',
+      itemList: {
+        rithmId: 'string',
+        name: 'string',
+        totalDocuments: 0,
+        groupName: 'string',
+        isChained: false,
+        totalStations: 0,
+        totalSubGroups: 0,
+        stationName: 'string',
+        stationGroupName: 'string',
+      },
+    };
+    fixture.detectChanges();
+    const expectedDatWidgetByStation = JSON.stringify({
+      stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+      columns: [{ name: 'name' }],
+    });
+    const dataWidgetStation = component.dataWidget;
+    expect(dataWidgetStation).toBe(expectedDatWidgetByStation);
+
+    component.itemWidgetModalSelected = {
+      itemType: 'document',
+      itemList: {
+        rithmId: 'string',
+        name: 'string',
+        totalDocuments: 0,
+        groupName: 'string',
+        isChained: false,
+        totalStations: 0,
+        totalSubGroups: 0,
+        stationName: 'string',
+        stationGroupName: 'string',
+      },
+    };
+    fixture.detectChanges();
+    const expectedDatWidgetByDocument = JSON.stringify({
+      documentRithmId: itemWidgetModalSelected.itemList.rithmId,
+      columns: [],
+    });
+    const dataWidgetDocument = component.dataWidget;
+    expect(dataWidgetDocument).toBe(expectedDatWidgetByDocument);
+
+    component.itemWidgetModalSelected = {
+      itemType: 'group',
+      itemList: {
+        rithmId: 'string',
+        name: 'string',
+        totalDocuments: 0,
+        groupName: 'string',
+        isChained: false,
+        totalStations: 0,
+        totalSubGroups: 0,
+        stationName: 'string',
+        stationGroupName: 'string',
+      },
+    };
+    fixture.detectChanges();
+    const expectedDatWidgetByGroup = JSON.stringify({
+      stationGroupRithmId: '',
+    });
+    const dataWidgetGroup = component.dataWidget;
+    expect(dataWidgetGroup).toBe(expectedDatWidgetByGroup);
+  });
+
   describe('Parse data widget', () => {
     it('should get data for document', () => {
       const expectData = JSON.stringify({
