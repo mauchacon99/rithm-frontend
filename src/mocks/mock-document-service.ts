@@ -22,7 +22,6 @@ import {
   RuleType,
   DocumentEvent,
   DocumentWidget,
-  StandardStringJSON,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
