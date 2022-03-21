@@ -1,1 +1,9 @@
-<p>admin-menu works!</p>
+<mat-selection-list [multiple]="false">
+  <mat-list-option
+    (click)="getItemSelected(item.type)"
+    *ngFor="let item of listAdminItemMenu"
+    [value]="itemSelected"
+  >
+    {{ item.name }}
+  </mat-list-option>
+</mat-selection-list>

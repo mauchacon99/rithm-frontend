@@ -3,6 +3,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { ListAdminOptionMenuType } from 'src/models/list-admin-option-menu';
 
 /**
  * Component for the main admin landing page.
@@ -15,6 +16,11 @@ import { UserService } from 'src/app/core/user.service';
 export class AdminComponent implements OnInit {
   /** Show Admin portal. */
   showAdminPortal = false;
+
+  /** Item selected item menu. */
+  itemMenuSelected = '1';
+
+  listAdminOptionMenuType = ListAdminOptionMenuType;
 
   constructor(
     private splitService: SplitService,
@@ -43,5 +49,14 @@ export class AdminComponent implements OnInit {
         this.errorService.logError(error);
       },
     });
+  }
+
+  /**
+   * Get item selected item menu.
+   *
+   * @param optionSelected Option list menu selected.
+   */
+  getItemSelected(optionSelected: string): void {
+    this.itemMenuSelected = optionSelected;
   }
 }
