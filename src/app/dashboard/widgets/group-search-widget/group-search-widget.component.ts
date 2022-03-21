@@ -33,7 +33,7 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Data to station group widget. */
   dataStationGroupWidget!: StationGroupWidgetData;
 
-/** Data to station group widget to show filtered results. */
+  /** Data to station group widget to show filtered results. */
   stations!: StationListGroupWidget[];
 
   /** StationGroupRithmId for station widget. */
@@ -92,7 +92,7 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Search similitude stations by name.*/
   searchStation(): void {
     this.stations = this.dataStationGroupWidget.stations.filter((station) =>
-      station.name.includes(this.search)
+      station.name.toLowerCase().includes(this.search.toLowerCase())
     );
   }
 }

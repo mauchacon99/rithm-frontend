@@ -12,9 +12,12 @@
 >
 </app-error-widget>
 
-<div class="w-full h-full p-2" *ngIf="!isLoading && !errorStationGroup">
+<div
+  class="w-full h-full container-group"
+  *ngIf="!isLoading && !errorStationGroup"
+>
   <!-- Header widget -->
-  <div class="flex flex-col input-search">
+  <div class="flex flex-col input-search m-2">
     <h3 *ngIf="dataStationGroupWidget" class="font-semibold truncate">
       {{ dataStationGroupWidget.title }}
     </h3>
@@ -34,7 +37,7 @@
   </div>
 
   <div
-    class="scrollbar p-2 overflow-auto h-full w-full"
+    class="scrollbar p-2 overflow-scroll pb-8 h-full w-full"
     *ngIf="dataStationGroupWidget"
   >
     <div
