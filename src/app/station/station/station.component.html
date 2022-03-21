@@ -26,6 +26,8 @@
     disableClose
   >
     <app-build-drawer
+      *ngIf="!stationLoading"
+      [stationId]="stationInformation.rithmId"
       (toggleDrawer)="toggleLeftDrawer()"
       (addInputFrame)="addInputFrame()"
       [inputFrameList]="inputFrameList"
