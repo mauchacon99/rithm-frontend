@@ -9,9 +9,10 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-
+import { MatDialog } from '@angular/material/dialog';
 import { DocumentService } from 'src/app/core/document.service';
 import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { UploadFileModalComponent } from 'src/app/shared/fields/upload-file-modal/upload-file-modal.component';
 
 /**
  *
@@ -50,7 +51,8 @@ export class FileFieldComponent
 
   constructor(
     private documentService: DocumentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public dialog: MatDialog
   ) {}
 
   /**
@@ -149,5 +151,17 @@ export class FileFieldComponent
       fieldVal = this.field.value ? this.field.value : '';
     }
     return fieldVal;
+  }
+
+  /**
+   * Open a modal upload-file-modal.
+   */
+  openUploadFileModal(): void {
+    this.dialog.open(UploadFileModalComponent, {
+      panelClass: ['w-5/6', 'sm:w-4/5'],
+      maxWidth: '500px',
+      minHeight: '345px',
+      disableClose: true,
+    });
   }
 }
