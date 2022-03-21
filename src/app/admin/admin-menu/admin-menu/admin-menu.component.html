@@ -1,1 +1,34 @@
-<p>admin-menu works!</p>
+<div class="my-4 px-2">
+  <!-- Header information of the organization. -->
+  <div *ngIf="isLoading" class="items-center py-2">
+    <app-loading-indicator
+      id="organization-name-loading"
+      [inlineText]="'Loading...'"
+    ></app-loading-indicator>
+  </div>
+
+  <div
+    class="flex justify-between items-end"
+    *ngIf="!failedGetOrganization && !isLoading"
+    id="info-organization"
+  >
+    <img
+      src="assets/logo/black-icon-only.svg"
+      class="w-10 mr-2"
+      alt="Logo Rithm"
+    />
+    <div class="w-[215px] md:w-[270px]">
+      <p *ngIf="organizationInfo" class="font-semibold truncate">
+        {{ organizationInfo.name }}
+      </p>
+    </div>
+  </div>
+
+  <div
+    *ngIf="failedGetOrganization"
+    id="failed-info-organization"
+    class="w-[260px] md:w-[320px]"
+  >
+    <p class="text-error-500 truncate">Name of organization not obtained</p>
+  </div>
+</div>
