@@ -10,9 +10,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { PaginationModule } from '../shared/pagination/pagination.module';
+import { AdminMenuComponent } from './admin-menu/admin-menu/admin-menu.component';
 
 @NgModule({
-  declarations: [AdminComponent, OrganizationManagementComponent],
+  declarations: [
+    AdminComponent,
+    OrganizationManagementComponent,
+    AdminMenuComponent,
+  ],
   imports: [
     CommonModule,
     AdminRoutingModule,
