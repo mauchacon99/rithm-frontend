@@ -156,9 +156,7 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
     const customField = this.customFields.find(
       (item: CustomField) => item.questionType === fieldType
     );
-    return customField
-      ? customField.icon
-      : 'fa-regular fa-circle-question';
+    return customField ? customField.icon : 'fa-regular fa-circle-question';
   }
 
   /**
