@@ -45,7 +45,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
-  mapDataLoading = true;
+  mapDataLoading = false;
 
   /** User has selected and opened the dropdown menu on a station. */
   private openedMenuStation?: StationMapElement;
@@ -233,12 +233,17 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Gets info about the mat-drawer toggle and determines user permissions.
    */
   ngOnInit(): void {
+    setTimeout(() => {
+      this.mapDataLoading = true;
+    }, 1);
     //Store the user information.
     this.currentUser = this.userService.user;
     //Check if user is an admin.
     this.isAdmin = this.currentUser.role === 'admin';
     //Set which drawer type to open.
-    this.sidenavDrawerService.setDrawer(this.mapElementDrawer);
+    setTimeout(() => {
+      this.sidenavDrawerService.setDrawer(this.mapElementDrawer);
+    }, 50);
   }
 
   /**
@@ -249,6 +254,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
     this.mapService.mapDataReceived$.next(false);
+    if (
+      this.drawerMode === 'connectionInfo' ||
+      this.drawerMode === 'stationGroupInfo'
+    ) {
+      this.sidenavDrawerService.drawerData$.next(false);
+    }
   }
 
   /**
