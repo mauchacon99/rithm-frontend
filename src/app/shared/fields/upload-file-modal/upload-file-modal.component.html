@@ -7,7 +7,8 @@
   <div class="flex justify-center mb-2">
     <div class="w-full pb-4 pt-6">
       <div class="flex items-center justify-center w-full">
-        <label for="upload-file"
+        <label
+          for="upload-file"
           class="flex flex-col w-full h-56 border-dashed border-2 border-secondary-200 hover:bg-secondary-50 hover:border-secondary-300 cursor-pointer"
         >
           <div class="flex flex-col items-center justify-center pt-7">
@@ -16,11 +17,24 @@
             ></span>
             <p class="pt-1 text-sm tracking-wider">Drop your file here</p>
             <p class="pt-1 pb-2 text-sm tracking-wider">or</p>
-            <button type="button" for="upload-file" mat-button color="accent" data-testid="browse-btn" (click)="uploadFile.click()">
+            <button
+              type="button"
+              for="upload-file"
+              mat-button
+              color="accent"
+              data-testid="browse-btn"
+              (click)="uploadFile.click()"
+            >
               Browse
             </button>
           </div>
-          <input type="file" id="upload-file" multiple class="opacity-0 cursor-pointer" #uploadFile />
+          <input
+            type="file"
+            id="upload-file"
+            multiple
+            class="opacity-0 cursor-pointer"
+            #uploadFile
+          />
         </label>
       </div>
     </div>
