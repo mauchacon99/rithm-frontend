@@ -11,12 +11,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { PaginationModule } from '../shared/pagination/pagination.module';
 import { AdminMenuComponent } from './admin-menu/admin-menu/admin-menu.component';
+import { GroupHierarchyComponent } from './action-admin-menu/group-hierarchy/group-hierarchy.component';
 
 @NgModule({
   declarations: [
     AdminComponent,
     OrganizationManagementComponent,
     AdminMenuComponent,
+    GroupHierarchyComponent,
   ],
   imports: [
     CommonModule,
