@@ -4,7 +4,8 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /** Description widget modal. */
 @Component({
-  selector: 'app-description-widget-modal[itemWidgetModalSelected][widgetType]',
+  selector:
+    'app-description-widget-modal[itemWidgetModalSelected][widgetType][dataWidget]',
   templateUrl: './description-widget-modal.component.html',
   styleUrls: ['./description-widget-modal.component.scss'],
 })
@@ -15,14 +16,14 @@ export class DescriptionWidgetModalComponent implements OnInit {
   /** Widget type to preview widget selected. */
   @Input() widgetType: WidgetType | 'defaultDocument' = WidgetType.Document;
 
-  /** Data widget for app-document-widget. */
-  dataWidget!: string;
+  /** Data widget for render widgets. */
+  @Input() dataWidget!: string;
 
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
-  /** Data static for each template by widgetType. */
-  dataTemplate;
+  /** Widget type without default. */
+  widgetTypeWithoutDefault!: WidgetType;
 
   /** Data Description for description-widget-modal.  */
   dataDescriptionTemplate = {
@@ -67,8 +68,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
     },
   };
 
-  /** Widget type without default. */
-  widgetTypeWithoutDefault!: WidgetType;
+  /** Data static for each template by widgetType. */
+  dataTemplate;
 
   constructor(private dashboardService: DashboardService) {
     this.dataTemplate = dashboardService.dataTemplatePreviewWidgetModal;
@@ -80,10 +81,5 @@ export class DescriptionWidgetModalComponent implements OnInit {
       this.widgetType === 'defaultDocument'
         ? this.enumWidgetType.Document
         : this.widgetType;
-
-    this.dataWidget = JSON.stringify({
-      documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-      columns: [],
-    });
   }
 }

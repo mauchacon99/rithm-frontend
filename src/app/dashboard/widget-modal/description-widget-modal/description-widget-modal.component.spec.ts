@@ -5,6 +5,7 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { MockDashboardService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockComponent } from 'ng-mocks';
+import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
@@ -33,6 +34,7 @@ describe('DescriptionWidgetModalComponent', () => {
       declarations: [
         DescriptionWidgetModalComponent,
         MockComponent(DocumentWidgetComponent),
+        MockComponent(GroupSearchWidgetComponent),
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
@@ -66,14 +68,5 @@ describe('DescriptionWidgetModalComponent', () => {
     fixture.detectChanges();
     component.ngOnInit();
     expect(component.widgetTypeWithoutDefault).toBe(WidgetType.Document);
-  });
-
-  it('should generate dataWidget stringify', () => {
-    const dataWidgetExpected = {
-      documentRithmId: itemWidgetModalSelected.itemList.rithmId,
-      columns: [],
-    };
-    component.ngOnInit();
-    expect(component.dataWidget).toBe(JSON.stringify(dataWidgetExpected));
   });
 });

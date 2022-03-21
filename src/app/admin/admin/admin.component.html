@@ -5,7 +5,10 @@
   <app-organization-management></app-organization-management>
 </div>
 <ng-template #newAdminInterface id="new-admin-interface">
-  <div class="text-center py-28">
-    <h3>New Admin Panel</h3>
-  </div></ng-template
->
+  <div class="flex h-full bg-white">
+    <div class="w-[300px] border-r-2 color-border">
+      <app-admin-menu></app-admin-menu>
+    </div>
+    <app-group-hierarchy></app-group-hierarchy>
+  </div>
+</ng-template>

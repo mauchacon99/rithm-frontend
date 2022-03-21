@@ -33,11 +33,12 @@
     [ngSwitch]="categorySelected"
   >
     <div
-      id="custom-fields-container"
-      data-testid="custom-fields-container"
+      *ngSwitchCase="'Form Inputs'"
+      id="input-frame-container"
+      data-testid="input-frame-container"
       cdkDropList
       cdkDropListConnectedTo="station-grid"
-      *ngSwitchCase="'Form Inputs'"
+      #customFieldsContainer="cdkDropList"
     >
       <div
         cdkDrag
@@ -48,13 +49,24 @@
         <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
         <span class="fa-regular fa-object-group fa-lg ml-auto"></span>
       </div>
+    </div>
+    <div
+      *ngSwitchCase="'Form Inputs'"
+      id="custom-fields-container"
+      data-testid="custom-fields-container"
+      cdkDropList
+      [cdkDropListConnectedTo]="inputFrameList"
+      #customFieldsContainer="cdkDropList"
+      [cdkDropListData]="customFields"
+    >
       <div
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
         data-testid="custom-fields-item"
         *ngFor="let field of customFields"
+        cdkDrag
       >
         <p class="text-lg ml-auto text-primary-900 text-center">
-          {{ field.name }}
+          {{ field.prompt }}
         </p>
         <span class="{{ field.icon }} fa-lg ml-auto"></span>
       </div>
