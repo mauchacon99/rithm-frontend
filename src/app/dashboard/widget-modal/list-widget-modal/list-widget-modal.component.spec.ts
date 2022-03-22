@@ -5,6 +5,7 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
+import { GroupWidgetTemplateModalComponent } from '../group-widget-template-modal/group-widget-template-modal.component';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
@@ -31,6 +32,7 @@ describe('ListWidgetModalComponent', () => {
         ListWidgetModalComponent,
         MockComponent(StationWidgetTemplateModalComponent),
         MockComponent(DocumentWidgetTemplateModalComponent),
+        MockComponent(GroupWidgetTemplateModalComponent),
       ],
     }).compileComponents();
   });
