@@ -16,7 +16,7 @@ export class AdminMenuComponent {
   /* Current item selected.  */
   itemSelected!: ListAdminOptionMenuType;
 
-  /*Types admin option menu.  */
+  /* Types admin option menu.  */
   listAdminOptionMenuType = ListAdminOptionMenuType;
 
   /* Admin options menu.  */
