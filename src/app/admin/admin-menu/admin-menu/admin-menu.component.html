@@ -3,6 +3,9 @@
     (click)="getItemSelected(item.type)"
     *ngFor="let item of listAdminItemMenu"
     [value]="itemSelected"
+    [selected]="item.type === listAdminOptionMenuType.AccountSettings"
+    [id]="item.type"
+    [attr.data-testid]="item.type"
   >
     {{ item.name }}
   </mat-list-option>
