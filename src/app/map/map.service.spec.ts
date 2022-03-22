@@ -709,13 +709,12 @@ describe('MapService', () => {
         isChained: false,
       },
     ];
-    service.stationGroupElements = stationGroupMapData.map(
-      (e) => new StationGroupMapElement(e)
-    );
+    service.mapStationGroupHelper.stationGroupElements =
+      stationGroupMapData.map((e) => new StationGroupMapElement(e));
     const rithmId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
 
     const resetSelectedStationGroupStationStatusSpy = spyOn(
-      TestBed.inject(MapService),
+      TestBed.inject(MapService).mapStationGroupHelper,
       'resetSelectedStationGroupStationStatus'
     );
 

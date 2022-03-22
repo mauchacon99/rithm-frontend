@@ -283,37 +283,19 @@ export class MapService {
    * @param stationGroup The incoming station-group data.
    */
   setStationGroupStatus(stationGroup: StationGroupMapElement): void {
-    //Update parent station-group and respective stations status.
-    this.mapStationGroupHelper.updateParentStationGroup(stationGroup.rithmId);
-    //Update descendent station-group and respective stations status.
-    this.mapStationGroupHelper.updateChildStationGroup(
+    this.mapStationGroupHelper.setStationGroupStatus(
       stationGroup,
       this.mapStationHelper
     );
-    //Reset status of each station-group and station if nothing(station group or station) has been selected.
-    if (
-      !this.stationElements.some((st) => st.selected) &&
-      !this.stationGroupElements.some((stGroup) => stGroup.selected)
-    ) {
-      this.resetSelectedStationGroupStationStatus();
-    }
   }
 
   /**
    * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
    */
   setStationGroupStationStatus(): void {
-    this.stationGroupElements.map((stationGroup) => {
-      stationGroup.disabled = true;
-      stationGroup.stations.map((station) => {
-        const stationIndex = this.stationElements.findIndex(
-          (st) => st.rithmId === station
-        );
-        if (!this.stationElements[stationIndex].selected) {
-          this.stationElements[stationIndex].disabled = true;
-        }
-      });
-    });
+    this.mapStationGroupHelper.setStationGroupStationStatus(
+      this.mapStationHelper
+    );
   }
 
   /**
@@ -331,60 +313,10 @@ export class MapService {
    * @param station The incoming station.
    */
   setSelectedStation(station: StationMapElement): void {
-    this.stationGroupElements.map((stationGroup) => {
-      if (station.selected) {
-        if (stationGroup.stations.includes(station.rithmId)) {
-          stationGroup.stations.map((st) => {
-            const stationIndex = this.stationElements.findIndex(
-              (sta) => sta.rithmId === st
-            );
-            this.stationElements[stationIndex].disabled = false;
-          });
-          stationGroup.disabled = false;
-          stationGroup.subStationGroups.forEach((subStationGroupId) => {
-            const stationGroupIndex = this.stationGroupElements.findIndex(
-              (group) => group.rithmId === subStationGroupId
-            );
-            this.stationGroupElements[stationGroupIndex].disabled = false;
-          });
-          return;
-        }
-      } else {
-        //If removing a selected station need to find the group that pending group is inside.
-        if (stationGroup.status === MapItemStatus.Pending) {
-          //const to reference the parent of the pending group.
-          const parentGroup = this.stationGroupElements.find(
-            (parentStationGroup) => {
-              return parentStationGroup.subStationGroups.includes(
-                stationGroup.rithmId
-              );
-            }
-          );
-          if (parentGroup) {
-            parentGroup.stations.map((st) => {
-              const stationIndex = this.stationElements.findIndex(
-                (sta) => sta.rithmId === st
-              );
-              this.stationElements[stationIndex].disabled = false;
-            });
-            parentGroup.disabled = false;
-            parentGroup.subStationGroups.forEach((subStationGroupId) => {
-              const stationGroupIndex = this.stationGroupElements.findIndex(
-                (group) => group.rithmId === subStationGroupId
-              );
-              this.stationGroupElements[stationGroupIndex].disabled = false;
-            });
-            return;
-          }
-        }
-      }
-    });
-    if (
-      !this.stationElements.some((st) => st.selected) &&
-      !this.stationGroupElements.some((stGroup) => stGroup.selected)
-    ) {
-      this.resetSelectedStationGroupStationStatus();
-    }
+    this.mapStationGroupHelper.setSelectedStation(
+      station,
+      this.mapStationHelper
+    );
   }
 
   /**
@@ -393,36 +325,10 @@ export class MapService {
    * @param stationId The station ID for which connections have to be removed.
    */
   removeAllStationConnections(stationId: string): void {
-    //Find all stations that have a connection line that has stationId as part of it.
-    this.stationElements.map((e) => {
-      //Remove the previous and next stations from the station.
-      if (e.rithmId === stationId) {
-        e.previousStations = [];
-        e.nextStations = [];
-        e.markAsUpdated();
-      }
-
-      //Remove the station from the previousStation arrays of all connecting stations.
-      if (e.previousStations.includes(stationId)) {
-        e.previousStations.splice(e.previousStations.indexOf(stationId), 1);
-        e.markAsUpdated();
-      }
-
-      //Remove the station from the nextStation arrays of all connecting stations.
-      if (e.nextStations.includes(stationId)) {
-        e.nextStations.splice(e.nextStations.indexOf(stationId), 1);
-        e.markAsUpdated();
-      }
-    });
-    //Remove the connections from this.connectionElements.
-    const filteredConnections = this.connectionElements.filter(
-      (e) =>
-        e.startStationRithmId !== stationId && e.endStationRithmId !== stationId
+    this.mapStationHelper.removeAllStationConnections(
+      stationId,
+      this.mapConnectionHelper
     );
-    //Set connectionElements to the filtered array.
-    this.connectionElements = filteredConnections;
-    //Note a change in map data.
-    this.mapHelper.mapDataReceived$.next(true);
   }
 
   /**
@@ -953,21 +859,10 @@ export class MapService {
    * @param rithmId The specific rithm Id of the station group.
    */
   updateCreatedStationGroup(rithmId: string): void {
-    const stationGroupIndex = this.stationGroupElements.findIndex(
-      (stationGroup) => stationGroup.rithmId === rithmId
+    this.mapStationGroupHelper.updateCreatedStationGroup(
+      rithmId,
+      this.mapStationHelper
     );
-    if (stationGroupIndex === -1) {
-      throw new Error(`There is not any station group with this rithmId.`);
-    }
-    if (this.mapMode$.value === MapMode.StationGroupAdd) {
-      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
-      this.stationGroupElements[stationGroupIndex].status =
-        MapItemStatus.Created;
-    } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      this.stationGroupElements[stationGroupIndex].markAsUpdated();
-    }
-
-    this.resetSelectedStationGroupStationStatus();
   }
 
   /**

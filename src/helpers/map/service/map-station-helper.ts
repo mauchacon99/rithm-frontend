@@ -264,4 +264,46 @@ export class MapStationHelper {
         connectedStation.isAddingConnected = false;
       });
   }
+
+  /**
+   * Removes the connections from a station, and removes that station from the connections of previous and next stations.
+   *
+   * @param stationId The station ID for which connections have to be removed.
+   * @param mapConnectionHelper The map connection helper reference.
+   */
+  removeAllStationConnections(
+    stationId: string,
+    mapConnectionHelper: MapConnectionHelper
+  ): void {
+    //Find all stations that have a connection line that has stationId as part of it.
+    this.stationElements.map((e) => {
+      //Remove the previous and next stations from the station.
+      if (e.rithmId === stationId) {
+        e.previousStations = [];
+        e.nextStations = [];
+        e.markAsUpdated();
+      }
+
+      //Remove the station from the previousStation arrays of all connecting stations.
+      if (e.previousStations.includes(stationId)) {
+        e.previousStations.splice(e.previousStations.indexOf(stationId), 1);
+        e.markAsUpdated();
+      }
+
+      //Remove the station from the nextStation arrays of all connecting stations.
+      if (e.nextStations.includes(stationId)) {
+        e.nextStations.splice(e.nextStations.indexOf(stationId), 1);
+        e.markAsUpdated();
+      }
+    });
+    //Remove the connections from this.connectionElements.
+    const filteredConnections = mapConnectionHelper.connectionElements.filter(
+      (e) =>
+        e.startStationRithmId !== stationId && e.endStationRithmId !== stationId
+    );
+    //Set connectionElements to the filtered array.
+    mapConnectionHelper.connectionElements = filteredConnections;
+    //Note a change in map data.
+    this.mapHelper.mapDataReceived$.next(true);
+  }
 }

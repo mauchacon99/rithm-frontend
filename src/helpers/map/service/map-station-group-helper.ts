@@ -1,4 +1,8 @@
-import { MapStationHelper, StationGroupMapElement } from 'src/helpers';
+import {
+  MapStationHelper,
+  StationGroupMapElement,
+  StationMapElement,
+} from 'src/helpers';
 import { MapItemStatus, MapMode } from 'src/models';
 import { MapHelper } from './map-helper';
 import { v4 as uuidv4 } from 'uuid';
@@ -377,5 +381,140 @@ export class MapStationGroupHelper {
         stationHelper.stationElements[stationIndex].disabled = false;
       });
     });
+  }
+
+  /**
+   * Set station group status of parent and child station group and respective stations.
+   *
+   * @param stationGroup The incoming station-group data.
+   * @param stationHelper The map station helper reference.
+   */
+  setStationGroupStatus(
+    stationGroup: StationGroupMapElement,
+    stationHelper: MapStationHelper
+  ): void {
+    //Update parent station-group and respective stations status.
+    this.updateParentStationGroup(stationGroup.rithmId);
+    //Update descendent station-group and respective stations status.
+    this.updateChildStationGroup(stationGroup, stationHelper);
+    //Reset status of each station-group and station if nothing(station group or station) has been selected.
+    if (
+      !stationHelper.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus(stationHelper);
+    }
+  }
+
+  /**
+   * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
+   *
+   * @param stationHelper The map station helper reference.
+   */
+  setStationGroupStationStatus(stationHelper: MapStationHelper): void {
+    this.stationGroupElements.map((stationGroup) => {
+      stationGroup.disabled = true;
+      stationGroup.stations.map((station) => {
+        const stationIndex = stationHelper.stationElements.findIndex(
+          (st) => st.rithmId === station
+        );
+        if (!stationHelper.stationElements[stationIndex].selected) {
+          stationHelper.stationElements[stationIndex].disabled = true;
+        }
+      });
+    });
+  }
+
+  /**
+   * Based on incoming station selection, update the status of related stations and station group.
+   *
+   * @param station The incoming station.
+   * @param stationHelper The map station helper reference.
+   */
+  setSelectedStation(
+    station: StationMapElement,
+    stationHelper: MapStationHelper
+  ): void {
+    this.stationGroupElements.map((stationGroup) => {
+      if (station.selected) {
+        if (stationGroup.stations.includes(station.rithmId)) {
+          stationGroup.stations.map((st) => {
+            const stationIndex = stationHelper.stationElements.findIndex(
+              (sta) => sta.rithmId === st
+            );
+            stationHelper.stationElements[stationIndex].disabled = false;
+          });
+          stationGroup.disabled = false;
+          stationGroup.subStationGroups.forEach((subStationGroupId) => {
+            const stationGroupIndex = this.stationGroupElements.findIndex(
+              (group) => group.rithmId === subStationGroupId
+            );
+            this.stationGroupElements[stationGroupIndex].disabled = false;
+          });
+          return;
+        }
+      } else {
+        //If removing a selected station need to find the group that pending group is inside.
+        if (stationGroup.status === MapItemStatus.Pending) {
+          //const to reference the parent of the pending group.
+          const parentGroup = this.stationGroupElements.find(
+            (parentStationGroup) => {
+              return parentStationGroup.subStationGroups.includes(
+                stationGroup.rithmId
+              );
+            }
+          );
+          if (parentGroup) {
+            parentGroup.stations.map((st) => {
+              const stationIndex = stationHelper.stationElements.findIndex(
+                (sta) => sta.rithmId === st
+              );
+              stationHelper.stationElements[stationIndex].disabled = false;
+            });
+            parentGroup.disabled = false;
+            parentGroup.subStationGroups.forEach((subStationGroupId) => {
+              const stationGroupIndex = this.stationGroupElements.findIndex(
+                (group) => group.rithmId === subStationGroupId
+              );
+              this.stationGroupElements[stationGroupIndex].disabled = false;
+            });
+            return;
+          }
+        }
+      }
+    });
+    if (
+      !stationHelper.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus(stationHelper);
+    }
+  }
+
+  /**
+   * Update the status to create for a new station group.
+   *
+   * @param rithmId The specific rithm Id of the station group.
+   * @param stationHelper The map station helper reference.
+   */
+  updateCreatedStationGroup(
+    rithmId: string,
+    stationHelper: MapStationHelper
+  ): void {
+    const stationGroupIndex = this.stationGroupElements.findIndex(
+      (stationGroup) => stationGroup.rithmId === rithmId
+    );
+    if (stationGroupIndex === -1) {
+      throw new Error(`There is not any station group with this rithmId.`);
+    }
+    if (this.mapHelper.mapMode$.value === MapMode.StationGroupAdd) {
+      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      this.stationGroupElements[stationGroupIndex].status =
+        MapItemStatus.Created;
+    } else if (this.mapHelper.mapMode$.value === MapMode.StationGroupEdit) {
+      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+    }
+
+    this.resetSelectedStationGroupStationStatus(stationHelper);
   }
 }
