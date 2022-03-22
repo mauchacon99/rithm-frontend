@@ -303,8 +303,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     if (confirm) {
       //Show loading indicator.
       this.mapDataLoading = true;
-      //Set the map mode to view.
-      this.mapService.mapMode$.next(MapMode.View);
       //Call the api to post changes to the server.
       this.mapService
         .publishMap()
@@ -327,6 +325,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
             );
           },
         });
+      //Set the map mode to view.
+      this.mapService.mapMode$.next(MapMode.View);
       //Clears all stations and groups available and disabled statuses that may have been set if was in addGroup mode.
       this.mapService.resetSelectedStationGroupStationStatus();
     }
