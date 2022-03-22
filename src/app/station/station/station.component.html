@@ -13,7 +13,9 @@
     ></app-detail-drawer>
     <app-info-drawer
       *ngIf="
-        drawerContext === 'stationInfo' || drawerContext === 'documentInfo'
+        drawerContext === 'stationInfo' ||
+        drawerContext === 'documentInfo' ||
+        drawerContext === 'fieldSetting'
       "
     ></app-info-drawer>
   </mat-drawer>
@@ -383,6 +385,8 @@
                           [stationViewMode]="editMode ? 'edit' : 'preview'"
                           [stationRithmId]="stationRithmId"
                           [id]="widgetItem.id"
+                          [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                          (toggleRightDrawer)="toggleRightDrawer()"
                         ></app-input-frame-widget>
                       </gridster-item>
                     </gridster>

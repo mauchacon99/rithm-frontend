@@ -825,6 +825,13 @@ export class StationComponent
   }
 
   /**
+   * Toggles the open state of the right setting drawer.
+   */
+  toggleRightDrawer(): void {
+    this.sidenavDrawerService.toggleDrawer('fieldSetting');
+  }
+
+  /**
    * Will track each gridster item.
    *
    * @param index Gridster item index.
