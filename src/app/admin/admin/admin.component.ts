@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
   showAdminPortal = false;
 
   /** Item selected item menu. */
-  itemMenuSelected!: ListAdminOptionMenuType;
+  itemMenuSelected: ListAdminOptionMenuType = ListAdminOptionMenuType.AccountSettings
 
   listAdminOptionMenuType = ListAdminOptionMenuType;
 
