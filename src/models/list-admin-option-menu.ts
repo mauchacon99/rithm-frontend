@@ -1,4 +1,4 @@
-import { ListAdminOptionMenuType } from './enums';
+import { ListAdminOptionMenuType } from './enums/admin-option-menu-type';
 
 /**
  * Represents list of admin menu options.

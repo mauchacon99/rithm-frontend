@@ -50,6 +50,19 @@ describe('AdminComponent', () => {
     expect(groupHierarchyDetail).toBeTruthy();
   });
 
+  it('should set ang get selected item menu', () => {
+    const itemToSelect = ListAdminOptionMenuType.GroupHierarchy;
+    component.itemMenuSelected = ListAdminOptionMenuType.AccountSettings;
+    const getItemSelected = spyOn(
+      component,
+      'getItemSelected'
+    ).and.callThrough();
+
+    component.getItemSelected(itemToSelect);
+    expect(getItemSelected).toHaveBeenCalled();
+    expect(component.itemMenuSelected).toEqual(itemToSelect);
+  });
+
   describe('Testing split.io', () => {
     let splitService: SplitService;
     beforeEach(() => {
