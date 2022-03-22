@@ -1,4 +1,8 @@
-import { CdkDragDrop, copyArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  copyArrayItem,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { Component, Input } from '@angular/core';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -60,6 +64,12 @@ export class InputFrameWidgetComponent {
     }
     if (event.container.id !== event.previousContainer.id) {
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
+    } else {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     }
   }
 

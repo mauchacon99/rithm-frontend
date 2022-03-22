@@ -6,6 +6,7 @@ import {
   CdkDragDrop,
   DragDropModule,
   copyArrayItem,
+  moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Question, QuestionFieldType } from 'src/models';
 import { of } from 'rxjs';
@@ -32,7 +33,7 @@ describe('InputFrameWidgetComponent', () => {
   });
 
   describe('TestDragDropElements', () => {
-    it('should call the method addElementDrag', async () => {
+    it('should call the method that copy the new inputs in widget', async () => {
       const secondList: Question[] = [];
       const firstList: Question[] = [
         {
@@ -64,6 +65,59 @@ describe('InputFrameWidgetComponent', () => {
       copyArrayItem(firstList, secondList, 0, 0);
       expect(secondList).toEqual(firstList);
       expect(spyDrag).toHaveBeenCalledOnceWith(cdkEvent);
+    });
+
+    it('should call the method that move the current inputs in widget', async () => {
+      const questionFields: Question[] = [
+        {
+          prompt: 'Fake question 1',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Fake question 2',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Fake question 3',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ];
+
+      const cdkEvent = {
+        container: { data: questionFields, id: 'input-widget' },
+        previousContainer: { data: questionFields, id: 'input-widget' },
+        previousIndex: 1,
+        currentIndex: 2,
+      } as CdkDragDrop<Question[]>;
+
+      const spyDrop = spyOn(component, 'addElementDrag').and.callFake(() =>
+        of(cdkEvent)
+      );
+      component.addElementDrag(cdkEvent);
+      fixture.detectChanges();
+
+      expect(cdkEvent.container.id).toEqual(cdkEvent.previousContainer.id);
+
+      moveItemInArray(questionFields, 1, 2);
+      fixture.detectChanges();
+
+      expect(cdkEvent.container.data).toEqual(questionFields);
+      expect(spyDrop).toHaveBeenCalled();
     });
   });
 });
