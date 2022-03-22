@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationGroupData, WidgetType } from 'src/models';
+import { WidgetType } from 'src/models';
+import { StationGroupData } from 'src/models/station-group-data';
+
 
 /**
  * Component for list field the groups how widget.
@@ -32,6 +34,12 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
 
+  /** Whether the action to get list station group is loading. */
+  isLoading = false;
+
+  /** Whether the action to get list station group fails. */
+  errorStationGroup = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService
@@ -49,15 +57,22 @@ export class GroupSearchWidgetComponent implements OnInit {
   /**
    * Get station groups.
    */
-  private getStationGroups(): void {
+  getStationGroups(): void {
+    this.isLoading = true;
+    this.errorStationGroup = false;
     this.stationService
       .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
         next: (dataStationGroup) => {
           this.dataStationGroup = dataStationGroup;
+          this.isLoading = false;
+          this.errorStationGroup = false;
+          this.dataStationGroup = dataStationGroup;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorStationGroup = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
