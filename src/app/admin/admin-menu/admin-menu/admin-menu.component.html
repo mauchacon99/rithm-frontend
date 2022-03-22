@@ -1,28 +1,30 @@
 <div class="my-4 px-2">
   <!-- Header information of the organization. -->
-  <div *ngIf="isLoading" class="items-center py-2">
+  <div *ngIf="isLoading" class="py-2">
     <app-loading-indicator
       id="organization-name-loading"
-      [inlineText]="'Loading...'"
     ></app-loading-indicator>
   </div>
 
   <div
-    class="flex justify-between items-end"
     *ngIf="!failedGetOrganization && !isLoading"
     id="info-organization"
+    class="flex flex-col justify-center items-center"
   >
     <img
       src="assets/logo/black-icon-only.svg"
-      class="w-10 mr-2"
+      class="h-[80px]"
       alt="Logo Rithm"
     />
-    <div class="w-[215px] md:w-[270px]">
-      <p *ngIf="organizationInfo" class="font-semibold truncate">
-        {{ organizationInfo.name }}
-      </p>
-    </div>
+
+    <p
+      *ngIf="organizationInfo"
+      class="font-semibold truncate text-center text-sm mt-2 w-10/12"
+    >
+      {{ organizationInfo.name }}
+    </p>
   </div>
+  <hr class="text-secondary-100 my-3" />
 
   <div
     *ngIf="failedGetOrganization"
