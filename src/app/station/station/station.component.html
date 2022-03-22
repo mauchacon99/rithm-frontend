@@ -378,21 +378,27 @@
                           trackBy: trackBy
                         "
                       >
-                        <button
-                          type="button"
-                          mat-icon-button
-                          mat-raised-button
-                          *ngIf="layoutMode"
-                          class="drag-handler mat-mini-fab text-accent-500 hover:cursor-move absolute left-[94%] -top-4"
+                        <div class="item-buttons absolute left-[94%] -top-4">
+                          <button
+                            type="button"
+                            mat-icon-button
+                            mat-raised-button
+                            *ngIf="layoutMode"
+                            class="drag-handler mat-mini-fab text-accent-500 hover:cursor-move"
+                          >
+                            <i class="fas fa-arrows fa-2x"></i>
+                          </button>
+                        </div>
+                        <div
+                          class="overflow-auto scrollbar mx-1 px-1 h-gridster"
                         >
-                          <i class="fas fa-arrows fa-2x"></i>
-                        </button>
-                        <app-input-frame-widget
-                          [fields]="widgetItem.questions"
-                          [stationViewMode]="editMode ? 'edit' : 'preview'"
-                          [stationRithmId]="stationRithmId"
-                          [id]="widgetItem.id"
-                        ></app-input-frame-widget>
+                          <app-input-frame-widget
+                            [fields]="widgetItem.questions"
+                            [stationViewMode]="editMode ? 'edit' : 'preview'"
+                            [stationRithmId]="stationRithmId"
+                            [id]="widgetItem.id"
+                          ></app-input-frame-widget>
+                        </div>
                       </gridster-item>
                     </gridster>
                   </div>

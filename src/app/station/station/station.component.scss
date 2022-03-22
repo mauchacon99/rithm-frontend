@@ -68,3 +68,6 @@ textarea {
     @apply border-2 border-primary-100 p-0 rounded transition-colors hover:border-accent-500 overflow-visible;
   }
 }
+.h-gridster {
+  height: calc(100% - 20px);
+}
