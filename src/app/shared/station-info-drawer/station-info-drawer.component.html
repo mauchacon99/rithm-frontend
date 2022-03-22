@@ -40,7 +40,8 @@
                 id="station"
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
-                (keyup)="updateStationInfoDrawerName()"
+                (keyup)="reportNewStationMapChange()"
+                (focusout)="updateStationInfoDrawerName()"
               />
             </mat-form-field>
           </ng-template>
