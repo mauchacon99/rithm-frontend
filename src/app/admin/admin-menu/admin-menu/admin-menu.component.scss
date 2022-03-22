@@ -6,7 +6,9 @@
       padding: 0 0 0 6px;
     }
   }
-
+  .mat-list-option {
+    @apply rounded-sm;
+  }
   .mat-list-item:hover {
     @apply bg-accent-100;
   }
