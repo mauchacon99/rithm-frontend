@@ -27,3 +27,8 @@ gridster {
     height: 517px !important;
   }
 }
+@media (min-width: 769px) {
+  .scrollbar-hidden {
+    overflow: hidden;
+  }
+}
