@@ -378,6 +378,14 @@
                           trackBy: trackBy
                         "
                       >
+                        <button
+                          type="button"
+                          mat-icon-button
+                          mat-raised-button
+                          class="drag-handler mat-mini-fab text-accent-500 hover:cursor-move absolute left-[94%] -top-4"
+                        >
+                          <i class="fas fa-arrows fa-2x"></i>
+                        </button>
                         <app-input-frame-widget
                           [fields]="widgetItem.questions"
                           [stationViewMode]="editMode ? 'edit' : 'preview'"
