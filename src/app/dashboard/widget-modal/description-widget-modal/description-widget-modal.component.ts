@@ -29,24 +29,30 @@ export class DescriptionWidgetModalComponent implements OnInit {
   dataDescriptionTemplate = {
     // station data
     [WidgetType.Station]: {
-      type: '',
-      customizable: '',
-      description: ``,
+      title: 'Table Widget',
+      type: 'Station Template',
+      customizable: 'Table Columns',
+      description: `By default. the table has a single column showing each document in your selected station.
+      Custom banner images can also be added to the widget`,
     },
     // StationTableBanner data
     [WidgetType.StationTableBanner]: {
-      type: '',
-      customizable: '',
-      description: ``,
+      title: 'Table Widget',
+      type: 'Station Template',
+      customizable: 'Table Columns & Image',
+      description: `By default. the table has a single column showing each document in your selected station.
+      Additional columns of data can be added as desired. Custom banner images can also be added to the widget`,
     },
     // groups data
     [WidgetType.StationGroup]: {
+      title: '',
       type: '',
       customizable: '',
       description: ``,
     },
     // document data
     [WidgetType.Document]: {
+      title: 'List Widget',
       type: 'Document Template',
       customizable: 'List Values',
       description: `By default, the list widget displays all of the values associated with a document.
@@ -54,6 +60,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
     },
     // DocumentListBanner data
     [WidgetType.DocumentListBanner]: {
+      title: 'List Widget',
       type: 'Document Template',
       customizable: 'List Values & Image',
       description: `Upload an image from the container to display as a banner image.
@@ -61,6 +68,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
     },
     // StationGroupSearch data
     [WidgetType.StationGroupSearch]: {
+      title: 'Search Widget',
       type: 'Group Template',
       customizable: 'Search result values',
       description: `User can query all the values saved on documents within a flow. By default the search results display the document
