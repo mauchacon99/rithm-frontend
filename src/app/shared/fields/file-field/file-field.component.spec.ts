@@ -3,7 +3,11 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
 import { FileFieldComponent } from './file-field.component';
@@ -48,6 +52,7 @@ describe('FileFieldComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: DocumentService, useValue: MockDocumentService },
+        { provide: MatDialogRef, useValue: { close } },
       ],
     }).compileComponents();
   });
@@ -100,5 +105,25 @@ describe('FileFieldComponent', () => {
       UploadFileModalComponent,
       expectDataModal
     );
+  });
+
+  it('should close the modal for upload file', () => {
+    let componentUpload: UploadFileModalComponent;
+    let fixtureUpload: ComponentFixture<UploadFileModalComponent>;
+
+    // eslint-disable-next-line prefer-const
+    fixtureUpload = TestBed.createComponent(UploadFileModalComponent);
+    // eslint-disable-next-line prefer-const
+    componentUpload = fixtureUpload.componentInstance;
+    fixtureUpload.detectChanges();
+
+    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+    const spyMethod = spyOn(componentUpload, 'closeModal').and.callThrough();
+    const btnClose =
+      fixtureUpload.nativeElement.querySelector('#close-modal-btn');
+    expect(btnClose).toBeTruthy();
+    btnClose.click();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(spyMatDialogRef).toHaveBeenCalled();
   });
 });
