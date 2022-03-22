@@ -19,7 +19,7 @@ export class AdminMenuComponent {
   /*Types admin option menu.  */
   listAdminOptionMenuType = ListAdminOptionMenuType;
 
-  /*Admin options menu.  */
+  /* Admin options menu.  */
   listAdminItemMenu: ListAdminOptionsMenu[] = [
     {
       name: 'Account Settings',
