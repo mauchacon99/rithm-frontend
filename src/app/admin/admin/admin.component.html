@@ -1,4 +1,7 @@
-<div class="page textured-bg pb-0" *ngIf="!true; else newAdminInterface">
+<div
+  class="page textured-bg pb-0"
+  *ngIf="!showAdminPortal; else newAdminInterface"
+>
   <app-organization-management></app-organization-management>
 </div>
 <ng-template #newAdminInterface id="new-admin-interface">
