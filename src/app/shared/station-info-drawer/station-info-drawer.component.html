@@ -40,7 +40,8 @@
                 id="station"
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
-                (keyup)="updateStationInfoDrawerName()"
+                (keyup)="reportNewStationMapChange()"
+                (focusout)="updateStationInfoDrawerName()"
               />
             </mat-form-field>
           </ng-template>
@@ -224,7 +225,7 @@
             *ngIf="!docGenLoading && !locallyCreated"
             (change)="updateGenerationStatus('None', $event)"
             [checked]="stationDocumentGenerationStatus === 'None'"
-            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+            [disabled]="docCreationLoading"
           >
           </mat-slide-toggle>
         </section>
@@ -241,7 +242,7 @@
             *ngIf="!docGenLoading && !locallyCreated"
             (change)="updateGenerationStatus('Manual', $event)"
             [checked]="stationDocumentGenerationStatus === 'Manual'"
-            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+            [disabled]="docCreationLoading"
           >
           </mat-slide-toggle>
         </section>
