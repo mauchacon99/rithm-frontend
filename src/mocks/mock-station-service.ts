@@ -14,7 +14,7 @@ import {
   ForwardPreviousStationsDocument,
   StandardStringJSON,
   StandardBooleanJSON,
-  StationGroupWidgetData,
+  StationGroupData,
 } from 'src/models';
 
 /**
@@ -1079,25 +1079,59 @@ export class MockStationService {
    * @param stationGroupRithmId The current station id.
    * @returns The station groups widget.
    */
-  getStationGroupsWidget(
-    stationGroupRithmId: string
-  ): Observable<StationGroupWidgetData> {
-    const expectedResponse = {
+  getStationGroups(stationGroupRithmId: string): Observable<StationGroupData> {
+    const expectedResponse: StationGroupData = {
       rithmId: '6375027-78345-73824-54244',
       title: 'Station Group',
-      SubStationGroups: [],
+      subStationGroups: ['subStation 1'],
       stations: [
         {
-          rithmId: '3237520-7837-78378-78378',
-          name: 'StationName',
-          workers: [],
-          StationOwners: [],
+          rithmId: '123-321-456',
+          name: 'station 1',
+          workers: [
+            {
+              rithmId: '123-321-456',
+              firstName: 'John',
+              lastName: 'Wayne',
+              email: 'name@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          stationOwners: [
+            {
+              rithmId: '789-798-456',
+              firstName: 'Peter',
+              lastName: 'Doe',
+              email: 'name1@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
         },
       ],
-      admins: [],
-      users: [],
-      IsChained: true,
-      IsImplicitRootFlow: true,
+      users: [
+        {
+          rithmId: '789-798-456',
+          firstName: 'Noah',
+          lastName: 'Smith',
+          email: 'name2@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      admins: [
+        {
+          rithmId: '159-753-456',
+          firstName: 'Taylor',
+          lastName: 'Du',
+          email: 'name3@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      isChained: true,
+      isImplicitRootStationGroup: true,
     };
 
     return of(expectedResponse).pipe(delay(1000));
