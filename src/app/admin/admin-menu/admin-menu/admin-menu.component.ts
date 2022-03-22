@@ -13,7 +13,7 @@ export class AdminMenuComponent {
   /** Emit widgetIndex to widget-drawer. */
   @Output() itemMenuSelected = new EventEmitter<ListAdminOptionMenuType>();
 
-  /*Current item selected.  */
+  /* Current item selected.  */
   itemSelected!: ListAdminOptionMenuType;
 
   /*Types admin option menu.  */
