@@ -5,7 +5,6 @@ import { StationService } from 'src/app/core/station.service';
 import { WidgetType } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
-
 /**
  * Component for list field the groups how widget.
  */
