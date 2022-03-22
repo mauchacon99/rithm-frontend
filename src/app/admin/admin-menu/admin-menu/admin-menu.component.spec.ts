@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListModule } from '@angular/material/list';
-import { ListAdminOptionMenuType } from 'src/models';
+import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 import { AdminMenuComponent } from './admin-menu.component';
 
 describe('AdminMenuComponent', () => {

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { ListAdminOptionMenuType } from 'src/models/enums';
+import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 import { ListAdminOptionsMenu } from 'src/models/index';
 /**
  * Admin menu component.
