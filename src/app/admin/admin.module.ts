@@ -12,6 +12,7 @@ import { PaginationModule } from 'src/app/shared/pagination/pagination.module';
 import { AdminMenuComponent } from './admin-menu/admin-menu/admin-menu.component';
 import { GroupHierarchyComponent } from './action-admin-menu/group-hierarchy/group-hierarchy.component';
 import { MatListModule } from '@angular/material/list';
+import { GroupListHierarchyComponent } from './action-admin-menu/group-hierarchy/group-list-hierarchy/group-list-hierarchy.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { MatListModule } from '@angular/material/list';
     OrganizationManagementComponent,
     AdminMenuComponent,
     GroupHierarchyComponent,
+    GroupListHierarchyComponent,
   ],
   imports: [
     CommonModule,
