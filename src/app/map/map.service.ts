@@ -149,6 +149,9 @@ export class MapService {
     data: {},
   });
 
+  /** Informs the center station button element whether to show on station selected. */
+  stationCenter$ = new BehaviorSubject(false);
+
   /** The copy of station group which is being edited. */
   tempStationGroup$ = new BehaviorSubject({});
 

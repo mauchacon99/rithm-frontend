@@ -84,6 +84,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
 
+  /** To show center station button when station is selected. */
+  stationCenter = false;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -227,6 +230,15 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.drawerMode = data;
         }
       });
+
+    //Track the selected station is in center of the map to enable the center station button.
+    this.mapService.stationCenter$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((isCenter) => {
+        if (this.stationCenter !== isCenter) {
+          this.stationCenter = isCenter;
+        }
+      });
   }
 
   /**
@@ -272,23 +284,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       this.sidenavDrawerService.isDrawerOpen &&
       this.drawerMode === 'stationInfo'
     );
-  }
-
-  /**
-   * Whether the station is selected and it's in center of the map.
-   *
-   * @returns True if the selected station in center of the map, false otherwise.
-   */
-  get stationCenter(): boolean {
-    const drawer = document.getElementsByTagName('mat-drawer');
-    //Call method to run logic for centering of the station.
-    if (this.mapService.stationElements.some((e) => e.drawerOpened)) {
-      return this.mapService.checkCenter(
-        CenterPanType.Station,
-        drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
-      );
-    }
-    return false;
   }
 
   /**
