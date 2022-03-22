@@ -75,7 +75,19 @@
       <mat-accordion multi>
         <mat-expansion-panel togglePosition="before" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title class="text-lg"> All </mat-panel-title>
+            <mat-panel-title class="text-lg" data-testid="all-fields">
+              All
+            </mat-panel-title>
+            <ng-template matExpansionPanelContent>
+              <app-previous-fields
+                [stationId]="stationId"
+                [isStation]="true"
+                [isPrivate]="false"
+                [isBuildDrawer]="true"
+                [customFields]="customFields"
+              >
+              </app-previous-fields>
+            </ng-template>
           </mat-expansion-panel-header>
           <!-- Options here -->
         </mat-expansion-panel>
