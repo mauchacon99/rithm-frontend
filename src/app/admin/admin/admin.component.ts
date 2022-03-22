@@ -3,7 +3,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
-import { ListAdminOptionMenuType } from 'src/models/list-admin-option-menu';
+import { ListAdminOptionMenuType } from 'src/models/enums';
 
 /**
  * Component for the main admin landing page.

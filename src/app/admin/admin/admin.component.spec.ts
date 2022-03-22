@@ -8,8 +8,8 @@ import { AdminMenuComponent } from 'src/app/admin/admin-menu/admin-menu/admin-me
 import { OrganizationManagementComponent } from 'src/app/admin/organization-management/organization-management.component';
 
 import { AdminComponent } from './admin.component';
-import { ListAdminOptionMenuType } from 'src/models/list-admin-option-menu';
 import { GroupHierarchyComponent } from '../action-admin-menu/group-hierarchy/group-hierarchy.component';
+import { ListAdminOptionMenuType } from 'src/models/enums';
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
