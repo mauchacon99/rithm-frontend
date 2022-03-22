@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DescriptionWidgetModalComponent } from './description-widget-modal.component';
-import { SelectedItemWidgetModel } from 'src/models';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { MockDashboardService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MockComponent } from 'ng-mocks';
+import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
+import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
@@ -28,7 +31,11 @@ describe('DescriptionWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DescriptionWidgetModalComponent],
+      declarations: [
+        DescriptionWidgetModalComponent,
+        MockComponent(DocumentWidgetComponent),
+        MockComponent(GroupSearchWidgetComponent),
+      ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
       ],
@@ -54,5 +61,12 @@ describe('DescriptionWidgetModalComponent', () => {
     expect(component.dataTemplate[component.widgetType]).toEqual(
       expectedDataTemplate[widgetType]
     );
+  });
+
+  it('should validate that widgetType not be defaultDocument', () => {
+    component.widgetType = 'defaultDocument';
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(component.widgetTypeWithoutDefault).toBe(WidgetType.Document);
   });
 });

@@ -12,3 +12,82 @@
     }}</span>
   </p>
 </div>
+
+<div class="w-full grid sm:grid-cols-1 lg:grid-cols-2 items-center gap-3">
+  <div class="w-full py-5 md:py-14">
+    <span class="font-bold"
+      >{{ dataDescriptionTemplate[widgetTypeWithoutDefault].title }}
+    </span>
+    <div class="flex border-t border-secondary-100 py-5 mt-2">
+      <div class="w-2/4">
+        <span class="text-sm">Type</span>
+      </div>
+      <div class="w-2/4">
+        <span class="text-sm">{{
+          dataDescriptionTemplate[widgetTypeWithoutDefault].type
+        }}</span>
+      </div>
+    </div>
+
+    <div class="flex border-t border-secondary-100 py-5">
+      <div class="w-2/4">
+        <span class="text-sm">Customizable Data</span>
+      </div>
+      <div class="w-2/4">
+        <span class="text-sm">{{
+          dataDescriptionTemplate[widgetTypeWithoutDefault].customizable
+        }}</span>
+      </div>
+    </div>
+
+    <div class="flex border-t border-secondary-100 py-5">
+      <div class="w-2/4">
+        <span class="text-sm">Description</span>
+      </div>
+      <div class="w-2/4">
+        <span class="text-sm">{{
+          dataDescriptionTemplate[widgetTypeWithoutDefault].description
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="w-full py-5">
+    <div class="flex justify-center rounded-md">
+      <app-document-widget
+        *ngIf="
+          widgetType === enumWidgetType.Document ||
+          widgetType === enumWidgetType.DocumentListBanner ||
+          widgetType === 'defaultDocument'
+        "
+        class="w-full md:w-3/5 h-[400px] shadow-xl rounded-md overflow-hidden"
+        [dataWidget]="dataWidget"
+        [editMode]="false"
+        [showButtonSetting]="false"
+        [widgetType]="widgetTypeWithoutDefault"
+      ></app-document-widget>
+
+      <app-station-widget
+        *ngIf="
+          widgetType === enumWidgetType.Station ||
+          widgetType === enumWidgetType.StationTableBanner
+        "
+        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
+        [dataWidget]="dataWidget"
+        [editMode]="false"
+        [showButtonSetting]="false"
+        [widgetType]="widgetTypeWithoutDefault"
+      >
+      </app-station-widget>
+
+      <app-group-search-widget
+        *ngIf="widgetType === enumWidgetType.StationGroupSearch"
+        class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
+        [dataWidget]="dataWidget"
+        [editMode]="false"
+        [showButtonSetting]="false"
+        [widgetType]="widgetTypeWithoutDefault"
+      >
+      </app-group-search-widget>
+    </div>
+  </div>
+</div>

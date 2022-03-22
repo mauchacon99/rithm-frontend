@@ -4,6 +4,7 @@ import {
   EventEmitter,
   ChangeDetectorRef,
   OnInit,
+  Input,
 } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CustomField, QuestionFieldType } from 'src/models';
@@ -12,15 +13,22 @@ import { CustomField, QuestionFieldType } from 'src/models';
  *
  */
 @Component({
-  selector: 'app-build-drawer',
+  selector: 'app-build-drawer[stationId]',
   templateUrl: './build-drawer.component.html',
   styleUrls: ['./build-drawer.component.scss'],
 })
 export class BuildDrawerComponent implements OnInit {
-  /**
-   * Event Emitter that executes toggle logic from station component.
-   */
+  /** The list of all the input frames in the grid. */
+  @Input() inputFrameList: string[] = [];
+
+  /** Event Emitter that executes toggle logic from station component. */
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
+
+  /** Event Emitter Will add a new input frame in the station grid. */
+  @Output() addInputFrame: EventEmitter<void> = new EventEmitter();
+
+  /** The station id used to get previous fields. */
+  @Input() stationId!: string;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
@@ -39,99 +47,93 @@ export class BuildDrawerComponent implements OnInit {
   /** Custom fields to form input category data. */
   customFields: CustomField[] = [
     {
-      name: 'Input Frame',
-      icon: 'fa-regular fa-object-group',
-      typeString: this.fieldTypeEnum.InputFrame,
-      dataTestId: 'add-input-frame',
-    },
-    {
-      name: 'Short Text',
+      prompt: 'Short Text',
       icon: 'fa-solid fa-font',
-      typeString: this.fieldTypeEnum.ShortText,
+      questionType: this.fieldTypeEnum.ShortText,
       dataTestId: 'add-short-text',
     },
     {
-      name: 'Long Text',
+      prompt: 'Long Text',
       icon: 'fa-solid fa-paragraph',
-      typeString: this.fieldTypeEnum.LongText,
+      questionType: this.fieldTypeEnum.LongText,
       dataTestId: 'add-long-text',
     },
     {
-      name: 'Email',
+      prompt: 'Email',
       icon: 'fa-solid fa-at',
-      typeString: this.fieldTypeEnum.Email,
+      questionType: this.fieldTypeEnum.Email,
       dataTestId: 'add-email',
     },
     {
-      name: 'URL',
+      prompt: 'URL',
       icon: 'fa-solid fa-link',
-      typeString: this.fieldTypeEnum.URL,
+      questionType: this.fieldTypeEnum.URL,
       dataTestId: 'add-url',
     },
     {
-      name: 'Address',
+      prompt: 'Address',
       icon: 'fa-regular fa-address-card',
-      typeString: this.fieldTypeEnum.AddressLine,
+      questionType: this.fieldTypeEnum.AddressLine,
       dataTestId: 'add-address',
     },
     {
-      name: 'Date',
+      prompt: 'Date',
       icon: 'fa-solid fa-calendar-day',
-      typeString: this.fieldTypeEnum.Date,
+      questionType: this.fieldTypeEnum.Date,
       dataTestId: 'add-date',
     },
     {
-      name: 'Single Select',
+      prompt: 'Single Select',
       icon: 'fa-solid fa-chevron-circle-down',
-      typeString: this.fieldTypeEnum.Select,
+      questionType: this.fieldTypeEnum.Select,
       dataTestId: 'add-single-select',
     },
     {
-      name: 'Multiselect',
+      prompt: 'Multiselect',
       icon: 'fa-solid fa-chevron-circle-down',
-      typeString: this.fieldTypeEnum.MultiSelect,
+      questionType: this.fieldTypeEnum.MultiSelect,
       dataTestId: 'add-multiselect',
     },
     {
-      name: 'Checklist',
+      prompt: 'Checklist',
       icon: 'fa-solid fa-list',
-      typeString: this.fieldTypeEnum.CheckList,
+      questionType: this.fieldTypeEnum.CheckList,
       dataTestId: 'add-checklist',
     },
     {
-      name: 'Checkbox',
+      prompt: 'Checkbox',
       icon: 'fa-regular fa-square-check',
-      typeString: this.fieldTypeEnum.Checkbox,
+      questionType: this.fieldTypeEnum.Checkbox,
       dataTestId: 'add-checkbox',
     },
     {
-      name: 'Number',
+      prompt: 'Number',
       icon: 'fa-solid fa-calculator',
-      typeString: this.fieldTypeEnum.Number,
+      questionType: this.fieldTypeEnum.Number,
       dataTestId: 'add-number',
     },
     {
-      name: 'Phone Number',
+      prompt: 'Phone Number',
       icon: 'fa-solid fa-phone-flip',
-      typeString: this.fieldTypeEnum.Phone,
+      questionType: this.fieldTypeEnum.Phone,
       dataTestId: 'add-phone-number',
     },
     {
-      name: 'Currency',
+      prompt: 'Currency',
       icon: 'fa-solid fa-money-bill-wave',
-      typeString: this.fieldTypeEnum.Currency,
+      questionType: this.fieldTypeEnum.Currency,
       dataTestId: 'add-currency',
     },
     {
-      name: 'Child Document',
+      prompt: 'Child Document',
       icon: 'fa-solid fa-file',
-      typeString: this.fieldTypeEnum.ChildDocument,
+      questionType: this.fieldTypeEnum.ChildDocument,
       dataTestId: 'add-child-document',
     },
     {
-      name: 'Custom Field',
+      prompt: 'Custom Field',
       icon: 'fa-solid fa-wrench',
-      typeString: this.fieldTypeEnum.CustomField,
+      questionType: this.fieldTypeEnum.CustomField,
       dataTestId: 'add-custom-field',
     },
   ];
@@ -159,5 +161,12 @@ export class BuildDrawerComponent implements OnInit {
    */
   handleCloseDrawer(): void {
     this.toggleDrawer.emit();
+  }
+
+  /**
+   * Will add a new input frame in the station grid.
+   */
+  addNewInputFrame(): void {
+    this.addInputFrame.emit();
   }
 }

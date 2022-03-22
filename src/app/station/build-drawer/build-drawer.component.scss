@@ -2,6 +2,20 @@
   @apply bg-accent-100;
 }
 
+.previous-fields {
+  .mat-expansion-panel {
+    @apply shadow-none border-none;
+  }
+
+  .mat-expansion-panel-header {
+    @apply px-2;
+  }
+
+  &::ng-deep .mat-expansion-panel-body {
+    @apply p-0;
+  }
+}
+
 /* stylelint-disable-next-line */
 .categories-content {
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
