@@ -11,7 +11,6 @@ import { AdminComponent } from './admin.component';
 import { GroupHierarchyComponent } from 'src/app/admin/action-admin-menu/group-hierarchy/group-hierarchy.component';
 import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 
-
 describe('AdminComponent', () => {
   let component: AdminComponent;
   let fixture: ComponentFixture<AdminComponent>;

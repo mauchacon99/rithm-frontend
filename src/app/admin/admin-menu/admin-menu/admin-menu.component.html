@@ -1,6 +1,6 @@
 <mat-selection-list [multiple]="false" class="admin-menu">
   <mat-list-option
-  class="sm:text-sm truncate"
+    class="sm:text-sm truncate"
     (click)="getItemSelected(item.type)"
     *ngFor="let item of listAdminItemMenu"
     [value]="itemSelected"
