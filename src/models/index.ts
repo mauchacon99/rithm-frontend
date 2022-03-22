@@ -63,5 +63,5 @@ export * from './rule-modal-operator';
 export * from './rule-modal-data';
 export * from './selected-item-widget-model';
 export * from './custom-field';
-export * from './station-list-groups-widget';
-export * from './station-group-widget-data';
+export * from './station-list-group';
+export * from './station-group-data';

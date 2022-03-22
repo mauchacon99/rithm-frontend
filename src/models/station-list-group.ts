@@ -1,9 +1,9 @@
-import { User } from '.';
+import { StationRosterMember } from '.';
 
 /**
  * Represents list of stations of group station.
  */
-export interface StationListGroupWidget {
+export interface StationListGroup {
   /** The rithm id of station. */
   rithmId: string;
 
@@ -11,8 +11,8 @@ export interface StationListGroupWidget {
   name: string;
 
   /** List users workers. */
-  workers: User[];
+  workers: StationRosterMember[];
 
   /** List users station owners. */
-  StationOwners: User[];
+  stationOwners: StationRosterMember[];
 }
