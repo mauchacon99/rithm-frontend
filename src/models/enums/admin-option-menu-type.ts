@@ -10,6 +10,7 @@ export enum ListAdminOptionMenuType {
 
   /** Directory option menu. */
   Directory = 'directory',
+
   /** Integration option menu.*/
   Integrations = 'integrations',
 }
