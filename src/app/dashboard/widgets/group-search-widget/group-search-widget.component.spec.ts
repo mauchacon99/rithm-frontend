@@ -26,7 +26,7 @@ describe('GroupSearchWidgetComponent', () => {
         rithmId: '3237520-7837-78378-78378',
         name: 'StationName',
         workers: [],
-        StationOwners: [],
+        stationOwners: [],
       },
     ],
     admins: [],
@@ -107,7 +107,7 @@ describe('GroupSearchWidgetComponent', () => {
       rithmId: '3237520-7837-78378-78378',
       name: 'StationName',
       workers: [],
-      StationOwners: [],
+      stationOwners: [],
     });
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
