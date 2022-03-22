@@ -7,6 +7,7 @@ export enum ListAdminOptionMenuType {
 
   /** Group Hierarchy option menu. */
   GroupHierarchy = 'groupHierarchy',
+
   /** Directory option menu. */
   Directory = 'directory',
   /** Integration option menu.*/
