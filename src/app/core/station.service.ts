@@ -18,8 +18,8 @@ import {
   StandardStringJSON,
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
-  StationGroupData,
 } from 'src/models';
+import { StationGroupData } from 'src/models/station-group-data';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 const MICROSERVICE_PATH_STATION_GROUP = '/stationservice/api/stationGroup';
