@@ -21,6 +21,7 @@ export class AdminComponent implements OnInit {
   itemMenuSelected: ListAdminOptionMenuType =
     ListAdminOptionMenuType.AccountSettings;
 
+  /** Value to use to compare for admin options menu type. */
   listAdminOptionMenuType = ListAdminOptionMenuType;
 
   constructor(
