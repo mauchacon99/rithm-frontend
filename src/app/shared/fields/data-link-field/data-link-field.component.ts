@@ -60,6 +60,9 @@ export class DataLinkFieldComponent
   /* The name for matching value  label  */
   matchingValueLabel = 'Matching Value';
 
+  /* The name for display fields  label  */
+  displayFieldsLabel = 'Display Fields';
+
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
@@ -94,6 +97,7 @@ export class DataLinkFieldComponent
       [this.field.questionType]: [this.fieldValue, []],
       selectedMatchingValue: ['', []],
       selectBaseValue: ['', []],
+      selectedDisplayFields: ['', []],
     });
     this.subscribeCurrentStationQuestions();
     this.getAllStations();
@@ -125,7 +129,7 @@ export class DataLinkFieldComponent
   }
 
   /**
-   * Get station questions for select matching value.
+   * Get station questions for select matching value and display fields.
    *
    * @param nameStation The name station selected.
    */
@@ -141,12 +145,18 @@ export class DataLinkFieldComponent
         .pipe(first())
         .subscribe({
           next: (questions) => {
-            this.questionLoading = false;
-            /** Update label name Matching Value if question array is empty. */
-            this.matchingValueLabel = !questions.length
-              ? 'Not Questions Found'
-              : 'Matching Value';
+            /** Update label name matching value and  display fields if question array is empty. */
+            if (!questions.length) {
+              this.matchingValueLabel = 'No Questions Found';
+              this.displayFieldsLabel = 'No Questions Found';
+            } else {
+              this.matchingValueLabel = 'Matching Value';
+              this.displayFieldsLabel = 'Display Fields';
+            }
             this.questions = questions;
+            this.resetField('selectedDisplayFields', []);
+            this.resetField('selectedMatchingValue', '');
+            this.questionLoading = false;
           },
           error: (error: unknown) => {
             this.questionLoading = false;
@@ -157,6 +167,22 @@ export class DataLinkFieldComponent
           },
         });
     }
+  }
+
+  /**
+   * Reset a dataLinkFieldForm value control.
+   *
+   * @param controlName The name control.
+   * @param value Value reset the control.
+   */
+  resetField(
+    controlName:
+      | 'selectedMatchingValue'
+      | 'selectBaseValue'
+      | 'selectedDisplayFields',
+    value: unknown
+  ): void {
+    this.dataLinkFieldForm.controls[controlName].reset(value);
   }
 
   /**

@@ -8,7 +8,7 @@
       >Help</a
     >
   </div>
-  <!-- Avalaible Stations  -->
+  <!-- Available Stations  -->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
     <mat-label>{{ field.prompt }}</mat-label>
     <div matPrefix class="icon">
@@ -53,23 +53,48 @@
       formControlName="selectedMatchingValue"
     >
       <mat-option
-        class="text-sm"
         *ngFor="let option of questions"
-        [value]="option.prompt"
+        class="text-sm"
+        [value]="option.rithmId"
       >
-        <p *ngIf="option.prompt">{{ option.prompt }}</p>
+        <p>{{ option.prompt || 'Missing question label' }}</p>
       </mat-option>
     </mat-select>
   </mat-form-field>
   <!-- Base Value-->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
-    <mat-label> Base Value</mat-label>
+    <mat-label> Base Value </mat-label>
     <mat-select formControlName="selectBaseValue">
-      <ng-container *ngFor="let item of currentStationQuestions">
-        <mat-option *ngIf="item.prompt" [value]="item.rithmId">
-          {{ item.prompt }}
+      <mat-option
+        *ngFor="let item of currentStationQuestions"
+        [value]="item.rithmId"
+      >
+        {{ item.prompt || 'Missing question label' }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!-- Display Fields  -->
+  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+    <mat-label
+      >{{ questionLoading ? 'Loading Questions' : displayFieldsLabel }}
+      <i *ngIf="questionLoading" class="fa-solid fa-spin fa-spinner fa-2x1">
+      </i>
+    </mat-label>
+    <mat-select
+      #selectDisplayFields
+      multiple
+      [disabled]="!questions.length || questionLoading"
+      formControlName="selectedDisplayFields"
+    >
+      <div (mouseleave)="selectDisplayFields.close()">
+        <mat-option
+          *ngFor="let option of questions"
+          class="text-sm"
+          [value]="option.rithmId"
+        >
+          <p>{{ option.prompt || 'Missing question label' }}</p>
         </mat-option>
-      </ng-container>
+      </div>
     </mat-select>
   </mat-form-field>
 </div>
