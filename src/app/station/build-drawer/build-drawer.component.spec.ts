@@ -151,6 +151,7 @@ describe('BuildDrawerComponent', () => {
 
     it('should be able to toggle expansion state of panel', async () => {
       const panel = await loader.getHarness(MatExpansionPanelHarness);
+      await panel.expand();
       expect(await panel.isExpanded()).toBe(true);
     });
   });
