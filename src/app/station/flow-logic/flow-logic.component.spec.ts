@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { FlowLogicComponent } from './flow-logic.component';
 import {
   MatDialog,
@@ -41,9 +42,13 @@ import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.
 import { RuleEquation } from 'src/models/rule-equation';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
+  let loader: HarnessLoader;
   const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
   const nextStations: ConnectedStationInfo[] = [
     {
@@ -310,82 +315,6 @@ describe('FlowLogicComponent', () => {
     );
     expect(component.flowRuleError).toBeTrue();
     expect(reviewError).toBeTruthy();
-  });
-
-  describe('New rule modal afterClosed', () => {
-    const ruleToAdd: RuleEquation = {
-      leftOperand: {
-        type: OperandType.String,
-        questionType: QuestionFieldType.ShortText,
-        value: '',
-        text: 'test',
-      },
-      operatorType: OperatorType.EqualTo,
-      rightOperand: {
-        type: OperandType.String,
-        questionType: QuestionFieldType.ShortText,
-        value: '',
-        text: 'test',
-      },
-    };
-    beforeEach(() => {
-      fixture = TestBed.createComponent(FlowLogicComponent);
-      component = fixture.componentInstance;
-      component.rithmId = rithmId;
-      component.flowLogicRules = [
-        {
-          stationRithmId: rithmId,
-          destinationStationRithmID: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
-          flowRule: {
-            ruleType: RuleType.And,
-            equations: [],
-            subRules: [],
-          },
-        },
-      ];
-      fixture.detectChanges();
-    });
-
-    it('should add a new flowLogicRule with equations if station doesnt exists', async () => {
-      component.flowLogicRules[0].destinationStationRithmID =
-        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
-
-      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
-        afterClosed: () => of(ruleToAdd),
-      } as MatDialogRef<typeof RuleModalComponent>);
-      await component.openModal('all', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
-      expect(dialogRef).toHaveBeenCalled();
-      expect(component.flowLogicRules).toHaveSize(2);
-    });
-
-    it('should update a flowLogicRule with equations if station exists', async () => {
-      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
-        afterClosed: () => of(ruleToAdd),
-      } as MatDialogRef<typeof RuleModalComponent>);
-      await component.openModal('all', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
-      expect(dialogRef).toHaveBeenCalled();
-      expect(component.flowLogicRules).toHaveSize(1);
-    });
-
-    it('should add a new flowLogicRule with subrules if station doesnt exists', async () => {
-      component.flowLogicRules[0].destinationStationRithmID =
-        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
-      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
-        afterClosed: () => of(ruleToAdd),
-      } as MatDialogRef<typeof RuleModalComponent>);
-      await component.openModal('any', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
-      expect(dialogRef).toHaveBeenCalled();
-      expect(component.flowLogicRules).toHaveSize(2);
-    });
-
-    it('should update a flowLogicRule with subrules if it exists', async () => {
-      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
-        afterClosed: () => of(ruleToAdd),
-      } as MatDialogRef<typeof RuleModalComponent>);
-      await component.openModal('any', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
-      expect(dialogRef).toHaveBeenCalled();
-      expect(component.flowLogicRules).toHaveSize(1);
-    });
   });
 
   it('Should return a default  flowRuleObject for the current station if not exists', async () => {
@@ -985,6 +914,131 @@ describe('FlowLogicComponent', () => {
     it('should translate the operator On', () => {
       const translatorResponse = component.translateOperator(OperatorType.On);
       expect(translatorResponse).toEqual('Is On');
+    });
+  });
+  describe('New rule modal afterClosed', () => {
+    const ruleToAdd: RuleEquation = {
+      leftOperand: {
+        type: OperandType.String,
+        questionType: QuestionFieldType.ShortText,
+        value: '',
+        text: 'test',
+      },
+      operatorType: OperatorType.EqualTo,
+      rightOperand: {
+        type: OperandType.String,
+        questionType: QuestionFieldType.ShortText,
+        value: '',
+        text: 'test',
+      },
+    };
+    beforeEach(() => {
+      fixture = TestBed.createComponent(FlowLogicComponent);
+      component = fixture.componentInstance;
+      component.rithmId = rithmId;
+      component.flowLogicRules = [
+        {
+          stationRithmId: rithmId,
+          destinationStationRithmID: '4157-a818-34904ac2-6bdd-50ffb37fdfbc',
+          flowRule: {
+            ruleType: RuleType.And,
+            equations: [],
+            subRules: [],
+          },
+        },
+      ];
+      fixture.detectChanges();
+      loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+    });
+
+    it('should add a new flowLogicRule with equations if station doesnt exists', async () => {
+      component.flowLogicRules[0].destinationStationRithmID =
+        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
+
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('all', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(2);
+    });
+
+    it('should update a flowLogicRule with equations if station exists', async () => {
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('all', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(1);
+    });
+
+    it('should add a new flowLogicRule with subrules if station doesnt exists', async () => {
+      component.flowLogicRules[0].destinationStationRithmID =
+        '4157-a818-34904ac2-6bdd-50ffb37fdfbc';
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('any', '34904ac2-6bdd-4157-a818-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(2);
+    });
+
+    it('should update a flowLogicRule with subrules if it exists', async () => {
+      const dialogRef = spyOn(component.dialog, 'open').and.returnValue({
+        afterClosed: () => of(ruleToAdd),
+      } as MatDialogRef<typeof RuleModalComponent>);
+      await component.openModal('any', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      expect(dialogRef).toHaveBeenCalled();
+      expect(component.flowLogicRules).toHaveSize(1);
+    });
+
+    it('should close the modal when it is opened to create a new rule', async () => {
+      component.openModal('any', '4157-a818-34904ac2-6bdd-50ffb37fdfbc');
+      let dialogs = await loader.getAllHarnesses(MatDialogHarness);
+
+      expect(dialogs.length).toBe(1);
+      await dialogs[0].close();
+
+      dialogs = await loader.getAllHarnesses(MatDialogHarness);
+      expect(dialogs.length).toBe(1);
+
+      await dialogs[0].close();
+      dialogs = await loader.getAllHarnesses(MatDialogHarness);
+      expect(dialogs.length).toBe(1);
+    });
+
+    it('should close the modal when it is opened to edit a rule', async () => {
+      const ruleEq: RuleEquation = {
+        leftOperand: {
+          type: OperandType.String,
+          questionType: QuestionFieldType.ShortText,
+          value: '',
+          text: 'test',
+        },
+        operatorType: OperatorType.EqualTo,
+        rightOperand: {
+          type: OperandType.String,
+          questionType: QuestionFieldType.ShortText,
+          value: '',
+          text: 'test',
+        },
+      };
+      component.openModal(
+        'and',
+        '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
+        ruleEq
+      );
+      let dialogs = await loader.getAllHarnesses(MatDialogHarness);
+
+      expect(dialogs.length).toBe(1);
+      await dialogs[0].close();
+
+      dialogs = await loader.getAllHarnesses(MatDialogHarness);
+      expect(dialogs.length).toBe(1);
+
+      await dialogs[0].close();
+      dialogs = await loader.getAllHarnesses(MatDialogHarness);
+      expect(dialogs.length).toBe(1);
     });
   });
 });
