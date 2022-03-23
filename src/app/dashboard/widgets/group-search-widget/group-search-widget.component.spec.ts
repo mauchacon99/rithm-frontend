@@ -148,10 +148,10 @@ describe('GroupSearchWidgetComponent', () => {
     fixture.detectChanges();
     const expectedStation = [
       {
-        rithmId: '232354527-7337-18378-38378',
-        name: 'StationName 3',
+        rithmId: '3237520-7837-78378-78378',
+        name: 'StationName',
         workers: [],
-        StationOwners: [],
+        stationOwners: [],
       },
     ];
     component.searchStation();

@@ -15,8 +15,8 @@
 <div class="w-full h-full" *ngIf="!isLoading && !errorStationGroup">
   <!-- Header widget -->
   <div class="flex flex-col input-search m-2">
-    <h3 *ngIf="dataStationGroupWidget" class="font-semibold truncate">
-      {{ dataStationGroupWidget.title }}
+    <h3 *ngIf="dataStationGroup" class="font-semibold truncate">
+      {{ dataStationGroup.title }}
     </h3>
     <mat-form-field appearance="outline" class="mt-3">
       <input
@@ -35,7 +35,7 @@
 
   <div
     class="scrollbar overflow-scroll h-full w-full container-group px-2"
-    *ngIf="dataStationGroupWidget"
+    *ngIf="dataStationGroup"
   >
     <div
       id="list-stations-groups"
