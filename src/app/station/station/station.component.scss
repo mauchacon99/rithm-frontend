@@ -75,8 +75,13 @@ textarea {
   .widget-item-layout .drag-handler {
     @apply block;
   }
-}
 
-.h-gridster {
-  height: calc(100% - 20px);
+  .h-gridster {
+    height: calc(100% - 20px);
+  }
+
+  .button-drag-handler {
+    @apply text-accent-500 bg-white hover:bg-accent-200 hover:text-white hover:cursor-move absolute top-0 right-0 z-10 rounded-full shadow-xl border-secondary-100;
+    position: absolute !important;
+  }
 }

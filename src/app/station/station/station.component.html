@@ -378,20 +378,16 @@
                           trackBy: trackBy
                         "
                       >
-                        <div class="item-buttons absolute right-0 z-10">
+                        <div class="h-gridster relative overflow-hidden">
                           <button
-                            type="button"
                             mat-icon-button
-                            mat-raised-button
-                            class="drag-handler mat-mini-fab text-accent-500 bg-white hover:cursor-move"
+                            type="button"
+                            class="button-drag-handler"
                             data-testid="button-drag-handler"
                           >
-                            <i class="fas fa-arrows fa-2x"></i>
+                            <i class="fas fa-arrows fa-xl"></i>
                           </button>
-                        </div>
-                        <div
-                          class="overflow-auto scrollbar mx-1 px-1 h-gridster"
-                        >
+
                           <app-input-frame-widget
                             [fields]="widgetItem.questions"
                             [stationViewMode]="editMode ? 'edit' : 'preview'"
