@@ -8,4 +8,7 @@ export interface ListAdminOptionsMenu {
   name: string;
   /** Key property to define type option menu. */
   type: ListAdminOptionMenuType;
+
+  /** Property to show or hidden depend permission. */
+  show: boolean;
 }

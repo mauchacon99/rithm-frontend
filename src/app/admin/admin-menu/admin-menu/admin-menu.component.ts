@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
+import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { OrganizationInfo } from 'src/models';
 import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
@@ -39,22 +40,27 @@ export class AdminMenuComponent implements OnInit {
     {
       name: 'Account Settings',
       type: this.listAdminOptionMenuType.AccountSettings,
+      show: true,
     },
     {
       name: 'Group Hierarchy',
       type: this.listAdminOptionMenuType.GroupHierarchy,
+      show: false,
     },
     {
       name: 'Directory',
       type: this.listAdminOptionMenuType.Directory,
+      show: true,
     },
     {
       name: 'Integrations',
       type: this.listAdminOptionMenuType.Integrations,
+      show: true,
     },
   ];
 
   constructor(
+    private splitService: SplitService,
     private userService: UserService,
     private errorService: ErrorService,
     private organizationService: OrganizationService
@@ -63,6 +69,7 @@ export class AdminMenuComponent implements OnInit {
   /** Get signed in user and information about organization. */
   ngOnInit(): void {
     this.getOrganizationInfo(this.userService.user.organization);
+    this.split();
   }
 
   /**
@@ -99,5 +106,21 @@ export class AdminMenuComponent implements OnInit {
    */
   getItemSelected(optionSelected: ListAdminOptionMenuType): void {
     this.itemMenuSelected.emit(optionSelected);
+  }
+
+  /**
+   * Split Service for show or hidden section Admin Portal.
+   */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.listAdminItemMenu[1].show =
+          this.splitService.getGroupHierarchyMenuTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 }

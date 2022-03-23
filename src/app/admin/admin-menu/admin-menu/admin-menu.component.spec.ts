@@ -9,11 +9,13 @@ import {
   MockUserService,
   MockErrorService,
   MockOrganizationService,
+  MockSplitService,
 } from 'src/mocks';
 import { MatListModule } from '@angular/material/list';
 import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 
 import { AdminMenuComponent } from './admin-menu.component';
+import { SplitService } from 'src/app/core/split.service';
 
 describe('AdminMenuComponent', () => {
   let component: AdminMenuComponent;
@@ -29,6 +31,7 @@ describe('AdminMenuComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: OrganizationService, useClass: MockOrganizationService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
       imports: [MatListModule],
     }).compileComponents();
@@ -117,5 +120,79 @@ describe('AdminMenuComponent', () => {
     const spyEmit = spyOn(component.itemMenuSelected, 'emit').and.callThrough();
     component.getItemSelected(itemToEmit);
     expect(spyEmit).toHaveBeenCalledOnceWith(itemToEmit);
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    let userService: UserService;
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
+    });
+
+    it('should catch split error ', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+    });
+
+    it('should get split for group hierarchy menu.', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const method = spyOn(
+        splitService,
+        'getGroupHierarchyMenuTreatment'
+      ).and.callThrough();
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+    });
+
+    it('should show group hierarchy when split is true', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const method = spyOn(
+        splitService,
+        'getGroupHierarchyMenuTreatment'
+      ).and.returnValue('on');
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      const groupMenu = fixture.debugElement.nativeElement.querySelector(
+        '#' + ListAdminOptionMenuType.GroupHierarchy
+      );
+      expect(groupMenu).toBeDefined();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+    });
+
+    it('should not show group hierarchy when split is false', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const method = spyOn(
+        splitService,
+        'getGroupHierarchyMenuTreatment'
+      ).and.returnValue('off');
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      const groupMenu = fixture.debugElement.nativeElement.querySelector(
+        '#' + ListAdminOptionMenuType.GroupHierarchy
+      );
+      expect(groupMenu).toBeNull();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+    });
   });
 });
