@@ -147,8 +147,8 @@ export class DataLinkFieldComponent
           next: (questions) => {
             /** Update label name matching value and  display fields if question array is empty. */
             if (!questions.length) {
-              this.matchingValueLabel = 'Not Questions Found';
-              this.displayFieldsLabel = 'Not Questions Found';
+              this.matchingValueLabel = 'No Questions Found';
+              this.displayFieldsLabel = 'No Questions Found';
             } else {
               this.matchingValueLabel = 'Matching Value';
               this.displayFieldsLabel = 'Display Fields';
