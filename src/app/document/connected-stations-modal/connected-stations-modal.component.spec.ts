@@ -298,16 +298,4 @@ describe('ConnectedStationsModalComponent', () => {
     const expectData = component.displayFn(station);
     expect(expectData).toEqual(station.name);
   });
-
-  it('should close the rule modal when connected-modal-close clicked', () => {
-    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
-    const spyMethod = spyOn(component, 'closeModal').and.callThrough();
-    const btnClose = fixture.nativeElement.querySelector(
-      '#connected-modal-close'
-    );
-    expect(btnClose).toBeTruthy();
-    btnClose.click();
-    expect(spyMethod).toHaveBeenCalled();
-    expect(spyMatDialogRef).toHaveBeenCalled();
-  });
 });

@@ -217,9 +217,4 @@ export class ConnectedStationsModalComponent implements OnInit {
         },
       });
   }
-
-  /** Close add widgets modal. */
-  closeModal(): void {
-    this.dialogRef.close();
-  }
 }
