@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationGroupWidgetData, WidgetType } from 'src/models';
+import { WidgetType } from 'src/models';
+import { StationGroupData } from 'src/models/station-group-data';
 
 /**
  * Component for list field the groups how widget.
@@ -27,10 +28,16 @@ export class GroupSearchWidgetComponent implements OnInit {
   @Input() dataWidget!: string;
 
   /** Data to station group widget. */
-  dataStationGroupWidget!: StationGroupWidgetData;
+  dataStationGroup!: StationGroupData;
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
+
+  /** Whether the action to get list station group is loading. */
+  isLoading = false;
+
+  /** Whether the action to get list station group fails. */
+  errorStationGroup = false;
 
   constructor(
     private stationService: StationService,
@@ -43,21 +50,28 @@ export class GroupSearchWidgetComponent implements OnInit {
   ngOnInit(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.getStationGroupsWidget();
+    this.getStationGroups();
   }
 
   /**
    * Get station groups.
    */
-  private getStationGroupsWidget(): void {
+  getStationGroups(): void {
+    this.isLoading = true;
+    this.errorStationGroup = false;
     this.stationService
-      .getStationGroupsWidget(this.stationGroupRithmId)
+      .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
-        next: (dataStationGroupWidget) => {
-          this.dataStationGroupWidget = dataStationGroupWidget;
+        next: (dataStationGroup) => {
+          this.dataStationGroup = dataStationGroup;
+          this.isLoading = false;
+          this.errorStationGroup = false;
+          this.dataStationGroup = dataStationGroup;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorStationGroup = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
