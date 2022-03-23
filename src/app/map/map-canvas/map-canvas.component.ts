@@ -1966,6 +1966,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!this.panActive && !this.pendingGroupActive) {
       this.drawElements();
     }
+
+    /* For selected station in map check the station is in center of the map.
+      and send info to center station button for show if true.
+    */
+    if (this.mapService.stationElements.some((e) => e.drawerOpened)) {
+      const drawer = document.getElementsByTagName('mat-drawer');
+      this.mapService.stationCenter$.next(
+        this.mapService.checkCenter(
+          CenterPanType.Station,
+          drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
+        )
+      );
+    }
   }
 
   /**
@@ -2450,6 +2463,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
+    station.drawerOpened = true;
     this.mapService.isDrawerOpened$.next(true);
   }
 
