@@ -12,6 +12,7 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
 import { PaginationModule } from '../shared/pagination/pagination.module';
 import { AdminMenuComponent } from './admin-menu/admin-menu/admin-menu.component';
 import { GroupHierarchyComponent } from './action-admin-menu/group-hierarchy/group-hierarchy.component';
+import { GroupListHierarchyComponent } from './action-admin-menu/group-hierarchy/group-list-hierarchy/group-list-hierarchy.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { GroupHierarchyComponent } from './action-admin-menu/group-hierarchy/gro
     OrganizationManagementComponent,
     AdminMenuComponent,
     GroupHierarchyComponent,
+    GroupListHierarchyComponent,
   ],
   imports: [
     CommonModule,
