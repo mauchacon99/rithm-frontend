@@ -41,6 +41,7 @@ import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/
 import { MatListModule } from '@angular/material/list';
 import { BuildDrawerComponent } from './build-drawer/build-drawer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/headline-widget/headline-widget.module';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     InputFrameWidgetModule,
     MatListModule,
     DragDropModule,
+    HeadlineWidgetModule,
   ],
 })
 export class StationModule {}
