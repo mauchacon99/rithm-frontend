@@ -139,5 +139,24 @@ describe('AdminComponent', () => {
       expect(method).toHaveBeenCalled();
       expect(component.showAdminPortal).toBeFalse();
     });
+
+    it('should get split for group hierarchy menu.', () => {
+      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const splitInitMethod = spyOn(
+        TestBed.inject(SplitService),
+        'initSdk'
+      ).and.callThrough();
+
+      const method = spyOn(
+        TestBed.inject(SplitService),
+        'getGroupHierarchyMenuTreatment'
+      ).and.callThrough();
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+      expect(component.showAdminPortal).toBeDefined();
+      expect(component.showGroupHierarchy).toBeDefined();
+    });
   });
 });
