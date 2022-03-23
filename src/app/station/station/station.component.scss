@@ -68,14 +68,6 @@ textarea {
     @apply border-2 border-primary-100 p-0 rounded transition-colors hover:border-accent-500 overflow-visible;
   }
 
-  .drag-handler {
-    @apply hidden;
-  }
-
-  .widget-item-layout .drag-handler {
-    @apply block;
-  }
-
   .h-gridster {
     height: calc(100% - 20px);
   }
@@ -84,5 +76,8 @@ textarea {
     @apply text-accent-500 bg-white hover:bg-accent-200 hover:text-white hover:cursor-move absolute top-0 right-0 z-10 rounded-full shadow-xl border-secondary-100;
 
     position: absolute !important;
+  }
+  .button-drag-handler.hidden {
+    display: none !important;
   }
 }

@@ -378,12 +378,20 @@
                           trackBy: trackBy
                         "
                       >
-                        <div class="h-gridster relative overflow-hidden">
+                        <div
+                          class="h-gridster relative overflow-hidden"
+                          (mouseover)="(moveButtonWidget)"
+                          (mouseout)="(moveButtonWidget)"
+                        >
                           <button
                             mat-icon-button
                             type="button"
                             class="button-drag-handler"
                             data-testid="button-drag-handler"
+                            [ngClass]="{
+                              block: moveInputWidget,
+                              hidden: !moveInputWidget
+                            }"
                           >
                             <i class="fas fa-arrows fa-xl"></i>
                           </button>
