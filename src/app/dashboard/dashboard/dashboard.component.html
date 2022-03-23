@@ -163,7 +163,11 @@
           >
             Current dashboard has no widgets to display.
           </div>
-          <gridster class="bg-transparent px-0 scrollbar" [options]="options">
+          <gridster
+            [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
+            class="bg-transparent px-0 scrollbar"
+            [options]="options"
+          >
             <gridster-item
               *ngFor="
                 let item of dashboardData.widgets;

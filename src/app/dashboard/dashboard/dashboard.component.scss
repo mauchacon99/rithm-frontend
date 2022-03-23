@@ -20,7 +20,6 @@
 gridster {
   padding-left: 0 !important;
   padding-right: 0 !important;
-  height: 75vh !important;
 }
 
 @media (max-width: 768px) {
@@ -29,8 +28,14 @@ gridster {
   }
 }
 
-@media (min-width: 769px) {
-  .scrollbar-hidden {
-    overflow: hidden;
-  }
+.scrollbar-hidden {
+  overflow: hidden;
+}
+
+.gridster {
+  height: 79vh !important;
+}
+
+.edit-mode-gridster {
+  height: 67vh !important;
 }
