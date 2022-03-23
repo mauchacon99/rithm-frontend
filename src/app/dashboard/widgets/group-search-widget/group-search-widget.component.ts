@@ -33,6 +33,9 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Data to station group widget to show filtered results. */
   stations!: StationListGroup[];
 
+  /** Data subStationGroupData for show filtered results. */
+  subStationGroupData!: StationGroupData[];
+
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
 
@@ -75,6 +78,7 @@ export class GroupSearchWidgetComponent implements OnInit {
           this.errorStationGroup = false;
           this.dataStationGroup = dataStationGroup;
           this.stations = this.dataStationGroup.stations;
+          this.subStationGroupData = this.dataStationGroup.subStationGroups;
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -87,10 +91,15 @@ export class GroupSearchWidgetComponent implements OnInit {
       });
   }
 
-  /** Search similitude stations by name.*/
+  /** Search similitude stations by name and substations .*/
   searchStation(): void {
     this.stations = this.dataStationGroup.stations.filter((station) =>
       station.name.toLowerCase().includes(this.search.toLowerCase())
+    );
+
+    this.subStationGroupData = this.dataStationGroup.subStationGroups.filter(
+      (subStation) =>
+        subStation.title.toLowerCase().includes(this.search.toLowerCase())
     );
   }
 }

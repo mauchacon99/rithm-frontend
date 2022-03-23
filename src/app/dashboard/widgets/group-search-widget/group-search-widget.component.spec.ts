@@ -23,11 +23,41 @@ describe('GroupSearchWidgetComponent', () => {
   const dataStationGroupWidget: StationGroupData = {
     rithmId: '6375027-78345-73824-54244',
     title: 'Station Group',
-    subStationGroups: [],
+    subStationGroups: [
+      {
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            workers: [],
+            stationOwners: [],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
+      },
+    ],
     stations: [
       {
         rithmId: '3237520-7837-78378-78378',
         name: 'StationName',
+        workers: [],
+        stationOwners: [],
+      },
+      {
+        rithmId: '9267520-4837-78378-78378',
+        name: 'StationName 2',
+        workers: [],
+        stationOwners: [],
+      },
+      {
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
         workers: [],
         stationOwners: [],
       },
@@ -107,12 +137,11 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show list of stations groups', () => {
-    component.dataStationGroup.stations.push({
-      rithmId: '3237520-7837-78378-78378',
-      name: 'StationName',
-      workers: [],
-      stationOwners: [],
-    });
+    component.dataStationGroup = dataStationGroupWidget;
+    component.stations = dataStationGroupWidget.stations;
+    component.subStationGroupData = dataStationGroupWidget.subStationGroups;
+    component.isLoading = false;
+    component.errorStationGroup = false;
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -127,9 +156,9 @@ describe('GroupSearchWidgetComponent', () => {
   it('should show message list of stations groups empty', () => {
     component.dataStationGroup = dataStationGroupWidget;
     component.stations = [];
+    component.subStationGroupData = [];
     component.isLoading = false;
     component.errorStationGroup = false;
-    component.dataStationGroup.stations = [];
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -141,20 +170,48 @@ describe('GroupSearchWidgetComponent', () => {
     expect(stationGroupsEmpty).toBeTruthy();
   });
 
-  it('should search stations', () => {
+  it('should search stations and substations', () => {
+    component.dataStationGroup = dataStationGroupWidget;
+    component.stations = dataStationGroupWidget.stations;
+    component.subStationGroupData = dataStationGroupWidget.subStationGroups;
     component.isLoading = false;
     component.errorStationGroup = false;
-    component.search = 'StationName 3';
+    component.search = 'stationName 3';
     fixture.detectChanges();
     const expectedStation = [
       {
-        rithmId: '3237520-7837-78378-78378',
-        name: 'StationName',
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
         workers: [],
         stationOwners: [],
       },
     ];
     component.searchStation();
     expect(component.stations).toEqual(expectedStation);
+
+    component.search = 'substation group';
+    fixture.detectChanges();
+
+    const expectedSubStation = [
+      {
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            workers: [],
+            stationOwners: [],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
+      },
+    ];
+    component.searchStation();
+    expect(component.subStationGroupData).toEqual(expectedSubStation);
   });
 });
