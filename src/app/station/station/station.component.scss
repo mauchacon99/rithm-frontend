@@ -67,6 +67,14 @@ textarea {
   .widget-item-layout {
     @apply border-2 border-primary-100 p-0 rounded transition-colors hover:border-accent-500 overflow-visible;
   }
+
+  .drag-handler {
+    @apply hidden;
+  }
+
+  .widget-item-layout .drag-handler {
+    @apply block;
+  }
 }
 
 .h-gridster {

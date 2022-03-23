@@ -372,20 +372,17 @@
                       <gridster-item
                         [item]="widgetItem"
                         [ngClass]="{ 'widget-item-layout': layoutMode }"
-                        class="pt-1"
+                        class="pt-1 hover:cursor-move"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
                           trackBy: trackBy
                         "
                       >
-                        <div
-                          class="item-buttons absolute left-[89%] -top-[5%] z-10"
-                        >
+                        <div class="item-buttons absolute right-0 z-10">
                           <button
                             type="button"
                             mat-icon-button
                             mat-raised-button
-                            *ngIf="layoutMode"
                             class="drag-handler mat-mini-fab text-accent-500 bg-white hover:cursor-move"
                             data-testid="button-drag-handler"
                           >
