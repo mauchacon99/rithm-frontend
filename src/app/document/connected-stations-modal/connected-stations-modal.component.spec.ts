@@ -38,10 +38,6 @@ describe('ConnectedStationsModalComponent', () => {
   let fixture: ComponentFixture<ConnectedStationsModalComponent>;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   const documentId = 'E204F369-386F-4E41';
-  const dialogRefSpyObj = jasmine.createSpyObj({
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    close: () => {},
-  });
 
   const station = {
     allowAllOrgWorkers: false,
@@ -88,7 +84,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MatDialogRef, useValue: dialogRefSpyObj },
+        { provide: MatDialogRef, useValue: { close } },
       ],
     }).compileComponents();
   });
@@ -216,9 +212,11 @@ describe('ConnectedStationsModalComponent', () => {
       'moveDocument'
     ).and.callFake(() => of(dataExpect));
     const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
+    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
 
     component.moveDocument();
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+    expect(spyMatDialogRef).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('dashboard');
   });
 
