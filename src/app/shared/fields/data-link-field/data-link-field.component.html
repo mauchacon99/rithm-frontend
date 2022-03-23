@@ -69,7 +69,7 @@
         *ngFor="let item of currentStationQuestions"
         [value]="item.rithmId"
       >
-        {{ item.prompt || 'There is not prompt added' }}
+        {{ item.prompt || 'Missing question label' }}
       </mat-option>
     </mat-select>
   </mat-form-field>
