@@ -165,7 +165,7 @@ describe('DataLinkFieldComponent', () => {
       'getStationQuestions'
     ).and.returnValue(of([]));
     component.getStationQuestions('Fake data link');
-    expect(component.matchingValueLabel).toEqual('Not Questions Found');
+    expect(component.matchingValueLabel).toEqual('No Questions Found');
     expect(component.questionLoading).toBeFalsy();
   });
 
@@ -177,7 +177,7 @@ describe('DataLinkFieldComponent', () => {
       'getStationQuestions'
     ).and.returnValue(of([]));
     component.getStationQuestions('Fake data link');
-    expect(component.displayFieldsLabel).toEqual('Not Questions Found');
+    expect(component.displayFieldsLabel).toEqual('No Questions Found');
     expect(component.questionLoading).toBeFalsy();
   });
 });
