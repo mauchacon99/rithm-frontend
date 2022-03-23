@@ -12,7 +12,7 @@
 >
 </app-error-widget>
 
-<div class="w-full h-full" *ngIf="!isLoading && !errorStationGroup">
+<div class="w-full h-full px-2 pb-2" *ngIf="!isLoading && !errorStationGroup">
   <!-- Header widget -->
   <div class="flex flex-col input-search m-2">
     <h3 *ngIf="dataStationGroup" class="font-semibold truncate">
@@ -28,13 +28,17 @@
         data-testid="search-stations"
         maxlength="55"
         (keyup)="searchStation()"
+        [disabled]="
+          dataStationGroup.stations.length === 0 &&
+          dataStationGroup.subStationGroups.length === 0
+        "
       />
       <span matPrefix><i class="fas fa-search text-secondary-300"></i></span>
     </mat-form-field>
   </div>
 
   <div
-    class="scrollbar overflow-scroll h-full w-full container-group px-2"
+    class="scrollbar overflow-scroll h-full w-full container-group px-2 mt-5"
     *ngIf="dataStationGroup"
   >
     <div
@@ -47,9 +51,9 @@
       <!--subStations-->
       <div
         *ngFor="let subStation of subStationGroupData"
-        class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
+        class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        {{ subStation.title }}
+        <span class="whitespace-normal truncate"> {{ subStation.title }}</span>
 
         <button mat-icon-button id="map-button" data-testid="map-button">
           <i class="fa-solid fa-map text-base text-secondary-500"></i>
@@ -59,9 +63,9 @@
       <!--Stations-->
       <div
         *ngFor="let station of stations"
-        class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
+        class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        {{ station.name }}
+        <span class="whitespace-normal truncate"> {{ station.name }}</span>
 
         <button
           mat-icon-button
