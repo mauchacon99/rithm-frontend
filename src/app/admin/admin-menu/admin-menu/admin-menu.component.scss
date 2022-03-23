@@ -1,3 +1,5 @@
+@import 'variables';
+
 .admin-menu {
   .mat-list-item-content {
     padding: 0;
@@ -18,4 +20,8 @@
   .mat-list-single-selected-option {
     @apply bg-accent-100;
   }
+}
+
+.color-border {
+  border-color: map-get($primary-palette, 50);
 }
