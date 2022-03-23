@@ -253,9 +253,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Check if user is an admin.
     this.isAdmin = this.currentUser.role === 'admin';
     //Set which drawer type to open.
-    setTimeout(() => {
-      this.sidenavDrawerService.setDrawer(this.mapElementDrawer);
-    }, 50);
+    this.sidenavDrawerService.setDrawer(this.mapElementDrawer);
   }
 
   /**

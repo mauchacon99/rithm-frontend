@@ -1405,6 +1405,9 @@ export class MapService {
         this.centerActive$.next(false);
         this.centerCount$.next(0);
       }
+      if (panType === CenterPanType.Station) {
+        this.stationCenter$.next(true);
+      }
     };
 
     //End method if centerActive is false.
