@@ -63,5 +63,6 @@ export * from './rule-modal-operator';
 export * from './rule-modal-data';
 export * from './selected-item-widget-model';
 export * from './custom-field';
+export * from './list-admin-option-menu';
 export * from './station-list-group';
 export * from './station-group-data';
