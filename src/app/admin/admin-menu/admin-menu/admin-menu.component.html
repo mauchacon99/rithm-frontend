@@ -31,3 +31,17 @@
     <p class="text-error-500">Unable to get organization name.</p>
   </div>
 </div>
+
+<mat-selection-list [multiple]="false" class="admin-menu mt-3">
+  <mat-list-option
+    class="sm:text-sm truncate"
+    (click)="getItemSelected(item.type)"
+    *ngFor="let item of listAdminItemMenu"
+    [value]="itemSelected"
+    [selected]="item.type === listAdminOptionMenuType.AccountSettings"
+    [id]="item.type"
+    [attr.data-testid]="item.type"
+  >
+    {{ item.name }}
+  </mat-list-option>
+</mat-selection-list>

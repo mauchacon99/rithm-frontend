@@ -10,6 +10,8 @@ import {
   MockErrorService,
   MockOrganizationService,
 } from 'src/mocks';
+import { MatListModule } from '@angular/material/list';
+import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 
 import { AdminMenuComponent } from './admin-menu.component';
 
@@ -28,6 +30,7 @@ describe('AdminMenuComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: OrganizationService, useClass: MockOrganizationService },
       ],
+      imports: [MatListModule],
     }).compileComponents();
   });
 
@@ -107,5 +110,12 @@ describe('AdminMenuComponent', () => {
       '#organization-name-loading'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should emit itemMenuSelected', () => {
+    const itemToEmit = ListAdminOptionMenuType.GroupHierarchy;
+    const spyEmit = spyOn(component.itemMenuSelected, 'emit').and.callThrough();
+    component.getItemSelected(itemToEmit);
+    expect(spyEmit).toHaveBeenCalledOnceWith(itemToEmit);
   });
 });
