@@ -378,13 +378,16 @@
                           trackBy: trackBy
                         "
                       >
-                        <div class="item-buttons absolute left-[94%] -top-4">
+                        <div
+                          class="item-buttons absolute left-[89%] -top-[5%] z-10"
+                        >
                           <button
                             type="button"
                             mat-icon-button
                             mat-raised-button
                             *ngIf="layoutMode"
-                            class="drag-handler mat-mini-fab text-accent-500 hover:cursor-move"
+                            class="drag-handler mat-mini-fab text-accent-500 bg-white hover:cursor-move"
+                            data-testid="button-drag-handler"
                           >
                             <i class="fas fa-arrows fa-2x"></i>
                           </button>
