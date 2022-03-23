@@ -5,13 +5,13 @@ import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
-import { StationGroupWidgetData, StationListGroupWidget } from 'src/models';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { StationGroupData } from 'src/models/station-group-data';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -20,35 +20,22 @@ describe('GroupSearchWidgetComponent', () => {
     // eslint-disable-next-line max-len
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
-  const stations: StationListGroupWidget[] = [
-    {
-      rithmId: '3237520-7837-78378-78378',
-      name: 'StationName 1',
-      workers: [],
-      StationOwners: [],
-    },
-    {
-      rithmId: '3227520-7837-78378-78378',
-      name: 'StationName 2',
-      workers: [],
-      StationOwners: [],
-    },
-    {
-      rithmId: '232354527-7337-18378-38378',
-      name: 'StationName 3',
-      workers: [],
-      StationOwners: [],
-    },
-  ];
-  const dataStationGroupWidget: StationGroupWidgetData = {
+  const dataStationGroupWidget: StationGroupData = {
     rithmId: '6375027-78345-73824-54244',
     title: 'Station Group',
-    SubStationGroups: [],
-    stations,
+    subStationGroups: [],
+    stations: [
+      {
+        rithmId: '3237520-7837-78378-78378',
+        name: 'StationName',
+        workers: [],
+        stationOwners: [],
+      },
+    ],
     admins: [],
     users: [],
-    IsChained: true,
-    IsImplicitRootFlow: true,
+    isChained: true,
+    isImplicitRootStationGroup: true,
   };
 
   beforeEach(async () => {
@@ -70,8 +57,7 @@ describe('GroupSearchWidgetComponent', () => {
     fixture = TestBed.createComponent(GroupSearchWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
-    component.dataStationGroupWidget = dataStationGroupWidget;
-    component.stations = stations;
+    component.dataStationGroup = dataStationGroupWidget;
     fixture.detectChanges();
   });
 
@@ -79,21 +65,18 @@ describe('GroupSearchWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call service that return station widget data', () => {
+  it('should call service that return station data', () => {
     const spyService = spyOn(
       TestBed.inject(StationService),
-      'getStationGroupsWidget'
+      'getStationGroups'
     ).and.callThrough();
     const expectData = JSON.parse(dataWidget).stationGroupRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
   });
 
-  it('should show error message when request station widget document  data', () => {
-    spyOn(
-      TestBed.inject(StationService),
-      'getStationGroupsWidget'
-    ).and.returnValue(
+  it('should show error message when request station document  data', () => {
+    spyOn(TestBed.inject(StationService), 'getStationGroups').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -124,17 +107,12 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show list of stations groups', () => {
-    component.dataStationGroupWidget = dataStationGroupWidget;
-    component.stations = [
-      {
-        rithmId: '3237520-7837-78378-78378',
-        name: 'StationName',
-        workers: [],
-        StationOwners: [],
-      },
-    ];
-    component.isLoading = false;
-    component.errorStationGroup = false;
+    component.dataStationGroup.stations.push({
+      rithmId: '3237520-7837-78378-78378',
+      name: 'StationName',
+      workers: [],
+      stationOwners: [],
+    });
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -147,10 +125,11 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show message list of stations groups empty', () => {
-    component.dataStationGroupWidget = dataStationGroupWidget;
+    component.dataStationGroup = dataStationGroupWidget;
     component.stations = [];
     component.isLoading = false;
     component.errorStationGroup = false;
+    component.dataStationGroup.stations = [];
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'

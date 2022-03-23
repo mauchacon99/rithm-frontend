@@ -2,11 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import {
-  StationGroupWidgetData,
-  StationListGroupWidget,
-  WidgetType,
-} from 'src/models';
+import { StationListGroup, WidgetType } from 'src/models';
+import { StationGroupData } from 'src/models/station-group-data';
 
 /**
  * Component for list field the groups how widget.
@@ -31,10 +28,10 @@ export class GroupSearchWidgetComponent implements OnInit {
   @Input() dataWidget!: string;
 
   /** Data to station group widget. */
-  dataStationGroupWidget!: StationGroupWidgetData;
+  dataStationGroup!: StationGroupData;
 
   /** Data to station group widget to show filtered results. */
-  stations!: StationListGroupWidget[];
+  stations!: StationListGroup[];
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
@@ -59,24 +56,25 @@ export class GroupSearchWidgetComponent implements OnInit {
   ngOnInit(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.getStationGroupsWidget();
+    this.getStationGroups();
   }
 
   /**
    * Get station groups.
    */
-  getStationGroupsWidget(): void {
+  getStationGroups(): void {
     this.isLoading = true;
     this.errorStationGroup = false;
     this.stationService
-      .getStationGroupsWidget(this.stationGroupRithmId)
+      .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
-        next: (dataStationGroupWidget) => {
+        next: (dataStationGroup) => {
+          this.dataStationGroup = dataStationGroup;
           this.isLoading = false;
           this.errorStationGroup = false;
-          this.dataStationGroupWidget = dataStationGroupWidget;
-          this.stations = this.dataStationGroupWidget.stations;
+          this.dataStationGroup = dataStationGroup;
+          this.stations = this.dataStationGroup.stations;
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -91,7 +89,7 @@ export class GroupSearchWidgetComponent implements OnInit {
 
   /** Search similitude stations by name.*/
   searchStation(): void {
-    this.stations = this.dataStationGroupWidget.stations.filter((station) =>
+    this.stations = this.dataStationGroup.stations.filter((station) =>
       station.name.toLowerCase().includes(this.search.toLowerCase())
     );
   }
