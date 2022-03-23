@@ -107,23 +107,24 @@ describe('FileFieldComponent', () => {
     );
   });
 
-  it('should close the modal for upload file', () => {
+  describe('UploadFileModalComponent', () => {
     let componentUpload: UploadFileModalComponent;
     let fixtureUpload: ComponentFixture<UploadFileModalComponent>;
+    beforeEach(() => {
+      fixtureUpload = TestBed.createComponent(UploadFileModalComponent);
+      componentUpload = fixtureUpload.componentInstance;
+      fixtureUpload.detectChanges();
+    });
 
-    // eslint-disable-next-line prefer-const
-    fixtureUpload = TestBed.createComponent(UploadFileModalComponent);
-    // eslint-disable-next-line prefer-const
-    componentUpload = fixtureUpload.componentInstance;
-    fixtureUpload.detectChanges();
-
-    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
-    const spyMethod = spyOn(componentUpload, 'closeModal').and.callThrough();
-    const btnClose =
-      fixtureUpload.nativeElement.querySelector('#close-modal-btn');
-    expect(btnClose).toBeTruthy();
-    btnClose.click();
-    expect(spyMethod).toHaveBeenCalled();
-    expect(spyMatDialogRef).toHaveBeenCalled();
+    it('should close the modal for upload file', () => {
+      const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+      const spyMethod = spyOn(componentUpload, 'closeModal').and.callThrough();
+      const btnClose =
+        fixtureUpload.nativeElement.querySelector('#close-modal-btn');
+      expect(btnClose).toBeTruthy();
+      btnClose.click();
+      expect(spyMethod).toHaveBeenCalled();
+      expect(spyMatDialogRef).toHaveBeenCalled();
+    });
   });
 });
