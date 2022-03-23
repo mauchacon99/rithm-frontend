@@ -21,7 +21,10 @@
 >
   <!--  Banner image-->
   <ng-container *ngIf="widgetType === typesWidget.DocumentListBanner">
-    <app-banner-image-widget [image]="image"></app-banner-image-widget>
+    <app-banner-image-widget
+      [widgetType]="widgetType"
+      [image]="image"
+    ></app-banner-image-widget>
   </ng-container>
 
   <!-- Header widget -->

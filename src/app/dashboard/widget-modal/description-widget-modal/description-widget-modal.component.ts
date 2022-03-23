@@ -74,6 +74,13 @@ export class DescriptionWidgetModalComponent implements OnInit {
       description: `User can query all the values saved on documents within a flow. By default the search results display the document
       name and the field that matches your search.`,
     },
+    // Profile widget banner.
+    [WidgetType.ContainerProfileBanner]: {
+      title: '',
+      type: '',
+      customizable: '',
+      description: '',
+    },
   };
 
   /** Data static for each template by widgetType. */

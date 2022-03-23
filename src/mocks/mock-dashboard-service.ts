@@ -77,6 +77,11 @@ export class MockDashboardService {
       title: '',
       description: '',
     },
+    [WidgetType.StationGroupSearch]: {
+      title: 'Search',
+      description: `User can query all the values saved on documents within a flow. By default the search results display the document
+      name and the field that matches your search.`,
+    },
     // Document data
     ['defaultDocument']: {
       title: 'Default',
@@ -90,6 +95,11 @@ export class MockDashboardService {
     [WidgetType.Document]: {
       title: 'List',
       description: 'Display all the values associated with a document.',
+    },
+    // Profile widget banner.
+    [WidgetType.ContainerProfileBanner]: {
+      title: '',
+      description: '',
     },
   };
 
