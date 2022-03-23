@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatListModule } from '@angular/material/list';
+import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 import { AdminMenuComponent } from './admin-menu.component';
 
 describe('AdminMenuComponent', () => {
@@ -9,6 +10,7 @@ describe('AdminMenuComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AdminMenuComponent],
+      imports: [MatListModule],
     }).compileComponents();
   });
 
@@ -20,5 +22,12 @@ describe('AdminMenuComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit itemMenuSelected', () => {
+    const itemToEmit = ListAdminOptionMenuType.GroupHierarchy;
+    const spyEmit = spyOn(component.itemMenuSelected, 'emit').and.callThrough();
+    component.getItemSelected(itemToEmit);
+    expect(spyEmit).toHaveBeenCalledOnceWith(itemToEmit);
   });
 });
