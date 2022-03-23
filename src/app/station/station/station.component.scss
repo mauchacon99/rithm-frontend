@@ -82,6 +82,7 @@ textarea {
 
   .button-drag-handler {
     @apply text-accent-500 bg-white hover:bg-accent-200 hover:text-white hover:cursor-move absolute top-0 right-0 z-10 rounded-full shadow-xl border-secondary-100;
+
     position: absolute !important;
   }
 }
