@@ -126,7 +126,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /**
    * Reporting if the name or isChained on a station group changed.
    */
-   reportNewStationGroupMapChange(): void {
+  reportNewStationGroupMapChange(): void {
     const index = this.mapService.stationGroupElements.findIndex(
       (stGroup) => stGroup.rithmId === this.stationGroupRithmId
     );
@@ -139,15 +139,16 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /**
    * Set the changes made to the current station group.
    */
-   setStationGroupChanges(): void {
+  setStationGroupChanges(): void {
     this.groupName =
       this.groupName.length > 0 ? this.groupName : 'Untitled Group';
-      if (this.currentMode === MapMode.Build ||
-          this.currentMode === MapMode.StationGroupAdd ||
-          this.currentMode === MapMode.StationGroupEdit
-      ) {
-        this.reportNewStationGroupMapChange();
-      }
+    if (
+      this.currentMode === MapMode.Build ||
+      this.currentMode === MapMode.StationGroupAdd ||
+      this.currentMode === MapMode.StationGroupEdit
+    ) {
+      this.reportNewStationGroupMapChange();
+    }
   }
 
   /**
