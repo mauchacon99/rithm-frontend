@@ -7,6 +7,7 @@ import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 /**
  * Component for managing the toolbar on the map.
  */
@@ -70,7 +71,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private organizationService: OrganizationService,
     private errorService: ErrorService,
-    private mapService: MapService
+    private mapService: MapService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     //Subscribe to mapMode in mapService.
     this.mapService.mapMode$
@@ -98,6 +100,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       this.mapService.mapMode$.next(MapMode.StationGroupAdd);
       this.mapService.matMenuStatus$.next(true);
     } else {
+      if (this.sidenavDrawerService.isDrawerOpen) {
+        this.sidenavDrawerService.closeDrawer();
+      }
       if (
         this.mapService.stationElements.some((station) => station.selected) ||
         this.mapService.stationGroupElements.some(
@@ -107,7 +112,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
         if (this.mapService.mapMode$.value === MapMode.StationGroupAdd) {
           this.mapService.resetSelectedStationGroupStationStatus();
           this.mapService.updatePendingStationGroup();
-          this.mapService.resetSelectedStationGroupStationStatus();
         } else if (
           this.mapService.mapMode$.value === MapMode.StationGroupEdit
         ) {
