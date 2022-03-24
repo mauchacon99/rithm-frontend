@@ -19,7 +19,8 @@
             id="group"
             data-testId="group-name-field"
             [(ngModel)]="groupName"
-            (ngModelChange)="setStationGroupChanges()"
+            (focusout)="setStationGroupChanges()"
+            (keyup)="reportNewStationGroupMapChange()"
           />
         </mat-form-field>
       </div>
