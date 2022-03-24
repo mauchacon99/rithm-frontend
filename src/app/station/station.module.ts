@@ -41,6 +41,7 @@ import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/
 import { MatListModule } from '@angular/material/list';
 import { BuildDrawerComponent } from './build-drawer/build-drawer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { BodyTextWidgetModule } from '../shared/station-document-widgets/body-text-widget/body-text-widget.module';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     GridsterModule,
     MatDividerModule,
     InputFrameWidgetModule,
+    BodyTextWidgetModule,
     MatListModule,
     DragDropModule,
   ],
