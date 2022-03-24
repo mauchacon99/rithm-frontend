@@ -1,1 +1,53 @@
-<div></div>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-3 h-full bg-white">
+  <!-- stationGroup -->
+  <div
+    class="lg:border-r-2 color-border lg:overflow-auto scrollbar height-container"
+  >
+    <ng-container *ngIf="stationGroups">
+      <mat-selection-list [multiple]="false">
+        <!-- subStationGroups -->
+        <mat-list-option
+          *ngFor="let stationGroup of stationGroups.subStationGroups"
+          [value]="stationGroup.rithmId"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              itemList;
+              context: { name: stationGroup.title, type: 'group' }
+            "
+          ></ng-container>
+        </mat-list-option>
+        <!-- stations -->
+        <mat-list-option
+          *ngFor="let station of stationGroups.stations"
+          [value]="station.rithmId"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              itemList;
+              context: { name: station.name, type: 'station' }
+            "
+          ></ng-container>
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Station group or station item list. -->
+<!-- name: name of the item -->
+<!-- type: type of the list 'group' | 'station' -->
+<ng-template #itemList let-name="name" let-type="type">
+  <div class="flex items-center">
+    <img
+      [src]="
+        type === 'group'
+          ? 'assets/images/station-group.png'
+          : 'assets/images/station.png'
+      "
+      [width]="27"
+      [alt]="type + '-' + name"
+    />
+    <span class="text-base ml-3 truncate">{{ name }}</span>
+  </div>
+</ng-template>
