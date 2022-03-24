@@ -55,27 +55,10 @@
     [itemWidgetModalSelected]="itemWidgetModalSelected"
     (previewWidgetSelected)="previewWidgetTypeSelected = $event"
   ></app-list-widget-modal>
-
-  <div
-    class="flex justify-between flex-col h-full"
+  <app-description-widget-modal
     *ngIf="previewWidgetTypeSelected"
+    [itemWidgetModalSelected]="itemWidgetModalSelected"
+    [widgetType]="previewWidgetTypeSelected"
   >
-    <app-description-widget-modal
-      [dataWidget]="dataWidget"
-      [itemWidgetModalSelected]="itemWidgetModalSelected"
-      [widgetType]="previewWidgetTypeSelected"
-    >
-    </app-description-widget-modal>
-    <div class="text-right pr-3 pb-3">
-      <button
-        mat-button
-        id="add-widget-button"
-        data-testid="add-widget-button"
-        class="bg-accent-800 text-secondary-50 drop-shadow-md"
-        (click)="addWidget()"
-      >
-        Add Widget
-      </button>
-    </div>
-  </div>
+  </app-description-widget-modal>
 </div>

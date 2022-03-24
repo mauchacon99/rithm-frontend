@@ -153,17 +153,31 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
 
   /**
    * Set the changes made to the current station group.
+   * Reporting if the name or isChained on a station group changed.
    */
-  setStationGroupChanges(): void {
+  reportNewStationGroupMapChange(): void {
     const index = this.mapService.stationGroupElements.findIndex(
       (stGroup) => stGroup.rithmId === this.stationGroupRithmId
     );
-    this.groupName =
-      this.groupName.length > 0 ? this.groupName : 'Untitled Group';
     this.mapService.stationGroupElements[index].title = this.groupName;
     this.mapService.stationGroupElements[index].isChained = this.isChained;
     this.mapService.stationGroupElements[index].markAsUpdated();
     this.mapService.stationGroupElementsChanged$.next(true);
+  }
+
+  /**
+   * Set the changes made to the current station group.
+   */
+  setStationGroupChanges(): void {
+    this.groupName =
+      this.groupName.length > 0 ? this.groupName : 'Untitled Group';
+    if (
+      this.currentMode === MapMode.Build ||
+      this.currentMode === MapMode.StationGroupAdd ||
+      this.currentMode === MapMode.StationGroupEdit
+    ) {
+      this.reportNewStationGroupMapChange();
+    }
   }
 
   /**
