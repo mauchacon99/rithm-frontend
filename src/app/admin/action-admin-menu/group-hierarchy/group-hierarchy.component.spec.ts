@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
 import { GroupHierarchyComponent } from './group-hierarchy.component';
 import { GroupListHierarchyComponent } from './group-list-hierarchy/group-list-hierarchy.component';
@@ -16,7 +17,7 @@ describe('GroupHierarchyComponent', () => {
         GroupHierarchyComponent,
         MockComponent(GroupListHierarchyComponent),
       ],
-      imports: [MatInputModule, NoopAnimationsModule],
+      imports: [MatInputModule, NoopAnimationsModule, ComingSoonMessageModule],
     }).compileComponents();
   });
 

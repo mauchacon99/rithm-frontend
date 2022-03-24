@@ -65,19 +65,18 @@ describe('AdminComponent', () => {
 
   describe('Testing split.io', () => {
     let splitService: SplitService;
+    let userService: UserService;
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
     });
 
     it('should get split for Admin Portal.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
-      const splitInitMethod = spyOn(
-        TestBed.inject(SplitService),
-        'initSdk'
-      ).and.callThrough();
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
-        TestBed.inject(SplitService),
+        splitService,
         'getAdminPortalTreatment'
       ).and.callThrough();
 
@@ -93,14 +92,11 @@ describe('AdminComponent', () => {
     });
 
     it('should show Admin Portal when permission exits.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
-      const splitInitMethod = spyOn(
-        TestBed.inject(SplitService),
-        'initSdk'
-      ).and.callThrough();
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
-        TestBed.inject(SplitService),
+        splitService,
         'getAdminPortalTreatment'
       ).and.returnValue('on');
 
@@ -117,14 +113,11 @@ describe('AdminComponent', () => {
     });
 
     it('should not show Admin Portal when permission does not exits.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
-      const splitInitMethod = spyOn(
-        TestBed.inject(SplitService),
-        'initSdk'
-      ).and.callThrough();
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
-        TestBed.inject(SplitService),
+        splitService,
         'getAdminPortalTreatment'
       ).and.returnValue('off');
 
@@ -141,14 +134,11 @@ describe('AdminComponent', () => {
     });
 
     it('should get split for group hierarchy menu.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
-      const splitInitMethod = spyOn(
-        TestBed.inject(SplitService),
-        'initSdk'
-      ).and.callThrough();
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
-        TestBed.inject(SplitService),
+        splitService,
         'getGroupHierarchyMenuTreatment'
       ).and.callThrough();
       splitService.sdkReady$.next();
