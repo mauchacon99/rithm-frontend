@@ -119,7 +119,7 @@ export class StationComponent
     pushItems: true,
     draggable: {
       enabled: true,
-      ignoreContent: false,
+      ignoreContent: true,
     },
     resizable: {
       enabled: true,
@@ -732,7 +732,6 @@ export class StationComponent
     /* Rearranges, can be dragged. */
     if (this.options.draggable) {
       this.options.draggable.enabled = enabledMode;
-      this.options.draggable.ignoreContent = enabledMode;
     }
     /* Execute changes. */
     this.changedOptions();
