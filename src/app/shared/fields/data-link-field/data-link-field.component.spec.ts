@@ -165,7 +165,19 @@ describe('DataLinkFieldComponent', () => {
       'getStationQuestions'
     ).and.returnValue(of([]));
     component.getStationQuestions('Fake data link');
-    expect(component.matchingValueLabel).toEqual('Not Questions Found');
+    expect(component.matchingValueLabel).toEqual('No Questions Found');
+    expect(component.questionLoading).toBeFalsy();
+  });
+
+  it('should change the name of Label DisplayFields to : not question found', () => {
+    component.stations = [STATIONS];
+    component.questionLoading = true;
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(of([]));
+    component.getStationQuestions('Fake data link');
+    expect(component.displayFieldsLabel).toEqual('No Questions Found');
     expect(component.questionLoading).toBeFalsy();
   });
 });
