@@ -54,11 +54,9 @@
         *ngFor="let subStation of subStationGroupData"
         class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <div>
-          <span class="whitespace-normal font-semibold truncate">
-            {{ subStation.title }}</span
-          >
-        </div>
+        <span class="whitespace-normal font-semibold truncate">
+          {{ subStation.title }}</span
+        >
 
         <div>
           <button mat-icon-button id="map-button" data-testid="map-button">
