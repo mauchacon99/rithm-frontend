@@ -107,5 +107,17 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+    <div *ngSwitchCase="'Components'">
+      <div
+        *ngFor="let customComponent of customComponents"
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        attr.data-testid="{{ customComponent.dataTestId }}"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ customComponent.prompt }}
+        </p>
+        <span class="{{ customComponent.icon }} fa-solid fa-lg ml-auto"></span>
+      </div>
+    </div>
   </section>
 </div>

@@ -138,6 +138,15 @@ export class BuildDrawerComponent implements OnInit {
     },
   ];
 
+  /** CustomComponents object with component data entry. */
+  customComponents = [
+    {
+      prompt: 'Headline',
+      icon: 'fa-heading',
+      dataTestId: 'component-headline',
+    },
+  ];
+
   constructor(private changeDetector: ChangeDetectorRef) {}
 
   /**
