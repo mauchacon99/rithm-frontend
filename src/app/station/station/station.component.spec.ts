@@ -793,6 +793,12 @@ describe('StationComponent', () => {
     expect(spyGridMode).toHaveBeenCalledWith('layout');
   });
 
+  it('should call sidenavService and display setting drawer', () => {
+    const spyDrawer = spyOn(TestBed.inject(SidenavDrawerService), 'openDrawer');
+    component.openRightDrawer();
+    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting');
+  });
+
   it('should add a new input frame widget to the array of input frames', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
     component.addInputFrame();
