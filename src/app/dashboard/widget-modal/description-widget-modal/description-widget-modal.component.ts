@@ -23,28 +23,21 @@ export class DescriptionWidgetModalComponent implements OnInit {
    * @returns Data of widget by typeWidget.
    */
   get dataWidget(): string {
-    let dataWidget = '';
-
-    switch (this.itemWidgetModalSelected.itemType) {
-      case 'document':
-        dataWidget = JSON.stringify({
-          documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-          columns: [],
-        });
-        break;
-      case 'station':
-        dataWidget = JSON.stringify({
-          stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-          columns: [{ name: 'name' }],
-        });
-        break;
-      case 'group':
-        dataWidget = JSON.stringify({
-          stationGroupRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        });
-        break;
+    if (this.itemWidgetModalSelected.itemType === 'document') {
+      return JSON.stringify({
+        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        columns: [],
+      });
+    } else if (this.itemWidgetModalSelected.itemType === 'station') {
+      return JSON.stringify({
+        stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        columns: [{ name: 'name' }],
+      });
+    } else {
+      return JSON.stringify({
+        stationGroupRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+      });
     }
-    return dataWidget;
   }
 
   /** Enum widget type. */
