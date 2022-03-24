@@ -54,15 +54,11 @@
         *ngFor="let subStation of subStationGroupData"
         class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <span class="whitespace-normal font-semibold truncate">
-          {{ subStation.title }}</span
-        >
+        <span class="whitespace-normal truncate"> {{ subStation.title }}</span>
 
-        <div>
-          <button mat-icon-button id="map-button" data-testid="map-button">
-            <i class="fa-solid fa-map text-base text-secondary-500"></i>
-          </button>
-        </div>
+        <button mat-icon-button id="map-button" data-testid="map-button">
+          <i class="fa-solid fa-map text-base text-secondary-500"></i>
+        </button>
       </div>
 
       <!--Stations-->
@@ -70,24 +66,24 @@
         *ngFor="let station of stations"
         class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <div>
-          <span class="whitespace-normal font-semibold truncate">{{ station.name }}</span>
-          <p class="text-xs truncate" (click)="openDocsModal(station)">
-            <a> Documents </a>
-          </p>
-        </div>
-
-        <div>
-          <button
-            mat-icon-button
-            id="link-station-button"
-            data-testid="link-station-button"
+        <span class="whitespace-normal truncate">
+          {{ station.name }} <br />
+          <span
+            id="show-documents-{{ station.rithmId }}"
+            [attr.data-testid]="'show-documents-' + station.rithmId"
+            class="whitespace-normal truncate text-xs font-normal"
+            (click)="openDocsModal(station)"
+            ><a>Documents</a></span
           >
-            <i
-              class="fas fa-external-link-alt text-base text-secondary-500"
-            ></i>
-          </button>
-        </div>
+        </span>
+
+        <button
+          mat-icon-button
+          id="link-station-button"
+          data-testid="link-station-button"
+        >
+          <i class="fas fa-external-link-alt text-base text-secondary-500"></i>
+        </button>
       </div>
     </div>
 
