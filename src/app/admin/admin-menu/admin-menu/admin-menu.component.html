@@ -19,7 +19,6 @@
     >
       {{ organizationInfo.name }}
     </p>
-
   </div>
   <div
     *ngIf="failedGetOrganization"
@@ -28,12 +27,10 @@
   >
     <p class="text-error-500">Unable to get organization name.</p>
   </div>
-
 </div>
 <div class="px-8 pt-5 pb-3">
   <hr class="text-secondary-100" />
 </div>
-
 
 <mat-selection-list [multiple]="false" class="admin-menu mt-3">
   <mat-list-option
