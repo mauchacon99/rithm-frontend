@@ -20,6 +20,7 @@
               type="button"
               mat-button
               color="accent"
+              id="file-browser-button"
               data-testid="file-browser-button"
               (click)="uploadFileInput.click()"
             >
@@ -29,6 +30,7 @@
           <input
             #uploadFileInput
             type="file"
+            id="upload-file-input"
             data-testid="upload-file-input"
             [hidden]="true"
           />
