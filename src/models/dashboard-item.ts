@@ -30,4 +30,6 @@ export interface DashboardItem {
   layerIndex?: 1 | 2;
   /** Image for show in widget. */
   image?: string | File | null;
+  /** Image profile for show in widget. */
+  profileImageId?: string | null;
 }
