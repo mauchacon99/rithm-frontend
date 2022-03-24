@@ -139,7 +139,7 @@ export class StationComponent
   connectedStationsLoading = true;
 
   /** Indicates when the button to move the widget will be enabled. */
-  moveInputWidget = false;
+  widgetMoveButton = -1;
 
   constructor(
     private stationService: StationService,
@@ -362,15 +362,6 @@ export class StationComponent
         )) ||
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
-  }
-
-  /**
-   * Display for move button of InputWidget.
-   *
-   * @returns If display the button of move, can be true or false.
-   */
-  get moveButtonWidget(): boolean {
-    return (this.moveInputWidget = !this.moveInputWidget && this.layoutMode);
   }
 
   /**

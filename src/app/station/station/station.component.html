@@ -368,30 +368,26 @@
                     <gridster
                       class="p-0 bg-transparent h-screen"
                       [options]="options"
+                      (mouseenter)="widgetMoveButton = -1"
                     >
                       <gridster-item
                         [item]="widgetItem"
                         [ngClass]="{ 'widget-item-layout': layoutMode }"
-                        class="pt-1 hover:cursor-move"
+                        class="pt-1"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
+                          let i = index;
                           trackBy: trackBy
                         "
+                        (mouseover)="widgetMoveButton = i"
                       >
-                        <div
-                          class="h-gridster relative overflow-hidden"
-                          (mouseover)="(moveButtonWidget)"
-                          (mouseout)="(moveButtonWidget)"
-                        >
+                        <div class="h-gridster relative overflow-hidden">
                           <button
                             mat-icon-button
                             type="button"
                             class="button-drag-handler"
                             data-testid="button-drag-handler"
-                            [ngClass]="{
-                              block: moveInputWidget,
-                              hidden: !moveInputWidget
-                            }"
+                            *ngIf="widgetMoveButton === i && layoutMode"
                           >
                             <i class="fas fa-arrows fa-xl"></i>
                           </button>
