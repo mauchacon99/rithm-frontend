@@ -146,7 +146,6 @@ describe('AdminComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(method).toHaveBeenCalled();
       expect(component.showAdminPortal).toBeDefined();
-      expect(component.showGroupHierarchy).toBeDefined();
     });
   });
 });

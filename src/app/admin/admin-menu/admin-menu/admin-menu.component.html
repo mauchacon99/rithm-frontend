@@ -33,17 +33,15 @@
 </div>
 
 <mat-selection-list [multiple]="false" class="admin-menu mt-3">
-  <div *ngFor="let item of listAdminItemMenu">
-    <mat-list-option
-      class="sm:text-sm truncate"
-      (click)="getItemSelected(item.type)"
-      *ngIf="item.show"
-      [value]="itemSelected"
-      [selected]="item.type === listAdminOptionMenuType.AccountSettings"
-      [id]="item.type"
-      [attr.data-testid]="item.type"
-    >
-      {{ item.name }}
-    </mat-list-option>
-  </div>
+  <mat-list-option
+    class="sm:text-sm truncate"
+    (click)="getItemSelected(item.type)"
+    *ngFor="let item of listAdminItemMenu"
+    [value]="itemSelected"
+    [selected]="item.type === listAdminOptionMenuType.AccountSettings"
+    [id]="item.type"
+    [attr.data-testid]="item.type"
+  >
+    {{ item.name }}
+  </mat-list-option>
 </mat-selection-list>
