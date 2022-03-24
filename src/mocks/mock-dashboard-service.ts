@@ -59,7 +59,7 @@ export class MockDashboardService {
     },
   ];
 
-    /** Data static to preview templates widgets modal and data description component. */
+  /** Data static to preview templates widgets modal and data description component. */
   dataTemplatePreviewWidgetModal = {
     // station data
     [WidgetType.Station]: {
@@ -156,7 +156,11 @@ export class MockDashboardService {
       descriptionComponent: {
         title: '',
         type: '',
-
+        customizable: '',
+        description: ``,
+      },
+    },
+  };
 
   /**
    * Update data of the widget since drawer station.
