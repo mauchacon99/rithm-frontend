@@ -395,9 +395,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       click: false,
       data: {},
     });
-    this.mapService.stationElements = [];
-    this.mapService.stationGroupElements = [];
-    this.mapService.connectionElements = [];
     this.mapService.isDrawerOpened$.next(false);
     this.mapService.mapMode$.next(MapMode.View);
   }
