@@ -180,7 +180,8 @@
               <app-station-widget
                 *ngIf="
                   item.widgetType === widgetType.Station ||
-                  item.widgetType === widgetType.StationTableBanner
+                  item.widgetType === widgetType.StationTableBanner ||
+                  item.widgetType === widgetType.ContainerProfileBanner
                 "
                 (expandWidget)="toggleExpandWidget(index, $event)"
                 [dataWidget]="item.data"
@@ -196,7 +197,8 @@
               <app-document-widget
                 *ngIf="
                   item.widgetType === widgetType.Document ||
-                  item.widgetType === widgetType.DocumentListBanner
+                  item.widgetType === widgetType.DocumentListBanner ||
+                  item.widgetType === widgetType.ContainerProfileBanner
                 "
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
