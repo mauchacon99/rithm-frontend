@@ -5,7 +5,15 @@
 }
 
 .input-search {
-  ::ng-deep .mat-form-field-wrapper {
-    padding: 0;
+  ::ng-deep {
+    .mat-form-field-wrapper {
+      padding: 0;
+    }
+
+    @media (max-width: 760px) {
+      .mat-form-field-infix {
+        width: 100% !important;
+      }
+    }
   }
 }
