@@ -155,6 +155,9 @@ export class MockMapService {
     data: {},
   });
 
+  /** Informs the center station button element whether to show on station selected. */
+  stationCenter$ = new BehaviorSubject(false);
+
   /**
    * Creates a new `MockMapService`.
    *
