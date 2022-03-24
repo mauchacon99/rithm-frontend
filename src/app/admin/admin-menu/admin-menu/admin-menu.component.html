@@ -13,7 +13,11 @@
     id="info-organization"
     class="flex flex-col justify-center items-center w-full"
   >
-    <img src="assets/logo/black-icon-only.svg" class="w-2/4" alt="Logo Rithm" />
+    <img
+      src="assets/logo/black-icon-only.svg"
+      class="max-w-[120px] max-h-[120px]"
+      alt="Logo Rithm"
+    />
 
     <p
       *ngIf="organizationInfo"
@@ -34,7 +38,7 @@
 
 <mat-selection-list [multiple]="false" class="admin-menu mt-3">
   <mat-list-option
-    class="sm:text-sm truncate"
+    class="sm:text-sm text-center sm:text-left truncate"
     (click)="getItemSelected(item.type)"
     *ngFor="let item of listAdminItemMenu"
     [value]="itemSelected"
