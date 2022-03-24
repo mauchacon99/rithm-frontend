@@ -105,8 +105,7 @@ describe('AdminMenuComponent', () => {
   });
 
   it('should show loading organization info while data is loading', () => {
-    const data = '123-123';
-    component['getOrganizationInfo'](data);
+    component['getOrganizationInfo']();
     fixture.detectChanges();
     expect(component.isLoading).toBeTrue();
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
@@ -120,79 +119,5 @@ describe('AdminMenuComponent', () => {
     const spyEmit = spyOn(component.itemMenuSelected, 'emit').and.callThrough();
     component.getItemSelected(itemToEmit);
     expect(spyEmit).toHaveBeenCalledOnceWith(itemToEmit);
-  });
-
-  describe('Testing split.io', () => {
-    let splitService: SplitService;
-    let userService: UserService;
-    beforeEach(() => {
-      splitService = TestBed.inject(SplitService);
-      userService = TestBed.inject(UserService);
-    });
-
-    it('should catch split error ', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      splitService.sdkReady$.error('error');
-      const errorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
-      ).and.callThrough();
-      component.ngOnInit();
-
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
-    });
-
-    it('should get split for group hierarchy menu.', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      const method = spyOn(
-        splitService,
-        'getGroupHierarchyMenuTreatment'
-      ).and.callThrough();
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(method).toHaveBeenCalled();
-    });
-
-    it('should show group hierarchy when split is true', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      const method = spyOn(
-        splitService,
-        'getGroupHierarchyMenuTreatment'
-      ).and.returnValue('on');
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-      const groupMenu = fixture.debugElement.nativeElement.querySelector(
-        '#' + ListAdminOptionMenuType.GroupHierarchy
-      );
-      expect(groupMenu).toBeDefined();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(method).toHaveBeenCalled();
-    });
-
-    it('should not show group hierarchy when split is false', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      const method = spyOn(
-        splitService,
-        'getGroupHierarchyMenuTreatment'
-      ).and.returnValue('off');
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-      const groupMenu = fixture.debugElement.nativeElement.querySelector(
-        '#' + ListAdminOptionMenuType.GroupHierarchy
-      );
-      expect(groupMenu).toBeNull();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(method).toHaveBeenCalled();
-    });
   });
 });

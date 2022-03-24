@@ -147,5 +147,21 @@ describe('AdminComponent', () => {
       expect(method).toHaveBeenCalled();
       expect(component.showAdminPortal).toBeDefined();
     });
+
+    it('should catch split error ', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+      expect(component.showAdminPortal).toBeFalse();
+    });
   });
 });

@@ -2,7 +2,6 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
-import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { OrganizationInfo } from 'src/models';
 import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
@@ -56,7 +55,6 @@ export class AdminMenuComponent implements OnInit {
   ];
 
   constructor(
-    private splitService: SplitService,
     private userService: UserService,
     private errorService: ErrorService,
     private organizationService: OrganizationService
@@ -64,18 +62,17 @@ export class AdminMenuComponent implements OnInit {
 
   /** Get signed in user and information about organization. */
   ngOnInit(): void {
-    this.getOrganizationInfo(this.userService.user.organization);
+    this.getOrganizationInfo();
   }
 
   /**
    * Get information about organization.
    *
-   * @param organizationId String of user organization.
    */
-  private getOrganizationInfo(organizationId: string): void {
+  private getOrganizationInfo(): void {
     this.isLoading = true;
     this.organizationService
-      .getOrganizationInfo(organizationId)
+      .getOrganizationInfo(this.userService.user.organization)
       .pipe(first())
       .subscribe({
         next: (organization) => {
