@@ -20,8 +20,4 @@ export class BodyTextWidgetComponent {
 
   /**Body text value */
   bodyTextValue = '';
-
-  constructor() {
-    /** */
-  }
 }
