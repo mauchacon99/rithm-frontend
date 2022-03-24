@@ -11,7 +11,7 @@ export interface StationGroupData {
   title: string;
 
   /** Sub groups. */
-  subStationGroups: string[];
+  subStationGroups: StationGroupData[];
 
   /** List stations of group. */
   stations: StationListGroup[];
