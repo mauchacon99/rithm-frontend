@@ -13,11 +13,11 @@
   </p>
 </div>
 
-<div class="flex flex-col justify-between">
+<div class="flex flex-col justify-between h-full">
   <div class="w-full grid sm:grid-cols-1 lg:grid-cols-2 items-center gap-3">
     <div class="w-full py-5 md:py-14">
       <span class="font-bold"
-        >{{ dataDescriptionTemplate[widgetTypeWithoutDefault].title }}
+        >{{ dataTemplate[widgetTypeWithoutDefault].descriptionComponent.title }}
       </span>
       <div class="flex border-t border-secondary-100 py-5 mt-2">
         <div class="w-2/4">
@@ -25,7 +25,7 @@
         </div>
         <div class="w-2/4">
           <span class="text-sm">{{
-            dataDescriptionTemplate[widgetTypeWithoutDefault].type
+            dataTemplate[widgetTypeWithoutDefault].descriptionComponent.type
           }}</span>
         </div>
       </div>
@@ -36,7 +36,8 @@
         </div>
         <div class="w-2/4">
           <span class="text-sm">{{
-            dataDescriptionTemplate[widgetTypeWithoutDefault].customizable
+            dataTemplate[widgetTypeWithoutDefault].descriptionComponent
+              .customizable
           }}</span>
         </div>
       </div>
@@ -47,7 +48,8 @@
         </div>
         <div class="w-2/4">
           <span class="text-sm">{{
-            dataDescriptionTemplate[widgetTypeWithoutDefault].description
+            dataTemplate[widgetTypeWithoutDefault].descriptionComponent
+              .description
           }}</span>
         </div>
       </div>
