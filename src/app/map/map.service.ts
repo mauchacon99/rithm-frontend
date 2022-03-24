@@ -482,6 +482,15 @@ export class MapService {
       isReadOnlyRootStationGroup: false,
     });
 
+    //Update the name of station group to newly edited one, if it's changed by user
+    const createStationGroup = this.stationGroupElements.find(
+      (group) =>
+        group.status === MapItemStatus.Pending && group.title !== 'Pending'
+    );
+    if (createStationGroup) {
+      newGroup.title = createStationGroup.title;
+    }
+
     if (this.mapMode$.value === MapMode.StationGroupEdit) {
       const editStationGroup = this.stationGroupElements.find(
         (group) => group.status === MapItemStatus.Pending
@@ -1755,13 +1764,15 @@ export class MapService {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
-    //If there are still stations or station group with status not normal, return true.
+    //If there are still stations or station group with status not normal and not Pending, return true.
     return (
       this.stationElements.some(
         (station) => station.status !== MapItemStatus.Normal
       ) ||
       this.stationGroupElements.some(
-        (stationGroup) => stationGroup.status !== MapItemStatus.Normal
+        (stationGroup) =>
+          stationGroup.status !== MapItemStatus.Normal &&
+          stationGroup.status !== MapItemStatus.Pending
       )
     );
   }
@@ -1804,11 +1815,31 @@ export class MapService {
       throw new Error(`There is not any station group with this rithmId.`);
     }
     if (this.mapMode$.value === MapMode.StationGroupAdd) {
-      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      //If group name is already changed from "Pending" assign updated one else set "Untitled Group"
+      this.stationGroupElements[stationGroupIndex].title =
+        this.stationGroupElements[stationGroupIndex].title === 'Pending' ||
+        this.stationGroupElements[stationGroupIndex].title === '' ||
+        !this.stationGroupElements[stationGroupIndex].title
+          ? 'Untitled Group'
+          : this.stationGroupElements[stationGroupIndex].title;
       this.stationGroupElements[stationGroupIndex].status =
         MapItemStatus.Created;
+      //If edited group already present in storedStationGroupElements, then it's the one which is already created
+      //so set it's status to Updated, else Created
     } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+      if (
+        this.storedStationGroupElements.some(
+          (group) =>
+            group.rithmId ===
+            this.stationGroupElements[stationGroupIndex].rithmId
+        )
+      ) {
+        this.stationGroupElements[stationGroupIndex].status =
+          MapItemStatus.Updated;
+      } else {
+        this.stationGroupElements[stationGroupIndex].status =
+          MapItemStatus.Created;
+      }
     }
 
     this.resetSelectedStationGroupStationStatus();
