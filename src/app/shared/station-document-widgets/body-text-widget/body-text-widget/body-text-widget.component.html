@@ -1,9 +1,5 @@
 <ng-container *ngIf="stationViewMode === 'edit'; else previewMode">
-  <div
-    class="min-h-full"
-    cdkDropList
-    [id]="'bodyTextWidget-' + id"
-  >
+  <div class="min-h-full" cdkDropList [id]="'bodyTextWidget-' + id">
     <textarea
       matInput
       class="p-1 min-w-full"

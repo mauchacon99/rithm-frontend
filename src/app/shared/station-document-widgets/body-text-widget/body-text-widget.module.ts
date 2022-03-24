@@ -5,10 +5,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [BodyTextWidgetComponent],
-  imports: [
-    CommonModule,
-    DragDropModule,
-  ],
+  imports: [CommonModule, DragDropModule],
   exports: [BodyTextWidgetComponent],
 })
 export class BodyTextWidgetModule {}

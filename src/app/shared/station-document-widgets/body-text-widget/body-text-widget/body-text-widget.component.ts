@@ -9,7 +9,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./body-text-widget.component.scss'],
 })
 export class BodyTextWidgetComponent {
-
   /** The mode to display fields inside the widget. */
   @Input() widgetMode = 'layout';
 
@@ -22,7 +21,7 @@ export class BodyTextWidgetComponent {
   /**Body text value */
   bodyTextValue = '';
 
-  constructor(){
+  constructor() {
     /** */
   }
 }

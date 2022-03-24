@@ -1,12 +1,11 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { BodyTextWidgetComponent } from "./body-text-widget.component";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BodyTextWidgetComponent } from './body-text-widget.component';
 
-describe('BodyTextWidgetComponent', ()=>{
+describe('BodyTextWidgetComponent', () => {
   let component: BodyTextWidgetComponent;
   let fixture: ComponentFixture<BodyTextWidgetComponent>;
 
-
-  beforeEach(async() =>{
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [BodyTextWidgetComponent],
     }).compileComponents();
@@ -18,7 +17,7 @@ describe('BodyTextWidgetComponent', ()=>{
     fixture.detectChanges();
   });
 
-  it('should create', ()=>{
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
