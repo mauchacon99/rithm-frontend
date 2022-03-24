@@ -54,11 +54,17 @@
         *ngFor="let subStation of subStationGroupData"
         class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <span class="whitespace-normal truncate"> {{ subStation.title }}</span>
+        <div>
+          <span class="whitespace-normal font-semibold truncate">
+            {{ subStation.title }}</span
+          >
+        </div>
 
-        <button mat-icon-button id="map-button" data-testid="map-button">
-          <i class="fa-solid fa-map text-base text-secondary-500"></i>
-        </button>
+        <div>
+          <button mat-icon-button id="map-button" data-testid="map-button">
+            <i class="fa-solid fa-map text-base text-secondary-500"></i>
+          </button>
+        </div>
       </div>
 
       <!--Stations-->
@@ -66,20 +72,29 @@
         *ngFor="let station of stations"
         class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <span class="whitespace-normal truncate"> {{ station.name }}</span>
+        <div>
+          <span class="whitespace-normal font-semibold truncate">{{ station.name }}</span>
+          <p class="text-xs truncate" (click)="openDocsModal(station)">
+            <a> Documents </a>
+          </p>
+        </div>
 
-        <button
-          mat-icon-button
-          id="link-station-button"
-          data-testid="link-station-button"
-        >
-          <i class="fas fa-external-link-alt text-base text-secondary-500"></i>
-        </button>
+        <div>
+          <button
+            mat-icon-button
+            id="link-station-button"
+            data-testid="link-station-button"
+          >
+            <i
+              class="fas fa-external-link-alt text-base text-secondary-500"
+            ></i>
+          </button>
+        </div>
       </div>
     </div>
 
     <ng-template #stationGroupsEmpty>
-      <div id="station-group-empty" class="text-sm text-center p-3">
+      <div id="station-group-empty" class="text-sm text-center">
         No stations and sub groups found in this group.
       </div>
     </ng-template>
