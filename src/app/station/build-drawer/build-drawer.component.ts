@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-debugger */
 import {
   Component,
   Output,
@@ -9,7 +7,7 @@ import {
   Input,
 } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
-import { CustomField, InputFrameWidget, QuestionFieldType } from 'src/models';
+import { CustomField, QuestionFieldType } from 'src/models';
 
 /**
  *
@@ -27,7 +25,7 @@ export class BuildDrawerComponent implements OnInit {
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
 
   /** Event Emitter Will add a new input frame in the station grid. */
-  @Output() addInputFrame: EventEmitter<InputFrameWidget> = new EventEmitter();
+  @Output() addInputFrame: EventEmitter<void> = new EventEmitter();
 
   /** The station id used to get previous fields. */
   @Input() stationId!: string;
@@ -140,68 +138,6 @@ export class BuildDrawerComponent implements OnInit {
     },
   ];
 
-  inputFrame: InputFrameWidget = {
-    frameRithmId: '',
-    cols: 6,
-    rows: 4,
-    x: 0,
-    y: 0,
-    minItemRows: 4,
-    minItemCols: 6,
-    questions: [],
-    type: '',
-    data: '',
-    id: 0,
-  };
-
-  bodyText: InputFrameWidget = {
-    frameRithmId: '',
-    cols: 6,
-    rows: 4,
-    x: 0,
-    y: 0,
-    minItemRows: 4,
-    minItemCols: 6,
-    questions: [],
-    type: 'body',
-    data: '',
-    id: 0,
-  };
-
-  componentList = [
-    {
-      prompt: 'Title',
-      icon: 'fa-solid fa-font',
-    },
-    {
-      prompt: 'Short Text',
-      icon: 'fa-solid fa-font',
-    },
-  ];
-
-  /** Custom fields to form input category data. */
-
-  customFieldsComponent = [
-    {
-      prompt: 'Headline',
-      icon: 'fa-solid fa-h1',
-      dataTestId: 'add-headline',
-      type: 'h1',
-    },
-    {
-      prompt: 'Title',
-      icon: 'fa-solid fa-h2',
-      dataTestId: 'add-title',
-      type: 'h2',
-    },
-    {
-      prompt: 'Body Text',
-      icon: 'fa-regular fa-paragraph',
-      dataTestId: 'body-text',
-      type: 'body',
-    },
-  ];
-
   constructor(private changeDetector: ChangeDetectorRef) {}
 
   /**
@@ -229,25 +165,8 @@ export class BuildDrawerComponent implements OnInit {
 
   /**
    * Will add a new input frame in the station grid.
-   *
-   * @param type Type element selected.
    */
-  addNewInputFrame(type: string): void {
-    console.log('Getting into drawer addnewInputFrame');
-    // debugger;
-    const inputFrame: InputFrameWidget = {
-      frameRithmId: '',
-      cols: 6,
-      rows: 4,
-      x: 0,
-      y: 0,
-      minItemRows: 4,
-      minItemCols: 6,
-      questions: [],
-      type: type,
-      data: '',
-      id: 0,
-    };
-    this.addInputFrame.emit(inputFrame);
+  addNewInputFrame(): void {
+    this.addInputFrame.emit();
   }
 }
