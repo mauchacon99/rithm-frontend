@@ -1,0 +1,11 @@
+@import 'variables';
+
+.color-border {
+  border-color: map-get($primary-palette, 50);
+}
+
+.input-search {
+  ::ng-deep .mat-form-field-wrapper {
+    padding: 0;
+  }
+}

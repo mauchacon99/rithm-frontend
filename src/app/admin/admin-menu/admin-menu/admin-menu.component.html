@@ -1,1 +1,47 @@
-<p>admin-menu works!</p>
+<!-- Header information of the organization. -->
+<div
+  class="h-[170px] lg:h-[200px] w-full border-b-2 color-border flex flex-col justify-center items-center"
+>
+  <div *ngIf="isLoading">
+    <app-loading-indicator
+      id="organization-name-loading"
+    ></app-loading-indicator>
+  </div>
+
+  <div
+    *ngIf="!failedGetOrganization && !isLoading"
+    id="info-organization"
+    class="flex flex-col justify-center items-center w-full"
+  >
+    <img src="assets/logo/black-icon-only.svg" class="w-2/4" alt="Logo Rithm" />
+
+    <p
+      *ngIf="organizationInfo"
+      class="font-semibold truncate text-center text-base mt-2 w-11/12"
+    >
+      {{ organizationInfo.name }}
+    </p>
+  </div>
+
+  <div
+    *ngIf="failedGetOrganization"
+    id="failed-info-organization"
+    class="w-11/12"
+  >
+    <p class="text-error-500">Unable to get organization name.</p>
+  </div>
+</div>
+
+<mat-selection-list [multiple]="false" class="admin-menu mt-3">
+  <mat-list-option
+    class="sm:text-sm truncate"
+    (click)="getItemSelected(item.type)"
+    *ngFor="let item of listAdminItemMenu"
+    [value]="itemSelected"
+    [selected]="item.type === listAdminOptionMenuType.AccountSettings"
+    [id]="item.type"
+    [attr.data-testid]="item.type"
+  >
+    {{ item.name }}
+  </mat-list-option>
+</mat-selection-list>
