@@ -291,7 +291,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     return (
       (this.sidenavDrawerService.isDrawerOpen &&
         this.drawerMode === 'stationInfo') ||
-      this.drawerMode === 'stationGroupInfo'
+      (this.sidenavDrawerService.isDrawerOpen &&
+        this.drawerMode === 'stationGroupInfo')
     );
   }
 
