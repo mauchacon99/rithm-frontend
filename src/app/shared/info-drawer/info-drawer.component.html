@@ -13,6 +13,9 @@
       *ngIf="drawerMode === 'documentInfo'"
     ></app-document-info-drawer>
     <app-history-drawer *ngIf="drawerMode === 'history'"></app-history-drawer>
+    <app-setting-drawer
+      *ngIf="drawerMode === 'fieldSetting'"
+    ></app-setting-drawer>
   </div>
   <div
     class="flex justify-center items-center border-t border-solid border-secondary-100 h-16"
