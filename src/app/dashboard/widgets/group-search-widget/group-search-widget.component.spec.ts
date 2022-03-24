@@ -238,4 +238,21 @@ describe('GroupSearchWidgetComponent', () => {
       expectData
     );
   });
+
+  it('should not show modal when edit mode is active', () => {
+    component.editMode = true;
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: dataStationGroupWidget.stations[0].name,
+        stationId: dataStationGroupWidget.stations[0].rithmId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openDocsModal(dataStationGroupWidget.stations[0]);
+    expect(spyModal).not.toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
+  });
 });

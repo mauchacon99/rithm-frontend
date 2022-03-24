@@ -112,12 +112,14 @@ export class GroupSearchWidgetComponent implements OnInit {
    * @param station Station specific for render modal and documents.
    */
   openDocsModal(station: StationListGroup): void {
-    this.dialog.open(StationDocumentsModalComponent, {
-      minWidth: '370px',
-      data: {
-        stationName: station.name,
-        stationId: station.rithmId,
-      },
-    });
+    if (!this.editMode) {
+      this.dialog.open(StationDocumentsModalComponent, {
+        minWidth: '370px',
+        data: {
+          stationName: station.name,
+          stationId: station.rithmId,
+        },
+      });
+    }
   }
 }
