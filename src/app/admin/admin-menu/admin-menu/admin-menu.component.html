@@ -1,7 +1,5 @@
 <!-- Header information of the organization. -->
-<div
-  class="h-[170px] lg:h-[200px] w-full border-b-2 color-border flex flex-col justify-center items-center"
->
+<div class="pt-5 color-border flex flex-col justify-center items-center">
   <div *ngIf="isLoading">
     <app-loading-indicator
       id="organization-name-loading"
@@ -11,7 +9,7 @@
   <div
     *ngIf="!failedGetOrganization && !isLoading"
     id="info-organization"
-    class="flex flex-col justify-center items-center w-full"
+    class="flex flex-col justify-center items-center"
   >
     <img src="assets/logo/black-icon-only.svg" class="w-2/4" alt="Logo Rithm" />
 
@@ -22,7 +20,6 @@
       {{ organizationInfo.name }}
     </p>
   </div>
-
   <div
     *ngIf="failedGetOrganization"
     id="failed-info-organization"
@@ -30,6 +27,9 @@
   >
     <p class="text-error-500">Unable to get organization name.</p>
   </div>
+</div>
+<div class="px-8 pt-5 pb-3">
+  <hr class="text-secondary-100" />
 </div>
 
 <mat-selection-list [multiple]="false" class="admin-menu mt-3">
