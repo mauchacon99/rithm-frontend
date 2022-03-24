@@ -39,7 +39,7 @@
   </div>
 
   <div
-    class="scrollbar overflow-scroll h-full w-full container-group mt-5"
+    class="scrollbar overflow-scroll h-full w-full container-group mt-5 border-t border-secondary-100"
     *ngIf="dataStationGroup"
   >
     <div
@@ -52,7 +52,7 @@
       <!--subStations-->
       <div
         *ngFor="let subStation of subStationGroupData"
-        class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
+        class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
       >
         <span class="whitespace-normal truncate"> {{ subStation.title }}</span>
 
@@ -64,7 +64,7 @@
       <!--Stations-->
       <div
         *ngFor="let station of stations"
-        class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
+        class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
       >
         <span class="whitespace-normal truncate">
           {{ station.name }} <br />
