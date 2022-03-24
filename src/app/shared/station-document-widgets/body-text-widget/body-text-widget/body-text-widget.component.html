@@ -7,7 +7,7 @@
       spellcheck="true"
       [value]="bodyTextValue"
       [id]="'bodyTextWidgetTextArea' + id"
-      data-testid="bodyTextWidget"
+      [attr.data-testid]="'bodyTextWidget' + id"
     >
     </textarea>
   </div>
@@ -20,7 +20,7 @@
     spellcheck="true"
     [value]="bodyTextValue"
     [id]="'bodyTextWidgetTextArea' + id"
-    data-testid="bodyTextWidget"
+    [attr.data-testid]="'bodyTextWidget' + id"
   >
   </textarea>
 </ng-template>
