@@ -397,6 +397,7 @@
                             [stationViewMode]="editMode ? 'edit' : 'preview'"
                             [stationRithmId]="stationRithmId"
                             [id]="widgetItem.id"
+                            [ngClass]="{ 'hover:cursor-move': layoutMode }"
                           ></app-input-frame-widget>
                         </div>
                       </gridster-item>
