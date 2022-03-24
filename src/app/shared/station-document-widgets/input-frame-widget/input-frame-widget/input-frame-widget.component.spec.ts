@@ -66,4 +66,10 @@ describe('InputFrameWidgetComponent', () => {
       expect(spyDrag).toHaveBeenCalledOnceWith(cdkEvent);
     });
   });
+
+  it('should emit event toggleRightDrawer', () => {
+    const spyEmit = spyOn(component.toggleRightDrawer, 'emit');
+    component.openSettingDrawer();
+    expect(spyEmit).toHaveBeenCalled();
+  });
 });
