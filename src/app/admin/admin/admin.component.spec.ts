@@ -72,7 +72,7 @@ describe('AdminComponent', () => {
     });
 
     it('should get split for Admin Portal.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
@@ -92,7 +92,7 @@ describe('AdminComponent', () => {
     });
 
     it('should show Admin Portal when permission exits.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
@@ -113,7 +113,7 @@ describe('AdminComponent', () => {
     });
 
     it('should not show Admin Portal when permission does not exits.', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       const method = spyOn(
@@ -133,20 +133,20 @@ describe('AdminComponent', () => {
       expect(component.showAdminPortal).toBeFalse();
     });
 
-    it('should catch split error ', () => {
+    it('should get split for group hierarchy menu.', () => {
       const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
-      splitService.sdkReady$.error('error');
-      const errorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
+      const method = spyOn(
+        splitService,
+        'getGroupHierarchyMenuTreatment'
       ).and.callThrough();
+      splitService.sdkReady$.next();
       component.ngOnInit();
-
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
-      expect(component.showAdminPortal).toBeFalse();
+      expect(method).toHaveBeenCalled();
+      expect(component.showAdminPortal).toBeDefined();
+      expect(component.showGroupHierarchy).toBeDefined();
     });
   });
 });
