@@ -139,6 +139,9 @@ export class StationComponent
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -526,6 +529,7 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = stationQuestions as Question[];
           }
+          this.popupService.notify('Station successfully saved');
         },
         error: (error: unknown) => {
           this.stationLoading = false;
