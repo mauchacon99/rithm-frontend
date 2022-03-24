@@ -1404,7 +1404,10 @@ export class MapService {
         //Reset properties that mark that more centering needs to happen.
         this.centerActive$.next(false);
         this.centerCount$.next(0);
-        if (panType === CenterPanType.Station) {
+        if (
+          panType === CenterPanType.Station ||
+          panType === CenterPanType.StationGroup
+        ) {
           this.stationCenter$.next(true);
         }
       }
