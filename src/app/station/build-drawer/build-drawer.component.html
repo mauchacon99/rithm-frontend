@@ -43,7 +43,7 @@
       <div
         cdkDrag
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
-        (click)="addNewInputFrame()"
+        (cdkDragStarted)="addNewInputFrame('input-frame')"
         data-testid="input-frame-item"
       >
         <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
@@ -98,6 +98,27 @@
           <!-- Options here -->
         </mat-expansion-panel>
       </mat-accordion>
+    </div>
+    <div
+      *ngSwitchCase="'Components'"
+      id="input-frame-container"
+      data-testid="input-frame-container"
+      cdkDropList
+      cdkDropListConnectedTo="station-grid"
+      #customFieldsContainer="cdkDropList"
+    >
+      <div
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
+        data-testid="custom-fields-item"
+        *ngFor="let field of customFieldsComponent"
+        cdkDrag
+        (cdkDragStarted)="addNewInputFrame(field.type)"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ field.prompt }}
+        </p>
+        <span class="{{ field.icon }} fa-lg ml-auto"></span>
+      </div>
     </div>
   </section>
 </div>

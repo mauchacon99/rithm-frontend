@@ -1,3 +1,5 @@
+/* eslint-disable no-debugger */
+/* eslint-disable no-console */
 import {
   Component,
   OnDestroy,
@@ -111,6 +113,9 @@ export class StationComponent
 
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
+
+  /**Current input frame manipulated. */
+  currentInputFrame?: InputFrameWidget;
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -795,23 +800,23 @@ export class StationComponent
 
   /**
    * Will add a new input frame in the station grid.
+   *
+   * @param inputFrame Reference to the component included on inputFrameWidgetItems.
    */
-  addInputFrame(): void {
-    const inputFrame: InputFrameWidget = {
-      frameRithmId: '',
-      cols: 6,
-      rows: 4,
-      x: 0,
-      y: 0,
-      minItemRows: 4,
-      minItemCols: 6,
-      questions: [],
-      type: '',
-      data: '',
+  addInputFrame(inputFrame: InputFrameWidget): void {
+    this.currentInputFrame = {
+      ...inputFrame,
       id: this.inputFrameWidgetItems.length,
     };
-    this.inputFrameWidgetItems.push(inputFrame);
-    this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
+  }
+
+  /**
+   * Interaction with grid.
+   */
+  addInputFrameOnGrid(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.inputFrameWidgetItems.push(this.currentInputFrame!);
+    this.inputFrameList.push('inputFrameWidget-' + this.currentInputFrame?.id);
   }
 
   /**
