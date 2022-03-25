@@ -39,7 +39,8 @@
       class="border-t border-solid border-secondary-100 py-5 pl-5"
       *ngIf="
         (widgetType === widgetTypeEnum.StationTableBanner ||
-          widgetType === widgetTypeEnum.DocumentListBanner) &&
+          widgetType === widgetTypeEnum.DocumentListBanner ||
+          widgetType === widgetTypeEnum.ContainerProfileBanner) &&
         showImageBanner
       "
       id="section-image-banner"
