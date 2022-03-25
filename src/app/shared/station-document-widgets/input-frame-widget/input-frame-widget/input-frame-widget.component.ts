@@ -1,9 +1,9 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   CdkDragDrop,
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { Component, Input } from '@angular/core';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -19,7 +19,7 @@ export class InputFrameWidgetComponent {
   @Input() fields!: Question[];
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode = 'layout';
+  @Input() widgetMode!: 'layout' | 'setting';
 
   /** Whether the station is in editMode or previewMode. */
   @Input() stationViewMode!: 'edit' | 'preview';
@@ -32,6 +32,9 @@ export class InputFrameWidgetComponent {
 
   /** The list of questionFieldTypes. */
   fieldTypes = QuestionFieldType;
+
+  /** Event Emitter will open a configuration drawer on the right side of the station. */
+  @Output() toggleRightDrawer: EventEmitter<void> = new EventEmitter();
 
   /**
    * Add the element draggable to the questions field.
@@ -123,5 +126,12 @@ export class InputFrameWidgetComponent {
       addressChildren.push(child);
     });
     return addressChildren;
+  }
+
+  /**
+   * Open setting drawer.
+   */
+  openSettingDrawer(): void {
+    this.toggleRightDrawer.emit();
   }
 }
