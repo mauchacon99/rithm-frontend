@@ -9,13 +9,17 @@
   <div
     *ngIf="!failedGetOrganization && !isLoading"
     id="info-organization"
-    class="flex flex-col justify-center items-center"
+    class="w-full flex flex-col justify-center items-center"
   >
-    <img src="assets/logo/black-icon-only.svg" class="w-2/4" alt="Logo Rithm" />
+    <img
+      src="assets/logo/black-icon-only.svg"
+      class="max-w-[120px] max-h-[120px]"
+      alt="Logo Rithm"
+    />
 
     <p
       *ngIf="organizationInfo"
-      class="font-semibold truncate text-center text-base mt-2 w-11/12"
+      class="font-semibold truncate text-center text-base mt-2 w-11/12 whitespace-normal"
     >
       {{ organizationInfo.name }}
     </p>
@@ -34,7 +38,7 @@
 
 <mat-selection-list [multiple]="false" class="admin-menu mt-3">
   <mat-list-option
-    class="sm:text-sm truncate"
+    class="sm:text-sm text-center md:text-left truncate"
     (click)="getItemSelected(item.type)"
     *ngFor="let item of listAdminItemMenu"
     [value]="itemSelected"
