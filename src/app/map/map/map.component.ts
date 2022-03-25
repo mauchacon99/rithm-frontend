@@ -16,6 +16,10 @@ export class MapComponent {
     private mapService: MapService,
     private errorService: ErrorService
   ) {
+    //To resolve Map is initially persisted across sessions between different user.
+    this.mapService.stationElements = [];
+    this.mapService.stationGroupElements = [];
+    this.mapService.connectionElements = [];
     //Subscribe to getMapData so that we can update the map with the data.
     this.mapService
       .getMapData()

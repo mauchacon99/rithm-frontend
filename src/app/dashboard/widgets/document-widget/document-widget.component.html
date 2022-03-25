@@ -16,12 +16,23 @@
   *ngIf="!isLoading && !failedLoadWidget"
   class="w-full h-full"
   [ngClass]="{
-    'container-document': widgetType === typesWidget.DocumentListBanner
+    'container-document-banner-image':
+      widgetType === typesWidget.DocumentListBanner,
+    'container-document-banner-profile':
+      widgetType === typesWidget.ContainerProfileBanner
   }"
 >
   <!--  Banner image-->
-  <ng-container *ngIf="widgetType === typesWidget.DocumentListBanner">
-    <app-banner-image-widget [image]="image"></app-banner-image-widget>
+  <ng-container
+    *ngIf="
+      widgetType === typesWidget.DocumentListBanner ||
+      widgetType === typesWidget.ContainerProfileBanner
+    "
+  >
+    <app-banner-image-widget
+      [widgetType]="widgetType"
+      [image]="image"
+    ></app-banner-image-widget>
   </ng-container>
 
   <!-- Header widget -->

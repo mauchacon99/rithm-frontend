@@ -614,7 +614,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Reporting if the name or notes on a station changed.
    */
   reportNewStationMapChange(): void {
-    if (this.stationNotes === undefined) {
+    if (this.mapMode === MapMode.Build && this.stationNotes === undefined) {
       throw new Error('Station notes not found');
     }
     const openStation = this.mapService.stationElements.find(
@@ -624,7 +624,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       throw new Error('Station was not found.');
     }
     openStation.stationName = this.stationName;
-    openStation.notes = this.stationNotes;
+    openStation.notes = this.stationNotes ? this.stationNotes : '';
     openStation.markAsUpdated();
     this.mapService.stationElementsChanged$.next(true);
   }

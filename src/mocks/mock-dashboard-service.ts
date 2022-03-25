@@ -131,6 +131,7 @@ export class MockDashboardService {
         Values can be optionally be hidden from on the widget in needed.`,
       },
     },
+    // Group
     [WidgetType.StationGroupSearch]: {
       title: 'Search',
       description: `User can query all the values saved on documents within a flow. By default the search results display the document
@@ -141,6 +142,17 @@ export class MockDashboardService {
         customizable: 'Search result values',
         description: `User can query all the values saved on documents within a flow. By default the search results display the document
         name and the field that matches your search.`,
+      },
+    },
+    // Profile widget document banner.
+    [WidgetType.ContainerProfileBanner]: {
+      title: '',
+      description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
       },
     },
   };
