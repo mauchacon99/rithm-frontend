@@ -1927,7 +1927,7 @@ export class MapService {
     if (panType === CenterPanType.StationGroup) {
       return (
         Math.abs(adjustCenter.x - canvasPoint.x) <= 1 &&
-        adjustCenter.y - canvasPoint.y <= 1
+        Math.abs(adjustCenter.y - canvasPoint.y) <= 1
       );
     }
     return adjustCenter.x === canvasPoint.x && adjustCenter.y === canvasPoint.y;
