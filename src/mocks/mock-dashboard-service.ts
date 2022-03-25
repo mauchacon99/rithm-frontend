@@ -71,7 +71,7 @@ export class MockDashboardService {
         type: 'Station Template',
         customizable: 'Table Columns',
         description: `By default. the table has a single column showing each document in your selected station.
-        Custom banner images can also be added to the widget`,
+          Custom banner images can also be added to the widget`,
       },
     },
     [WidgetType.StationTableBanner]: {
@@ -83,7 +83,7 @@ export class MockDashboardService {
         type: 'Station Template',
         customizable: 'Table Columns & Image',
         description: `By default. the table has a single column showing each document in your selected station.
-        Additional columns of data can be added as desired. Custom banner     images can also be added to the widget`,
+          Additional columns of data can be added as desired. Custom banner     images can also be added to the widget`,
       },
     },
     // groups data
@@ -117,7 +117,7 @@ export class MockDashboardService {
         type: 'Document Template',
         customizable: 'List Values & Image',
         description: `Upload an image from the container to display as a banner image.
-        List values can also be optionally hidden from on the widget as needed.`,
+          List values can also be optionally hidden from on the widget as needed.`,
       },
     },
     [WidgetType.Document]: {
@@ -128,31 +128,33 @@ export class MockDashboardService {
         type: 'Document Template',
         customizable: 'List Values',
         description: `By default, the list widget displays all of the values associated with a document.
-        Values can be optionally be hidden from on the widget in needed.`,
+          Values can be optionally be hidden from on the widget in needed.`,
       },
     },
     // Group
     [WidgetType.StationGroupSearch]: {
       title: 'Search',
       description: `User can query all the values saved on documents within a flow. By default the search results display the document
-      name and the field that matches your search.`,
+        name and the field that matches your search.`,
       descriptionComponent: {
         title: 'Search Widget',
         type: 'Group Template',
         customizable: 'Search result values',
         description: `User can query all the values saved on documents within a flow. By default the search results display the document
-        name and the field that matches your search.`,
+          name and the field that matches your search.`,
       },
     },
     // Profile widget document banner.
     [WidgetType.ContainerProfileBanner]: {
-      title: '',
-      description: '',
+      title: 'Profile With Banner Image',
+      description:
+        'Display an image uploaded to the container along with a banner image.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'List Widget',
+        type: 'Document Template',
+        customizable: 'List values & Image',
+        description: `Select an image from the container to display as a profile image, and upload a banner image of your choice.
+          List values can also be optionally hidden from on the widget as needed.`,
       },
     },
   };
