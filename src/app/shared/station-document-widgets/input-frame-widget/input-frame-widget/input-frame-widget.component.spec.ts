@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { InputFrameWidgetComponent } from './input-frame-widget.component';
 
 import {
@@ -13,6 +12,17 @@ import { of } from 'rxjs';
 describe('InputFrameWidgetComponent', () => {
   let component: InputFrameWidgetComponent;
   let fixture: ComponentFixture<InputFrameWidgetComponent>;
+  const firstList: Question[] = [
+    {
+      prompt: 'Fake question 1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -34,17 +44,6 @@ describe('InputFrameWidgetComponent', () => {
   describe('TestDragDropElements', () => {
     it('should call the method addElementDrag', async () => {
       const secondList: Question[] = [];
-      const firstList: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
 
       const cdkEvent = {
         container: { data: firstList, id: 'form-inputs' },
@@ -69,7 +68,8 @@ describe('InputFrameWidgetComponent', () => {
 
   it('should emit event toggleRightDrawer', () => {
     const spyEmit = spyOn(component.toggleRightDrawer, 'emit');
-    component.openSettingDrawer();
-    expect(spyEmit).toHaveBeenCalled();
+    const field = firstList[0];
+    component.openSettingDrawer(field);
+    expect(spyEmit).toHaveBeenCalledWith(field);
   });
 });

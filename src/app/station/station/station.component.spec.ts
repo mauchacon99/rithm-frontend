@@ -795,8 +795,8 @@ describe('StationComponent', () => {
 
   it('should call sidenavService and display setting drawer', () => {
     const spyDrawer = spyOn(TestBed.inject(SidenavDrawerService), 'openDrawer');
-    component.openRightDrawer();
-    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting');
+    component.openRightDrawer(question);
+    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting', question);
   });
 
   it('should add a new input frame widget to the array of input frames', () => {

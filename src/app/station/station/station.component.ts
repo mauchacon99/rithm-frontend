@@ -827,9 +827,11 @@ export class StationComponent
 
   /**
    * Toggles the open state of the right setting drawer.
+   *
+   * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openRightDrawer(): void {
-    this.sidenavDrawerService.openDrawer('fieldSetting');
+  openRightDrawer(field: Question): void {
+    this.sidenavDrawerService.openDrawer('fieldSetting', field);
   }
 
   /**
