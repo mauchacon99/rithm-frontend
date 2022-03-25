@@ -17,7 +17,7 @@ export class MapStationGroupHelper {
   /** An array that stores a backup of stationGroupElements when buildMap is called. */
   storedStationGroupElements: StationGroupMapElement[] = [];
 
-  constructor(private mapHelper: MapHelper) {}
+  constructor(private mapHelper: MapHelper) { }
 
   /**
    * Validates that station groups belong to exactly one immediate parent station group.
@@ -153,6 +153,15 @@ export class MapStationGroupHelper {
       isChained: false,
       isReadOnlyRootStationGroup: false,
     });
+
+    //Update the name of station group to newly edited one, if it's changed by user
+    const createStationGroup = this.stationGroupElements.find(
+      (group) =>
+        group.status === MapItemStatus.Pending && group.title !== 'Pending'
+    );
+    if (createStationGroup) {
+      newGroup.title = createStationGroup.title;
+    }
 
     if (this.mapHelper.mapMode$.value === MapMode.StationGroupEdit) {
       const editStationGroup = this.stationGroupElements.find(
@@ -508,11 +517,31 @@ export class MapStationGroupHelper {
       throw new Error(`There is not any station group with this rithmId.`);
     }
     if (this.mapHelper.mapMode$.value === MapMode.StationGroupAdd) {
-      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      //If group name is already changed from "Pending" assign updated one else set "Untitled Group"
+      this.stationGroupElements[stationGroupIndex].title =
+        this.stationGroupElements[stationGroupIndex].title === 'Pending' ||
+          this.stationGroupElements[stationGroupIndex].title === '' ||
+          !this.stationGroupElements[stationGroupIndex].title
+          ? 'Untitled Group'
+          : this.stationGroupElements[stationGroupIndex].title;
       this.stationGroupElements[stationGroupIndex].status =
         MapItemStatus.Created;
+      //If edited group already present in storedStationGroupElements, then it's the one which is already created
+      //so set it's status to Updated, else Created
     } else if (this.mapHelper.mapMode$.value === MapMode.StationGroupEdit) {
-      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+      if (
+        this.storedStationGroupElements.some(
+          (group) =>
+            group.rithmId ===
+            this.stationGroupElements[stationGroupIndex].rithmId
+        )
+      ) {
+        this.stationGroupElements[stationGroupIndex].status =
+          MapItemStatus.Updated;
+      } else {
+        this.stationGroupElements[stationGroupIndex].status =
+          MapItemStatus.Created;
+      }
     }
 
     this.resetSelectedStationGroupStationStatus(stationHelper);

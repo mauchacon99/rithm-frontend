@@ -142,10 +142,13 @@ export class MapService {
   /** The Station Group Helper. */
   mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
 
+  /** Informs the center station button element whether to show on station selected. */
+  stationCenter$ = new BehaviorSubject(false);
+
   /** The copy of station group which is being edited. */
   tempStationGroup$ = new BehaviorSubject({});
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Getter The stations groups Elements.
@@ -664,6 +667,9 @@ export class MapService {
         //Reset properties that mark that more centering needs to happen.
         this.centerActive$.next(false);
         this.centerCount$.next(0);
+        if (panType === CenterPanType.Station) {
+          this.stationCenter$.next(true);
+        }
       }
     };
 
@@ -818,13 +824,15 @@ export class MapService {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
-    //If there are still stations or station group with status not normal, return true.
+    //If there are still stations or station group with status not normal and not Pending, return true.
     return (
       this.stationElements.some(
         (station) => station.status !== MapItemStatus.Normal
       ) ||
       this.stationGroupElements.some(
-        (stationGroup) => stationGroup.status !== MapItemStatus.Normal
+        (stationGroup) =>
+          stationGroup.status !== MapItemStatus.Normal &&
+          stationGroup.status !== MapItemStatus.Pending
       )
     );
   }
@@ -958,5 +966,18 @@ export class MapService {
    */
   updateStationCanvasPoints(): void {
     this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
+  }
+
+  /**
+   * Checks the map when station is selected and its in the center of the map.
+   *
+   * @param panType Determines the area of the map to be pan to center.
+   * @param drawerWidth Width of the opened drawer.
+   * @returns True if the option is a selected station is center of the map.
+   */
+  checkCenter(panType: CenterPanType, drawerWidth = 0): boolean {
+    const adjustCenter = this.getAdjustedCenter(panType, drawerWidth);
+    const canvasPoint = this.currentCanvasPoint$.value;
+    return adjustCenter.x === canvasPoint.x && adjustCenter.y === canvasPoint.y;
   }
 }

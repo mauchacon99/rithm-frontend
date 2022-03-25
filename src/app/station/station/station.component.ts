@@ -525,6 +525,7 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = stationQuestions as Question[];
           }
+          this.popupService.notify('Station successfully saved');
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -822,6 +823,13 @@ export class StationComponent
     if (this.settingMode) {
       this.setGridMode('layout');
     }
+  }
+
+  /**
+   * Toggles the open state of the right setting drawer.
+   */
+  openRightDrawer(): void {
+    this.sidenavDrawerService.openDrawer('fieldSetting');
   }
 
   /**

@@ -101,10 +101,11 @@ export class StationGroupMapElement {
    * Marks the status of the station group element as updated.
    */
   markAsUpdated(): void {
-    //Only mark as updated if the station group isn't already marked as created or deleted.
+    //Only mark as updated if the station group isn't already marked as created or deleted or Pending.
     if (
       this.status !== MapItemStatus.Created &&
-      this.status !== MapItemStatus.Deleted
+      this.status !== MapItemStatus.Deleted &&
+      this.status !== MapItemStatus.Pending
     ) {
       this.status = MapItemStatus.Updated;
     }

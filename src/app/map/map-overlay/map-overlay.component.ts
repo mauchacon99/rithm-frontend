@@ -45,7 +45,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
-  mapDataLoading = true;
+  mapDataLoading = false;
 
   /** User has selected and opened the dropdown menu on a station. */
   private openedMenuStation?: StationMapElement;
@@ -83,6 +83,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
+
+  /** To show center station button when station is selected. */
+  stationCenter = false;
 
   /**
    * Whether the map is in any building mode.
@@ -227,12 +230,24 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.drawerMode = data;
         }
       });
+
+    //Track the selected station is in center of the map to enable the center station button.
+    this.mapService.stationCenter$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((isCenter) => {
+        if (this.stationCenter !== isCenter) {
+          this.stationCenter = isCenter;
+        }
+      });
   }
 
   /**
    * Gets info about the mat-drawer toggle and determines user permissions.
    */
   ngOnInit(): void {
+    setTimeout(() => {
+      this.mapDataLoading = true;
+    }, 1);
     //Store the user information.
     this.currentUser = this.userService.user;
     //Check if user is an admin.
@@ -249,6 +264,24 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
     this.mapService.mapHelper.mapDataReceived$.next(false);
+    if (
+      this.drawerMode === 'connectionInfo' ||
+      this.drawerMode === 'stationGroupInfo'
+    ) {
+      this.sidenavDrawerService.drawerData$.next(false);
+    }
+  }
+
+  /**
+   * Whether the drawer is opened or not.
+   *
+   * @returns True if any drawer is opened, false otherwise.
+   */
+  get stationDrawerOpened(): boolean {
+    return (
+      this.sidenavDrawerService.isDrawerOpen &&
+      this.drawerMode === 'stationInfo'
+    );
   }
 
   /**
@@ -303,8 +336,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     if (confirm) {
       //Show loading indicator.
       this.mapDataLoading = true;
-      //Set the map mode to view.
-      this.mapService.mapMode$.next(MapMode.View);
       //Call the api to post changes to the server.
       this.mapService
         .publishMap()
@@ -327,6 +358,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
             );
           },
         });
+      //Set the map mode to view.
+      this.mapService.mapMode$.next(MapMode.View);
       //Clears all stations and groups available and disabled statuses that may have been set if was in addGroup mode.
       this.mapService.resetSelectedStationGroupStationStatus();
     }
@@ -342,10 +375,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const confirm = !this.mapHasChanges
       ? true
       : await this.popupService.confirm({
-          title: 'Confirmation',
-          message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-          okButtonText: 'Confirm',
-        });
+        title: 'Confirmation',
+        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+        okButtonText: 'Confirm',
+      });
     //If user accepts, or there are no changes.
     if (confirm) {
       //Call method to run logic for cancelling.
@@ -556,5 +589,25 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   toggleDrawer(drawerItem: 'stationGroupInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
+   * While station is selected & drawer opened, Method called for selected station to centering in the map.
+   */
+  centerStation(): void {
+    this.mapService.isDrawerOpened$.next(true);
+    //Close any open station option menus.
+    this.mapService.matMenuStatus$.next(true);
+    //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+    this.mapService.centerActive$.next(true);
+    //Get the map drawer element.
+    const drawer = document.getElementsByTagName('mat-drawer');
+    //Increment centerCount to show that more centering of station needs to be done.
+    this.mapService.centerCount$.next(1);
+    //Call method to run logic for centering of the station.
+    this.mapService.center(
+      CenterPanType.Station,
+      drawer[0] ? drawer[0].clientWidth : 0
+    );
   }
 }

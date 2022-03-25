@@ -1,11 +1,26 @@
 <div
-  class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col"
+  class="relative"
+  [ngClass]="{ 'mb-3': widgetType === enumWidgetType.ContainerProfileBanner }"
 >
-  <i *ngIf="!image" class="fas text-[60px] text-secondary-300 fa-image"></i>
-  <img
-    *ngIf="image"
-    [src]="image"
-    class="w-full h-full object-cover"
-    alt="Image widget"
-  />
+  <div
+    class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col"
+  >
+    <i
+      *ngIf="!image && widgetType !== enumWidgetType.ContainerProfileBanner"
+      class="fas text-[60px] text-secondary-300 fa-image"
+    ></i>
+    <img
+      *ngIf="image"
+      [src]="image"
+      class="w-full h-full object-cover"
+      alt="Image widget"
+    />
+  </div>
+
+  <div
+    class="absolute top-[44%] lg:top-[32%] left-[5%]"
+    *ngIf="widgetType === enumWidgetType.ContainerProfileBanner"
+  >
+    <app-avatar-image-widget></app-avatar-image-widget>
+  </div>
 </div>

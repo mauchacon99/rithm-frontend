@@ -40,7 +40,8 @@
                 id="station"
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
-                (keyup)="updateStationInfoDrawerName()"
+                (keyup)="reportNewStationMapChange()"
+                (focusout)="updateStationInfoDrawerName()"
               />
             </mat-form-field>
           </ng-template>
@@ -171,13 +172,23 @@
           </button>
         </div>
         <div
-          class="w-full py-2 px-2 text-center"
+          class="w-full py-2 flex justify-between"
           *ngIf="openedFromMap && !locallyCreated"
         >
           <button mat-stroked-button color="accent" (click)="goToStation()">
             View Station
           </button>
+          <button
+            *ngIf="drawerOpened && !stationCenter"
+            id="centerStation"
+            class="px-3 py-1 text-accent-500 hidden md:inline-block"
+            data-testId="centerStation"
+            (click)="centerStation()"
+          >
+            <i class="fas fa-location"></i>
+          </button>
         </div>
+
         <div
           class="w-full py-2 px-2 text-center"
           *ngIf="displayDeleteStationButton"
@@ -224,7 +235,7 @@
             *ngIf="!docGenLoading && !locallyCreated"
             (change)="updateGenerationStatus('None', $event)"
             [checked]="stationDocumentGenerationStatus === 'None'"
-            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+            [disabled]="docCreationLoading"
           >
           </mat-slide-toggle>
         </section>
@@ -241,7 +252,7 @@
             *ngIf="!docGenLoading && !locallyCreated"
             (change)="updateGenerationStatus('Manual', $event)"
             [checked]="stationDocumentGenerationStatus === 'Manual'"
-            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+            [disabled]="docCreationLoading"
           >
           </mat-slide-toggle>
         </section>

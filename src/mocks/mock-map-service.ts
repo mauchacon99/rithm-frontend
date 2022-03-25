@@ -171,6 +171,9 @@ export class MockMapService {
   /** The Station Group Helper. */
   mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
 
+  /** Informs the center station button element whether to show on station selected. */
+  stationCenter$ = new BehaviorSubject(false);
+
   /**
    * Creates a new `MockMapService`.
    *
@@ -291,7 +294,7 @@ export class MockMapService {
    * @param coords The coordinates where the station will be placed.
    */
   // eslint-disable-next-line
-  createNewStation(coords: Point): void {}
+  createNewStation(coords: Point): void { }
 
   /**
    * Updates station status to delete.
@@ -299,19 +302,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void {}
+  deleteStation(station: StationMapElement): void { }
 
   /**
    * Enters build mode for the map.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buildMap(): void {}
+  buildMap(): void { }
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void {}
+  cancelMapChanges(): void { }
 
   /**
    * Publishes local map changes to the server.
@@ -346,7 +349,7 @@ export class MockMapService {
     zoomingIn: boolean,
     zoomOrigin = this.mapHelper.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
-  ): void {}
+  ): void { }
   /* eslint-enable */
 
   /**

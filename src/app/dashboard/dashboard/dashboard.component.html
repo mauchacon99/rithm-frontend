@@ -21,7 +21,7 @@
       (deleteWidget)="removeWidgetIndex($event)"
     ></app-widget-drawer>
   </mat-drawer>
-  <mat-drawer-content class="textured-bg h-calc scrollbar">
+  <mat-drawer-content class="textured-bg h-calc scrollbar-hidden">
     <ng-container *ngIf="!viewNewDashboard; else newDashboard">
       <div class="container mx-auto px-3 py-5 lg:px-0">
         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
@@ -119,6 +119,7 @@
                     [(ngModel)]="dashboardData.name"
                     type="text"
                     placeholder="Untitled Dashboard"
+                    autocomplete="off"
                   />
                 </mat-form-field>
               </div>
@@ -164,7 +165,8 @@
             Current dashboard has no widgets to display.
           </div>
           <gridster
-            class="h-screen bg-transparent px-0 scrollbar"
+            [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
+            class="bg-transparent px-0 scrollbar"
             [options]="options"
           >
             <gridster-item
@@ -196,7 +198,8 @@
               <app-document-widget
                 *ngIf="
                   item.widgetType === widgetType.Document ||
-                  item.widgetType === widgetType.DocumentListBanner
+                  item.widgetType === widgetType.DocumentListBanner ||
+                  item.widgetType === widgetType.ContainerProfileBanner
                 "
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"
