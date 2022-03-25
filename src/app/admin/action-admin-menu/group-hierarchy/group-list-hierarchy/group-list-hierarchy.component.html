@@ -3,6 +3,23 @@
   <div
     class="md:border-r-2 color-border md:overflow-auto scrollbar height-container px-3 pb-3"
   >
+    <div
+      *ngIf="isLoading"
+      class="w-full h-full flex md:items-center justify-center"
+    >
+      <app-loading-indicator
+        id="loader-groups-hierarchy"
+      ></app-loading-indicator>
+    </div>
+
+    <div
+      *ngIf="isErrorGetGroups"
+      id="failed-groups"
+      class="w-full h-full flex md:items-center justify-center"
+    >
+      <p class="text-error-500">There are no groups to show.</p>
+    </div>
+
     <ng-container *ngIf="stationGroups">
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
