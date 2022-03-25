@@ -38,7 +38,7 @@
     <div class="m-2">
       <div class="h-[30px] -mx-2 flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
-          {{ dataStationWidget.stationName }}
+          {{ dataStationWidget.stationName || 'Untitled Station' }}
         </h3>
         <div *ngIf="dataStationWidget && !editMode">
           <button

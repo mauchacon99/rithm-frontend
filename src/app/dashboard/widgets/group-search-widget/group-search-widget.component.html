@@ -16,7 +16,7 @@
   <!-- Header widget -->
   <div class="flex flex-col input-search m-2">
     <h3 *ngIf="dataStationGroup" class="font-semibold truncate">
-      {{ dataStationGroup.title }}
+      {{ dataStationGroup.title || 'Untitled Group' }}
     </h3>
     <mat-form-field appearance="outline" class="mt-3">
       <input
@@ -29,8 +29,9 @@
         maxlength="55"
         (keyup)="searchStation()"
         [disabled]="
-          dataStationGroup.stations.length === 0 &&
-          dataStationGroup.subStationGroups.length === 0
+          (!dataStationGroup.stations.length &&
+            !dataStationGroup.subStationGroups.length) ||
+          editMode
         "
         autocomplete="off"
       />
@@ -54,7 +55,9 @@
         *ngFor="let subStation of subStationGroupData"
         class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <span class="whitespace-normal truncate"> {{ subStation.title }}</span>
+        <span class="whitespace-normal truncate">
+          {{ subStation.title || 'Untitled Group' }}</span
+        >
 
         <button mat-icon-button id="map-button" data-testid="map-button">
           <i class="fa-solid fa-map text-base text-secondary-500"></i>
@@ -67,7 +70,7 @@
         class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
       >
         <span class="whitespace-normal truncate">
-          {{ station.name }} <br />
+          {{ station.name || 'Untitled Station' }} <br />
           <span
             id="show-documents-{{ station.rithmId }}"
             [attr.data-testid]="'show-documents-' + station.rithmId"
@@ -79,10 +82,13 @@
 
         <button
           mat-icon-button
-          id="link-station-button"
-          data-testid="link-station-button"
+          [id]="'link-station-button-' + station.rithmId"
+          [attr.data-testid]="'link-station-button-' + station.rithmId"
+          class="text-secondary-500"
+          [disabled]="editMode"
+          [routerLink]="['/', 'station', station.rithmId]"
         >
-          <i class="fas fa-external-link-alt text-base text-secondary-500"></i>
+          <i class="fas fa-external-link-alt text-base"></i>
         </button>
       </div>
     </div>
