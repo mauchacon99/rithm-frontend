@@ -4,6 +4,7 @@ import {
   MapItemStatus,
   Point,
   PathButton,
+  MapMode,
 } from '../models';
 
 export interface StationGroupMapElement extends StationGroupMapData {
@@ -53,8 +54,13 @@ export class StationGroupMapElement {
    *
    * @param point The cursor location.
    * @param ctx The rendering context for the canvas.
+   * @param mode The current mapMode.
    */
-  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+  checkElementHover(
+    point: Point,
+    ctx: CanvasRenderingContext2D,
+    mode: MapMode
+  ): void {
     //Saves the current state of the canvas context.
     ctx.save();
     //This will allow users to click in the area around group boundaries without having to click in the rendered space.
@@ -68,6 +74,7 @@ export class StationGroupMapElement {
         for (const iconButton of this.pathButtons) {
           // If the mouse hovers over the icon button then hoverItem changes.
           if (
+            mode !== MapMode.View &&
             this.isPointInStationGroupPendingButtons(point, iconButton, ctx)
           ) {
             this.hoverItem = iconButton.typeButton;

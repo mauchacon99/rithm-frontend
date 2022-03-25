@@ -1435,7 +1435,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Loop through the station group array to check if there is a station group being interacted with.
       for (const stationGroup of this.stationGroups) {
         //Checks whether the station group boundary is being hovered over.
-        stationGroup.checkElementHover(eventContextPoint, this.context);
+        stationGroup.checkElementHover(
+          eventContextPoint,
+          this.context,
+          this.mapMode
+        );
 
         //If hovering over the station group boundary or name and MapDragItem should not be Node and Station.
         if (
@@ -1926,7 +1930,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           });
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
-            stationGroup.checkElementHover(eventContextPoint, this.context);
+            stationGroup.checkElementHover(
+              eventContextPoint,
+              this.context,
+              this.mapMode
+            );
             //If cursor is over a group boundary or option button.
             if (
               stationGroup.hoverItem ===
@@ -2260,7 +2268,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   checkStationGroupClick(contextPoint: Point, point: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
-      stationGroup.checkElementHover(contextPoint, this.context);
+      stationGroup.checkElementHover(contextPoint, this.context, this.mapMode);
 
       //If MapMode is StationGroupAdd we select the group.
       if (
