@@ -15,14 +15,6 @@
 }
 
 .item-select-groups {
-  .mat-list-item-content {
-    padding: 0;
-
-    .mat-list-item {
-      padding: 0 0 0 6px;
-    }
-  }
-
   .mat-list-option {
     @apply rounded-sm;
   }
@@ -33,5 +25,15 @@
 
   .mat-list-single-selected-option {
     @apply bg-accent-50;
+  }
+
+  ::ng-deep {
+    .mat-list-text {
+      padding: 0 !important;
+    }
+
+    .mat-list-item-content {
+      @apply pr-0;
+    }
   }
 }

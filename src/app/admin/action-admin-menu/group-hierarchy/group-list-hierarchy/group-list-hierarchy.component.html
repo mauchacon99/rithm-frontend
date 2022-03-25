@@ -49,7 +49,7 @@
       [alt]="type + '-' + name"
     />
     <span class="text-sm lg:text-base ml-3 truncate">{{
-      null || 'Untitled ' + (type | titlecase)
+      name || 'Untitled ' + (type | titlecase)
     }}</span>
   </div>
 </ng-template>
