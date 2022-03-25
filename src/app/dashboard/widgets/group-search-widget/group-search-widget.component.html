@@ -29,8 +29,9 @@
         maxlength="55"
         (keyup)="searchStation()"
         [disabled]="
-          dataStationGroup.stations.length === 0 &&
-          dataStationGroup.subStationGroups.length === 0
+          (dataStationGroup.stations.length === 0 &&
+            dataStationGroup.subStationGroups.length === 0) ||
+          editMode
         "
         autocomplete="off"
       />
