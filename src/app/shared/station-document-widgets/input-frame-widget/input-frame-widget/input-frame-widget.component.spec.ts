@@ -9,7 +9,6 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Question, QuestionFieldType } from 'src/models';
-import { of } from 'rxjs';
 
 describe('InputFrameWidgetComponent', () => {
   let component: InputFrameWidgetComponent;
@@ -52,9 +51,7 @@ describe('InputFrameWidgetComponent', () => {
         previousContainer: { data: secondList, id: 'input-widget' },
       } as CdkDragDrop<Question[]>;
 
-      const spyDrag = spyOn(component, 'addElementDrag').and.callFake(() =>
-        of(cdkEvent)
-      );
+      const spyDrag = spyOn(component, 'addElementDrag').and.returnValue();
       component.addElementDrag(cdkEvent);
       fixture.detectChanges();
 
@@ -105,9 +102,7 @@ describe('InputFrameWidgetComponent', () => {
         currentIndex: 2,
       } as CdkDragDrop<Question[]>;
 
-      const spyDrop = spyOn(component, 'addElementDrag').and.callFake(() =>
-        of(cdkEvent)
-      );
+      const spyDrop = spyOn(component, 'addElementDrag').and.returnValue();
       component.addElementDrag(cdkEvent);
       fixture.detectChanges();
 
