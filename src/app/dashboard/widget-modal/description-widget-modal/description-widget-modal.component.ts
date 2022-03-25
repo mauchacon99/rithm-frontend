@@ -72,7 +72,10 @@ export class DescriptionWidgetModalComponent implements OnInit {
   private minItemRowsWidget(): number {
     return this.widgetTypeWithoutDefault ===
       this.enumWidgetType.DocumentListBanner ||
-      this.widgetTypeWithoutDefault === this.enumWidgetType.StationTableBanner
+      this.widgetTypeWithoutDefault ===
+        this.enumWidgetType.StationTableBanner ||
+      this.widgetTypeWithoutDefault ===
+        this.enumWidgetType.ContainerProfileBanner
       ? 2
       : 1;
   }
