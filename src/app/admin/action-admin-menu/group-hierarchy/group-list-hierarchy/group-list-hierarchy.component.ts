@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -13,6 +13,10 @@ import { StationGroupData } from 'src/models';
   styleUrls: ['./group-list-hierarchy.component.scss'],
 })
 export class GroupListHierarchyComponent implements OnInit {
+  /** RithmId of station or stationGroup to search. */
+  @Input() stationGroupRithmId = '';
+
+  /** Data of stationGroup. */
   stationGroups!: StationGroupData;
 
   constructor(
@@ -27,14 +31,10 @@ export class GroupListHierarchyComponent implements OnInit {
     this.getStationGroups();
   }
 
-  /**
-   * Get stationGroups.
-   *
-   * @param idStationOrGroup RithmId of station or stationGroup.
-   */
-  private getStationGroups(idStationOrGroup = ''): void {
+  /** Get stationGroups. */
+  private getStationGroups(): void {
     this.stationService
-      .getStationGroups(idStationOrGroup)
+      .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
         next: (stationGroup) => {

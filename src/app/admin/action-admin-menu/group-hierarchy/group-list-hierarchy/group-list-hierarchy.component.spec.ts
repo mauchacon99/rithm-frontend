@@ -9,6 +9,7 @@ import { GroupListHierarchyComponent } from './group-list-hierarchy.component';
 describe('GroupListHierarchyComponent', () => {
   let component: GroupListHierarchyComponent;
   let fixture: ComponentFixture<GroupListHierarchyComponent>;
+  let stationService: StationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,6 +24,7 @@ describe('GroupListHierarchyComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GroupListHierarchyComponent);
     component = fixture.componentInstance;
+    stationService = TestBed.inject(StationService);
     fixture.detectChanges();
   });
 
@@ -32,7 +34,7 @@ describe('GroupListHierarchyComponent', () => {
 
   it('should call service that return station groups data', () => {
     const spyService = spyOn(
-      TestBed.inject(StationService),
+      stationService,
       'getStationGroups'
     ).and.callThrough();
     component.ngOnInit();
@@ -40,7 +42,7 @@ describe('GroupListHierarchyComponent', () => {
   });
 
   it('should show error message when request station widget document  data', () => {
-    spyOn(TestBed.inject(StationService), 'getStationGroups').and.returnValue(
+    spyOn(stationService, 'getStationGroups').and.returnValue(
       throwError(() => {
         throw new Error();
       })
