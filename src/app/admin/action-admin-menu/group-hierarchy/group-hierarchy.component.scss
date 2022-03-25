@@ -5,16 +5,18 @@
 }
 
 .input-search {
-  ::ng-deep .mat-form-field-wrapper {
-    padding: 0;
-  }
+  ::ng-deep {
+    .mat-form-field-wrapper {
+      padding: 0;
+    }
 
-  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
-    @apply h-[50px] w-full md:w-80;
-  }
+    .mat-form-field-appearance-outline .mat-form-field-flex {
+      @apply h-[50px] w-full md:w-80;
+    }
 
-  ::ng-deep .mat-form-field-infix {
-    padding-top: 1px !important;
+    .mat-form-field-infix {
+      padding-top: 1px !important;
+    }
   }
 
   .mat-form-field-appearance-outline .mat-form-field-suffix {
