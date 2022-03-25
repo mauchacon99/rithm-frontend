@@ -36,12 +36,6 @@ import { v4 as uuidv4 } from 'uuid';
  * Mocks methods of the `MapService`.
  */
 export class MockMapService {
-  /** Notifies when the map data has been received. */
-  mapDataReceived$ = new BehaviorSubject(false);
-
-  /** The rendering context for the canvas element for the map. */
-  canvasContext?: CanvasRenderingContext2D;
-
   /** This behavior subject will track the array of stations. */
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
@@ -75,9 +69,6 @@ export class MockMapService {
     },
   ];
 
-  /** Informs the map when station group elements have changed. */
-  stationGroupElementsChanged$ = new BehaviorSubject(false);
-
   /** The station group elements displayed on the map. */
   stationGroupElements: StationGroupMapElement[] = [];
 
@@ -102,32 +93,8 @@ export class MockMapService {
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.Build);
 
-  /** The current scale of the map. */
-  mapScale$ = new BehaviorSubject(1);
-
-  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
-  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject({
-    x: 0,
-    y: 0,
-  });
-
-  /** The coordinate at which the current mouse point in the overall map. */
-  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({
-    x: 0,
-    y: 0,
-  });
-
-  /** Check current mouse click if clicked the station option button. */
-  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
-
-  /** Check if mouse clicked outside of the option menu in canvas area. */
-  matMenuStatus$ = new BehaviorSubject(false);
-
   /** The number of zoom levels to increment or decrement. */
   zoomCount$ = new BehaviorSubject(0);
-
-  /** Informs the map when station elements have changed. */
-  stationElementsChanged$ = new BehaviorSubject(false);
 
   /** Checks if there should be panning towards the center of the map. */
   centerPan$ = new BehaviorSubject(false);
@@ -138,26 +105,11 @@ export class MockMapService {
   /** Checks if there should be panning towards the center of any station. */
   centerActive$ = new BehaviorSubject(false);
 
-  /** The Station rithm Id centered on the map. */
-  centerStationRithmId$ = new BehaviorSubject('');
-
-  /** Informs the map that which drawer is opened. */
-  isDrawerOpened$ = new BehaviorSubject(false);
-
-  /** The View Station Button Click, informs to make the init Load on the map. */
-  viewStationButtonClick$ = new BehaviorSubject(true);
-
   /** An object containing the data needed to properly display and interact with the map boundary box. */
   boundaryElement?: BoundaryMapElement;
 
   /** The number of times this.center() should be called. It will continually be incremented until centering is done.*/
   centerCount$ = new BehaviorSubject(0);
-
-  /** If station group option button was clicked. */
-  stationGroupOptionButtonClick$ = new BehaviorSubject({
-    click: false,
-    data: {},
-  });
 
   /** The Map Helper. */
   mapHelper = new MapHelper();
@@ -170,9 +122,6 @@ export class MockMapService {
 
   /** The Station Group Helper. */
   mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
-
-  /** Informs the center station button element whether to show on station selected. */
-  stationCenter$ = new BehaviorSubject(false);
 
   /**
    * Creates a new `MockMapService`.
@@ -187,12 +136,21 @@ export class MockMapService {
   }
 
   /**
+   * Getter The canvas context.
+   *
+   * @returns CanvasRenderingContext2D | undefined.
+   */
+  get canvasContext(): CanvasRenderingContext2D | undefined {
+    return this.mapHelper.canvasContext;
+  }
+
+  /**
    * Registers the canvas rendering context from the component for use elsewhere.
    *
    * @param canvasContext The rendering context for the canvas element.
    */
   registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
-    this.canvasContext = canvasContext;
+    this.mapHelper.registerCanvasContext(canvasContext);
   }
 
   /**
@@ -294,7 +252,7 @@ export class MockMapService {
    * @param coords The coordinates where the station will be placed.
    */
   // eslint-disable-next-line
-  createNewStation(coords: Point): void { }
+  createNewStation(coords: Point): void {}
 
   /**
    * Updates station status to delete.
@@ -302,19 +260,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void { }
+  deleteStation(station: StationMapElement): void {}
 
   /**
    * Enters build mode for the map.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buildMap(): void { }
+  buildMap(): void {}
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void { }
+  cancelMapChanges(): void {}
 
   /**
    * Publishes local map changes to the server.
@@ -349,7 +307,7 @@ export class MockMapService {
     zoomingIn: boolean,
     zoomOrigin = this.mapHelper.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
-  ): void { }
+  ): void {}
   /* eslint-enable */
 
   /**
@@ -749,7 +707,7 @@ export class MockMapService {
       this.centerCount$.next(this.centerCount$.value + 1);
     } else {
       //After the animation is finished, jump to the map center.
-      this.currentCanvasPoint$.next(adjustedCenter);
+      this.mapHelper.currentCanvasPoint$.next(adjustedCenter);
       //Cancel panning by setting panVelocity to 0,0.
       this.centerPanVelocity$.next({ x: 0, y: 0 });
     }

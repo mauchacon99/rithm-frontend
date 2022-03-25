@@ -141,14 +141,16 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     private userService: UserService
   ) {
     //Track map mode as it changes.
-    this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
-      next: (mapMode) => {
-        this.currentMode = mapMode;
-      },
-      error: (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
-      },
-    });
+    this.mapService.mapHelper.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (mapMode) => {
+          this.currentMode = mapMode;
+        },
+        error: (error: unknown) => {
+          throw new Error(`Map overlay subscription error: ${error}`);
+        },
+      });
 
     //Track when new map changes are made.
     this.mapService.mapHelper.mapDataReceived$
@@ -168,32 +170,38 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       });
 
     //Track which, if any, station option button is clicked.
-    this.mapService.stationButtonClick$
+    this.mapService.mapStationHelper.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((clickRes) => {
         //If a button was clicked and the map is in build mode.
         this.clickMode = <MatMenuOption>clickRes.click;
         if (
           clickRes.click === MatMenuOption.OptionButton &&
-          this.mapService.mapMode$.value === MapMode.Build
+          this.mapService.mapHelper.mapMode$.value === MapMode.Build
         ) {
           //Open where the mouse currently is.
-          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+          this.optionMenuTrigger(
+            this.mapService.mapHelper.currentMousePoint$.value
+          );
           //Set openedMenuStation.
           this.openedMenuStation = clickRes.data as StationMapElement;
         } else if (
           clickRes.click === MatMenuOption.NewStation &&
-          this.mapService.mapMode$.value === MapMode.Build
+          this.mapService.mapHelper.mapMode$.value === MapMode.Build
         ) {
           //On right clicked open the option menu for the new station.
-          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+          this.optionMenuTrigger(
+            this.mapService.mapHelper.currentMousePoint$.value
+          );
         } else if (
           clickRes.click === MatMenuOption.EditStationGroup &&
-          this.mapService.mapMode$.value !== MapMode.View &&
-          this.mapService.mapMode$.value !== MapMode.StationGroupAdd
+          this.mapService.mapHelper.mapMode$.value !== MapMode.View &&
+          this.mapService.mapHelper.mapMode$.value !== MapMode.StationGroupAdd
         ) {
           //On click of station group option button, the edit station group menu opens.
-          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+          this.optionMenuTrigger(
+            this.mapService.mapHelper.currentMousePoint$.value
+          );
         }
       });
 
@@ -205,14 +213,14 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       });
 
     //Note if cursor clicks somewhere that will close the option menu.
-    this.mapService.matMenuStatus$
+    this.mapService.mapHelper.matMenuStatus$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((click) => {
         if (click) {
           //Close the menu.
           this.closeOptionMenu();
           //Note there is no menu open.
-          this.mapService.matMenuStatus$.next(false);
+          this.mapService.mapHelper.matMenuStatus$.next(false);
         }
       });
 
@@ -232,7 +240,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       });
 
     //Track the selected station is in center of the map to enable the center station button.
-    this.mapService.stationCenter$
+    this.mapService.mapStationHelper.stationCenter$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((isCenter) => {
         if (this.stationCenter !== isCenter) {
@@ -262,7 +270,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    this.mapService.mapMode$.next(MapMode.View);
+    this.mapService.mapHelper.mapMode$.next(MapMode.View);
     this.mapService.mapHelper.mapDataReceived$.next(false);
     if (
       this.drawerMode === 'connectionInfo' ||
@@ -324,7 +332,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async publish(): Promise<void> {
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Open popup and store user response as boolean.
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
@@ -359,7 +367,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           },
         });
       //Set the map mode to view.
-      this.mapService.mapMode$.next(MapMode.View);
+      this.mapService.mapHelper.mapMode$.next(MapMode.View);
       //Clears all stations and groups available and disabled statuses that may have been set if was in addGroup mode.
       this.mapService.resetSelectedStationGroupStationStatus();
     }
@@ -370,15 +378,15 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async cancel(): Promise<void> {
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //If map doesn't have changes allow cancel, otherwise popup and store user response as boolean.
     const confirm = !this.mapHasChanges
       ? true
       : await this.popupService.confirm({
-        title: 'Confirmation',
-        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-        okButtonText: 'Confirm',
-      });
+          title: 'Confirmation',
+          message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+          okButtonText: 'Confirm',
+        });
     //If user accepts, or there are no changes.
     if (confirm) {
       //Call method to run logic for cancelling.
@@ -391,7 +399,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   center(): void {
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the center() method.
     this.mapService.centerActive$.next(true);
     //Increment centerCount to show that more centering needs to be done.
@@ -405,7 +413,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   zoomIn(): void {
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Increment zoomCount so handleZoom knows how much zoom in is needed.
     this.mapService.zoomCount$.next(
       this.zoomCount + BUTTON_ZOOM_COUNT_INCREMENT
@@ -419,7 +427,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   zoomOut(): void {
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Decrement zoomCount so handleZoom knows how much zoom out is needed.
     this.mapService.zoomCount$.next(
       this.zoomCount - BUTTON_ZOOM_COUNT_INCREMENT
@@ -470,7 +478,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Reset property where station where menu should be opened was stored.
     this.openedMenuStation = undefined;
     //Reset stationButtonClick.
-    this.mapService.stationButtonClick$.next({
+    this.mapService.mapStationHelper.stationButtonClick$.next({
       click: MatMenuOption.None,
       data: {},
     });
@@ -551,7 +559,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       //Set isAddingConnected to true for station.
       this.mapService.stationElements[index].isAddingConnected = true;
       //Set mapMode to stationAdd.
-      this.mapService.mapMode$.next(MapMode.StationAdd);
+      this.mapService.mapHelper.mapMode$.next(MapMode.StationAdd);
     } else {
       throw new Error(
         `No index found to create connected station ${this.openedMenuStation.rithmId}`
@@ -568,18 +576,18 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const coords = { x: this.menuX - 5, y: this.menuY - 65 };
     // creates new station.
     this.mapService.createNewStation(coords);
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
   }
 
   /**
    * Method called when a user clicks the edit station group.
    */
   editStationGroup(): void {
-    this.mapService.stationGroupOptionButtonClick$.next({
+    this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$.next({
       click: true,
-      data: this.mapService.stationButtonClick$.value.data,
+      data: this.mapService.mapStationHelper.stationButtonClick$.value.data,
     });
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
   }
 
   /**
@@ -595,9 +603,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * While station is selected & drawer opened, Method called for selected station to centering in the map.
    */
   centerStation(): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
     this.mapService.centerActive$.next(true);
     //Get the map drawer element.

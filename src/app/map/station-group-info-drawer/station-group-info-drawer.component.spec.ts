@@ -11,6 +11,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StationGroupInfoDrawerComponent } from './station-group-info-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { MapItemStatus, MapMode } from 'src/models';
+import { StationGroupMapElement } from 'src/helpers';
 
 describe('StationGroupInfoDrawerComponent', () => {
   let component: StationGroupInfoDrawerComponent;
@@ -51,16 +53,48 @@ describe('StationGroupInfoDrawerComponent', () => {
   });
 
   it('should set the changes made to the current station group', () => {
-    component.stationGroupRithmId = 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989';
-    const index = service.stationGroupElements.findIndex(
+    const stationGroups = [
+      {
+        rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        organizationRithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        title: 'Group 1',
+        stations: [
+          'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+          'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+          'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+          'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
+        ],
+        subStationGroups: [],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+        isChained: false,
+      },
+      {
+        rithmId: '',
+        title: '',
+        stations: [],
+        subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: true,
+        isChained: false,
+      },
+    ];
+    service.mapStationGroupHelper.stationGroupElements = stationGroups.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    component.stationGroupRithmId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
+    component.currentMode = MapMode.Build;
+    const index = service.mapStationGroupHelper.stationGroupElements.findIndex(
       (stGroup) => stGroup.rithmId === component.stationGroupRithmId
     );
     component.setStationGroupChanges();
-    expect(service.stationGroupElements[index].title).toEqual(
-      component.groupName
-    );
-    service.stationGroupElementsChanged$.subscribe((res) =>
-      expect(res).toBe(true)
+    expect(
+      service.mapStationGroupHelper.stationGroupElements[index].title
+    ).toEqual(component.groupName);
+    service.mapStationGroupHelper.stationGroupElementsChanged$.subscribe(
+      (res) => expect(res).toBe(true)
     );
   });
 

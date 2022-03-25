@@ -2,8 +2,9 @@ import { StationMapElement } from '../station-map-element';
 import { MapHelper } from './map-helper';
 import { MapConnectionHelper } from './map-connection-helper';
 import { ConnectionMapElement, MapStationGroupHelper } from 'src/helpers';
-import { MapItemStatus, MapMode, Point } from 'src/models';
+import { MapItemStatus, MapMode, MatMenuOption, Point } from 'src/models';
 import { v4 as uuidv4 } from 'uuid';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Represents methods that handle station data for the Map.
@@ -14,6 +15,24 @@ export class MapStationHelper {
 
   /** An array that stores a backup of stationElements when buildMap is called. */
   storedStationElements: StationMapElement[] = [];
+
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
+  /**
+   * Note if, and which station option button was clicked.
+   * This is required so that the option menu pulls down on the right station.
+   */
+  stationButtonClick$ = new BehaviorSubject({
+    click: MatMenuOption.None,
+    data: {},
+  });
+
+  /** The Station rithm Id centered on the map. */
+  centerStationRithmId$ = new BehaviorSubject('');
+
+  /** Informs the center station button element whether to show on station selected. */
+  stationCenter$ = new BehaviorSubject(false);
 
   constructor(private mapHelper: MapHelper) {}
 
@@ -305,5 +324,41 @@ export class MapStationHelper {
     mapConnectionHelper.connectionElements = filteredConnections;
     //Note a change in map data.
     this.mapHelper.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Remove deleted Status and Set normal status for stations.
+   */
+  removeDeletedAndSetNormalStations(): void {
+    this.stationElements = this.stationElements.filter(
+      (e) => e.status !== MapItemStatus.Deleted
+    );
+    this.stationElements.forEach(
+      (station) => (station.status = MapItemStatus.Normal)
+    );
+  }
+
+  /**
+   * Stations have changes.
+   */
+  stationsHaveChanges(): void {
+    //All stations that have MapItemStatus set to updated.
+    const updatedStations = this.stationElements.filter(
+      (station) => station.status === MapItemStatus.Updated
+    );
+    for (const updatedStation of updatedStations) {
+      //Find any stored stations that match the updated station.
+      const storedStation = this.storedStationElements.find(
+        (station) => station.rithmId === updatedStation.rithmId
+      );
+      if (!storedStation) {
+        throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
+            but does not exist in stored stations.`);
+      }
+      //If all the settings on updated station are identical to its stored counterpart, set that station's status to normal.
+      if (storedStation.isIdenticalTo(updatedStation)) {
+        updatedStation.status = MapItemStatus.Normal;
+      }
+    }
   }
 }

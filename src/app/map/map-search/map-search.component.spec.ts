@@ -115,6 +115,7 @@ describe('MapSearchComponent', () => {
   });
 
   it('should open drawer when any autocomplete option is selected', fakeAsync(() => {
+    service.mapHelper.mapMode$.next(MapMode.Build);
     const sideNavSpy = spyOn(
       TestBed.inject(SidenavDrawerService),
       'openDrawer'
@@ -153,7 +154,7 @@ describe('MapSearchComponent', () => {
     expect(station.drawerOpened).toBeTrue();
     expect(component.searchText).toEqual('');
     expect(component.filteredStationsStationGroups.length).toEqual(0);
-    service.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
+    service.mapHelper.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
     service.centerActive$.subscribe((res) => expect(res).toBe(true));
     service.centerCount$.subscribe((res) => expect(res).toBe(1));
     tick(1);

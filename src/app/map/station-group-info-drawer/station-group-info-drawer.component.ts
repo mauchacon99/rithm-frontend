@@ -63,15 +63,17 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     private popupService: PopupService
   ) {
     //Subscribe to the mapMode on the mapService.
-    this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
-      next: (mapMode) => {
-        //set this.currentMode to the subscribed mapMode.
-        this.currentMode = mapMode;
-      },
-      error: (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
-      },
-    });
+    this.mapService.mapHelper.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (mapMode) => {
+          //set this.currentMode to the subscribed mapMode.
+          this.currentMode = mapMode;
+        },
+        error: (error: unknown) => {
+          throw new Error(`Map overlay subscription error: ${error}`);
+        },
+      });
 
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -111,7 +113,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'stationGroupInfo'): void {
-    this.mapService.isDrawerOpened$.next(false);
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 
@@ -127,13 +129,21 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * Reporting if the name or isChained on a station group changed.
    */
   reportNewStationGroupMapChange(): void {
-    const index = this.mapService.stationGroupElements.findIndex(
-      (stGroup) => stGroup.rithmId === this.stationGroupRithmId
+    const index =
+      this.mapService.mapStationGroupHelper.stationGroupElements.findIndex(
+        (stGroup) => stGroup.rithmId === this.stationGroupRithmId
+      );
+    this.mapService.mapStationGroupHelper.stationGroupElements[index].title =
+      this.groupName;
+    this.mapService.mapStationGroupHelper.stationGroupElements[
+      index
+    ].isChained = this.isChained;
+    this.mapService.mapStationGroupHelper.stationGroupElements[
+      index
+    ].markAsUpdated();
+    this.mapService.mapStationGroupHelper.stationGroupElementsChanged$.next(
+      true
     );
-    this.mapService.stationGroupElements[index].title = this.groupName;
-    this.mapService.stationGroupElements[index].isChained = this.isChained;
-    this.mapService.stationGroupElements[index].markAsUpdated();
-    this.mapService.stationGroupElementsChanged$.next(true);
   }
 
   /**

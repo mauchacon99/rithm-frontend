@@ -6,6 +6,7 @@ import {
 import { MapItemStatus, MapMode } from 'src/models';
 import { MapHelper } from './map-helper';
 import { v4 as uuidv4 } from 'uuid';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Represents methods that handle station data for the Map.
@@ -17,7 +18,19 @@ export class MapStationGroupHelper {
   /** An array that stores a backup of stationGroupElements when buildMap is called. */
   storedStationGroupElements: StationGroupMapElement[] = [];
 
-  constructor(private mapHelper: MapHelper) { }
+  /** The copy of station group which is being edited. */
+  tempStationGroup$ = new BehaviorSubject({});
+
+  /** Informs the map when station group elements have changed. */
+  stationGroupElementsChanged$ = new BehaviorSubject(false);
+
+  /** If station group option button was clicked. */
+  stationGroupOptionButtonClick$ = new BehaviorSubject({
+    click: false,
+    data: {},
+  });
+
+  constructor(private mapHelper: MapHelper) {}
 
   /**
    * Validates that station groups belong to exactly one immediate parent station group.
@@ -65,7 +78,7 @@ export class MapStationGroupHelper {
    * Copy the station group Elements in stationGroupElements.
    */
   stationGroupsDeepCopy(): void {
-    this.stationGroupElements = this.mapHelper.deepCopy(
+    this.storedStationGroupElements = this.mapHelper.deepCopy(
       this.stationGroupElements
     );
   }
@@ -520,8 +533,8 @@ export class MapStationGroupHelper {
       //If group name is already changed from "Pending" assign updated one else set "Untitled Group"
       this.stationGroupElements[stationGroupIndex].title =
         this.stationGroupElements[stationGroupIndex].title === 'Pending' ||
-          this.stationGroupElements[stationGroupIndex].title === '' ||
-          !this.stationGroupElements[stationGroupIndex].title
+        this.stationGroupElements[stationGroupIndex].title === '' ||
+        !this.stationGroupElements[stationGroupIndex].title
           ? 'Untitled Group'
           : this.stationGroupElements[stationGroupIndex].title;
       this.stationGroupElements[stationGroupIndex].status =
@@ -545,5 +558,72 @@ export class MapStationGroupHelper {
     }
 
     this.resetSelectedStationGroupStationStatus(stationHelper);
+  }
+
+  /**
+   * Remove deleted and set normal status for station groups.
+   */
+  removeDeletedAndSerNormalStationGroup(): void {
+    this.stationGroupElements = this.stationGroupElements.filter(
+      (e) => e.status !== MapItemStatus.Deleted
+    );
+
+    this.stationGroupElements.forEach(
+      (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
+    );
+  }
+
+  /**
+   * Revert the changes made across station group in edit mode.
+   *
+   * @param stationHelper The map station helper reference.
+   */
+  revertStationGroup(stationHelper: MapStationHelper): void {
+    if (this.mapHelper.mapMode$.value === MapMode.StationGroupEdit) {
+      if (!(this.tempStationGroup$.value instanceof StationGroupMapElement)) {
+        throw new Error(`There is no temporary station group available.`);
+      }
+      const rithmId = this.tempStationGroup$.value.rithmId;
+      const groupIndex = this.stationGroupElements.findIndex(
+        (group) => group.rithmId === rithmId
+      );
+      if (groupIndex === -1) {
+        throw new Error(
+          `There is no station group available to replace tempGroup.`
+        );
+      }
+      this.stationGroupElements[groupIndex] = this.tempStationGroup$.value;
+      this.tempStationGroup$.next({});
+      //Remove station rithm id's from other groups to make make sure a station has got only one parent.
+      this.stationGroupElements[groupIndex].stations.map((stationRithmId) => {
+        this.stationGroupElements.map((group) => {
+          if (
+            group.stations.includes(stationRithmId) &&
+            group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+          ) {
+            group.stations = group.stations.filter(
+              (stationId) => stationId !== stationRithmId
+            );
+          }
+        });
+      });
+      //Remove station group rithm id's from other groups to make sure a group has got only one parent.
+      this.stationGroupElements[groupIndex].subStationGroups.map(
+        (subGroupRithmId) => {
+          this.stationGroupElements.map((group) => {
+            if (
+              group.subStationGroups.includes(subGroupRithmId) &&
+              group.rithmId !== this.stationGroupElements[groupIndex].rithmId
+            ) {
+              group.subStationGroups = group.subStationGroups.filter(
+                (groupId) => groupId !== subGroupRithmId
+              );
+            }
+          });
+        }
+      );
+      this.resetSelectedStationGroupStationStatus(stationHelper);
+      this.mapHelper.mapDataReceived$.next(true);
+    }
   }
 }

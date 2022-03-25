@@ -146,4 +146,21 @@ export class StationGroupMapElement {
     // Compares the path with the current point of the mouse to canvas context.
     return ctx.isPointInPath(pathButtons.path, point.x, point.y);
   }
+
+  /**
+   * Compares the modified station group with stored station group data.
+   *
+   * @param stationGroup The station group to compare this station group against.
+   * @returns Returns TRUE if data is same else FALSE.
+   */
+  isIdenticalTo(stationGroup: StationGroupMapElement): boolean {
+    return (
+      JSON.stringify(this.stations) === JSON.stringify(stationGroup.stations) &&
+      JSON.stringify(this.subStationGroups) ===
+        JSON.stringify(stationGroup.subStationGroups) &&
+      JSON.stringify(this.boundaryPoints) ===
+        JSON.stringify(stationGroup.boundaryPoints) &&
+      this.title === stationGroup.title
+    );
+  }
 }

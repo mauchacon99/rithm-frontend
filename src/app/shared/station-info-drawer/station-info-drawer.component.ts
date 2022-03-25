@@ -626,7 +626,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     openStation.stationName = this.stationName;
     openStation.notes = this.stationNotes ? this.stationNotes : '';
     openStation.markAsUpdated();
-    this.mapService.stationElementsChanged$.next(true);
+    this.mapService.mapStationHelper.stationElementsChanged$.next(true);
   }
 
   /**
@@ -806,8 +806,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Navigate the user to the station on the map.
    */
   goToStationOnMap(): void {
-    this.mapService.centerStationRithmId$.next(this.stationRithmId);
-    this.mapService.viewStationButtonClick$.next(true);
+    this.mapService.mapStationHelper.centerStationRithmId$.next(
+      this.stationRithmId
+    );
+    this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
   }
 
@@ -841,9 +843,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * While station is selected & drawer opened, Method called for selected station to centering in the map.
    */
   centerStation(): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
     this.mapService.centerActive$.next(true);
     //Get the map drawer element.

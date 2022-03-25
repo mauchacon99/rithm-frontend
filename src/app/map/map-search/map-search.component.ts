@@ -64,7 +64,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
     private stationService: StationService
   ) {
     //This subscribe shows if there are any drawers open.
-    this.mapService.isDrawerOpened$
+    this.mapService.mapHelper.isDrawerOpened$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerOpened) => {
         if (!drawerOpened) {
@@ -284,9 +284,9 @@ export class MapSearchComponent implements OnInit, OnDestroy {
    * @param drawerItem The selected item.
    */
   openDrawer(drawerItem: StationMapElement | StationGroupMapElement): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
     this.mapService.centerActive$.next(true);
     //Get the map drawer element.
@@ -295,9 +295,9 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       const dataInformationDrawer: StationInfoDrawerData = {
         stationRithmId: drawerItem.rithmId,
         stationName: drawerItem.stationName,
-        editMode: this.mapService.mapMode$.value === MapMode.Build,
+        editMode: this.mapService.mapHelper.mapMode$.value === MapMode.Build,
         stationStatus: drawerItem.status,
-        mapMode: this.mapService.mapMode$.value,
+        mapMode: this.mapService.mapHelper.mapMode$.value,
         openedFromMap: true,
         notes: drawerItem.notes,
       };
@@ -321,7 +321,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       const dataInformationDrawer: StationGroupInfoDrawerData = {
         stationGroupRithmId: drawerItem.rithmId,
         stationGroupName: drawerItem.title,
-        editMode: this.mapService.mapMode$.value === MapMode.Build,
+        editMode: this.mapService.mapHelper.mapMode$.value === MapMode.Build,
         numberOfStations: drawerItem.stations.length,
         numberOfSubgroups: drawerItem.subStationGroups.length,
         stationGroupStatus: drawerItem.status,

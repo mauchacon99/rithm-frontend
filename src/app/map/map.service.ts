@@ -7,26 +7,25 @@ import {
   MapData,
   MapItemStatus,
   EnvironmentName,
-  MatMenuOption,
   CenterPanType,
 } from 'src/models';
 import {
-  DEFAULT_CANVAS_POINT,
-  DEFAULT_SCALE,
   MAX_SCALE,
   ZOOM_VELOCITY,
-  DEFAULT_MOUSE_POINT,
   STATION_WIDTH,
   STATION_HEIGHT,
   SCALE_REDUCED_RENDER,
   CENTER_ZOOM_BUFFER,
   STATION_PAN_CENTER_WIDTH,
   STATION_PAN_CENTER_HEIGHT,
+  MIN_SCALE,
+  SCALE_RENDER_STATION_ELEMENTS,
+  ABOVE_MAX,
+  BELOW_MIN,
 } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import {
-  BoundaryMapElement,
   ConnectionMapElement,
   StationGroupMapElement,
   StationMapElement,
@@ -50,67 +49,11 @@ export class MapService {
   /** This will track the array of stations and station groups received from the backend. */
   mapData: MapData = { stations: [], stationGroups: [] };
 
-  /** Notifies when the map data has been received. */
-  mapDataReceived$ = new BehaviorSubject(false);
-
-  /** Informs the map when station elements have changed. */
-  stationElementsChanged$ = new BehaviorSubject(false);
-
-  /** Informs the map when station group elements have changed. */
-  stationGroupElementsChanged$ = new BehaviorSubject(false);
-
-  /** An object containing the data needed to properly display and interact with the map boundary box. */
-  boundaryElement?: BoundaryMapElement;
-
-  /** The rendering context for the canvas element for the map. */
-  canvasContext?: CanvasRenderingContext2D;
-
-  /** The current mode of interaction on the map. Default is View. */
-  mapMode$ = new BehaviorSubject(MapMode.View);
-
-  /** The current scale of the map. Default is 1. */
-  mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
-
   /**
    * The number of zoom levels to increment or decrement.
    * Scale should be slowly changed as this happens.
    */
   zoomCount$ = new BehaviorSubject(0);
-
-  /** Informs the map that which drawer is opened. */
-  isDrawerOpened$ = new BehaviorSubject(false);
-
-  /** The View Station Button Click, informs to make the init Load on the map. */
-  viewStationButtonClick$ = new BehaviorSubject(true);
-
-  /**
-   * The coordinate at which the canvas is currently rendering in regards to the overall map.
-   * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
-   */
-  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(
-    DEFAULT_CANVAS_POINT
-  );
-
-  /**
-   * The coordinate at which the current cursor is located in the overall map.
-   * When the cursor is not currently being tracked,
-   * it should be set to {x: -1, y: -1} to show it is not currently on the canvas.
-   */
-  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(
-    DEFAULT_MOUSE_POINT
-  );
-
-  /**
-   * Note if, and which station option button was clicked.
-   * This is required so that the option menu pulls down on the right station.
-   */
-  stationButtonClick$ = new BehaviorSubject({
-    click: MatMenuOption.None,
-    data: {},
-  });
-
-  /** Check if clicked outside of the option menu in canvas area. This closes the option menu. */
-  matMenuStatus$ = new BehaviorSubject(false);
 
   /** Checks if there should be panning towards the center of the map. */
   centerActive$ = new BehaviorSubject(false);
@@ -120,15 +63,6 @@ export class MapService {
 
   /** The number of times this.center() should be called. It will continually be incremented until centering is done.*/
   centerCount$ = new BehaviorSubject(0);
-
-  /** The Station rithm Id centered on the map. */
-  centerStationRithmId$ = new BehaviorSubject('');
-
-  /** If station group option button was clicked. */
-  stationGroupOptionButtonClick$ = new BehaviorSubject({
-    click: false,
-    data: {},
-  });
 
   /** The Map Helper. */
   mapHelper = new MapHelper();
@@ -142,13 +76,7 @@ export class MapService {
   /** The Station Group Helper. */
   mapStationGroupHelper = new MapStationGroupHelper(this.mapHelper);
 
-  /** Informs the center station button element whether to show on station selected. */
-  stationCenter$ = new BehaviorSubject(false);
-
-  /** The copy of station group which is being edited. */
-  tempStationGroup$ = new BehaviorSubject({});
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Getter The stations groups Elements.
@@ -199,12 +127,21 @@ export class MapService {
   }
 
   /**
+   * Getter The canvas context.
+   *
+   * @returns CanvasRenderingContext2D | undefined.
+   */
+  get canvasContext(): CanvasRenderingContext2D | undefined {
+    return this.mapHelper.canvasContext;
+  }
+
+  /**
    * Registers the canvas rendering context from the component for use elsewhere.
    *
    * @param canvasContext The rendering context for the canvas element.
    */
   registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
-    this.canvasContext = canvasContext;
+    this.mapHelper.registerCanvasContext(canvasContext);
   }
 
   /**
@@ -246,7 +183,6 @@ export class MapService {
    * Converts station data so it can be drawn on the canvas.
    */
   private useStationData(): void {
-    // new.
     //Turns station data into StationMapElements and sets this.stationElements to that.
     this.mapStationHelper.stationElements = this.mapData.stations.map(
       (e) => new StationMapElement(e)
@@ -260,10 +196,6 @@ export class MapService {
     this.mapHelper.setBoundary(this.mapStationHelper);
     //Trigger logic to use station map points and update stationCanvasPoints accordingly.
     this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
-
-    // (remove)
-    this.stationElements = this.mapStationHelper.stationElements;
-    this.boundaryElement = this.mapHelper.boundaryElement;
   }
 
   /**
@@ -338,16 +270,12 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
-    //(remove).
     //Set mapMode to build.
-    this.mapMode$.next(MapMode.Build);
-
+    this.mapHelper.mapMode$.next(MapMode.Build);
     //Create copies of all the stations, groups and connections so we can revert to those copies if we cancel our changes.
     this.mapStationHelper.stationsDeepCopy();
     this.mapStationGroupHelper.stationGroupsDeepCopy();
     this.mapConnectionHelper.connectionsDeepCopy();
-    //Set mapMode to build.
-    this.mapHelper.mapMode$.next(MapMode.Build);
   }
 
   /**
@@ -370,7 +298,7 @@ export class MapService {
    */
   publishMap(): Observable<unknown> {
     //Set pending group to new before publishing.
-    this.stationGroupElements.map((stationGroup) => {
+    this.mapStationGroupHelper.stationGroupElements.map((stationGroup) => {
       if (stationGroup.status === MapItemStatus.Pending) {
         this.updateCreatedStationGroup(stationGroup.rithmId);
       }
@@ -378,10 +306,10 @@ export class MapService {
 
     //Get all updated, new and deleted stations and groups.
     const filteredData: MapData = {
-      stations: this.stationElements.filter(
+      stations: this.mapStationHelper.stationElements.filter(
         (e) => e.status !== MapItemStatus.Normal
       ),
-      stationGroups: this.stationGroupElements.filter(
+      stationGroups: this.mapStationGroupHelper.stationGroupElements.filter(
         (e) => e.status !== MapItemStatus.Normal
       ),
     };
@@ -407,19 +335,9 @@ export class MapService {
         .pipe(
           tap(() => {
             //After the post, remove deleted stations and groups from their respective arrays.
-            this.stationElements = this.stationElements.filter(
-              (e) => e.status !== MapItemStatus.Deleted
-            );
-            this.stationGroupElements = this.stationGroupElements.filter(
-              (e) => e.status !== MapItemStatus.Deleted
-            );
             //After the post, set all new and updated stations' and groups' statuses back to normal.
-            this.stationElements.forEach(
-              (station) => (station.status = MapItemStatus.Normal)
-            );
-            this.stationGroupElements.forEach(
-              (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
-            );
+            this.mapStationHelper.removeDeletedAndSetNormalStations();
+            this.mapStationGroupHelper.removeDeletedAndSerNormalStationGroup();
             this.mapHelper.mapDataReceived$.next(true);
           })
         )
@@ -457,7 +375,7 @@ export class MapService {
       //If zoomCount is positive, we're zooming in.
       if (this.zoomCount$.value > 0) {
         //run this.zoom(), marking it as zooming in.
-        this.mapHelper.zoom(true, zoomOrigin);
+        this.zoom(true, zoomOrigin);
         //Decrement the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value - 1);
         //If zoomCount still isn't 0, recursively call this.handleZoom().
@@ -469,7 +387,7 @@ export class MapService {
       //If zoomCount is negative, we're zooming out.
       if (this.zoomCount$.value < 0) {
         //Run this.zoom(), marking it as zooming out.
-        this.mapHelper.zoom(false, zoomOrigin);
+        this.zoom(false, zoomOrigin);
         //Increment the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value + 1);
         //If zoomCount still isn't 0, recursively call this.handleZoom().
@@ -502,13 +420,13 @@ export class MapService {
    */
   private centerScale(onInit = false): void {
     //TODO: This method needs work in general. It especially needs help when used in conjunction with centerPan().
-    if (!this.canvasContext) {
+    if (!this.mapHelper.canvasContext) {
       throw new Error(
         'Cannot get center point of canvas when canvas context is not set'
       );
     }
 
-    if (!this.boundaryElement) {
+    if (!this.mapHelper.boundaryElement) {
       throw new Error(
         'Cannot get center point of map if map boundaries are not defined.'
       );
@@ -516,11 +434,11 @@ export class MapService {
 
     //Get correct size of the canvas.
     const canvasBoundingRect =
-      this.canvasContext.canvas.getBoundingClientRect();
+      this.mapHelper.canvasContext.canvas.getBoundingClientRect();
 
     //Get the canvas points of the top-left corner and bottom-right corner of the map.
-    const minPoint = this.boundaryElement.minCanvasPoint;
-    const maxPoint = this.boundaryElement.maxCanvasPoint;
+    const minPoint = this.mapHelper.boundaryElement.minCanvasPoint;
+    const maxPoint = this.mapHelper.boundaryElement.maxCanvasPoint;
 
     //Get the DPI of the screen.
     const pixelRatio = window.devicePixelRatio || 1;
@@ -633,7 +551,7 @@ export class MapService {
     //If there are no stations to center around, do nothing.
     if (
       panType === CenterPanType.Station &&
-      this.stationElements.length === 0
+      this.mapStationHelper.stationElements.length === 0
     ) {
       return;
     }
@@ -641,7 +559,7 @@ export class MapService {
     //If there are no station groups to center around, do nothing.
     if (
       panType === CenterPanType.StationGroup &&
-      this.stationGroupElements.length === 0
+      this.mapStationGroupHelper.stationGroupElements.length === 0
     ) {
       return;
     }
@@ -668,7 +586,7 @@ export class MapService {
         this.centerActive$.next(false);
         this.centerCount$.next(0);
         if (panType === CenterPanType.Station) {
-          this.stationCenter$.next(true);
+          this.mapStationHelper.stationCenter$.next(true);
         }
       }
     };
@@ -707,9 +625,10 @@ export class MapService {
 
     //If selected station group needs to be pan to center.
     if (panType === CenterPanType.StationGroup) {
-      const openedStationGroups = this.stationGroupElements.find(
-        (e) => e.drawerOpened
-      );
+      const openedStationGroups =
+        this.mapStationGroupHelper.stationGroupElements.find(
+          (e) => e.drawerOpened
+        );
       if (!openedStationGroups) {
         throw new Error('There is no selected station group for center pan');
       }
@@ -806,30 +725,14 @@ export class MapService {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   get mapHasChanges(): boolean {
-    //All stations that have MapItemStatus set to updated.
-    const updatedStations = this.stationElements.filter(
-      (station) => station.status === MapItemStatus.Updated
-    );
-    for (const updatedStation of updatedStations) {
-      //Find any stored stations that match the updated station.
-      const storedStation = this.mapStationHelper.storedStationElements.find(
-        (station) => station.rithmId === updatedStation.rithmId
-      );
-      if (!storedStation) {
-        throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
-          but does not exist in stored stations.`);
-      }
-      //If all the settings on updated station are identical to its stored counterpart, set that station's status to normal.
-      if (storedStation.isIdenticalTo(updatedStation)) {
-        updatedStation.status = MapItemStatus.Normal;
-      }
-    }
+    this.mapStationHelper.stationsHaveChanges();
+    //this.mapStationGroupHelper.stationGroupsHaveChanges();
     //If there are still stations or station group with status not normal and not Pending, return true.
     return (
-      this.stationElements.some(
+      this.mapStationHelper.stationElements.some(
         (station) => station.status !== MapItemStatus.Normal
       ) ||
-      this.stationGroupElements.some(
+      this.mapStationGroupHelper.stationGroupElements.some(
         (stationGroup) =>
           stationGroup.status !== MapItemStatus.Normal &&
           stationGroup.status !== MapItemStatus.Pending
@@ -842,13 +745,19 @@ export class MapService {
    */
   handleDrawerClose(): void {
     if (this.stationElements.some((e) => e.drawerOpened)) {
-      const openedStations = this.stationElements.filter((e) => e.drawerOpened);
+      const openedStations = this.mapStationHelper.stationElements.filter(
+        (e) => e.drawerOpened
+      );
       openedStations.forEach((station) => {
         station.drawerOpened = false;
       });
       this.mapHelper.mapDataReceived$.next(true);
     }
-    if (this.stationGroupElements.some((e) => e.drawerOpened)) {
+    if (
+      this.mapStationGroupHelper.stationGroupElements.some(
+        (e) => e.drawerOpened
+      )
+    ) {
       const openedStationGroups = this.stationGroupElements.filter(
         (e) => e.drawerOpened
       );
@@ -858,7 +767,9 @@ export class MapService {
       this.mapHelper.mapDataReceived$.next(true);
     }
     //On station drawer closed, set the connection highlight point false.
-    this.connectionElements.map((e) => (e.highlighted = false));
+    this.mapConnectionHelper.connectionElements.map(
+      (e) => (e.highlighted = false)
+    );
   }
 
   /**
@@ -878,52 +789,7 @@ export class MapService {
    *
    */
   revertStationGroup(): void {
-    if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      if (!(this.tempStationGroup$.value instanceof StationGroupMapElement)) {
-        throw new Error(`There is no temporary station group available.`);
-      }
-      const rithmId = this.tempStationGroup$.value.rithmId;
-      const groupIndex = this.stationGroupElements.findIndex(
-        (group) => group.rithmId === rithmId
-      );
-      if (groupIndex === -1) {
-        throw new Error(
-          `There is no station group available to replace tempGroup.`
-        );
-      }
-      this.stationGroupElements[groupIndex] = this.tempStationGroup$.value;
-      this.tempStationGroup$.next({});
-      //Remove station rithm id's from other groups to make make sure a station has got only one parent.
-      this.stationGroupElements[groupIndex].stations.map((stationRithmId) => {
-        this.stationGroupElements.map((group) => {
-          if (
-            group.stations.includes(stationRithmId) &&
-            group.rithmId !== this.stationGroupElements[groupIndex].rithmId
-          ) {
-            group.stations = group.stations.filter(
-              (stationId) => stationId !== stationRithmId
-            );
-          }
-        });
-      });
-      //Remove station group rithm id's from other groups to make sure a group has got only one parent.
-      this.stationGroupElements[groupIndex].subStationGroups.map(
-        (subGroupRithmId) => {
-          this.stationGroupElements.map((group) => {
-            if (
-              group.subStationGroups.includes(subGroupRithmId) &&
-              group.rithmId !== this.stationGroupElements[groupIndex].rithmId
-            ) {
-              group.subStationGroups = group.subStationGroups.filter(
-                (groupId) => groupId !== subGroupRithmId
-              );
-            }
-          });
-        }
-      );
-      this.resetSelectedStationGroupStationStatus();
-      this.mapHelper.mapDataReceived$.next(true);
-    }
+    this.mapStationGroupHelper.revertStationGroup(this.mapStationHelper);
   }
 
   /**
@@ -933,9 +799,12 @@ export class MapService {
    */
   get isLastStationGroup(): boolean {
     return (
-      this.stationGroupElements.filter((e) => e.selected && !e.disabled)
-        .length === 1 &&
-      this.stationElements.filter((e) => e.selected && !e.disabled).length === 0
+      this.mapStationGroupHelper.stationGroupElements.filter(
+        (e) => e.selected && !e.disabled
+      ).length === 1 &&
+      this.mapStationHelper.stationElements.filter(
+        (e) => e.selected && !e.disabled
+      ).length === 0
     );
   }
 
@@ -977,7 +846,89 @@ export class MapService {
    */
   checkCenter(panType: CenterPanType, drawerWidth = 0): boolean {
     const adjustCenter = this.getAdjustedCenter(panType, drawerWidth);
-    const canvasPoint = this.currentCanvasPoint$.value;
+    const canvasPoint = this.mapHelper.currentCanvasPoint$.value;
     return adjustCenter.x === canvasPoint.x && adjustCenter.y === canvasPoint.y;
+  }
+
+  /**
+   * Zooms the map by adjusting the map scale and position.
+   *
+   * @param zoomingIn Zooming in or out?
+   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param zoomAmount How much to zoom in/out.
+   */
+  zoom(
+    zoomingIn: boolean,
+    zoomOrigin = this.mapHelper.getCanvasCenterPoint(),
+    zoomAmount = ZOOM_VELOCITY
+  ): void {
+    //Reset zoomCount and return if attempting to zoom past min or max scale.
+    if (
+      (this.mapHelper.mapScale$.value <= MIN_SCALE && !zoomingIn) ||
+      (this.mapHelper.mapScale$.value >= MAX_SCALE && zoomingIn)
+    ) {
+      this.zoomCount$.next(0);
+      return;
+    }
+
+    // Reset zoomCount and return if attempting to zoom out past a certain point while not in view mode.
+    if (
+      this.mapHelper.mapScale$.value <=
+        SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
+      !zoomingIn &&
+      this.mapHelper.mapMode$.value !== MapMode.View
+    ) {
+      this.zoomCount$.next(0);
+      return;
+    }
+
+    //Set so that we can move the currentCanvasPoint closer or further away based on zoom direction.
+    const translateDirection = zoomingIn ? -1 : 1;
+
+    /* What will we change the scale to when we're finished?
+    When we zoom out we make the scale smaller, when we zoom in we make it larger.
+    zoomAmount is set up to be exponential. */
+    const newScale = zoomingIn
+      ? this.mapHelper.mapScale$.value / zoomAmount
+      : this.mapHelper.mapScale$.value * zoomAmount;
+
+    //We have translateLogic in a const so that we don't have to repeat code for both x and y coords.
+    const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
+      //If zooming in.
+      if (zoom) {
+        //Return amount to translate a given coord based on the arithmetic.
+        return Math.round(
+          //current scale to new scale
+          (zoomOrigin[coord] / this.mapHelper.mapScale$.value -
+            zoomOrigin[coord] / newScale) *
+            translateDirection
+        );
+        //If zooming out.
+      } else {
+        //Return amount to translate a given coord based on the arithmetic.
+        return Math.round(
+          //new scale to current scale
+          (zoomOrigin[coord] / newScale -
+            zoomOrigin[coord] / this.mapHelper.mapScale$.value) *
+            translateDirection
+        );
+      }
+    };
+
+    //Subtract the number returned from translateLogic from x coord of currentCanvasPoint to pan the map that amount.
+    this.mapHelper.currentCanvasPoint$.value.x -= translateLogic(
+      zoomingIn,
+      'x'
+    );
+    //Subtract the number returned from translateLogic from y coord of currentCanvasPoint to pan the map that amount.
+    this.mapHelper.currentCanvasPoint$.value.y -= translateLogic(
+      zoomingIn,
+      'y'
+    );
+
+    //Set the mapScale to the new scale as long as it isn't above or below the max or min allowed.
+    this.mapHelper.mapScale$.next(
+      zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale)
+    );
   }
 }
