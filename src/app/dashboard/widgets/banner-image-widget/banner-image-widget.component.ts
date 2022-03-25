@@ -1,14 +1,18 @@
 import { Component, Input } from '@angular/core';
+import { WidgetType } from 'src/models';
 
 /**
  * Component for Banner image widgets.
  */
 @Component({
-  selector: 'app-banner-image-widget[image]',
+  selector: 'app-banner-image-widget[image][widgetType]',
   templateUrl: './banner-image-widget.component.html',
   styleUrls: ['./banner-image-widget.component.scss'],
 })
 export class BannerImageWidgetComponent {
+  /** WidgetType input. */
+  @Input() widgetType!: WidgetType;
+
   /** Image setter. */
   private _image!: string | null;
 
@@ -34,4 +38,7 @@ export class BannerImageWidgetComponent {
   get image(): string | null | undefined {
     return this._image;
   }
+
+  /** Enum widgetType. */
+  enumWidgetType = WidgetType;
 }
