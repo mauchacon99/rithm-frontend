@@ -1413,7 +1413,10 @@ export class MapService {
         //Reset properties that mark that more centering needs to happen.
         this.centerActive$.next(false);
         this.centerCount$.next(0);
-        if (panType === CenterPanType.Station) {
+        if (
+          panType === CenterPanType.Station ||
+          panType === CenterPanType.StationGroup
+        ) {
           this.stationCenter$.next(true);
         }
       }
@@ -1921,6 +1924,12 @@ export class MapService {
   checkCenter(panType: CenterPanType, drawerWidth = 0): boolean {
     const adjustCenter = this.getAdjustedCenter(panType, drawerWidth);
     const canvasPoint = this.currentCanvasPoint$.value;
+    if (panType === CenterPanType.StationGroup) {
+      return (
+        Math.abs(adjustCenter.x - canvasPoint.x) <= 1 &&
+        Math.abs(adjustCenter.y - canvasPoint.y) <= 1
+      );
+    }
     return adjustCenter.x === canvasPoint.x && adjustCenter.y === canvasPoint.y;
   }
 }
