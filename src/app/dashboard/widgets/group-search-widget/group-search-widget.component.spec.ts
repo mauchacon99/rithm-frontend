@@ -9,6 +9,11 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { MockComponent } from 'ng-mocks';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { StationGroupData } from 'src/models/station-group-data';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -20,11 +25,41 @@ describe('GroupSearchWidgetComponent', () => {
   const dataStationGroupWidget: StationGroupData = {
     rithmId: '6375027-78345-73824-54244',
     title: 'Station Group',
-    subStationGroups: [],
+    subStationGroups: [
+      {
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            workers: [],
+            stationOwners: [],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
+      },
+    ],
     stations: [
       {
         rithmId: '3237520-7837-78378-78378',
         name: 'StationName',
+        workers: [],
+        stationOwners: [],
+      },
+      {
+        rithmId: '9267520-4837-78378-78378',
+        name: 'StationName 2',
+        workers: [],
+        stationOwners: [],
+      },
+      {
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
         workers: [],
         stationOwners: [],
       },
@@ -41,6 +76,13 @@ describe('GroupSearchWidgetComponent', () => {
         GroupSearchWidgetComponent,
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
+        MockComponent(StationDocumentsModalComponent),
+      ],
+      imports: [
+        MatInputModule,
+        NoopAnimationsModule,
+        FormsModule,
+        MatDialogModule,
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -103,12 +145,11 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show list of stations groups', () => {
-    component.dataStationGroup.stations.push({
-      rithmId: '3237520-7837-78378-78378',
-      name: 'StationName',
-      workers: [],
-      stationOwners: [],
-    });
+    component.dataStationGroup = dataStationGroupWidget;
+    component.stations = dataStationGroupWidget.stations;
+    component.subStationGroupData = dataStationGroupWidget.subStationGroups;
+    component.isLoading = false;
+    component.errorStationGroup = false;
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -121,7 +162,11 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show message list of stations groups empty', () => {
-    component.dataStationGroup.stations = [];
+    component.dataStationGroup = dataStationGroupWidget;
+    component.stations = [];
+    component.subStationGroupData = [];
+    component.isLoading = false;
+    component.errorStationGroup = false;
     fixture.detectChanges();
     const listStations = fixture.debugElement.nativeElement.querySelector(
       '#list-stations-groups'
@@ -131,5 +176,83 @@ describe('GroupSearchWidgetComponent', () => {
     );
     expect(listStations).toBeNull();
     expect(stationGroupsEmpty).toBeTruthy();
+  });
+
+  it('should search stations and substations', () => {
+    component.dataStationGroup = dataStationGroupWidget;
+    component.stations = dataStationGroupWidget.stations;
+    component.subStationGroupData = dataStationGroupWidget.subStationGroups;
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.search = 'stationName 3';
+    fixture.detectChanges();
+    const expectedStation = [
+      {
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
+        workers: [],
+        stationOwners: [],
+      },
+    ];
+    component.searchStation();
+    expect(component.stations).toEqual(expectedStation);
+
+    component.search = 'substation group';
+    fixture.detectChanges();
+
+    const expectedSubStation = [
+      {
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            workers: [],
+            stationOwners: [],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
+      },
+    ];
+    component.searchStation();
+    expect(component.subStationGroupData).toEqual(expectedSubStation);
+  });
+
+  it('should executed modal for render documents the specific station', () => {
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: dataStationGroupWidget.stations[0].name,
+        stationId: dataStationGroupWidget.stations[0].rithmId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openDocsModal(dataStationGroupWidget.stations[0]);
+    expect(spyModal).toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
+  });
+
+  it('should not show modal when edit mode is active', () => {
+    component.editMode = true;
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: dataStationGroupWidget.stations[0].name,
+        stationId: dataStationGroupWidget.stations[0].rithmId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openDocsModal(dataStationGroupWidget.stations[0]);
+    expect(spyModal).not.toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
   });
 });

@@ -119,6 +119,7 @@
                     [(ngModel)]="dashboardData.name"
                     type="text"
                     placeholder="Untitled Dashboard"
+                    autocomplete="off"
                   />
                 </mat-form-field>
               </div>
@@ -197,7 +198,8 @@
               <app-document-widget
                 *ngIf="
                   item.widgetType === widgetType.Document ||
-                  item.widgetType === widgetType.DocumentListBanner
+                  item.widgetType === widgetType.DocumentListBanner ||
+                  item.widgetType === widgetType.ContainerProfileBanner
                 "
                 [dataWidget]="item.data"
                 [widgetType]="item.widgetType"

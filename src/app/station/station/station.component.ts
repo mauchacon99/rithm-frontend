@@ -138,6 +138,9 @@ export class StationComponent
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -823,6 +826,13 @@ export class StationComponent
     if (this.settingMode) {
       this.setGridMode('layout');
     }
+  }
+
+  /**
+   * Toggles the open state of the right setting drawer.
+   */
+  openRightDrawer(): void {
+    this.sidenavDrawerService.openDrawer('fieldSetting');
   }
 
   /**

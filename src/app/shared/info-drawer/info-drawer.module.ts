@@ -5,6 +5,7 @@ import { DocumentInfoDrawerModule } from 'src/app/shared/document-info-drawer/do
 import { StationInfoDrawerModule } from 'src/app/shared/station-info-drawer/station-info-drawer.module';
 import { HistoryDrawerModule } from 'src/app/shared/history-drawer/history-drawer.module';
 import { MatButtonModule } from '@angular/material/button';
+import { SettingDrawerModule } from 'src/app/shared/setting-drawer/setting-drawer.module';
 
 @NgModule({
   declarations: [InfoDrawerComponent],
@@ -13,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
     DocumentInfoDrawerModule,
     StationInfoDrawerModule,
     HistoryDrawerModule,
+    SettingDrawerModule,
     MatButtonModule,
   ],
   exports: [InfoDrawerComponent],

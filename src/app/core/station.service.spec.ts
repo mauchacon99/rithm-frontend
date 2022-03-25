@@ -1138,9 +1138,63 @@ describe('StationService', () => {
   it('should return the station group', () => {
     const depth = 1;
     const expectedResponse: StationGroupData = {
-      rithmId: stationId,
+      rithmId: '6375027-78345-73824-54244',
       title: 'Station Group',
-      subStationGroups: ['subStation 1'],
+      subStationGroups: [
+        {
+          rithmId: '1375027-78345-73824-54244',
+          title: 'Sub Station Group',
+          subStationGroups: [],
+          stations: [
+            {
+              rithmId: '123-321-456',
+              name: 'station 1',
+              workers: [
+                {
+                  rithmId: '123-321-456',
+                  firstName: 'John',
+                  lastName: 'Wayne',
+                  email: 'name@company.com',
+                  isWorker: true,
+                  isOwner: true,
+                },
+              ],
+              stationOwners: [
+                {
+                  rithmId: '789-798-456',
+                  firstName: 'Peter',
+                  lastName: 'Doe',
+                  email: 'name1@company.com',
+                  isWorker: true,
+                  isOwner: true,
+                },
+              ],
+            },
+          ],
+          users: [
+            {
+              rithmId: '789-798-456',
+              firstName: 'Noah',
+              lastName: 'Smith',
+              email: 'name2@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          admins: [
+            {
+              rithmId: '159-753-456',
+              firstName: 'Taylor',
+              lastName: 'Du',
+              email: 'name3@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          isChained: true,
+          isImplicitRootStationGroup: true,
+        },
+      ],
       stations: [
         {
           rithmId: '123-321-456',
