@@ -12,6 +12,7 @@ import { StationGroupData } from 'src/models/station-group-data';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -75,7 +76,12 @@ describe('GroupSearchWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
-      imports: [MatInputModule, NoopAnimationsModule, FormsModule],
+      imports: [
+        MatInputModule,
+        NoopAnimationsModule,
+        FormsModule,
+        RouterTestingModule,
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
