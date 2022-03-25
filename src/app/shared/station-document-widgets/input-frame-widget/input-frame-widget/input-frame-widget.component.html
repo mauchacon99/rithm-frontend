@@ -2,12 +2,12 @@
   <div
     class="min-h-full"
     cdkDropList
-    cdkDropListOrientation="vertical"
     [id]="'inputFrameWidget-' + id"
     [cdkDropListData]="fields"
     (cdkDropListDropped)="addElementDrag($event)"
   >
     <div *ngFor="let field of fields" cdkDrag>
+      <div class="drag-placeholder" *cdkDragPlaceholder></div>
       <app-text-field
         [field]="field"
         [isStation]="true"
