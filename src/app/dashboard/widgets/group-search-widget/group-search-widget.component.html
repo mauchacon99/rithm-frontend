@@ -82,10 +82,13 @@
 
         <button
           mat-icon-button
-          id="link-station-button"
-          data-testid="link-station-button"
+          [id]="'link-station-button-' + station.rithmId"
+          [attr.data-testid]="'link-station-button-' + station.rithmId"
+          class="text-secondary-500"
+          [disabled]="editMode"
+          [routerLink]="['/', 'station', station.rithmId]"
         >
-          <i class="fas fa-external-link-alt text-base text-secondary-500"></i>
+          <i class="fas fa-external-link-alt text-base"></i>
         </button>
       </div>
     </div>
