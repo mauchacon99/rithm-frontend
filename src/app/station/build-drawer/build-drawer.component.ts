@@ -145,7 +145,7 @@ export class BuildDrawerComponent implements OnInit {
   customComponents = [
     {
       prompt: 'Headline',
-      icon: 'fa-heading',
+      icon: 'fa-heading fa-solid',
       dataTestId: 'component-headline',
       type: this.frameTypes.Headline,
     },
