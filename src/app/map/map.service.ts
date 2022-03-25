@@ -149,6 +149,9 @@ export class MapService {
     data: {},
   });
 
+  /** Informs the center station button element whether to show on station selected. */
+  stationCenter$ = new BehaviorSubject(false);
+
   /** The copy of station group which is being edited. */
   tempStationGroup$ = new BehaviorSubject({});
 
@@ -478,6 +481,15 @@ export class MapService {
       isChained: false,
       isReadOnlyRootStationGroup: false,
     });
+
+    //Update the name of station group to newly edited one, if it's changed by user
+    const createStationGroup = this.stationGroupElements.find(
+      (group) =>
+        group.status === MapItemStatus.Pending && group.title !== 'Pending'
+    );
+    if (createStationGroup) {
+      newGroup.title = createStationGroup.title;
+    }
 
     if (this.mapMode$.value === MapMode.StationGroupEdit) {
       const editStationGroup = this.stationGroupElements.find(
@@ -1401,6 +1413,9 @@ export class MapService {
         //Reset properties that mark that more centering needs to happen.
         this.centerActive$.next(false);
         this.centerCount$.next(0);
+        if (panType === CenterPanType.Station) {
+          this.stationCenter$.next(true);
+        }
       }
     };
 
@@ -1749,13 +1764,15 @@ export class MapService {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
-    //If there are still stations or station group with status not normal, return true.
+    //If there are still stations or station group with status not normal and not Pending, return true.
     return (
       this.stationElements.some(
         (station) => station.status !== MapItemStatus.Normal
       ) ||
       this.stationGroupElements.some(
-        (stationGroup) => stationGroup.status !== MapItemStatus.Normal
+        (stationGroup) =>
+          stationGroup.status !== MapItemStatus.Normal &&
+          stationGroup.status !== MapItemStatus.Pending
       )
     );
   }
@@ -1798,11 +1815,31 @@ export class MapService {
       throw new Error(`There is not any station group with this rithmId.`);
     }
     if (this.mapMode$.value === MapMode.StationGroupAdd) {
-      this.stationGroupElements[stationGroupIndex].title = 'Untitled Group';
+      //If group name is already changed from "Pending" assign updated one else set "Untitled Group"
+      this.stationGroupElements[stationGroupIndex].title =
+        this.stationGroupElements[stationGroupIndex].title === 'Pending' ||
+        this.stationGroupElements[stationGroupIndex].title === '' ||
+        !this.stationGroupElements[stationGroupIndex].title
+          ? 'Untitled Group'
+          : this.stationGroupElements[stationGroupIndex].title;
       this.stationGroupElements[stationGroupIndex].status =
         MapItemStatus.Created;
+      //If edited group already present in storedStationGroupElements, then it's the one which is already created
+      //so set it's status to Updated, else Created
     } else if (this.mapMode$.value === MapMode.StationGroupEdit) {
-      this.stationGroupElements[stationGroupIndex].markAsUpdated();
+      if (
+        this.storedStationGroupElements.some(
+          (group) =>
+            group.rithmId ===
+            this.stationGroupElements[stationGroupIndex].rithmId
+        )
+      ) {
+        this.stationGroupElements[stationGroupIndex].status =
+          MapItemStatus.Updated;
+      } else {
+        this.stationGroupElements[stationGroupIndex].status =
+          MapItemStatus.Created;
+      }
     }
 
     this.resetSelectedStationGroupStationStatus();
@@ -1872,5 +1909,18 @@ export class MapService {
         .length === 1 &&
       this.stationElements.filter((e) => e.selected && !e.disabled).length === 0
     );
+  }
+
+  /**
+   * Checks the map when station is selected and its in the center of the map.
+   *
+   * @param panType Determines the area of the map to be pan to center.
+   * @param drawerWidth Width of the opened drawer.
+   * @returns True if the option is a selected station is center of the map.
+   */
+  checkCenter(panType: CenterPanType, drawerWidth = 0): boolean {
+    const adjustCenter = this.getAdjustedCenter(panType, drawerWidth);
+    const canvasPoint = this.currentCanvasPoint$.value;
+    return adjustCenter.x === canvasPoint.x && adjustCenter.y === canvasPoint.y;
   }
 }

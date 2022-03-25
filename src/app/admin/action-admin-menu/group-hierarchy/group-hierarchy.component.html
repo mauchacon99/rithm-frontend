@@ -1,9 +1,9 @@
 <div
-  class="w-full sm:py-5 px-4 md:flex md:justify-between items-center border-b-2 color-border input-search"
+  class="sm:py-5 px-4 md:flex md:justify-between items-center md:border-b-2 color-border input-search"
 >
   <span class="text-3xl font-bold">Groups</span>
   <mat-form-field
-    class="w-full sm:w-80 mt-2 md:mt-0 search-tabs"
+    class="w-full md:w-80 mt-2 md:mt-0 search-tabs"
     appearance="outline"
   >
     <input
@@ -13,7 +13,12 @@
       id="search-tabs"
       data-testid="search-tabs"
       maxlength="55"
+      autocomplete="off"
     />
     <span matPrefix><i class="fas fa-search p-1 text-secondary-300"></i></span>
   </mat-form-field>
+</div>
+
+<div>
+  <app-group-list-hierarchy> </app-group-list-hierarchy>
 </div>
