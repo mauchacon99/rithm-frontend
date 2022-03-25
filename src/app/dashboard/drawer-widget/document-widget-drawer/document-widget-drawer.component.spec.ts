@@ -27,6 +27,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 describe('DocumentWidgetDrawerComponent', () => {
   let component: DocumentWidgetDrawerComponent;
   let fixture: ComponentFixture<DocumentWidgetDrawerComponent>;
+  let sideNavService: SidenavDrawerService;
   const dataEditWidget: EditDataWidget = {
     widgetItem: {
       rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
@@ -70,6 +71,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     fixture = TestBed.createComponent(DocumentWidgetDrawerComponent);
     component = fixture.componentInstance;
     component.quantityElementsWidget = 2;
+    sideNavService = TestBed.inject(SidenavDrawerService);
     fixture.detectChanges();
   });
 
@@ -81,7 +83,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     const dataWidget = JSON.parse(dataEditWidget.widgetItem.data);
     const spyEmit = spyOn(component.setWidgetIndex, 'emit').and.callThrough();
 
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
+    sideNavService.drawerData$.next(dataEditWidget);
     expect(component.widgetIndex).toEqual(dataEditWidget.widgetIndex);
     expect(component.widgetItem).toEqual(dataEditWidget.widgetItem);
     expect(component.quantityElementsWidget).toEqual(
@@ -131,7 +133,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('Should emit getWidgetItem', () => {
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
+    sideNavService.drawerData$.next(dataEditWidget);
     const spySetWidgetType = spyOn(component.getWidgetItem, 'emit');
     component.ngOnInit();
     expect(spySetWidgetType).toHaveBeenCalledOnceWith(
@@ -288,6 +290,16 @@ describe('DocumentWidgetDrawerComponent', () => {
       '#display-document-drawer-error'
     );
     expect(errorMessage).toBeTruthy();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call method to get document images in service', () => {
+    dataEditWidget.widgetItem.widgetType = WidgetType.ContainerProfileBanner;
+    const spyError = spyOn(
+      TestBed.inject(DocumentService),
+      'getImagesDocuments'
+    ).and.callThrough();
+    sideNavService.drawerData$.next(dataEditWidget);
     expect(spyError).toHaveBeenCalled();
   });
 });
