@@ -14,10 +14,9 @@ import { SettingsModule } from './settings/settings.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AdminModule } from './admin/admin.module';
-import { TitleWidgetComponent } from './shared/station-document-widgets/title-widget/title-widget.component';
 
 @NgModule({
-  declarations: [AppComponent, TitleWidgetComponent],
+  declarations: [AppComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
