@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingDrawerComponent } from './setting-drawer.component';
 
 describe('SettingDrawerComponent', () => {
@@ -9,6 +10,7 @@ describe('SettingDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingDrawerComponent],
+      imports: [MatInputModule, NoopAnimationsModule],
     }).compileComponents();
   });
 

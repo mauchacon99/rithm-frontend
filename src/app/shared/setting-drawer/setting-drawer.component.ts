@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Question } from 'src/models';
 
 /**
  * Component for setting drawer in the station.
@@ -9,6 +10,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./setting-drawer.component.scss'],
 })
 export class SettingDrawerComponent {
+  /** The field information for your setting. */
+  fieldSetting!: Question;
+
   constructor() {
     /* */
   }
