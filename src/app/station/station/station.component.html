@@ -370,6 +370,7 @@
                     <gridster
                       class="p-0 bg-transparent h-screen"
                       [options]="options"
+                      (mouseleave)="widgetMoveButton = -1"
                     >
                       <gridster-item
                         [item]="widgetItem"
@@ -377,17 +378,31 @@
                         class="pt-1"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
+                          let i = index;
                           trackBy: trackBy
                         "
+                        (mouseover)="widgetMoveButton = i"
                       >
-                        <app-input-frame-widget
-                          [fields]="widgetItem.questions"
-                          [stationViewMode]="editMode ? 'edit' : 'preview'"
-                          [stationRithmId]="stationRithmId"
-                          [id]="widgetItem.id"
-                          [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                          (openSettingDrawer)="openSettingDrawer($event)"
-                        ></app-input-frame-widget>
+                        <div class="h-gridster relative overflow-hidden">
+                          <button
+                            mat-icon-button
+                            type="button"
+                            class="button-drag-handler"
+                            data-testid="button-drag-handler"
+                            *ngIf="widgetMoveButton === i && layoutMode"
+                          >
+                            <i class="fas fa-arrows fa-xl"></i>
+                          </button>
+
+                          <app-input-frame-widget
+                            [fields]="widgetItem.questions"
+                            [stationViewMode]="editMode ? 'edit' : 'preview'"
+                            [stationRithmId]="stationRithmId"
+                            [id]="widgetItem.id"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                            (openSettingDrawer)="openSettingDrawer($event)"
+                          ></app-input-frame-widget>
+                        </div>
                       </gridster-item>
                     </gridster>
                   </div>
