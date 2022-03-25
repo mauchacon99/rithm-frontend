@@ -293,6 +293,20 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should show error message when the document images request fails', () => {
+    const spyError = spyOn(
+      TestBed.inject(DocumentService),
+      'getImagesDocuments'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.getImagesDocuments();
+    fixture.detectChanges();
+    expect(spyError).toHaveBeenCalled();
+  });
+
   it('should call method to get document images in service', () => {
     dataEditWidget.widgetItem.widgetType = WidgetType.ContainerProfileBanner;
     const spyError = spyOn(
