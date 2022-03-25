@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { BodyTextWidgetComponent } from './body-text-widget.component';
 
 describe('BodyTextWidgetComponent', () => {
