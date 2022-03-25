@@ -20,11 +20,20 @@
               type="button"
               mat-button
               color="accent"
+              id="file-browser-button"
               data-testid="file-browser-button"
+              (click)="uploadFileInput.click()"
             >
               Browse
             </button>
           </div>
+          <input
+            #uploadFileInput
+            type="file"
+            id="upload-file-input"
+            data-testid="upload-file-input"
+            [hidden]="true"
+          />
         </div>
       </div>
     </div>
