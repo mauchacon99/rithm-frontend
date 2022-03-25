@@ -5,17 +5,18 @@
   <app-organization-management></app-organization-management>
 </div>
 <ng-template #newAdminInterface id="new-admin-interface">
-  <div class="md:grid md:grid-cols-12 h-full bg-white">
-    <div class="md:col-span-3 lg:col-span-2 md:border-r-2 color-border">
+  <div class="h-full bg-white md:flex md:flex-row">
+    <div
+      class="w-full md:w-[300px] text-center md:border-r-2 color-border px-2"
+    >
       <app-admin-menu
         (itemMenuSelected)="getItemSelected($event)"
       ></app-admin-menu>
     </div>
-    <div class="md:col-span-9 lg:col-span-10 bg-white">
+    <div class="w-full mt-10 md:mt-0 bg-white">
       <app-group-hierarchy
         id="group-hierarchy"
         *ngIf="itemMenuSelected === listAdminOptionMenuType.GroupHierarchy"
-        class="mt-3"
       ></app-group-hierarchy>
     </div>
   </div>

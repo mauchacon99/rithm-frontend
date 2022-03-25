@@ -8,6 +8,8 @@
         <!-- subStationGroups -->
         <mat-list-option
           *ngFor="let stationGroup of stationGroups.subStationGroups"
+          [id]="'group-item-' + stationGroup.rithmId"
+          [attr.data-testid]="'group-item-' + stationGroup.rithmId"
           [value]="stationGroup"
         >
           <ng-container
@@ -20,7 +22,9 @@
         <!-- stations -->
         <mat-list-option
           *ngFor="let station of stationGroups.stations"
-          [value]="station.rithmId"
+          [value]="station"
+          [id]="'station-item-' + station.rithmId"
+          [attr.data-testid]="'station-item-' + station.rithmId"
         >
           <ng-container
             *ngTemplateOutlet="
