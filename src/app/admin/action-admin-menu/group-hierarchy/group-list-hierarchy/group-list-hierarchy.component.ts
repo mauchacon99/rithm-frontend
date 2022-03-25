@@ -27,10 +27,14 @@ export class GroupListHierarchyComponent implements OnInit {
     this.getStationGroups();
   }
 
-  /** Get stationGroups. */
-  private getStationGroups(): void {
+  /**
+   * Get stationGroups.
+   *
+   * @param idStationOrGroup RithmId of station or stationGroup.
+   */
+  private getStationGroups(idStationOrGroup = ''): void {
     this.stationService
-      .getStationGroups('')
+      .getStationGroups(idStationOrGroup)
       .pipe(first())
       .subscribe({
         next: (stationGroup) => {
