@@ -39,7 +39,7 @@
 
   <mat-selection-list [multiple]="false" class="admin-menu mt-3">
     <mat-list-option
-      class="sm:text-sm truncate"
+      class="sm:text-sm truncate text-center md:text-left"
       (click)="getItemSelected(item.type)"
       *ngFor="let item of listAdminItemMenu"
       [value]="itemSelected"
