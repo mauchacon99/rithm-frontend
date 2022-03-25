@@ -12,6 +12,8 @@ import { StationGroupData } from 'src/models/station-group-data';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -74,8 +76,14 @@ describe('GroupSearchWidgetComponent', () => {
         GroupSearchWidgetComponent,
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
+        MockComponent(StationDocumentsModalComponent),
       ],
-      imports: [MatInputModule, NoopAnimationsModule, FormsModule],
+      imports: [
+        MatInputModule,
+        NoopAnimationsModule,
+        FormsModule,
+        MatDialogModule,
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -213,5 +221,38 @@ describe('GroupSearchWidgetComponent', () => {
     ];
     component.searchStation();
     expect(component.subStationGroupData).toEqual(expectedSubStation);
+  });
+
+  it('should executed modal for render documents the specific station', () => {
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: dataStationGroupWidget.stations[0].name,
+        stationId: dataStationGroupWidget.stations[0].rithmId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openDocsModal(dataStationGroupWidget.stations[0]);
+    expect(spyModal).toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
+  });
+
+  it('should not show modal when edit mode is active', () => {
+    component.editMode = true;
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: dataStationGroupWidget.stations[0].name,
+        stationId: dataStationGroupWidget.stations[0].rithmId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openDocsModal(dataStationGroupWidget.stations[0]);
+    expect(spyModal).not.toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
   });
 });
