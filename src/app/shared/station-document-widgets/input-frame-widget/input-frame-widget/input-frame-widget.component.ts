@@ -30,7 +30,7 @@ export class InputFrameWidgetComponent {
   fieldTypes = QuestionFieldType;
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
-  @Output() toggleRightDrawer: EventEmitter<Question> =
+  @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
 
   /**
@@ -124,7 +124,7 @@ export class InputFrameWidgetComponent {
    *
    * @param field The field for the setting drawer.
    */
-  openSettingDrawer(field: Question): void {
-    this.toggleRightDrawer.emit(field);
+  openFieldSettingDrawer(field: Question): void {
+    this.openSettingDrawer.emit(field);
   }
 }

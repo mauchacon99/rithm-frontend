@@ -67,9 +67,9 @@ describe('InputFrameWidgetComponent', () => {
   });
 
   it('should emit event toggleRightDrawer', () => {
-    const spyEmit = spyOn(component.toggleRightDrawer, 'emit');
+    const spyEmit = spyOn(component.openSettingDrawer, 'emit');
     const field = firstList[0];
-    component.openSettingDrawer(field);
+    component.openFieldSettingDrawer(field);
     expect(spyEmit).toHaveBeenCalledWith(field);
   });
 });

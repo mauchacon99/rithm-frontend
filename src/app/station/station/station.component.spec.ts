@@ -795,7 +795,7 @@ describe('StationComponent', () => {
 
   it('should call sidenavService and display setting drawer', () => {
     const spyDrawer = spyOn(TestBed.inject(SidenavDrawerService), 'openDrawer');
-    component.openRightDrawer(question);
+    component.openSettingDrawer(question);
     expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting', question);
   });
 
