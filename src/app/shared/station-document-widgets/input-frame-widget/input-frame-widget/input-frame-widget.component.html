@@ -7,7 +7,7 @@
     (cdkDropListDropped)="addElementDrag($event)"
   >
     <div *ngFor="let field of fields" cdkDrag>
-      <div class="drag-placeholder" *cdkDragPlaceholder></div>
+      <div class="field-drag-placeholder" *cdkDragPlaceholder></div>
       <app-text-field
         [field]="field"
         [isStation]="true"
