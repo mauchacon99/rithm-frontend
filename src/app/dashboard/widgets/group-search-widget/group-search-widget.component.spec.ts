@@ -4,6 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
 
@@ -15,6 +16,7 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { StationGroupData } from 'src/models/station-group-data';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { StationComponent } from 'src/app/station/station/station.component';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -84,7 +86,12 @@ describe('GroupSearchWidgetComponent', () => {
         NoopAnimationsModule,
         FormsModule,
         MatDialogModule,
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'station/:stationId',
+            component: MockComponent(StationComponent),
+          },
+        ]),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -256,5 +263,33 @@ describe('GroupSearchWidgetComponent', () => {
       StationDocumentsModalComponent,
       expectData
     );
+  });
+
+  it('should redirect to station', async () => {
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.stations = dataStationGroupWidget.stations;
+    fixture.detectChanges();
+    const btnRedirectStation = fixture.debugElement.nativeElement.querySelector(
+      '#link-station-button-' + dataStationGroupWidget.stations[0].rithmId
+    );
+    expect(btnRedirectStation).toBeTruthy();
+    await btnRedirectStation.click();
+    expect(TestBed.inject(Location).path()).toEqual(
+      `/station/${dataStationGroupWidget.stations[0].rithmId}`
+    );
+  });
+
+  it('should disable button redirect to station when editMode is true', async () => {
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.editMode = true;
+    component.stations = dataStationGroupWidget.stations;
+    fixture.detectChanges();
+    const btnRedirectStation = fixture.debugElement.nativeElement.querySelector(
+      '#link-station-button-' + dataStationGroupWidget.stations[0].rithmId
+    );
+    expect(btnRedirectStation).toBeTruthy();
+    expect(btnRedirectStation.disabled).toBeTrue();
   });
 });
