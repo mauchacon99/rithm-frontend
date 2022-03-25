@@ -224,7 +224,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
-    this.mapService.zoomCount$
+    this.mapService.zoomHelper.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
         this.zoomCount = count;
@@ -266,7 +266,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     /* This subscribe sets this.nextPanVelocity when the behavior subject in mapService changes.
     Then it checks if auto pan should be activated.
     This is needed to pan the map when the center method is called. */
-    this.mapService.centerPanVelocity$
+    this.mapService.centerHelper.centerPanVelocity$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((velocity) => {
         this.nextPanVelocity = velocity;
@@ -333,9 +333,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               (station) => station.rithmId === this.centerStationRithmId
             );
             //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-            this.mapService.centerActive$.next(true);
+            this.mapService.centerHelper.centerActive$.next(true);
             //Increment centerCount to show that more centering of station needs to be done.
-            this.mapService.centerCount$.next(1);
+            this.mapService.centerHelper.centerCount$.next(1);
             // If Drawer isn't open and there is station to be centered.
             if (
               !this.mapService.mapHelper.isDrawerOpened$.value &&
@@ -364,7 +364,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               stationCenter[0].drawerOpened = true;
               setTimeout(() => {
                 // Center the map on the station.
-                this.mapService.center(
+                this.mapService.centerHelper.center(
                   CenterPanType.Station,
                   drawer[0] ? drawer[0].clientWidth : 0
                 );
@@ -372,9 +372,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.mapHelper.viewStationButtonClick$.next(false);
             }
           } else {
-            this.mapService.centerActive$.next(true);
-            this.mapService.centerCount$.next(1);
-            this.mapService.center(CenterPanType.MapCenter, 0, dataReceived);
+            this.mapService.centerHelper.centerActive$.next(true);
+            this.mapService.centerHelper.centerCount$.next(1);
+            this.mapService.centerHelper.center(
+              CenterPanType.MapCenter,
+              0,
+              dataReceived
+            );
             this.mapService.mapHelper.viewStationButtonClick$.next(false);
           }
         }
@@ -765,10 +769,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (event.key === '+' || event.key === '=' || event.key === '-') {
         //If station menu is open, close it.
         this.mapService.mapHelper.matMenuStatus$.next(true);
-        this.mapService.zoomCount$.next(
+        this.mapService.zoomHelper.zoomCount$.next(
           this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50)
         );
-        this.mapService.handleZoom(false);
+        this.mapService.zoomHelper.handleZoom(false);
       }
     }
   }
@@ -782,9 +786,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   wheel(event: WheelEvent): void {
     event.preventDefault();
     //If map is in the middle of a center animation, cancel it.
-    this.mapService.centerActive$.next(false);
-    this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
-    this.mapService.centerCount$.next(0);
+    this.mapService.centerHelper.centerActive$.next(false);
+    this.mapService.centerHelper.centerPanVelocity$.next({ x: 0, y: 0 });
+    this.mapService.centerHelper.centerCount$.next(0);
 
     //Track where the mouse is located on the canvas after the wheel event is triggered.
     const mousePoint = this.getEventCanvasPoint(event);
@@ -807,19 +811,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
       if (this.scale >= MAX_SCALE) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
         return;
       }
       //If map is in the middle of zooming out, cancel it.
       if (this.zoomCount < 0) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
       }
       //Adjust the zoomCount based on the eventAmount.
-      this.mapService.zoomCount$.next(
+      this.mapService.zoomHelper.zoomCount$.next(
         this.zoomCount + Math.floor(10 * -eventAmount)
       );
       //Trigger zoom logic.
-      this.mapService.handleZoom(false, mousePoint);
+      this.mapService.zoomHelper.handleZoom(false, mousePoint);
       //If a zoom out is attempted when scrolling.
     } else {
       // Do nothing if already at min zoom, in build or view mode.
@@ -828,19 +832,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         (this.mapService.mapHelper.mapMode$.value !== MapMode.View &&
           this.scale <= SCALE_RENDER_STATION_ELEMENTS / ZOOM_VELOCITY)
       ) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
         return;
       }
       //If map is in the middle of zooming in, cancel it.
       if (this.zoomCount > 0) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
       }
       //Adjust the zoomCount based on the eventAmount.
-      this.mapService.zoomCount$.next(
+      this.mapService.zoomHelper.zoomCount$.next(
         this.zoomCount - Math.floor(10 * eventAmount)
       );
       //Trigger zoom logic.
-      this.mapService.handleZoom(false, mousePoint);
+      this.mapService.zoomHelper.handleZoom(false, mousePoint);
     }
     // Overlay option menu close state.
     if (
@@ -984,7 +988,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If panning is due to center button being pressed.
-    if (!this.panActive && this.mapService.centerActive$.value) {
+    if (!this.panActive && this.mapService.centerHelper.centerActive$.value) {
       //Set this.panActive to true so that there can only be one auto pan look going at a time.
       this.panActive = true;
       //The loop to run on each animation frame.
@@ -992,7 +996,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //Take the current nextPanvelocity, and for one animation frame, use that to autoPan.
         this.autoMapPan(this.nextPanVelocity);
         //If center button was pressed, centerActive will be set to true, unless it was cancelled or finished.
-        if (this.mapService.centerActive$.value) {
+        if (this.mapService.centerHelper.centerActive$.value) {
           //Loop through again.
           this.panReq = requestAnimationFrame(step);
         } else {
@@ -1260,7 +1264,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Always allow movement when centerCount are greater than 0.
-    if (this.mapService.centerCount$.value > 0) {
+    if (this.mapService.centerHelper.centerCount$.value > 0) {
       return true;
     }
 
@@ -1382,9 +1386,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       cancelAnimationFrame(this.panReq as number);
       this.panActive = false;
       this.fastDrag = false;
-      this.mapService.centerActive$.next(false);
-      this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
-      this.mapService.centerCount$.next(0);
+      this.mapService.centerHelper.centerActive$.next(false);
+      this.mapService.centerHelper.centerPanVelocity$.next({ x: 0, y: 0 });
+      this.mapService.centerHelper.centerCount$.next(0);
       this.nextPanVelocity = { x: 0, y: 0 };
     }
 
@@ -1986,7 +1990,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.mapService.stationElements.some((e) => e.drawerOpened)) {
       const drawer = document.getElementsByTagName('mat-drawer');
       this.mapService.mapStationHelper.stationCenter$.next(
-        this.mapService.checkCenter(
+        this.mapService.centerHelper.checkCenter(
           CenterPanType.Station,
           drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
         )
@@ -2032,18 +2036,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Update lastTouchCoords with current position of fingers.
       this.lastTouchCoords = position;
       //Update zoomCount by adding the average difference.
-      this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+      this.mapService.zoomHelper.zoomCount$.next(this.zoomCount + averageDiff);
       //Call handleZoom with pinch set to true, and zoom at the centerPoint.
-      this.mapService.handleZoom(true, middlePoint);
+      this.mapService.zoomHelper.handleZoom(true, middlePoint);
       //If there is less distance between your fingers than when you started.
     } else if (averageEnd < averageStart) {
       // Zoom out
       // Update lastTouchCoords with current position of fingers.
       this.lastTouchCoords = position;
       //Update zoomCount by adding the average difference.
-      this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+      this.mapService.zoomHelper.zoomCount$.next(this.zoomCount + averageDiff);
       //Call handleZoom with pinch set to true, and zoom at the centerPoint.
-      this.mapService.handleZoom(true, middlePoint);
+      this.mapService.zoomHelper.handleZoom(true, middlePoint);
     }
   }
 

@@ -288,7 +288,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
     //Close any open station option menus.
     this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Get the map drawer element.
     const drawer = document.getElementsByTagName('mat-drawer');
     if (drawerItem instanceof StationMapElement) {
@@ -309,10 +309,10 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
       //Increment centerCount to show that more centering of station needs to be done.
-      this.mapService.centerCount$.next(1);
+      this.mapService.centerHelper.centerCount$.next(1);
       //Call method to run logic for centering of the station.
       setTimeout(() => {
-        this.mapService.center(
+        this.mapService.centerHelper.center(
           CenterPanType.Station,
           drawer[0] ? drawer[0].clientWidth : 0
         );
@@ -334,10 +334,10 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       );
       drawerItem.drawerOpened = true;
       //Increment centerCount to show that more centering of station group needs to be done.
-      this.mapService.centerCount$.next(1);
+      this.mapService.centerHelper.centerCount$.next(1);
       //Call method to run logic for centering of the station group.
       setTimeout(() => {
-        this.mapService.center(
+        this.mapService.centerHelper.center(
           CenterPanType.StationGroup,
           drawer[0] ? drawer[0].clientWidth : 0
         );

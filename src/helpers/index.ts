@@ -11,3 +11,5 @@ export * from './map/service/map-station-helper';
 export * from './map/service/map-helper';
 export * from './map/service/map-connection-helper';
 export * from './map/service/map-station-group-helper';
+export * from './map/service/center-helper';
+export * from './map/service/zoom-helper';

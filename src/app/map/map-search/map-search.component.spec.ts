@@ -124,7 +124,10 @@ describe('MapSearchComponent', () => {
       TestBed.inject(StationService),
       'updatedStationNameText'
     );
-    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'center');
+    const mapServiceSpy = spyOn(
+      TestBed.inject(MapService).centerHelper,
+      'center'
+    );
     const station = new StationMapElement({
       rithmId: '',
       stationName: 'Untitled Station',
@@ -155,8 +158,10 @@ describe('MapSearchComponent', () => {
     expect(component.searchText).toEqual('');
     expect(component.filteredStationsStationGroups.length).toEqual(0);
     service.mapHelper.matMenuStatus$.subscribe((res) => expect(res).toBe(true));
-    service.centerActive$.subscribe((res) => expect(res).toBe(true));
-    service.centerCount$.subscribe((res) => expect(res).toBe(1));
+    service.centerHelper.centerActive$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
+    service.centerHelper.centerCount$.subscribe((res) => expect(res).toBe(1));
     tick(1);
     expect(mapServiceSpy).toHaveBeenCalledWith(
       CenterPanType.Station,

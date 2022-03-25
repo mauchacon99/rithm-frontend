@@ -206,7 +206,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       });
 
     //Track the current zoomCount.
-    this.mapService.zoomCount$
+    this.mapService.zoomHelper.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
         this.zoomCount = count;
@@ -401,11 +401,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Close any open station option menus.
     this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the center() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Increment centerCount to show that more centering needs to be done.
-    this.mapService.centerCount$.next(1);
+    this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering.
-    this.mapService.center(CenterPanType.MapCenter);
+    this.mapService.centerHelper.center(CenterPanType.MapCenter);
   }
 
   /**
@@ -415,11 +415,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Close any open station option menus.
     this.mapService.mapHelper.matMenuStatus$.next(true);
     //Increment zoomCount so handleZoom knows how much zoom in is needed.
-    this.mapService.zoomCount$.next(
+    this.mapService.zoomHelper.zoomCount$.next(
       this.zoomCount + BUTTON_ZOOM_COUNT_INCREMENT
     );
     //Call method to run logic for zoom.
-    this.mapService.handleZoom(false);
+    this.mapService.zoomHelper.handleZoom(false);
   }
 
   /**
@@ -429,11 +429,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Close any open station option menus.
     this.mapService.mapHelper.matMenuStatus$.next(true);
     //Decrement zoomCount so handleZoom knows how much zoom out is needed.
-    this.mapService.zoomCount$.next(
+    this.mapService.zoomHelper.zoomCount$.next(
       this.zoomCount - BUTTON_ZOOM_COUNT_INCREMENT
     );
     //Call method to run logic for zoom.
-    this.mapService.handleZoom(false);
+    this.mapService.zoomHelper.handleZoom(false);
   }
 
   /**
@@ -607,13 +607,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Close any open station option menus.
     this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Get the map drawer element.
     const drawer = document.getElementsByTagName('mat-drawer');
     //Increment centerCount to show that more centering of station needs to be done.
-    this.mapService.centerCount$.next(1);
+    this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.center(
+    this.mapService.centerHelper.center(
       CenterPanType.Station,
       drawer[0] ? drawer[0].clientWidth : 0
     );
