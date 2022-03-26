@@ -51,8 +51,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
-  /** Get flow button name. */
-  flowButtonName = '';
+  /** Get flow button name /Flow as default. */
+  flowButtonName = 'Flow';
 
   /** Display the ownerRoster length. */
   ownersRosterLength = -1;
