@@ -710,13 +710,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update flow button name.
-   */
-  updateFlowButtonName(): void {
-    this.stationService.updatedFlowButtonText(this.flowButtonName);
-  }
-
-  /**
    * Update the AllowAllOrgWorkers status.
    */
   updateAllOrgWorkersStation(): void {

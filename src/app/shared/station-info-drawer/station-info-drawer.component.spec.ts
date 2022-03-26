@@ -40,7 +40,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
-  let stationInject: StationService;
   const formBuilder = new FormBuilder();
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
@@ -105,7 +104,6 @@ describe('StationInfoDrawerComponent', () => {
       isChained: false,
     };
     component.stationRithmId = stationId;
-    stationInject = TestBed.inject(StationService);
     fixture.detectChanges();
   });
 
@@ -526,20 +524,6 @@ describe('StationInfoDrawerComponent', () => {
         '#loading-indicator-allow-org-workers'
       );
     expect(loadingAllOrgWorker).toBeTruthy();
-  });
-
-  it('should update text of flow button', () => {
-    const spyFlowButton = spyOn(
-      TestBed.inject(StationService),
-      'updatedFlowButtonText'
-    ).and.callThrough();
-
-    expect(component.flowButtonName).toBe('');
-    stationInject.flowButtonText$.next('Flow');
-    expect(component.flowButtonName).toBe('');
-    component.updateFlowButtonName();
-
-    expect(spyFlowButton).toHaveBeenCalledOnceWith(component.flowButtonName);
   });
 
   it('should navigate to the station on the map', () => {
