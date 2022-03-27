@@ -25,6 +25,7 @@ import {
   RuleType,
   DocumentEvent,
   DocumentWidget,
+  DocumentImage,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -921,6 +922,42 @@ describe('DocumentService', () => {
     );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(formData);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should call method to get document images', () => {
+    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+    const expectedResponse: DocumentImage[] = [
+      {
+        imageId: '231-456-654',
+        imageName: 'landscape.png',
+      },
+    ];
+    service.getImagesDocuments(documentRithm).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
+  it('should return image json', () => {
+    const expectedResponse = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image name',
+    };
+
+    const imageId = '123-456-789';
+
+    service.getImageByRithmId(imageId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson?vaultFileRithmId=${imageId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
 
     req.flush(expectedResponse);
     httpTestingController.verify();

@@ -15,7 +15,7 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
-  ImageModelWidget,
+  DocumentImage,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -37,7 +37,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   });
 
   /** Image to banner. */
-  @Input() set image(value: ImageModelWidget) {
+  @Input() set image(value: DocumentImage) {
     if (this.widgetItem && this.widgetItem.imageId !== value.imageId) {
       this.widgetItem.imageId = value.imageId;
       this.widgetItem.imageName = value.imageName;

@@ -16,10 +16,12 @@ import {
   StandardStringJSON,
   DocumentNameField,
   StandardBooleanJSON,
+  StationGroupData,
 } from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
+const MICROSERVICE_PATH_STATION_GROUP = '/stationservice/api/stationGroup';
 
 describe('StationService', () => {
   let service: StationService;
@@ -1134,26 +1136,126 @@ describe('StationService', () => {
   });
 
   it('should return the station group', () => {
-    const expectedResponse = {
+    const depth = 1;
+    const expectedResponse: StationGroupData = {
       rithmId: '6375027-78345-73824-54244',
       title: 'Station Group',
-      SubStationGroups: [],
-      stations: [
+      subStationGroups: [
         {
-          rithmId: '3237520-7837-78378-78378',
-          name: 'StationName',
-          workers: [],
-          StationOwners: [],
+          rithmId: '1375027-78345-73824-54244',
+          title: 'Sub Station Group',
+          subStationGroups: [],
+          stations: [
+            {
+              rithmId: '123-321-456',
+              name: 'station 1',
+              workers: [
+                {
+                  rithmId: '123-321-456',
+                  firstName: 'John',
+                  lastName: 'Wayne',
+                  email: 'name@company.com',
+                  isWorker: true,
+                  isOwner: true,
+                },
+              ],
+              stationOwners: [
+                {
+                  rithmId: '789-798-456',
+                  firstName: 'Peter',
+                  lastName: 'Doe',
+                  email: 'name1@company.com',
+                  isWorker: true,
+                  isOwner: true,
+                },
+              ],
+            },
+          ],
+          users: [
+            {
+              rithmId: '789-798-456',
+              firstName: 'Noah',
+              lastName: 'Smith',
+              email: 'name2@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          admins: [
+            {
+              rithmId: '159-753-456',
+              firstName: 'Taylor',
+              lastName: 'Du',
+              email: 'name3@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          isChained: true,
+          isImplicitRootStationGroup: true,
         },
       ],
-      admins: [],
-      users: [],
-      IsChained: true,
-      IsImplicitRootFlow: true,
+      stations: [
+        {
+          rithmId: '123-321-456',
+          name: 'station 1',
+          workers: [
+            {
+              rithmId: '123-321-456',
+              firstName: 'John',
+              lastName: 'Wayne',
+              email: 'name@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+          stationOwners: [
+            {
+              rithmId: '789-798-456',
+              firstName: 'Peter',
+              lastName: 'Doe',
+              email: 'name1@company.com',
+              isWorker: true,
+              isOwner: true,
+            },
+          ],
+        },
+      ],
+      users: [
+        {
+          rithmId: '789-798-456',
+          firstName: 'Noah',
+          lastName: 'Smith',
+          email: 'name2@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      admins: [
+        {
+          rithmId: '159-753-456',
+          firstName: 'Taylor',
+          lastName: 'Du',
+          email: 'name3@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      isChained: true,
+      isImplicitRootStationGroup: true,
     };
 
-    service.getStationGroupsWidget('656-651-615-565').subscribe((response) => {
+    service.getStationGroups(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/hierarchy?stationGroupRithmId=${stationId}&depth=${depth}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
+    expect(req.request.params.get('depth')).toBe('1');
+
+    req.flush(expectedResponse);
   });
 });

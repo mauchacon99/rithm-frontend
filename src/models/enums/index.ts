@@ -20,3 +20,4 @@ export * from './corner';
 export * from './columns-document-info';
 export * from './frame-type.enum';
 export * from './centerPan-type-enum';
+export * from './admin-option-menu-type';

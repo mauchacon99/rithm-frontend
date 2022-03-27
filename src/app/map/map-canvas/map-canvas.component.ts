@@ -159,6 +159,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
+  /** Whether the called info-drawer is documentInfo type or stationInfo. */
+  drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
+
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
    *
@@ -290,6 +293,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.updateStationGroup(optionData.data);
         }
       });
+
+    //Track the current drawerContext.
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        //If the drawerContext is a usable context.
+        if (
+          data === 'connectionInfo' ||
+          data === 'stationInfo' ||
+          data === 'stationGroupInfo'
+        ) {
+          //Set drawerMode to the current data.
+          this.drawerMode = data;
+        }
+      });
   }
 
   /**
@@ -395,9 +413,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       click: false,
       data: {},
     });
-    this.mapService.stationElements = [];
-    this.mapService.stationGroupElements = [];
-    this.mapService.connectionElements = [];
     this.mapService.isDrawerOpened$.next(false);
     this.mapService.mapMode$.next(MapMode.View);
   }
@@ -1966,6 +1981,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!this.panActive && !this.pendingGroupActive) {
       this.drawElements();
     }
+
+    /* For selected station or station group in map check whether it's in center of the map.
+      and send info to center station or station group button for show if true.
+    */
+    if (
+      this.mapService.stationElements.some((e) => e.drawerOpened) ||
+      this.mapService.stationGroupElements.some((e) => e.drawerOpened)
+    ) {
+      const drawer = document.getElementsByTagName('mat-drawer');
+      this.mapService.stationCenter$.next(
+        this.mapService.checkCenter(
+          this.drawerMode === 'stationInfo'
+            ? CenterPanType.Station
+            : CenterPanType.StationGroup,
+          drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
+        )
+      );
+    }
   }
 
   /**
@@ -2450,6 +2483,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
+    station.drawerOpened = true;
     this.mapService.isDrawerOpened$.next(true);
   }
 

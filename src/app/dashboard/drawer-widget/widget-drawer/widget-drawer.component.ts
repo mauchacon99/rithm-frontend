@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import { DashboardItem, ImageModelWidget, WidgetType } from 'src/models';
+import { DashboardItem, DocumentImage, WidgetType } from 'src/models';
 import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
@@ -38,7 +38,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Image selected in input file. */
-  imageUploaded!: ImageModelWidget;
+  imageUploaded!: DocumentImage;
 
   /** Validate if the widget is type station-table-banner-widget. */
   widgetTypeEnum = WidgetType;
@@ -157,10 +157,10 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    * @param event Event of select image.
    */
   uploadImage(event: Event): void {
-    this.isUploading = true;
     const target = event.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
     if (file) {
+      this.isUploading = true;
       this.documentService
         .uploadImage(file)
         .pipe(first())

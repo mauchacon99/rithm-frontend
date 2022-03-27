@@ -1,0 +1,7 @@
+.custom-loading-indicator {
+  ::ng-deep app-loading-indicator {
+    div {
+      justify-content: start !important;
+    }
+  }
+}

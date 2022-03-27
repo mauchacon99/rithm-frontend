@@ -19,6 +19,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -30,6 +31,7 @@ describe('WidgetDrawerComponent', () => {
         WidgetDrawerComponent,
         MockComponent(StationWidgetDrawerComponent),
         MockComponent(DocumentWidgetDrawerComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -304,5 +306,17 @@ describe('WidgetDrawerComponent', () => {
     ).and.callThrough();
     component.uploadImage(mockEvt as unknown as Event);
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should show loading indicator when upload an image', () => {
+    component.showImageBanner = true;
+    component.widgetType = WidgetType.DocumentListBanner;
+    component.isUploading = true;
+    fixture.detectChanges();
+
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-upload-image'
+    );
+    expect(loadingIndicator).toBeTruthy();
   });
 });

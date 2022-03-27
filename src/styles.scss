@@ -65,6 +65,7 @@ $rithm-theme: mat.define-light-theme(
 
 body {
   background: $primary-blue;
+  overflow: hidden;
 }
 
 /// Overrides the default accent color for the snackbar action

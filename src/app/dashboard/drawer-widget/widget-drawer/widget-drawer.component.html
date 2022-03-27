@@ -39,7 +39,8 @@
       class="border-t border-solid border-secondary-100 py-5 pl-5"
       *ngIf="
         (widgetType === widgetTypeEnum.StationTableBanner ||
-          widgetType === widgetTypeEnum.DocumentListBanner) &&
+          widgetType === widgetTypeEnum.DocumentListBanner ||
+          widgetType === widgetTypeEnum.ContainerProfileBanner) &&
         showImageBanner
       "
       id="section-image-banner"
@@ -52,7 +53,7 @@
         id="upload-image-button"
         data-testid="upload-image-button"
         (click)="fileInput.click()"
-        [disabled]="isUploading || (imageUploaded && imageUploaded.imageId)"
+        [disabled]="isUploading || (!!imageUploaded && !!imageUploaded.imageId)"
       >
         <i class="fa fa-upload"></i>
         Upload image
@@ -67,8 +68,16 @@
       </button>
 
       <div
-        class="w-full flex mt-5 items-center"
-        *ngIf="imageUploaded && imageUploaded.imageId"
+        *ngIf="isUploading"
+        class="mt-3 custom-loading-indicator"
+        id="loading-indicator-upload-image"
+      >
+        <app-loading-indicator inlineText="Loading..."></app-loading-indicator>
+      </div>
+
+      <div
+        class="w-full flex mt-2 items-center"
+        *ngIf="!isUploading && imageUploaded && imageUploaded.imageId"
       >
         <span class="text-accent-500 truncate">{{
           imageUploaded.imageName

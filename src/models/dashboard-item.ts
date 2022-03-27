@@ -32,4 +32,6 @@ export interface DashboardItem {
   imageId?: string | null;
   /** Name of the image. */
   imageName?: string | null;
+  /** Image profile for show in widget. */
+  profileImageId?: string | null;
 }

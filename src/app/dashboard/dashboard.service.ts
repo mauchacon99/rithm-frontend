@@ -59,42 +59,103 @@ export class DashboardService {
     },
   ];
 
-  /** Data static to preview templates widgets modal. */
+  /** Data static to preview templates widgets modal and data description component. */
   dataTemplatePreviewWidgetModal = {
     // station data
     [WidgetType.Station]: {
       title: 'Table',
       description:
         'Build a custom table with specific values from each document in the station.',
+      descriptionComponent: {
+        title: 'Table Widget',
+        type: 'Station Template',
+        customizable: 'Table Columns',
+        description: `By default. the table has a single column showing each document in your selected station.
+        Custom banner images can also be added to the widget`,
+      },
     },
     [WidgetType.StationTableBanner]: {
       title: 'Table With Banner Image',
       description:
         'Build a custom table with specific values from each document in the station.',
+      descriptionComponent: {
+        title: 'Table Widget',
+        type: 'Station Template',
+        customizable: 'Table Columns & Image',
+        description: `By default. the table has a single column showing each document in your selected station.
+        Additional columns of data can be added as desired. Custom banner     images can also be added to the widget`,
+      },
     },
     // groups data
     [WidgetType.StationGroup]: {
       title: '',
       description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
     },
     // Document data
     ['defaultDocument']: {
       title: 'Default',
       description: 'Maintain the default document styling.',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
     },
     [WidgetType.DocumentListBanner]: {
       title: 'List with Banner Image',
       description:
         'Display all the values associated with a document along with a custom banner image.',
+      descriptionComponent: {
+        title: 'List Widget',
+        type: 'Document Template',
+        customizable: 'List Values & Image',
+        description: `Upload an image from the container to display as a banner image.
+        List values can also be optionally hidden from on the widget as needed.`,
+      },
     },
     [WidgetType.Document]: {
       title: 'List',
       description: 'Display all the values associated with a document.',
+      descriptionComponent: {
+        title: 'List Widget',
+        type: 'Document Template',
+        customizable: 'List Values',
+        description: `By default, the list widget displays all of the values associated with a document.
+        Values can be optionally be hidden from on the widget in needed.`,
+      },
     },
+    // Group
     [WidgetType.StationGroupSearch]: {
       title: 'Search',
       description: `User can query all the values saved on documents within a flow. By default the search results display the document
       name and the field that matches your search.`,
+      descriptionComponent: {
+        title: 'Search Widget',
+        type: 'Group Template',
+        customizable: 'Search result values',
+        description: `User can query all the values saved on documents within a flow. By default the search results display the document
+        name and the field that matches your search.`,
+      },
+    },
+    // Profile widget document banner.
+    [WidgetType.ContainerProfileBanner]: {
+      title: 'Profile With Banner Image',
+      description:
+        'Display an image uploaded to the container along with a banner image.',
+      descriptionComponent: {
+        title: 'List Widget',
+        type: 'Document Template',
+        customizable: 'List values & Image',
+        description: `Select an image from the container to display as a profile image, and upload a banner image of your choice.
+        List values can also be optionally hidden from on the widget as needed.`,
+      },
     },
   };
 

@@ -302,10 +302,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dashboardData = JSON.parse(
             JSON.stringify(this.dashboardDataCopy)
           );
-          this.configEditMode();
         } else {
           this.getParams();
         }
+        this.configEditMode();
         this.toggleDrawerOnlyForWidgets();
       }
     } else {
