@@ -183,7 +183,7 @@ describe('WidgetDrawerComponent', () => {
     expect(component.fileInputFile.nativeElement.value).toBe('');
   });
 
-  it('should call onSelectFile', () => {
+  it('should call uploadImage', () => {
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'uploadImage'
