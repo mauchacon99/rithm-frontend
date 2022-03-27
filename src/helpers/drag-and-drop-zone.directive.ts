@@ -56,7 +56,6 @@ export class DragAndDropZoneDirective {
     const { dataTransfer } = evt;
     if (dataTransfer && dataTransfer.files) {
       const files = dataTransfer.files;
-      dataTransfer.items.clear();
       this.fileDropped.emit(files);
     }
   }
