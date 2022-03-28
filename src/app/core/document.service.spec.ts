@@ -914,5 +914,13 @@ describe('DocumentService', () => {
     service.getImagesDocuments(documentRithm).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/images?documentRithmId=${documentRithm}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toEqual(documentRithm);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
