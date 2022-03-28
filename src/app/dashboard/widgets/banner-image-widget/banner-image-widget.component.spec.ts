@@ -1,14 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { throwError } from 'rxjs';
+import { MockComponent } from 'ng-mocks';
 
 import { BannerImageWidgetComponent } from './banner-image-widget.component';
+import { DocumentService } from 'src/app/core/document.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('BannerImageWidgetComponent', () => {
   let component: BannerImageWidgetComponent;
   let fixture: ComponentFixture<BannerImageWidgetComponent>;
 
+  const image = {
+    imageId: '123-456-789',
+    imageName: 'Image name',
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BannerImageWidgetComponent],
+      declarations: [
+        BannerImageWidgetComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
+      providers: [
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: DocumentService, useClass: MockDocumentService },
+      ],
     }).compileComponents();
   });
 
@@ -22,24 +40,76 @@ describe('BannerImageWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call FileReader when image is type file', () => {
-    const spyReaderFile = spyOn(window, 'FileReader').and.callThrough();
-    component.image = new File([new Blob()], 'image-test', {
-      type: 'image/jpeg',
+  it('should call method getImageByRithmId', () => {
+    component.image = image;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getImageByRithmId'
+    ).and.callThrough();
+    component['getImageByRithmId']();
+
+    expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
+  });
+
+  it('should show error if the request getImageByRithmId fail', () => {
+    component.image = image;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getImageByRithmId'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getImageByRithmId']();
+
+    expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  describe('Input image', () => {
+    it('should get image by imageId', () => {
+      const spyService = spyOn(
+        TestBed.inject(DocumentService),
+        'getImageByRithmId'
+      ).and.callThrough();
+
+      component.image = image;
+
+      expect(component.imageSrc).toEqual('');
+      expect(component.image).toEqual(image);
+      expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
     });
 
-    expect(spyReaderFile).toHaveBeenCalled();
-  });
+    it('should loading image while upload image', () => {
+      const expectedImage = {
+        imageId: null,
+        imageName: null,
+      };
+      component.image = {
+        imageId: 'TEMPLoading',
+        imageName: null,
+      };
 
-  it('should return a string when image is type string', () => {
-    component.image = 'image-url';
-    expect(typeof component['_image']).toEqual('string');
-    expect(typeof component.image).toEqual('string');
-  });
+      expect(component.imageSrc).toEqual('');
+      expect(component.image).toEqual(expectedImage);
+      expect(component.isLoading).toBeTrue();
+    });
 
-  it('should return null when image is type undefined or null', () => {
-    component.image = null;
-    expect(component['_image']).toBeNull();
-    expect(component.image).toBeNull();
+    it('should set image to null', () => {
+      const expectedImage = {
+        imageId: null,
+        imageName: null,
+      };
+      component.image = expectedImage;
+
+      expect(component.imageSrc).toEqual('');
+      expect(component.image).toEqual(expectedImage);
+      expect(component.isLoading).toBeFalse();
+    });
   });
 });
