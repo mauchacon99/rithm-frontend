@@ -12,6 +12,6 @@
   }
 }
 
-::ng-deep .mat-ripple {
+mat-slide-toggle.mat-slide ::ng-deep .mat-ripple {
   display: none;
 }
