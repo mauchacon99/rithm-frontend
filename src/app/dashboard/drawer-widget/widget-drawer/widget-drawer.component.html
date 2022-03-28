@@ -7,6 +7,7 @@
           data-testid="close-widget-drawer"
           id="close-widget-drawer"
           mat-icon-button
+          [disabled]="isUploading"
           (click)="toggleDrawer()"
           class="text-secondary-500"
         >
@@ -21,7 +22,7 @@
         *ngIf="drawerMode === 'stationWidget'"
         (getWidgetIndex)="setWidgetIndex($event)"
         (getWidgetItem)="setWidgetItem($event)"
-        [image]="imageSelected"
+        [image]="imageUploaded"
       >
       </app-station-widget-drawer>
 
@@ -30,7 +31,7 @@
         *ngIf="drawerMode === 'documentWidget'"
         (setWidgetIndex)="setWidgetIndex($event)"
         (getWidgetItem)="setWidgetItem($event)"
-        [image]="imageSelected"
+        [image]="imageUploaded"
       >
       </app-document-widget-drawer>
     </div>
@@ -53,7 +54,7 @@
         id="upload-image-button"
         data-testid="upload-image-button"
         (click)="fileInput.click()"
-        [disabled]="imageSelected"
+        [disabled]="isUploading || (!!imageUploaded && !!imageUploaded.imageId)"
       >
         <i class="fa fa-upload"></i>
         Upload image
@@ -63,12 +64,25 @@
           accept="image/png,image/jpeg"
           id="upload-image-input"
           [hidden]="true"
-          (change)="onSelectFile($event)"
+          (change)="uploadImage($event)"
         />
       </button>
 
-      <div class="w-full flex mt-5 items-center" *ngIf="imageSelected">
-        <span class="text-accent-500 truncate">{{ imageSelected.name }}</span>
+      <div
+        *ngIf="isUploading"
+        class="mt-3 custom-loading-indicator"
+        id="loading-indicator-upload-image"
+      >
+        <app-loading-indicator inlineText="Loading..."></app-loading-indicator>
+      </div>
+
+      <div
+        class="w-full flex mt-2 items-center"
+        *ngIf="!isUploading && imageUploaded && imageUploaded.imageId"
+      >
+        <span class="text-accent-500 truncate">{{
+          imageUploaded.imageName
+        }}</span>
         <button
           mat-icon-button
           class="text-secondary-500"
@@ -103,6 +117,7 @@
       mat-button
       mat-raised-button
       color="accent"
+      [disabled]="isUploading"
       (click)="toggleDrawer()"
       data-testid="done-btn"
       id="done-btn"
