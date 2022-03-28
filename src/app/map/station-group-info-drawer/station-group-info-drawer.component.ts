@@ -147,7 +147,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   get stationGroupCenter(): boolean {
     const drawer = document.getElementsByTagName('mat-drawer');
     //Call method to selected station is in center of the map.
-    return this.mapService.checkCenter(
+    return this.mapService.centerHelper.checkCenter(
       CenterPanType.StationGroup,
       drawer[0] ? drawer[0].clientWidth : 0
     );
@@ -215,17 +215,17 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * While station group is selected & drawer opened, Method called for selected station to centering in the map.
    */
   centerStationGroup(): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Get the map drawer element.
     const drawer = document.getElementsByTagName('mat-drawer');
     //Increment centerCount to show that more centering of station needs to be done.
-    this.mapService.centerCount$.next(1);
+    this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.center(
+    this.mapService.centerHelper.center(
       CenterPanType.StationGroup,
       drawer[0] ? drawer[0].clientWidth : 0
     );

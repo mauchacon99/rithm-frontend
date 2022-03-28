@@ -395,10 +395,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const confirm = !this.mapHasChanges
       ? true
       : await this.popupService.confirm({
-        title: 'Confirmation',
-        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-        okButtonText: 'Confirm',
-      });
+          title: 'Confirmation',
+          message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+          okButtonText: 'Confirm',
+        });
     //If user accepts, or there are no changes.
     if (confirm) {
       //Call method to run logic for cancelling.
@@ -627,6 +627,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Increment centerCount to show that more centering of station needs to be done.
     this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.centerHelper.center(panType, drawer[0] ? drawer[0].clientWidth : 0);
+    this.mapService.centerHelper.center(
+      panType,
+      drawer[0] ? drawer[0].clientWidth : 0
+    );
   }
 }
