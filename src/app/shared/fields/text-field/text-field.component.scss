@@ -20,6 +20,8 @@ textarea {
   }
 
   .mat-form-field-wrapper {
+    @apply bg-white;
+
     padding-bottom: 0;
     margin: 0 0 24px;
   }

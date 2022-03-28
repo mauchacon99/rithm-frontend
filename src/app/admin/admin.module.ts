@@ -14,6 +14,7 @@ import { GroupHierarchyComponent } from './action-admin-menu/group-hierarchy/gro
 import { MatListModule } from '@angular/material/list';
 import { GroupListHierarchyComponent } from './action-admin-menu/group-hierarchy/group-list-hierarchy/group-list-hierarchy.component';
 import { UserGroupStationAdminComponent } from './action-admin-menu/group-hierarchy/user-group-station-admin/user-group-station-admin.component';
+import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-soon-message.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { UserGroupStationAdminComponent } from './action-admin-menu/group-hierar
     LoadingIndicatorModule,
     PaginationModule,
     MatListModule,
+    ComingSoonMessageModule,
   ],
 })
 export class AdminModule {}
