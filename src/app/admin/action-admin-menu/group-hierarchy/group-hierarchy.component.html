@@ -31,8 +31,12 @@
         ></app-group-list-hierarchy>
       </div>
     </div>
-    <div class="w-full md:w-[20%]">
-      <app-user-group-station-admin></app-user-group-station-admin>
+    <div class="w-full md:w-[20%] md:border-l-2 color-border">
+      <app-user-group-station-admin
+        *ngIf="typeSelectedItem"
+        [selectedItem]="selectedItem"
+        [typeSelectedItem]="typeSelectedItem"
+      ></app-user-group-station-admin>
     </div>
   </div>
 </div>
