@@ -285,4 +285,10 @@ describe('TextFieldComponent', () => {
     await component.removeFieldStation(component.field);
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
+
+  it('should call function that remove field of station', () => {
+    const removeFieldSpy = spyOn(component, 'removeField').and.callThrough();
+    component.removeField(component.field);
+    expect(removeFieldSpy).toHaveBeenCalledOnceWith(component.field);
+  });
 });

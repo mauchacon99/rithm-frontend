@@ -84,7 +84,13 @@
       ></i>
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
-      <button type="button" mat-icon-button (click)="removeFieldStation(field)">
+      <button
+        type="button"
+        mat-icon-button
+        (click)="removeFieldStation(field)"
+        id="button-remove-field"
+        data-testid="button-remove-field"
+      >
         <i class="fas fa-times"></i>
       </button>
     </div>
