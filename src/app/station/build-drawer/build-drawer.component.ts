@@ -150,6 +150,12 @@ export class BuildDrawerComponent implements OnInit {
       type: this.frameTypes.Headline,
     },
     {
+      prompt: 'Body Text',
+      icon: 'fa-paragraph fa-solid',
+      dataTestId: 'component-body-text',
+      type: this.frameTypes.Body,
+    },
+    {
       prompt: 'Title',
       icon: 'fa-heading fa-solid',
       dataTestId: 'component-title',
