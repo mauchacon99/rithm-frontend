@@ -177,6 +177,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Set config break point in mobile. */
+  private setConfigMobileGridster(): void {
+    this.options.mobileBreakpoint = this.isMobileDevice ? 1280 : 640;
+    this.changedOptions();
+  }
+
   /**
    * Initialize split on page load.
    */
@@ -422,12 +428,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
     this.setConfigMobileGridster();
-  }
-
-  /** Set config break point in mobile. */
-  private setConfigMobileGridster(): void {
-    this.options.mobileBreakpoint = this.isMobileDevice ? 1280 : 640;
-    this.changedOptions();
   }
 
   /**
