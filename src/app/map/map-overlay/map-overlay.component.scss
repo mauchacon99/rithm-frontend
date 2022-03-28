@@ -1,4 +1,3 @@
-
 :host {
   touch-action: manipulation;
 }
@@ -14,6 +13,7 @@
 
   mat-drawer.mapStationInfo {
     @apply mt-0;
+
     position: absolute !important;
     height: 100%;
     padding-top: 55px;
@@ -23,7 +23,6 @@
     left: calc(100% - 20rem);
   }
 }
-
 
 .mat-menu-panel {
   min-height: auto !important;
