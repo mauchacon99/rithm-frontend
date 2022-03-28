@@ -859,7 +859,7 @@ export class StationComponent
   closeSettingDrawer(): void {
     /** If both are open, the field setting drawer must be closed. */
     if (
-      this.isOpenDrawerLeft &&
+      (this.isOpenDrawerLeft || this.settingMode) &&
       this.sidenavDrawerService.isDrawerOpen &&
       this.drawerContext === 'fieldSetting'
     ) {
