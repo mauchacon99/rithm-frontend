@@ -25,6 +25,7 @@ import {
   RuleType,
   DocumentEvent,
   DocumentWidget,
+  DocumentImage,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -900,5 +901,18 @@ describe('DocumentService', () => {
 
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should call method to get document images', () => {
+    const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
+    const expectedResponse: DocumentImage[] = [
+      {
+        imageId: '231-456-654',
+        imageName: 'landscape.png',
+      },
+    ];
+    service.getImagesDocuments(documentRithm).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 });

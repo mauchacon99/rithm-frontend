@@ -15,6 +15,7 @@ export class DocumentWidgetTemplateModalComponent {
   @Input() widgetType:
     | WidgetType.Document
     | WidgetType.DocumentListBanner
+    | WidgetType.ContainerProfileBanner
     | 'defaultDocument' = 'defaultDocument';
 
   /** Enum widgetType. */

@@ -32,6 +32,7 @@ import {
   RuleType,
   OperandType,
   OperatorType,
+  DocumentImage,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -582,5 +583,24 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       rulesFromStationFlowLogic
     );
+  }
+
+  /**
+   * Get images document.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns data images document.
+   */
+  getImagesDocuments(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    documentRithmId: string
+  ): Observable<DocumentImage[]> {
+    const dataImagesDocument: DocumentImage[] = [
+      {
+        imageId: '231-456-654',
+        imageName: 'landscape.png',
+      },
+    ];
+    return of(dataImagesDocument).pipe(delay(1000));
   }
 }
