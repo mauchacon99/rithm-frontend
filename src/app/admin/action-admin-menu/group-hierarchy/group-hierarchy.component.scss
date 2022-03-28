@@ -28,13 +28,3 @@
     margin-left: 8px;
   }
 }
-
-.height-container {
-  height: calc(100vh - 165px);
-}
-
-@media (max-width: 760px) {
-  .height-container {
-    height: 100% !important;
-  }
-}
