@@ -259,9 +259,9 @@ export class TextFieldComponent
   }
 
   /**
-   * Remove the field of station.
+   * Show modal that executes the function to remove the field.
    *
-   * @param field The field to emit.
+   * @param field The field to be removed.
    */
   async removeFieldStation(field: Question): Promise<void> {
     const confirm = await this.popupService.confirm({
