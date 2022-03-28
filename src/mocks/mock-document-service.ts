@@ -22,6 +22,7 @@ import {
   RuleType,
   DocumentEvent,
   DocumentWidget,
+  DocumentImage,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1550,5 +1551,21 @@ export class MockDocumentService {
     } else {
       return of().pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get images document.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns data images document.
+   */
+  getImagesDocuments(documentRithmId: string): Observable<DocumentImage[]> {
+    const dataImagesDocument: DocumentImage[] = [
+      {
+        imageId: '231-456-654',
+        imageName: 'landscape.png',
+      },
+    ];
+    return of(dataImagesDocument).pipe(delay(1000));
   }
 }
