@@ -68,3 +68,4 @@ export * from './station-list-group';
 export * from './station-group-data';
 export * from './document-image';
 export * from './data-link-object';
+export * from './image-data';

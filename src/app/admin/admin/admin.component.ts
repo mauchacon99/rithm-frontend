@@ -17,6 +17,9 @@ export class AdminComponent implements OnInit {
   /** Show Admin portal. */
   showAdminPortal = false;
 
+  /** Show Group hierarchy. */
+  showGroupHierarchy = false;
+
   /** Item selected item menu. */
   itemMenuSelected: ListAdminOptionMenuType =
     ListAdminOptionMenuType.AccountSettings;
@@ -46,6 +49,8 @@ export class AdminComponent implements OnInit {
       next: () => {
         this.showAdminPortal =
           this.splitService.getAdminPortalTreatment() === 'on';
+        this.showGroupHierarchy =
+          this.splitService.getGroupHierarchyMenuTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
