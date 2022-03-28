@@ -39,7 +39,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Station Id passed from parent. */
   stationRithmId = '';
 
-  /** Edit Mode. */
+  /** Get station name from sidenavDrawerService or behaviour subject. */
   stationName = '';
 
   /** The Last Updated Date. */
@@ -75,7 +75,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station drawer is opened from map or not. */
   openedFromMap = false;
 
-  /** The drawer context for stationInfo. */
+  /** Station info is chained or not. */
   isChained = false;
 
   /** Station information object. */
