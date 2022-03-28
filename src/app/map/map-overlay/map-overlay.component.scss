@@ -1,41 +1,34 @@
-::ng-deep.cdk-overlay-backdrop.cdk-overlay-transparent-backdrop {
-  display: none;
-}
-
 :host {
   touch-action: manipulation;
 }
 
-::ng-deep .mat-drawer-container {
+.info-drawer-map .mat-drawer-container {
   background-color: transparent;
 }
 
-::ng-deep .mapElementDrawer {
+.mapElementDrawer {
   position: fixed !important;
   top: 129px;
+  background-color: transparent;
+
+  mat-drawer.mapStationInfo {
+    @apply mt-0;
+
+    position: absolute !important;
+    height: 100%;
+    padding-top: 55px;
+  }
 
   @media screen and (min-width: 992px) {
     left: calc(100% - 20rem);
   }
 }
 
-.info-drawer-map {
-  ::ng-deep mat-drawer-container {
-    mat-drawer.mapStationInfo {
-      @apply mt-0;
-
-      position: absolute !important;
-      height: 100%;
-      padding-top: 55px;
-    }
-  }
-}
-
-::ng-deep .mat-menu-panel {
+.mat-menu-panel {
   min-height: auto !important;
 }
 
-::ng-deep .mat-drawer-content.static {
+.mat-drawer-content.static {
   position: static !important;
 }
 
