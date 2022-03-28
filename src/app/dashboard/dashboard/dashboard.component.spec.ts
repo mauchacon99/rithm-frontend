@@ -831,13 +831,13 @@ describe('DashboardComponent', () => {
     expect(expectedData.widgets[0].rithmId).toEqual('');
   });
 
-  fit('should set config breakpoint for mobile devices', () => {
+  it('should set config breakpoint for mobile devices', () => {
     spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(1280);
   });
 
-  fit('should set config breakpoint for not mobile devices', () => {
+  it('should set config breakpoint for not mobile devices', () => {
     spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(640);
