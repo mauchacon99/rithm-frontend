@@ -5,6 +5,7 @@ import { MockComponent } from 'ng-mocks';
 
 import { GroupHierarchyComponent } from './group-hierarchy.component';
 import { GroupListHierarchyComponent } from './group-list-hierarchy/group-list-hierarchy.component';
+import { UserGroupStationAdminComponent } from './user-group-station-admin/user-group-station-admin.component';
 
 describe('GroupHierarchyComponent', () => {
   let component: GroupHierarchyComponent;
@@ -15,6 +16,7 @@ describe('GroupHierarchyComponent', () => {
       declarations: [
         GroupHierarchyComponent,
         MockComponent(GroupListHierarchyComponent),
+        MockComponent(UserGroupStationAdminComponent),
       ],
       imports: [MatInputModule, NoopAnimationsModule],
     }).compileComponents();
