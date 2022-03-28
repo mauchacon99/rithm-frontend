@@ -119,6 +119,7 @@ export class StationComponent
     pushItems: true,
     draggable: {
       enabled: true,
+      ignoreContent: true,
     },
     resizable: {
       enabled: true,
