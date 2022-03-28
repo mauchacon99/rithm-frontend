@@ -63,9 +63,14 @@ textarea {
   .gridster-row {
     @apply border-secondary-50;
   }
+
+  .gridster-item {
+    @apply px-0 pb-0 rounded transition-colors;
+  }
+
   //Widget item in layout mode
   .widget-item-layout {
-    @apply border-2 border-primary-100 p-0 rounded transition-colors hover:border-accent-500;
+    @apply border-2 border-secondary-100 hover:border-accent-500;
   }
 
   .h-gridster {
