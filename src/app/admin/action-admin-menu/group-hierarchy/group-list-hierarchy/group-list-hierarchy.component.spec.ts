@@ -156,13 +156,11 @@ describe('GroupListHierarchyComponent', () => {
     expect(method).toHaveBeenCalled();
   });
 
-  it('should emit value and type when selected item', () => {
+  it('should emit value when selected item', () => {
     const method = spyOn(component, 'selectedListItem').and.callThrough();
     const getSelectedItem = spyOn(component.getSelectedItem, 'emit');
-    const getTypeSelectedItem = spyOn(component.getTypeSelectedItem, 'emit');
-    component.selectedListItem(subStationGroups, 'group');
+    component.selectedListItem(subStationGroups);
     expect(method).toHaveBeenCalled();
     expect(getSelectedItem).toHaveBeenCalledOnceWith(subStationGroups);
-    expect(getTypeSelectedItem).toHaveBeenCalledOnceWith('group');
   });
 });

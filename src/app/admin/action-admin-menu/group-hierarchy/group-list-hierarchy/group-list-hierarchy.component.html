@@ -11,7 +11,7 @@
           [id]="'group-item-' + stationGroup.rithmId"
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
           [value]="stationGroup"
-          (click)="selectedListItem(stationGroups, 'group')"
+          (click)="selectedListItem(stationGroups)"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -26,7 +26,7 @@
           [value]="station"
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
-          (click)="selectedListItem(station, 'station')"
+          (click)="selectedListItem(station)"
         >
           <ng-container
             *ngTemplateOutlet="

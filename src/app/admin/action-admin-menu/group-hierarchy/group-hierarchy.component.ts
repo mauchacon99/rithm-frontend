@@ -16,8 +16,17 @@ export class GroupHierarchyComponent {
   /** Value of selected item. */
   selectedItem!: StationGroupData | StationListGroup;
 
-  /** Type of selected item. */
-  typeSelectedItem!: 'group' | 'station';
+  /** Show component app-user-group-station-admin when clicked item.*/
+  showUserGroupStation = false;
+
+  /**
+   * Return if selectedItem is group.
+   *
+   * @returns Is group.
+   */
+  get isGroup(): boolean {
+    return 'stations' in this.selectedItem ? true : false;
+  }
 
   /**
    * Set value selected item.
@@ -26,14 +35,6 @@ export class GroupHierarchyComponent {
    */
   setSelectItem(value: StationGroupData | StationListGroup): void {
     this.selectedItem = value;
-  }
-
-  /**
-   * Set type selected item.
-   *
-   * @param type Selected item type.
-   */
-  setTypeSelectedItem(type: 'group' | 'station'): void {
-    this.typeSelectedItem = type;
+    this.showUserGroupStation = true;
   }
 }

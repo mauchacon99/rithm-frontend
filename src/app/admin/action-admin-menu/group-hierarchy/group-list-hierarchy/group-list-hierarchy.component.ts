@@ -21,9 +21,6 @@ export class GroupListHierarchyComponent implements OnInit {
     StationGroupData | StationListGroup
   >();
 
-  /** Output type of selected item. */
-  @Output() getTypeSelectedItem = new EventEmitter<'group' | 'station'>();
-
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
 
@@ -61,13 +58,8 @@ export class GroupListHierarchyComponent implements OnInit {
    * Emit data of item selected to group-hierarchy.component.
    *
    * @param value Selected item data.
-   * @param type Selected item type.
    */
-  selectedListItem(
-    value: StationGroupData | StationListGroup,
-    type: 'group' | 'station'
-  ): void {
+  selectedListItem(value: StationGroupData | StationListGroup): void {
     this.getSelectedItem.emit(value);
-    this.getTypeSelectedItem.emit(type);
   }
 }
