@@ -36,5 +36,4 @@ export class GroupHierarchyComponent {
   setTypeSelectedItem(type: 'group' | 'station'): void {
     this.typeSelectedItem = type;
   }
-
 }
