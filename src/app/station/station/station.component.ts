@@ -808,6 +808,7 @@ export class StationComponent
       });
       if (confirmRemove) {
         this.inputFrameWidgetItems.splice(this.widgetFocused, 1);
+        this.widgetFocused = -1;
       }
     }
   }

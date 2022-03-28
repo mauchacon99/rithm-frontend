@@ -340,6 +340,7 @@
                         >
                           <span
                             class="fas fa-trash text-secondary-500 fa-lg"
+                            [ngClass]="{ 'text-error-500': widgetFocused > -1 }"
                           ></span>
                         </button>
                         <mat-divider [vertical]="true"></mat-divider>
