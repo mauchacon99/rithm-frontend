@@ -23,6 +23,7 @@ import {
   DocumentEvent,
   DocumentWidget,
   DocumentImage,
+  ImageData,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1585,12 +1586,7 @@ export class MockDocumentService {
    * @param imageRithmId The Specific ID of image.
    * @returns Returns data image.
    */
-  getImageByRithmId(imageRithmId: string): Observable<{
-    /** Image on Base64. */
-    imageData: string;
-    /** Name of the image. */
-    imageName: string;
-  }> {
+  getImageByRithmId(imageRithmId: string): Observable<ImageData> {
     const response = {
       imageData:
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',

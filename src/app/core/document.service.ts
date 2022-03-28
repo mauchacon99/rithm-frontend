@@ -33,6 +33,7 @@ import {
   OperandType,
   OperatorType,
   DocumentImage,
+  ImageData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -627,20 +628,13 @@ export class DocumentService {
    * @param imageRithmId The Specific ID of image.
    * @returns Returns data image.
    */
-  getImageByRithmId(imageRithmId: string): Observable<{
-    /** Image on Base64. */
-    imageData: string;
-    /** Name of the image. */
-    imageName: string;
-  }> {
+  getImageByRithmId(imageRithmId: string): Observable<ImageData> {
     const params = new HttpParams().set('vaultFileRithmId', imageRithmId);
-    return this.http.get<{
-      /** Image on Base64. */
-      imageData: string;
-      /** Name of the image. */
-      imageName: string;
-    }>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson`, {
-      params,
-    });
+    return this.http.get<ImageData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson`,
+      {
+        params,
+      }
+    );
   }
 }
