@@ -67,3 +67,4 @@ export * from './list-admin-option-menu';
 export * from './station-list-group';
 export * from './station-group-data';
 export * from './document-image';
+export * from './image-data';
