@@ -38,9 +38,11 @@
         >
           <mat-label>Select Field</mat-label>
           <mat-select
+            #firstOperand
             [(value)]="firstOperandQuestionRithmId"
             id="first-operand-selector"
             data-testid="first-operand-selector"
+            (clickOutside)="firstOperand.close()"
           >
             <ng-container *ngFor="let question of firstOperandQuestionList">
               <mat-option
@@ -140,11 +142,13 @@
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
           <mat-select
+            #comparisonType
             id="operator-selector"
             data-testid="operator-selector"
             [(ngModel)]="operatorSelected"
             [ngModelOptions]="{ standalone: true }"
             (selectionChange)="resetQuestionFieldComponent()"
+            (clickOutside)="comparisonType.close()"
           >
             <mat-option
               *ngFor="let operator of operatorList"
@@ -251,6 +255,7 @@
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
           <mat-select
+            #previousField
             id="second-operand-selector"
             data-testid="second-operand-selector"
             [disabled]="!secondOperandQuestionList.length"
@@ -259,6 +264,7 @@
             (focus)="
               secondOperandQuestionList.length && resetQuestionFieldComponent()
             "
+            (clickOutside)="previousField.close()"
           >
             <mat-option
               *ngFor="let question of secondOperandQuestionList"
