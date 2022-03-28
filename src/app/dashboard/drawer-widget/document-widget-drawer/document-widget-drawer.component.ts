@@ -35,8 +35,11 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Image to banner. */
   @Input() set image(value: File | null) {
-    if (this.widgetItem && this.widgetItem.image !== value) {
-      this.widgetItem.image = value;
+    if (
+      this.dataDrawerDocument?.widgetItem &&
+      this.dataDrawerDocument.widgetItem.image !== value
+    ) {
+      this.dataDrawerDocument.widgetItem.image = value;
       this.updateWidget();
     }
   }
@@ -53,20 +56,17 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Form to multiselect columns to document. */
   formColumns = new FormControl();
 
-  /** Widget item of opened widget-drawer. */
-  widgetItem!: DashboardItem;
-
   /** Questions the document. */
   questions!: QuestionList[];
 
   /** Document RithmId. */
   documentRithmId!: string;
 
-  /** Widget index of opened widget-drawer. */
-  widgetIndex!: number;
+  /** Data drawer document. */
+  dataDrawerDocument!: EditDataWidget;
 
-  /** Element list in drawer. */
-  quantityElementsWidget = 0;
+  /** Value used to compare the widgets. */
+  widgetType = WidgetType;
 
   /** Loading drawer. */
   isLoading = false;
@@ -104,14 +104,14 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const dataDrawer = data as EditDataWidget;
         if (dataDrawer) {
-          this.widgetItem = dataDrawer.widgetItem;
-          this.widgetIndex = dataDrawer.widgetIndex;
-          this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
-          const dataWidget = JSON.parse(this.widgetItem.data);
+          this.dataDrawerDocument = dataDrawer;
+          const dataWidget = JSON.parse(
+            this.dataDrawerDocument.widgetItem.data
+          );
           this.documentColumns = dataWidget.columns || [];
           this.documentRithmId = dataWidget.documentRithmId;
-          this.setWidgetIndex.emit(this.widgetIndex);
-          this.getWidgetItem.emit(this.widgetItem);
+          this.setWidgetIndex.emit(this.dataDrawerDocument.widgetIndex);
+          this.getWidgetItem.emit(this.dataDrawerDocument.widgetItem);
           this.getDocumentWidget();
           if (
             dataDrawer.widgetItem.widgetType ===
@@ -181,15 +181,15 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
         questionId,
       });
     });
-    this.widgetItem.data = JSON.stringify({
+    this.dataDrawerDocument.widgetItem.data = JSON.stringify({
       documentRithmId: this.documentRithmId,
       columns: this.documentColumns,
     });
     this.loadColumnsSelect();
     this.dashboardService.updateDashboardWidgets({
-      widgetItem: this.widgetItem,
-      widgetIndex: this.widgetIndex,
-      quantityElementsWidget: this.quantityElementsWidget,
+      widgetItem: this.dataDrawerDocument.widgetItem,
+      widgetIndex: this.dataDrawerDocument.widgetIndex,
+      quantityElementsWidget: this.dataDrawerDocument.quantityElementsWidget,
     });
   }
 
