@@ -42,20 +42,18 @@ describe('BannerImageWidgetComponent', () => {
 
   it('should call method getImageByRithmId', () => {
     component.image = image;
-
-    const spyMethod = spyOn(
+    const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getImageByRithmId'
     ).and.callThrough();
+    component['getImageByRithmId']();
 
-    component.ngOnInit();
-
-    expect(spyMethod).toHaveBeenCalledOnceWith(image.imageId);
+    expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
   });
 
   it('should show error if the request getImageByRithmId fail', () => {
     component.image = image;
-    const spyMethod = spyOn(
+    const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getImageByRithmId'
     ).and.returnValue(
@@ -63,24 +61,55 @@ describe('BannerImageWidgetComponent', () => {
         throw new Error();
       })
     );
-
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
+    component['getImageByRithmId']();
 
-    component.ngOnInit();
-
-    expect(spyMethod).toHaveBeenCalledOnceWith(image.imageId);
+    expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should show loading indicator', () => {
-    component.isLoading = true;
-    fixture.detectChanges();
+  describe('Input image', () => {
+    it('should get image by imageId', () => {
+      const spyService = spyOn(
+        TestBed.inject(DocumentService),
+        'getImageByRithmId'
+      ).and.callThrough();
 
-    const loadingIndicator =
-      fixture.debugElement.nativeElement.querySelector('#loading-indicator');
-    expect(loadingIndicator).toBeTruthy();
+      component.image = image;
+
+      expect(component.imageSrc).toEqual('');
+      expect(component.image).toEqual(image);
+      expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
+    });
+
+    it('should loading image while upload image', () => {
+      const expectedImage = {
+        imageId: null,
+        imageName: null,
+      };
+      component.image = {
+        imageId: 'TEMPLoading',
+        imageName: null,
+      };
+
+      expect(component.imageSrc).toEqual('');
+      expect(component.image).toEqual(expectedImage);
+      expect(component.isLoading).toBeTrue();
+    });
+
+    it('should set image to null', () => {
+      const expectedImage = {
+        imageId: null,
+        imageName: null,
+      };
+      component.image = expectedImage;
+
+      expect(component.imageSrc).toEqual('');
+      expect(component.image).toEqual(expectedImage);
+      expect(component.isLoading).toBeFalse();
+    });
   });
 });

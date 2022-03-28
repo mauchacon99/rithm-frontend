@@ -160,6 +160,11 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
     if (file) {
+      // Loading banner image while upload image.
+      this.imageUploaded = {
+        imageId: 'TEMPLoading',
+        imageName: null,
+      };
       this.isUploading = true;
       this.documentService
         .uploadImage(file)
@@ -174,6 +179,11 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
           },
           error: (error: unknown) => {
             this.isUploading = false;
+            // Loading banner image while upload image.
+            this.imageUploaded = {
+              imageId: null,
+              imageName: null,
+            };
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error

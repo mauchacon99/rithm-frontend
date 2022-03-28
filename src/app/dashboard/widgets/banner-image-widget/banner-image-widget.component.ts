@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { DocumentImage, WidgetType } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
@@ -12,7 +12,7 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './banner-image-widget.component.html',
   styleUrls: ['./banner-image-widget.component.scss'],
 })
-export class BannerImageWidgetComponent implements OnInit {
+export class BannerImageWidgetComponent {
   /** WidgetType input. */
   @Input() widgetType!: WidgetType;
 
@@ -22,12 +22,14 @@ export class BannerImageWidgetComponent implements OnInit {
   /** Image of widget to get image Base64. */
   @Input() set image(value: DocumentImage) {
     this._image = value;
-    if (value && value.imageId && typeof this.imageSrc === 'string') {
-      this.imageSrc = '';
-      this.isLoading = true;
+    this.imageSrc = '';
+    if (value && value.imageId && value.imageId !== 'TEMPLoading') {
       this.getImageByRithmId();
+    } else if (value && value.imageId && value.imageId === 'TEMPLoading') {
+      this.isLoading = true;
+      this._image.imageId = null;
     } else {
-      this.imageSrc = '';
+      this.isLoading = false;
     }
   }
 
@@ -41,7 +43,7 @@ export class BannerImageWidgetComponent implements OnInit {
   }
 
   /** Image to show on banner image. */
-  imageSrc: string | null = null;
+  imageSrc!: string;
 
   /** Loading banner image. */
   isLoading = false;
@@ -54,14 +56,10 @@ export class BannerImageWidgetComponent implements OnInit {
     private errorService: ErrorService
   ) {}
 
-  /** Init method. */
-  ngOnInit(): void {
-    this.getImageByRithmId();
-  }
-
   /** Get banner image by id of image. */
   private getImageByRithmId(): void {
     if (this.image && this.image.imageId) {
+      this.isLoading = true;
       this.documentService
         .getImageByRithmId(this.image.imageId)
         .pipe(first())
@@ -79,8 +77,6 @@ export class BannerImageWidgetComponent implements OnInit {
             );
           },
         });
-    } else {
-      this.imageSrc = '';
     }
   }
 }

@@ -4,16 +4,14 @@
 >
   <div
     class="h-[155px] w-full bg-secondary-100 flex items-center justify-center flex-col"
+    [ngClass]="{
+      'animate-pulse':
+        isLoading && widgetType === enumWidgetType.ContainerProfileBanner
+    }"
   >
-    <div *ngIf="isLoading" id="loading-indicator">
-      <app-loading-indicator></app-loading-indicator>
-    </div>
     <i
-      *ngIf="
-        !isLoading &&
-        !imageSrc &&
-        widgetType !== enumWidgetType.ContainerProfileBanner
-      "
+      *ngIf="!imageSrc && widgetType !== enumWidgetType.ContainerProfileBanner"
+      [ngClass]="{ 'animate-pulse': isLoading }"
       class="fas text-[60px] text-secondary-300 fa-image"
     ></i>
     <img

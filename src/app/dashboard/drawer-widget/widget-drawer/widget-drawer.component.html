@@ -7,6 +7,7 @@
           data-testid="close-widget-drawer"
           id="close-widget-drawer"
           mat-icon-button
+          [disabled]="isUploading"
           (click)="toggleDrawer()"
           class="text-secondary-500"
         >
@@ -116,6 +117,7 @@
       mat-button
       mat-raised-button
       color="accent"
+      [disabled]="isUploading"
       (click)="toggleDrawer()"
       data-testid="done-btn"
       id="done-btn"

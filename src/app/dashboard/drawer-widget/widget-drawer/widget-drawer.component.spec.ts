@@ -319,4 +319,31 @@ describe('WidgetDrawerComponent', () => {
     );
     expect(loadingIndicator).toBeTruthy();
   });
+
+  it('should set widgetType and imageUploaded', () => {
+    const expectedImage = {
+      imageId: '123-456-789',
+      imageName: 'Image name',
+    };
+    const widgetItem = {
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 4,
+      // eslint-disable-next-line max-len
+      data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+      maxItemCols: 0,
+      maxItemRows: 0,
+      minItemCols: 0,
+      minItemRows: 0,
+      rows: 2,
+      widgetType: WidgetType.Station,
+      x: 0,
+      y: 0,
+      imageId: expectedImage.imageId,
+      imageName: expectedImage.imageName,
+    };
+    component.setWidgetItem(widgetItem);
+
+    expect(component.widgetType).toEqual(WidgetType.Station);
+    expect(component.imageUploaded).toEqual(expectedImage);
+  });
 });
