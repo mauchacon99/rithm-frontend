@@ -149,6 +149,12 @@ export class BuildDrawerComponent implements OnInit {
       dataTestId: 'component-headline',
       type: this.frameTypes.Headline,
     },
+    {
+      prompt: 'Title',
+      icon: 'fa-heading fa-solid',
+      dataTestId: 'component-title',
+      type: this.frameTypes.Title,
+    },
   ];
 
   constructor(private changeDetector: ChangeDetectorRef) {}
