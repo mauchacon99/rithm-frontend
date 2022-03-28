@@ -49,6 +49,6 @@
 
 .button-setting-section {
   ::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 0.8em;
+    @apply text-xs;
   }
 }
