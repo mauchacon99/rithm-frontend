@@ -96,4 +96,13 @@ export class SplitService {
   public getAdminPortalTreatment(): string {
     return this.splitClient.getTreatment('admin_portal_split');
   }
+
+  /**
+   * Get the section groupHierarchyMenu.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupHierarchyMenuTreatment(): string {
+    return this.splitClient.getTreatment('permissions_split');
+  }
 }

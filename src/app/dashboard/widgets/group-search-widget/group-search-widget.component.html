@@ -16,7 +16,7 @@
   <!-- Header widget -->
   <div class="flex flex-col input-search m-2">
     <h3 *ngIf="dataStationGroup" class="font-semibold truncate">
-      {{ dataStationGroup.title }}
+      {{ dataStationGroup.title || 'Untitled Group' }}
     </h3>
     <mat-form-field appearance="outline" class="mt-3">
       <input
@@ -29,8 +29,9 @@
         maxlength="55"
         (keyup)="searchStation()"
         [disabled]="
-          dataStationGroup.stations.length === 0 &&
-          dataStationGroup.subStationGroups.length === 0
+          (!dataStationGroup.stations.length &&
+            !dataStationGroup.subStationGroups.length) ||
+          editMode
         "
         autocomplete="off"
       />
@@ -39,7 +40,7 @@
   </div>
 
   <div
-    class="scrollbar overflow-scroll h-full w-full container-group mt-5"
+    class="scrollbar overflow-scroll h-full w-full container-group mt-5 border-t border-secondary-100"
     *ngIf="dataStationGroup"
   >
     <div
@@ -52,9 +53,11 @@
       <!--subStations-->
       <div
         *ngFor="let subStation of subStationGroupData"
-        class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
+        class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <span class="whitespace-normal truncate"> {{ subStation.title }}</span>
+        <span class="whitespace-normal truncate">
+          {{ subStation.title || 'Untitled Group' }}</span
+        >
 
         <button mat-icon-button id="map-button" data-testid="map-button">
           <i class="fa-solid fa-map text-base text-secondary-500"></i>
@@ -64,23 +67,35 @@
       <!--Stations-->
       <div
         *ngFor="let station of stations"
-        class="flex justify-between border-t border-secondary-100 py-3 text-sm font-semibold items-center"
+        class="flex justify-between border-b border-secondary-100 py-3 text-sm font-semibold items-center"
       >
-        <span class="whitespace-normal truncate"> {{ station.name }}</span>
+        <span class="whitespace-normal truncate">
+          {{ station.name || 'Untitled Station' }} <br />
+          <span
+            id="show-documents-{{ station.rithmId }}"
+            [attr.data-testid]="'show-documents-' + station.rithmId"
+            class="whitespace-normal truncate text-xs font-normal"
+            (click)="openDocsModal(station)"
+            ><a>Documents</a></span
+          >
+        </span>
 
         <button
           mat-icon-button
-          id="link-station-button"
-          data-testid="link-station-button"
+          [id]="'link-station-button-' + station.rithmId"
+          [attr.data-testid]="'link-station-button-' + station.rithmId"
+          class="text-secondary-500"
+          [disabled]="editMode"
+          [routerLink]="['/', 'station', station.rithmId]"
         >
-          <i class="fas fa-external-link-alt text-base text-secondary-500"></i>
+          <i class="fas fa-external-link-alt text-base"></i>
         </button>
       </div>
     </div>
 
     <ng-template #stationGroupsEmpty>
-      <div id="station-group-empty" class="text-sm text-center p-3">
-        No stations found in this group.
+      <div id="station-group-empty" class="text-sm text-center">
+        No stations or sub groups found in this group.
       </div>
     </ng-template>
   </div>

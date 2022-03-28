@@ -206,4 +206,10 @@ describe('DescriptionWidgetModalComponent', () => {
     const responseData = component['minItemRowsWidget']();
     expect(responseData).toEqual(1);
   });
+
+  it('should return 2 minItemRows when widget type for ContainerProfileBanner', () => {
+    component.widgetTypeWithoutDefault = WidgetType.ContainerProfileBanner;
+    const responseData = component['minItemRowsWidget']();
+    expect(responseData).toEqual(2);
+  });
 });

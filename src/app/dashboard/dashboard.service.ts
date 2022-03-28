@@ -146,13 +146,15 @@ export class DashboardService {
     },
     // Profile widget document banner.
     [WidgetType.ContainerProfileBanner]: {
-      title: '',
-      description: '',
+      title: 'Profile With Banner Image',
+      description:
+        'Display an image uploaded to the container along with a banner image.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'List Widget',
+        type: 'Document Template',
+        customizable: 'List values & Image',
+        description: `Select an image from the container to display as a profile image, and upload a banner image of your choice.
+        List values can also be optionally hidden from on the widget as needed.`,
       },
     },
   };

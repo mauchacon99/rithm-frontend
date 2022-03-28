@@ -87,6 +87,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** To show center station button when station is selected. */
   stationCenter = false;
 
+  /** For panType be selected to center of the map. */
+  panType = CenterPanType.MapCenter;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -237,6 +240,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           //Set drawerMode to the current data.
           this.drawerMode = data;
         }
+        //Set the panType through drawerMode.
+        if (data === 'stationInfo') {
+          this.panType = CenterPanType.Station;
+        }
+        if (data === 'stationGroupInfo') {
+          this.panType = CenterPanType.StationGroup;
+        }
       });
 
     //Track the selected station is in center of the map to enable the center station button.
@@ -287,8 +297,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   get stationDrawerOpened(): boolean {
     return (
-      this.sidenavDrawerService.isDrawerOpen &&
-      this.drawerMode === 'stationInfo'
+      (this.sidenavDrawerService.isDrawerOpen &&
+        this.drawerMode === 'stationInfo') ||
+      (this.sidenavDrawerService.isDrawerOpen &&
+        this.drawerMode === 'stationGroupInfo')
     );
   }
 
@@ -383,10 +395,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     const confirm = !this.mapHasChanges
       ? true
       : await this.popupService.confirm({
-          title: 'Confirmation',
-          message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-          okButtonText: 'Confirm',
-        });
+        title: 'Confirmation',
+        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+        okButtonText: 'Confirm',
+      });
     //If user accepts, or there are no changes.
     if (confirm) {
       //Call method to run logic for cancelling.
@@ -600,9 +612,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * While station is selected & drawer opened, Method called for selected station to centering in the map.
+   * While station or station group is selected & drawer opened, Method called for selected station to centering in the map.
+   *
+   * @param panType Determines the area of the map to be pan to center.
    */
-  centerStation(): void {
+  centerStation(panType: CenterPanType): void {
     this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
     this.mapService.mapHelper.matMenuStatus$.next(true);
@@ -613,9 +627,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Increment centerCount to show that more centering of station needs to be done.
     this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.centerHelper.center(
-      CenterPanType.Station,
-      drawer[0] ? drawer[0].clientWidth : 0
-    );
+    this.mapService.centerHelper.center(panType, drawer[0] ? drawer[0].clientWidth : 0);
   }
 }

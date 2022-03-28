@@ -159,6 +159,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
+  /** Whether the called info-drawer is documentInfo type or stationInfo. */
+  drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
+
   /**
    * Add station mode active. This get is true when this.mapMode is set to stationAdd.
    *
@@ -288,6 +291,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           optionData.data instanceof StationGroupMapElement
         ) {
           this.updateStationGroup(optionData.data);
+        }
+      });
+
+    //Track the current drawerContext.
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        //If the drawerContext is a usable context.
+        if (
+          data === 'connectionInfo' ||
+          data === 'stationInfo' ||
+          data === 'stationGroupInfo'
+        ) {
+          //Set drawerMode to the current data.
+          this.drawerMode = data;
         }
       });
   }
@@ -799,12 +817,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Is the zoom out attempt fast?
       event.deltaY >= 100
         ? //If so, set eventAmount divided by 100.
-          Math.floor(event.deltaY / 100)
+        Math.floor(event.deltaY / 100)
         : //is the zoom in attempt fast?
         event.deltaY <= -100
-        ? //If so, set eventAmount divided by 100.
+          ? //If so, set eventAmount divided by 100.
           Math.ceil(event.deltaY / 100)
-        : //If not fast, only divide by 3.
+          : //If not fast, only divide by 3.
           event.deltaY / 3;
 
     //If a zoom in is attempted when scrolling.
@@ -1120,7 +1138,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Set the x coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const rightPan = Math.floor(
         ((canvasRect.width - box() - position.x) * MAX_PAN_VELOCITY * 0.01) /
-          this.scale
+        this.scale
       );
       //If rightPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.x =
@@ -1148,7 +1166,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ((canvasRect.height - box() - mobileAdjust - position.y) *
           MAX_PAN_VELOCITY *
           0.01) /
-          this.scale
+        this.scale
       );
       //If bottomPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.y =
@@ -1247,16 +1265,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
       if (
         this.maxBoundaryCoords.x -
-          canvasRect.width +
-          BOUNDARY_MARGIN / this.scale <
+        canvasRect.width +
+        BOUNDARY_MARGIN / this.scale <
         0
       ) {
         outsideRightEdge = true;
       }
       if (
         this.maxBoundaryCoords.y -
-          canvasRect.height +
-          BOUNDARY_MARGIN / this.scale <
+        canvasRect.height +
+        BOUNDARY_MARGIN / this.scale <
         0
       ) {
         outsideBottomEdge = true;
@@ -1525,9 +1543,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     This allows users to be a little less precise. */
     if (
       Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) <
-        TOUCH_EVENT_MARGIN &&
+      TOUCH_EVENT_MARGIN &&
       Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) <
-        TOUCH_EVENT_MARGIN
+      TOUCH_EVENT_MARGIN
     ) {
       //Reset properties that were changed by the event.
       this.dragItem = MapDragItem.Default;
@@ -1950,7 +1968,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             //If cursor is over a group boundary or option button.
             if (
               stationGroup.hoverItem ===
-                StationGroupElementHoverItem.Boundary ||
+              StationGroupElementHoverItem.Boundary ||
               (stationGroup.hoverItem ===
                 StationGroupElementHoverItem.ButtonOption &&
                 this.mapMode !== MapMode.View)
@@ -1984,14 +2002,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.drawElements();
     }
 
-    /* For selected station in map check the station is in center of the map.
-      and send info to center station button for show if true.
+    /* For selected station or station group in map check whether it's in center of the map.
+      and send info to center station or station group button for show if true.
     */
-    if (this.mapService.stationElements.some((e) => e.drawerOpened)) {
+    if (
+      this.mapService.stationElements.some((e) => e.drawerOpened) ||
+      this.mapService.stationGroupElements.some((e) => e.drawerOpened)
+    ) {
       const drawer = document.getElementsByTagName('mat-drawer');
       this.mapService.mapStationHelper.stationCenter$.next(
         this.mapService.centerHelper.checkCenter(
-          CenterPanType.Station,
+          this.drawerMode === 'stationInfo'
+            ? CenterPanType.Station
+            : CenterPanType.StationGroup,
           drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
         )
       );
@@ -2122,7 +2145,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             //Stop de-selecting station in station group edit mode when it contains only one station.
             if (
               this.mapService.mapHelper.mapMode$.value ===
-                MapMode.StationGroupEdit &&
+              MapMode.StationGroupEdit &&
               this.mapService.stationElements.filter((e) => e.selected)
                 .length === 1 &&
               station.selected
@@ -2203,8 +2226,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.mapStationGroupHelper.tempStationGroup$
                 .value instanceof StationGroupMapElement &&
               this.stationGroups[groupIndex].rithmId ===
-                this.mapService.mapStationGroupHelper.tempStationGroup$.value
-                  .rithmId
+              this.mapService.mapStationGroupHelper.tempStationGroup$.value
+                .rithmId
             ) {
               this.mapService.revertStationGroup();
             }
@@ -2298,7 +2321,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           // return if the only group present inside the editing group. So that avoid creating an empty group
           if (
             this.mapService.mapHelper.mapMode$.value ===
-              MapMode.StationGroupEdit &&
+            MapMode.StationGroupEdit &&
             this.mapService.isLastStationGroup
           ) {
             return;

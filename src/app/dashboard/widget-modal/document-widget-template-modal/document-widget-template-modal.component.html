@@ -28,6 +28,11 @@
         *ngSwitchCase="enumWidgetType.DocumentListBanner"
         [ngTemplateOutlet]="previewListBanner"
       ></ng-container>
+      <!-- Type container-profile-banner-widget-->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.ContainerProfileBanner"
+        [ngTemplateOutlet]="previewContainerProfile"
+      ></ng-container>
     </div>
     <!-- Info of card. -->
     <div class="p-2 overflow-auto h-2/6 scrollbar">
@@ -54,6 +59,21 @@
     >
       <i class="fas fa-image text-3xl text-secondary-500 animate-pulse"></i>
     </div>
+    <ng-container *ngTemplateOutlet="previewList"></ng-container>
+  </div>
+</ng-template>
+
+<!-- Preview widget type container-profile-banner-widget -->
+<ng-template #previewContainerProfile>
+  <div class="h-full w-full rounded bg-white overflow-hidden">
+    <div class="h-2/5 bg-secondary-100 relative">
+      <div
+        class="h-[60px] w-[60px] rounded-full border-2 border-white bg-secondary-200 absolute m-4 flex justify-center items-center"
+      >
+        <i class="far fa-user text-white text-4xl"></i>
+      </div>
+    </div>
+
     <ng-container *ngTemplateOutlet="previewList"></ng-container>
   </div>
 </ng-template>

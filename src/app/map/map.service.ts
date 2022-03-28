@@ -59,7 +59,7 @@ export class MapService {
     this.zoomHelper
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Getter The stations groups Elements.

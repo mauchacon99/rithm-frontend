@@ -14,8 +14,10 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
   ColumnFieldsWidget,
   DashboardItem,
+  DocumentImage,
   EditDataWidget,
   QuestionList,
+  WidgetType,
 } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -78,6 +80,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document columns. */
   documentColumns: ColumnFieldsWidget[] = [];
 
+  /** Document images. */
+  documentImages: DocumentImage[] = [];
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private documentService: DocumentService,
@@ -108,6 +113,12 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.setWidgetIndex.emit(this.widgetIndex);
           this.getWidgetItem.emit(this.widgetItem);
           this.getDocumentWidget();
+          if (
+            dataDrawer.widgetItem.widgetType ===
+            WidgetType.ContainerProfileBanner
+          ) {
+            this.getImagesDocuments();
+          }
         }
       });
   }
@@ -180,6 +191,27 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       widgetIndex: this.widgetIndex,
       quantityElementsWidget: this.quantityElementsWidget,
     });
+  }
+
+  /**
+   * Get images document.
+   *
+   */
+  getImagesDocuments(): void {
+    this.documentService
+      .getImagesDocuments(this.documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (imagesDocument) => {
+          this.documentImages = imagesDocument;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**

@@ -33,6 +33,7 @@
       <div class="flex flex-row justify-between items-center text-xs">
         Chained
         <mat-slide-toggle
+          class="mat-slide"
           [checked]="isChained"
           [(ngModel)]="isChained"
           (ngModelChange)="setStationGroupChanges()"
@@ -68,8 +69,9 @@
         {{ numberOfSubgroups }}
       </button>
     </div>
-    <div class="w-full p-4" *ngIf="isBuilding">
+    <div class="w-full p-4 pr-3 flex justify-between">
       <button
+        *ngIf="isBuilding"
         mat-stroked-button
         id="delete-stationGroup-button"
         data-testId="delete-stationGroup-button"
@@ -78,6 +80,15 @@
         (click)="removeStationGroup()"
       >
         Delete Station Group
+      </button>
+      <button
+        *ngIf="drawerOpened && !stationGroupCenter"
+        id="centerStationGroup"
+        class="px-3 py-1 text-accent-500 hidden md:inline-block"
+        data-testId="centerStationGroup"
+        (click)="centerStationGroup()"
+      >
+        <i class="fas fa-location"></i>
       </button>
     </div>
   </div>
