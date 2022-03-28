@@ -23,7 +23,6 @@
         <!-- stations -->
         <mat-list-option
           *ngFor="let station of stationGroups.stations"
-          [value]="station"
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
           (click)="selectedListItem(station)"
