@@ -83,4 +83,13 @@ export class MockSplitService {
   public getAdminPortalTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section groupHierarchyMenu.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupHierarchyMenuTreatment(): string {
+    return 'on';
+  }
 }
