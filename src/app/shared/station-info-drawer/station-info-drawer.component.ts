@@ -51,7 +51,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
-  /** Get flow button name /Flow as default. */
+  /** Get flow button name (Flow as default). */
   flowButtonName = 'Flow';
 
   /** Display the ownerRoster length. */
@@ -301,9 +301,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Whether the station is selected and it's in center of the map.
+   * Whether the selected station is map centered or not.
    *
-   * @returns True if the selected station in center of the map, false otherwise.
+   * @returns True if the selected station is map centered otherwise false.
    */
   get stationCenter(): boolean {
     const drawer = document.getElementsByTagName('mat-drawer');

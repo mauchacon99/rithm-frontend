@@ -108,7 +108,7 @@
               ></i>
             </div>
           </div>
-          <div>
+          <div class="mb-4 button-setting-section">
             <mat-form-field appearance="outline" class="w-full">
               <input
                 matInput
@@ -121,6 +121,9 @@
                 maxlength="10"
                 [disabled]="openedFromMap && mapMode !== mapModeEnum.Build"
               />
+              <mat-hint align="end"
+                >{{ flowButtonName.length || 0 }}/10</mat-hint
+              >
               <button
                 *ngIf="flowButtonName !== stationInformation.flowButton"
                 matSuffix
@@ -131,7 +134,7 @@
                 <i
                   class="fa-solid fa-xl"
                   [ngClass]="{
-                    'fa-circle-check fa-beat-fade': !savingButtonText,
+                    'fa-floppy-disk fa-beat-fade': !savingButtonText,
                     'fa-spinner fa-spin': savingButtonText
                   }"
                 ></i>
