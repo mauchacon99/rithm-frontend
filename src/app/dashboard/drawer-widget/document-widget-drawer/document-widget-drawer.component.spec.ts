@@ -98,7 +98,6 @@ describe('DocumentWidgetDrawerComponent', () => {
   it('Should subscribe to SidenavDrawerService.drawerData$', () => {
     const dataWidget = JSON.parse(dataEditWidget.widgetItem.data);
     const spyEmit = spyOn(component.setWidgetIndex, 'emit').and.callThrough();
-    component.dataDrawerDocument = dataEditWidget;
     sideNavService.drawerData$.next(dataEditWidget);
     expect(component.dataDrawerDocument.widgetIndex).toEqual(
       dataEditWidget.widgetIndex
@@ -248,7 +247,6 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should emit updateDataWidget$ to update widget', () => {
-    component.dataDrawerDocument = dataEditWidget;
     component.formColumns.setValue(['1020-65sdvsd4-05060708-090trhrth']);
     component.questions = [];
     const expectData = {
@@ -257,7 +255,7 @@ describe('DocumentWidgetDrawerComponent', () => {
       quantityElementsWidget:
         component.dataDrawerDocument.quantityElementsWidget,
     };
-    const expectDocmentColumns = [
+    const expectDocumentColumns = [
       {
         name: 'Question Document',
         questionId: component.formColumns.value[0],
@@ -270,7 +268,7 @@ describe('DocumentWidgetDrawerComponent', () => {
 
     component['updateWidget']();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
-    expect(component.documentColumns).toEqual(expectDocmentColumns);
+    expect(component.documentColumns).toEqual(expectDocumentColumns);
   });
 
   it('should render message for show user this document not have questions assigned', () => {
