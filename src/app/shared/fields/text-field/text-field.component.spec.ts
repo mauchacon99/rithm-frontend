@@ -3,12 +3,17 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Question, QuestionFieldType } from 'src/models';
+import { DialogOptions, Question, QuestionFieldType } from 'src/models';
 
 import { TextFieldComponent } from './text-field.component';
 import { StationService } from 'src/app/core/station.service';
-import { MockDocumentService, MockStationService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockPopupService,
+  MockStationService,
+} from 'src/mocks';
 import { DocumentService } from 'src/app/core/document.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 const FIELDS: Question[] = [
   {
@@ -76,6 +81,7 @@ describe('TextFieldComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: DocumentService, useValue: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -263,5 +269,20 @@ describe('TextFieldComponent', () => {
       expect(email.hasError('email')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
     });
+  });
+
+  it('should open a confirmation pop up on click of delete station field', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Remove Field',
+      message: `Are you sure you want to remove this field?`,
+      okButtonText: 'Remove',
+      cancelButtonText: 'Close',
+    };
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.removeFieldStation(component.field);
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 });

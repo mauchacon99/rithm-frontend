@@ -24,6 +24,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Reusable component for all fields involving text.
@@ -91,6 +92,7 @@ export class TextFieldComponent
     private fb: FormBuilder,
     private stationService: StationService,
     private documentService: DocumentService,
+    private popupService: PopupService,
     @Inject(NgZone) private ngZone: NgZone
   ) {}
 
@@ -254,5 +256,22 @@ export class TextFieldComponent
       }
     }
     return fieldVal;
+  }
+
+  /**
+   * Remove the field of station.
+   *
+   * @param field The field to emit.
+   */
+  async removeFieldStation(field: Question): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Remove Field',
+      message: `Are you sure you want to remove this field?`,
+      okButtonText: 'Remove',
+      cancelButtonText: 'Close',
+    });
+    if (confirm) {
+      this.removeField(field);
+    }
   }
 }
