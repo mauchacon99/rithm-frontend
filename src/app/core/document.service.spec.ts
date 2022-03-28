@@ -903,6 +903,30 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
+  it('should upload image', () => {
+    const expectedResponse = {
+      data: 'ewf34tf-3ge343-g34g3e',
+    };
+    const file = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    const formData = new FormData();
+    formData.append('image', file);
+
+    service.uploadImage(file).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/image`
+    );
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(formData);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
   it('should call method to get document images', () => {
     const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const expectedResponse: DocumentImage[] = [
@@ -914,5 +938,36 @@ describe('DocumentService', () => {
     service.getImagesDocuments(documentRithm).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/images?documentRithmId=${documentRithm}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toEqual(documentRithm);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return image json', () => {
+    const expectedResponse = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image name',
+    };
+
+    const imageId = '123-456-789';
+
+    service.getImageByRithmId(imageId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson?vaultFileRithmId=${imageId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });

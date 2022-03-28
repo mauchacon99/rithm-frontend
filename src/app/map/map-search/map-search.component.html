@@ -45,7 +45,7 @@
     (click)="isMobile ? closeMobileSearch() : clearSearchText()"
   ></i>
   <mat-form-field
-    class="text-sm w-full"
+    class="text-sm w-full mat-search-bar"
     [ngClass]="{ 'px-4 pt-4': isMobile }"
     appearance="fill"
   >
@@ -66,7 +66,7 @@
       [displayWith]="displayStationName"
     >
       <mat-option
-        class="text-sm"
+        class="text-sm mat-option-list"
         *ngFor="let option of filteredStationsStationGroups"
         [value]="option"
         (click)="openDrawer(option)"
@@ -74,7 +74,7 @@
       >
         <span
           *ngIf="isStation(option)"
-          class="station bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
+          class="station bg-contain bg-no-repeat w-5 h-4 inline-block mb-2 mr-2"
         ></span>
         <span
           *ngIf="!isStation(option)"

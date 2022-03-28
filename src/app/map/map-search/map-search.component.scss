@@ -1,27 +1,28 @@
 //Search css styles
-::ng-deep.mat-form-field-wrapper {
-  padding: 0;
 
-  .mat-form-field-underline {
-    display: none;
+mat-form-field.mat-search-bar {
+  ::ng-deep.mat-form-field-wrapper {
+    padding: 0;
+
+    .mat-form-field-underline {
+      display: none;
+    }
   }
-}
 
-::ng-deep.mat-form-field-appearance-fill {
-  .mat-form-field-flex {
+  ::ng-deep .mat-form-field-flex {
     padding: 10px 25px 10px 35px !important;
     background-color: #fff;
     border: 1px solid #bfbfbf;
   }
 
-  .mat-form-field-infix {
+  ::ng-deep .mat-form-field-infix {
     padding: 0;
     border-top: 0.35rem;
     font-size: 0.89rem;
   }
 }
 
-::ng-deep.mat-option {
+mat-option.mat-option.mat-option-list {
   line-height: 21px !important;
   height: 50px !important;
   padding: 0 10px !important;
