@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -701,5 +701,52 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/hierarchy`,
       { params }
     );
+  }
+
+  /**
+   * Get the field questions of each widget.
+   *
+   * @param stationRithmId  The station id.
+   * @returns An object with value of each question for widget.
+   */
+  getFieldQuestionWidget(stationRithmId: string): Observable<unknown> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot receive the information for widget.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the field questions of widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param newFieldQuestion The value that will be update.
+   * @returns The field question updated.
+   */
+  updateFieldQuestionWidget(
+    stationRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    newFieldQuestion: []
+  ): Observable<unknown> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the widget field',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }

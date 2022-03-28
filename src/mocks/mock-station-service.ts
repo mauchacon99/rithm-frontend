@@ -1190,4 +1190,51 @@ export class MockStationService {
 
     return of(expectedResponse).pipe(delay(1000));
   }
+
+
+  /**
+   * Get the field questions of each widget.
+   *
+   * @param stationRithmId  The station id.
+   * @returns An object with value of each question for widget.
+   */
+   getFieldQuestionWidget(stationRithmId: string): Observable<unknown> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot receive the information for widget.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the field questions of widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param newFieldQuestion The value that will be update.
+   * @returns The field question updated.
+   */
+   updateFieldQuestionWidget(
+    stationRithmId: string,
+    newFieldQuestion: []
+  ): Observable<unknown> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the widget field',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
 }
