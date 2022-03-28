@@ -522,14 +522,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
+    const bodyDashboardData = this.parseDashboardData();
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
-        ? this.dashboardService.updateOrganizationDashboard(
-            this.parseDashboardData()
-          )
-        : this.dashboardService.updatePersonalDashboard(
-            this.parseDashboardData()
-          );
+        ? this.dashboardService.updateOrganizationDashboard(bodyDashboardData)
+        : this.dashboardService.updatePersonalDashboard(bodyDashboardData);
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
