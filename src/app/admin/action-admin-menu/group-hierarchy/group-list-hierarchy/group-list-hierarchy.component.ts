@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSelectionListChange } from '@angular/material/list';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -8,13 +9,19 @@ import { StationGroupData } from 'src/models';
  * Component to show options list.
  */
 @Component({
-  selector: 'app-group-list-hierarchy',
+  selector: 'app-group-list-hierarchy[stationGroupRithmId][depthGroup]',
   templateUrl: './group-list-hierarchy.component.html',
   styleUrls: ['./group-list-hierarchy.component.scss'],
 })
 export class GroupListHierarchyComponent implements OnInit {
   /** RithmId of station or stationGroup to search. */
   @Input() stationGroupRithmId = '';
+
+  /** Depth of the sub-stationGroups. */
+  @Input() depthGroup = 1;
+
+  /** Emit RithmId of station or stationGroup selected. */
+  @Output() selectedGroupRithmId = new EventEmitter<string>();
 
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
@@ -34,7 +41,7 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Get stationGroups. */
   private getStationGroups(): void {
     this.stationService
-      .getStationGroups(this.stationGroupRithmId)
+      .getStationGroups(this.stationGroupRithmId, this.depthGroup)
       .pipe(first())
       .subscribe({
         next: (stationGroup) => {
@@ -47,5 +54,16 @@ export class GroupListHierarchyComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Emit RithmId of station or stationGroup selected.
+   *
+   * @param selectedStationGroup Selected file of list type MatSelectionListChange.
+   */
+  selectGroupRithmId(selectedStationGroup: MatSelectionListChange): void {
+    const { source } = selectedStationGroup;
+    const rithmId = source._value?.at(0) as string;
+    this.selectedGroupRithmId.emit(rithmId);
   }
 }

@@ -5,6 +5,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { GroupListHierarchyComponent } from './group-list-hierarchy.component';
+import { MatSelectionListChange } from '@angular/material/list';
 
 describe('GroupListHierarchyComponent', () => {
   let component: GroupListHierarchyComponent;
@@ -38,7 +39,7 @@ describe('GroupListHierarchyComponent', () => {
       'getStationGroups'
     ).and.callThrough();
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalledOnceWith('');
+    expect(spyService).toHaveBeenCalledOnceWith('', 1);
   });
 
   it('should show error message when request station widget document  data', () => {
@@ -53,5 +54,22 @@ describe('GroupListHierarchyComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should emit selectedGroupRithmId', () => {
+    const expectedRithmId = '123-456-789';
+    const spyEmit = spyOn(
+      component.selectedGroupRithmId,
+      'emit'
+    ).and.callThrough();
+    const mockMatSelectionListChange = {
+      source: {
+        _value: [expectedRithmId],
+      },
+    };
+    component.selectGroupRithmId(
+      mockMatSelectionListChange as MatSelectionListChange
+    );
+    expect(spyEmit).toHaveBeenCalledOnceWith(expectedRithmId);
   });
 });

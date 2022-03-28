@@ -51,4 +51,21 @@ describe('GroupHierarchyComponent', () => {
     expect(sectionGroupHierarchy).toBeNull();
     expect(sectionPermissionDenied).toBeDefined();
   });
+
+  it('should push new columns to columnsStationGroupRithmId', () => {
+    const expectedRithmId = '123-456-789';
+    const spyPush = spyOn(
+      component.columnsStationGroupRithmId,
+      'push'
+    ).and.callThrough();
+    const spySplice = spyOn(
+      component.columnsStationGroupRithmId,
+      'splice'
+    ).and.callThrough();
+
+    component.onSelectStationGroupRithmId(expectedRithmId, 0);
+    expect(spyPush).toHaveBeenCalledOnceWith(expectedRithmId);
+    expect(spySplice).toHaveBeenCalled();
+    expect(component.columnsStationGroupRithmId.at(1)).toEqual(expectedRithmId);
+  });
 });

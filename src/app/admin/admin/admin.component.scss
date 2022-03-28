@@ -7,3 +7,13 @@
 .color-border {
   border-color: map-get($primary-palette, 50);
 }
+
+.width-container {
+  width: calc(100% - 300px);
+}
+
+@media (max-width: 760px) {
+  .width-container {
+    width: 100% !important;
+  }
+}
