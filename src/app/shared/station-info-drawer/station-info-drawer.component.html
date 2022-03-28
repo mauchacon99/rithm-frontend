@@ -125,8 +125,10 @@
                 >{{ flowButtonName.length || 0 }}/10</mat-hint
               >
               <button
-                *ngIf="flowButtonName !== stationInformation.flowButton"
                 matSuffix
+                id="save-flow-button-text"
+                data-testid="save-flow-button-text"
+                *ngIf="flowButtonName !== stationInformation.flowButton"
                 class="text-accent-300"
                 (click)="saveButtonSettings()"
                 matTooltip="Click to save the current text"
