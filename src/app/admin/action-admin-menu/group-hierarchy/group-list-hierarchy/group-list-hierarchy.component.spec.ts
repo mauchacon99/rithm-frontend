@@ -75,6 +75,7 @@ describe('GroupListHierarchyComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#failed-groups');
     expect(spyError).toHaveBeenCalled();
     expect(showMessage).toBeTruthy();
+    expect(component.isErrorGetGroups).toBeTrue();
   });
 
   it('should show loading while request getStationGroups', () => {
@@ -89,5 +90,6 @@ describe('GroupListHierarchyComponent', () => {
     );
     expect(spyMethod).toHaveBeenCalled();
     expect(loader).toBeTruthy();
+    expect(component.isLoading).toBeTrue();
   });
 });
