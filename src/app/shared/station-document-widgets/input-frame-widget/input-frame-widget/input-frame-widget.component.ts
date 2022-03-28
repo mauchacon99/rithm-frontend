@@ -135,6 +135,8 @@ export class InputFrameWidgetComponent {
    * @param field The field for the setting drawer.
    */
   openFieldSettingDrawer(field: Question): void {
-    this.openSettingDrawer.emit(field);
+    if (this.widgetMode === 'setting') {
+      this.openSettingDrawer.emit(field);
+    }
   }
 }

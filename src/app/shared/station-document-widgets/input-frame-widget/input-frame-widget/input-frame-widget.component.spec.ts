@@ -116,6 +116,7 @@ describe('InputFrameWidgetComponent', () => {
   });
 
   it('should emit event openSettingDrawer', () => {
+    component.widgetMode = 'setting';
     const spyEmit = spyOn(component.openSettingDrawer, 'emit');
     const field = firstList[0];
     component.openFieldSettingDrawer(field);

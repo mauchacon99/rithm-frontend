@@ -774,12 +774,22 @@ export class StationComponent
    * Save the changes make in the gridster.
    */
   saveStationChanges(): void {
+    /** If the left drawer is open, it must be closed. */
+    if (this.isOpenDrawerLeft) {
+      this.isOpenDrawerLeft = false;
+    }
+    this.closeSettingDrawer();
     this.editMode = false;
     this.setGridMode('preview');
   }
 
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
+    /** If the left drawer is open, it must be closed. */
+    if (this.isOpenDrawerLeft) {
+      this.isOpenDrawerLeft = false;
+    }
+    this.closeSettingDrawer();
     const confirm = await this.popupService.confirm({
       title: 'Cancel?',
       message: '\nUnsaved changes will be lost.',
@@ -824,6 +834,7 @@ export class StationComponent
    */
   toggleLeftDrawer(): void {
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
+    this.closeSettingDrawer();
     if (this.settingMode) {
       this.setGridMode('layout');
     }
@@ -835,7 +846,25 @@ export class StationComponent
    * @param field The field information for the setting drawer through sidenavDrawerService.
    */
   openSettingDrawer(field: Question): void {
+    /** If the left drawer is open, it must be closed. */
+    if (this.isOpenDrawerLeft) {
+      this.isOpenDrawerLeft = false;
+    }
     this.sidenavDrawerService.openDrawer('fieldSetting', field);
+  }
+
+  /**
+   * Close the right setting drawer for field setting.
+   */
+  closeSettingDrawer(): void {
+    /** If both are open, the field setting drawer must be closed. */
+    if (
+      this.isOpenDrawerLeft &&
+      this.sidenavDrawerService.isDrawerOpen &&
+      this.drawerContext === 'fieldSetting'
+    ) {
+      this.sidenavDrawerService.closeDrawer();
+    }
   }
 
   /**
