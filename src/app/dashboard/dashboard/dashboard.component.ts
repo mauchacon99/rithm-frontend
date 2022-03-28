@@ -177,12 +177,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Set config break point in mobile. */
-  private setConfigMobileGridster(): void {
-    this.options.mobileBreakpoint = this.isMobileDevice ? 1280 : 640;
-    this.changedOptions();
-  }
-
   /**
    * Initialize split on page load.
    */
@@ -197,6 +191,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /** Set config break point in mobile. */
+  private setConfigMobileGridster(): void {
+    this.options.mobileBreakpoint = this.isMobileDevice ? 1280 : 640;
+    this.changedOptions();
   }
 
   /** Get loading in service dashboard for show loading in dashboard component. */
