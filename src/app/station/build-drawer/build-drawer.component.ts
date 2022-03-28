@@ -7,7 +7,7 @@ import {
   Input,
 } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
-import { CustomField, QuestionFieldType } from 'src/models';
+import { CustomField, FrameType, QuestionFieldType } from 'src/models';
 
 /**
  *
@@ -32,6 +32,9 @@ export class BuildDrawerComponent implements OnInit {
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
+
+  /** Frame types list.  */
+  frameTypes = FrameType;
 
   /** The current category selected. */
   categorySelected = 'Form Inputs';
@@ -135,6 +138,22 @@ export class BuildDrawerComponent implements OnInit {
       icon: 'fa-solid fa-wrench',
       questionType: this.fieldTypeEnum.CustomField,
       dataTestId: 'add-custom-field',
+    },
+  ];
+
+  /** CustomComponents object with component data entry. */
+  customComponents = [
+    {
+      prompt: 'Headline',
+      icon: 'fa-heading fa-solid',
+      dataTestId: 'component-headline',
+      type: this.frameTypes.Headline,
+    },
+    {
+      prompt: 'Title',
+      icon: 'fa-heading fa-solid',
+      dataTestId: 'component-title',
+      type: this.frameTypes.Title,
     },
   ];
 
