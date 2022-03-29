@@ -332,10 +332,15 @@
                           id="button-remove-widget"
                           data-testid="button-remove-widget"
                           class="px-2"
+                          [class]="{
+                            'hover:cursor-not-allowed': widgetFocused < 0
+                          }"
                           (click)="removeWidgets()"
+                          [disabled]="widgetFocused < 0"
                         >
                           <span
                             class="fas fa-trash text-secondary-500 fa-lg"
+                            [ngClass]="{ 'text-error-500': widgetFocused > -1 }"
                           ></span>
                         </button>
                         <mat-divider [vertical]="true"></mat-divider>
@@ -374,18 +379,23 @@
                     <gridster
                       class="p-0 bg-transparent h-screen"
                       [options]="options"
-                      (mouseleave)="widgetMoveButton = -1"
                     >
                       <gridster-item
                         [item]="widgetItem"
-                        [ngClass]="{ 'widget-item-layout': layoutMode }"
-                        class="pt-1"
+                        class="gridster-item"
+                        [ngClass]="{
+                          'widget-item-layout':
+                            layoutMode && widgetFocused !== i,
+                          'border-accent-300 border-2': widgetFocused === i
+                        }"
+                        (click)="focusWidget(i)"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
                           let i = index;
                           trackBy: trackBy
                         "
-                        (mouseover)="widgetMoveButton = i"
+                        (mouseenter)="widgetMoveButton = i"
+                        (mouseleave)="widgetMoveButton = -1"
                       >
                         <div class="h-gridster relative overflow-hidden">
                           <button

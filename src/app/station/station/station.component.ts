@@ -131,6 +131,12 @@ export class StationComponent
 
   inputFrameWidgetItems: StationFrameWidget[] = [];
 
+  /** The current focused/selected widget. */
+  widgetFocused = -1;
+
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
+
   /** Loading / Error variables. */
 
   /** Whether the request to get the station info is currently underway. */
@@ -138,9 +144,6 @@ export class StationComponent
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
-
-  /** Indicates when the button to move the widget will be enabled. */
-  widgetMoveButton = -1;
 
   constructor(
     private stationService: StationService,
@@ -733,6 +736,7 @@ export class StationComponent
     if (this.options.draggable) {
       this.options.draggable.enabled = enabledMode;
     }
+    this.widgetFocused = -1;
     /* Execute changes. */
     this.changedOptions();
   }
@@ -814,8 +818,20 @@ export class StationComponent
   }
 
   /** Remove widgets from the gridster in layout mode. */
-  removeWidgets(): void {
-    this.inputFrameWidgetItems.length = 0;
+  async removeWidgets(): Promise<void> {
+    if (this.widgetFocused > -1) {
+      const confirmRemove = await this.popupService.confirm({
+        title: 'Remove widget?',
+        message: '\nThe selected widget will be removed.',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirmRemove) {
+        this.inputFrameWidgetItems.splice(this.widgetFocused, 1);
+        this.widgetFocused = -1;
+      }
+    }
   }
 
   /**
@@ -866,6 +882,15 @@ export class StationComponent
    */
   trackBy(index: number, item: GridsterItem): number {
     return item.id;
+  }
+
+  /**
+   * Allow to select/unselect any clicked widget.
+   *
+   * @param index The index of the selected widget.
+   */
+  focusWidget(index: number): void {
+    this.widgetFocused = index === this.widgetFocused ? -1 : index;
   }
 
   /**
