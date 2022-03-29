@@ -51,4 +51,8 @@
   ::ng-deep .mat-form-field-wrapper {
     @apply text-xs;
   }
+
+  ::ng-deep .mat-hint {
+    @apply text-xs;
+  }
 }
