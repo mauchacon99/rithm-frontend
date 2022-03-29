@@ -16,9 +16,6 @@ export class GroupHierarchyComponent {
   /** Value of selected item. */
   selectedItem!: StationGroupData | StationListGroup;
 
-  /** Show component app-user-group-station-admin when clicked item.*/
-  showUserGroupStation = false;
-
   /**
    * Return if selectedItem is group.
    *
@@ -35,6 +32,5 @@ export class GroupHierarchyComponent {
    */
   setSelectItem(value: StationGroupData | StationListGroup): void {
     this.selectedItem = value;
-    this.showUserGroupStation = true;
   }
 }
