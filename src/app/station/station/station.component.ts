@@ -786,20 +786,12 @@ export class StationComponent
    * Save the changes make in the gridster.
    */
   saveStationChanges(): void {
-    /** If the left drawer is open, it must be closed. */
-    if (this.isOpenDrawerLeft) {
-      this.isOpenDrawerLeft = false;
-    }
     this.editMode = false;
     this.setGridMode('preview');
   }
 
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
-    /** If the left drawer is open, it must be closed. */
-    if (this.isOpenDrawerLeft) {
-      this.isOpenDrawerLeft = false;
-    }
     const confirm = await this.popupService.confirm({
       title: 'Cancel?',
       message: '\nUnsaved changes will be lost.',
@@ -856,7 +848,6 @@ export class StationComponent
    */
   toggleLeftDrawer(): void {
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
-    this.closeSettingDrawer();
     if (this.settingMode) {
       this.setGridMode('layout');
     }
