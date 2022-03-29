@@ -19,6 +19,7 @@ import {
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
   StationFrameWidget,
+  QuestionFieldType,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -705,45 +706,13 @@ export class StationService {
   }
 
   /**
-   * Get the field questions of each widget.
-   *
-   * @param stationRithmId  The station id.
-   * @returns An object with value of each question for widget.
-   */
-  getFieldQuestionWidget(stationRithmId: string): Observable<unknown> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot receive the information for widget.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const expectedResponse: StationFrameWidget = {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: 'test',
-        data: 'testing question widget',
-        id: 0,
-      };
-      return of(expectedResponse).pipe(delay(1000));
-    }
-  }
-
-  /**
-   * Update the field questions of widgets.
+   * Save or update the field questions of widgets.
    *
    * @param stationRithmId The station id that will be update.
    * @param newFieldQuestion The value that will be update.
    * @returns The field question updated.
    */
-  updateFieldQuestionWidget(
+  addFieldQuestionWidget(
     stationRithmId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     newFieldQuestion: StationFrameWidget[]
@@ -758,6 +727,17 @@ export class StationService {
           })
       ).pipe(delay(1000));
     } else {
+      const expectedQuestion: Question[] = [
+        {
+          prompt: 'Fake question 1',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ];
       const expectedResponse: StationFrameWidget = {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -766,7 +746,7 @@ export class StationService {
         x: 0,
         y: 0,
         type: 'test',
-        data: 'data-testing-id',
+        data: JSON.stringify(expectedQuestion),
         id: 0,
       };
       return of(expectedResponse).pipe(delay(1000));

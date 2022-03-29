@@ -1259,6 +1259,7 @@ describe('StationService', () => {
 
     req.flush(expectedResponse);
   });
+
   it('should return the status when updated the flow button text', () => {
     const expectedResponse: StandardStringJSON = {
       data: 'test',
@@ -1278,24 +1279,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should return the data of each widget', () => {
-    const expectedResponse: StationFrameWidget = {
-      rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      cols: 6,
-      rows: 4,
-      x: 0,
-      y: 0,
-      type: 'test',
-      data: 'data-field-testing',
-      id: 0,
-    };
-    service.getFieldQuestionWidget(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
-  });
-
-  fit('should update the data of each widget', () => {
+  it('should save or update the data of each widget', () => {
     const expectedQuestion: Question[] = [
       {
         prompt: 'Fake question 1',
@@ -1322,7 +1306,7 @@ describe('StationService', () => {
     ];
 
     service
-      .updateFieldQuestionWidget(stationId, newFieldQuestion)
+      .addFieldQuestionWidget(stationId, newFieldQuestion)
       .subscribe((response) => {
         expect(response).toEqual(newFieldQuestion[0]);
       });

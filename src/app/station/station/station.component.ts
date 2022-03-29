@@ -771,23 +771,22 @@ export class StationComponent
   }
 
   /**
-   * Save the changes make in the gridster.
+   * Save or update the changes make in each widget the gridster.
    */
-  saveStationChanges(): void {
-    const newFieldQuestion = this.inputFrameWidgetItems;
-
+  saveStationFramesChanged(): void {
+    let newFieldQuestion = this.inputFrameWidgetItems;
     this.editMode = false;
     this.setGridMode('preview');
-    this.inputFrameWidgetItems.forEach((field, index) => {
-      newFieldQuestion[index] = {
+
+    newFieldQuestion = this.inputFrameWidgetItems.map((field, index) => {
+      return {
         ...newFieldQuestion[index],
-        rithmId: this.randRithmId,
         data: JSON.stringify(field.questions),
       };
     });
 
     this.stationService
-      .updateFieldQuestionWidget(this.stationRithmId, newFieldQuestion)
+      .addFieldQuestionWidget(this.stationRithmId, newFieldQuestion)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {
@@ -824,7 +823,7 @@ export class StationComponent
    */
   addInputFrame(): void {
     const inputFrame: StationFrameWidget = {
-      rithmId: '',
+      rithmId: this.randRithmId,
       stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
