@@ -25,7 +25,7 @@ export class BuildDrawerComponent implements OnInit {
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
 
   /** Event Emitter Will add a new input frame in the station grid. */
-  @Output() addInputFrame: EventEmitter<string> = new EventEmitter();
+  @Output() addInputFrame: EventEmitter<FrameType> = new EventEmitter();
 
   /** The station id used to get previous fields. */
   @Input() stationId!: string;
@@ -193,7 +193,7 @@ export class BuildDrawerComponent implements OnInit {
    *
    * @param type Input frame type sended.
    */
-  addNewInputFrame(type: string): void {
+  addNewInputFrame(type: FrameType): void {
     this.addInputFrame.emit(type);
   }
 }

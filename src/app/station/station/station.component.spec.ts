@@ -27,6 +27,7 @@ import { StationTemplateComponent } from 'src/app/station/station-template/stati
 import { StationService } from 'src/app/core/station.service';
 import {
   FlowLogicRule,
+  FrameType,
   OperandType,
   OperatorType,
   Question,
@@ -801,17 +802,17 @@ describe('StationComponent', () => {
 
   it('should add a new input frame widget to the array of input frames', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems).toHaveSize(1);
   });
 
   it('should add more than one input frame with different id', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
 
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems.length).toBe(1);
 
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems.length).toBe(2);
 
     expect(component.inputFrameWidgetItems[0].id).not.toEqual(

@@ -26,6 +26,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -33,7 +34,6 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 /**
  * Main component for viewing a station.
@@ -65,6 +65,9 @@ export class StationComponent
 
   /** The information about the station. */
   stationInformation!: StationInformation;
+
+  /** Different types of input frames components.*/
+  frameType = FrameType;
 
   /** Station Rithm id. */
   stationRithmId = '';
@@ -805,7 +808,9 @@ export class StationComponent
    *
    * @param type Information referent to widget selected.
    */
-  addInputFrame(type: string | CdkDragDrop<string, string, string>): void {
+  addInputFrame(
+    type: CdkDragDrop<string, string, FrameType> | FrameType
+  ): void {
     const inputFrame: InputFrameWidget = {
       frameRithmId: '',
       cols: 6,
@@ -815,13 +820,18 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
-      type: '',
+      type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
     };
+
+    /**
+     * Identify typeof type, in case is emitted by CdkDragDrop it
+     * gonna be an object and in case comes from a click method it will be a string.
+     */
     const value: string = typeof type === 'string' ? type : type.item.data;
 
-    //Add individual properties for every Type.
+    /**Add individual properties for every Type. */
     switch (value) {
       case FrameType.Body:
         inputFrame.cols = 6;
