@@ -4,8 +4,8 @@
 
 export interface DocumentImage {
   /** Id the image. */
-  imageId: string;
+  imageId: string | null;
 
   /** Name the image. */
-  imageName: string;
+  imageName: string | null;
 }
