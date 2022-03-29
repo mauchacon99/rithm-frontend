@@ -340,13 +340,17 @@ describe('DocumentWidgetDrawerComponent', () => {
       imageId: '123-456-789',
       imageName: 'Image name',
     };
-    component.widgetItem = dataEditWidget.widgetItem;
+    component.dataDrawerDocument.widgetItem = dataEditWidget.widgetItem;
     const spyMethod = spyOn(component, 'updateWidget');
 
     component.image = image;
 
     expect(spyMethod).toHaveBeenCalled();
-    expect(component.widgetItem.imageId).toEqual(image.imageId);
-    expect(component.widgetItem.imageName).toEqual(image.imageName);
+    expect(component.dataDrawerDocument.widgetItem.imageId).toEqual(
+      image.imageId
+    );
+    expect(component.dataDrawerDocument.widgetItem.imageName).toEqual(
+      image.imageName
+    );
   });
 });

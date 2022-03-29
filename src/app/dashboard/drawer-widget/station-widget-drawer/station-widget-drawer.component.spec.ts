@@ -486,12 +486,16 @@ describe('StationWidgetDrawerComponent', () => {
         imageId: '123-456-789',
         imageName: 'Image name',
       };
-      component.widgetItem = dataEditWidget.widgetItem;
+      component.dataDrawerStation.widgetItem = dataEditWidget.widgetItem;
 
       component.image = image;
 
-      expect(component.widgetItem.imageId).toEqual(image.imageId);
-      expect(component.widgetItem.imageName).toEqual(image.imageName);
+      expect(component.dataDrawerStation.widgetItem.imageId).toEqual(
+        image.imageId
+      );
+      expect(component.dataDrawerStation.widgetItem.imageName).toEqual(
+        image.imageName
+      );
     });
   });
 
