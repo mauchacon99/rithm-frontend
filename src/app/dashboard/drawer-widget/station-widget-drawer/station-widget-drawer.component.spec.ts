@@ -480,6 +480,19 @@ describe('StationWidgetDrawerComponent', () => {
       );
       expect(renderMessage).toBeFalsy();
     });
+
+    it('should call updateWidget when change Input image', () => {
+      const image = {
+        imageId: '123-456-789',
+        imageName: 'Image name',
+      };
+      component.widgetItem = dataEditWidget.widgetItem;
+
+      component.image = image;
+
+      expect(component.widgetItem.imageId).toEqual(image.imageId);
+      expect(component.widgetItem.imageName).toEqual(image.imageName);
+    });
   });
 
   it('Should emit widgetIndex', () => {

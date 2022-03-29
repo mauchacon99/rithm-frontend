@@ -15,6 +15,7 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
+  DocumentImage,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -36,12 +37,13 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   });
 
   /** Image to banner. */
-  @Input() set image(value: File | null) {
+  @Input() set image(value: DocumentImage) {
     if (
       this.dataDrawerStation?.widgetItem &&
-      this.dataDrawerStation.widgetItem.image !== value
+      this.dataDrawerStation.widgetItem.imageId !== value.imageId
     ) {
-      this.dataDrawerStation.widgetItem.image = value;
+      this.dataDrawerStation.widgetItem.imageId = value.imageId;
+      this.dataDrawerStation.widgetItem.imageName = value.imageName;
       this.updateWidget();
     }
   }

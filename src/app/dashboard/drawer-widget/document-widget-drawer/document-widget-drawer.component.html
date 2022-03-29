@@ -40,12 +40,19 @@
 
   <div
     *ngIf="failedLoadDrawer"
+  <<<<<<< HEAD
+
+=======
+>>>>>>> 5758b45f1c974702b0fe89353e7994f5b29ffb97
+  <div
+    *ngIf="failedLoadDrawer"
     class="text-error-500 text-center my-4"
     id="display-document-drawer-error"
   >
     Unable to retrieve data.
   </div>
 </ng-template>
+
 <div
   *ngIf="
     dataDrawerDocument?.widgetItem?.widgetType ===
@@ -77,9 +84,8 @@
         <mat-option
           *ngIf="!documentImages.length"
           [value]=""
-          [disabled]="true"
-          [id]="'option-profile-image-empty'"
-          [attr.data-testid]="'option-column-empty'"
+
+     [attr.data-testid]="'option-column-empty'"
         >
           There are not images to list.
         </mat-option>
