@@ -195,6 +195,9 @@ describe('GroupListHierarchyComponent', () => {
   });
 
   it('should clicked in item', () => {
+    component.isLoading = false;
+    component.isErrorGetGroups = false;
+    fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemGroup = fixture.nativeElement.querySelector(
       '#group-item-' + subStationGroups.rithmId
