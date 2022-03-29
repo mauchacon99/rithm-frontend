@@ -38,12 +38,8 @@
     </mat-form-field>
   </div>
 
-  <div
-    *ngIf="failedLoadDrawer"
-  <<<<<<< HEAD
-
-=======
->>>>>>> 5758b45f1c974702b0fe89353e7994f5b29ffb97
+  <div *ngIf="failedLoadDrawer" <<<<<<< HEAD ======= >>>>>>>
+  5758b45f1c974702b0fe89353e7994f5b29ffb97
   <div
     *ngIf="failedLoadDrawer"
     class="text-error-500 text-center my-4"
@@ -84,8 +80,7 @@
         <mat-option
           *ngIf="!documentImages.length"
           [value]=""
-
-     [attr.data-testid]="'option-column-empty'"
+          [attr.data-testid]="'option-column-empty'"
         >
           There are not images to list.
         </mat-option>
