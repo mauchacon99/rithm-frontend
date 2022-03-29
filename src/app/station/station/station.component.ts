@@ -239,19 +239,6 @@ export class StationComponent
   }
 
   /**
-   * Listen the flowButtonText subject.
-   */
-  private subscribeFlowButtonText(): void {
-    this.stationService.flowButtonText$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        if (this.stationInformation) {
-          this.stationInformation.flowButton = data.length ? data : 'Flow';
-        }
-      });
-  }
-
-  /**
    * Populate and update possibleAnswers for an specific question.
    *
    * @param answer The question we are adding possible answers to.
@@ -302,7 +289,6 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
-    this.subscribeFlowButtonText();
 
     if (!this.editMode) this.setGridMode('preview');
   }
@@ -504,12 +490,6 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
-
-      // Update flow button text.
-      this.stationService.updateFlowButtonText(
-        this.stationInformation.rithmId,
-        this.stationInformation.flowButton
-      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -525,7 +505,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , , stationQuestions]) => {
+        next: ([, , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
