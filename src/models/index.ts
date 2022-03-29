@@ -67,4 +67,5 @@ export * from './station-list-group';
 export * from './station-group-data';
 export * from './document-image';
 export * from './station-frame-widget';
+export * from './data-link-object';
 export * from './image-data';
