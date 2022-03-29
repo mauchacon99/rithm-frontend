@@ -7,6 +7,7 @@ import { StationWidgetDrawerComponent } from '../station-widget-drawer/station-w
 import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { PopupService } from 'src/app/core/popup.service';
 import {
+  MockDocumentService,
   MockErrorService,
   MockPopupService,
   MockSplitService,
@@ -16,6 +17,9 @@ import { WidgetType } from 'src/models';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { DocumentService } from 'src/app/core/document.service';
+import { throwError } from 'rxjs';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
@@ -27,6 +31,7 @@ describe('WidgetDrawerComponent', () => {
         WidgetDrawerComponent,
         MockComponent(StationWidgetDrawerComponent),
         MockComponent(DocumentWidgetDrawerComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -34,6 +39,7 @@ describe('WidgetDrawerComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SplitService, useClass: MockSplitService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -164,33 +170,37 @@ describe('WidgetDrawerComponent', () => {
   it('should remove image selected', () => {
     component.showImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
-    component.imageSelected = new File(new Array<Blob>(), 'image', {
-      type: 'image/jpeg',
-    });
+    component.imageUploaded = {
+      imageId: '24782-52555-4524-542-4555',
+      imageName: 'Name image',
+    };
     fixture.detectChanges();
-    const spyOnRemoveSelectedFile = spyOn(
-      component,
-      'removeSelectedFile'
-    ).and.callThrough();
     component.removeSelectedFile();
-    expect(spyOnRemoveSelectedFile).toHaveBeenCalledOnceWith();
-    expect(component.imageSelected).toBeNull();
+    expect(component.imageUploaded).toEqual({
+      imageId: null,
+      imageName: null,
+    });
     expect(component.fileInputFile.nativeElement.value).toBe('');
   });
 
-  it('should call onSelectFile', () => {
-    const spyMethod = spyOn(component, 'onSelectFile').and.callThrough();
+  it('should call uploadImage', () => {
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'uploadImage'
+    ).and.callThrough();
     const mockFile = new File([''], 'name', { type: 'text/png' });
     const mockEvt = { target: { files: [mockFile] } };
-    component.onSelectFile(mockEvt as unknown as Event);
-    expect(spyMethod).toHaveBeenCalled();
-    expect(component.imageSelected).not.toBeNull();
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyService).toHaveBeenCalledOnceWith(mockFile);
   });
 
   it('should show alert delete and remove image in widget', async () => {
     component.showImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
-    component.imageSelected = new File([''], 'name', { type: 'text/png' });
+    component.imageUploaded = {
+      imageId: '24782-52555-4524-542-4555',
+      imageName: 'Name image',
+    };
     fixture.detectChanges();
 
     const dataExpect = {
@@ -225,7 +235,10 @@ describe('WidgetDrawerComponent', () => {
     expect(spyConfirmImageDelete).toHaveBeenCalled();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataExpect);
     expect(spyRemoveSelectedFile).toHaveBeenCalled();
-    expect(component.imageSelected).toBeNull();
+    expect(component.imageUploaded).toEqual({
+      imageId: null,
+      imageName: null,
+    });
   });
 
   describe('Testing split.io', () => {
@@ -277,5 +290,60 @@ describe('WidgetDrawerComponent', () => {
       expect(splitInitMethod).toHaveBeenCalled();
       expect(errorService).toHaveBeenCalled();
     });
+  });
+
+  it('should return error when upload image', () => {
+    const mockFile = new File([''], 'name', { type: 'text/png' });
+    const mockEvt = { target: { files: [mockFile] } };
+    spyOn(TestBed.inject(DocumentService), 'uploadImage').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should show loading indicator when upload an image', () => {
+    component.showImageBanner = true;
+    component.widgetType = WidgetType.DocumentListBanner;
+    component.isUploading = true;
+    fixture.detectChanges();
+
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-upload-image'
+    );
+    expect(loadingIndicator).toBeTruthy();
+  });
+
+  it('should set widgetType and imageUploaded', () => {
+    const expectedImage = {
+      imageId: '123-456-789',
+      imageName: 'Image name',
+    };
+    const widgetItem = {
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 4,
+      // eslint-disable-next-line max-len
+      data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+      maxItemCols: 0,
+      maxItemRows: 0,
+      minItemCols: 0,
+      minItemRows: 0,
+      rows: 2,
+      widgetType: WidgetType.Station,
+      x: 0,
+      y: 0,
+      imageId: expectedImage.imageId,
+      imageName: expectedImage.imageName,
+    };
+    component.setWidgetItem(widgetItem);
+
+    expect(component.widgetType).toEqual(WidgetType.Station);
+    expect(component.imageUploaded).toEqual(expectedImage);
   });
 });
