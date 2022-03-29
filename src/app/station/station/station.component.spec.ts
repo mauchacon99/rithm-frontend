@@ -32,7 +32,6 @@ import {
   Question,
   QuestionFieldType,
   RuleType,
-  StationFrameWidget,
 } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
@@ -817,43 +816,6 @@ describe('StationComponent', () => {
 
     expect(component.inputFrameWidgetItems[0].id).not.toEqual(
       component.inputFrameWidgetItems[1].id
-    );
-  });
-
-  it('should saved or updated the widget fields of station current', () => {
-    const expectedQuestion: Question[] = [
-      {
-        prompt: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-    const newFieldQuestion: StationFrameWidget[] = [
-      {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: 'test',
-        data: JSON.stringify(expectedQuestion),
-        id: 0,
-      },
-    ];
-    component.stationRithmId = component.stationInformation.rithmId;
-    const addFieldWidgetSpy = spyOn(
-      TestBed.inject(StationService),
-      'addFieldQuestionWidget'
-    ).and.callThrough();
-    component.addFieldQuestionWidget();
-    expect(addFieldWidgetSpy).toHaveBeenCalledOnceWith(
-      component.stationRithmId,
-      newFieldQuestion
     );
   });
 });
