@@ -1,4 +1,8 @@
-<div id="group-hierarchy" *ngIf="showGroupHierarchy; else permissionDenied">
+<div
+  class="w-full"
+  id="group-hierarchy"
+  *ngIf="showGroupHierarchy; else permissionDenied"
+>
   <div
     class="sm:py-5 px-4 md:flex md:justify-between items-center border-b-2 color-border input-search"
   >
@@ -22,8 +26,23 @@
     </mat-form-field>
   </div>
 
-  <div>
-    <app-group-list-hierarchy> </app-group-list-hierarchy>
+  <div class="flex flex-col-reverse md:flex-row">
+    <div class="w-full md:w-[80%] h-full flex overflow-x-auto">
+      <div class="w-full md:w-[300px]">
+        <app-group-list-hierarchy
+          (getSelectedItem)="setSelectItem($event)"
+        ></app-group-list-hierarchy>
+      </div>
+    </div>
+
+    <div
+      class="w-full md:w-[300px] md:border-l-2 color-border"
+      *ngIf="selectedItem"
+    >
+      <app-user-group-station-admin
+        [selectedItem]="selectedItem"
+      ></app-user-group-station-admin>
+    </div>
   </div>
 </div>
 <ng-template #permissionDenied>
