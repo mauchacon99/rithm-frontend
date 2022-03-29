@@ -16,28 +16,27 @@
       </div>
     </div>
     <!--     body drawer-->
-    <div class="px-3 pb-4">
-      <!--      Station drawer-->
-      <app-station-widget-drawer
-        *ngIf="drawerMode === 'stationWidget'"
-        (getWidgetIndex)="setWidgetIndex($event)"
-        (getWidgetItem)="setWidgetItem($event)"
-        [image]="imageUploaded"
-      >
-      </app-station-widget-drawer>
 
-      <!-- Document drawer-->
-      <app-document-widget-drawer
-        *ngIf="drawerMode === 'documentWidget'"
-        (setWidgetIndex)="setWidgetIndex($event)"
-        (getWidgetItem)="setWidgetItem($event)"
-        [image]="imageUploaded"
-      >
-      </app-document-widget-drawer>
-    </div>
+    <!--      Station drawer-->
+    <app-station-widget-drawer
+      *ngIf="drawerMode === 'stationWidget'"
+      (getWidgetIndex)="setWidgetIndex($event)"
+      (getWidgetItem)="setWidgetItem($event)"
+      [image]="imageUploaded"
+    >
+    </app-station-widget-drawer>
+
+    <!-- Document drawer-->
+    <app-document-widget-drawer
+      *ngIf="drawerMode === 'documentWidget'"
+      (setWidgetIndex)="setWidgetIndex($event)"
+      (getWidgetItem)="setWidgetItem($event)"
+      [image]="imageUploaded"
+    >
+    </app-document-widget-drawer>
     <!-- Upload image-->
     <div
-      class="border-t border-solid border-secondary-100 py-5 pl-5"
+      class="border-t border-solid border-secondary-100 py-5 pl-3"
       *ngIf="
         (widgetType === widgetTypeEnum.StationTableBanner ||
           widgetType === widgetTypeEnum.DocumentListBanner ||

@@ -103,24 +103,48 @@
             <div>
               <i
                 class="fas fa-question-circle text-secondary-300 cursor-pointer"
-                matTooltip="?"
+                matTooltip="The button text to show in each container flow button"
                 matTooltipPosition="right"
               ></i>
             </div>
           </div>
-          <div>
-            <mat-form-field appearance="outline" class="w-full">
+          <div class="mb-4 button-setting-section">
+            <mat-form-field
+              hintLabel="Max Characters length"
+              appearance="outline"
+              class="w-full"
+            >
               <input
                 matInput
                 type="text"
                 placeholder="Button Name"
                 id="button-name"
                 [(ngModel)]="flowButtonName"
-                (ngModelChange)="saveButtonSettings()"
                 data-testid="button-name"
                 autocomplete="off"
+                maxlength="10"
                 [disabled]="openedFromMap && mapMode !== mapModeEnum.Build"
               />
+              <mat-hint align="end"
+                >{{ flowButtonName.length || 0 }}/10</mat-hint
+              >
+              <button
+                matSuffix
+                id="save-flow-button-text"
+                data-testid="save-flow-button-text"
+                *ngIf="flowButtonName !== stationInformation.flowButton"
+                class="text-accent-300"
+                (click)="saveButtonSettings()"
+                matTooltip="Click to save the current text"
+              >
+                <i
+                  class="fa-solid fa-xl"
+                  [ngClass]="{
+                    'fa-floppy-disk fa-beat-fade': !savingButtonText,
+                    'fa-spinner fa-spin': savingButtonText
+                  }"
+                ></i>
+              </button>
             </mat-form-field>
           </div>
           <div class="flex justify-between items-center">

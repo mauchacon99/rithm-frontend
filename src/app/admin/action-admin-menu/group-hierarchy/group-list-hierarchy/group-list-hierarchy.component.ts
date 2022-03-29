@@ -27,6 +27,12 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
 
+  /** Load indicator get groups. */
+  isLoading = false;
+
+  /** Show error if get groups fail. */
+  isErrorGetGroups = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService
@@ -41,14 +47,20 @@ export class GroupListHierarchyComponent implements OnInit {
 
   /** Get stationGroups. */
   getStationGroups(): void {
+    this.isLoading = true;
+    this.isErrorGetGroups = false;
     this.stationService
       .getStationGroups(this.stationGroupRithmId, this.depthGroup)
       .pipe(first())
       .subscribe({
         next: (stationGroup) => {
+          this.isLoading = false;
+          this.isErrorGetGroups = false;
           this.stationGroups = stationGroup;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.isErrorGetGroups = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
