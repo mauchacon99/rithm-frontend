@@ -287,7 +287,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     return (
       this.stationDocumentGenerationStatus ===
         DocumentGenerationStatus.Manual &&
-      (this.mapMode === 0 || this.mapMode === undefined) &&
+      (this.mapMode === MapMode.View ||
+        this.mapMode === MapMode.Build ||
+        this.mapMode === undefined) &&
       !this.locallyCreated &&
       (this.isUserAdminOrOwner || this.isWorker)
     );
