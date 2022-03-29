@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full bg-white">
+<div class="h-full bg-white">
   <!-- stationGroup -->
   <div
     class="md:border-r-2 color-border md:overflow-auto scrollbar height-container px-3 pb-3"
@@ -11,6 +11,7 @@
           [id]="'group-item-' + stationGroup.rithmId"
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
           [value]="stationGroup"
+          (click)="selectedListItem(stationGroups)"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -22,9 +23,9 @@
         <!-- stations -->
         <mat-list-option
           *ngFor="let station of stationGroups.stations"
-          [value]="station"
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
+          (click)="selectedListItem(station)"
         >
           <ng-container
             *ngTemplateOutlet="
