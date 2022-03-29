@@ -34,12 +34,10 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 })
 export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Image to banner. */
-  @Input() set image(value: File | null) {
-    if (
-      this.dataDrawerDocument?.widgetItem &&
-      this.dataDrawerDocument.widgetItem.image !== value
-    ) {
-      this.dataDrawerDocument.widgetItem.image = value;
+  @Input() set image(value: DocumentImage) {
+    if (this.dataDrawerDocument?.widgetItem && this.dataDrawerDocument?.widgetItem.imageId !== value.imageId) {
+      this.dataDrawerDocument.widgetItem.imageId = value.imageId;
+      this.dataDrawerDocument.widgetItem.imageName = value.imageName;
       this.updateWidget();
     }
   }
