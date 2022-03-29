@@ -13,6 +13,7 @@ import { AdminMenuComponent } from './admin-menu/admin-menu/admin-menu.component
 import { GroupHierarchyComponent } from './action-admin-menu/group-hierarchy/group-hierarchy.component';
 import { MatListModule } from '@angular/material/list';
 import { GroupListHierarchyComponent } from './action-admin-menu/group-hierarchy/group-list-hierarchy/group-list-hierarchy.component';
+import { UserGroupStationAdminComponent } from './action-admin-menu/group-hierarchy/user-group-station-admin/user-group-station-admin.component';
 import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-soon-message.module';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-so
     AdminMenuComponent,
     GroupHierarchyComponent,
     GroupListHierarchyComponent,
+    UserGroupStationAdminComponent,
   ],
   imports: [
     CommonModule,
