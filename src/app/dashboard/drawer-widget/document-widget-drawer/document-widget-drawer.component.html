@@ -4,7 +4,19 @@
   <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
 </div>
 
-<div *ngIf="!isLoading" id="content-drawer-document-widget" class="mt-3">
+<div
+  *ngIf="failedLoadDrawer"
+  class="text-error-500 text-center my-4"
+  id="display-document-drawer-error"
+>
+  Unable to retrieve data.
+</div>
+
+<div
+  *ngIf="!isLoading && !failedLoadDrawer"
+  id="content-drawer-document-widget"
+  class="mt-3"
+>
   <div
     *ngIf="!dataDrawerDocument?.quantityElementsWidget; else selectDrawer"
     id="message-not-question-assigned-to-document"
@@ -36,14 +48,6 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-  </div>
-
-  <div
-    *ngIf="failedLoadDrawer"
-    class="text-error-500 text-center my-4"
-    id="display-document-drawer-error"
-  >
-    Unable to retrieve data.
   </div>
 </ng-template>
 

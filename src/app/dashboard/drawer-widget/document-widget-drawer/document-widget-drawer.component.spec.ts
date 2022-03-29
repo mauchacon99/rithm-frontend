@@ -304,6 +304,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     component['getDocumentWidget']();
     fixture.detectChanges();
     expect(component.failedLoadDrawer).toBeTrue();
+    expect(component.isLoading).toBeFalse();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-drawer-error'
     );
