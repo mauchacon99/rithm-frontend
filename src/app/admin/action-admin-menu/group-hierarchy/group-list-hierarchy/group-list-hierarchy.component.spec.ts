@@ -218,5 +218,4 @@ describe('GroupListHierarchyComponent', () => {
     expect(method).toHaveBeenCalled();
     expect(getSelectedItem).toHaveBeenCalledOnceWith(subStationGroups);
   });
-
 });
