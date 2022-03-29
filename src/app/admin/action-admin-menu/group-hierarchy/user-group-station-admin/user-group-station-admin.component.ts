@@ -18,4 +18,19 @@ export class UserGroupStationAdminComponent {
   get isGroup(): boolean {
     return 'stations' in this.selectedItem ? true : false;
   }
+
+  /**
+   * Return name or title depending typeof selectedItem.
+   *
+   * @returns Name element.
+   */
+  get nameElement(): string {
+    if (this.selectedItem) {
+      return 'name' in this.selectedItem
+        ? this.selectedItem.name
+        : this.selectedItem.title;
+    } else {
+      return '';
+    }
+  }
 }
