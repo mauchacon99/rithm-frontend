@@ -3,35 +3,38 @@
   class="w-full md:w-[300px] h-full border-b-2 md:border-b-0 md:border-r-2 color-border md:overflow-auto scrollbar bg-white px-3 pb-3"
 >
   <ng-container *ngIf="stationGroups">
-    <mat-selection-list [multiple]="false" class="item-select-groups">
-      <!-- subStationGroups -->
-      <mat-list-option
-        *ngFor="let stationGroup of stationGroups.subStationGroups"
-        [id]="'group-item-' + stationGroup.rithmId"
-        [attr.data-testid]="'group-item-' + stationGroup.rithmId"
-        (click)="selectGroup(stationGroup)"
-      >
-        <ng-container
-          *ngTemplateOutlet="
+    <ng-container *ngIf="stationGroups.subStationGroups.length && stationGroups.stations.length; else emptyList">
+      <mat-selection-list [multiple]="false" class="item-select-groups">
+        <!-- subStationGroups -->
+        <mat-list-option
+                *ngFor="let stationGroup of stationGroups.subStationGroups"
+                [id]="'group-item-' + stationGroup.rithmId"
+                [attr.data-testid]="'group-item-' + stationGroup.rithmId"
+                (click)="selectGroup(stationGroup)"
+        >
+          <ng-container
+                  *ngTemplateOutlet="
             itemList;
             context: { name: stationGroup.title, type: 'group' }
           "
-        ></ng-container>
-      </mat-list-option>
-      <!-- stations -->
-      <mat-list-option
-        *ngFor="let station of stationGroups.stations"
-        [id]="'station-item-' + station.rithmId"
-        [attr.data-testid]="'station-item-' + station.rithmId"
-      >
-        <ng-container
-          *ngTemplateOutlet="
+          ></ng-container>
+        </mat-list-option>
+        <!-- stations -->
+        <mat-list-option
+                *ngFor="let station of stationGroups.stations"
+                [id]="'station-item-' + station.rithmId"
+                [attr.data-testid]="'station-item-' + station.rithmId"
+                (click)="selectGroup(station)"
+        >
+          <ng-container
+                  *ngTemplateOutlet="
             itemList;
             context: { name: station.name, type: 'station' }
           "
-        ></ng-container>
-      </mat-list-option>
-    </mat-selection-list>
+          ></ng-container>
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-container>
   </ng-container>
 </div>
 
@@ -49,8 +52,14 @@
       [width]="type === 'group' ? 23 : 21"
       [alt]="type + '-' + name"
     />
-    <span class="text-sm lg:text-base ml-3 truncate">{{
-      name?.trim() ? name : 'Untitled ' + (type | titlecase)
+    <span class="text-sm md:text-base ml-3 truncate">{{
+      name?.trim() || 'Untitled ' + (type | titlecase)
     }}</span>
+  </div>
+</ng-template>
+
+<ng-template #emptyList>
+  <div class="text-center text-sm md:text-base pt-4">
+    There aren't groups or stations.
   </div>
 </ng-template>

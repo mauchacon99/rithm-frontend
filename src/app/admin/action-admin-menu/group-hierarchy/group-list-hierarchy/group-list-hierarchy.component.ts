@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationGroupData } from 'src/models';
+import { StationGroupData, StationListGroup } from 'src/models';
 
 /**
  * Component to show options list.
@@ -60,7 +60,7 @@ export class GroupListHierarchyComponent implements OnInit {
    *
    * @param selectedStationGroup Selected stationGroup.
    */
-  selectGroup(selectedStationGroup: StationGroupData): void {
+  selectGroup(selectedStationGroup: StationGroupData | StationListGroup): void {
     this.selectedGroupRithmId.emit(selectedStationGroup.rithmId);
   }
 }
