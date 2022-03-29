@@ -369,7 +369,10 @@
                     class="gridster-container pb-4 w-full"
                     cdkDropList
                     id="station-grid"
-                    cdkDropListConnectedTo="input-frame-container"
+                    [attr.cdkDropListConnectedTo]="[
+                      'input-frame-container',
+                      'custom-component-container'
+                    ]"
                     (cdkDropListDropped)="addInputFrame($event)"
                   >
                     <gridster
