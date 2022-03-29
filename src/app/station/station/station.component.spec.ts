@@ -850,7 +850,7 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'addFieldQuestionWidget'
     ).and.callThrough();
-    component.getPreviousAndNextStations();
+    component.addFieldQuestionWidget();
     expect(addFieldWidgetSpy).toHaveBeenCalledOnceWith(
       component.stationRithmId,
       newFieldQuestion
