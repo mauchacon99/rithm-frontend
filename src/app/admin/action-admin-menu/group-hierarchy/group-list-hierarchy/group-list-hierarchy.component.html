@@ -30,7 +30,7 @@
       <p class="text-error-500">Error: Unable to show groups or station.</p>
     </div>
 
-    <ng-container *ngIf="stationGroups">
+    <ng-container *ngIf="stationGroups && !isLoading && !isErrorGetGroups">
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
         <mat-list-option

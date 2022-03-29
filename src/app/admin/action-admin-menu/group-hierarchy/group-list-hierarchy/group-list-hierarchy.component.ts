@@ -46,8 +46,8 @@ export class GroupListHierarchyComponent implements OnInit {
       .subscribe({
         next: (stationGroup) => {
           this.isLoading = false;
-          this.stationGroups = stationGroup;
           this.isErrorGetGroups = false;
+          this.stationGroups = stationGroup;
         },
         error: (error: unknown) => {
           this.isLoading = false;
