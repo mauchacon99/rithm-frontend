@@ -1,15 +1,27 @@
-<div class="font-semibold text-secondary-500">List Values</div>
+<div class="px-3 pb-3 font-semibold text-secondary-500">List Values</div>
 
-<div *ngIf="isLoading" id="loading-indicator" class="mt-3">
+<div *ngIf="isLoading" id="loading-indicator" class="mt-3 pb-4">
   <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
 </div>
 
-<div *ngIf="!isLoading" id="content-drawer-document-widget" class="mt-3">
+<div
+  *ngIf="failedLoadDrawer"
+  class="text-error-500 text-center my-4"
+  id="display-document-drawer-error"
+>
+  Unable to retrieve data.
+</div>
+
+<div
+  *ngIf="!isLoading && !failedLoadDrawer"
+  id="content-drawer-document-widget"
+  class="mt-3"
+>
   <div
-    *ngIf="!quantityElementsWidget; else selectDrawer"
+    *ngIf="!dataDrawerDocument?.quantityElementsWidget; else selectDrawer"
     id="message-not-question-assigned-to-document"
   >
-    <p class="text-sm">
+    <p class="text-sm px-3 pb-4">
       This document has no questions and therefore the fields to be assigned
       cannot be displayed.
     </p>
@@ -18,28 +30,63 @@
 
 <!--Template to select questions to show in document-widget-->
 <ng-template #selectDrawer>
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Select Fields</mat-label>
-    <mat-select
-      [formControl]="formColumns"
-      multiple
-      (selectionChange)="updateWidget()"
-    >
-      <mat-option
-        *ngFor="let field of documentFields; index as index"
-        [value]="field.questionId"
-        [id]="'option-column' + index"
-        [attr.data-testid]="'option-column' + index"
+  <div class="px-3 pb-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Select Fields</mat-label>
+      <mat-select
+        [formControl]="formColumns"
+        multiple
+        (selectionChange)="updateWidget()"
       >
-        {{ field.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <div
-    *ngIf="failedLoadDrawer"
-    class="text-error-500 text-center my-4"
-    id="display-document-drawer-error"
-  >
-    Unable to retrieve data.
+        <mat-option
+          *ngFor="let field of documentFields; index as index"
+          [value]="field.questionId"
+          [id]="'option-column' + index"
+          [attr.data-testid]="'option-column' + index"
+        >
+          {{ field.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </ng-template>
+
+<div
+  *ngIf="
+    dataDrawerDocument?.widgetItem?.widgetType ===
+    enumWidgetType.ContainerProfileBanner
+  "
+>
+  <hr class="text-secondary-100" />
+  <!-- Profile image section -->
+  <div class="px-3 py-4">
+    <div class="font-semibold text-secondary-500 mb-3">Profile Image</div>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Select Image</mat-label>
+      <mat-select
+        [(value)]="
+          !documentImages.length
+            ? ''
+            : dataDrawerDocument.widgetItem.profileImageId
+        "
+        [formControl]="formColumns"
+      >
+        <mat-option
+          *ngFor="let image of documentImages; index as index"
+          [value]="image.imageId"
+          [id]="'option-profile-image' + index"
+          [attr.data-testid]="'option-column' + index"
+        >
+          {{ image.imageName }} (uploaded image)
+        </mat-option>
+        <mat-option
+          *ngIf="!documentImages.length"
+          [value]=""
+          [attr.data-testid]="'option-column-empty'"
+        >
+          There are not images to list.
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
