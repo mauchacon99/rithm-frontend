@@ -85,6 +85,7 @@ describe('DocumentWidgetDrawerComponent', () => {
         widgetType: WidgetType.Document,
         x: 0,
         y: 0,
+        profileImageId: '123132',
       },
       widgetIndex: 0,
       quantityElementsWidget: 2,

@@ -40,6 +40,7 @@ describe('StationWidgetDrawerComponent', () => {
       widgetType: WidgetType.Station,
       x: 0,
       y: 0,
+      profileImageId: '123132',
     },
     widgetIndex: 0,
     isCloseDrawer: false,
