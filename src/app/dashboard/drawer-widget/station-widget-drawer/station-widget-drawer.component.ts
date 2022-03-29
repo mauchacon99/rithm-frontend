@@ -38,7 +38,10 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Image to banner. */
   @Input() set image(value: DocumentImage) {
-    if (this.dataDrawerStation?.widgetItem && this.dataDrawerStation.widgetItem.imageId !== value.imageId) {
+    if (
+      this.dataDrawerStation?.widgetItem &&
+      this.dataDrawerStation.widgetItem.imageId !== value.imageId
+    ) {
       this.dataDrawerStation.widgetItem.imageId = value.imageId;
       this.dataDrawerStation.widgetItem.imageName = value.imageName;
       this.updateWidget();
