@@ -79,8 +79,10 @@ export class ConnectionMapElement {
     ctx.save();
     //This will allow users to click in the area around connection line without having to click in the rendered space.
     ctx.lineWidth = 30;
-    //Set to true if cursor is on/near the connection line.
-    this.hovering = ctx.isPointInStroke(this.path, point.x, point.y);
+    if (this.path && this.path instanceof Path2D) {
+      //Set to true if cursor is on/near the connection line.
+      this.hovering = ctx.isPointInStroke(this.path, point.x, point.y);
+    }
     //Restore the saved context state and undo the changes to it.
     ctx.restore();
   }
@@ -143,79 +145,79 @@ export class ConnectionMapElement {
         //Is the ending station below the starting station?
         //draw the line going above or below the starting station accordingly.
         startPoint.y >= endPoint.y + STATION_HEIGHT * scale ||
-        (startPoint.y <= endPoint.y &&
-          startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
+          (startPoint.y <= endPoint.y &&
+            startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
           ? {
-              x: Math.floor(
-                startPoint.x +
-                  (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI)
-              ),
-              y: Math.floor(
-                startPoint.y -
-                  (STATION_HEIGHT / 3) * scale +
-                  (STATION_HEIGHT / 3) * scale * Math.sin(1.5 * Math.PI)
-              ),
-            }
+            x: Math.floor(
+              startPoint.x +
+              (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI)
+            ),
+            y: Math.floor(
+              startPoint.y -
+              (STATION_HEIGHT / 3) * scale +
+              (STATION_HEIGHT / 3) * scale * Math.sin(1.5 * Math.PI)
+            ),
+          }
           : {
-              x: Math.floor(
-                startPoint.x +
-                  (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI) -
-                  (STATION_WIDTH / 1.5) * scale
-              ),
-              y: Math.floor(
-                startPoint.y +
-                  (STATION_HEIGHT / 3) * scale +
-                  (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
-              ),
-            };
+            x: Math.floor(
+              startPoint.x +
+              (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI) -
+              (STATION_WIDTH / 1.5) * scale
+            ),
+            y: Math.floor(
+              startPoint.y +
+              (STATION_HEIGHT / 3) * scale +
+              (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
+            ),
+          };
       //Store the data needed to establish the final curve around the ending station.
       const endArc: Point =
         //Is the ending station below the starting station?
         //Draw the line going above or below the starting station accordingly.
         startPoint.y <= endPoint.y
           ? {
-              x: Math.floor(
-                endPoint.x +
-                  (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI)
-              ),
-              y: Math.floor(
-                endPoint.y -
-                  (STATION_HEIGHT / 3) * scale +
-                  (STATION_HEIGHT / 3) * scale * Math.sin(1.5 * Math.PI)
-              ),
-            }
+            x: Math.floor(
+              endPoint.x +
+              (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI)
+            ),
+            y: Math.floor(
+              endPoint.y -
+              (STATION_HEIGHT / 3) * scale +
+              (STATION_HEIGHT / 3) * scale * Math.sin(1.5 * Math.PI)
+            ),
+          }
           : {
-              x: Math.floor(
-                endPoint.x +
-                  (STATION_HEIGHT / 3) * scale * Math.cos(0.5 * Math.PI)
-              ),
-              y: Math.floor(
-                endPoint.y +
-                  (STATION_HEIGHT / 3) * scale +
-                  (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
-              ),
-            };
+            x: Math.floor(
+              endPoint.x +
+              (STATION_HEIGHT / 3) * scale * Math.cos(0.5 * Math.PI)
+            ),
+            y: Math.floor(
+              endPoint.y +
+              (STATION_HEIGHT / 3) * scale +
+              (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
+            ),
+          };
 
       //draw the starting arc.
       startPoint.y >= endPoint.y + STATION_HEIGHT * scale ||
-      (startPoint.y <= endPoint.y &&
-        startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
+        (startPoint.y <= endPoint.y &&
+          startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
         ? path.arc(
-            startPoint.x,
-            startPoint.y - (STATION_HEIGHT / 3) * scale,
-            (STATION_HEIGHT / 3) * scale,
-            0.5 * Math.PI,
-            1.5 * Math.PI,
-            true
-          )
+          startPoint.x,
+          startPoint.y - (STATION_HEIGHT / 3) * scale,
+          (STATION_HEIGHT / 3) * scale,
+          0.5 * Math.PI,
+          1.5 * Math.PI,
+          true
+        )
         : path.arc(
-            startPoint.x,
-            startPoint.y + (STATION_HEIGHT / 3) * scale,
-            (STATION_HEIGHT / 3) * scale,
-            1.5 * Math.PI,
-            0.5 * Math.PI,
-            false
-          );
+          startPoint.x,
+          startPoint.y + (STATION_HEIGHT / 3) * scale,
+          (STATION_HEIGHT / 3) * scale,
+          1.5 * Math.PI,
+          0.5 * Math.PI,
+          false
+        );
 
       //draw the bezier curve between where startArc ends and endArc begins.
       path.bezierCurveTo(
@@ -229,21 +231,21 @@ export class ConnectionMapElement {
       //draw the ending arc.
       startPoint.y <= endPoint.y
         ? path.arc(
-            endPoint.x,
-            endPoint.y - (STATION_HEIGHT / 3) * scale,
-            (STATION_HEIGHT / 3) * scale,
-            1.5 * Math.PI,
-            0.5 * Math.PI,
-            true
-          )
+          endPoint.x,
+          endPoint.y - (STATION_HEIGHT / 3) * scale,
+          (STATION_HEIGHT / 3) * scale,
+          1.5 * Math.PI,
+          0.5 * Math.PI,
+          true
+        )
         : path.arc(
-            endPoint.x,
-            endPoint.y + (STATION_HEIGHT / 3) * scale,
-            (STATION_HEIGHT / 3) * scale,
-            0.5 * Math.PI,
-            1.5 * Math.PI,
-            false
-          );
+          endPoint.x,
+          endPoint.y + (STATION_HEIGHT / 3) * scale,
+          (STATION_HEIGHT / 3) * scale,
+          0.5 * Math.PI,
+          1.5 * Math.PI,
+          false
+        );
     }
 
     // add arrow
@@ -259,9 +261,9 @@ export class ConnectionMapElement {
     const norm =
       startPoint.x - STATION_WIDTH * 1.5 * scale > endPoint.x
         ? this.getNormalizedVectorPoint(
-            { x: endPoint.x - 10, y: endPoint.y },
-            endPoint
-          )
+          { x: endPoint.x - 10, y: endPoint.y },
+          endPoint
+        )
         : this.getNormalizedVectorPoint(controlPoints[1], endPoint);
     const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
     // x and y will be set for each side of the arrow and used to draw the lines of the arrow.
