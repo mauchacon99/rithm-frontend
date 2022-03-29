@@ -1,4 +1,3 @@
-import { FrameType } from './enums';
 import { Question } from './question';
 
 export interface InputFrameWidget {
@@ -24,7 +23,7 @@ export interface InputFrameWidget {
   questions: Question[];
   /** Type each input frame. */
   /** This is going to be updated with InputFrameType Enum. */
-  type: FrameType;
+  type: string;
   /** The data contained in each frame. */
   data: string;
   /** Id of the item. */
