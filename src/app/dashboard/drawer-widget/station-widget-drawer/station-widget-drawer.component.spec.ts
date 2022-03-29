@@ -40,6 +40,7 @@ describe('StationWidgetDrawerComponent', () => {
       widgetType: WidgetType.Station,
       x: 0,
       y: 0,
+      profileImageId: '123132',
     },
     widgetIndex: 0,
     isCloseDrawer: false,
@@ -93,8 +94,24 @@ describe('StationWidgetDrawerComponent', () => {
     fixture = TestBed.createComponent(StationWidgetDrawerComponent);
     component = fixture.componentInstance;
     component.questions = questions;
-    component.quantityElementsWidget = 2;
     fixture.detectChanges();
+    component.dataDrawerStation = {
+      widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+        cols: 4,
+        data: '{"documentRithmId":"1bda1a41-e86a-4031-b3f5-f2329e108db5","columns":[]}',
+        maxItemCols: 0,
+        maxItemRows: 0,
+        minItemCols: 0,
+        minItemRows: 0,
+        rows: 2,
+        widgetType: WidgetType.Station,
+        x: 0,
+        y: 0,
+      },
+      widgetIndex: 0,
+      quantityElementsWidget: 2,
+    };
   });
 
   it('should create', () => {
@@ -106,8 +123,12 @@ describe('StationWidgetDrawerComponent', () => {
 
     expect(component.stationRithmId).toEqual(dataWidget.stationRithmId);
     expect(component.stationColumns).toEqual(dataWidget.columns);
-    expect(component.widgetIndex).toEqual(dataEditWidget.widgetIndex);
-    expect(component.widgetItem).toEqual(dataEditWidget.widgetItem);
+    expect(component.dataDrawerStation.widgetIndex).toEqual(
+      dataEditWidget.widgetIndex
+    );
+    expect(component.dataDrawerStation.widgetItem).toEqual(
+      dataEditWidget.widgetItem
+    );
   });
 
   it('should show loading indicator', () => {
@@ -164,8 +185,25 @@ describe('StationWidgetDrawerComponent', () => {
           questionId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
         },
       ];
-      component.widgetIndex = dataEditWidget.widgetIndex;
-      component.widgetItem = JSON.parse(
+      component.dataDrawerStation = {
+        widgetItem: {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+          cols: 4,
+          data: '{"documentRithmId":"1bda1a41-e86a-4031-b3f5-f2329e108db5","columns":[]}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+        widgetIndex: 0,
+        quantityElementsWidget: 2,
+      };
+      component.dataDrawerStation.widgetIndex = dataEditWidget.widgetIndex;
+      component.dataDrawerStation.widgetItem = JSON.parse(
         JSON.stringify(dataEditWidget.widgetItem)
       );
       component.questions = questions;
@@ -237,6 +275,8 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should add new column', () => {
+      component.dataDrawerStation.quantityElementsWidget = 1;
+      fixture.detectChanges();
       const spyMethod = spyOn(component, 'addNewColumn').and.callThrough();
       const btnNewColumn =
         fixture.nativeElement.querySelector('#add-new-column');
@@ -248,6 +288,8 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should disable add new column', () => {
+      component.dataDrawerStation.quantityElementsWidget = 1;
+      fixture.detectChanges();
       spyOnProperty(component, 'disabledNewColumn').and.returnValue(true);
       const btnNewColumn =
         fixture.nativeElement.querySelector('#add-new-column');
@@ -349,8 +391,8 @@ describe('StationWidgetDrawerComponent', () => {
 
     it('should emit updateDataWidget$ to update widget', () => {
       const expectData = {
-        widgetItem: component.widgetItem,
-        widgetIndex: component.widgetIndex,
+        widgetItem: component.dataDrawerStation.widgetItem,
+        widgetIndex: component.dataDrawerStation.widgetIndex,
         quantityElementsWidget: 2,
       };
       const spyService = spyOn(
@@ -421,7 +463,7 @@ describe('StationWidgetDrawerComponent', () => {
       expect(spyError).toHaveBeenCalled();
     });
     it('should render message for show user this station not documents assigned', () => {
-      component.quantityElementsWidget = 0;
+      component.dataDrawerStation.quantityElementsWidget = 0;
       component.questions = [];
       fixture.detectChanges();
       const renderMessage = fixture.debugElement.nativeElement.querySelector(
@@ -431,6 +473,8 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should no render message for show user this station not documents assigned', () => {
+      component.dataDrawerStation.quantityElementsWidget = 1;
+      fixture.detectChanges();
       const renderMessage = fixture.debugElement.nativeElement.querySelector(
         '#message-not-documents-assigned-to-station'
       );
@@ -442,12 +486,16 @@ describe('StationWidgetDrawerComponent', () => {
         imageId: '123-456-789',
         imageName: 'Image name',
       };
-      component.widgetItem = dataEditWidget.widgetItem;
+      component.dataDrawerStation.widgetItem = dataEditWidget.widgetItem;
 
       component.image = image;
 
-      expect(component.widgetItem.imageId).toEqual(image.imageId);
-      expect(component.widgetItem.imageName).toEqual(image.imageName);
+      expect(component.dataDrawerStation.widgetItem.imageId).toEqual(
+        image.imageId
+      );
+      expect(component.dataDrawerStation.widgetItem.imageName).toEqual(
+        image.imageName
+      );
     });
   });
 
