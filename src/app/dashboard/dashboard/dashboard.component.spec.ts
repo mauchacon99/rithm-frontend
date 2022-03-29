@@ -830,4 +830,38 @@ describe('DashboardComponent', () => {
     const expectedData = component['parseDashboardData']();
     expect(expectedData.widgets[0].rithmId).toEqual('');
   });
+
+  it('should set config breakpoint for mobile devices', () => {
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(1920);
+  });
+
+  it('should set config breakpoint for not mobile devices', () => {
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(640);
+  });
+
+  it('should get and set config when init live cycle component and nor mobile device', () => {
+    const spyChangeGridster = spyOn(
+      component,
+      'changedOptions'
+    ).and.callThrough();
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(640);
+    expect(spyChangeGridster).toHaveBeenCalled();
+  });
+
+  it('should get and set config when init live cycle component and yes mobile device', () => {
+    const spyChangeGridster = spyOn(
+      component,
+      'changedOptions'
+    ).and.callThrough();
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(1920);
+    expect(spyChangeGridster).toHaveBeenCalled();
+  });
 });

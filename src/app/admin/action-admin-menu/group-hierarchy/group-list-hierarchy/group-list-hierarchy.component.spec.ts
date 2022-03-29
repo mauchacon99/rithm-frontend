@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 import { MatListModule } from '@angular/material/list';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { StationGroupData, StationListGroup } from 'src/models';
 
@@ -98,7 +100,10 @@ describe('GroupListHierarchyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GroupListHierarchyComponent],
+      declarations: [
+        GroupListHierarchyComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [MatListModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
@@ -142,7 +147,57 @@ describe('GroupListHierarchyComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
+  it('should show error message when request getStationGroups fail', () => {
+    const spyError = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroups'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component['getStationGroups']();
+    fixture.detectChanges();
+    const showMessage =
+      fixture.debugElement.nativeElement.querySelector('#failed-groups');
+    expect(spyError).toHaveBeenCalled();
+    expect(showMessage).toBeTruthy();
+    expect(component.isErrorGetGroups).toBeTrue();
+  });
+
+  it('should show loading while request getStationGroups', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroups'
+    ).and.callThrough();
+    component['getStationGroups']();
+    fixture.detectChanges();
+    const loader = fixture.debugElement.nativeElement.querySelector(
+      '#loader-groups-hierarchy'
+    );
+    expect(spyMethod).toHaveBeenCalled();
+    expect(loader).toBeTruthy();
+    expect(component.isLoading).toBeTrue();
+  });
+
+  it('should reload getStationGroups if request fail', () => {
+    component.isErrorGetGroups = true;
+    fixture.detectChanges();
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroups'
+    ).and.callThrough();
+
+    const btnTry = fixture.nativeElement.querySelector('#try-again');
+    expect(btnTry).toBeTruthy();
+    btnTry.click();
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
   it('should clicked in item', () => {
+    component.isLoading = false;
+    component.isErrorGetGroups = false;
+    fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemGroup = fixture.nativeElement.querySelector(
       '#group-item-' + subStationGroups.rithmId
