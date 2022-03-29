@@ -711,20 +711,28 @@ export class StationComponent
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
   setGridMode(mode: 'layout' | 'setting' | 'preview'): void {
-    const enabledMode = mode === 'layout' ? true : false;
-    /* If it is different from preview, we are in editable mode. */
-    if (mode !== 'preview') {
-      this.layoutMode = enabledMode;
-      this.settingMode = !enabledMode;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = false;
+    let enabledMode = false;
+    /** Depending on the case, the mode is set. */
+    switch (mode) {
+      case 'preview':
+        this.layoutMode = false;
+        this.settingMode = false;
+        this.isOpenDrawerLeft = false;
+        this.closeSettingDrawer();
+        break;
+      case 'setting':
+        enabledMode = false;
+        this.isOpenDrawerLeft = false;
+        break;
+      case 'layout':
+        enabledMode = true;
+        this.closeSettingDrawer();
+        break;
+      default:
+        break;
     }
-
-    /*If the parameter 'mode' is different 'layout' hidden the drawer left.*/
-    if (mode !== 'layout') {
-      this.isOpenDrawerLeft = false;
-    }
+    this.layoutMode = enabledMode;
+    this.settingMode = !enabledMode;
 
     /* Make the grid visible.*/
     this.options.displayGrid = enabledMode ? 'always' : 'none';
@@ -782,7 +790,6 @@ export class StationComponent
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
     }
-    this.closeSettingDrawer();
     this.editMode = false;
     this.setGridMode('preview');
   }
@@ -793,7 +800,6 @@ export class StationComponent
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
     }
-    this.closeSettingDrawer();
     const confirm = await this.popupService.confirm({
       title: 'Cancel?',
       message: '\nUnsaved changes will be lost.',
@@ -875,7 +881,6 @@ export class StationComponent
   closeSettingDrawer(): void {
     /** If both are open, the field setting drawer must be closed. */
     if (
-      (this.isOpenDrawerLeft || this.settingMode) &&
       this.sidenavDrawerService.isDrawerOpen &&
       this.drawerContext === 'fieldSetting'
     ) {
