@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { StationGroupData, StationListGroup } from 'src/models';
 
 /**
  * Component to show hierarchy on admin panel.
@@ -15,14 +16,32 @@ export class GroupHierarchyComponent {
   /** Columns of render with stationGroupRithmId. */
   columnsStationGroupRithmId: string[] = [''];
 
+  /** Value of selected item. */
+  selectedItem!: StationGroupData | StationListGroup;
+
   /**
-   * Push stationGroupRithmId to colums.
+   * Return if selectedItem is group.
    *
-   * @param rithmId StationGroupRithmId selected.
+   * @returns Is group.
+   */
+  get isGroup(): boolean {
+    return 'stations' in this.selectedItem;
+  }
+
+  /**
+   * Set value of item selected and generate columns.
+   *
+   * @param itemSelected Selected item StationGroupData | StationListGroup.
    * @param index Number of the column rendered.
    */
-  onSelectStationGroupRithmId(rithmId: string, index: number): void {
+  setSelectItem(
+    itemSelected: StationGroupData | StationListGroup,
+    index: number
+  ): void {
+    this.selectedItem = itemSelected;
     this.columnsStationGroupRithmId.splice(index + 1);
-    this.columnsStationGroupRithmId.push(rithmId);
+    if (this.isGroup) {
+      this.columnsStationGroupRithmId.push(itemSelected.rithmId);
+    }
   }
 }

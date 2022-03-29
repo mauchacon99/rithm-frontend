@@ -1,4 +1,8 @@
-<div id="group-hierarchy" *ngIf="showGroupHierarchy; else permissionDenied">
+<div
+  class="w-full"
+  id="group-hierarchy"
+  *ngIf="showGroupHierarchy; else permissionDenied"
+>
   <div
     class="py-5 px-4 md:flex md:justify-between items-center border-b-2 color-border input-search"
   >
@@ -22,20 +26,32 @@
     </mat-form-field>
   </div>
 
-  <div class="md:flex md:overflow-auto w-full h-full md:h-[calc(100vh-165px)]">
-    <ng-container
-      *ngFor="
-        let columnStationGroup of columnsStationGroupRithmId;
-        index as index
-      "
+  <div class="flex flex-col-reverse md:flex-row">
+    <div
+      class="w-full md:w-[calc(100%-300px)] md:h-[calc(100vh-165px)] h-full md:flex md:overflow-auto"
     >
-      <app-group-list-hierarchy
-        [stationGroupRithmId]="columnStationGroup"
-        [depthGroup]="index + 1"
-        (selectedGroupRithmId)="onSelectStationGroupRithmId($event, index)"
+      <ng-container
+        *ngFor="
+          let columnStationGroup of columnsStationGroupRithmId;
+          index as index
+        "
       >
-      </app-group-list-hierarchy>
-    </ng-container>
+        <app-group-list-hierarchy
+          [stationGroupRithmId]="columnStationGroup"
+          [depthGroup]="index + 1"
+          (getSelectedItem)="setSelectItem($event, index)"
+        ></app-group-list-hierarchy>
+      </ng-container>
+    </div>
+
+    <div
+      class="w-full md:w-[300px] md:border-l-2 color-border"
+      *ngIf="selectedItem"
+    >
+      <app-user-group-station-admin
+        [selectedItem]="selectedItem"
+      ></app-user-group-station-admin>
+    </div>
   </div>
 </div>
 <ng-template #permissionDenied>

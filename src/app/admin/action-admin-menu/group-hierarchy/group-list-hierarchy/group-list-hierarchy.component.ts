@@ -19,8 +19,10 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Depth of the sub-stationGroups. */
   @Input() depthGroup = 1;
 
-  /** Emit RithmId of station or stationGroup selected. */
-  @Output() selectedGroupRithmId = new EventEmitter<string>();
+  /** Output value of selected item. */
+  @Output() getSelectedItem = new EventEmitter<
+    StationGroupData | StationListGroup
+  >();
 
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
@@ -38,7 +40,7 @@ export class GroupListHierarchyComponent implements OnInit {
   }
 
   /** Get stationGroups. */
-  private getStationGroups(): void {
+  getStationGroups(): void {
     this.stationService
       .getStationGroups(this.stationGroupRithmId, this.depthGroup)
       .pipe(first())
@@ -56,11 +58,11 @@ export class GroupListHierarchyComponent implements OnInit {
   }
 
   /**
-   * Emit RithmId of station or stationGroup selected.
+   * Emit data StationGroupData | StationListGroup of item selected.
    *
-   * @param selectedStationGroup Selected stationGroup.
+   * @param itemSelected Selected item data.
    */
-  selectGroup(selectedStationGroup: StationGroupData | StationListGroup): void {
-    this.selectedGroupRithmId.emit(selectedStationGroup.rithmId);
+  selectedListItem(itemSelected: StationGroupData | StationListGroup): void {
+    this.getSelectedItem.emit(itemSelected);
   }
 }
