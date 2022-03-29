@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSelectionListChange } from '@angular/material/list';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -59,11 +58,9 @@ export class GroupListHierarchyComponent implements OnInit {
   /**
    * Emit RithmId of station or stationGroup selected.
    *
-   * @param selectedStationGroup Selected file of list type MatSelectionListChange.
+   * @param selectedStationGroup Selected stationGroup.
    */
-  selectGroupRithmId(selectedStationGroup: MatSelectionListChange): void {
-    const { source } = selectedStationGroup;
-    const rithmId = source._value?.at(0) as string;
-    this.selectedGroupRithmId.emit(rithmId);
+  selectGroup(selectedStationGroup: StationGroupData): void {
+    this.selectedGroupRithmId.emit(selectedStationGroup.rithmId);
   }
 }

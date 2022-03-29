@@ -3,17 +3,13 @@
   class="w-full md:w-[300px] h-full border-b-2 md:border-b-0 md:border-r-2 color-border md:overflow-auto scrollbar bg-white px-3 pb-3"
 >
   <ng-container *ngIf="stationGroups">
-    <mat-selection-list
-      [multiple]="false"
-      class="item-select-groups"
-      (selectionChange)="selectGroupRithmId($event)"
-    >
+    <mat-selection-list [multiple]="false" class="item-select-groups">
       <!-- subStationGroups -->
       <mat-list-option
         *ngFor="let stationGroup of stationGroups.subStationGroups"
         [id]="'group-item-' + stationGroup.rithmId"
         [attr.data-testid]="'group-item-' + stationGroup.rithmId"
-        [value]="stationGroup.rithmId"
+        (click)="selectGroup(stationGroup)"
       >
         <ng-container
           *ngTemplateOutlet="
@@ -25,7 +21,6 @@
       <!-- stations -->
       <mat-list-option
         *ngFor="let station of stationGroups.stations"
-        [value]="station.rithmId"
         [id]="'station-item-' + station.rithmId"
         [attr.data-testid]="'station-item-' + station.rithmId"
       >
