@@ -779,7 +779,8 @@ describe('StationComponent', () => {
     fixture.detectChanges();
     component.inputFrameWidgetItems = [
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 0,
@@ -792,7 +793,8 @@ describe('StationComponent', () => {
         id: 0,
       },
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 7,
