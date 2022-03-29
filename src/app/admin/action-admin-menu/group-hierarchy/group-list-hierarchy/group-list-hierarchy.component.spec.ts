@@ -92,4 +92,18 @@ describe('GroupListHierarchyComponent', () => {
     expect(loader).toBeTruthy();
     expect(component.isLoading).toBeTrue();
   });
+
+  it('should reload getStationGroups if request fail', () => {
+    component.isErrorGetGroups = true;
+    fixture.detectChanges();
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroups'
+    ).and.callThrough();
+
+    const btnTry = fixture.nativeElement.querySelector('#try-again');
+    expect(btnTry).toBeTruthy();
+    btnTry.click();
+    expect(spyMethod).toHaveBeenCalled();
+  });
 });

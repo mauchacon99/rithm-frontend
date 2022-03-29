@@ -5,7 +5,7 @@
   >
     <div
       *ngIf="isLoading"
-      class="w-full h-full flex md:items-center justify-center"
+      class="w-full h-full flex items-center justify-center"
     >
       <app-loading-indicator
         id="loader-groups-hierarchy"
@@ -15,9 +15,19 @@
     <div
       *ngIf="isErrorGetGroups"
       id="failed-groups"
-      class="w-full h-full flex md:items-center justify-center"
+      class="w-full h-full flex flex-col items-center justify-center text-center mt-2 md:mt-0"
     >
-      <p class="text-error-500">Error: Unable to show groups or stations .</p>
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="getStationGroups()"
+        id="try-again"
+        data-testid="try-again"
+        class="w-32"
+      >
+        Try Again
+      </button>
+      <p class="text-error-500">There are no groups or stations to show.</p>
     </div>
 
     <ng-container *ngIf="stationGroups">
