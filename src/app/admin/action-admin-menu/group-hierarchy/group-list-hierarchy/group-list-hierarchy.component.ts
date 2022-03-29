@@ -45,6 +45,7 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Get stationGroups. */
   getStationGroups(): void {
     this.isLoading = true;
+    this.isErrorGetGroups = false;
     this.stationService
       .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
