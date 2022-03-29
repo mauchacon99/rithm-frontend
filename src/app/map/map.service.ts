@@ -360,7 +360,6 @@ export class MapService {
    */
   get mapHasChanges(): boolean {
     this.mapStationHelper.stationsHaveChanges();
-    //this.mapStationGroupHelper.stationGroupsHaveChanges();
     //If there are still stations or station group with status not normal and not Pending, return true.
     return (
       this.mapStationHelper.stationElements.some(

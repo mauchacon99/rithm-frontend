@@ -199,7 +199,6 @@ export class StationGroupElementService {
   drawStationGroupBoundaryLine(stationGroup: StationGroupMapElement): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
-    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group boundary line if context is not defined'
@@ -360,7 +359,6 @@ export class StationGroupElementService {
   drawStationGroupName(stationGroup: StationGroupMapElement): void {
     //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
-    //(remove) this.canvasContext = this.mapService.mapHelper.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group name if context is not defined'
