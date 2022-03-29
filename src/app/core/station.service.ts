@@ -18,6 +18,7 @@ import {
   StandardStringJSON,
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
+  StationFrameWidget,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -720,7 +721,18 @@ export class StationService {
           })
       ).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      const expectedResponse: StationFrameWidget = {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: 'test',
+        data: 'testing question widget',
+        id: 0,
+      };
+      return of(expectedResponse).pipe(delay(1000));
     }
   }
 
@@ -733,7 +745,6 @@ export class StationService {
    */
   updateFieldQuestionWidget(
     stationRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     newFieldQuestion: []
   ): Observable<unknown> {
     if (!stationRithmId) {
@@ -746,7 +757,18 @@ export class StationService {
           })
       ).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      const expectedResponse: StationFrameWidget = {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: 'test',
+        data: JSON.stringify(newFieldQuestion),
+        id: 0,
+      };
+      return of(expectedResponse).pipe(delay(1000));
     }
   }
 }

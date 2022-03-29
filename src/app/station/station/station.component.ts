@@ -20,7 +20,7 @@ import {
   Question,
   PossibleAnswer,
   FlowLogicRule,
-  InputFrameWidget,
+  StationFrameWidget,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
@@ -129,7 +129,7 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: InputFrameWidget[] = [];
+  inputFrameWidgetItems: StationFrameWidget[] = [];
 
   /** Loading / Error variables. */
 
@@ -802,8 +802,9 @@ export class StationComponent
    * Will add a new input frame in the station grid.
    */
   addInputFrame(): void {
-    const inputFrame: InputFrameWidget = {
-      frameRithmId: '',
+    const inputFrame: StationFrameWidget = {
+      rithmId: '',
+      stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
       x: 0,

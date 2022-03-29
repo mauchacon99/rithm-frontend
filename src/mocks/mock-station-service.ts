@@ -15,6 +15,7 @@ import {
   StandardStringJSON,
   StandardBooleanJSON,
   StationGroupData,
+  StationFrameWidget,
 } from 'src/models';
 
 /**
@@ -1191,14 +1192,13 @@ export class MockStationService {
     return of(expectedResponse).pipe(delay(1000));
   }
 
-
   /**
    * Get the field questions of each widget.
    *
    * @param stationRithmId  The station id.
    * @returns An object with value of each question for widget.
    */
-   getFieldQuestionWidget(stationRithmId: string): Observable<unknown> {
+  getFieldQuestionWidget(stationRithmId: string): Observable<unknown> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -1209,7 +1209,18 @@ export class MockStationService {
           })
       ).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      const expectedResponse: StationFrameWidget = {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: 'test',
+        data: 'testing question widget',
+        id: 0,
+      };
+      return of(expectedResponse).pipe(delay(1000));
     }
   }
 
@@ -1220,7 +1231,7 @@ export class MockStationService {
    * @param newFieldQuestion The value that will be update.
    * @returns The field question updated.
    */
-   updateFieldQuestionWidget(
+  updateFieldQuestionWidget(
     stationRithmId: string,
     newFieldQuestion: []
   ): Observable<unknown> {
@@ -1234,7 +1245,18 @@ export class MockStationService {
           })
       ).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      const expectedResponse: StationFrameWidget = {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: 'test',
+        data: JSON.stringify(newFieldQuestion),
+        id: 0,
+      };
+      return of(expectedResponse).pipe(delay(1000));
     }
   }
 }

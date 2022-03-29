@@ -16,7 +16,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class InputFrameWidgetComponent {
   /** Questions to be displayed inside the widget. */
-  @Input() fields!: Question[];
+  @Input() fields!: Question[] | undefined;
 
   /** The mode to display fields inside the widget. */
   @Input() widgetMode!: 'layout' | 'setting';
@@ -41,10 +41,11 @@ export class InputFrameWidgetComponent {
    *
    * @param event Receive the element draggable as DragDrop type for move it.
    */
-  addElementDrag(event: CdkDragDrop<Question[]>): void {
+  addElementDrag(event: CdkDragDrop<Question[] | undefined>): void {
+    const field = event as CdkDragDrop<Question[]>;
     const fieldType =
-      event.previousContainer.data[event.previousIndex].questionType;
-    const prompt = event.previousContainer.data[event.previousIndex].prompt;
+      field.previousContainer.data[field.previousIndex].questionType;
+    const prompt = field.previousContainer.data[event.previousIndex].prompt;
     const newQuestion: Question = {
       rithmId: this.randRithmId,
       prompt: prompt,
@@ -65,13 +66,13 @@ export class InputFrameWidgetComponent {
     ) {
       newQuestion.possibleAnswers = [];
     }
-    if (event.container.id !== event.previousContainer.id) {
-      copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
+    if (field.container.id !== field.previousContainer.id) {
+      copyArrayItem([newQuestion], field.container.data, 0, field.currentIndex);
     } else {
       moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
+        field.container.data,
+        field.previousIndex,
+        field.currentIndex
       );
     }
   }
