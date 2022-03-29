@@ -38,31 +38,6 @@
     </mat-form-field>
   </div>
   <div
-    *ngIf="
-      dataDrawerDocument.widgetItem.widgetType ===
-      widgetType.ContainerProfileBanner
-    "
-  >
-    <hr class="text-secondary-100" />
-    <!-- Profile image section -->
-    <div class="px-3 py-4">
-      <div class="font-semibold text-secondary-500 mb-3">Profile Image</div>
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Select Image</mat-label>
-        <mat-select [formControl]="formColumns">
-          <mat-option
-            *ngFor="let image of documentImages; index as index"
-            [value]="image.imageId"
-            [id]="'option-profile-image' + index"
-            [attr.data-testid]="'option-column' + index"
-          >
-            {{ image.imageName }} (uploaded image)
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-  <div
     *ngIf="failedLoadDrawer"
     class="text-error-500 text-center my-4"
     id="display-document-drawer-error"
@@ -70,3 +45,45 @@
     Unable to retrieve data.
   </div>
 </ng-template>
+
+<div
+  *ngIf="
+    dataDrawerDocument.widgetItem.widgetType ===
+    widgetType.ContainerProfileBanner
+  "
+>
+  <hr class="text-secondary-100" />
+  <!-- Profile image section -->
+  <div class="px-3 py-4">
+    <div class="font-semibold text-secondary-500 mb-3">Profile Image</div>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Select Image</mat-label>
+      <mat-select
+        [(value)]="
+          documentImages.length === 0
+            ? 0
+            : dataDrawerDocument.widgetItem.imageId
+        "
+        [formControl]="formColumns"
+      >
+        <mat-option
+          *ngFor="let image of documentImages; index as index"
+          [value]="image.imageId"
+          [id]="'option-profile-image' + index"
+          [attr.data-testid]="'option-column' + index"
+        >
+          {{ image.imageName }} (uploaded image)
+        </mat-option>
+        <mat-option
+          *ngIf="!documentImages.length"
+          [value]="0"
+          [disabled]="true"
+          [id]="'option-profile-image-empty'"
+          [attr.data-testid]="'option-column-empty'"
+        >
+          There are not images to list.
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
