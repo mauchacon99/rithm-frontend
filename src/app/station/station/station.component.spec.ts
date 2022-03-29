@@ -32,6 +32,7 @@ import { StationTemplateComponent } from 'src/app/station/station-template/stati
 import { StationService } from 'src/app/core/station.service';
 import {
   FlowLogicRule,
+  FrameType,
   OperandType,
   OperatorType,
   Question,
@@ -737,9 +738,9 @@ describe('StationComponent', () => {
 
     const spySaveChange = spyOn(
       component,
-      'saveStationFramesChanged'
+      'saveStationFramesChanges'
     ).and.callThrough();
-    component.saveStationFramesChanged();
+    component.saveStationFramesChanges();
     expect(spySaveChange).toHaveBeenCalled();
     expect(component.editMode).toBeFalsy();
   });
@@ -783,7 +784,7 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 0,
       },
@@ -797,7 +798,7 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 1,
       },

@@ -18,6 +18,7 @@ import {
   StandardBooleanJSON,
   StationGroupData,
   StationFrameWidget,
+  FrameType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1279,8 +1280,8 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should save or update the data of each widget', () => {
-    const expectedQuestion: Question[] = [
+  it('should save/update the array of stationFramesWidget', () => {
+    const InputFrameWidgetQuestions: Question[] = [
       {
         prompt: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
@@ -1291,7 +1292,7 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    const newFieldQuestion: StationFrameWidget[] = [
+    const frameStationWidget: StationFrameWidget[] = [
       {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -1299,16 +1300,16 @@ describe('StationService', () => {
         rows: 4,
         x: 0,
         y: 0,
-        type: 'test',
-        data: JSON.stringify(expectedQuestion),
+        type: FrameType.Input,
+        data: JSON.stringify(InputFrameWidgetQuestions),
         id: 0,
       },
     ];
 
     service
-      .addFieldQuestionWidget(stationId, newFieldQuestion)
+      .addFieldQuestionWidget(stationId, frameStationWidget)
       .subscribe((response) => {
-        expect(response).toEqual(newFieldQuestion[0]);
+        expect(response).toEqual(frameStationWidget[0]);
       });
   });
 });

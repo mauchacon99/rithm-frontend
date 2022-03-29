@@ -20,6 +20,7 @@ import {
   StandardBooleanJSON,
   StationFrameWidget,
   QuestionFieldType,
+  FrameType,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -709,13 +710,13 @@ export class StationService {
    * Save or update the field questions of widgets.
    *
    * @param stationRithmId The station id that will be update.
-   * @param newFieldQuestion The value that will be update.
+   * @param stationFrames The value that will be update.
    * @returns The field question updated.
    */
   addFieldQuestionWidget(
     stationRithmId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    newFieldQuestion: StationFrameWidget[]
+    stationFrames: StationFrameWidget[]
   ): Observable<StationFrameWidget> {
     if (!stationRithmId) {
       return throwError(
@@ -727,7 +728,7 @@ export class StationService {
           })
       ).pipe(delay(1000));
     } else {
-      const expectedQuestion: Question[] = [
+      const InputFrameWidgetQuestions: Question[] = [
         {
           prompt: 'Fake question 1',
           rithmId: '3j4k-3h2j-hj4j',
@@ -738,18 +739,18 @@ export class StationService {
           children: [],
         },
       ];
-      const expectedResponse: StationFrameWidget = {
+      const frameStationWidget: StationFrameWidget = {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         cols: 6,
         rows: 4,
         x: 0,
         y: 0,
-        type: 'test',
-        data: JSON.stringify(expectedQuestion),
+        type: FrameType.Input,
+        data: JSON.stringify(InputFrameWidgetQuestions),
         id: 0,
       };
-      return of(expectedResponse).pipe(delay(1000));
+      return of(frameStationWidget).pipe(delay(1000));
     }
   }
 }

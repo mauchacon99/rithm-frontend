@@ -21,6 +21,7 @@ import {
   PossibleAnswer,
   FlowLogicRule,
   StationFrameWidget,
+  FrameType,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
@@ -755,22 +756,18 @@ export class StationComponent
   }
 
   /**
-   * Save or update the changes make in each widget the gridster.
+   * Save or update the changes make the station frame widgets.
    */
-  saveStationFramesChanged(): void {
-    let newFieldQuestion = this.inputFrameWidgetItems;
+  saveStationFramesChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
-    newFieldQuestion = this.inputFrameWidgetItems.map((field, index) => {
-      return {
-        ...newFieldQuestion[index],
-        data: JSON.stringify(field.questions),
-      };
+    this.inputFrameWidgetItems.map((field) => {
+      field.data = JSON.stringify(field.questions);
     });
 
     this.stationService
-      .addFieldQuestionWidget(this.stationRithmId, newFieldQuestion)
+      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {
@@ -828,7 +825,7 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
-      type: '',
+      type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
     };

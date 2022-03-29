@@ -49,7 +49,7 @@ describe('InputFrameWidgetComponent', () => {
       const cdkEvent = {
         container: { data: firstList, id: 'form-inputs' },
         previousContainer: { data: secondList, id: 'input-widget' },
-      } as CdkDragDrop<Question[] | undefined>;
+      } as CdkDragDrop<Question[]>;
 
       const spyDrag = spyOn(component, 'addElementDrag').and.returnValue();
       component.addElementDrag(cdkEvent);
@@ -100,7 +100,7 @@ describe('InputFrameWidgetComponent', () => {
         previousContainer: { data: questionFields, id: 'input-widget' },
         previousIndex: 1,
         currentIndex: 2,
-      } as CdkDragDrop<Question[] | undefined>;
+      } as CdkDragDrop<Question[]>;
 
       const spyDrop = spyOn(component, 'addElementDrag').and.returnValue();
       component.addElementDrag(cdkEvent);

@@ -1,3 +1,4 @@
+import { FrameType } from './enums';
 import { Question } from './question';
 
 export interface StationFrameWidget {
@@ -24,8 +25,8 @@ export interface StationFrameWidget {
   /** The array of questions. */
   questions?: Question[];
   /** Type each input frame. */
-  /** This is going to be updated with StationFrameType Enum. */
-  type: string;
+  /** This is going to be updated with FrameType Enum. */
+  type: FrameType;
   /** The data contained in each frame. */
   data: string;
   /** Id of the item. */
