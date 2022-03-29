@@ -1233,8 +1233,8 @@ export class MockStationService {
    */
   updateFieldQuestionWidget(
     stationRithmId: string,
-    newFieldQuestion: []
-  ): Observable<unknown> {
+    newFieldQuestion: StationFrameWidget[]
+  ): Observable<StationFrameWidget> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -1253,7 +1253,7 @@ export class MockStationService {
         x: 0,
         y: 0,
         type: 'test',
-        data: JSON.stringify(newFieldQuestion),
+        data: 'data-testing-id',
         id: 0,
       };
       return of(expectedResponse).pipe(delay(1000));

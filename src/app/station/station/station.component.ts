@@ -774,8 +774,29 @@ export class StationComponent
    * Save the changes make in the gridster.
    */
   saveStationChanges(): void {
+    const newFieldQuestion = this.inputFrameWidgetItems;
+
     this.editMode = false;
     this.setGridMode('preview');
+    this.inputFrameWidgetItems.forEach((field, index) => {
+      newFieldQuestion[index] = {
+        ...newFieldQuestion[index],
+        rithmId: this.randRithmId,
+        data: JSON.stringify(field.questions),
+      };
+    });
+
+    this.stationService
+      .updateFieldQuestionWidget(this.stationRithmId, newFieldQuestion)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /** This cancel button clicked show alert. */
