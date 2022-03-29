@@ -122,4 +122,14 @@ export class GroupSearchWidgetComponent implements OnInit {
       });
     }
   }
+
+  /**
+   * Navigate the user to the station on the map.
+   */
+   goToStationGroupOnMap(): void {
+    this.mapService.centerStationRithmId$.next(this.stationRithmId);
+    this.mapService.viewStationButtonClick$.next(true);
+    this.router.navigate([`/map`]);
+  }
+
 }
