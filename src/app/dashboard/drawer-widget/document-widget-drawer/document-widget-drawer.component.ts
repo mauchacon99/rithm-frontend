@@ -67,7 +67,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   dataDrawerDocument!: EditDataWidget;
 
   /** Value used to compare the widgets. */
-  widgetType = WidgetType;
+  enumWidgetType = WidgetType;
 
   /** Loading drawer. */
   isLoading = false;
