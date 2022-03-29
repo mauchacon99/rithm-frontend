@@ -3,7 +3,34 @@
   <div
     class="md:border-r-2 color-border md:overflow-auto scrollbar height-container px-3 pb-3"
   >
-    <ng-container *ngIf="stationGroups">
+    <div
+      *ngIf="isLoading"
+      class="w-full h-full flex items-center justify-center"
+    >
+      <app-loading-indicator
+        id="loader-groups-hierarchy"
+      ></app-loading-indicator>
+    </div>
+
+    <div
+      *ngIf="isErrorGetGroups"
+      id="failed-groups"
+      class="w-full h-full flex flex-col items-center justify-center text-center mt-2 md:mt-0"
+    >
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="getStationGroups()"
+        id="try-again"
+        data-testid="try-again"
+        class="w-32"
+      >
+        Try Again
+      </button>
+      <p class="text-error-500">Error: Unable to show groups or station.</p>
+    </div>
+
+    <ng-container *ngIf="stationGroups && !isLoading && !isErrorGetGroups">
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
         <mat-list-option
