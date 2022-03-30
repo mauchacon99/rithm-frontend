@@ -345,7 +345,6 @@ export class MapService {
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
-    // new.
     this.mapConnectionHelper.validateConnections(this.mapStationHelper);
     this.mapStationHelper.validateStationsBelongToExactlyOneStationGroup(
       this.mapStationGroupHelper
