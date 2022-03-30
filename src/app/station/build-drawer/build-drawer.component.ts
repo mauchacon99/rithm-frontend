@@ -25,7 +25,7 @@ export class BuildDrawerComponent implements OnInit {
   @Output() toggleDrawer: EventEmitter<unknown> = new EventEmitter();
 
   /** Event Emitter Will add a new input frame in the station grid. */
-  @Output() addInputFrame: EventEmitter<void> = new EventEmitter();
+  @Output() addInputFrame: EventEmitter<FrameType> = new EventEmitter();
 
   /** The station id used to get previous fields. */
   @Input() stationId!: string;
@@ -150,16 +150,16 @@ export class BuildDrawerComponent implements OnInit {
       type: this.frameTypes.Headline,
     },
     {
-      prompt: 'Body Text',
-      icon: 'fa-paragraph fa-solid',
-      dataTestId: 'component-body-text',
-      type: this.frameTypes.Body,
-    },
-    {
       prompt: 'Title',
       icon: 'fa-heading fa-solid',
       dataTestId: 'component-title',
       type: this.frameTypes.Title,
+    },
+    {
+      prompt: 'Body Text',
+      icon: 'fa-paragraph fa-solid',
+      dataTestId: 'component-body-text',
+      type: this.frameTypes.Body,
     },
   ];
 
@@ -190,8 +190,10 @@ export class BuildDrawerComponent implements OnInit {
 
   /**
    * Will add a new input frame in the station grid.
+   *
+   * @param type Input frame type sended.
    */
-  addNewInputFrame(): void {
-    this.addInputFrame.emit();
+  addNewInputFrame(type: FrameType): void {
+    this.addInputFrame.emit(type);
   }
 }
