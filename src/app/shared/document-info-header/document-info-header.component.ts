@@ -191,9 +191,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     } else {
       this.getAppendedFieldsOnDocumentName(this.stationRithmId);
     }
-    if (!this.isWidget) {
-      this.getStatusDocumentEditable();
-    }
+    this.getStatusDocumentEditable();
   }
 
   /**
@@ -359,11 +357,16 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Update the Document Name Behavior Subject.
    */
   updateDocumentNameBS(): void {
+    const baseName = this.documentNameForm.controls['name'];
     const documentName: DocumentName = {
-      baseName: this.documentNameForm.controls.name.value,
+      baseName: baseName.value?.trim(),
       appendedName: this.appendedDocumentName,
     };
-    this.documentService.updateDocumentNameBS(documentName);
+    if (documentName.baseName) {
+      this.documentService.updateDocumentNameBS(documentName);
+    } else {
+      baseName.setValue(baseName.value?.trim());
+    }
   }
 
   /** Navigate the user to the document page. */

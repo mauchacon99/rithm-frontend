@@ -45,50 +45,13 @@
       </div>
 
       <section *ngIf="!isStation" class="col-span-12">
-        <div
-          class="w-full flex flex-col"
-          *ngIf="isDocumentNameEditable; else nonEditableDocName"
-        >
-          <form
-            [formGroup]="documentNameForm"
-            class="flex items-center document-header-form"
-          >
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Document Name:</mat-label>
-              <input
-                id="name"
-                type="text"
-                matInput
-                matNativeControl
-                placeholder="Untitled document"
-                formControlName="name"
-                (keyup)="updateDocumentNameBS()"
-              />
-            </mat-form-field>
-            <button
-              type="button"
-              data-testid="document-info-drawer"
-              mat-icon-button
-              class="icon icon-top pl-2"
-              (click)="toggleDrawer('documentInfo')"
-              id="info-drawer-button-document"
-              [disabled]="isDrawerOpen"
-            >
-              <i
-                class="fas fa-info-circle text-2xl"
-                [ngClass]="
-                  isDrawerOpen ? 'text-primary-100' : 'text-primary-500'
-                "
-              ></i>
-            </button>
-          </form>
-          <p
-            *ngIf="appendedDocumentName !== ''"
-            class="text-xs text-secondary-500"
-          >
-            Appended Name: {{ appendedDocumentName }}
-          </p>
-        </div>
+        <ng-container
+          *ngIf="
+            isDocumentNameEditable;
+            then inputEditDocumentName;
+            else nonEditableDocName
+          "
+        ></ng-container>
         <ng-template #nonEditableDocName>
           <div class="flex items-center justify-between col-span-12">
             <div class="w-full">
@@ -171,15 +134,25 @@
   id="section-current-worker"
   class="border-b border-secondary-400"
 >
-  <div class="py-2 border-b border-secondary-400">
-    <p class="font-semibold">
-      {{ documentName }}
-    </p>
+  <ng-container
+    *ngIf="
+      isDocumentNameEditable && isUserAdminOrOwner;
+      then inputEditDocumentName;
+      else nonEditableDocNameWidget
+    "
+  ></ng-container>
+  <ng-template #nonEditableDocNameWidget>
+    <div class="py-2 border-b border-secondary-400">
+      <p class="font-semibold">
+        {{ documentName }}
+      </p>
 
-    <p class="text-xs">
-      {{ stationNameDocument }}
-    </p>
-  </div>
+      <p class="text-xs">
+        {{ stationNameDocument }}
+      </p>
+    </div>
+  </ng-template>
+
   <div class="flex justify-between items-center p-1">
     <div *ngIf="currentAssignedUserDocument?.rithmId; else startButton">
       <small
@@ -244,3 +217,43 @@
     </button>
   </div>
 </section>
+
+<ng-template #inputEditDocumentName>
+  <div class="w-full flex flex-col">
+    <form
+      [formGroup]="documentNameForm"
+      class="flex items-center document-header-form"
+    >
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Document Name:</mat-label>
+        <input
+          id="name"
+          type="text"
+          matInput
+          matNativeControl
+          placeholder="Untitled document"
+          formControlName="name"
+          (keyup)="updateDocumentNameBS()"
+        />
+      </mat-form-field>
+      <button
+        *ngIf="!isWidget"
+        type="button"
+        data-testid="document-info-drawer"
+        mat-icon-button
+        class="icon icon-top pl-2"
+        (click)="toggleDrawer('documentInfo')"
+        id="info-drawer-button-document"
+        [disabled]="isDrawerOpen"
+      >
+        <i
+          class="fas fa-info-circle text-2xl"
+          [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
+        ></i>
+      </button>
+    </form>
+    <p *ngIf="appendedDocumentName" class="text-xs text-secondary-500">
+      Appended Name: {{ appendedDocumentName }}
+    </p>
+  </div>
+</ng-template>
