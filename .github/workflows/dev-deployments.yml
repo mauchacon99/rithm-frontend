@@ -28,6 +28,12 @@ jobs:
       - name: Placing app offline file
         run: Copy-Item ./src/app_offline.htm C:/inetpub/devapp.rithm.tech
 
+      - name: Cleanup Old Deployment
+        run: |
+          Get-ChildItem -Path "C:\temp\" -File -Recurse |
+          Where-Object { $_.Name -ne "app_offline.htm" } |
+          Remove-Item
+
       - name: Deploying app
         run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
 
