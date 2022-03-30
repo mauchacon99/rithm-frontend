@@ -885,7 +885,7 @@ export class StationComponent
   /**
    * Add row at widget current.
    *
-   * @param event The event boolean.
+   * @param event Return true when should execute the function.
    * @param widgetId The index of the selected widget.
    */
   addRowWidget(event: boolean, widgetId: number): void {
