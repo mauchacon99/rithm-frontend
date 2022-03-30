@@ -696,20 +696,28 @@ export class StationComponent
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
   setGridMode(mode: 'layout' | 'setting' | 'preview'): void {
-    const enabledMode = mode === 'layout' ? true : false;
-    /* If it is different from preview, we are in editable mode. */
-    if (mode !== 'preview') {
-      this.layoutMode = enabledMode;
-      this.settingMode = !enabledMode;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = false;
+    let enabledMode = false;
+    /** Depending on the case, the mode is set. */
+    switch (mode) {
+      case 'preview':
+        this.layoutMode = false;
+        this.settingMode = false;
+        this.isOpenDrawerLeft = false;
+        this.closeSettingDrawer();
+        break;
+      case 'setting':
+        enabledMode = false;
+        this.isOpenDrawerLeft = false;
+        break;
+      case 'layout':
+        enabledMode = true;
+        this.closeSettingDrawer();
+        break;
+      default:
+        break;
     }
-
-    /*If the parameter 'mode' is different 'layout' hidden the drawer left.*/
-    if (mode !== 'layout') {
-      this.isOpenDrawerLeft = false;
-    }
+    this.layoutMode = enabledMode;
+    this.settingMode = !enabledMode;
 
     /* Make the grid visible.*/
     this.options.displayGrid = enabledMode ? 'always' : 'none';
@@ -855,10 +863,29 @@ export class StationComponent
   }
 
   /**
-   * Toggles the open state of the right setting drawer.
+   * Open the right setting drawer for field setting.
+   *
+   * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openRightDrawer(): void {
-    this.sidenavDrawerService.openDrawer('fieldSetting');
+  openSettingDrawer(field: Question): void {
+    /** If the left drawer is open, it must be closed. */
+    if (this.isOpenDrawerLeft) {
+      this.isOpenDrawerLeft = false;
+    }
+    this.sidenavDrawerService.openDrawer('fieldSetting', field);
+  }
+
+  /**
+   * Close the right setting drawer for field setting.
+   */
+  closeSettingDrawer(): void {
+    /** If both are open, the field setting drawer must be closed. */
+    if (
+      this.sidenavDrawerService.isDrawerOpen &&
+      this.drawerContext === 'fieldSetting'
+    ) {
+      this.sidenavDrawerService.closeDrawer();
+    }
   }
 
   /**
