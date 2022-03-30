@@ -36,8 +36,29 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** Whether the request to get the station info is currently underway. */
-  stationLoading = true;
+  /** Station Id passed from parent. */
+  stationRithmId = '';
+
+  /** Get station name from sidenavDrawerService or behaviour subject. */
+  stationName = '';
+
+  /** The Last Updated Date. */
+  lastUpdatedDate = '';
+
+  /** Color message LastUpdated. */
+  colorMessage = '';
+
+  /** The drawer context for stationInfo. */
+  drawerContext = '';
+
+  /** Get flow button name (Flow as default). */
+  flowButtonName = 'Flow';
+
+  /** Display the ownerRoster length. */
+  ownersRosterLength = -1;
+
+  /** The selected tab index/init. */
+  selectedTabIndex = 0;
 
   /** Whether the worker roster us public or not. */
   isPublic = false;
@@ -45,14 +66,52 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station allow to add external users to the roster. */
   allowExternal = false;
 
-  /** Loading in the allow external workers section. */
-  allowExternalLoading = false;
-
-  /** Check if there is an error when updating the allow external workers. */
-  allowExternalError = false;
-
   /** Whether the station is allowed for all the organization workers or not. */
   allowAllOrgWorkers = false;
+
+  /** Is component viewed in station edit mode. */
+  editMode = false;
+
+  /** Whether the station drawer is opened from map or not. */
+  openedFromMap = false;
+
+  /** Station info is chained or not. */
+  isChained = false;
+
+  /** Station information object. */
+  stationInformation!: StationInformation;
+
+  /** Notes for the station. */
+  stationNotes?: string;
+
+  /** If component is being viewed on the map, what mode is the map in? */
+  mapMode?: MapMode;
+
+  /** If component is being viewed on the map, what status does the station have? */
+  stationStatus?: MapItemStatus;
+
+  /** Status by default the document in station. */
+  stationDocumentGenerationStatus: DocumentGenerationStatus =
+    DocumentGenerationStatus.None;
+
+  /** Allowing access to all MapMode enums in HTML.*/
+  mapModeEnum = MapMode;
+
+  /** The priority for current station once the info is loaded.*/
+  stationPriority: number | '--' = '--';
+
+  /** The default message to prompt user to publish local changes.*/
+  publishStationMessage = 'Publish map changes to update ';
+
+  /**
+   * Loading/Error Variables block.
+   */
+
+  /** Whether the request to get the station info is currently underway. */
+  stationLoading = true;
+
+  /** Loading in the allow external workers section. */
+  allowExternalLoading = false;
 
   /** The loading if changed toggle to allow all workers in the organization. */
   allowAllOrgLoading = false;
@@ -72,66 +131,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the toggle to allow previous button or not. */
   statusAllowPreviousLoading = false;
 
-  /** Use to determinate generation of document. */
-  showDocumentGenerationError = false;
+  /** Loading while saving the button text is underway. */
+  savingButtonText = false;
 
-  /** Is component viewed in station edit mode. */
-  editMode = false;
-
-  /** Station information object. */
-  stationInformation?: StationInformation;
-
-  /** Station Id passed from parent. */
-  stationRithmId = '';
-
-  /** Edit Mode. */
-  stationName = '';
-
-  /** Notes for the station. */
-  stationNotes?: string;
-
-  /** If component is being viewed on the map, what mode is the map in? */
-  mapMode?: MapMode;
-
-  /** If component is being viewed on the map, what status does the station have? */
-  stationStatus?: MapItemStatus;
-
-  /** The Last Updated Date. */
-  lastUpdatedDate = '';
-
-  /** Status by default the document in station. */
-  stationDocumentGenerationStatus: DocumentGenerationStatus =
-    DocumentGenerationStatus.None;
-
-  /** Color message LastUpdated. */
-  colorMessage = '';
-
-  /** Whether the station drawer is opened from map or not. */
-  openedFromMap = false;
-
-  /** Allowing access to all MapMode enums in HTML.*/
-  mapModeEnum = MapMode;
-
-  /** The priority for current station once the info is loaded.*/
-  stationPriority: number | '--' = '--';
-
-  /** The default message to prompt user to publish local changes.*/
-  publishStationMessage = 'Publish map changes to update ';
-
-  /** The drawer context for stationInfo. */
-  drawerContext = '';
-
-  /** The drawer context for stationInfo. */
-  isChained = false;
-
-  /** Display the ownerRoster length. */
-  ownersRosterLength = -1;
-
-  /** The selected tab index/init. */
-  selectedTabIndex = 0;
-
-  /** Get flow button name. */
-  flowButtonName = '';
+  /** Check if there is an error when updating the allow external workers. */
+  allowExternalError = false;
 
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
@@ -149,6 +153,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       drawer[0] ? drawer[0].clientWidth : 0
     );
   }
+
+  /** Use to determinate generation of document. */
+  showDocumentGenerationError = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -286,7 +293,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   get displayCreateDocumentButton(): boolean {
     return (
       this.stationDocumentGenerationStatus ===
-        DocumentGenerationStatus.Manual &&
+      DocumentGenerationStatus.Manual &&
       (this.mapMode === MapMode.View ||
         this.mapMode === MapMode.Build ||
         this.mapMode === undefined) &&
@@ -323,10 +330,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       status === 'None' && statusNew.checked
         ? DocumentGenerationStatus.None
         : status === 'None' && !statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : status === 'Manual' && statusNew.checked
-        ? DocumentGenerationStatus.Manual
-        : DocumentGenerationStatus.None;
+          ? DocumentGenerationStatus.Manual
+          : status === 'Manual' && statusNew.checked
+            ? DocumentGenerationStatus.Manual
+            : DocumentGenerationStatus.None;
 
     this.updateStationDocumentGenerationStatus(this.stationRithmId, value);
   }
@@ -705,13 +712,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update flow button name.
-   */
-  updateFlowButtonName(): void {
-    this.stationService.updatedFlowButtonText(this.flowButtonName);
-  }
-
-  /**
    * Update the AllowAllOrgWorkers status.
    */
   updateAllOrgWorkersStation(): void {
@@ -827,11 +827,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Save Buttons Settings.
    */
   saveButtonSettings(): void {
+    this.savingButtonText = true;
+    this.flowButtonName = this.flowButtonName.trim();
     this.stationService
       .updateFlowButtonText(this.stationRithmId, this.flowButtonName)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.stationInformation.flowButton = this.flowButtonName;
+          this.savingButtonText = false;
+        },
         error: (error: unknown) => {
+          this.savingButtonText = false;
           this.errorService.displayError(
             'Something went wrong on our end when updating the flow button text and we are looking into it. \
                 Please try again in a little while',

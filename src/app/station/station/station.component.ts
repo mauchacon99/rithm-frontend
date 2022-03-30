@@ -21,10 +21,12 @@ import {
   PossibleAnswer,
   FlowLogicRule,
   InputFrameWidget,
+  FrameType,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -63,6 +65,9 @@ export class StationComponent
 
   /** The information about the station. */
   stationInformation!: StationInformation;
+
+  /** Different types of input frames components.*/
+  frameType = FrameType;
 
   /** Station Rithm id. */
   stationRithmId = '';
@@ -239,19 +244,6 @@ export class StationComponent
   }
 
   /**
-   * Listen the flowButtonText subject.
-   */
-  private subscribeFlowButtonText(): void {
-    this.stationService.flowButtonText$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        if (this.stationInformation) {
-          this.stationInformation.flowButton = data.length ? data : 'Flow';
-        }
-      });
-  }
-
-  /**
    * Populate and update possibleAnswers for an specific question.
    *
    * @param answer The question we are adding possible answers to.
@@ -302,7 +294,6 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
-    this.subscribeFlowButtonText();
 
     if (!this.editMode) this.setGridMode('preview');
   }
@@ -504,12 +495,6 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
-
-      // Update flow button text.
-      this.stationService.updateFlowButtonText(
-        this.stationInformation.rithmId,
-        this.stationInformation.flowButton
-      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -525,7 +510,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , , stationQuestions]) => {
+        next: ([, , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
@@ -816,8 +801,12 @@ export class StationComponent
 
   /**
    * Will add a new input frame in the station grid.
+   *
+   * @param type Information referent to widget selected.
    */
-  addInputFrame(): void {
+  addInputFrame(
+    type: CdkDragDrop<string, string, FrameType> | FrameType
+  ): void {
     const inputFrame: InputFrameWidget = {
       frameRithmId: '',
       cols: 6,
@@ -827,10 +816,30 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
-      type: '',
+      type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
     };
+
+    /**
+     * Identify typeof type, in case is emitted by CdkDragDrop it
+     * gonna be an object and in case comes from a click method it will be a string.
+     */
+    const value: string = typeof type === 'string' ? type : type.item.data;
+
+    /**Add individual properties for every Type. */
+    switch (value) {
+      case FrameType.Body:
+        inputFrame.cols = 6;
+        inputFrame.rows = 2;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 2;
+        inputFrame.type = FrameType.Body;
+        break;
+
+      default:
+        break;
+    }
     this.inputFrameWidgetItems.push(inputFrame);
     this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
   }

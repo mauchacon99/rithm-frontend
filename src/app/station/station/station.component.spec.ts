@@ -32,6 +32,7 @@ import { StationTemplateComponent } from 'src/app/station/station-template/stati
 import { StationService } from 'src/app/core/station.service';
 import {
   FlowLogicRule,
+  FrameType,
   OperandType,
   OperatorType,
   Question,
@@ -230,10 +231,6 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'updateStationQuestions'
     ).and.callThrough();
-    const spyUpdateFlowButtonText = spyOn(
-      TestBed.inject(StationService),
-      'updateFlowButtonText'
-    ).and.callThrough();
     const spyFunctionSave = spyOn(
       component,
       'saveStationInformation'
@@ -249,7 +246,6 @@ describe('StationComponent', () => {
     expect(spyUpdateNameTemplate).toHaveBeenCalled();
     expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
-    expect(spyUpdateFlowButtonText).toHaveBeenCalled();
   });
 
   it('should validate the form controls initial value', () => {
@@ -862,17 +858,17 @@ describe('StationComponent', () => {
 
   it('should add a new input frame widget to the array of input frames', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems).toHaveSize(1);
   });
 
   it('should add more than one input frame with different id', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
 
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems.length).toBe(1);
 
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems.length).toBe(2);
 
     expect(component.inputFrameWidgetItems[0].id).not.toEqual(
