@@ -10,3 +10,13 @@
     <i class="fa-solid fa-map text-base text-secondary-500"></i>
   </button>
 </div>
+<mat-accordion>
+  <app-expansion-member-group-admin
+    [selectedItem]="selectedItem"
+    [isAdmin]="true"
+  ></app-expansion-member-group-admin>
+  <app-expansion-member-group-admin
+    [selectedItem]="selectedItem"
+    [isAdmin]="false"
+  ></app-expansion-member-group-admin>
+</mat-accordion>

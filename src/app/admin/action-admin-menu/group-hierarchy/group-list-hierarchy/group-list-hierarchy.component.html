@@ -26,7 +26,7 @@
   <ng-container *ngIf="stationGroups && !isLoading && !isErrorGetGroups">
     <ng-container
       *ngIf="
-        stationGroups.subStationGroups.length && stationGroups.stations.length;
+        stationGroups.subStationGroups.length || stationGroups.stations.length;
         else emptyList
       "
     >
