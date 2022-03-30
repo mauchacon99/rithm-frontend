@@ -844,7 +844,14 @@ export class StationComponent
         inputFrame.minItemRows = 2;
         inputFrame.type = FrameType.Body;
         break;
-
+      case FrameType.Title:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
+        inputFrame.minItemRows = 1;
+        inputFrame.maxItemRows = 1;
+        inputFrame.type = FrameType.Title;
+        break;
       default:
         break;
     }
