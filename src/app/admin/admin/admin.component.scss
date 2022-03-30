@@ -1,9 +1,5 @@
 @import 'variables';
 
-.page {
-  height: calc(100vh - 111px);
-}
-
 .color-border {
   border-color: map-get($primary-palette, 50);
 }
