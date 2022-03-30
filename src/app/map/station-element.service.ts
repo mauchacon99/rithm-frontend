@@ -67,7 +67,7 @@ export class StationElementService {
 
   constructor(private mapService: MapService) {
     //set this.mapScale to match the behavior subject in mapService.
-    this.mapService.mapScale$.subscribe((scale) => {
+    this.mapService.mapHelper.mapScale$.subscribe((scale) => {
       this.mapScale = scale;
     });
   }
@@ -92,12 +92,13 @@ export class StationElementService {
     //Draw the card itself.
     this.drawStationCard(station, dragItem);
     if (
-      ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+      ((this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapHelper.mapMode$.value ===
+          MapMode.StationGroupEdit) &&
         station.disabled &&
         !station.selected &&
         station.hoverItem !== StationElementHoverItem.None) ||
-      (this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+      (this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit &&
         station.hoverItem !== StationElementHoverItem.None &&
         this.mapService.stationElements.filter((e) => e.selected).length ===
           1 &&
@@ -222,8 +223,9 @@ export class StationElementService {
     ctx.closePath();
     //The color of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.fillStyle =
-      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+      (this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapHelper.mapMode$.value ===
+          MapMode.StationGroupEdit) &&
       station.disabled &&
       !station.selected
         ? MAP_DISABLED
@@ -234,22 +236,28 @@ export class StationElementService {
       (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
         ? MAP_SELECTED
-        : ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+        : ((this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+            this.mapService.mapHelper.mapMode$.value ===
+              MapMode.StationGroupEdit) &&
             station.selected) ||
-          ((this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+          ((this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+            this.mapService.mapHelper.mapMode$.value ===
+              MapMode.StationGroupEdit) &&
             station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled)
         ? MAP_SELECTED
-        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-            this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+        : (this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+            this.mapService.mapHelper.mapMode$.value ===
+              MapMode.StationGroupEdit) &&
           station.disabled &&
           !station.selected
         ? MAP_DISABLED_STROKE
         : MAP_DEFAULT_COLOR;
     if (
-      (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd &&
         (station.selected ||
           (station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled))) ||
@@ -280,7 +288,7 @@ export class StationElementService {
     //Stop de-selecting station in station group edit mode when it contains only one station.
     const isEditMode =
       station.hoverItem !== StationElementHoverItem.None &&
-      this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+      this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit &&
       this.mapService.stationElements.filter((e) => e.selected).length === 1 &&
       station.selected &&
       !station.disabled;
@@ -380,8 +388,9 @@ export class StationElementService {
     //Set the styling for the text.
     ctx.textAlign = 'left';
     ctx.fillStyle =
-      (this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-        this.mapService.mapMode$.value === MapMode.StationGroupEdit) &&
+      (this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd ||
+        this.mapService.mapHelper.mapMode$.value ===
+          MapMode.StationGroupEdit) &&
       station.disabled &&
       !station.selected
         ? MAP_DISABLE_TEXT_COLOR
@@ -516,8 +525,9 @@ export class StationElementService {
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BADGE_HOVER_COLOR
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit
+        : this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+          this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit
         ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : BADGE_DEFAULT_COLOR;
     ctx.fill();
@@ -641,8 +651,9 @@ export class StationElementService {
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BUTTON_HOVER_COLOR
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit
+        : this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+          this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit
         ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : buttonColor;
     ctx.fill();
@@ -699,8 +710,9 @@ export class StationElementService {
         ? CONNECTION_DEFAULT_COLOR
         : station.hoverItem === StationElementHoverItem.Node &&
           dragItem !== MapDragItem.Node &&
-          this.mapService.mapMode$.value !== MapMode.StationGroupAdd &&
-          this.mapService.mapMode$.value !== MapMode.StationGroupEdit
+          this.mapService.mapHelper.mapMode$.value !==
+            MapMode.StationGroupAdd &&
+          this.mapService.mapHelper.mapMode$.value !== MapMode.StationGroupEdit
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
     ctx.fill();
@@ -726,8 +738,9 @@ export class StationElementService {
         station.dragging) ||
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd ||
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit
+        : this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+          this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit
         ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : NODE_HOVER_COLOR;
     ctx.stroke();
