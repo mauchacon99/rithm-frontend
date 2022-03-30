@@ -30,6 +30,9 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
+  /** Station Rithm id. */
+  @Output() frameWidget: EventEmitter<boolean> = new EventEmitter();
+
   /** The list of questionFieldTypes. */
   fieldTypes = QuestionFieldType;
 
@@ -66,6 +69,9 @@ export class InputFrameWidgetComponent {
       newQuestion.possibleAnswers = [];
     }
     if (event.container.id !== event.previousContainer.id) {
+      if (this.fields.length >= 3) {
+        this.frameWidget.emit(true);
+      }
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
     } else {
       moveItemInArray(

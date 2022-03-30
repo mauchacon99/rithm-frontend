@@ -65,16 +65,20 @@ textarea {
   }
 
   .gridster-item {
-    @apply px-0 pb-0 rounded transition-colors;
+    @apply px-0 pb-0 rounded transition-colors overflow-visible;
   }
 
   //Widget item in layout mode
   .widget-item-layout {
     @apply border-2 border-secondary-100 hover:border-accent-500;
+
+    ::ng-deep .mat-form-field-wrapper {
+      margin: 0 0 11px !important;
+    }
   }
 
   .h-gridster {
-    height: calc(100% - 20px);
+    @apply h-full;
   }
 
   .drag-handler {

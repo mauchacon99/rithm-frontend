@@ -396,7 +396,7 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster relative overflow-hidden">
+                        <div class="h-gridster">
                           <button
                             mat-icon-button
                             type="button"
@@ -414,6 +414,7 @@
                             [id]="widgetItem.id"
                             [widgetMode]="layoutMode ? 'layout' : 'setting'"
                             (toggleRightDrawer)="openRightDrawer()"
+                            (frameWidget)="addRowWidget($event, i)"
                           ></app-input-frame-widget>
                         </div>
                       </gridster-item>

@@ -8,13 +8,24 @@
   >
     <div *ngFor="let field of fields" cdkDrag>
       <div class="field-drag-placeholder" *cdkDragPlaceholder></div>
-      <app-text-field
-        [field]="field"
-        [isStation]="true"
-        [labelTag]="field.prompt"
-        [widgetItem]="true"
-        (click)="widgetMode === 'setting' && openSettingDrawer()"
-      ></app-text-field>
+      <div>
+        <button
+          mat-icon-button
+          type="button"
+          data-testid="button-related-station"
+          id="button-related-station"
+          class="inline-flex items-center justify-center w-5 h-5 absolute z-10 -left-[9px] -mt-[9px] rounded-full bg-secondary-200 text-white cursor-auto"
+        >
+          <i class="fa-solid fa-book-open fa-xs"></i>
+        </button>
+        <app-text-field
+          [field]="field"
+          [isStation]="true"
+          [labelTag]="field.prompt"
+          [widgetItem]="true"
+          (click)="widgetMode === 'setting' && openSettingDrawer()"
+        ></app-text-field>
+      </div>
     </div>
   </div>
 </ng-container>

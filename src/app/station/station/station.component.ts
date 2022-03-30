@@ -119,7 +119,8 @@ export class StationComponent
 
   /** Grid initial values. */
   options: GridsterConfig = {
-    gridType: 'scrollVertical',
+    gridType: 'verticalFixed',
+    fixedRowHeight: 48.5,
     displayGrid: 'always',
     pushItems: true,
     draggable: {
@@ -879,6 +880,19 @@ export class StationComponent
    */
   focusWidget(index: number): void {
     this.widgetFocused = index === this.widgetFocused ? -1 : index;
+  }
+
+  /**
+   * Add row at widget current.
+   *
+   * @param event The event boolean.
+   * @param widgetId The index of the selected widget.
+   */
+  addRowWidget(event: boolean, widgetId: number): void {
+    this.inputFrameWidgetItems[widgetId].rows++;
+    this.inputFrameWidgetItems[widgetId].minItemRows =
+      this.inputFrameWidgetItems[widgetId].rows;
+    this.changedOptions();
   }
 
   /**
