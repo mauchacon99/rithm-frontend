@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MockComponent } from 'ng-mocks';
-import { StationListGroup, StationGroupData } from 'src/models';
-import { ExpansionMemberGroupAdminComponent } from '../expansion-member-group-admin/expansion-member-group-admin.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { StationGroupData, StationListGroup } from 'src/models';
 
-import { UserGroupStationAdminComponent } from './user-group-station-admin.component';
+import { ExpansionMemberGroupAdminComponent } from './expansion-member-group-admin.component';
 
-describe('UserGroupStationAdminComponent', () => {
-  let component: UserGroupStationAdminComponent;
-  let fixture: ComponentFixture<UserGroupStationAdminComponent>;
+describe('ExpansionMemberGroupAdminComponent', () => {
+  let component: ExpansionMemberGroupAdminComponent;
+  let fixture: ComponentFixture<ExpansionMemberGroupAdminComponent>;
 
   const stations: StationListGroup = {
     rithmId: '123-321-456',
@@ -66,16 +65,13 @@ describe('UserGroupStationAdminComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        UserGroupStationAdminComponent,
-        MockComponent(ExpansionMemberGroupAdminComponent),
-      ],
-      imports: [MatExpansionModule],
+      declarations: [ExpansionMemberGroupAdminComponent],
+      imports: [MatExpansionModule, NoopAnimationsModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserGroupStationAdminComponent);
+    fixture = TestBed.createComponent(ExpansionMemberGroupAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
