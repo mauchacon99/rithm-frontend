@@ -46,7 +46,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** RithmId of station or stationGroup to search. */
-  @Input() showImageBanner = true;
+  @Input() showImageBanner = false;
 
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
