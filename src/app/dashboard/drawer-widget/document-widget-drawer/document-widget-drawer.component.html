@@ -80,12 +80,12 @@
       <mat-select
         [(value)]="
           !documentImages.length
-            ? null
+            ? ''
             : dataDrawerDocument.widgetItem.profileImageId
         "
         [formControl]="formColumns"
       >
-        <mat-option [value]="null" [attr.data-testid]="'option-column-none'">
+        <mat-option [value]="''" [attr.data-testid]="'option-column-none'">
           None
         </mat-option>
         <mat-option
