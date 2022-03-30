@@ -80,11 +80,14 @@
       <mat-select
         [(value)]="
           !documentImages.length
-            ? ''
+            ? null
             : dataDrawerDocument.widgetItem.profileImageId
         "
         [formControl]="formColumns"
       >
+        <mat-option [value]="null" [attr.data-testid]="'option-column-none'">
+          None
+        </mat-option>
         <mat-option
           *ngFor="let image of documentImages; index as index"
           [value]="image.imageId"
@@ -92,13 +95,6 @@
           [attr.data-testid]="'option-column' + index"
         >
           {{ image.imageName }} (uploaded image)
-        </mat-option>
-        <mat-option
-          *ngIf="!documentImages.length"
-          [value]=""
-          [attr.data-testid]="'option-column-empty'"
-        >
-          There are not images to list.
         </mat-option>
       </mat-select>
     </mat-form-field>
