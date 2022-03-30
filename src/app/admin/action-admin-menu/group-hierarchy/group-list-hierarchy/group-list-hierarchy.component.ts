@@ -8,13 +8,16 @@ import { StationGroupData, StationListGroup } from 'src/models';
  * Component to show options list.
  */
 @Component({
-  selector: 'app-group-list-hierarchy',
+  selector: 'app-group-list-hierarchy[stationGroupRithmId][depthGroup]',
   templateUrl: './group-list-hierarchy.component.html',
   styleUrls: ['./group-list-hierarchy.component.scss'],
 })
 export class GroupListHierarchyComponent implements OnInit {
   /** RithmId of station or stationGroup to search. */
   @Input() stationGroupRithmId = '';
+
+  /** Depth of the sub-stationGroups. */
+  @Input() depthGroup = 1;
 
   /** Output value of selected item. */
   @Output() getSelectedItem = new EventEmitter<
@@ -23,6 +26,12 @@ export class GroupListHierarchyComponent implements OnInit {
 
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
+
+  /** Load indicator get groups. */
+  isLoading = false;
+
+  /** Show error if get groups fail. */
+  isErrorGetGroups = false;
 
   constructor(
     private stationService: StationService,
@@ -37,15 +46,21 @@ export class GroupListHierarchyComponent implements OnInit {
   }
 
   /** Get stationGroups. */
-  private getStationGroups(): void {
+  getStationGroups(): void {
+    this.isLoading = true;
+    this.isErrorGetGroups = false;
     this.stationService
-      .getStationGroups(this.stationGroupRithmId)
+      .getStationGroups(this.stationGroupRithmId, this.depthGroup)
       .pipe(first())
       .subscribe({
         next: (stationGroup) => {
+          this.isLoading = false;
+          this.isErrorGetGroups = false;
           this.stationGroups = stationGroup;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.isErrorGetGroups = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -55,11 +70,11 @@ export class GroupListHierarchyComponent implements OnInit {
   }
 
   /**
-   * Emit data of item selected to group-hierarchy.component.
+   * Emit data StationGroupData | StationListGroup of item selected.
    *
-   * @param value Selected item data.
+   * @param itemSelected Selected item data.
    */
-  selectedListItem(value: StationGroupData | StationListGroup): void {
-    this.getSelectedItem.emit(value);
+  selectedListItem(itemSelected: StationGroupData | StationListGroup): void {
+    this.getSelectedItem.emit(itemSelected);
   }
 }

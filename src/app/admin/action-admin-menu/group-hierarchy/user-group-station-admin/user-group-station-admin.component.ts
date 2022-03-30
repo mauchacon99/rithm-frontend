@@ -16,7 +16,7 @@ export class UserGroupStationAdminComponent {
    * @returns Is group.
    */
   get isGroup(): boolean {
-    return 'stations' in this.selectedItem ? true : false;
+    return 'stations' in this.selectedItem;
   }
 
   /**
