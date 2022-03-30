@@ -109,7 +109,26 @@ describe('GroupHierarchyComponent', () => {
     expect(sectionPermissionDenied).toBeDefined();
   });
 
-  it('should  return true or false in isGroup', () => {
+  it('should push new columns to columnsStationGroupRithmId', () => {
+    const spyPush = spyOn(
+      component.columnsStationGroupRithmId,
+      'push'
+    ).and.callThrough();
+    const spySplice = spyOn(
+      component.columnsStationGroupRithmId,
+      'splice'
+    ).and.callThrough();
+
+    component.setSelectItem(subStationGroups, 0);
+    expect(spyPush).toHaveBeenCalledOnceWith(subStationGroups.rithmId);
+    expect(spySplice).toHaveBeenCalled();
+    expect(component.columnsStationGroupRithmId.at(1)).toEqual(
+      subStationGroups.rithmId
+    );
+    expect(component.selectedItem).toEqual(subStationGroups);
+  });
+
+  it('should return true or false in isGroup', () => {
     component.selectedItem = stations;
     const result = component.isGroup;
     expect(result).toBeFalse();

@@ -4,7 +4,7 @@
   *ngIf="showGroupHierarchy; else permissionDenied"
 >
   <div
-    class="sm:py-5 px-4 md:flex md:justify-between items-center border-b-2 color-border input-search"
+    class="py-5 px-4 md:flex md:justify-between items-center border-b-2 color-border input-search"
   >
     <span class="text-3xl font-bold">Groups</span>
     <mat-form-field
@@ -27,12 +27,21 @@
   </div>
 
   <div class="flex flex-col-reverse md:flex-row">
-    <div class="w-full md:w-[80%] h-full flex overflow-x-auto">
-      <div class="w-full md:w-[300px]">
+    <div
+      class="w-full md:w-[calc(100%-300px)] md:h-[calc(100vh-165px)] h-full md:flex md:overflow-auto"
+    >
+      <ng-container
+        *ngFor="
+          let columnStationGroup of columnsStationGroupRithmId;
+          index as index
+        "
+      >
         <app-group-list-hierarchy
-          (getSelectedItem)="setSelectItem($event)"
+          [stationGroupRithmId]="columnStationGroup"
+          [depthGroup]="index + 1"
+          (getSelectedItem)="setSelectItem($event, index)"
         ></app-group-list-hierarchy>
-      </div>
+      </ng-container>
     </div>
 
     <div
