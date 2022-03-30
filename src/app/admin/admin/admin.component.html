@@ -1,5 +1,5 @@
 <div
-  class="page textured-bg pb-0"
+  class="h-[calc(100vh-111px)] textured-bg pb-0"
   *ngIf="!showAdminPortal; else newAdminInterface"
 >
   <app-organization-management></app-organization-management>
@@ -13,7 +13,7 @@
         (itemMenuSelected)="getItemSelected($event)"
       ></app-admin-menu>
     </div>
-    <div class="w-full mt-10 md:mt-0 bg-white overflow-hidden">
+    <div class="w-full bg-white md:w-[calc(100%-300px)]">
       <app-group-hierarchy
         [showGroupHierarchy]="showGroupHierarchy"
         id="group-hierarchy"

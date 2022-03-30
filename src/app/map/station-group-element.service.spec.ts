@@ -221,13 +221,14 @@ describe('StationGroupElementService', () => {
     const expectPositionStations = [0, 2];
     const expectPoints: Point[] = [];
     expectPositionStations.forEach((positionStation) => {
-      const scaledPadding = STATION_GROUP_PADDING * mapService.mapScale$.value;
+      const scaledPadding =
+        STATION_GROUP_PADDING * mapService.mapHelper.mapScale$.value;
       const maxX =
         mapService.stationElements[positionStation].canvasPoint.x +
-        STATION_WIDTH * mapService.mapScale$.value;
+        STATION_WIDTH * mapService.mapHelper.mapScale$.value;
       const maxY =
         mapService.stationElements[positionStation].canvasPoint.y +
-        STATION_HEIGHT * mapService.mapScale$.value;
+        STATION_HEIGHT * mapService.mapHelper.mapScale$.value;
       expectPoints.push(
         {
           x:
@@ -277,7 +278,8 @@ describe('StationGroupElementService', () => {
       { x: 240, y: 87, corner: Corner.TopLeft },
       { x: 240, y: 129, corner: Corner.TopLeft },
     ];
-    const padding = STATION_GROUP_PADDING * mapService.mapScale$.value;
+    const padding =
+      STATION_GROUP_PADDING * mapService.mapHelper.mapScale$.value;
     const expectPoints: Point[] = [
       { x: -186 - padding, y: -3 + padding, corner: Corner.BottomLeft },
       { x: -104 - padding, y: 299 + padding, corner: Corner.BottomLeft },
@@ -394,7 +396,7 @@ describe('StationGroupElementService', () => {
       TestBed.inject(StationGroupElementService),
       'drawStationGroupName'
     );
-    mapService.mapScale$.next(SCALE_RENDER_STATION_ELEMENTS);
+    mapService.mapHelper.mapScale$.next(SCALE_RENDER_STATION_ELEMENTS);
     service.drawStationGroup(mapService.stationGroupElements[0]);
     // When the station group name isn't visible.
     expect(getStationPointsForStationGroupSpy).toHaveBeenCalled();
@@ -412,7 +414,7 @@ describe('StationGroupElementService', () => {
     drawStationGroupBoundaryLineSpy.calls.reset();
 
     // When the station group name is visible.
-    mapService.mapScale$.next(DEFAULT_SCALE);
+    mapService.mapHelper.mapScale$.next(DEFAULT_SCALE);
     service.drawStationGroup(mapService.stationGroupElements[0]);
     expect(getStationPointsForStationGroupSpy).toHaveBeenCalledTimes(2);
     expect(getSubStationGroupPointsForStationGroupSpy).toHaveBeenCalledTimes(2);

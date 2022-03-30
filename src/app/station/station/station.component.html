@@ -391,7 +391,7 @@
                             layoutMode && widgetFocused !== i,
                           'border-accent-300 border-2': widgetFocused === i
                         }"
-                        (click)="focusWidget(i)"
+                        (click)="settingMode || focusWidget(i)"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
                           let i = index;
@@ -417,7 +417,7 @@
                             [stationRithmId]="stationRithmId"
                             [id]="widgetItem.id"
                             [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                            (toggleRightDrawer)="openRightDrawer()"
+                            (openSettingDrawer)="openSettingDrawer($event)"
                           ></app-input-frame-widget>
                         </div>
                       </gridster-item>
