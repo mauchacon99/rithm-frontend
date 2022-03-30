@@ -23,7 +23,7 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   /**
    * Listen the DrawerData Service.
    */
-  private subscribeDrawerData(): void {
+  private subscribeDrawerData$(): void {
     this.sideNavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -36,7 +36,7 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.subscribeDrawerData();
+    this.subscribeDrawerData$();
   }
 
   /**

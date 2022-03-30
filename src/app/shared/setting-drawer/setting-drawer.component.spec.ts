@@ -42,7 +42,7 @@ describe('SettingDrawerComponent', () => {
   });
 
   it('should subscribe drawerData', () => {
-    const drawerSpy = spyOn(component, <never>'subscribeDrawerData');
+    const drawerSpy = spyOn(component, <never>'subscribeDrawerData$');
     component.ngOnInit();
     expect(drawerSpy).toHaveBeenCalled();
   });
