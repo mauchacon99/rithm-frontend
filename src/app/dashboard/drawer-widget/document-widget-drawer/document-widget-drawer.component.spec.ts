@@ -323,6 +323,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     );
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
+    component.showImageBanner = true;
     component.getImagesDocuments();
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
@@ -367,6 +368,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.isLoadingProfileImage = true;
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
+    component.showImageBanner = true;
     fixture.detectChanges();
     const loading = fixture.debugElement.nativeElement.querySelector(
       '#loading-indicator-profile-image'
