@@ -43,7 +43,7 @@
       <div
         cdkDrag
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
-        (click)="addNewInputFrame()"
+        (click)="addNewInputFrame(frameTypes.Input)"
         data-testid="input-frame-item"
       >
         <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
@@ -112,8 +112,8 @@
       id="components-container"
       data-testid="components-container"
       cdkDropList
-      [cdkDropListConnectedTo]="inputFrameList"
-      [cdkDropListData]="customFields"
+      cdkDropListConnectedTo="station-grid"
+      #customComponentContainer="cdkDropList"
     >
       <div
         *ngFor="let customComponent of customComponents; let i = index"
@@ -121,6 +121,8 @@
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
         attr.data-testid="{{ customComponent.dataTestId }}-{{ i }}"
         cdkDrag
+        [cdkDragData]="customComponent.type"
+        (click)="addNewInputFrame(customComponent.type)"
       >
         <p class="text-lg ml-auto text-primary-900 text-center">
           {{ customComponent.prompt }}

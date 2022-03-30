@@ -21,6 +21,7 @@ import {
   PossibleAnswer,
   FlowLogicRule,
   InputFrameWidget,
+  FrameType,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
@@ -32,7 +33,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 /**
  * Main component for viewing a station.
  */
@@ -800,8 +801,10 @@ export class StationComponent
 
   /**
    * Will add a new input frame in the station grid.
+   *
+   * @param type Information referent to widget selected.
    */
-  addInputFrame(): void {
+   addInputFrame(type: string | CdkDragDrop<string, string, string>): void {
     const inputFrame: InputFrameWidget = {
       frameRithmId: '',
       cols: 6,
@@ -811,10 +814,32 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
-      type: '',
+      type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
     };
+    const value: string = typeof type === 'string' ? type : type.item.data;
+
+    //Add individual properties for every Type.
+    switch (value) {
+      case FrameType.Headline:
+        inputFrame.cols = 19;
+        inputFrame.rows = 2;
+        inputFrame.minItemCols = 20;
+        inputFrame.minItemRows = 1;
+        inputFrame.type = FrameType.Body;
+        break;
+      case FrameType.Body:
+        inputFrame.cols = 6;
+        inputFrame.rows = 2;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 2;
+        inputFrame.type = FrameType.Body;
+        break;
+
+      default:
+        break;
+    }
     this.inputFrameWidgetItems.push(inputFrame);
     this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
   }
