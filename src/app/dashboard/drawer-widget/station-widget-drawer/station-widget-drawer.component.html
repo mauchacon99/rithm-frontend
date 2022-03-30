@@ -28,7 +28,7 @@
           <div
             *ngFor="let column of getFormColumns.controls; index as formChild"
             [formGroupName]="formChild"
-            class="flex justify-between items-center mt-2"
+            class="flex justify-between items-center mt-2 mat-select-station"
           >
             <mat-form-field appearance="outline" class="w-full">
               <mat-select formControlName="name">
