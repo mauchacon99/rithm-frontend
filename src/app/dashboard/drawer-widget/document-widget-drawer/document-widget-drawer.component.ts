@@ -72,8 +72,14 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Loading drawer. */
   isLoading = false;
 
+  /** Loading profile image drawer. */
+  isLoadingProfileImage = false;
+
   /** Toggle to show error message if get request fails.*/
   failedLoadDrawer = false;
+
+  /** Toggle to show error message if get request fails.*/
+  failedLoadDrawerProfileImage = false;
 
   /** Columns list to display in select. */
   documentFields: ColumnFieldsWidget[] = [];
@@ -199,14 +205,20 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
    *
    */
   getImagesDocuments(): void {
+    this.isLoadingProfileImage = true;
+    this.failedLoadDrawerProfileImage = false;
     this.documentService
       .getImagesDocuments(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (imagesDocument) => {
+          this.isLoadingProfileImage = false;
+          this.failedLoadDrawerProfileImage = false;
           this.documentImages = imagesDocument;
         },
         error: (error: unknown) => {
+          this.isLoadingProfileImage = false;
+          this.failedLoadDrawerProfileImage = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

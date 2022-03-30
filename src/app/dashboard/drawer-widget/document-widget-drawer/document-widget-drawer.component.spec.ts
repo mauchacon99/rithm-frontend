@@ -321,9 +321,16 @@ describe('DocumentWidgetDrawerComponent', () => {
         throw new Error();
       })
     );
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
     component.getImagesDocuments();
     fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#display-document-image-profile-drawer-error'
+    );
+    expect(errorMessage).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
+    expect(component.isLoadingProfileImage).toBeFalse();
   });
 
   it('should call method to get document images in service', () => {
@@ -353,5 +360,17 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(component.dataDrawerDocument.widgetItem.imageName).toEqual(
       image.imageName
     );
+  });
+
+  it('should show  profile image loading indicator', () => {
+    component.isLoadingProfileImage = true;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    fixture.detectChanges();
+    const loading = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-profile-image'
+    );
+    expect(component.isLoadingProfileImage).toBeTrue();
+    expect(loading).toBeTruthy();
   });
 });
