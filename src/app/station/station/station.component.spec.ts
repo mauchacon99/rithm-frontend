@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
@@ -27,6 +32,7 @@ import { StationTemplateComponent } from 'src/app/station/station-template/stati
 import { StationService } from 'src/app/core/station.service';
 import {
   FlowLogicRule,
+  FrameType,
   OperandType,
   OperatorType,
   Question,
@@ -225,10 +231,6 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'updateStationQuestions'
     ).and.callThrough();
-    const spyUpdateFlowButtonText = spyOn(
-      TestBed.inject(StationService),
-      'updateFlowButtonText'
-    ).and.callThrough();
     const spyFunctionSave = spyOn(
       component,
       'saveStationInformation'
@@ -244,7 +246,6 @@ describe('StationComponent', () => {
     expect(spyUpdateNameTemplate).toHaveBeenCalled();
     expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
-    expect(spyUpdateFlowButtonText).toHaveBeenCalled();
   });
 
   it('should validate the form controls initial value', () => {
@@ -610,9 +611,14 @@ describe('StationComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
 
+    const spyCloseSetting = spyOn(
+      component,
+      'closeSettingDrawer'
+    ).and.callThrough();
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(spyCloseSetting).toHaveBeenCalled();
     expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
     expect(component.options.resizable?.enabled).toBeTrue();
     expect(component.options.draggable?.enabled).toBeTrue();
@@ -636,8 +642,14 @@ describe('StationComponent', () => {
     component.editMode = true;
     component.isOpenDrawerLeft = true;
     fixture.detectChanges();
+
+    const spyCloseSetting = spyOn(
+      component,
+      'closeSettingDrawer'
+    ).and.callThrough();
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
+    expect(spyCloseSetting).toHaveBeenCalled();
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
     expect(component.isOpenDrawerLeft).toBeFalsy();
   });
@@ -744,22 +756,78 @@ describe('StationComponent', () => {
     expect(component.editMode).toBeFalsy();
   });
 
-  it('should remove widgets with the trash icon in the editToolbar', () => {
+  it('should open a confirming Popup when clicking on the delete button', () => {
     component.viewNewStation = true;
     component.editMode = true;
     const modeConfig = 'layout';
     component.setGridMode(modeConfig);
+    component.widgetFocused = 1;
+    fixture.detectChanges();
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
     fixture.detectChanges();
 
     const btnTrashIcon = fixture.debugElement.nativeElement.querySelector(
       '#button-remove-widget'
     );
     expect(btnTrashIcon).toBeTruthy();
-    const spyRemove = spyOn(component, 'removeWidgets').and.callThrough();
     btnTrashIcon.click();
-    expect(spyRemove).toHaveBeenCalled();
-    expect(component.inputFrameWidgetItems.length).toBeLessThanOrEqual(0);
+    expect(popUpConfirmSpy).toHaveBeenCalled();
   });
+
+  it('should remove the selected widget after confirming the popup', fakeAsync(() => {
+    component.viewNewStation = true;
+    component.editMode = true;
+    const modeConfig = 'layout';
+    component.setGridMode(modeConfig);
+    component.widgetFocused = 1;
+    fixture.detectChanges();
+    component.inputFrameWidgetItems = [
+      {
+        frameRithmId: '',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [],
+        type: '',
+        data: '',
+        id: 0,
+      },
+      {
+        frameRithmId: '',
+        cols: 6,
+        rows: 4,
+        x: 7,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [],
+        type: '',
+        data: '',
+        id: 1,
+      },
+    ];
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.returnValue(Promise.resolve(true));
+    const removeSpy = spyOn(component, 'removeWidgets').and.callThrough();
+    fixture.detectChanges();
+    const btnTrashIcon = fixture.debugElement.nativeElement.querySelector(
+      '#button-remove-widget'
+    );
+    expect(btnTrashIcon).toBeTruthy();
+    btnTrashIcon.click();
+    expect(removeSpy).toHaveBeenCalled();
+    expect(popUpConfirmSpy).toHaveBeenCalled();
+    tick(100);
+    expect(component.inputFrameWidgetItems).toHaveSize(1);
+  }));
 
   it('should open drawer left when click in button toggle-left-drawer  ', () => {
     component.viewNewStation = true;
@@ -795,27 +863,64 @@ describe('StationComponent', () => {
 
   it('should call sidenavService and display setting drawer', () => {
     const spyDrawer = spyOn(TestBed.inject(SidenavDrawerService), 'openDrawer');
-    component.openRightDrawer();
-    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting');
+    component.openSettingDrawer(question);
+    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting', question);
   });
 
-  it('should add a new input frame widget to the array of input frames', () => {
-    expect(component.inputFrameWidgetItems).toHaveSize(0);
-    component.addInputFrame();
-    expect(component.inputFrameWidgetItems).toHaveSize(1);
-  });
-
-  it('should add more than one input frame with different id', () => {
-    expect(component.inputFrameWidgetItems).toHaveSize(0);
-
-    component.addInputFrame();
-    expect(component.inputFrameWidgetItems.length).toBe(1);
-
-    component.addInputFrame();
-    expect(component.inputFrameWidgetItems.length).toBe(2);
-
-    expect(component.inputFrameWidgetItems[0].id).not.toEqual(
-      component.inputFrameWidgetItems[1].id
+  it('should call sidenavService and close setting drawer', () => {
+    const drawerContext = 'fieldSetting';
+    TestBed.inject(SidenavDrawerService).drawerContext$.next(drawerContext);
+    spyOnProperty(
+      TestBed.inject(SidenavDrawerService),
+      'isDrawerOpen'
+    ).and.returnValue(true);
+    const spyCloseDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'closeDrawer'
     );
+    component.closeSettingDrawer();
+    expect(spyCloseDrawer).toHaveBeenCalled();
+  });
+
+  describe('should add value to the array of input frames', () => {
+    it('should add a new input frame widget ', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+      component.addInputFrame(FrameType.Input);
+      expect(component.inputFrameWidgetItems).toHaveSize(1);
+    });
+
+    it('should add more than one input frame with different id', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+
+      component.addInputFrame(FrameType.Input);
+      expect(component.inputFrameWidgetItems.length).toBe(1);
+
+      component.addInputFrame(FrameType.Input);
+      expect(component.inputFrameWidgetItems.length).toBe(2);
+
+      expect(component.inputFrameWidgetItems[0].id).not.toEqual(
+        component.inputFrameWidgetItems[1].id
+      );
+    });
+
+    it('should add a new title widget ', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+      component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems).toHaveSize(1);
+    });
+
+    it('should add more than one title widget with different id', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+
+      component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems.length).toBe(1);
+
+      component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems.length).toBe(2);
+
+      expect(component.inputFrameWidgetItems[0].id).not.toEqual(
+        component.inputFrameWidgetItems[1].id
+      );
+    });
   });
 });
