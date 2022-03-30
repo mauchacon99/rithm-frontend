@@ -74,7 +74,7 @@ textarea {
   }
 
   .h-gridster {
-    height: calc(100% - 20px);
+    @apply w-full;
   }
 
   .drag-handler {

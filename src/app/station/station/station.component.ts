@@ -833,7 +833,7 @@ export class StationComponent
         inputFrame.rows = 1;
         inputFrame.minItemCols = 24;
         inputFrame.minItemRows = 1;
-        inputFrame.type = FrameType.Body;
+        inputFrame.type = FrameType.Headline;
         break;
       case FrameType.Body:
         inputFrame.cols = 6;
