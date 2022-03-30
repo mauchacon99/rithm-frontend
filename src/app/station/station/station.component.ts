@@ -65,6 +65,9 @@ export class StationComponent
   /** The information about the station. */
   stationInformation!: StationInformation;
 
+  /** Different types of input frames components.*/
+  frameType = FrameType;
+
   /** Station Rithm id. */
   stationRithmId = '';
 
@@ -132,6 +135,12 @@ export class StationComponent
 
   inputFrameWidgetItems: InputFrameWidget[] = [];
 
+  /** The current focused/selected widget. */
+  widgetFocused = -1;
+
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
+
   /** Loading / Error variables. */
 
   /** Whether the request to get the station info is currently underway. */
@@ -139,9 +148,6 @@ export class StationComponent
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
-
-  /** Indicates when the button to move the widget will be enabled. */
-  widgetMoveButton = -1;
 
   constructor(
     private stationService: StationService,
@@ -237,19 +243,6 @@ export class StationComponent
   }
 
   /**
-   * Listen the flowButtonText subject.
-   */
-  private subscribeFlowButtonText(): void {
-    this.stationService.flowButtonText$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        if (this.stationInformation) {
-          this.stationInformation.flowButton = data.length ? data : 'Flow';
-        }
-      });
-  }
-
-  /**
    * Populate and update possibleAnswers for an specific question.
    *
    * @param answer The question we are adding possible answers to.
@@ -300,7 +293,6 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
-    this.subscribeFlowButtonText();
 
     if (!this.editMode) this.setGridMode('preview');
   }
@@ -502,12 +494,6 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
-
-      // Update flow button text.
-      this.stationService.updateFlowButtonText(
-        this.stationInformation.rithmId,
-        this.stationInformation.flowButton
-      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -523,7 +509,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , , stationQuestions]) => {
+        next: ([, , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
@@ -734,6 +720,7 @@ export class StationComponent
     if (this.options.draggable) {
       this.options.draggable.enabled = enabledMode;
     }
+    this.widgetFocused = -1;
     /* Execute changes. */
     this.changedOptions();
   }
@@ -795,8 +782,20 @@ export class StationComponent
   }
 
   /** Remove widgets from the gridster in layout mode. */
-  removeWidgets(): void {
-    this.inputFrameWidgetItems.length = 0;
+  async removeWidgets(): Promise<void> {
+    if (this.widgetFocused > -1) {
+      const confirmRemove = await this.popupService.confirm({
+        title: 'Remove widget?',
+        message: '\nThe selected widget will be removed.',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirmRemove) {
+        this.inputFrameWidgetItems.splice(this.widgetFocused, 1);
+        this.widgetFocused = -1;
+      }
+    }
   }
 
   /**
@@ -804,7 +803,9 @@ export class StationComponent
    *
    * @param type Information referent to widget selected.
    */
-   addInputFrame(type: string | CdkDragDrop<string, string, string>): void {
+  addInputFrame(
+    type: CdkDragDrop<string, string, FrameType> | FrameType
+  ): void {
     const inputFrame: InputFrameWidget = {
       frameRithmId: '',
       cols: 6,
@@ -818,14 +819,19 @@ export class StationComponent
       data: '',
       id: this.inputFrameWidgetItems.length,
     };
+
+    /**
+     * Identify typeof type, in case is emitted by CdkDragDrop it
+     * gonna be an object and in case comes from a click method it will be a string.
+     */
     const value: string = typeof type === 'string' ? type : type.item.data;
 
-    //Add individual properties for every Type.
+    /**Add individual properties for every Type. */
     switch (value) {
       case FrameType.Headline:
-        inputFrame.cols = 19;
-        inputFrame.rows = 2;
-        inputFrame.minItemCols = 20;
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
         inputFrame.minItemRows = 1;
         inputFrame.type = FrameType.Body;
         break;
@@ -870,6 +876,15 @@ export class StationComponent
    */
   trackBy(index: number, item: GridsterItem): number {
     return item.id;
+  }
+
+  /**
+   * Allow to select/unselect any clicked widget.
+   *
+   * @param index The index of the selected widget.
+   */
+  focusWidget(index: number): void {
+    this.widgetFocused = index === this.widgetFocused ? -1 : index;
   }
 
   /**

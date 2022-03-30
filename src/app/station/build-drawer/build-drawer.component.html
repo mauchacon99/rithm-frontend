@@ -38,7 +38,6 @@
       data-testid="input-frame-container"
       cdkDropList
       cdkDropListConnectedTo="station-grid"
-      #customFieldsContainer="cdkDropList"
     >
       <div
         cdkDrag
@@ -56,7 +55,6 @@
       data-testid="custom-fields-container"
       cdkDropList
       [cdkDropListConnectedTo]="inputFrameList"
-      #customFieldsContainer="cdkDropList"
       [cdkDropListData]="customFields"
     >
       <div
@@ -109,13 +107,14 @@
     </div>
     <div
       *ngSwitchCase="'Components'"
-      id="components-container"
-      data-testid="components-container"
+      id="custom-component-container"
+      data-testid="custom-component-container"
       cdkDropList
       cdkDropListConnectedTo="station-grid"
-      #customComponentContainer="cdkDropList"
     >
       <div
+        cdkDrag
+        [cdkDragData]="customComponent.type"
         *ngFor="let customComponent of customComponents; let i = index"
         id="{{ customComponent.prompt }}-{{ i }}"
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
