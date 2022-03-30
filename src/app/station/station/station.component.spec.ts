@@ -856,7 +856,7 @@ describe('StationComponent', () => {
     expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting');
   });
 
-  fdescribe('should add value to the array of input frames', () => {
+  describe('should add value to the array of input frames', () => {
     it('should add a new input frame widget ', () => {
       expect(component.inputFrameWidgetItems).toHaveSize(0);
       component.addInputFrame(FrameType.Input);
