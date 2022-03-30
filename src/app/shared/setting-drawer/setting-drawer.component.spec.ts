@@ -40,4 +40,10 @@ describe('SettingDrawerComponent', () => {
     sideNavService.drawerData$.next(field);
     expect(component.fieldSetting).toBe(field);
   });
+
+  it('should subscribe drawerData', () => {
+    const drawerSpy = spyOn(component, <never>'subscribeDrawerData');
+    component.ngOnInit();
+    expect(drawerSpy).toHaveBeenCalled();
+  });
 });
