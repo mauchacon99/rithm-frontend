@@ -1,6 +1,6 @@
 import { STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
 import { Point } from 'src/models';
-import { StationMapElement } from '.';
+import { StationMapElement } from '..';
 
 /**
  * Represents all information about the map boundary box.

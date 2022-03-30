@@ -12,3 +12,7 @@
     font-size: 0.5rem !important;
   }
 }
+
+.screen-box {
+  @apply absolute left-0 -top-1 w-full z-[9];
+}
