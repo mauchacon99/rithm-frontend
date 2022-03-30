@@ -130,7 +130,7 @@ describe('GroupListHierarchyComponent', () => {
       'getStationGroups'
     ).and.callThrough();
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalledOnceWith('');
+    expect(spyService).toHaveBeenCalledOnceWith('', 1);
   });
 
   it('should show error message when request station widget document  data', () => {
@@ -202,20 +202,52 @@ describe('GroupListHierarchyComponent', () => {
     const itemGroup = fixture.nativeElement.querySelector(
       '#group-item-' + subStationGroups.rithmId
     );
+    expect(itemGroup).toBeTruthy();
     itemGroup.click();
     expect(method).toHaveBeenCalled();
+  });
+
+  it('should clicked in item station', () => {
+    component.isLoading = false;
+    component.isErrorGetGroups = false;
+    fixture.detectChanges();
+    const method = spyOn(component, 'selectedListItem');
     const itemStation = fixture.nativeElement.querySelector(
       '#station-item-' + stations.rithmId
     );
+    expect(itemStation).toBeTruthy();
     itemStation.click();
     expect(method).toHaveBeenCalled();
   });
 
   it('should emit value when selected item', () => {
-    const method = spyOn(component, 'selectedListItem').and.callThrough();
     const getSelectedItem = spyOn(component.getSelectedItem, 'emit');
     component.selectedListItem(subStationGroups);
-    expect(method).toHaveBeenCalled();
     expect(getSelectedItem).toHaveBeenCalledOnceWith(subStationGroups);
+  });
+
+  it('should reload get stations group', () => {
+    component.isLoading = false;
+    component.isErrorGetGroups = false;
+    const spyMethod = spyOn(component, 'getStationGroups');
+    component.stationGroups = {
+      rithmId: '6375027-78345-73824-54244',
+      title: 'Station Group',
+      subStationGroups: [],
+      stations: [],
+      users: [],
+      admins: [],
+      isChained: true,
+      isImplicitRootStationGroup: true,
+    };
+    fixture.detectChanges();
+
+    const btnReload = fixture.debugElement.nativeElement.querySelector(
+      '#reload-get-stations-group'
+    );
+
+    expect(btnReload).toBeTruthy();
+    btnReload.click();
+    expect(spyMethod).toHaveBeenCalled();
   });
 });
