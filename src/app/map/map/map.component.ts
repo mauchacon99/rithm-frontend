@@ -32,7 +32,7 @@ export class MapComponent {
             true
           );
           //Note that the data from the backend has been received.
-          this.mapService.mapDataReceived$.next(true);
+          this.mapService.mapHelper.mapDataReceived$.next(true);
         },
       });
   }
