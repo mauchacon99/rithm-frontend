@@ -1,5 +1,9 @@
-import { CdkDragDrop, copyArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  CdkDragDrop,
+  copyArrayItem,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -29,8 +33,9 @@ export class InputFrameWidgetComponent {
   /** The list of questionFieldTypes. */
   fieldTypes = QuestionFieldType;
 
-  /** Event Emitter will open a configuration drawer on the right side of the station. */
-  @Output() toggleRightDrawer: EventEmitter<void> = new EventEmitter();
+  /** Event Emitter will open a field setting drawer on the right side of the station. */
+  @Output() openSettingDrawer: EventEmitter<Question> =
+    new EventEmitter<Question>();
 
   /**
    * Add the element draggable to the questions field.
@@ -63,6 +68,12 @@ export class InputFrameWidgetComponent {
     }
     if (event.container.id !== event.previousContainer.id) {
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
+    } else {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     }
   }
 
@@ -120,8 +131,12 @@ export class InputFrameWidgetComponent {
 
   /**
    * Open setting drawer.
+   *
+   * @param field The field for the setting drawer.
    */
-  openSettingDrawer(): void {
-    this.toggleRightDrawer.emit();
+  openFieldSettingDrawer(field: Question): void {
+    if (this.widgetMode === 'setting') {
+      this.openSettingDrawer.emit(field);
+    }
   }
 }

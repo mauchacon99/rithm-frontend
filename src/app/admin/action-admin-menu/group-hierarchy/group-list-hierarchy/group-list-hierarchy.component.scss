@@ -1,0 +1,29 @@
+@import 'variables';
+
+.color-border {
+  border-color: map-get($primary-palette, 50);
+}
+
+.item-select-groups {
+  .mat-list-option {
+    @apply rounded-sm;
+  }
+
+  .mat-list-item:hover {
+    @apply bg-accent-100;
+  }
+
+  .mat-list-single-selected-option {
+    @apply bg-accent-50;
+  }
+
+  ::ng-deep {
+    .mat-list-text {
+      padding: 0 !important;
+    }
+
+    .mat-list-item-content {
+      @apply pr-0;
+    }
+  }
+}

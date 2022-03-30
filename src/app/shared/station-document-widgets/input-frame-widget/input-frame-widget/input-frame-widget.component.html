@@ -7,12 +7,13 @@
     (cdkDropListDropped)="addElementDrag($event)"
   >
     <div *ngFor="let field of fields" cdkDrag>
+      <div class="field-drag-placeholder" *cdkDragPlaceholder></div>
       <app-text-field
         [field]="field"
         [isStation]="true"
         [labelTag]="field.prompt"
         [widgetItem]="true"
-        (click)="widgetMode === 'setting' && openSettingDrawer()"
+        (click)="openFieldSettingDrawer(field)"
       ></app-text-field>
     </div>
   </div>

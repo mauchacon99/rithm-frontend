@@ -63,16 +63,21 @@ textarea {
   .gridster-row {
     @apply border-secondary-50;
   }
+
+  .gridster-item {
+    @apply px-0 pb-0 rounded transition-colors;
+  }
+
   //Widget item in layout mode
   .widget-item-layout {
-    @apply border-2 border-primary-100 p-0 rounded transition-colors hover:border-accent-500;
+    @apply border-2 border-secondary-100 hover:border-accent-500;
   }
 
   .h-gridster {
     height: calc(100% - 20px);
   }
 
-  .button-drag-handler {
+  .drag-handler {
     @apply text-accent-500 bg-white hover:bg-accent-300 hover:text-white hover:cursor-move absolute top-0 right-0 z-10 rounded-full shadow-xl border-secondary-100;
 
     position: absolute !important;
