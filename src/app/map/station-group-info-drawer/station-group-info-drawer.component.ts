@@ -68,15 +68,17 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     private popupService: PopupService
   ) {
     //Subscribe to the mapMode on the mapService.
-    this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
-      next: (mapMode) => {
-        //set this.currentMode to the subscribed mapMode.
-        this.currentMode = mapMode;
-      },
-      error: (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
-      },
-    });
+    this.mapService.mapHelper.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (mapMode) => {
+          //set this.currentMode to the subscribed mapMode.
+          this.currentMode = mapMode;
+        },
+        error: (error: unknown) => {
+          throw new Error(`Map overlay subscription error: ${error}`);
+        },
+      });
 
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -105,7 +107,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
           this.mapService.stationGroupElements[
             currentStationIndex
           ].drawerOpened = true;
-          this.mapService.mapDataReceived$.next(true);
+          this.mapService.mapHelper.mapDataReceived$.next(true);
         }
       });
   }
@@ -116,7 +118,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'stationGroupInfo'): void {
-    this.mapService.isDrawerOpened$.next(false);
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 
@@ -145,7 +147,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   get stationGroupCenter(): boolean {
     const drawer = document.getElementsByTagName('mat-drawer');
     //Call method to selected station is in center of the map.
-    return this.mapService.checkCenter(
+    return this.mapService.centerHelper.checkCenter(
       CenterPanType.StationGroup,
       drawer[0] ? drawer[0].clientWidth : 0
     );
@@ -156,15 +158,23 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * Reporting if the name or isChained on a station group changed.
    */
   reportNewStationGroupMapChange(): void {
-    const index = this.mapService.stationGroupElements.findIndex(
-      (stGroup) => stGroup.rithmId === this.stationGroupRithmId
+    const index =
+      this.mapService.mapStationGroupHelper.stationGroupElements.findIndex(
+        (stGroup) => stGroup.rithmId === this.stationGroupRithmId
+      );
+    this.mapService.mapStationGroupHelper.stationGroupElements[index].title =
+      this.groupName
+        .trimStart()
+        .trimEnd();
+    this.mapService.mapStationGroupHelper.stationGroupElements[
+      index
+    ].isChained = this.isChained;
+    this.mapService.mapStationGroupHelper.stationGroupElements[
+      index
+    ].markAsUpdated();
+    this.mapService.mapStationGroupHelper.stationGroupElementsChanged$.next(
+      true
     );
-    this.mapService.stationGroupElements[index].title = this.groupName
-      .trimStart()
-      .trimEnd();
-    this.mapService.stationGroupElements[index].isChained = this.isChained;
-    this.mapService.stationGroupElements[index].markAsUpdated();
-    this.mapService.stationGroupElementsChanged$.next(true);
   }
 
   /**
@@ -197,7 +207,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     //If user confirms.
     if (confirm) {
       //Remove the station group using the method in map.service.
-      this.mapService.removeStationGroup(this.stationGroupRithmId);
+      this.mapService.mapStationGroupHelper.removeStationGroup(
+        this.stationGroupRithmId
+      );
       //Close the drawer.
       this.sidenavDrawerService.toggleDrawer('stationGroupInfo');
     }
@@ -207,17 +219,17 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    * While station group is selected & drawer opened, Method called for selected station to centering in the map.
    */
   centerStationGroup(): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Get the map drawer element.
     const drawer = document.getElementsByTagName('mat-drawer');
     //Increment centerCount to show that more centering of station needs to be done.
-    this.mapService.centerCount$.next(1);
+    this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.center(
+    this.mapService.centerHelper.center(
       CenterPanType.StationGroup,
       drawer[0] ? drawer[0].clientWidth : 0
     );

@@ -1,5 +1,5 @@
 import { MapItemStatus, StationMapData } from 'src/models';
-import { BoundaryMapElement, StationMapElement } from '.';
+import { BoundaryMapElement, StationMapElement } from '..';
 
 const TEST_STATIONS_DATA: StationMapData[] = [
   {

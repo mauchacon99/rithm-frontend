@@ -32,6 +32,7 @@ import { StationTemplateComponent } from 'src/app/station/station-template/stati
 import { StationService } from 'src/app/core/station.service';
 import {
   FlowLogicRule,
+  FrameType,
   OperandType,
   OperatorType,
   Question,
@@ -610,9 +611,14 @@ describe('StationComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
 
+    const spyCloseSetting = spyOn(
+      component,
+      'closeSettingDrawer'
+    ).and.callThrough();
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
+    expect(spyCloseSetting).toHaveBeenCalled();
     expect(component.options.displayGrid).toEqual(<displayGrids>displayGrid);
     expect(component.options.resizable?.enabled).toBeTrue();
     expect(component.options.draggable?.enabled).toBeTrue();
@@ -636,8 +642,14 @@ describe('StationComponent', () => {
     component.editMode = true;
     component.isOpenDrawerLeft = true;
     fixture.detectChanges();
+
+    const spyCloseSetting = spyOn(
+      component,
+      'closeSettingDrawer'
+    ).and.callThrough();
     const spyGridMode = spyOn(component, 'setGridMode').and.callThrough();
     component.setGridMode(modeConfig);
+    expect(spyCloseSetting).toHaveBeenCalled();
     expect(spyGridMode).toHaveBeenCalledWith(modeConfig);
     expect(component.isOpenDrawerLeft).toBeFalsy();
   });
@@ -851,23 +863,38 @@ describe('StationComponent', () => {
 
   it('should call sidenavService and display setting drawer', () => {
     const spyDrawer = spyOn(TestBed.inject(SidenavDrawerService), 'openDrawer');
-    component.openRightDrawer();
-    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting');
+    component.openSettingDrawer(question);
+    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting', question);
+  });
+
+  it('should call sidenavService and close setting drawer', () => {
+    const drawerContext = 'fieldSetting';
+    TestBed.inject(SidenavDrawerService).drawerContext$.next(drawerContext);
+    spyOnProperty(
+      TestBed.inject(SidenavDrawerService),
+      'isDrawerOpen'
+    ).and.returnValue(true);
+    const spyCloseDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'closeDrawer'
+    );
+    component.closeSettingDrawer();
+    expect(spyCloseDrawer).toHaveBeenCalled();
   });
 
   it('should add a new input frame widget to the array of input frames', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems).toHaveSize(1);
   });
 
   it('should add more than one input frame with different id', () => {
     expect(component.inputFrameWidgetItems).toHaveSize(0);
 
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems.length).toBe(1);
 
-    component.addInputFrame();
+    component.addInputFrame(FrameType.Input);
     expect(component.inputFrameWidgetItems.length).toBe(2);
 
     expect(component.inputFrameWidgetItems[0].id).not.toEqual(

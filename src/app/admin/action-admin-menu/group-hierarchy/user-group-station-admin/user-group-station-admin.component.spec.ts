@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MockComponent } from 'ng-mocks';
 import { StationListGroup, StationGroupData } from 'src/models';
+import { ExpansionMemberGroupAdminComponent } from '../expansion-member-group-admin/expansion-member-group-admin.component';
 
 import { UserGroupStationAdminComponent } from './user-group-station-admin.component';
 
@@ -63,7 +66,11 @@ describe('UserGroupStationAdminComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserGroupStationAdminComponent],
+      declarations: [
+        UserGroupStationAdminComponent,
+        MockComponent(ExpansionMemberGroupAdminComponent),
+      ],
+      imports: [MatExpansionModule],
     }).compileComponents();
   });
 

@@ -31,7 +31,7 @@
       *ngIf="!stationLoading"
       [stationId]="stationInformation.rithmId"
       (toggleDrawer)="toggleLeftDrawer()"
-      (addInputFrame)="addInputFrame()"
+      (addInputFrame)="addInputFrame($event)"
       [inputFrameList]="inputFrameList"
     ></app-build-drawer>
   </mat-drawer>
@@ -369,8 +369,11 @@
                     class="gridster-container pb-4 w-full"
                     cdkDropList
                     id="station-grid"
-                    cdkDropListConnectedTo="input-frame-container"
-                    (cdkDropListDropped)="addInputFrame()"
+                    [attr.cdkDropListConnectedTo]="[
+                      'input-frame-container',
+                      'custom-component-container'
+                    ]"
+                    (cdkDropListDropped)="addInputFrame($event)"
                   >
                     <gridster
                       class="p-0 bg-transparent h-screen"
@@ -410,7 +413,7 @@
                             [stationRithmId]="stationRithmId"
                             [id]="widgetItem.id"
                             [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                            (toggleRightDrawer)="openRightDrawer()"
+                            (openSettingDrawer)="openSettingDrawer($event)"
                           ></app-input-frame-widget>
                         </div>
                       </gridster-item>
