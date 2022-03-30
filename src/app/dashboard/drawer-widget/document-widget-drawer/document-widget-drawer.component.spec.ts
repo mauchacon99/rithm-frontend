@@ -374,4 +374,26 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(component.isLoadingProfileImage).toBeTrue();
     expect(loading).toBeTruthy();
   });
+
+  it('should show  profile section when showImage is true ', () => {
+    component.showImageBanner = true;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    fixture.detectChanges();
+    const section = fixture.debugElement.nativeElement.querySelector(
+      '#profile-image-section-drawer'
+    );
+    expect(section).toBeTruthy();
+  });
+
+  it('should not  show  profile section when showImage is false ', () => {
+    component.showImageBanner = false;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    fixture.detectChanges();
+    const section = fixture.debugElement.nativeElement.querySelector(
+      '#profile-image-section-drawer'
+    );
+    expect(section).toBeNull();
+  });
 });

@@ -54,8 +54,9 @@
 <div
   *ngIf="
     dataDrawerDocument?.widgetItem?.widgetType ===
-    enumWidgetType.ContainerProfileBanner
+      enumWidgetType.ContainerProfileBanner && showImageBanner
   "
+  id="profile-image-section-drawer"
 >
   <hr class="text-secondary-100" />
   <!-- Profile image section -->

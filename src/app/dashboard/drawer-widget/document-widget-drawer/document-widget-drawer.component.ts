@@ -27,7 +27,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  * Component for Station widget drawer.
  */
 @Component({
-  selector: 'app-document-widget-drawer',
+  selector: 'app-document-widget-drawer[showImageBanner]',
   templateUrl: './document-widget-drawer.component.html',
   styleUrls: ['./document-widget-drawer.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -44,6 +44,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       this.updateWidget();
     }
   }
+
+  /** RithmId of station or stationGroup to search. */
+  @Input() showImageBanner = true;
 
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
