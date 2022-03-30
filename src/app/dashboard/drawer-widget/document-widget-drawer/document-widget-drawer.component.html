@@ -71,7 +71,7 @@
       ></app-loading-indicator>
     </div>
     <mat-form-field
-      *ngIf="!failedLoadDrawerProfileImage && !isLoadingProfileImage"
+      *ngIf="!failedLoadProfileImageData && !isLoadingProfileImage"
       appearance="outline"
       class="w-full"
     >
@@ -102,7 +102,7 @@
       </mat-select>
     </mat-form-field>
     <div
-      *ngIf="failedLoadDrawerProfileImage"
+      *ngIf="failedLoadProfileImageData"
       class="text-error-500 text-center my-4"
       id="display-document-image-profile-drawer-error"
     >

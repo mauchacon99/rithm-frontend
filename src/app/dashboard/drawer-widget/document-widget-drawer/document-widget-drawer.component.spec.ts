@@ -331,6 +331,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(errorMessage).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
     expect(component.isLoadingProfileImage).toBeFalse();
+    expect(component.failedLoadProfileImageData).toBeTrue();
   });
 
   it('should call method to get document images in service', () => {
