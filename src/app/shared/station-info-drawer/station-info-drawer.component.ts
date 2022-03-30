@@ -293,7 +293,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   get displayCreateDocumentButton(): boolean {
     return (
       this.stationDocumentGenerationStatus ===
-      DocumentGenerationStatus.Manual &&
+        DocumentGenerationStatus.Manual &&
       (this.mapMode === MapMode.View ||
         this.mapMode === MapMode.Build ||
         this.mapMode === undefined) &&
@@ -330,10 +330,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       status === 'None' && statusNew.checked
         ? DocumentGenerationStatus.None
         : status === 'None' && !statusNew.checked
-          ? DocumentGenerationStatus.Manual
-          : status === 'Manual' && statusNew.checked
-            ? DocumentGenerationStatus.Manual
-            : DocumentGenerationStatus.None;
+        ? DocumentGenerationStatus.Manual
+        : status === 'Manual' && statusNew.checked
+        ? DocumentGenerationStatus.Manual
+        : DocumentGenerationStatus.None;
 
     this.updateStationDocumentGenerationStatus(this.stationRithmId, value);
   }
