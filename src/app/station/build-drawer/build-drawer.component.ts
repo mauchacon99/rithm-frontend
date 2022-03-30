@@ -188,7 +188,6 @@ export class BuildDrawerComponent implements OnInit {
     this.toggleDrawer.emit();
   }
 
-
   /**
    * Will add a new input frame in the station grid.
    *
