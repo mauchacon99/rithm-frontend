@@ -820,7 +820,9 @@ export class StationComponent
    *
    * @param type Information referent to widget selected.
    */
-  addInputFrame( type: CdkDragDrop<string, string, FrameType> | FrameType): void {
+  addInputFrame(
+    type: CdkDragDrop<string, string, FrameType> | FrameType
+  ): void {
     const inputFrame: StationFrameWidget = {
       rithmId: this.randRithmId,
       stationRithmId: this.stationRithmId,
