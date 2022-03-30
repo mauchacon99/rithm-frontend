@@ -25,12 +25,8 @@ export class UserGroupStationAdminComponent {
    * @returns Name element.
    */
   get nameElement(): string {
-    if (this.selectedItem) {
-      return 'name' in this.selectedItem
-        ? this.selectedItem.name
-        : this.selectedItem.title;
-    } else {
-      return '';
-    }
+    return 'name' in this.selectedItem
+      ? this.selectedItem.name
+      : this.selectedItem.title;
   }
 }
