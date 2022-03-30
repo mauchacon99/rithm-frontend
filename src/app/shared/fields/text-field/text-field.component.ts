@@ -269,6 +269,7 @@ export class TextFieldComponent
       message: `Are you sure you want to remove this field?`,
       okButtonText: 'Remove',
       cancelButtonText: 'Close',
+      important: true,
     });
     if (confirm) {
       this.removeField(field);

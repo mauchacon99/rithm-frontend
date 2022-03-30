@@ -277,6 +277,7 @@ describe('TextFieldComponent', () => {
       message: `Are you sure you want to remove this field?`,
       okButtonText: 'Remove',
       cancelButtonText: 'Close',
+      important: true,
     };
     const popupSpy = spyOn(
       TestBed.inject(PopupService),
