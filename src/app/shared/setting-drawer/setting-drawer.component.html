@@ -1,9 +1,10 @@
 <div class="grid grid-cols-1 px-4">
-  <div class="w-full py-2">
+  <div class="w-full py-2" *ngIf="fieldSetting">
     <!-- Title -->
     <div class="col-span-12 py-5">
       <h6>Field Settings</h6>
     </div>
+    <!-- Label -->
     <div class="col-span-12">
       <mat-form-field appearance="outline" class="w-full mat-setting-input">
         <mat-label>Label</mat-label>
@@ -12,7 +13,8 @@
           type="text"
           id="field-setting-input"
           data-testid="field-setting-input"
-          placeholder="Placeholder"
+          placeholder="{{ fieldSetting.prompt }}"
+          [(ngModel)]="fieldSetting.value"
         />
       </mat-form-field>
     </div>
