@@ -70,9 +70,26 @@ describe('DocumentWidgetDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentWidgetDrawerComponent);
     component = fixture.componentInstance;
-    component.quantityElementsWidget = 2;
     sideNavService = TestBed.inject(SidenavDrawerService);
     fixture.detectChanges();
+    component.dataDrawerDocument = {
+      widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+        cols: 4,
+        data: '{"documentRithmId":"1bda1a41-e86a-4031-b3f5-f2329e108db5","columns":[]}',
+        maxItemCols: 0,
+        maxItemRows: 0,
+        minItemCols: 0,
+        minItemRows: 0,
+        rows: 2,
+        widgetType: WidgetType.Document,
+        x: 0,
+        y: 0,
+        profileImageId: '123132',
+      },
+      widgetIndex: 0,
+      quantityElementsWidget: 2,
+    };
   });
 
   it('should create', () => {
@@ -82,11 +99,14 @@ describe('DocumentWidgetDrawerComponent', () => {
   it('Should subscribe to SidenavDrawerService.drawerData$', () => {
     const dataWidget = JSON.parse(dataEditWidget.widgetItem.data);
     const spyEmit = spyOn(component.setWidgetIndex, 'emit').and.callThrough();
-
     sideNavService.drawerData$.next(dataEditWidget);
-    expect(component.widgetIndex).toEqual(dataEditWidget.widgetIndex);
-    expect(component.widgetItem).toEqual(dataEditWidget.widgetItem);
-    expect(component.quantityElementsWidget).toEqual(
+    expect(component.dataDrawerDocument.widgetIndex).toEqual(
+      dataEditWidget.widgetIndex
+    );
+    expect(component.dataDrawerDocument.widgetItem).toEqual(
+      dataEditWidget.widgetItem
+    );
+    expect(component.dataDrawerDocument.quantityElementsWidget).toEqual(
       dataEditWidget.quantityElementsWidget
     );
     expect(component.documentColumns).toEqual(dataWidget.columns);
@@ -228,17 +248,15 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should emit updateDataWidget$ to update widget', () => {
-    component.widgetItem = dataEditWidget.widgetItem;
-    component.widgetIndex = dataEditWidget.widgetIndex;
-    component.quantityElementsWidget = dataEditWidget.quantityElementsWidget;
     component.formColumns.setValue(['1020-65sdvsd4-05060708-090trhrth']);
     component.questions = [];
     const expectData = {
-      widgetItem: component.widgetItem,
-      widgetIndex: component.widgetIndex,
-      quantityElementsWidget: component.quantityElementsWidget,
+      widgetItem: component.dataDrawerDocument.widgetItem,
+      widgetIndex: component.dataDrawerDocument.widgetIndex,
+      quantityElementsWidget:
+        component.dataDrawerDocument.quantityElementsWidget,
     };
-    const expectDocmentColumns = [
+    const expectDocumentColumns = [
       {
         name: 'Question Document',
         questionId: component.formColumns.value[0],
@@ -251,11 +269,11 @@ describe('DocumentWidgetDrawerComponent', () => {
 
     component['updateWidget']();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
-    expect(component.documentColumns).toEqual(expectDocmentColumns);
+    expect(component.documentColumns).toEqual(expectDocumentColumns);
   });
 
   it('should render message for show user this document not have questions assigned', () => {
-    component.quantityElementsWidget = 0;
+    component.dataDrawerDocument.quantityElementsWidget = 0;
     component.isLoading = false;
     fixture.detectChanges();
     const renderMessage = fixture.debugElement.nativeElement.querySelector(
@@ -265,7 +283,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should no render message for show user this document not have questions assigned', () => {
-    component.quantityElementsWidget = 1;
+    component.dataDrawerDocument.quantityElementsWidget = 1;
     component.isLoading = false;
     fixture.detectChanges();
     const renderMessage = fixture.debugElement.nativeElement.querySelector(
@@ -286,6 +304,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     component['getDocumentWidget']();
     fixture.detectChanges();
     expect(component.failedLoadDrawer).toBeTrue();
+    expect(component.isLoading).toBeFalse();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-drawer-error'
     );
@@ -322,13 +341,17 @@ describe('DocumentWidgetDrawerComponent', () => {
       imageId: '123-456-789',
       imageName: 'Image name',
     };
-    component.widgetItem = dataEditWidget.widgetItem;
+    component.dataDrawerDocument.widgetItem = dataEditWidget.widgetItem;
     const spyMethod = spyOn(component, 'updateWidget');
 
     component.image = image;
 
     expect(spyMethod).toHaveBeenCalled();
-    expect(component.widgetItem.imageId).toEqual(image.imageId);
-    expect(component.widgetItem.imageName).toEqual(image.imageName);
+    expect(component.dataDrawerDocument.widgetItem.imageId).toEqual(
+      image.imageId
+    );
+    expect(component.dataDrawerDocument.widgetItem.imageName).toEqual(
+      image.imageName
+    );
   });
 });
