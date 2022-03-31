@@ -30,16 +30,28 @@
     <div
       class="w-full md:w-[calc(100%-300px)] md:h-[calc(100vh-165px)] h-full md:flex md:overflow-auto"
     >
-      <ng-container
-        *ngFor="
-          let columnStationGroup of columnsStationGroupRithmId;
-          index as index
-        "
+      <div
+        class="w-full md:hidden overflow-x-auto p-3"
+        *ngIf="groupItemListSelected.length > 1"
       >
+        <ul class="flex flex-row">
+          <li
+            *ngFor="let list of groupItemListSelected; index as index"
+            class="ml-2 whitespace-nowrap"
+            (click)="moveList(index)"
+          >
+            {{ list.name + ' / ' }}
+          </li>
+        </ul>
+      </div>
+      <ng-container *ngFor="let list of groupItemListSelected; index as index">
         <app-group-list-hierarchy
-          [stationGroupRithmId]="columnStationGroup"
+          [stationGroupRithmId]="list.rithmId"
           [depthGroup]="index + 1"
           (getSelectedItem)="setSelectItem($event, index)"
+          [ngClass]="{
+            'hidden md:block': index !== groupItemListSelected.length - 1
+          }"
         ></app-group-list-hierarchy>
       </ng-container>
     </div>
