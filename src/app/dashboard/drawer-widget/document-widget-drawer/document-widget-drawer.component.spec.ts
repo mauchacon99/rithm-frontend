@@ -326,7 +326,6 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
     component.showProfileImageBanner = true;
-    component.getImagesDocuments();
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-image-profile-drawer-error'

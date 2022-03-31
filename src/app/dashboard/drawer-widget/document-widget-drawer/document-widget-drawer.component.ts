@@ -45,7 +45,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** RithmId of station or stationGroup to search. */
+  /** Show profile image banner. */
   @Input() set showProfileImageBanner(value: boolean) {
     if (
       this.dataDrawerDocument?.widgetItem?.widgetType ===
