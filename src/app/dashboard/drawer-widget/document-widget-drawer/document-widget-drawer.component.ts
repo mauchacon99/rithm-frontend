@@ -61,7 +61,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get shoe profile image permission.
+   * Get show profile image permission.
    *
    * @returns Profile image permission.
    */
