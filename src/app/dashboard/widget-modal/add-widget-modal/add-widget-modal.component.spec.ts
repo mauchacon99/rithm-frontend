@@ -23,6 +23,7 @@ import {
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
+import { ComingSoonMessageComponent } from 'src/app/shared/coming-soon-message/coming-soon-message.component';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -64,6 +65,7 @@ describe('AddWidgetModalComponent', () => {
         MockComponent(CustomTabWidgetModalComponent),
         MockComponent(ListWidgetModalComponent),
         MockComponent(DescriptionWidgetModalComponent),
+        MockComponent(ComingSoonMessageComponent),
       ],
     }).compileComponents();
   });

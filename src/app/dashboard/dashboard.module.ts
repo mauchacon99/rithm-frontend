@@ -11,6 +11,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatRippleModule } from '@angular/material/core';
+
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StationCardComponent } from './station-card/station-card.component';
@@ -34,13 +39,9 @@ import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-dra
 import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-drawer.component';
 import { LoadingWidgetComponent } from './widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-widget-modal.component';
-import { MatRippleModule } from '@angular/material/core';
 import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ItemListWidgetModalComponent } from './widget-modal/item-list-widget-modal/item-list-widget-modal.component';
 import { BannerImageWidgetComponent } from './widgets/banner-image-widget/banner-image-widget.component';
 import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-widget-modal.component';
@@ -50,7 +51,7 @@ import { DescriptionWidgetModalComponent } from './widget-modal/description-widg
 import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-search-widget.component';
 import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar-image-widget.component';
-import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-soon-message.module';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
 @NgModule({
   declarations: [
@@ -87,26 +88,27 @@ import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-so
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    MatInputModule,
+    ComingSoonMessageModule,
     ReactiveFormsModule,
     GridsterModule,
-    MatCardModule,
     LoadingIndicatorModule,
     RosterModule,
     StationDocumentsModalModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatExpansionModule,
-    MatListModule,
     UserAvatarModule,
     DocumentModule,
-    MatMenuModule,
     FormsModule,
     MatSelectModule,
     MatDialogModule,
     MatRippleModule,
     MatTableModule,
     MatTabsModule,
+    MatInputModule,
+    MatMenuModule,
+    MatCardModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatExpansionModule,
+    MatListModule,
     MatButtonToggleModule,
     ComingSoonMessageModule,
   ],
