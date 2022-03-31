@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
@@ -11,7 +14,7 @@ describe('SettingDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingDrawerComponent],
-      imports: [MatSlideToggleModule],
+      imports: [MatInputModule, NoopAnimationsModule, FormsModule, MatSlideToggleModule],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
