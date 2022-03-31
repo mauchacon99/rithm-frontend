@@ -1,6 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DocumentService } from 'src/app/core/document.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { UploadFileModalComponent } from './upload-file-modal.component';
+import { CommonModule } from '@angular/common';
 
 describe('UploadFileModalComponent', () => {
   let component: UploadFileModalComponent;
@@ -8,8 +21,22 @@ describe('UploadFileModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [{ provide: MatDialogRef, useValue: { close } }],
+      providers: [
+        { provide: MatDialogRef, useValue: { close } },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: DocumentService, useValue: MockDocumentService },
+        { provide: ErrorService, useValue: MockErrorService },
+      ],
       declarations: [UploadFileModalComponent],
+      imports: [
+        MatDialogModule,
+        RouterTestingModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatProgressBarModule,
+        CommonModule,
+      ],
     }).compileComponents();
   });
 

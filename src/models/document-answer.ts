@@ -17,7 +17,7 @@ export interface DocumentAnswer {
   value: string;
 
   /** File to answer. */
-  file?: string;
+  file?: File;
 
   /** Name to file answer. */
   filename?: string;

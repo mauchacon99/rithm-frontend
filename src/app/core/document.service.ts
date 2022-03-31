@@ -193,6 +193,12 @@ export class DocumentService {
           : element.value.replace(/\s/g, '')
       );
       formData.append(`answers[${index}].type`, element.type);
+      if (element.type === QuestionFieldType.File && element.file) {
+        formData.append(`answers[${index}].file`, element.file);
+      }
+      if (element.type === QuestionFieldType.File && element.filename) {
+        formData.append(`answers[${index}].filename`, element.filename);
+      }
       formData.append(`answers[${index}].questionUpdated`, 'true');
     });
     return this.http.post<DocumentAnswer[]>(

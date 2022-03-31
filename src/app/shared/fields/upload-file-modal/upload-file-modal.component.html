@@ -4,7 +4,7 @@
     <h4 class="text-center">Upload File</h4>
   </div>
   <!-- File upload -->
-  <div class="flex justify-center mb-2">
+  <div *ngIf="!isLoading" class="flex justify-center mb-2">
     <div class="w-full pb-4 pt-6">
       <div class="flex items-center justify-center w-full">
         <div
@@ -32,10 +32,32 @@
             type="file"
             id="upload-file-input"
             data-testid="upload-file-input"
-            [hidden]="true"
+            (change)="onFileSelected($event)"
           />
         </div>
       </div>
+    </div>
+  </div>
+  <div *ngIf="false" class="flex w-full items-center justify-start">
+    <div class="w-14 text-center">
+      <i class="fa-solid fa-file text-4xl text-secondary-300 px-2 py-3"></i>
+    </div>
+    <div class="w-4/5">
+      <span class="block text-sm py-1">Document text</span>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="progress"
+      ></mat-progress-bar>
+      <span class="block text-xs py-1">12kb of 20kb</span>
+    </div>
+    <div class="w-13 text-center">
+      <i class="fas fa-times text-xl text-secondary-500 px-2 py-3"></i>
+    </div>
+  </div>
+  <div *ngIf="isLoading" class="flex w-full items-center justify-start">
+    <div class="w-full">
+      <span class="block text-sm py-1">{{ this.file?.name }}</span>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
   </div>
   <div mat-dialog-actions class="flex justify-end space-x-4">
@@ -57,9 +79,10 @@
       data-testid="save-modal-btn"
       id="save-modal-btn"
       class="pl-3"
-      [disabled]="true"
+      [disabled]="fileCount === 0 || isLoading"
+      (click)="saveData()"
     >
-      Save
+      Done
     </button>
   </div>
 </div>

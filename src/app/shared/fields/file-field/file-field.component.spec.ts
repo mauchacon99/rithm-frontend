@@ -7,13 +7,18 @@ import {
   MatDialog,
   MatDialogModule,
   MatDialogRef,
+  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
 import { FileFieldComponent } from './file-field.component';
-import { MockDocumentService } from 'src/mocks';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { DocumentService } from 'src/app/core/document.service';
 import { UploadFileModalComponent } from 'src/app/shared/fields/upload-file-modal/upload-file-modal.component';
+import { MockComponent } from 'ng-mocks';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ErrorService } from 'src/app/core/error.service';
+import { CommonModule } from '@angular/common';
 
 const FIELD: Question = {
   rithmId: '3j4k-3h2j-hj4j',
@@ -40,7 +45,10 @@ describe('FileFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FileFieldComponent],
+      declarations: [
+        FileFieldComponent,
+        MockComponent(UploadFileModalComponent),
+      ],
       imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -48,11 +56,15 @@ describe('FileFieldComponent', () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
         MatDialogModule,
+        RouterTestingModule,
+        CommonModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: DocumentService, useValue: MockDocumentService },
         { provide: MatDialogRef, useValue: { close } },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: ErrorService, useValue: MockErrorService },
       ],
     }).compileComponents();
   });
@@ -95,6 +107,7 @@ describe('FileFieldComponent', () => {
       maxWidth: '500px',
       minHeight: '345px',
       disableClose: true,
+      data: component.field,
     };
     const dialogSpy = spyOn(
       TestBed.inject(MatDialog),
