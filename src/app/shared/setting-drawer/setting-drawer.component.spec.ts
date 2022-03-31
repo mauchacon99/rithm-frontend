@@ -6,6 +6,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('SettingDrawerComponent', () => {
   let component: SettingDrawerComponent;
@@ -14,7 +15,13 @@ describe('SettingDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingDrawerComponent],
-      imports: [MatInputModule, NoopAnimationsModule, FormsModule, MatSlideToggleModule],
+      imports: [
+        MatInputModule,
+        NoopAnimationsModule,
+        FormsModule,
+        MatSlideToggleModule,
+        MatButtonModule,
+      ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -43,7 +50,7 @@ describe('SettingDrawerComponent', () => {
       children: [],
     };
     sideNavService.drawerData$.next(field);
-    expect(component.fieldSetting).toBe(field);
+    expect(component.fieldSetting).toBeUndefined(field);
   });
 
   it('should subscribe drawerData', () => {
