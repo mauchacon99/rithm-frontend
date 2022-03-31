@@ -751,9 +751,9 @@ describe('StationComponent', () => {
 
     const spySaveChange = spyOn(
       component,
-      'saveStationChanges'
+      'saveStationFramesChanges'
     ).and.callThrough();
-    component.saveStationChanges();
+    component.saveStationFramesChanges();
     expect(spySaveChange).toHaveBeenCalled();
     expect(component.editMode).toBeFalsy();
   });
@@ -788,7 +788,8 @@ describe('StationComponent', () => {
     fixture.detectChanges();
     component.inputFrameWidgetItems = [
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 0,
@@ -796,12 +797,13 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 0,
       },
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 7,
@@ -809,7 +811,7 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 1,
       },
