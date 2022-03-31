@@ -159,6 +159,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
+  /** The station group rithm Id centered on the map. */
+  private centerStationGroupRithmId = '';
+
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
 
@@ -282,6 +285,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.centerStationRithmId = stationRithmId;
       });
 
+    // Subscription is available for the station group centered on the map.
+    this.mapService.mapStationHelper.centerStationGroupRithmId$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationGroupRithmId) => {
+        this.centerStationGroupRithmId = stationGroupRithmId;
+      });
+
     //This subscribe shows if any station group has to be edited.
     this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$
       .pipe(takeUntil(this.destroyed$))
@@ -384,6 +394,51 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
                 // Center the map on the station.
                 this.mapService.centerHelper.center(
                   CenterPanType.Station,
+                  drawer[0] ? drawer[0].clientWidth : 0
+                );
+              }, 5);
+              this.mapService.mapHelper.viewStationButtonClick$.next(false);
+            }
+          } else if (this.centerStationGroupRithmId !== '') {
+            //Find the station group through rithmId
+            const stationGroupCenter =
+              this.mapService.stationGroupElements.find(
+                (stationGroup) =>
+                  stationGroup.rithmId === this.centerStationGroupRithmId
+              );
+            //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+            this.mapService.centerHelper.centerActive$.next(true);
+            //Increment centerCount to show that more centering of station needs to be done.
+            this.mapService.centerHelper.centerCount$.next(1);
+            // If drawer isn't open and there is station group to be centered.
+            if (
+              !this.mapService.mapHelper.isDrawerOpened$.value &&
+              stationGroupCenter
+            ) {
+              this.mapService.mapHelper.isDrawerOpened$.next(true);
+              const drawer = document.getElementsByTagName('mat-drawer');
+              const dataInformationDrawer: StationGroupInfoDrawerData = {
+                stationGroupRithmId: stationGroupCenter.rithmId,
+                stationGroupName: stationGroupCenter.title,
+                editMode:
+                  this.mapService.mapHelper.mapMode$.value === MapMode.Build,
+                numberOfStations: stationGroupCenter.stations.length,
+                numberOfSubgroups: stationGroupCenter.subStationGroups.length,
+                stationGroupStatus: stationGroupCenter.status,
+                isChained: stationGroupCenter.isChained,
+              };
+              //Open station group info drawer when station group is selected.
+              this.sidenavDrawerService.openDrawer(
+                'stationGroupInfo',
+                dataInformationDrawer
+              );
+              stationGroupCenter.drawerOpened = true;
+              //Increment centerCount to show that more centering of station group needs to be done.
+              this.mapService.centerHelper.centerCount$.next(1);
+              //Call method to run logic for centering of the station group.
+              setTimeout(() => {
+                this.mapService.centerHelper.center(
+                  CenterPanType.StationGroup,
                   drawer[0] ? drawer[0].clientWidth : 0
                 );
               }, 5);
