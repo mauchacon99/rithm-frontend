@@ -501,4 +501,17 @@ export class MockMapService {
       this.resetSelectedStationGroupStationStatus();
     }
   }
+
+  /**
+   * Reset the map elements.
+   */
+  resetMapElements(): void {
+    this.mapStationHelper.stationElements = [];
+    this.mapStationGroupHelper.stationGroupElements = [];
+    this.mapConnectionHelper.connectionElements = [];
+
+    this.mapStationHelper.storedStationElements = [];
+    this.mapStationGroupHelper.storedStationGroupElements = [];
+    this.mapConnectionHelper.storedConnectionElements = [];
+  }
 }
