@@ -32,6 +32,15 @@ describe('SettingDrawerComponent', () => {
     fixture = TestBed.createComponent(SettingDrawerComponent);
     component = fixture.componentInstance;
     sideNavService = TestBed.inject(SidenavDrawerService);
+    component.fieldSetting = {
+      prompt: 'Fake question 1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
     fixture.detectChanges();
   });
 
