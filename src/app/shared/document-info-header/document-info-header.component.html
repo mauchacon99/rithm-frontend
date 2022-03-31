@@ -134,24 +134,24 @@
   id="section-current-worker"
   class="border-b border-secondary-400"
 >
-  <ng-container
-    *ngIf="
-      isDocumentNameEditable && isUserAdminOrOwner;
-      then inputEditDocumentName;
-      else nonEditableDocNameWidget
-    "
-  ></ng-container>
-  <ng-template #nonEditableDocNameWidget>
-    <div class="py-2 border-b border-secondary-400">
+  <div class="py-2 border-b border-secondary-400">
+    <ng-container
+      *ngIf="
+        isDocumentNameEditable && isUserAdminOrOwner;
+        then inputEditDocumentName;
+        else nonEditableDocNameWidget
+      "
+    ></ng-container>
+    <ng-template #nonEditableDocNameWidget>
       <p class="font-semibold">
         {{ documentName }}
       </p>
+    </ng-template>
 
-      <p class="text-xs">
-        {{ stationNameDocument }}
-      </p>
-    </div>
-  </ng-template>
+    <p class="text-xs">
+      {{ stationNameDocument }}
+    </p>
+  </div>
 
   <div class="flex justify-between items-center p-1">
     <div *ngIf="currentAssignedUserDocument?.rithmId; else startButton">
@@ -228,10 +228,12 @@
         <mat-label>Document Name:</mat-label>
         <input
           id="name"
+          data-testid="name"
           type="text"
           matInput
           matNativeControl
-          placeholder="Untitled document"
+          autocomplete="off"
+          placeholder="Untitled container"
           formControlName="name"
           (keyup)="updateDocumentNameBS()"
         />

@@ -359,12 +359,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   updateDocumentNameBS(): void {
     const baseName = this.documentNameForm.controls['name'];
     const documentName: DocumentName = {
-      baseName: baseName.value?.trim(),
+      baseName: baseName.value?.trim() || 'Untitled container',
       appendedName: this.appendedDocumentName,
     };
-    if (documentName.baseName) {
-      this.documentService.updateDocumentNameBS(documentName);
-    } else {
+
+    this.documentService.updateDocumentNameBS(documentName);
+    if (!baseName.value?.trim()) {
       baseName.setValue(baseName.value?.trim());
     }
   }
