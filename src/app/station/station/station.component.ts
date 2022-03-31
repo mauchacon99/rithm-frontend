@@ -874,7 +874,7 @@ export class StationComponent
    *
    * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openSettingDrawer(field: Question): void {
+  openSettingDrawer(field: Question | string): void {
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
