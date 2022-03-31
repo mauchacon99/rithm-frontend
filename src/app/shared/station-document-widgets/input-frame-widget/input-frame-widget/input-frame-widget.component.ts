@@ -70,7 +70,7 @@ export class InputFrameWidgetComponent {
       newQuestion.possibleAnswers = [];
     }
     if (event.container.id !== event.previousContainer.id) {
-      if (this.fields.length >= 3) {
+      if (this.fields && this.fields.length >= 3) {
         this.frameWidget.emit(true);
       }
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);

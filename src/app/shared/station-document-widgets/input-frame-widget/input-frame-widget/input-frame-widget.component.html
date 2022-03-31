@@ -7,21 +7,14 @@
     [cdkDropListData]="fields"
     (cdkDropListDropped)="addElementDrag($event)"
   >
-    <div *ngFor="let field of fields" cdkDrag class="relative">
+    <div *ngFor="let field of fields" cdkDrag>
+      <div class="field-drag-placeholder" *cdkDragPlaceholder></div>
       <div
         class="screen-box h-[56px]"
         (click)="openFieldSettingDrawer(field)"
       ></div>
-      <div class="field-drag-placeholder" *cdkDragPlaceholder></div>
-      <div>
-        <button
-          mat-icon-button
-          type="button"
-          data-testid="button-related-station"
-          id="button-related-station"
-        >
-          <i class="fa-solid fa-book-open"></i>
-        </button>
+      <div class="input-box">
+        <i class="fa-solid fa-book-open"></i>
         <app-text-field
           [field]="field"
           [isStation]="true"
