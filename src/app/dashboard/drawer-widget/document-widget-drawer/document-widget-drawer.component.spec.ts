@@ -313,7 +313,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  fit('should show error message when the document images request fails', () => {
+  it('should show error message when the document images request fails', () => {
     const spyError = spyOn(
       TestBed.inject(DocumentService),
       'getImagesDocuments'
@@ -331,6 +331,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-image-profile-drawer-error'
     );
+    expect(component.showProfileImageBanner).toBeTrue();
     expect(errorMessage).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
     expect(component.isLoadingProfileImage).toBeFalse();

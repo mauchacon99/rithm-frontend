@@ -45,15 +45,28 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Show section image document drawer. */
+  private _showProfileImageBanner = false;
+
   /** RithmId of station or stationGroup to search. */
   @Input() set showProfileImageBanner(value: boolean) {
+    this._showProfileImageBanner = value;
     if (
       this.dataDrawerDocument?.widgetItem?.widgetType ===
         WidgetType.ContainerProfileBanner &&
-      value
+      this._showProfileImageBanner
     ) {
       this.getImagesDocuments();
     }
+  }
+
+  /**
+   * Get data for station widget.
+   *
+   * @returns Data for station widget.
+   */
+  get showProfileImageBanner(): boolean {
+    return this._showProfileImageBanner;
   }
 
   /** Emit widgetIndex to widget-drawer. */
