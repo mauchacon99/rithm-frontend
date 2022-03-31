@@ -33,12 +33,12 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Output() frameWidget: EventEmitter<boolean> = new EventEmitter();
 
-  /** The list of questionFieldTypes. */
-  fieldTypes = QuestionFieldType;
-
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
+
+  /** The list of questionFieldTypes. */
+  fieldTypes = QuestionFieldType;
 
   /**
    * Add the element draggable to the questions field.
@@ -46,29 +46,28 @@ export class InputFrameWidgetComponent {
    * @param event Receive the element draggable as DragDrop type for move it.
    */
   addElementDrag(event: CdkDragDrop<Question[]>): void {
-    const fieldType =
-      event.previousContainer.data[event.previousIndex].questionType;
-    const prompt = event.previousContainer.data[event.previousIndex].prompt;
-    const newQuestion: Question = {
-      rithmId: this.randRithmId,
-      prompt: prompt,
-      questionType: fieldType,
-      isReadOnly: false,
-      isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
-      isPrivate: false,
-      children:
-        fieldType === QuestionFieldType.AddressLine
-          ? this.addAddressChildren()
-          : [],
-      originalStationRithmId: this.stationRithmId,
-    };
-    if (
-      fieldType === QuestionFieldType.CheckList ||
-      fieldType === QuestionFieldType.Select ||
-      fieldType === QuestionFieldType.MultiSelect
-    ) {
-      newQuestion.possibleAnswers = [];
-    }
+    const questionInfo = event.previousContainer.data[event.previousIndex];
+
+    const newQuestion: Question = questionInfo.rithmId
+      ? questionInfo
+      : {
+          rithmId: this.randRithmId,
+          prompt: questionInfo.prompt,
+          questionType: questionInfo.questionType,
+          isReadOnly: false,
+          isRequired:
+            questionInfo.questionType === QuestionFieldType.Instructions
+              ? true
+              : false,
+          isPrivate: false,
+          children:
+            questionInfo.questionType === QuestionFieldType.AddressLine
+              ? this.addAddressChildren()
+              : [],
+          originalStationRithmId: this.stationRithmId,
+          possibleAnswers: [],
+        };
+
     if (event.container.id !== event.previousContainer.id) {
       if (this.fields && this.fields.length >= 3) {
         this.frameWidget.emit(true);

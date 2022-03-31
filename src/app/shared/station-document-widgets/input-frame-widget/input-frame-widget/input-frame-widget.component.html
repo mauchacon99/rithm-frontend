@@ -13,7 +13,10 @@
         class="screen-box h-[56px]"
         (click)="openFieldSettingDrawer(field)"
       ></div>
-      <div class="previous-question-badge">
+      <div
+        class="previous-question-badge"
+        *ngIf="field.originalStationRithmId !== stationRithmId"
+      >
         <i class="fa-solid fa-book-open text-xs"></i>
       </div>
       <app-text-field
