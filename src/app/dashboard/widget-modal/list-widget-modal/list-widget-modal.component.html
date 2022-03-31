@@ -88,14 +88,19 @@
   <!-- Stations types list -->
   <div class="py-6">
     <p class="font-semibold">Search</p>
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-      <!-- Widget card type group -->
-      <app-group-widget-template-modal
-        (click)="emitPreviewWidgetSelected(enumWidgetType.StationGroupSearch)"
-        [widgetType]="enumWidgetType.StationGroupSearch"
-      >
-      </app-group-widget-template-modal>
+    <div *ngIf="showGroupTemplate; else comingSoon">
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+        <!-- Widget card type group -->
+        <app-group-widget-template-modal
+          (click)="emitPreviewWidgetSelected(enumWidgetType.StationGroupSearch)"
+          [widgetType]="enumWidgetType.StationGroupSearch"
+        >
+        </app-group-widget-template-modal>
+      </div>
     </div>
+    <ng-template #comingSoon>
+      <app-coming-soon-message></app-coming-soon-message>
+    </ng-template>
   </div>
   <hr class="text-secondary-100" />
 </section>

@@ -5,13 +5,16 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
  * The component for list widget modal.
  */
 @Component({
-  selector: 'app-list-widget-modal[itemWidgetModalSelected]',
+  selector: 'app-list-widget-modal[itemWidgetModalSelected][showGroupTemplate]',
   templateUrl: './list-widget-modal.component.html',
   styleUrls: ['./list-widget-modal.component.scss'],
 })
 export class ListWidgetModalComponent {
   /** Item widget modal selected. */
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Show group widget template. */
+  @Input() showGroupTemplate = false;
 
   /** Title preview widget selected emit. */
   @Output() previewWidgetSelected = new EventEmitter<

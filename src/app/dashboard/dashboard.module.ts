@@ -50,6 +50,7 @@ import { DescriptionWidgetModalComponent } from './widget-modal/description-widg
 import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-search-widget.component';
 import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar-image-widget.component';
+import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-soon-message.module';
 
 @NgModule({
   declarations: [
@@ -107,6 +108,7 @@ import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar
     MatTableModule,
     MatTabsModule,
     MatButtonToggleModule,
+    ComingSoonMessageModule,
   ],
 })
 export class DashboardModule {}

@@ -14,7 +14,15 @@ import { SelectedItemWidgetModel } from 'src/models';
 import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
 import { DescriptionWidgetModalComponent } from 'src/app/dashboard/widget-modal/description-widget-modal/description-widget-modal.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { MockDashboardService } from 'src/mocks';
+import {
+  MockDashboardService,
+  MockErrorService,
+  MockSplitService,
+  MockUserService,
+} from 'src/mocks';
+import { UserService } from 'src/app/core/user.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { SplitService } from 'src/app/core/split.service';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -46,6 +54,9 @@ describe('AddWidgetModalComponent', () => {
         { provide: MatDialogRef, useValue: { close } },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+        { provide: UserService, useClass: MockUserService },
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
       imports: [MatTabsModule, NoopAnimationsModule, MatDialogModule],
       declarations: [
@@ -121,5 +132,76 @@ describe('AddWidgetModalComponent', () => {
     btnReturnCustom.click();
     expect(component.previewWidgetTypeSelected).toBeNull();
     expect(component.identifyShowElement).toEqual('document');
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    let userService: UserService;
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
+    });
+
+    it('should get split for group widget.', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const method = spyOn(
+        splitService,
+        'getGroupSectionAddWidgetTreatment'
+      ).and.callThrough();
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+      expect(component.showGroupTemplate).toBeDefined();
+    });
+
+    it('should show group widget when permission exits.', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const method = spyOn(
+        splitService,
+        'getGroupSectionAddWidgetTreatment'
+      ).and.returnValue('on');
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+      expect(component.showGroupTemplate).toBeTrue();
+    });
+
+    it('should not show group widget when permission does not exits.', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const method = spyOn(
+        splitService,
+        'getGroupSectionAddWidgetTreatment'
+      ).and.returnValue('off');
+
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(method).toHaveBeenCalled();
+      expect(component.showGroupTemplate).toBeFalse();
+    });
+
+    it('should catch split error ', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+      expect(component.showGroupTemplate).toBeFalse();
+    });
   });
 });
