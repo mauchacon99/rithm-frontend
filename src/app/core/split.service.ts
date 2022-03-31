@@ -105,4 +105,13 @@ export class SplitService {
   public getGroupHierarchyMenuTreatment(): string {
     return this.splitClient.getTreatment('permissions_split');
   }
+
+  /**
+   * Get the profile banner split.
+   *
+   * @returns Split treatment.
+   */
+  public getProfileBannerTreatment(): string {
+    return this.splitClient.getTreatment('profile_banner_split');
+  }
 }

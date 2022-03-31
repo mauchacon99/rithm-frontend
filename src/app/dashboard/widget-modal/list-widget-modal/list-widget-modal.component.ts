@@ -1,5 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectedItemWidgetModel, WidgetType } from 'src/models';
+import { first } from 'rxjs/operators';
+import { UserService } from '../../../core/user.service';
+import { SplitService } from '../../../core/split.service';
+import { ErrorService } from '../../../core/error.service';
 
 /**
  * The component for list widget modal.
@@ -9,7 +13,7 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
   templateUrl: './list-widget-modal.component.html',
   styleUrls: ['./list-widget-modal.component.scss'],
 })
-export class ListWidgetModalComponent {
+export class ListWidgetModalComponent implements OnInit {
   /** Item widget modal selected. */
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
 
@@ -18,8 +22,38 @@ export class ListWidgetModalComponent {
     WidgetType | 'defaultDocument'
   >();
 
+  /** Show section document profile. */
+  isContainerProfileBanner = false;
+
   /** Enum widget types. */
   enumWidgetType = WidgetType;
+
+  constructor(
+    private userService: UserService,
+    private splitService: SplitService,
+    private errorService: ErrorService
+  ) {}
+
+  /**
+   * Initialize split on page load.
+   */
+  ngOnInit(): void {
+    this.split();
+  }
+
+  /** Split Service. */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.isContainerProfileBanner =
+          this.splitService.getDashboardTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
+  }
 
   /**
    * Emit preview widget selected.

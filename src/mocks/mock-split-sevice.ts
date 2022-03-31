@@ -92,4 +92,13 @@ export class MockSplitService {
   public getGroupHierarchyMenuTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the profile banner split.
+   *
+   * @returns Split treatment.
+   */
+  public getProfileBannerTreatment(): string {
+    return 'on';
+  }
 }

@@ -44,20 +44,23 @@
     </div>
   </div>
 
-  <hr class="text-secondary-100" />
   <!-- Document types Profiles -->
-  <div class="py-6">
-    <p class="font-semibold">Profiles</p>
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-      <!-- Widget card type container-profile-banner-widget -->
-      <app-document-widget-template-modal
-        (click)="
+  <ng-container *ngIf="isContainerProfileBanner; else comingSoonMessage">
+    <hr class="text-secondary-100" />
+    <div class="py-6">
+      <p class="font-semibold">Profiles</p>
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+        <!-- Widget card type container-profile-banner-widget -->
+        <app-document-widget-template-modal
+                (click)="
           emitPreviewWidgetSelected(enumWidgetType.ContainerProfileBanner)
         "
-        [widgetType]="enumWidgetType.ContainerProfileBanner"
-      ></app-document-widget-template-modal>
+                [widgetType]="enumWidgetType.ContainerProfileBanner"
+        ></app-document-widget-template-modal>
+      </div>
     </div>
-  </div>
+  </ng-container>
+
 </section>
 
 <!--Section for show station template-->
@@ -99,3 +102,7 @@
   </div>
   <hr class="text-secondary-100" />
 </section>
+
+<ng-template #comingSoonMessage>
+  <app-coming-soon-message></app-coming-soon-message>
+</ng-template>
