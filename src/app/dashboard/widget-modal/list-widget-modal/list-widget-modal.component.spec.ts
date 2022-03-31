@@ -8,7 +8,7 @@ import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-m
 import { GroupWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
-fdescribe('ListWidgetModalComponent', () => {
+describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
   let fixture: ComponentFixture<ListWidgetModalComponent>;
 
@@ -61,19 +61,19 @@ fdescribe('ListWidgetModalComponent', () => {
 
   it('should show group widget when permission is true', () => {
     component.showGroupTemplate = true;
-    itemWidgetModalSelected.itemType = 'group';
-    fixture.detectChanges();
-    const sectionPermissionDenied =
-      fixture.debugElement.nativeElement.querySelector('#comingSoon');
-    expect(sectionPermissionDenied).toBeTruthy();
-  });
-
-  it('should show group widget when permission is false', () => {
-    component.showGroupTemplate = false;
-    itemWidgetModalSelected.itemType = 'group';
+    component.itemWidgetModalSelected.itemType = 'group';
     fixture.detectChanges();
     const sectionPermissionDenied =
       fixture.debugElement.nativeElement.querySelector('#comingSoon');
     expect(sectionPermissionDenied).toBeNull();
+  });
+
+  it('should not show group widget when permission is false', () => {
+    component.showGroupTemplate = false;
+    component.itemWidgetModalSelected.itemType = 'group';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeTruthy();
   });
 });
