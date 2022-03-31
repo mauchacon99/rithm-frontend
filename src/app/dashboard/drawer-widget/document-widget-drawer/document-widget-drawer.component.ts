@@ -48,7 +48,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Show section image document drawer. */
   private _showProfileImageBanner = false;
 
-  /** Show profile image banner. */
+  /** Set profile image banner permission. */
   @Input() set showProfileImageBanner(value: boolean) {
     this._showProfileImageBanner = value;
     if (
@@ -61,9 +61,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get data for station widget.
+   * Get shoe profile image permission.
    *
-   * @returns Data for station widget.
+   * @returns Profile image permission.
    */
   get showProfileImageBanner(): boolean {
     return this._showProfileImageBanner;
