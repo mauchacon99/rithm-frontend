@@ -1,8 +1,11 @@
+import { FrameType } from './enums';
 import { Question } from './question';
 
-export interface InputFrameWidget {
-  /** Unique Id for each InputFrame. */
-  frameRithmId: string;
+export interface StationFrameWidget {
+  /** Unique Id for each StationFrame. */
+  rithmId: string;
+  /** The id of the specific station. */
+  stationRithmId: string;
   /** Number of columns that item spans. */
   cols: number;
   /** Number of rows that item spans. */
@@ -20,10 +23,10 @@ export interface InputFrameWidget {
   /** Maximum cols width the item is going to have in the grid. */
   maxItemCols?: number;
   /** The array of questions. */
-  questions: Question[];
+  questions?: Question[];
   /** Type each input frame. */
-  /** This is going to be updated with InputFrameType Enum. */
-  type: string;
+  /** This is going to be updated with FrameType Enum. */
+  type: FrameType;
   /** The data contained in each frame. */
   data: string;
   /** Id of the item. */
