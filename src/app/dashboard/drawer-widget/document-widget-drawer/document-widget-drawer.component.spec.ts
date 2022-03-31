@@ -328,9 +328,6 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.showProfileImageBanner = true;
     component.getImagesDocuments();
     fixture.detectChanges();
-
-    console.log((component.showProfileImageBanner = true));
-    console.log(component.showProfileImageBanner);
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-image-profile-drawer-error'
     );
