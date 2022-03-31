@@ -749,9 +749,9 @@ describe('StationComponent', () => {
 
     const spySaveChange = spyOn(
       component,
-      'saveStationChanges'
+      'saveStationFramesChanges'
     ).and.callThrough();
-    component.saveStationChanges();
+    component.saveStationFramesChanges();
     expect(spySaveChange).toHaveBeenCalled();
     expect(component.editMode).toBeFalsy();
   });
@@ -786,7 +786,8 @@ describe('StationComponent', () => {
     fixture.detectChanges();
     component.inputFrameWidgetItems = [
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 0,
@@ -794,12 +795,13 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 0,
       },
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 7,
@@ -807,7 +809,7 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 1,
       },
@@ -882,23 +884,45 @@ describe('StationComponent', () => {
     expect(spyCloseDrawer).toHaveBeenCalled();
   });
 
-  it('should add a new input frame widget to the array of input frames', () => {
-    expect(component.inputFrameWidgetItems).toHaveSize(0);
-    component.addInputFrame(FrameType.Input);
-    expect(component.inputFrameWidgetItems).toHaveSize(1);
-  });
+  describe('should add value to the array of input frames', () => {
+    it('should add a new input frame widget ', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+      component.addInputFrame(FrameType.Input);
+      expect(component.inputFrameWidgetItems).toHaveSize(1);
+    });
 
-  it('should add more than one input frame with different id', () => {
-    expect(component.inputFrameWidgetItems).toHaveSize(0);
+    it('should add more than one input frame with different id', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
 
-    component.addInputFrame(FrameType.Input);
-    expect(component.inputFrameWidgetItems.length).toBe(1);
+      component.addInputFrame(FrameType.Input);
+      expect(component.inputFrameWidgetItems.length).toBe(1);
 
-    component.addInputFrame(FrameType.Input);
-    expect(component.inputFrameWidgetItems.length).toBe(2);
+      component.addInputFrame(FrameType.Input);
+      expect(component.inputFrameWidgetItems.length).toBe(2);
 
-    expect(component.inputFrameWidgetItems[0].id).not.toEqual(
-      component.inputFrameWidgetItems[1].id
-    );
+      expect(component.inputFrameWidgetItems[0].id).not.toEqual(
+        component.inputFrameWidgetItems[1].id
+      );
+    });
+
+    it('should add a new title widget ', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+      component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems).toHaveSize(1);
+    });
+
+    it('should add more than one title widget with different id', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+
+      component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems.length).toBe(1);
+
+      component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems.length).toBe(2);
+
+      expect(component.inputFrameWidgetItems[0].id).not.toEqual(
+        component.inputFrameWidgetItems[1].id
+      );
+    });
   });
 });

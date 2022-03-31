@@ -20,7 +20,7 @@ import {
   Question,
   PossibleAnswer,
   FlowLogicRule,
-  InputFrameWidget,
+  StationFrameWidget,
   FrameType,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -134,7 +134,7 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: InputFrameWidget[] = [];
+  inputFrameWidgetItems: StationFrameWidget[] = [];
 
   /** The current focused/selected widget. */
   widgetFocused = -1;
@@ -768,11 +768,27 @@ export class StationComponent
   }
 
   /**
-   * Save the changes make in the gridster.
+   * Save or update the changes make the station frame widgets.
    */
-  saveStationChanges(): void {
+  saveStationFramesChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
+
+    this.inputFrameWidgetItems.map((field) => {
+      field.data = JSON.stringify(field.questions);
+    });
+
+    this.stationService
+      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /** This cancel button clicked show alert. */
@@ -815,8 +831,9 @@ export class StationComponent
   addInputFrame(
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
-    const inputFrame: InputFrameWidget = {
-      frameRithmId: '',
+    const inputFrame: StationFrameWidget = {
+      rithmId: this.randRithmId,
+      stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
       x: 0,
@@ -844,7 +861,14 @@ export class StationComponent
         inputFrame.minItemRows = 2;
         inputFrame.type = FrameType.Body;
         break;
-
+      case FrameType.Title:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
+        inputFrame.minItemRows = 1;
+        inputFrame.maxItemRows = 1;
+        inputFrame.type = FrameType.Title;
+        break;
       default:
         break;
     }
