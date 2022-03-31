@@ -396,7 +396,10 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster relative overflow-hidden">
+                        <div
+                          class="h-gridster relative overflow-hidden"
+                          [ngSwitch]="widgetItem.type"
+                        >
                           <button
                             mat-icon-button
                             type="button"
@@ -406,8 +409,8 @@
                           >
                             <i class="fas fa-arrows fa-xl"></i>
                           </button>
-
                           <app-input-frame-widget
+                            *ngSwitchDefault
                             [fields]="widgetItem.questions"
                             [stationViewMode]="editMode ? 'edit' : 'preview'"
                             [stationRithmId]="stationRithmId"
@@ -415,6 +418,11 @@
                             [widgetMode]="layoutMode ? 'layout' : 'setting'"
                             (openSettingDrawer)="openSettingDrawer($event)"
                           ></app-input-frame-widget>
+                          <app-body-text-widget
+                            *ngSwitchCase="frameType.Body"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                            (openSettingDrawer)="openSettingDrawer($event)"
+                          ></app-body-text-widget>
                         </div>
                       </gridster-item>
                     </gridster>

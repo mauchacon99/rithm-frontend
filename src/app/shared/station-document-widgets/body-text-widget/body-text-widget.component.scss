@@ -1,0 +1,6 @@
+.screen-box {
+  @apply absolute left-1 right-1 bottom-1 top-1 z-[9];
+
+  height: calc(100% - 8px);
+  width: calc(100% - 8px);
+}
