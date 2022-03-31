@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { InputFrameWidgetComponent } from './input-frame-widget.component';
 
 import {
@@ -13,6 +12,17 @@ import { Question, QuestionFieldType } from 'src/models';
 describe('InputFrameWidgetComponent', () => {
   let component: InputFrameWidgetComponent;
   let fixture: ComponentFixture<InputFrameWidgetComponent>;
+  const firstList: Question[] = [
+    {
+      prompt: 'Fake question 1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -34,17 +44,6 @@ describe('InputFrameWidgetComponent', () => {
   describe('TestDragDropElements', () => {
     it('should call the method that copy the new inputs in widget', async () => {
       const secondList: Question[] = [];
-      const firstList: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
 
       const cdkEvent = {
         container: { data: firstList, id: 'form-inputs' },
@@ -116,9 +115,11 @@ describe('InputFrameWidgetComponent', () => {
     });
   });
 
-  it('should emit event toggleRightDrawer', () => {
-    const spyEmit = spyOn(component.toggleRightDrawer, 'emit');
-    component.openSettingDrawer();
-    expect(spyEmit).toHaveBeenCalled();
+  it('should emit event openSettingDrawer', () => {
+    component.widgetMode = 'setting';
+    const spyEmit = spyOn(component.openSettingDrawer, 'emit');
+    const field = firstList[0];
+    component.openFieldSettingDrawer(field);
+    expect(spyEmit).toHaveBeenCalledWith(field);
   });
 });

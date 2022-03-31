@@ -16,6 +16,17 @@ export class UserGroupStationAdminComponent {
    * @returns Is group.
    */
   get isGroup(): boolean {
-    return 'stations' in this.selectedItem ? true : false;
+    return 'stations' in this.selectedItem;
+  }
+
+  /**
+   * Return name or title depending typeof selectedItem.
+   *
+   * @returns Name element.
+   */
+  get nameElement(): string {
+    return 'name' in this.selectedItem
+      ? this.selectedItem.name
+      : this.selectedItem.title;
   }
 }

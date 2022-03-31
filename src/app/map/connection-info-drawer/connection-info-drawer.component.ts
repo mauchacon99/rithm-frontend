@@ -86,7 +86,7 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
       });
 
     //Subscribe to the mapMode so that we can track it.
-    this.mapService.mapMode$
+    this.mapService.mapHelper.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
         this.mapMode = mapMode;
