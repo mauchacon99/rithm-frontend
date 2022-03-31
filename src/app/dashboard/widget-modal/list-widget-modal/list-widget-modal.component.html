@@ -44,12 +44,11 @@
     </div>
   </div>
 
-  <!-- Document types Profiles -->
-  <ng-container *ngIf="isContainerProfileBanner; else comingSoonMessage">
     <hr class="text-secondary-100" />
+    <!-- Document types Profiles -->
     <div class="py-6">
       <p class="font-semibold">Profiles</p>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5" *ngIf="isContainerProfileBanner; else comingSoonMessage">
         <!-- Widget card type container-profile-banner-widget -->
         <app-document-widget-template-modal
                 (click)="
@@ -59,7 +58,6 @@
         ></app-document-widget-template-modal>
       </div>
     </div>
-  </ng-container>
 
 </section>
 

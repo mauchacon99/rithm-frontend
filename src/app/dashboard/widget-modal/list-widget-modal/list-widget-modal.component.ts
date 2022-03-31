@@ -47,7 +47,7 @@ export class ListWidgetModalComponent implements OnInit {
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         this.isContainerProfileBanner =
-          this.splitService.getDashboardTreatment() === 'on';
+          this.splitService.getProfileBannerTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
