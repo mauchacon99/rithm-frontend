@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { first } from 'rxjs/operators';
-import { UserService } from '../../../core/user.service';
-import { SplitService } from '../../../core/split.service';
-import { ErrorService } from '../../../core/error.service';
+import { UserService } from 'src/app/core/user.service';
+import { SplitService } from 'src/app/core/split.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * The component for list widget modal.
