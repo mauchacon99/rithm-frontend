@@ -5,10 +5,8 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.input-box .fa-book-open {
-  @apply inline-flex items-center justify-center w-5 h-5 absolute z-10 -left-[9px] -mt-[9px] rounded-full bg-secondary-200 text-white;
-
-  font-size: 0.5rem !important;
+.previous-question-badge {
+  @apply absolute z-[3] -left-2 -top-2 inline-flex items-center justify-center p-0 w-[22px] h-[22px] rounded-full text-white text-center bg-secondary-200;
 }
 
 .screen-box {

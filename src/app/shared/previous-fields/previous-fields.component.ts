@@ -47,6 +47,9 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   /** Custom fields to form input category data from build drawer component. */
   @Input() customFields: CustomField[] = [];
 
+  /** Contains the list of inputFrame created. */
+  @Input() inputFrameList: string[] = [];
+
   /** The list of station private/all questions. */
   questions: Question[] = [];
 

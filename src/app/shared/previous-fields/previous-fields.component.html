@@ -9,6 +9,7 @@
         class="cursor-pointer"
         (click)="moveFieldToTemplate(previousField)"
         *ngFor="let previousField of questions"
+        cdkDrag
       >
         <mat-card class="padding-card">
           <div
@@ -105,18 +106,26 @@
   </div>
   <ng-template #previousFields>
     <div
-      class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
-      data-testid="previous-all-fields"
-      *ngFor="let previousField of questions"
+      cdkDropList
+      [cdkDropListConnectedTo]="inputFrameList"
+      [cdkDropListData]="questions"
+      id="previous-fields-all"
+      data-testid="previous-fields-all"
     >
-      <p class="text-lg ml-auto text-primary-900 text-center truncate">
-        {{ previousField.prompt }}
-      </p>
-      <span
-        class="{{
-          getPreviousFieldIcon(previousField.questionType)
-        }} fa-lg ml-auto"
-      ></span>
+      <div
+        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        *ngFor="let previousField of questions"
+        cdkDrag
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center truncate">
+          {{ previousField.prompt }}
+        </p>
+        <span
+          class="{{
+            getPreviousFieldIcon(previousField.questionType)
+          }} fa-lg ml-auto"
+        ></span>
+      </div>
     </div>
     <ng-container *ngIf="questions.length === 0 && !questionsError">
       <div

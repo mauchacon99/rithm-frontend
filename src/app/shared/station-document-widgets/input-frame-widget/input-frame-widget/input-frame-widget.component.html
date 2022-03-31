@@ -7,21 +7,21 @@
     [cdkDropListData]="fields"
     (cdkDropListDropped)="addElementDrag($event)"
   >
-    <div *ngFor="let field of fields" cdkDrag>
+    <div *ngFor="let field of fields" cdkDrag class="relative">
       <div class="field-drag-placeholder" *cdkDragPlaceholder></div>
       <div
         class="screen-box h-[56px]"
         (click)="openFieldSettingDrawer(field)"
       ></div>
-      <div class="input-box">
-        <i class="fa-solid fa-book-open"></i>
-        <app-text-field
-          [field]="field"
-          [isStation]="true"
-          [labelTag]="field.prompt"
-          [widgetItem]="true"
-        ></app-text-field>
+      <div class="previous-question-badge">
+        <i class="fa-solid fa-book-open text-xs"></i>
       </div>
+      <app-text-field
+        [field]="field"
+        [isStation]="true"
+        [labelTag]="field.prompt"
+        [widgetItem]="true"
+      ></app-text-field>
     </div>
   </div>
 </ng-container>
