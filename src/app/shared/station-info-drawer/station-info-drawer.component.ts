@@ -140,6 +140,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
 
+  /**
+   * Whether the station is selected and it's in center of the map.
+   *
+   * @returns True if the selected station in center of the map, false otherwise.
+   */
+  get stationCenter(): boolean {
+    const drawer = document.getElementsByTagName('mat-drawer');
+    //Call method to selected station is in center of the map.
+    return this.mapService.centerHelper.checkCenter(
+      CenterPanType.Station,
+      drawer[0] ? drawer[0].clientWidth : 0
+    );
+  }
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -197,7 +211,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                   currentStationIndex
                 ].drawerOpened = true;
               }
-              this.mapService.mapDataReceived$.next(true);
+              this.mapService.mapHelper.mapDataReceived$.next(true);
             }
             if (
               this.openedFromMap &&
@@ -299,20 +313,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       (this.openedFromMap && this.editMode && this.isUserAdminOrOwner) ||
       (!this.openedFromMap && this.editMode) ||
       (!this.openedFromMap && this.isUserAdminOrOwner)
-    );
-  }
-
-  /**
-   * Whether the selected station is map centered or not.
-   *
-   * @returns True if the selected station is map centered otherwise false.
-   */
-  get stationCenter(): boolean {
-    const drawer = document.getElementsByTagName('mat-drawer');
-    //Call method to selected station is in center of the map.
-    return this.mapService.checkCenter(
-      CenterPanType.Station,
-      drawer[0] ? drawer[0].clientWidth : 0
     );
   }
 
@@ -583,19 +583,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (status) {
             this.stationDocumentGenerationStatus = status;
           }
+          this.popupService.notify('The status has changed successfully');
         },
-        // eslint-disable-next-line
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.docGenLoading = false;
-          if (error?.status === 400) {
-            this.sidenavDrawerService.closeDrawer();
-            // return;
-          } else {
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          }
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
         },
       });
   }
@@ -635,7 +630,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     openStation.stationName = this.stationName;
     openStation.notes = this.stationNotes ? this.stationNotes : '';
     openStation.markAsUpdated();
-    this.mapService.stationElementsChanged$.next(true);
+    this.mapService.mapStationHelper.stationElementsChanged$.next(true);
   }
 
   /**
@@ -808,8 +803,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Navigate the user to the station on the map.
    */
   goToStationOnMap(): void {
-    this.mapService.centerStationRithmId$.next(this.stationRithmId);
-    this.mapService.viewStationButtonClick$.next(true);
+    this.mapService.mapStationHelper.centerStationRithmId$.next(
+      this.stationRithmId
+    );
+    this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
   }
 
@@ -850,17 +847,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * While station is selected & drawer opened, Method called for selected station to centering in the map.
    */
   centerStation(): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Get the map drawer element.
     const drawer = document.getElementsByTagName('mat-drawer');
     //Increment centerCount to show that more centering of station needs to be done.
-    this.mapService.centerCount$.next(1);
+    this.mapService.centerHelper.centerCount$.next(1);
     //Call method to run logic for centering of the station.
-    this.mapService.center(
+    this.mapService.centerHelper.center(
       CenterPanType.Station,
       drawer[0] ? drawer[0].clientWidth : 0
     );

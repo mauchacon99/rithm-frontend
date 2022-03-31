@@ -179,6 +179,25 @@ describe('StationInfoDrawerComponent', () => {
     );
   });
 
+  it('should display a confirming popup when the status change succeed', () => {
+    const documentGenStatus = DocumentGenerationStatus;
+    spyOn(
+      TestBed.inject(StationService),
+      'updateStationDocumentGenerationStatus'
+    ).and.returnValue(of(documentGenStatus.Manual));
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'notify'
+    ).and.callThrough();
+    component.updateStationDocumentGenerationStatus(
+      stationId,
+      documentGenStatus.None
+    );
+    expect(popupSpy).toHaveBeenCalledOnceWith(
+      'The status has changed successfully'
+    );
+  });
+
   it('should update the component data', () => {
     const refreshDataComponent = spyOn(
       TestBed.inject(StationService),
@@ -531,8 +550,10 @@ describe('StationInfoDrawerComponent', () => {
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
     component.goToStationOnMap();
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
-    expect(mapService.centerStationRithmId$.value).toBe(stationId);
-    expect(mapService.viewStationButtonClick$.value).toBeTrue();
+    expect(mapService.mapStationHelper.centerStationRithmId$.value).toBe(
+      stationId
+    );
+    expect(mapService.mapHelper.viewStationButtonClick$.value).toBeTrue();
   });
 
   it('should show view on the map station button', () => {
