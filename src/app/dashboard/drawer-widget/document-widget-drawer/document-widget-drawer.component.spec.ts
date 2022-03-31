@@ -323,7 +323,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     );
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     component.getImagesDocuments();
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
@@ -337,6 +337,7 @@ describe('DocumentWidgetDrawerComponent', () => {
 
   it('should call method to get document images in service', () => {
     dataEditWidget.widgetItem.widgetType = WidgetType.ContainerProfileBanner;
+    component.showProfileImageBanner = true;
     const spyError = spyOn(
       TestBed.inject(DocumentService),
       'getImagesDocuments'
@@ -368,7 +369,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.isLoadingProfileImage = true;
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     fixture.detectChanges();
     const loading = fixture.debugElement.nativeElement.querySelector(
       '#loading-indicator-profile-image'
@@ -378,7 +379,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should show  profile section when showImage is true ', () => {
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
     fixture.detectChanges();
@@ -389,7 +390,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should not  show  profile section when showImage is false ', () => {
-    component.showImageBanner = false;
+    component.showProfileImageBanner = false;
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
     fixture.detectChanges();

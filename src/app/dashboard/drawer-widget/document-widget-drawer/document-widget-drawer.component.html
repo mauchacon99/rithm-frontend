@@ -54,7 +54,7 @@
 <div
   *ngIf="
     dataDrawerDocument?.widgetItem?.widgetType ===
-      enumWidgetType.ContainerProfileBanner && showImageBanner
+      enumWidgetType.ContainerProfileBanner && showProfileImageBanner
   "
   id="profile-image-section-drawer"
 >
@@ -86,7 +86,7 @@
         [formControl]="formColumns"
       >
         <mat-option
-          [value]="null"
+          [value]="''"
           data-testid="option-profile-none"
           id="'option-profile-none'"
         >

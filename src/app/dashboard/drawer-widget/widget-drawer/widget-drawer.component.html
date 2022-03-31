@@ -32,7 +32,7 @@
       (setWidgetIndex)="setWidgetIndex($event)"
       (getWidgetItem)="setWidgetItem($event)"
       [image]="imageUploaded"
-      [showImageBanner]="showImageBanner"
+      [showProfileImageBanner]="showProfileImageBanner"
     >
     </app-document-widget-drawer>
     <!-- Upload image-->
@@ -42,7 +42,7 @@
         (widgetType === widgetTypeEnum.StationTableBanner ||
           widgetType === widgetTypeEnum.DocumentListBanner ||
           widgetType === widgetTypeEnum.ContainerProfileBanner) &&
-        showImageBanner
+        showProfileImageBanner
       "
       id="section-image-banner"
     >

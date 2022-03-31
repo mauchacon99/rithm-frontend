@@ -27,7 +27,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  * Component for Station widget drawer.
  */
 @Component({
-  selector: 'app-document-widget-drawer[showImageBanner]',
+  selector: 'app-document-widget-drawer[showProfileImageBanner]',
   templateUrl: './document-widget-drawer.component.html',
   styleUrls: ['./document-widget-drawer.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -125,7 +125,8 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.getDocumentWidget();
           if (
             dataDrawer.widgetItem.widgetType ===
-            WidgetType.ContainerProfileBanner
+              WidgetType.ContainerProfileBanner &&
+            this.showProfileImageBanner
           ) {
             this.getImagesDocuments();
           }
