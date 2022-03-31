@@ -13,15 +13,18 @@ export class BodyTextWidgetComponent {
   @Input() widgetMode!: 'layout' | 'setting';
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
-  @Output() openSettingDrawer: EventEmitter<Question> =
-    new EventEmitter<Question>();
+  @Output() openSettingDrawer: EventEmitter<Question | string> =
+    new EventEmitter<Question | string>();
+
+  /** Text value to show on body text widget. */
+  bodyTextValue = 'Write something descriptive';
 
   /**
    * Open setting drawer.
    *
    * @param field The field for the setting drawer.
    */
-  handleOpenSettingDrawer(field?: Question): void {
+  handleOpenSettingDrawer(field?: Question | string): void {
     if (this.widgetMode === 'setting') {
       this.openSettingDrawer.emit(field);
     }

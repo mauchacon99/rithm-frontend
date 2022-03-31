@@ -1,10 +1,8 @@
-<div class="body-text-widget h-full w-full">
-  <div
-    class="screen-box"
-    (click)="widgetMode === 'setting' && handleOpenSettingDrawer()"
-  ></div>
-  <textarea
-    class="text-xs w-full h-full p-2 placeholder-primary-200"
-    placeholder="Write something descriptive"
-  ></textarea>
+<div
+  class="body-text-widget h-full w-full p-2"
+  (click)="widgetMode === 'setting' && handleOpenSettingDrawer(bodyTextValue)"
+>
+  <p class="text-xs text-primary-200">
+    {{ bodyTextValue }}
+  </p>
 </div>

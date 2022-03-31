@@ -16,7 +16,7 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** The field information for your setting. */
-  fieldSetting!: Question;
+  fieldSetting!: Question | string;
 
   constructor(private sideNavDrawerService: SidenavDrawerService) {}
 
@@ -27,7 +27,7 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
     this.sideNavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const dataDrawer = data as Question;
+        const dataDrawer = data as Question | string;
         this.fieldSetting = dataDrawer;
       });
   }
