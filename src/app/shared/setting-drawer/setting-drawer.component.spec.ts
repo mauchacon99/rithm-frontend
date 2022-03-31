@@ -50,7 +50,7 @@ describe('SettingDrawerComponent', () => {
       children: [],
     };
     sideNavService.drawerData$.next(field);
-    expect(component.fieldSetting).toBeUndefined(field);
+    expect(component.fieldSetting).toBe(field);
   });
 
   it('should subscribe drawerData', () => {
