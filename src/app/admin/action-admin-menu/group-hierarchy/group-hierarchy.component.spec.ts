@@ -4,7 +4,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { StationGroupData, StationListGroup } from 'src/models';
-
 import { GroupHierarchyComponent } from './group-hierarchy.component';
 import { GroupListHierarchyComponent } from './group-list-hierarchy/group-list-hierarchy.component';
 import { UserGroupStationAdminComponent } from './user-group-station-admin/user-group-station-admin.component';
@@ -109,23 +108,44 @@ describe('GroupHierarchyComponent', () => {
     expect(sectionPermissionDenied).toBeDefined();
   });
 
-  it('should push new columns to columnsStationGroupRithmId', () => {
-    const spyPush = spyOn(
-      component.columnsStationGroupRithmId,
-      'push'
-    ).and.callThrough();
+  it('should push and splice columns to itemListSelected', () => {
+    const spyPush = spyOn(component.itemListSelected, 'push').and.callThrough();
+
     const spySplice = spyOn(
-      component.columnsStationGroupRithmId,
+      component.itemListSelected,
       'splice'
     ).and.callThrough();
 
-    component.setSelectItem(subStationGroups, 0);
-    expect(spyPush).toHaveBeenCalledOnceWith(subStationGroups.rithmId);
-    expect(spySplice).toHaveBeenCalled();
-    expect(component.columnsStationGroupRithmId.at(1)).toEqual(
-      subStationGroups.rithmId
-    );
+    component.setSelectItem(subStationGroups, 1);
+    expect(spyPush).toHaveBeenCalledOnceWith({
+      rithmId: subStationGroups.rithmId,
+      name: (subStationGroups as StationGroupData).title,
+      data: JSON.stringify(subStationGroups),
+    });
+    expect(component.itemListSelected.length).toBe(1);
     expect(component.selectedItem).toEqual(subStationGroups);
+    expect(spySplice).toHaveBeenCalled();
+  });
+
+  it('should push and splice columns to groupItemListSelected', () => {
+    const spyPush = spyOn(
+      component.groupItemListSelected,
+      'push'
+    ).and.callThrough();
+
+    const spySplice = spyOn(
+      component.groupItemListSelected,
+      'splice'
+    ).and.callThrough();
+
+    component.setSelectItem(subStationGroups, 1);
+    expect(spyPush).toHaveBeenCalledOnceWith({
+      rithmId: subStationGroups.rithmId,
+      name: (subStationGroups as StationGroupData).title,
+      data: JSON.stringify(subStationGroups),
+    });
+    expect(component.groupItemListSelected.length).toBe(2);
+    expect(spySplice).toHaveBeenCalled();
   });
 
   it('should return true or false in isGroup', () => {
@@ -135,5 +155,42 @@ describe('GroupHierarchyComponent', () => {
     component.selectedItem = subStationGroups;
     const result2 = component.isGroup;
     expect(result2).toBeTrue();
+  });
+
+  it('should moved index in groupItemListSelected when clicked in navigation', () => {
+    component.showGroupHierarchy = true;
+    component.groupItemListSelected.push({
+      rithmId: subStationGroups.rithmId,
+      name: (subStationGroups as StationGroupData).title,
+      data: JSON.stringify(subStationGroups),
+    });
+
+    component.itemListSelected.push({
+      rithmId: subStationGroups.rithmId,
+      name: (subStationGroups as StationGroupData).title,
+      data: JSON.stringify(subStationGroups),
+    });
+
+    fixture.detectChanges();
+
+    const spySplice = spyOn(
+      component.groupItemListSelected,
+      'splice'
+    ).and.callThrough();
+
+    const spyFind = spyOn(component.itemListSelected, 'find').and.callThrough();
+
+    const spyMoveList = spyOn(component, 'moveList').and.callThrough();
+
+    const btnNavigation = fixture.nativeElement.querySelector(
+      '#item-navigation-' + subStationGroups.rithmId
+    );
+    expect(btnNavigation).toBeTruthy();
+    btnNavigation.click();
+
+    expect(spyMoveList).toHaveBeenCalled();
+    expect(spySplice).toHaveBeenCalled();
+    expect(spyFind).toHaveBeenCalled();
+    expect(component.selectedItem).toEqual(subStationGroups);
   });
 });

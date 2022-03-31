@@ -31,18 +31,25 @@
       class="w-full md:w-[calc(100%-300px)] md:h-[calc(100vh-165px)] h-full md:flex md:overflow-auto"
     >
       <div
-        class="w-full md:hidden overflow-x-auto p-3"
+        class="w-full md:hidden overflow-x-auto scrollbar p-3"
         *ngIf="groupItemListSelected.length > 1"
       >
-        <ul class="flex flex-row">
-          <li
-            *ngFor="let list of groupItemListSelected; index as index"
-            class="ml-2 whitespace-nowrap"
-            (click)="moveList(index)"
+        <div class="flex flex-row">
+          <div
+            *ngFor="let item of groupItemListSelected; index as index"
+            class="whitespace-nowrap"
           >
-            {{ list.name + ' / ' }}
-          </li>
-        </ul>
+            <button
+              mat-button
+              [id]="'item-navigation-' + item.rithmId"
+              [attr.data-testid]="'item-navigation-' + item.rithmId"
+              class="button-navigation"
+              (click)="moveList(index)"
+            >
+              {{ item.name }}</button
+            >/
+          </div>
+        </div>
       </div>
       <ng-container *ngFor="let list of groupItemListSelected; index as index">
         <app-group-list-hierarchy

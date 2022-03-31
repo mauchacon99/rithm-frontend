@@ -1,10 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { StationGroupData, StationListGroup } from 'src/models';
 
+/** Selected List element for StationGroupData | StationListGroup.*/
 interface itemSelected {
-  /** Selected item type. */
-  type: string;
-
   /** Selected item RithmId. */
   rithmId: string;
 
@@ -14,6 +12,7 @@ interface itemSelected {
   /** Selected item data. */
   data: string;
 }
+
 /**
  * Component to show hierarchy on admin panel.
  */
@@ -27,19 +26,11 @@ export class GroupHierarchyComponent {
   @Input() showGroupHierarchy!: boolean;
 
   /** List element selected. */
-  itemListSelected: itemSelected[] = [
-    {
-      type: 'group',
-      rithmId: '',
-      name: 'Home',
-      data: '{}',
-    },
-  ];
+  itemListSelected: itemSelected[] = [];
 
   /** List group selected. */
   groupItemListSelected: itemSelected[] = [
     {
-      type: 'group',
       rithmId: '',
       name: 'Home',
       data: '{}',
@@ -69,11 +60,10 @@ export class GroupHierarchyComponent {
     index: number
   ): void {
     this.selectedItem = itemSelected;
-    this.itemListSelected.splice(index + 1);
+    this.itemListSelected.splice(index);
     this.groupItemListSelected.splice(index + 1);
 
     this.itemListSelected.push({
-      type: this.isGroup ? 'group' : 'station',
       rithmId: itemSelected.rithmId,
       name: this.isGroup
         ? (itemSelected as StationGroupData).title
@@ -83,7 +73,6 @@ export class GroupHierarchyComponent {
 
     if (this.isGroup) {
       this.groupItemListSelected.push({
-        type: 'group',
         rithmId: itemSelected.rithmId,
         name: (itemSelected as StationGroupData).title,
         data: JSON.stringify(itemSelected),
@@ -92,19 +81,20 @@ export class GroupHierarchyComponent {
   }
 
   /**
-   * Navigation in options list columns.
+   * Navigate between the different columns of options.
    *
    * @param index Index selected.
    */
   moveList(index: number): void {
     this.groupItemListSelected.splice(index + 1, this.itemListSelected.length);
-    this.itemListSelected.forEach((item) => {
-      if (
+    const dataItemSelected = this.itemListSelected.find(
+      (item) =>
         item.rithmId ===
         this.groupItemListSelected[this.groupItemListSelected.length - 1]
           .rithmId
-      )
-        this.selectedItem = JSON.parse(item.data);
-    });
+    );
+    if (dataItemSelected) {
+      this.selectedItem = JSON.parse(dataItemSelected.data);
+    }
   }
 }
