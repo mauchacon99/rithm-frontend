@@ -15,6 +15,7 @@ import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-wi
 import { DescriptionWidgetModalComponent } from 'src/app/dashboard/widget-modal/description-widget-modal/description-widget-modal.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDashboardService } from 'src/mocks';
+import { ComingSoonMessageComponent } from 'src/app/shared/coming-soon-message/coming-soon-message.component';
 
 describe('AddWidgetModalComponent', () => {
   let component: AddWidgetModalComponent;
@@ -53,6 +54,7 @@ describe('AddWidgetModalComponent', () => {
         MockComponent(CustomTabWidgetModalComponent),
         MockComponent(ListWidgetModalComponent),
         MockComponent(DescriptionWidgetModalComponent),
+        MockComponent(ComingSoonMessageComponent),
       ],
     }).compileComponents();
   });
