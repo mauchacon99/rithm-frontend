@@ -16,7 +16,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class InputFrameWidgetComponent {
   /** Questions to be displayed inside the widget. */
-  @Input() fields!: Question[];
+  @Input() fields: Question[] | undefined = [];
 
   /** The mode to display fields inside the widget. */
   @Input() widgetMode!: 'layout' | 'setting';
