@@ -71,7 +71,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     fixture = TestBed.createComponent(DocumentWidgetDrawerComponent);
     component = fixture.componentInstance;
     sideNavService = TestBed.inject(SidenavDrawerService);
-    fixture.detectChanges();
+    component.showProfileImageBanner = false;
     component.dataDrawerDocument = {
       widgetItem: {
         rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
@@ -90,6 +90,7 @@ describe('DocumentWidgetDrawerComponent', () => {
       widgetIndex: 0,
       quantityElementsWidget: 2,
     };
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -312,7 +313,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should show error message when the document images request fails', () => {
+  fit('should show error message when the document images request fails', () => {
     const spyError = spyOn(
       TestBed.inject(DocumentService),
       'getImagesDocuments'
@@ -321,11 +322,15 @@ describe('DocumentWidgetDrawerComponent', () => {
         throw new Error();
       })
     );
+
     component.dataDrawerDocument.widgetItem.widgetType =
       WidgetType.ContainerProfileBanner;
     component.showProfileImageBanner = true;
     component.getImagesDocuments();
     fixture.detectChanges();
+
+    console.log((component.showProfileImageBanner = true));
+    console.log(component.showProfileImageBanner);
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-image-profile-drawer-error'
     );
@@ -336,13 +341,14 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should call method to get document images in service', () => {
-    dataEditWidget.widgetItem.widgetType = WidgetType.ContainerProfileBanner;
-    component.showProfileImageBanner = true;
     const spyError = spyOn(
       TestBed.inject(DocumentService),
       'getImagesDocuments'
     ).and.callThrough();
-    sideNavService.drawerData$.next(dataEditWidget);
+    component.dataDrawerDocument = dataEditWidget;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    component.showProfileImageBanner = true;
     expect(spyError).toHaveBeenCalled();
   });
 

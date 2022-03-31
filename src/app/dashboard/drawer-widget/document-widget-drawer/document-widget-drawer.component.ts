@@ -46,7 +46,15 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   }
 
   /** RithmId of station or stationGroup to search. */
-  @Input() showProfileImageBanner = false;
+  @Input() set showProfileImageBanner(value: boolean) {
+    if (
+      this.dataDrawerDocument?.widgetItem?.widgetType ===
+        WidgetType.ContainerProfileBanner &&
+      value
+    ) {
+      this.getImagesDocuments();
+    }
+  }
 
   /** Emit widgetIndex to widget-drawer. */
   @Output() setWidgetIndex = new EventEmitter<number>();
@@ -123,13 +131,6 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.setWidgetIndex.emit(this.dataDrawerDocument.widgetIndex);
           this.getWidgetItem.emit(this.dataDrawerDocument.widgetItem);
           this.getDocumentWidget();
-          if (
-            dataDrawer.widgetItem.widgetType ===
-              WidgetType.ContainerProfileBanner &&
-            this.showProfileImageBanner
-          ) {
-            this.getImagesDocuments();
-          }
         }
       });
   }
