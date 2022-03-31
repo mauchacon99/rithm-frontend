@@ -20,7 +20,7 @@ import {
   Question,
   PossibleAnswer,
   FlowLogicRule,
-  InputFrameWidget,
+  StationFrameWidget,
   FrameType,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -134,7 +134,7 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: InputFrameWidget[] = [];
+  inputFrameWidgetItems: StationFrameWidget[] = [];
 
   /** The current focused/selected widget. */
   widgetFocused = -1;
@@ -696,20 +696,28 @@ export class StationComponent
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
   setGridMode(mode: 'layout' | 'setting' | 'preview'): void {
-    const enabledMode = mode === 'layout' ? true : false;
-    /* If it is different from preview, we are in editable mode. */
-    if (mode !== 'preview') {
-      this.layoutMode = enabledMode;
-      this.settingMode = !enabledMode;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = false;
+    let enabledMode = false;
+    /** Depending on the case, the mode is set. */
+    switch (mode) {
+      case 'preview':
+        this.layoutMode = false;
+        this.settingMode = false;
+        this.isOpenDrawerLeft = false;
+        this.closeSettingDrawer();
+        break;
+      case 'setting':
+        enabledMode = false;
+        this.isOpenDrawerLeft = false;
+        break;
+      case 'layout':
+        enabledMode = true;
+        this.closeSettingDrawer();
+        break;
+      default:
+        break;
     }
-
-    /*If the parameter 'mode' is different 'layout' hidden the drawer left.*/
-    if (mode !== 'layout') {
-      this.isOpenDrawerLeft = false;
-    }
+    this.layoutMode = enabledMode;
+    this.settingMode = !enabledMode;
 
     /* Make the grid visible.*/
     this.options.displayGrid = enabledMode ? 'always' : 'none';
@@ -760,11 +768,27 @@ export class StationComponent
   }
 
   /**
-   * Save the changes make in the gridster.
+   * Save or update the changes make the station frame widgets.
    */
-  saveStationChanges(): void {
+  saveStationFramesChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
+
+    this.inputFrameWidgetItems.map((field) => {
+      field.data = JSON.stringify(field.questions);
+    });
+
+    this.stationService
+      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /** This cancel button clicked show alert. */
@@ -807,8 +831,9 @@ export class StationComponent
   addInputFrame(
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
-    const inputFrame: InputFrameWidget = {
-      frameRithmId: '',
+    const inputFrame: StationFrameWidget = {
+      rithmId: this.randRithmId,
+      stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
       x: 0,
@@ -836,7 +861,14 @@ export class StationComponent
         inputFrame.minItemRows = 2;
         inputFrame.type = FrameType.Body;
         break;
-
+      case FrameType.Title:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
+        inputFrame.minItemRows = 1;
+        inputFrame.maxItemRows = 1;
+        inputFrame.type = FrameType.Title;
+        break;
       default:
         break;
     }
@@ -855,10 +887,29 @@ export class StationComponent
   }
 
   /**
-   * Toggles the open state of the right setting drawer.
+   * Open the right setting drawer for field setting.
+   *
+   * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openRightDrawer(): void {
-    this.sidenavDrawerService.openDrawer('fieldSetting');
+  openSettingDrawer(field: Question): void {
+    /** If the left drawer is open, it must be closed. */
+    if (this.isOpenDrawerLeft) {
+      this.isOpenDrawerLeft = false;
+    }
+    this.sidenavDrawerService.openDrawer('fieldSetting', field);
+  }
+
+  /**
+   * Close the right setting drawer for field setting.
+   */
+  closeSettingDrawer(): void {
+    /** If both are open, the field setting drawer must be closed. */
+    if (
+      this.sidenavDrawerService.isDrawerOpen &&
+      this.drawerContext === 'fieldSetting'
+    ) {
+      this.sidenavDrawerService.closeDrawer();
+    }
   }
 
   /**

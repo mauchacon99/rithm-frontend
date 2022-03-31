@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MockComponent } from 'ng-mocks';
 import { StationListGroup, StationGroupData } from 'src/models';
+import { ExpansionMemberGroupAdminComponent } from '../expansion-member-group-admin/expansion-member-group-admin.component';
 
 import { UserGroupStationAdminComponent } from './user-group-station-admin.component';
 
@@ -63,13 +66,18 @@ describe('UserGroupStationAdminComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserGroupStationAdminComponent],
+      declarations: [
+        UserGroupStationAdminComponent,
+        MockComponent(ExpansionMemberGroupAdminComponent),
+      ],
+      imports: [MatExpansionModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserGroupStationAdminComponent);
     component = fixture.componentInstance;
+    component.selectedItem = stations;
     fixture.detectChanges();
   });
 
@@ -78,11 +86,21 @@ describe('UserGroupStationAdminComponent', () => {
   });
 
   it('should  return true or false in isGroup', () => {
-    component.selectedItem = stations;
     const result = component.isGroup;
     expect(result).toBeFalse();
     component.selectedItem = subStationGroups;
     const result2 = component.isGroup;
     expect(result2).toBeTrue();
+  });
+
+  it('should  return nameElement when selectedItem is stations', () => {
+    const result = component.nameElement;
+    expect(result).toEqual(stations.name);
+  });
+
+  it('should  return nameElement when selectedItem is group stations', () => {
+    component.selectedItem = subStationGroups;
+    const result = component.nameElement;
+    expect(result).toEqual(subStationGroups.title);
   });
 });
