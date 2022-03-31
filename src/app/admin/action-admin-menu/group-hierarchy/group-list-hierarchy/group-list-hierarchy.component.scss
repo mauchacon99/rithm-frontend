@@ -4,16 +4,6 @@
   border-color: map-get($primary-palette, 50);
 }
 
-.height-container {
-  height: calc(100vh - 165px);
-}
-
-@media (max-width: 760px) {
-  .height-container {
-    height: 100% !important;
-  }
-}
-
 .item-select-groups {
   .mat-list-option {
     @apply rounded-sm;

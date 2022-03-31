@@ -1,16 +1,42 @@
-<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full bg-white">
-  <!-- stationGroup -->
+<div
+  class="border-b-2 md:border-b-0 md:border-r-2 color-border md:overflow-auto scrollbar px-3 pb-3 h-full md:w-[300px] bg-white"
+>
+  <div *ngIf="isLoading" class="w-full h-full flex items-center justify-center">
+    <app-loading-indicator id="loader-groups-hierarchy"></app-loading-indicator>
+  </div>
+
   <div
-    class="md:border-r-2 color-border md:overflow-auto scrollbar height-container px-3 pb-3"
+    *ngIf="isErrorGetGroups"
+    id="failed-groups"
+    class="w-full h-full flex flex-col items-center justify-center text-center mt-2 md:mt-0"
   >
-    <ng-container *ngIf="stationGroups">
+    <button
+      mat-stroked-button
+      color="warn"
+      (click)="getStationGroups()"
+      id="try-again"
+      data-testid="try-again"
+      class="w-32"
+    >
+      Try Again
+    </button>
+    <p class="text-error-500">Error: Unable to show groups or station.</p>
+  </div>
+
+  <ng-container *ngIf="stationGroups && !isLoading && !isErrorGetGroups">
+    <ng-container
+      *ngIf="
+        stationGroups.subStationGroups.length || stationGroups.stations.length;
+        else emptyList
+      "
+    >
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
         <mat-list-option
           *ngFor="let stationGroup of stationGroups.subStationGroups"
           [id]="'group-item-' + stationGroup.rithmId"
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
-          [value]="stationGroup"
+          (click)="selectedListItem(stationGroup)"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -22,9 +48,9 @@
         <!-- stations -->
         <mat-list-option
           *ngFor="let station of stationGroups.stations"
-          [value]="station"
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
+          (click)="selectedListItem(station)"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -35,7 +61,7 @@
         </mat-list-option>
       </mat-selection-list>
     </ng-container>
-  </div>
+  </ng-container>
 </div>
 
 <!-- Station group or station item list. -->
@@ -52,8 +78,23 @@
       [width]="type === 'group' ? 23 : 21"
       [alt]="type + '-' + name"
     />
-    <span class="text-sm lg:text-base ml-3 truncate">{{
-      name || 'Untitled ' + (type | titlecase)
+    <span class="text-sm md:text-base ml-3 truncate">{{
+      name?.trim() || 'Untitled ' + (type | titlecase)
     }}</span>
+  </div>
+</ng-template>
+
+<ng-template #emptyList>
+  <div class="text-center text-sm md:text-base pt-4">
+    There aren't groups or stations.
+    <button
+      mat-icon-button
+      id="reload-get-stations-group"
+      data-testid="reload-get-stations-group"
+      class="pl-1 text-secondary-500"
+      (click)="getStationGroups()"
+    >
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>
   </div>
 </ng-template>
