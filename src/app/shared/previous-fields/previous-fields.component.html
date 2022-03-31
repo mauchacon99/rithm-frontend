@@ -108,11 +108,11 @@
       cdkDropList
       [cdkDropListConnectedTo]="inputFrameList"
       [cdkDropListData]="questions"
-      id="previous-fields-all"
-      data-testid="previous-fields-all"
+      id="previous-fields"
+      data-testid="previous-fields"
     >
       <div
-        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer"
+        class="flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer bg-white"
         *ngFor="let previousField of questions"
         cdkDrag
       >

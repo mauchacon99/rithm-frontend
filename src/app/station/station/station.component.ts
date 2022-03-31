@@ -119,7 +119,7 @@ export class StationComponent
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
-    fixedRowHeight: 48.5,
+    fixedRowHeight: 52,
     displayGrid: 'always',
     pushItems: true,
     draggable: {

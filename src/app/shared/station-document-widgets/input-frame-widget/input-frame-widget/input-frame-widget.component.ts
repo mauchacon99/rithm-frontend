@@ -55,10 +55,7 @@ export class InputFrameWidgetComponent {
           prompt: questionInfo.prompt,
           questionType: questionInfo.questionType,
           isReadOnly: false,
-          isRequired:
-            questionInfo.questionType === QuestionFieldType.Instructions
-              ? true
-              : false,
+          isRequired: false,
           isPrivate: false,
           children:
             questionInfo.questionType === QuestionFieldType.AddressLine
@@ -127,7 +124,7 @@ export class InputFrameWidgetComponent {
         isRequired: element.required,
         isPrivate: false,
         children: [],
-        originalStationRithmId: '21316c62-8a45-4e79-ba58-0927652569cc',
+        originalStationRithmId: this.stationRithmId,
       };
       addressChildren.push(child);
     });
