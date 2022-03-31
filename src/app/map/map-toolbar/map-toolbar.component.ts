@@ -75,7 +75,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService
   ) {
     //Subscribe to mapMode in mapService.
-    this.mapService.mapMode$
+    this.mapService.mapHelper.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mode) => {
         //Get local mapMode to match the mode from mapService.
@@ -97,8 +97,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    */
   addStationGroup(): void {
     if (!this.stationGroupAddActive) {
-      this.mapService.mapMode$.next(MapMode.StationGroupAdd);
-      this.mapService.matMenuStatus$.next(true);
+      this.mapService.mapHelper.mapMode$.next(MapMode.StationGroupAdd);
+      this.mapService.mapHelper.matMenuStatus$.next(true);
     } else {
       if (this.sidenavDrawerService.isDrawerOpen) {
         this.sidenavDrawerService.closeDrawer();
@@ -109,17 +109,19 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
           (stationGroup) => stationGroup.selected
         )
       ) {
-        if (this.mapService.mapMode$.value === MapMode.StationGroupAdd) {
+        if (
+          this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd
+        ) {
           this.mapService.resetSelectedStationGroupStationStatus();
           this.mapService.updatePendingStationGroup();
         } else if (
-          this.mapService.mapMode$.value === MapMode.StationGroupEdit
+          this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit
         ) {
           this.mapService.resetSelectedStationGroupStationStatus();
           this.mapService.revertStationGroup();
         }
       }
-      this.mapService.mapMode$.next(MapMode.Build);
+      this.mapService.mapHelper.mapMode$.next(MapMode.Build);
     }
     // TODO: Implement add station group.
   }
@@ -140,13 +142,13 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
         : this.mapService.revertStationGroup();
     }
     if (!this.stationAddActive) {
-      this.mapService.mapMode$.next(MapMode.StationAdd);
-      this.mapService.matMenuStatus$.next(true);
+      this.mapService.mapHelper.mapMode$.next(MapMode.StationAdd);
+      this.mapService.mapHelper.matMenuStatus$.next(true);
     } else {
-      this.mapService.mapMode$.next(MapMode.Build);
+      this.mapService.mapHelper.mapMode$.next(MapMode.Build);
       if (this.mapService.stationElements.some((e) => e.isAddingConnected)) {
-        this.mapService.disableConnectedStationMode();
-        this.mapService.mapDataReceived$.next(true);
+        this.mapService.mapStationHelper.disableConnectedStationMode();
+        this.mapService.mapHelper.mapDataReceived$.next(true);
       }
     }
     // TODO: Implement add station
