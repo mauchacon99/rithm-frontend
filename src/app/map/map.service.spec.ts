@@ -168,11 +168,11 @@ describe('MapService', () => {
       stationElementsArray[0].rithmId
     );
 
-    service.stationElements = stationElementsArray;
+    service.mapStationHelper.stationElements = stationElementsArray;
 
-    service.setConnections();
+    service.mapConnectionHelper.setConnections(service.mapStationHelper);
 
-    expect(service.connectionElements.length).toEqual(3);
+    expect(service.mapConnectionHelper.connectionElements.length).toEqual(3);
   });
 
   xit('should restore previous data when cancelled', () => {
@@ -374,7 +374,7 @@ describe('MapService', () => {
       (e) => new StationGroupMapElement(e)
     );
     const stationGroupId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
-    service.removeStationGroup(stationGroupId);
+    service.mapStationGroupHelper.removeStationGroup(stationGroupId);
     const removedGroup = service.stationGroupElements.find(
       (group) => group.rithmId === stationGroupId
     );
@@ -391,7 +391,9 @@ describe('MapService', () => {
     );
     expect(removedGroup?.subStationGroups.length).toEqual(0);
     expect(removedGroup?.stations.length).toEqual(0);
-    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
+    service.mapHelper.mapDataReceived$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
   });
 
   it('should add only the parent group to a pending group when a group and subgroup are selected', () => {
@@ -675,7 +677,9 @@ describe('MapService', () => {
       e.drawerOpened = true;
     });
     service.handleDrawerClose();
-    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
+    service.mapHelper.mapDataReceived$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
   });
 
   it('should update the status to created for a new station group.', () => {
@@ -705,13 +709,12 @@ describe('MapService', () => {
         isChained: false,
       },
     ];
-    service.stationGroupElements = stationGroupMapData.map(
-      (e) => new StationGroupMapElement(e)
-    );
+    service.mapStationGroupHelper.stationGroupElements =
+      stationGroupMapData.map((e) => new StationGroupMapElement(e));
     const rithmId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
 
     const resetSelectedStationGroupStationStatusSpy = spyOn(
-      TestBed.inject(MapService),
+      TestBed.inject(MapService).mapStationGroupHelper,
       'resetSelectedStationGroupStationStatus'
     );
 

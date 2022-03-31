@@ -9,11 +9,6 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
-  ConnectionMapElement,
-  StationGroupMapElement,
-  StationMapElement,
-} from 'src/helpers';
-import {
   MapMode,
   Point,
   MapDragItem,
@@ -51,6 +46,11 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
+import {
+  ConnectionMapElement,
+  StationGroupMapElement,
+  StationMapElement,
+} from 'src/helpers';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -182,7 +182,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapBoundaryService: MapBoundaryService
   ) {
     //This subscribe sets this.mapMode when the behavior subject in mapService changes, then redraws the map.
-    this.mapService.mapMode$
+    this.mapService.mapHelper.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
         this.mapMode = mapMode;
@@ -191,7 +191,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     /* This subscribe sets this.scale when the behavior subject in mapService changes.
     Then it executes a loop to more cleanly handle scale change animation. */
-    this.mapService.mapScale$
+    this.mapService.mapHelper.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.scale = scale;
@@ -199,7 +199,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe sets this.currentCanvasPoint when the behavior subject in mapService changes, then redraws the map.
-    this.mapService.currentCanvasPoint$
+    this.mapService.mapHelper.currentCanvasPoint$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
         this.currentCanvasPoint = point;
@@ -207,7 +207,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe sets this.stations when the behavior subject in mapService changes, then redraws the map.
-    this.mapService.stationElementsChanged$
+    this.mapService.mapStationHelper.stationElementsChanged$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         /* This sets this.stations as a reference to this.mapService.stationElements
@@ -217,7 +217,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe sets this.stationGroups when the behavior subject in mapService changes, then redraws the map.
-    this.mapService.stationGroupElementsChanged$
+    this.mapService.mapStationGroupHelper.stationGroupElementsChanged$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         /* This sets this.stationGroups as a reference to this.mapService.stationGroupElements
@@ -227,14 +227,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
-    this.mapService.zoomCount$
+    this.mapService.zoomHelper.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
         this.zoomCount = count;
       });
 
     //This subscribe shows if there are any drawers open.
-    this.mapService.isDrawerOpened$
+    this.mapService.mapHelper.isDrawerOpened$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerOpened) => {
         if (!drawerOpened) {
@@ -248,7 +248,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     it then sets this.nextPanVelocity to the velocity set during that check and then activates auto pan if appropriate.
 
     Simply put: if a station or node or stationGroup is dragged to the edge of the screen, the map should start panning.*/
-    this.mapService.currentMousePoint$
+    this.mapService.mapHelper.currentMousePoint$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
         this.currentMousePoint = point;
@@ -269,21 +269,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     /* This subscribe sets this.nextPanVelocity when the behavior subject in mapService changes.
     Then it checks if auto pan should be activated.
     This is needed to pan the map when the center method is called. */
-    this.mapService.centerPanVelocity$
+    this.mapService.centerHelper.centerPanVelocity$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((velocity) => {
         this.nextPanVelocity = velocity;
         this.checkAutoPan();
       });
 
-    this.mapService.centerStationRithmId$
+    this.mapService.mapStationHelper.centerStationRithmId$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationRithmId) => {
         this.centerStationRithmId = stationRithmId;
       });
 
     //This subscribe shows if any station group has to be edited.
-    this.mapService.stationGroupOptionButtonClick$
+    this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((optionData) => {
         if (
@@ -321,11 +321,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       '2d'
     ) as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
+    this.mapService.mapHelper.registerCanvasContext(this.context);
 
     //Sets the canvas to the size and DPI of the screen.
     this.setCanvasSize();
 
-    this.mapService.mapDataReceived$
+    this.mapService.mapHelper.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((dataReceived) => {
         //When the mapDataReceived behavior subject changes, update class properties.
@@ -340,29 +341,33 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.connections = this.mapService.connectionElements;
 
         //If this is the first time the component is being initialized, center the map without animation.
-        if (dataReceived && this.mapService.viewStationButtonClick$.value) {
+        if (
+          dataReceived &&
+          this.mapService.mapHelper.viewStationButtonClick$.value
+        ) {
           // If there is a station id to be centered.
           if (this.centerStationRithmId !== '') {
             const stationCenter = this.mapService.stationElements.filter(
               (station) => station.rithmId === this.centerStationRithmId
             );
             //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-            this.mapService.centerActive$.next(true);
+            this.mapService.centerHelper.centerActive$.next(true);
             //Increment centerCount to show that more centering of station needs to be done.
-            this.mapService.centerCount$.next(1);
+            this.mapService.centerHelper.centerCount$.next(1);
             // If Drawer isn't open and there is station to be centered.
             if (
-              !this.mapService.isDrawerOpened$.value &&
+              !this.mapService.mapHelper.isDrawerOpened$.value &&
               stationCenter.length > 0
             ) {
-              this.mapService.isDrawerOpened$.next(true);
+              this.mapService.mapHelper.isDrawerOpened$.next(true);
               const drawer = document.getElementsByTagName('mat-drawer');
               const dataInformationDrawer: StationInfoDrawerData = {
                 stationRithmId: stationCenter[0].rithmId,
                 stationName: stationCenter[0].stationName,
-                editMode: this.mapService.mapMode$.value === MapMode.Build,
+                editMode:
+                  this.mapService.mapHelper.mapMode$.value === MapMode.Build,
                 stationStatus: stationCenter[0].status,
-                mapMode: this.mapService.mapMode$.value,
+                mapMode: this.mapService.mapHelper.mapMode$.value,
                 openedFromMap: true,
                 notes: stationCenter[0].notes,
               };
@@ -377,18 +382,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               stationCenter[0].drawerOpened = true;
               setTimeout(() => {
                 // Center the map on the station.
-                this.mapService.center(
+                this.mapService.centerHelper.center(
                   CenterPanType.Station,
                   drawer[0] ? drawer[0].clientWidth : 0
                 );
               }, 5);
-              this.mapService.viewStationButtonClick$.next(false);
+              this.mapService.mapHelper.viewStationButtonClick$.next(false);
             }
           } else {
-            this.mapService.centerActive$.next(true);
-            this.mapService.centerCount$.next(1);
-            this.mapService.center(CenterPanType.MapCenter, 0, dataReceived);
-            this.mapService.viewStationButtonClick$.next(false);
+            this.mapService.centerHelper.centerActive$.next(true);
+            this.mapService.centerHelper.centerCount$.next(1);
+            this.mapService.centerHelper.center(
+              CenterPanType.MapCenter,
+              0,
+              dataReceived
+            );
+            this.mapService.mapHelper.viewStationButtonClick$.next(false);
           }
         }
 
@@ -409,12 +418,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.connections = [];
-    this.mapService.stationGroupOptionButtonClick$.next({
+    this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$.next({
       click: false,
       data: {},
     });
-    this.mapService.isDrawerOpened$.next(false);
-    this.mapService.mapMode$.next(MapMode.View);
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
+    this.mapService.mapHelper.mapMode$.next(MapMode.View);
   }
 
   /**
@@ -777,11 +786,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Allow plus and minus keys to trigger zooming in and out.
       if (event.key === '+' || event.key === '=' || event.key === '-') {
         //If station menu is open, close it.
-        this.mapService.matMenuStatus$.next(true);
-        this.mapService.zoomCount$.next(
+        this.mapService.mapHelper.matMenuStatus$.next(true);
+        this.mapService.zoomHelper.zoomCount$.next(
           this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50)
         );
-        this.mapService.handleZoom(false);
+        this.mapService.zoomHelper.handleZoom(false);
       }
     }
   }
@@ -795,9 +804,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   wheel(event: WheelEvent): void {
     event.preventDefault();
     //If map is in the middle of a center animation, cancel it.
-    this.mapService.centerActive$.next(false);
-    this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
-    this.mapService.centerCount$.next(0);
+    this.mapService.centerHelper.centerActive$.next(false);
+    this.mapService.centerHelper.centerPanVelocity$.next({ x: 0, y: 0 });
+    this.mapService.centerHelper.centerCount$.next(0);
 
     //Track where the mouse is located on the canvas after the wheel event is triggered.
     const mousePoint = this.getEventCanvasPoint(event);
@@ -820,44 +829,47 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
       if (this.scale >= MAX_SCALE) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
         return;
       }
       //If map is in the middle of zooming out, cancel it.
       if (this.zoomCount < 0) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
       }
       //Adjust the zoomCount based on the eventAmount.
-      this.mapService.zoomCount$.next(
+      this.mapService.zoomHelper.zoomCount$.next(
         this.zoomCount + Math.floor(10 * -eventAmount)
       );
       //Trigger zoom logic.
-      this.mapService.handleZoom(false, mousePoint);
+      this.mapService.zoomHelper.handleZoom(false, mousePoint);
       //If a zoom out is attempted when scrolling.
     } else {
       // Do nothing if already at min zoom, in build or view mode.
       if (
         this.scale <= MIN_SCALE ||
-        (this.mapService.mapMode$.value !== MapMode.View &&
+        (this.mapService.mapHelper.mapMode$.value !== MapMode.View &&
           this.scale <= SCALE_RENDER_STATION_ELEMENTS / ZOOM_VELOCITY)
       ) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
         return;
       }
       //If map is in the middle of zooming in, cancel it.
       if (this.zoomCount > 0) {
-        this.mapService.zoomCount$.next(0);
+        this.mapService.zoomHelper.zoomCount$.next(0);
       }
       //Adjust the zoomCount based on the eventAmount.
-      this.mapService.zoomCount$.next(
+      this.mapService.zoomHelper.zoomCount$.next(
         this.zoomCount - Math.floor(10 * eventAmount)
       );
       //Trigger zoom logic.
-      this.mapService.handleZoom(false, mousePoint);
+      this.mapService.zoomHelper.handleZoom(false, mousePoint);
     }
     // Overlay option menu close state.
-    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
-      this.mapService.matMenuStatus$.next(true);
+    if (
+      this.mapService.mapHelper.matMenuStatus$ &&
+      this.mapMode === MapMode.Build
+    ) {
+      this.mapService.mapHelper.matMenuStatus$.next(true);
     }
   }
 
@@ -984,7 +996,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.panActive = false;
           this.fastDrag = false;
           this.nextPanVelocity = { x: 0, y: 0 };
-          this.mapService.currentCanvasPoint$.next(this.currentCanvasPoint);
+          this.mapService.mapHelper.currentCanvasPoint$.next(
+            this.currentCanvasPoint
+          );
         }
       };
       //Begin loop.
@@ -992,7 +1006,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If panning is due to center button being pressed.
-    if (!this.panActive && this.mapService.centerActive$.value) {
+    if (!this.panActive && this.mapService.centerHelper.centerActive$.value) {
       //Set this.panActive to true so that there can only be one auto pan look going at a time.
       this.panActive = true;
       //The loop to run on each animation frame.
@@ -1000,7 +1014,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //Take the current nextPanvelocity, and for one animation frame, use that to autoPan.
         this.autoMapPan(this.nextPanVelocity);
         //If center button was pressed, centerActive will be set to true, unless it was cancelled or finished.
-        if (this.mapService.centerActive$.value) {
+        if (this.mapService.centerHelper.centerActive$.value) {
           //Loop through again.
           this.panReq = requestAnimationFrame(step);
         } else {
@@ -1041,7 +1055,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the Boundary box
-      if (this.mapService.boundaryElement) {
+      if (this.mapService.mapHelper.boundaryElement) {
         this.drawBoundaryBox();
       }
 
@@ -1050,7 +1064,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.stationElementService.drawStation(
           station,
           this.mapMode,
-          this.mapService.currentMousePoint$.value,
+          this.mapService.mapHelper.currentMousePoint$.value,
           this.dragItem
         );
       });
@@ -1174,7 +1188,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * boundary overlap otherwise.
    */
   private drawBoundaryBox(): void {
-    if (!this.mapService.boundaryElement) {
+    if (!this.mapService.mapHelper.boundaryElement) {
       throw new Error(
         'Cannot draw boundary, if boundaryElement is not defined.'
       );
@@ -1189,8 +1203,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     /* Find corners of map using the min and max canvas points.
     Corners are set using the canvas points of the topmost, leftmost, rightmost and bottommost stations.
     mapMin is the topleft corner of the map. mapMax is the bottom right corner of the map. */
-    const mapMin = this.mapService.boundaryElement.minCanvasPoint;
-    const mapMax = this.mapService.boundaryElement.maxCanvasPoint;
+    const mapMin = this.mapService.mapHelper.boundaryElement.minCanvasPoint;
+    const mapMax = this.mapService.mapHelper.boundaryElement.maxCanvasPoint;
 
     /* We will draw each line of the box using the mapMin and mapMax
     and then offsetting that using screenDimension and this.boundaryPadding. */
@@ -1268,7 +1282,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Always allow movement when centerCount are greater than 0.
-    if (this.mapService.centerCount$.value > 0) {
+    if (this.mapService.centerHelper.centerCount$.value > 0) {
       return true;
     }
 
@@ -1390,15 +1404,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       cancelAnimationFrame(this.panReq as number);
       this.panActive = false;
       this.fastDrag = false;
-      this.mapService.centerActive$.next(false);
-      this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
-      this.mapService.centerCount$.next(0);
+      this.mapService.centerHelper.centerActive$.next(false);
+      this.mapService.centerHelper.centerPanVelocity$.next({ x: 0, y: 0 });
+      this.mapService.centerHelper.centerCount$.next(0);
       this.nextPanVelocity = { x: 0, y: 0 };
     }
 
     //If there is a station option menu open, close it.
-    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
-      this.mapService.matMenuStatus$.next(true);
+    if (
+      this.mapService.mapHelper.matMenuStatus$ &&
+      this.mapMode === MapMode.Build
+    ) {
+      this.mapService.mapHelper.matMenuStatus$.next(true);
     }
 
     //In build mode, there are things that can be clicked that cant be clicked in view mode.
@@ -1502,8 +1519,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.holdDrag = false;
 
     // If there is a station option menu open, close it.
-    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
-      this.mapService.matMenuStatus$.next(true);
+    if (
+      this.mapService.mapHelper.matMenuStatus$ &&
+      this.mapMode === MapMode.Build
+    ) {
+      this.mapService.mapHelper.matMenuStatus$.next(true);
     }
 
     /* Check if event was a click and not a drag.
@@ -1539,15 +1559,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const canvas = this.mapCanvas.nativeElement;
         if (event.target === canvas) {
           //set mousePoint to the tracked cursor position.
-          this.mapService.currentMousePoint$.next(event);
+          this.mapService.mapHelper.currentMousePoint$.next(event);
           //On right clicked opening the option menu for the add new station.
-          this.mapService.stationButtonClick$.next({
+          this.mapService.mapStationHelper.stationButtonClick$.next({
             click: MatMenuOption.NewStation,
             data: [],
           });
         }
         //Resetting the current mouse point to -1, -1. This tells our code we're no longer tracking the mouse point.
-        this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
+        this.mapService.mapHelper.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
         //Don't run any of the rest of the method's code.
         return;
       }
@@ -1558,7 +1578,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.clickEventHandler(eventCanvasPoint, eventContextPoint);
       }
       //Resetting the current mouse point to -1, -1. This tells our code we're no longer tracking the mouse point.
-      this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
+      this.mapService.mapHelper.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
       //Don't run any of the rest of the method's code.
       return;
     }
@@ -1702,7 +1722,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Reset properties.
-    this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
+    this.mapService.mapHelper.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
       //ensure no station has decimals in their coordinates.
@@ -1797,13 +1817,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         // Check if hovering over an interactive station element.
         station.checkElementHover(
-          this.mapService.currentMousePoint$.value,
+          this.mapService.mapHelper.currentMousePoint$.value,
           this.mapMode,
           this.scale
         );
         if (station.dragging) {
           //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
-          this.mapService.currentMousePoint$.next(eventCanvasPoint);
+          this.mapService.mapHelper.currentMousePoint$.next(eventCanvasPoint);
         }
       }
 
@@ -1813,14 +1833,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.stationElements.some((e) => e.isAddingConnected)
     ) {
       //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
-      this.mapService.currentMousePoint$.next(eventCanvasPoint);
+      this.mapService.mapHelper.currentMousePoint$.next(eventCanvasPoint);
 
       //If dragging a previously created connection line.
     } else if (this.dragItem === MapDragItem.Connection) {
       //Loop through stations to check if a station is being hovered over.
       for (const station of this.stations) {
         station.checkElementHover(
-          this.mapService.currentMousePoint$.value,
+          this.mapService.mapHelper.currentMousePoint$.value,
           this.mapMode,
           this.scale
         );
@@ -1843,7 +1863,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapCanvas.nativeElement.style.cursor = 'grabbing';
         if (this.stations.some((station) => station.dragging)) {
           //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
-          this.mapService.currentMousePoint$.next(eventCanvasPoint);
+          this.mapService.mapHelper.currentMousePoint$.next(eventCanvasPoint);
         }
       }
 
@@ -1990,8 +2010,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.stationGroupElements.some((e) => e.drawerOpened)
     ) {
       const drawer = document.getElementsByTagName('mat-drawer');
-      this.mapService.stationCenter$.next(
-        this.mapService.checkCenter(
+      this.mapService.mapStationHelper.stationCenter$.next(
+        this.mapService.centerHelper.checkCenter(
           this.drawerMode === 'stationInfo'
             ? CenterPanType.Station
             : CenterPanType.StationGroup,
@@ -2039,18 +2059,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Update lastTouchCoords with current position of fingers.
       this.lastTouchCoords = position;
       //Update zoomCount by adding the average difference.
-      this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+      this.mapService.zoomHelper.zoomCount$.next(this.zoomCount + averageDiff);
       //Call handleZoom with pinch set to true, and zoom at the centerPoint.
-      this.mapService.handleZoom(true, middlePoint);
+      this.mapService.zoomHelper.handleZoom(true, middlePoint);
       //If there is less distance between your fingers than when you started.
     } else if (averageEnd < averageStart) {
       // Zoom out
       // Update lastTouchCoords with current position of fingers.
       this.lastTouchCoords = position;
       //Update zoomCount by adding the average difference.
-      this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+      this.mapService.zoomHelper.zoomCount$.next(this.zoomCount + averageDiff);
       //Call handleZoom with pinch set to true, and zoom at the centerPoint.
-      this.mapService.handleZoom(true, middlePoint);
+      this.mapService.zoomHelper.handleZoom(true, middlePoint);
     }
   }
 
@@ -2073,7 +2093,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.createNewStation(coords);
 
       //After clicking, set to build mode.
-      this.mapService.mapMode$.next(MapMode.Build);
+      this.mapService.mapHelper.mapMode$.next(MapMode.Build);
       return;
     }
 
@@ -2090,9 +2110,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.isPointInOptionButton(point, this.mapMode, this.scale)
       ) {
         //set mousePoint to the tracked cursor position.
-        this.mapService.currentMousePoint$.next(point);
+        this.mapService.mapHelper.currentMousePoint$.next(point);
         //Note which station was clicked so we can open the option menu for the correct station.
-        this.mapService.stationButtonClick$.next({
+        this.mapService.mapStationHelper.stationButtonClick$.next({
           click: MatMenuOption.OptionButton,
           data: station,
         });
@@ -2124,7 +2144,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           if (!station.disabled) {
             //Stop de-selecting station in station group edit mode when it contains only one station.
             if (
-              this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+              this.mapService.mapHelper.mapMode$.value ===
+                MapMode.StationGroupEdit &&
               this.mapService.stationElements.filter((e) => e.selected)
                 .length === 1 &&
               station.selected
@@ -2202,22 +2223,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               throw new Error(`There is no station group with status pending.`);
             }
             if (
-              this.mapService.tempStationGroup$.value instanceof
-                StationGroupMapElement &&
+              this.mapService.mapStationGroupHelper.tempStationGroup$
+                .value instanceof StationGroupMapElement &&
               this.stationGroups[groupIndex].rithmId ===
-                this.mapService.tempStationGroup$.value.rithmId
+                this.mapService.mapStationGroupHelper.tempStationGroup$.value
+                  .rithmId
             ) {
               this.mapService.revertStationGroup();
             }
           }
-          this.mapService.mapMode$.next(MapMode.Build);
+          this.mapService.mapHelper.mapMode$.next(MapMode.Build);
         }
       } else if (
         stationGroupPending.hoverItem ===
         StationGroupElementHoverItem.ButtonAccept
       ) {
         this.mapService.updateCreatedStationGroup(stationGroupPending.rithmId);
-        this.mapService.mapMode$.next(MapMode.Build);
+        this.mapService.mapHelper.mapMode$.next(MapMode.Build);
       }
       return;
     }
@@ -2298,7 +2320,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ) {
           // return if the only group present inside the editing group. So that avoid creating an empty group
           if (
-            this.mapService.mapMode$.value === MapMode.StationGroupEdit &&
+            this.mapService.mapHelper.mapMode$.value ===
+              MapMode.StationGroupEdit &&
             this.mapService.isLastStationGroup
           ) {
             return;
@@ -2342,7 +2365,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             'stationGroupInfo',
             dataInformationDrawer
           );
-          this.mapService.isDrawerOpened$.next(true);
+          this.mapService.mapHelper.isDrawerOpened$.next(true);
           break;
         }
       }
@@ -2351,9 +2374,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapMode === MapMode.Build
       ) {
         //set mousePoint to the tracked cursor position.
-        this.mapService.currentMousePoint$.next(point);
+        this.mapService.mapHelper.currentMousePoint$.next(point);
         //On clicked opening the option menu for the edit station group.
-        this.mapService.stationButtonClick$.next({
+        this.mapService.mapStationHelper.stationButtonClick$.next({
           click: MatMenuOption.EditStationGroup,
           data: stationGroup,
         });
@@ -2484,7 +2507,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
     station.drawerOpened = true;
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
   }
 
   /**
@@ -2549,7 +2572,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     for (const station of this.stations) {
       if (station.dragging) {
         //set mousePoint to the tracked cursor position.
-        this.mapService.currentMousePoint$.next(eventCanvasPoint);
+        this.mapService.mapHelper.currentMousePoint$.next(eventCanvasPoint);
 
         //Adjust the station's mapPoint by tracked movement, adjusted for scale.
         station.mapPoint.x -= moveAmountX / this.scale;
@@ -2567,11 +2590,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param stationGroup The station group to be edited.
    */
   updateStationGroup(stationGroup: StationGroupMapElement): void {
-    this.mapService.mapMode$.next(MapMode.StationGroupEdit);
+    this.mapService.mapHelper.mapMode$.next(MapMode.StationGroupEdit);
     if (!stationGroup) {
       throw new Error(`There is no station group with status pending.`);
     }
-    this.mapService.tempStationGroup$.next(
+    this.mapService.mapStationGroupHelper.tempStationGroup$.next(
       new StationGroupMapElement({ ...stationGroup }) as StationGroupMapElement
     );
     stationGroup.status = MapItemStatus.Pending;
