@@ -41,18 +41,17 @@ describe('BannerImageWidgetComponent', () => {
   });
 
   it('should call method getImageByRithmId', () => {
-    component.image = image;
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getImageByRithmId'
     ).and.callThrough();
-    component['getImageByRithmId']();
+    component['getImageByRithmId']('123-456-789', 'banner');
 
     expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
   });
 
-  it('should show error if the request getImageByRithmId fail', () => {
-    component.image = image;
+  it('should show error if the request getImageByRithmId fail when type is banner', () => {
+    const expectedRithmId = '123-456-789';
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getImageByRithmId'
@@ -65,9 +64,29 @@ describe('BannerImageWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['getImageByRithmId']();
+    component['getImageByRithmId'](expectedRithmId, 'banner');
 
-    expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
+    expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should show error if the request getImageByRithmId fail when type is profile', () => {
+    const expectedRithmId = '123-456-789';
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getImageByRithmId'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getImageByRithmId'](expectedRithmId, 'profile');
+
+    expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -110,6 +129,27 @@ describe('BannerImageWidgetComponent', () => {
       expect(component.imageSrc).toEqual('');
       expect(component.image).toEqual(expectedImage);
       expect(component.isLoading).toBeFalse();
+    });
+  });
+
+  describe('Input profileImage', () => {
+    it('should call method getImageByRithmId', () => {
+      const expectedRithmId = '123-456-789';
+
+      const spyService = spyOn(
+        TestBed.inject(DocumentService),
+        'getImageByRithmId'
+      ).and.callThrough();
+      component.profileImage = expectedRithmId;
+
+      expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
+    });
+
+    it('should clear profile image', () => {
+      component.profileImage = null;
+
+      expect(component.isLoadingProfileImage).toBeFalse();
+      expect(component.profileImageBase64).toEqual('');
     });
   });
 });

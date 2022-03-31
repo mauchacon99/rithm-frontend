@@ -36,6 +36,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Image to banner. */
   @Input() image!: DocumentImage;
 
+  /** Image to banner. */
+  @Input() profileImage!: string | null;
+
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 

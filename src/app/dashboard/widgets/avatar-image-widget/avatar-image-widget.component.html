@@ -1,5 +1,17 @@
 <div
   class="h-[100px] w-[100px] lg:h-[120px] lg:w-[120px] rounded-full border-4 border-white bg-secondary-200 flex flex-col justify-center items-center"
 >
-  <i class="far fa-user text-white text-4xl"></i>
+  <i
+    *ngIf="!profileImage"
+    class="far fa-user text-white text-4xl"
+    [ngClass]="{ 'animate-pulse': isLoading }"
+    id="profile-icon"
+  ></i>
+  <img
+    *ngIf="profileImage"
+    [src]="profileImage"
+    class="w-full h-full object-cover"
+    alt="Profile image container"
+    id="profile-image"
+  />
 </div>

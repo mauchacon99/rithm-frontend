@@ -36,7 +36,7 @@
       <mat-select
         [formControl]="formColumns"
         multiple
-        (selectionChange)="updateWidget()"
+        (selectionChange)="updateColumnsListWidget()"
       >
         <mat-option
           *ngFor="let field of documentFields; index as index"
@@ -64,25 +64,29 @@
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Select Image</mat-label>
       <mat-select
-        [(value)]="
-          !documentImages.length
-            ? ''
-            : dataDrawerDocument.widgetItem.profileImageId
-        "
-        [formControl]="formColumns"
+        [formControl]="formProfileImageId"
+        (selectionChange)="updateProfileImageWidget()"
       >
         <mat-option
-          *ngFor="let image of documentImages; index as index"
+          *ngIf="documentProfileImages.length"
+          [value]="null"
+          id="option-profile-image-clear"
+          data-testid="option-column-clear"
+        >
+          Clear
+        </mat-option>
+        <mat-option
+          *ngFor="let image of documentProfileImages"
           [value]="image.imageId"
-          [id]="'option-profile-image' + index"
-          [attr.data-testid]="'option-column' + index"
+          [id]="'option-profile-image-' + image.imageId"
+          [attr.data-testid]="'option-column-' + image.imageId"
         >
           {{ image.imageName }} (uploaded image)
         </mat-option>
         <mat-option
-          *ngIf="!documentImages.length"
-          [value]=""
-          [attr.data-testid]="'option-column-empty'"
+          *ngIf="!documentProfileImages.length"
+          id="option-column-empty"
+          data-testid="option-column-empty"
         >
           There are not images to list.
         </mat-option>
