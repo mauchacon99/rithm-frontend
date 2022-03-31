@@ -1,5 +1,6 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
   <mat-drawer
+    [disableClose]="drawerDisableClose"
     #drawer
     mode="over"
     [position]="drawerContext === 'menuDashboard' ? 'start' : 'end'"

@@ -80,6 +80,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get disable close drawer with Esc or click outside.
+   *
+   * @returns If is disabled the drawer.
+   */
+  get drawerDisableClose(): boolean {
+    return this.sidenavDrawerService.getDisableCloseDrawerOutside;
+  }
+
+  /**
    * Whether the drawer is open.
    *
    * @returns True if the drawer is open, false otherwise.
@@ -625,5 +634,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.sidenavDrawerService.setDisableCloseDrawerOutside();
   }
 }

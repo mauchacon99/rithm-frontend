@@ -32,6 +32,9 @@ export class SidenavDrawerService {
   /** Optional data that is available to the drawer. */
   drawerData$: ReplaySubject<unknown> = new ReplaySubject(1);
 
+  /** Disable close drawer with Esc or click outside. */
+  private drawerDisableClose = false;
+
   /** Whether to show the backdrop for an opened drawer. */
   private _drawerHasBackdrop!: boolean;
 
@@ -183,5 +186,23 @@ export class SidenavDrawerService {
     !this.drawerComponent.opened
       ? this.openDrawer(context, data)
       : this.closeDrawer();
+  }
+
+  /**
+   * Set disable close drawer with Esc or click outside.
+   *
+   * @param disableClose True to disable close.
+   */
+  setDisableCloseDrawerOutside(disableClose = false): void {
+    this.drawerDisableClose = disableClose;
+  }
+
+  /**
+   * Get disable close drawer with Esc or click outside.
+   *
+   * @returns If is disabled the drawer.
+   */
+  get getDisableCloseDrawerOutside(): boolean {
+    return this.drawerDisableClose;
   }
 }
