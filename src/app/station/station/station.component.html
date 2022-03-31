@@ -348,6 +348,8 @@
                           mat-button
                           type="button"
                           color="accent"
+                          id="cancel-station-changes"
+                          data-testid="cancel-station-changes"
                           class="font-semibold text-sm"
                           (click)="cancelStationChanges()"
                         >
@@ -357,8 +359,10 @@
                           mat-raised-button
                           type="button"
                           color="accent"
+                          id="save-station-frames"
+                          data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="saveStationChanges()"
+                          (click)="saveStationFramesChanges()"
                         >
                           Save
                         </button>
@@ -387,7 +391,7 @@
                             layoutMode && widgetFocused !== i,
                           'border-accent-300 border-2': widgetFocused === i
                         }"
-                        (click)="focusWidget(i)"
+                        (click)="settingMode || focusWidget(i)"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
                           let i = index;
