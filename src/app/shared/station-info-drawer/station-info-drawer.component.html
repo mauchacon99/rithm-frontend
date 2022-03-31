@@ -41,6 +41,7 @@
                 data-testid="station-name-field"
                 [(ngModel)]="stationName"
                 (keyup)="reportNewStationMapChange()"
+                (blur)="stationName=deleteSpace(stationName)"
                 (focusout)="updateStationInfoDrawerName()"
               />
             </mat-form-field>

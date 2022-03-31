@@ -619,6 +619,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+   /**
+   * Delete space the text to be evaluated to remove excess space.
+   *
+   * @param text The text to be evaluated to remove excess spaces.
+   * @returns A string to assign a character.
+   */
+  deleteSpace(text:string): string{
+    return text.replace(/\s+/g, " ").trim();
+  }
+
   /**
    * Reporting if the name or notes on a station changed.
    */
