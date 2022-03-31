@@ -414,7 +414,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Get the user assigned to the document.
-   *
    */
   private getAssignedUserToDocument(): void {
     this.documentService
