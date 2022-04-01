@@ -376,7 +376,7 @@ export class MapService {
    * Set drawerOpened property of respective map element to false when any drawer is closed.
    */
   handleDrawerClose(): void {
-    if (this.stationElements.some((e) => e.drawerOpened)) {
+    if (this.mapStationHelper.stationElements.some((e) => e.drawerOpened)) {
       const openedStations = this.mapStationHelper.stationElements.filter(
         (e) => e.drawerOpened
       );
@@ -390,9 +390,10 @@ export class MapService {
         (e) => e.drawerOpened
       )
     ) {
-      const openedStationGroups = this.stationGroupElements.filter(
-        (e) => e.drawerOpened
-      );
+      const openedStationGroups =
+        this.mapStationGroupHelper.stationGroupElements.filter(
+          (e) => e.drawerOpened
+        );
       openedStationGroups.forEach((group) => {
         group.drawerOpened = false;
       });
@@ -467,5 +468,18 @@ export class MapService {
    */
   updateStationCanvasPoints(): void {
     this.mapStationHelper.updateStationCanvasPoints(this.mapConnectionHelper);
+  }
+
+  /**
+   * Reset the map elements.
+   */
+  resetMapElements(): void {
+    this.mapStationHelper.stationElements = [];
+    this.mapStationGroupHelper.stationGroupElements = [];
+    this.mapConnectionHelper.connectionElements = [];
+
+    this.mapStationHelper.storedStationElements = [];
+    this.mapStationGroupHelper.storedStationGroupElements = [];
+    this.mapConnectionHelper.storedConnectionElements = [];
   }
 }
