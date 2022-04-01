@@ -417,7 +417,7 @@
                             [stationRithmId]="stationRithmId"
                             [id]="widgetItem.id"
                             [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                            (frameWidget)="addRowWidget($event, i)"
+                            (frameWidget)="widgetRowAdjustment(i)"
                             (openSettingDrawer)="openSettingDrawer($event)"
                           ></app-input-frame-widget>
                         </div>

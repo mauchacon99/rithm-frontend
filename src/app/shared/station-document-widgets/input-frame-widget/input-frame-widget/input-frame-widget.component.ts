@@ -31,14 +31,11 @@ export class InputFrameWidgetComponent {
   @Input() stationRithmId = '';
 
   /** Station Rithm id. */
-  @Output() frameWidget: EventEmitter<boolean> = new EventEmitter();
+  @Output() frameWidget: EventEmitter<number> = new EventEmitter();
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
-
-  /** The list of questionFieldTypes. */
-  fieldTypes = QuestionFieldType;
 
   /**
    * Add the element draggable to the questions field.
@@ -67,7 +64,7 @@ export class InputFrameWidgetComponent {
 
     if (event.container.id !== event.previousContainer.id) {
       if (this.fields && this.fields.length >= 3) {
-        this.frameWidget.emit(true);
+        this.frameWidget.emit(this.fields.length);
       }
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
     } else {

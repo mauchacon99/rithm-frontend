@@ -942,13 +942,19 @@ export class StationComponent
   /**
    * Add row at widget current.
    *
-   * @param event Return true when should execute the function.
    * @param widgetId The index of the selected widget.
    */
-  addRowWidget(event: boolean, widgetId: number): void {
-    this.inputFrameWidgetItems[widgetId].rows++;
-    this.inputFrameWidgetItems[widgetId].minItemRows =
-      this.inputFrameWidgetItems[widgetId].rows;
+  widgetRowAdjustment(widgetId: number): void {
+    const inputWidget = this.inputFrameWidgetItems[widgetId];
+    if (
+      inputWidget &&
+      inputWidget.questions &&
+      inputWidget.minItemRows &&
+      inputWidget.rows <= inputWidget.questions.length
+    ) {
+      inputWidget.rows++;
+      inputWidget.minItemRows = inputWidget.rows;
+    }
     this.changedOptions();
   }
 
