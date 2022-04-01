@@ -47,7 +47,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   widgetType!: WidgetType;
 
   /** Show section image banner. */
-  showImageBanner = false;
+  showProfileImageBanner = false;
 
   /** While the image its uploading. */
   isUploading = false;
@@ -84,7 +84,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        this.showImageBanner =
+        this.showProfileImageBanner =
           this.splitService.getStationUploadBannerTreatment() === 'on';
       },
       error: (error: unknown) => {
