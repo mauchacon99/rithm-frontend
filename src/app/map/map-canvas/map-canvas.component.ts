@@ -321,7 +321,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       '2d'
     ) as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
-    this.mapService.mapHelper.registerCanvasContext(this.context);
 
     //Sets the canvas to the size and DPI of the screen.
     this.setCanvasSize();
@@ -424,6 +423,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     });
     this.mapService.mapHelper.isDrawerOpened$.next(false);
     this.mapService.mapHelper.mapMode$.next(MapMode.View);
+    this.mapService.mapHelper.currentCanvasPoint$.next({ x: 0, y: 0 });
   }
 
   /**
