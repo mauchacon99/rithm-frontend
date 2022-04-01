@@ -1,3 +1,7 @@
+mat-slide-toggle.mat-slide ::ng-deep .mat-ripple {
+  display: none;
+}
+
 .mat-setting-input {
   ::ng-deep .mat-form-field-wrapper {
     @apply m-0;
