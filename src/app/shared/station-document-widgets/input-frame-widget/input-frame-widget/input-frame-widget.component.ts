@@ -30,7 +30,7 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
-  /** If there are many elements in the widget, the height will be modified. */
+  /** Emit an event to adjust its heigth when its number of children overpass its number of rows. */
   @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */

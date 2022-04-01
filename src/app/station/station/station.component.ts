@@ -946,8 +946,10 @@ export class StationComponent
    * @param widget The widget selected.
    */
   widgetRowAdjustment(height: number, widget: StationFrameWidget): void {
-    widget.rows = height;
-    widget.minItemRows = height;
+    if (height > widget.rows) {
+      widget.rows = height;
+      widget.minItemRows = height;
+    }
     this.changedOptions();
   }
 
