@@ -27,7 +27,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  * Component for Station widget drawer.
  */
 @Component({
-  selector: 'app-document-widget-drawer',
+  selector: 'app-document-widget-drawer[showProfileImageBanner]',
   templateUrl: './document-widget-drawer.component.html',
   styleUrls: ['./document-widget-drawer.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -43,6 +43,30 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       this.dataDrawerDocument.widgetItem.imageName = value.imageName;
       this.updateWidget();
     }
+  }
+
+  /** Show section image document drawer. */
+  private _showProfileImageBanner = false;
+
+  /** Set profile image banner permission. */
+  @Input() set showProfileImageBanner(value: boolean) {
+    this._showProfileImageBanner = value;
+    if (
+      this.dataDrawerDocument?.widgetItem?.widgetType ===
+        WidgetType.ContainerProfileBanner &&
+      this._showProfileImageBanner
+    ) {
+      this.getImagesDocuments();
+    }
+  }
+
+  /**
+   * Get show profile image permission.
+   *
+   * @returns Profile image permission.
+   */
+  get showProfileImageBanner(): boolean {
+    return this._showProfileImageBanner;
   }
 
   /** Emit widgetIndex to widget-drawer. */
@@ -72,8 +96,14 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Loading drawer. */
   isLoading = false;
 
+  /** Loading profile image drawer. */
+  isLoadingProfileImage = false;
+
   /** Toggle to show error message if get request fails.*/
   failedLoadDrawer = false;
+
+  /** Toggle to show error message if get request fails.*/
+  failedLoadProfileImageData = false;
 
   /** Columns list to display in select. */
   documentFields: ColumnFieldsWidget[] = [];
@@ -114,12 +144,6 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.setWidgetIndex.emit(this.dataDrawerDocument.widgetIndex);
           this.getWidgetItem.emit(this.dataDrawerDocument.widgetItem);
           this.getDocumentWidget();
-          if (
-            dataDrawer.widgetItem.widgetType ===
-            WidgetType.ContainerProfileBanner
-          ) {
-            this.getImagesDocuments();
-          }
         }
       });
   }
@@ -199,14 +223,20 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
    *
    */
   getImagesDocuments(): void {
+    this.isLoadingProfileImage = true;
+    this.failedLoadProfileImageData = false;
     this.documentService
       .getImagesDocuments(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (imagesDocument) => {
+          this.isLoadingProfileImage = false;
+          this.failedLoadProfileImageData = false;
           this.documentImages = imagesDocument;
         },
         error: (error: unknown) => {
+          this.isLoadingProfileImage = false;
+          this.failedLoadProfileImageData = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
