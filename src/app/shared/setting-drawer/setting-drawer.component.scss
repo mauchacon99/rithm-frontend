@@ -11,3 +11,9 @@ mat-slide-toggle.mat-slide ::ng-deep .mat-ripple {
     @apply mt-1 w-7 h-7 leading-6;
   }
 }
+
+.mat-setting-input {
+  ::ng-deep .mat-form-field-wrapper {
+    @apply m-0;
+  }
+}

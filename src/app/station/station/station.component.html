@@ -348,6 +348,8 @@
                           mat-button
                           type="button"
                           color="accent"
+                          id="cancel-station-changes"
+                          data-testid="cancel-station-changes"
                           class="font-semibold text-sm"
                           (click)="cancelStationChanges()"
                         >
@@ -357,8 +359,10 @@
                           mat-raised-button
                           type="button"
                           color="accent"
+                          id="save-station-frames"
+                          data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="saveStationChanges()"
+                          (click)="saveStationFramesChanges()"
                         >
                           Save
                         </button>
