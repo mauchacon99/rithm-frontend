@@ -110,6 +110,7 @@ import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/comi
     MatExpansionModule,
     MatListModule,
     MatButtonToggleModule,
+    ComingSoonMessageModule,
   ],
 })
 export class DashboardModule {}

@@ -53,6 +53,8 @@
   <app-list-widget-modal
     *ngIf="!previewWidgetTypeSelected"
     [itemWidgetModalSelected]="itemWidgetModalSelected"
+    [showGroupTemplate]="showGroupTemplate"
+    [showContainerProfileBanner]="showContainerProfileBanner"
     (previewWidgetSelected)="previewWidgetTypeSelected = $event"
   ></app-list-widget-modal>
   <app-description-widget-modal
