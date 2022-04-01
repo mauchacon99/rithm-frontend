@@ -69,7 +69,7 @@
         {{ numberOfSubgroups }}
       </button>
     </div>
-    <div class="w-full p-4 pr-3 flex justify-between">
+    <div class="w-full p-4 pr-3 flex justify-between" [ngClass]="{'flex-row': !isBuilding}">
       <button
         *ngIf="isBuilding"
         mat-stroked-button
@@ -83,12 +83,16 @@
       </button>
       <button
         *ngIf="drawerOpened && !stationGroupCenter"
+        [ngClass]="{'mat-stroked-button': !isBuilding}"
+        color="accent"
         id="centerStationGroup"
         class="px-3 py-1 text-accent-500 hidden md:inline-block"
         data-testId="centerStationGroup"
         (click)="centerStationGroup()"
       >
-        <i class="fas fa-location"></i>
+       <ng-container *ngIf="!isBuilding">
+         Center
+       </ng-container> <i class="fas fa-location"></i>
       </button>
     </div>
   </div>
