@@ -190,6 +190,14 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(documentName);
   });
 
+  it('should apply trim when update the name in document info drawer', () => {
+    formGroup.controls['name'].setValue('          ');
+    component.appendedDocumentName = 'Appended Name';
+    component.updateDocumentNameBS();
+
+    expect(formGroup.controls['name'].value).toEqual('');
+  });
+
   it('should disable info-drawer-button once the info-drawer is opened', () => {
     spyOnProperty(
       TestBed.inject(SidenavDrawerService),

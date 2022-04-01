@@ -1,5 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 /** Dialog Modal for add widgets. */
@@ -8,7 +12,7 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
   templateUrl: './add-widget-modal.component.html',
   styleUrls: ['./add-widget-modal.component.scss'],
 })
-export class AddWidgetModalComponent {
+export class AddWidgetModalComponent implements OnInit {
   /** Selected item to show list widget. */
   itemWidgetModalSelected!: SelectedItemWidgetModel;
 
@@ -27,11 +31,24 @@ export class AddWidgetModalComponent {
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
+  /** Show group widget template. */
+  showGroupTemplate = false;
+
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public matData: string
+    @Inject(MAT_DIALOG_DATA) public matData: string,
+    private splitService: SplitService,
+    private errorService: ErrorService,
+    private userService: UserService
   ) {
     this.dashboardRithmId = matData;
+  }
+
+  /**
+   * Initial Method.
+   */
+  ngOnInit(): void {
+    this.split();
   }
 
   /** Close add widgets modal. */
@@ -54,5 +71,21 @@ export class AddWidgetModalComponent {
     this.previewWidgetTypeSelected
       ? (this.previewWidgetTypeSelected = null)
       : (this.identifyShowElement = 'tabs');
+  }
+
+  /**
+   * Split Service for show or hidden section Admin Portal.
+   */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showGroupTemplate =
+          this.splitService.getGroupSectionAddWidgetTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 }

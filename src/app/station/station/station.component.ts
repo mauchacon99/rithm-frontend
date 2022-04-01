@@ -26,7 +26,6 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -34,7 +33,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 /**
  * Main component for viewing a station.
  */
@@ -854,6 +853,13 @@ export class StationComponent
 
     /**Add individual properties for every Type. */
     switch (value) {
+      case FrameType.Headline:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
+        inputFrame.minItemRows = 1;
+        inputFrame.type = FrameType.Headline;
+        break;
       case FrameType.Body:
         inputFrame.cols = 6;
         inputFrame.rows = 2;
@@ -891,7 +897,7 @@ export class StationComponent
    *
    * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openSettingDrawer(field: Question): void {
+  openSettingDrawer(field: Question | string): void {
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;

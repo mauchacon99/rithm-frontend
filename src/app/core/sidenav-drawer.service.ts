@@ -27,6 +27,7 @@ export class SidenavDrawerService {
     | 'stationWidget'
     | 'documentWidget'
     | 'fieldSetting'
+    | ''
   > = new ReplaySubject(1);
 
   /** Optional data that is available to the drawer. */
