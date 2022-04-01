@@ -5,7 +5,8 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
-import { GroupWidgetTemplateModalComponent } from '../group-widget-template-modal/group-widget-template-modal.component';
+import { GroupWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/group-widget-template-modal/group-widget-template-modal.component';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
@@ -34,6 +35,7 @@ describe('ListWidgetModalComponent', () => {
         MockComponent(DocumentWidgetTemplateModalComponent),
         MockComponent(GroupWidgetTemplateModalComponent),
       ],
+      imports: [ComingSoonMessageModule],
     }).compileComponents();
   });
 
@@ -55,5 +57,23 @@ describe('ListWidgetModalComponent', () => {
     ).and.callThrough();
     component.emitPreviewWidgetSelected(WidgetType.Station);
     expect(spyEmit).toHaveBeenCalledOnceWith(WidgetType.Station);
+  });
+
+  it('should show group widget when permission is true', () => {
+    component.showGroupTemplate = true;
+    component.itemWidgetModalSelected.itemType = 'group';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeNull();
+  });
+
+  it('should not show group widget when permission is false', () => {
+    component.showGroupTemplate = false;
+    component.itemWidgetModalSelected.itemType = 'group';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeTruthy();
   });
 });
