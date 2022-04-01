@@ -165,6 +165,12 @@ describe('GroupHierarchyComponent', () => {
       data: JSON.stringify(subStationGroups),
     });
 
+    component.groupItemListSelected.push({
+      rithmId: subStationGroups.rithmId,
+      name: (subStationGroups as StationGroupData).title,
+      data: JSON.stringify(subStationGroups),
+    });
+
     component.itemListSelected.push({
       rithmId: subStationGroups.rithmId,
       name: (subStationGroups as StationGroupData).title,

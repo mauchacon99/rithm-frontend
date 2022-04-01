@@ -86,7 +86,12 @@ export class GroupHierarchyComponent {
    * @param index Index selected.
    */
   moveList(index: number): void {
-    this.groupItemListSelected.splice(index + 1, this.itemListSelected.length);
+    this.groupItemListSelected.splice(
+      index + 1,
+      this.groupItemListSelected.length
+    );
+    this.itemListSelected.splice(index, this.itemListSelected.length);
+
     const dataItemSelected = this.itemListSelected.find(
       (item) =>
         item.rithmId ===
