@@ -105,4 +105,13 @@ export class SplitService {
   public getGroupHierarchyMenuTreatment(): string {
     return this.splitClient.getTreatment('permissions_split');
   }
+
+  /**
+   * Get the section group section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupSectionAddWidgetTreatment(): string {
+    return this.splitClient.getTreatment('group_widget_split');
+  }
 }
