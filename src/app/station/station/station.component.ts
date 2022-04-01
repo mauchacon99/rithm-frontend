@@ -770,18 +770,22 @@ export class StationComponent
   /**
    * Save or update the changes make the station frame widgets.
    */
-  saveStationFramesChanges(): void {
+   saveStationWidgetsChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
     this.inputFrameWidgetItems.map((field) => {
-      field.data = JSON.stringify(field.questions);
+      if (field.questions) {
+        field.data = JSON.stringify(field.questions);
+      }
     });
-
     this.stationService
-      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
+      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
+        next: ( inputFrames ) => {
+          console.log(this.stationRithmId, this.inputFrameWidgetItems,inputFrames);
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -840,7 +844,6 @@ export class StationComponent
       y: 0,
       minItemRows: 4,
       minItemCols: 6,
-      questions: [],
       type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
@@ -854,6 +857,9 @@ export class StationComponent
 
     /**Add individual properties for every Type. */
     switch (value) {
+      case FrameType.Input:
+        inputFrame.questions = [];
+        break;
       case FrameType.Body:
         inputFrame.cols = 6;
         inputFrame.rows = 2;
