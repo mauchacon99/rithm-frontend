@@ -14,7 +14,7 @@ textarea {
 
 .widgetItem ::ng-deep {
   .mat-form-field-infix {
-    @apply pb-[8.4px];
+    @apply pb-2;
 
     border-top: 0.45em solid transparent;
   }

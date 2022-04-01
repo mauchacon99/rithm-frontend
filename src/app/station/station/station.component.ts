@@ -119,7 +119,7 @@ export class StationComponent
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
-    fixedRowHeight: 52,
+    fixedRowHeight: 50,
     displayGrid: 'always',
     pushItems: true,
     draggable: {
@@ -947,14 +947,13 @@ export class StationComponent
   widgetRowAdjustment(widgetId: number): void {
     const inputWidget = this.inputFrameWidgetItems[widgetId];
     if (
-      inputWidget &&
       inputWidget.questions &&
-      inputWidget.minItemRows &&
       inputWidget.rows <= inputWidget.questions.length
     ) {
       inputWidget.rows++;
       inputWidget.minItemRows = inputWidget.rows;
     }
+    console.log(inputWidget)
     this.changedOptions();
   }
 
