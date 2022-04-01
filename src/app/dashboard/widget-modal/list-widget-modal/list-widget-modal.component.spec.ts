@@ -64,7 +64,7 @@ describe('ListWidgetModalComponent', () => {
     component.itemWidgetModalSelected.itemType = 'group';
     fixture.detectChanges();
     const sectionPermissionDenied =
-      fixture.debugElement.nativeElement.querySelector('#comingSoon');
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
     expect(sectionPermissionDenied).toBeNull();
   });
 
