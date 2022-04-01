@@ -94,6 +94,15 @@ export class MockSplitService {
   }
 
   /**
+   * Get the profile banner split.
+   *
+   * @returns Split treatment.
+   */
+  public getProfileBannerTreatment(): string {
+    return 'on';
+  }
+
+  /**
    * Get the section group section in add widget modal.
    *
    * @returns Split treatment.
