@@ -410,15 +410,22 @@
                           >
                             <i class="fas fa-arrows fa-xl"></i>
                           </button>
-
-                          <app-input-frame-widget
-                            [fields]="widgetItem.questions"
-                            [stationViewMode]="editMode ? 'edit' : 'preview'"
-                            [stationRithmId]="stationRithmId"
-                            [id]="widgetItem.id"
-                            [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                            (openSettingDrawer)="openSettingDrawer($event)"
-                          ></app-input-frame-widget>
+                          <ng-container [ngSwitch]="widgetItem.type">
+                            <app-title-widget
+                              [ngSwitch]="frameType.Title"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-title-widget>
+                            <app-input-frame-widget
+                              *ngSwitchDefault
+                              [fields]="widgetItem.questions"
+                              [stationViewMode]="editMode ? 'edit' : 'preview'"
+                              [stationRithmId]="stationRithmId"
+                              [id]="widgetItem.id"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-input-frame-widget>
+                          </ng-container>
                         </div>
                       </gridster-item>
                     </gridster>
