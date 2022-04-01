@@ -144,50 +144,47 @@ describe('AddWidgetModalComponent', () => {
       userService = TestBed.inject(UserService);
     });
 
-    it('should get split for group widget.', () => {
+    it('should call split and treatments.', () => {
       const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      const method = spyOn(
-        splitService,
-        'getGroupSectionAddWidgetTreatment'
-      ).and.callThrough();
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(method).toHaveBeenCalled();
-      expect(component.showGroupTemplate).toBeDefined();
-    });
-
-    it('should show group widget when permission exits.', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      const method = spyOn(
+      const methodGroupSection = spyOn(
         splitService,
         'getGroupSectionAddWidgetTreatment'
       ).and.returnValue('on');
+      const methodProfileBanner = spyOn(
+        splitService,
+        'getProfileBannerTreatment'
+      ).and.returnValue('on');
+
       splitService.sdkReady$.next();
       component.ngOnInit();
+
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(method).toHaveBeenCalled();
+      expect(methodGroupSection).toHaveBeenCalled();
+      expect(methodProfileBanner).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeTrue();
+      expect(component.showContainerProfileBanner).toBeTrue();
     });
 
-    it('should not show group widget when permission does not exits.', () => {
+    it('should not show treatments when permission does not exits.', () => {
       const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      const method = spyOn(
+      const methodGroupSection = spyOn(
         splitService,
         'getGroupSectionAddWidgetTreatment'
+      ).and.returnValue('off');
+      const methodProfileBanner = spyOn(
+        splitService,
+        'getProfileBannerTreatment'
       ).and.returnValue('off');
 
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(method).toHaveBeenCalled();
+      expect(methodGroupSection).toHaveBeenCalled();
+      expect(methodProfileBanner).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeFalse();
+      expect(component.showContainerProfileBanner).toBeFalse();
     });
 
     it('should catch split error ', () => {
@@ -204,6 +201,7 @@ describe('AddWidgetModalComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeFalse();
+      expect(component.showContainerProfileBanner).toBeFalse();
     });
   });
 });
