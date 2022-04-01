@@ -5,6 +5,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('SettingDrawerComponent', () => {
   let component: SettingDrawerComponent;
@@ -13,7 +15,13 @@ describe('SettingDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingDrawerComponent],
-      imports: [MatInputModule, NoopAnimationsModule, FormsModule],
+      imports: [
+        MatInputModule,
+        NoopAnimationsModule,
+        FormsModule,
+        MatSlideToggleModule,
+        MatButtonModule,
+      ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -24,6 +32,15 @@ describe('SettingDrawerComponent', () => {
     fixture = TestBed.createComponent(SettingDrawerComponent);
     component = fixture.componentInstance;
     sideNavService = TestBed.inject(SidenavDrawerService);
+    component.fieldSetting = {
+      prompt: 'Fake question 1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
     fixture.detectChanges();
   });
 

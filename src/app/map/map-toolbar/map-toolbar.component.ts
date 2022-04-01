@@ -131,6 +131,16 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * Sets the map to add station mode in preparation for a station to be selected.
    */
   addStation(): void {
+    /** If the map is in StationGroupAdd or StationGroupEdit mode, the status must be reset. */
+    if (
+      this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd ||
+      this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupEdit
+    ) {
+      this.mapService.resetSelectedStationGroupStationStatus();
+      this.mapService.mapHelper.mapMode$.value === MapMode.StationGroupAdd
+        ? this.mapService.updatePendingStationGroup()
+        : this.mapService.revertStationGroup();
+    }
     if (!this.stationAddActive) {
       this.mapService.mapHelper.mapMode$.next(MapMode.StationAdd);
       this.mapService.mapHelper.matMenuStatus$.next(true);
