@@ -305,12 +305,19 @@ describe('WidgetDrawerComponent', () => {
         throw new Error();
       })
     );
+    const spyServiceDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'setDisableCloseDrawerOutside'
+    ).and.callThrough();
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
+
     component.uploadImage(mockEvt as unknown as Event);
+
     expect(spyError).toHaveBeenCalled();
+    expect(spyServiceDrawer).toHaveBeenCalled();
   });
 
   it('should show loading indicator when upload an image', () => {
@@ -350,5 +357,14 @@ describe('WidgetDrawerComponent', () => {
 
     expect(component.widgetType).toEqual(WidgetType.Station);
     expect(component.imageUploaded).toEqual(expectedImage);
+  });
+
+  it('should call setDisableCloseDrawerOutside when destroy component', () => {
+    const spyServiceDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'setDisableCloseDrawerOutside'
+    ).and.callThrough();
+    component.ngOnDestroy();
+    expect(spyServiceDrawer).toHaveBeenCalled();
   });
 });
