@@ -1,59 +1,32 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectedItemWidgetModel, WidgetType } from 'src/models';
-import { first } from 'rxjs/operators';
-import { UserService } from 'src/app/core/user.service';
-import { SplitService } from 'src/app/core/split.service';
-import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * The component for list widget modal.
  */
 @Component({
-  selector: 'app-list-widget-modal[itemWidgetModalSelected]',
+  selector:
+    'app-list-widget-modal[itemWidgetModalSelected][showGroupTemplate][showContainerProfileBanner]',
   templateUrl: './list-widget-modal.component.html',
   styleUrls: ['./list-widget-modal.component.scss'],
 })
-export class ListWidgetModalComponent implements OnInit {
+export class ListWidgetModalComponent {
   /** Item widget modal selected. */
   @Input() itemWidgetModalSelected!: SelectedItemWidgetModel;
+
+  /** Show group widget template. */
+  @Input() showGroupTemplate = false;
+
+  /** Show section document profile. */
+  @Input() showContainerProfileBanner = false;
 
   /** Title preview widget selected emit. */
   @Output() previewWidgetSelected = new EventEmitter<
     WidgetType | 'defaultDocument'
   >();
 
-  /** Show section document profile. */
-  isContainerProfileBanner = false;
-
   /** Enum widget types. */
   enumWidgetType = WidgetType;
-
-  constructor(
-    private userService: UserService,
-    private splitService: SplitService,
-    private errorService: ErrorService
-  ) {}
-
-  /**
-   * Initialize split on page load.
-   */
-  ngOnInit(): void {
-    this.split();
-  }
-
-  /** Split Service. */
-  private split(): void {
-    this.splitService.initSdk(this.userService.user.organization);
-    this.splitService.sdkReady$.pipe(first()).subscribe({
-      next: () => {
-        this.isContainerProfileBanner =
-          this.splitService.getProfileBannerTreatment() === 'on';
-      },
-      error: (error: unknown) => {
-        this.errorService.logError(error);
-      },
-    });
-  }
 
   /**
    * Emit preview widget selected.

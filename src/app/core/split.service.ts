@@ -114,4 +114,13 @@ export class SplitService {
   public getProfileBannerTreatment(): string {
     return this.splitClient.getTreatment('profile_banner_split');
   }
+
+  /**
+   * Get the section group section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupSectionAddWidgetTreatment(): string {
+    return this.splitClient.getTreatment('group_widget_split');
+  }
 }

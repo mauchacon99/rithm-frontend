@@ -5,12 +5,8 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 
 import { ListWidgetModalComponent } from './list-widget-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
-import { GroupWidgetTemplateModalComponent } from '../group-widget-template-modal/group-widget-template-modal.component';
-import { ComingSoonMessageComponent } from 'src/app/shared/coming-soon-message/coming-soon-message.component';
-import { UserService } from 'src/app/core/user.service';
-import { MockErrorService, MockSplitService, MockUserService } from 'src/mocks';
-import { ErrorService } from 'src/app/core/error.service';
-import { SplitService } from 'src/app/core/split.service';
+import { GroupWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/group-widget-template-modal/group-widget-template-modal.component';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
@@ -38,13 +34,8 @@ describe('ListWidgetModalComponent', () => {
         MockComponent(StationWidgetTemplateModalComponent),
         MockComponent(DocumentWidgetTemplateModalComponent),
         MockComponent(GroupWidgetTemplateModalComponent),
-        MockComponent(ComingSoonMessageComponent),
       ],
-      providers: [
-        { provide: UserService, useClass: MockUserService },
-        { provide: ErrorService, useClass: MockErrorService },
-        { provide: SplitService, useClass: MockSplitService },
-      ],
+      imports: [ComingSoonMessageModule],
     }).compileComponents();
   });
 
@@ -68,46 +59,39 @@ describe('ListWidgetModalComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith(WidgetType.Station);
   });
 
-  describe('Testing split.io', () => {
-    let splitService: SplitService;
-    let userService: UserService;
+  it('should show group widget when permission is true', () => {
+    component.showGroupTemplate = true;
+    component.itemWidgetModalSelected.itemType = 'group';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeNull();
+  });
 
-    beforeEach(() => {
-      splitService = TestBed.inject(SplitService);
-      userService = TestBed.inject(UserService);
-    });
+  it('should not show group widget when permission is false', () => {
+    component.showGroupTemplate = false;
+    component.itemWidgetModalSelected.itemType = 'group';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeTruthy();
+  });
 
-    it('should call split service and treatments', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+  it('should show profile banner widget when permission is true', () => {
+    component.showContainerProfileBanner = true;
+    component.itemWidgetModalSelected.itemType = 'document';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeNull();
+  });
 
-      const spyGetConfigWidgetsTreatment = spyOn(
-        splitService,
-        'getProfileBannerTreatment'
-      ).and.callThrough();
-
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
-      expect(component.isContainerProfileBanner).toBeTrue();
-    });
-
-    it('should catch split error ', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      splitService.sdkReady$.error('error');
-      const errorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
-      ).and.callThrough();
-      component.ngOnInit();
-
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
-      expect(component.isContainerProfileBanner).toBeFalse();
-    });
+  it('should not show profile banner widget when permission is false', () => {
+    component.showContainerProfileBanner = false;
+    component.itemWidgetModalSelected.itemType = 'document';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeTruthy();
   });
 });
