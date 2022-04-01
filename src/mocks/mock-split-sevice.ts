@@ -92,4 +92,13 @@ export class MockSplitService {
   public getGroupHierarchyMenuTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section group section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupSectionAddWidgetTreatment(): string {
+    return 'on';
+  }
 }
