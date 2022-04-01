@@ -59,7 +59,9 @@
               [attr.data-testid]="'item-navigation-' + item.rithmId"
               (click)="moveList(index)"
               [disabled]="index === groupItemListSelected.length - 1"
-              [ngClass]="{'button-disabled':index === groupItemListSelected.length - 1}"
+              [ngClass]="{
+                'button-disabled': index === groupItemListSelected.length - 1
+              }"
             >
               {{ item.name }}</button
             >/
