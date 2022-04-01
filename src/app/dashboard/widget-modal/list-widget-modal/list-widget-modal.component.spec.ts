@@ -76,4 +76,22 @@ describe('ListWidgetModalComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
     expect(sectionPermissionDenied).toBeTruthy();
   });
+
+  it('should show profile banner widget when permission is true', () => {
+    component.showContainerProfileBanner = true;
+    component.itemWidgetModalSelected.itemType = 'document';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeNull();
+  });
+
+  it('should not show profile banner widget when permission is false', () => {
+    component.showContainerProfileBanner = false;
+    component.itemWidgetModalSelected.itemType = 'document';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeTruthy();
+  });
 });

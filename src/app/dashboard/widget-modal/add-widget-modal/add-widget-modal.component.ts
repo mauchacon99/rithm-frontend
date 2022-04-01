@@ -34,6 +34,9 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show group widget template. */
   showGroupTemplate = false;
 
+  /** Show section document profile. */
+  showContainerProfileBanner = false;
+
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
     @Inject(MAT_DIALOG_DATA) public matData: string,
@@ -82,6 +85,9 @@ export class AddWidgetModalComponent implements OnInit {
       next: () => {
         this.showGroupTemplate =
           this.splitService.getGroupSectionAddWidgetTreatment() === 'on';
+
+        this.showContainerProfileBanner =
+          this.splitService.getProfileBannerTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
