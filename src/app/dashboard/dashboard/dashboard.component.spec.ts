@@ -497,11 +497,6 @@ describe('DashboardComponent', () => {
         maxWidth: '1500px',
         data: dataDashboard.rithmId,
       };
-      const drawerContext = 'stationWidget';
-      sidenavDrawer.drawerContext$.next(drawerContext);
-      expect(component.drawerContext).toBe(drawerContext);
-      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
-      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       const spyDialog = spyOn(
         TestBed.inject(MatDialog),
         'open'
@@ -509,7 +504,6 @@ describe('DashboardComponent', () => {
         afterClosed: () => of(false),
       } as MatDialogRef<typeof component>);
       component.openDialogAddWidget();
-      expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalledOnceWith(
         AddWidgetModalComponent,
         dataExpectModal
