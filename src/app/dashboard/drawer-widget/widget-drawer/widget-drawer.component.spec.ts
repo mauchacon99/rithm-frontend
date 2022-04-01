@@ -358,13 +358,4 @@ describe('WidgetDrawerComponent', () => {
     expect(component.widgetType).toEqual(WidgetType.Station);
     expect(component.imageUploaded).toEqual(expectedImage);
   });
-
-  it('should call setDisableCloseDrawerOutside when destroy component', () => {
-    const spyServiceDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'setDisableCloseDrawerOutside'
-    ).and.callThrough();
-    component.ngOnDestroy();
-    expect(spyServiceDrawer).toHaveBeenCalled();
-  });
 });
