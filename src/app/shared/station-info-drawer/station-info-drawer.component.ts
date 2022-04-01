@@ -816,6 +816,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
+    this.sidenavDrawerService.drawerContext$.next('');
   }
 
   /**
