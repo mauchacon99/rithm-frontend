@@ -349,11 +349,11 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      (!this.stationForm.valid &&
-        !(
-          !this.stationForm.dirty ||
-          !this.stationForm.controls.stationTemplateForm.touched
-        )) ||
+      !this.stationForm.valid ||
+      !(
+        this.stationForm.dirty ||
+        this.stationForm.controls.stationTemplateForm.touched
+      ) ||
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
@@ -426,6 +426,7 @@ export class StationComponent
               this.stationInformation.questions
             );
           }
+          this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
         },
@@ -516,6 +517,7 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = stationQuestions as Question[];
           }
+          this.resetStationForm();
           this.popupService.notify('Station successfully saved');
         },
         error: (error: unknown) => {
@@ -542,6 +544,7 @@ export class StationComponent
           this.stationTabsIndex = 1;
           this.pendingFlowLogicRules = [];
           this.childFlowLogic.ruleLoading = false;
+          this.resetStationForm();
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -944,5 +947,15 @@ export class StationComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Resets the station form.
+   */
+  private resetStationForm() {
+    setTimeout(() => {
+      this.stationForm.markAsPristine();
+      this.stationForm.controls.stationTemplateForm.markAsUntouched();
+    }, 0);
   }
 }
