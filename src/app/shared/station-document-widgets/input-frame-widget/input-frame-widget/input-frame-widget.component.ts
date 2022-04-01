@@ -30,8 +30,8 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
-  /** Station Rithm id. */
-  @Output() frameWidget: EventEmitter<number> = new EventEmitter();
+  /** If there are many elements in the widget, the height will be modified. */
+  @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
@@ -63,10 +63,10 @@ export class InputFrameWidgetComponent {
         };
 
     if (event.container.id !== event.previousContainer.id) {
-      if (this.fields && this.fields.length >= 3) {
-        this.frameWidget.emit(this.fields.length);
-      }
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
+      if (this.fields && this.fields.length > 4) {
+        this.widgetRowAdjustment.emit(this.fields.length);
+      }
     } else {
       moveItemInArray(
         event.container.data,

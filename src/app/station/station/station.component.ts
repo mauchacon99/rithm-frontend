@@ -942,18 +942,12 @@ export class StationComponent
   /**
    * Add row at widget current.
    *
-   * @param widgetId The index of the selected widget.
+   * @param height The new height of widget.
+   * @param widget The widget selected.
    */
-  widgetRowAdjustment(widgetId: number): void {
-    const inputWidget = this.inputFrameWidgetItems[widgetId];
-    if (
-      inputWidget.questions &&
-      inputWidget.rows <= inputWidget.questions.length
-    ) {
-      inputWidget.rows++;
-      inputWidget.minItemRows = inputWidget.rows;
-    }
-    console.log(inputWidget)
+  widgetRowAdjustment(height: number, widget: StationFrameWidget): void {
+    widget.rows = height;
+    widget.minItemRows = height;
     this.changedOptions();
   }
 

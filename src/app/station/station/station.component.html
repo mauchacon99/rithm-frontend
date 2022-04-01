@@ -423,7 +423,9 @@
                               [stationRithmId]="stationRithmId"
                               [id]="widgetItem.id"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (frameWidget)="widgetRowAdjustment(i)"
+                              (widgetRowAdjustment)="
+                                widgetRowAdjustment($event, widgetItem)
+                              "
                               (openSettingDrawer)="openSettingDrawer($event)"
                             ></app-input-frame-widget>
                           </ng-container>
