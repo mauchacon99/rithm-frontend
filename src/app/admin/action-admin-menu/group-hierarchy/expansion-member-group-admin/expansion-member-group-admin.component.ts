@@ -62,13 +62,13 @@ export class ExpansionMemberGroupAdminComponent {
   getStationsMembers(): void {
     this.isLoading = true;
     this.isErrorGetUsers = false;
-    const getStation$ = this.isAdmin
+    const getMembersStation$ = this.isAdmin
       ? this.stationService.getStationOwnerRoster(this.stationSelected.rithmId)
       : this.stationService.getStationWorkerRoster(
           this.stationSelected.rithmId
         );
 
-    getStation$.pipe(first()).subscribe({
+    getMembersStation$.pipe(first()).subscribe({
       next: (members) => {
         this.members = members;
         this.isLoading = false;

@@ -29,6 +29,7 @@
   <div class="loading flex" *ngIf="isLoading">
     <app-loading-indicator
       class="flex-grow m-auto"
+      [inlineText]="'loading'"
       id="loading-get-members"
     ></app-loading-indicator>
   </div>
@@ -42,26 +43,30 @@
     *ngIf="members && !isLoading && !isErrorGetUsers"
   >
     <div class="px-5" *ngIf="!members.length">
-      <p class="text-error-500">There are no members to display.</p>
+      <p>There are no members to display.</p>
     </div>
 
     <div *ngFor="let member of members">
       <mat-list-item
         matRipple
+        [id]="'member' + member.rithmId"
+        [attr.data-testid]="'member' + member.rithmId"
         class="item hover:bg-accent-50 cursor-pointer border-b color-border"
       >
-        <div class="flex justify-between items-center">
-          <div class="flex space-x-3 items-center">
+        <div class="w-full flex justify-between items-center">
+          <div class="w-9/12 flex space-x-3 items-center">
             <app-user-avatar
               [firstName]="member.firstName"
               [lastName]="member.lastName"
             >
             </app-user-avatar>
-            <div class="flex flex-col">
-              <span class="text-sm">{{
+            <div class="w-full flex flex-col">
+              <span class="text-sm whitespace-nowrap truncate">{{
                 member.firstName + member.lastName
               }}</span>
-              <span class="text-sm text-accent-500">{{ member.email }}</span>
+              <span class="text-sm text-accent-500 whitespace-nowrap truncate"
+                >{{ member.email }}
+              </span>
             </div>
           </div>
 

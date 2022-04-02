@@ -6,6 +6,7 @@ import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { StationGroupData, StationListGroup } from 'src/models';
 import { ExpansionMemberGroupAdminComponent } from './expansion-member-group-admin.component';
@@ -49,6 +50,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       declarations: [
         ExpansionMemberGroupAdminComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(UserAvatarComponent),
       ],
       imports: [MatExpansionModule, NoopAnimationsModule],
       providers: [
@@ -107,30 +109,6 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     it('should  return true if isGroup', () => {
       const result = component.isGroup;
       expect(result).toBeTrue();
-    });
-
-    it('should call service that return station members for groups how admin', () => {
-      const spyService = spyOn(
-        stationService,
-        'getStationOwnerRoster'
-      ).and.callThrough();
-      component.isAdmin = true;
-      component.stationSelected = subStationGroups;
-      fixture.detectChanges();
-      component.getStationsMembers();
-      expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId);
-    });
-
-    it('should call service that return station members for groups how user', () => {
-      const spyService = spyOn(
-        stationService,
-        'getStationWorkerRoster'
-      ).and.callThrough();
-      component.isAdmin = false;
-      component.stationSelected = subStationGroups;
-      fixture.detectChanges();
-      component.getStationsMembers();
-      expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId);
     });
   });
 
