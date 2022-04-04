@@ -39,12 +39,10 @@ export class UserGroupStationAdminComponent {
    * Navigate the user to the station on the map.
    */
   goToStationOnMap(): void {
-    const emitCenterOnMap = this.isGroup
-      ? 'centerStationGroupRithmId$'
-      : 'centerStationRithmId$';
-    this.mapService.mapStationHelper[emitCenterOnMap].next(
-      this.selectedItem.rithmId
-    );
+    const emitCenterOnMap$ = this.isGroup
+      ? this.mapService.mapStationHelper.centerStationGroupRithmId$
+      : this.mapService.mapStationHelper.centerStationRithmId$;
+    emitCenterOnMap$.next(this.selectedItem.rithmId);
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigateByUrl('/map');
   }
