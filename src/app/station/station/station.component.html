@@ -411,6 +411,11 @@
                             <i class="fas fa-arrows fa-xl"></i>
                           </button>
                           <ng-container [ngSwitch]="widgetItem.type">
+                            <app-headline-widget
+                              *ngSwitchCase="frameType.Headline"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-headline-widget>
                             <app-title-widget
                               *ngSwitchCase="frameType.Title"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
