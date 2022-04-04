@@ -912,6 +912,11 @@ describe('StationComponent', () => {
       component.addInputFrame(FrameType.Title);
       expect(component.inputFrameWidgetItems).toHaveSize(1);
     });
+    fit('should add a new banner widget with different id', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+      component.addInputFrame(FrameType.Image);
+      expect(component.inputFrameWidgetItems).toHaveSize(1);
+    });
 
     it('should add more than one title widget with different id', () => {
       expect(component.inputFrameWidgetItems).toHaveSize(0);
