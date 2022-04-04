@@ -49,6 +49,7 @@ import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-dr
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -100,6 +101,7 @@ describe('DashboardComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         Renderer2,
         { provide: ElementRef, useValue: MockService(ElementRef) },
+        { provide: MobileBrowserChecker, useClass: MobileBrowserChecker },
       ],
       imports: [
         MatSidenavModule,
@@ -826,13 +828,15 @@ describe('DashboardComponent', () => {
   });
 
   it('should set config breakpoint for mobile devices', () => {
-    spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
+    spyOnProperty(
+      TestBed.inject(MobileBrowserChecker),
+      'isMobileDevice'
+    ).and.returnValue(true);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(1920);
   });
 
   it('should set config breakpoint for not mobile devices', () => {
-    spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(640);
   });
@@ -842,7 +846,6 @@ describe('DashboardComponent', () => {
       component,
       'changedOptions'
     ).and.callThrough();
-    spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(640);
     expect(spyChangeGridster).toHaveBeenCalled();
@@ -853,7 +856,10 @@ describe('DashboardComponent', () => {
       component,
       'changedOptions'
     ).and.callThrough();
-    spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
+    spyOnProperty(
+      TestBed.inject(MobileBrowserChecker),
+      'isMobileDevice'
+    ).and.returnValue(true);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(1920);
     expect(spyChangeGridster).toHaveBeenCalled();
