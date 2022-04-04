@@ -9,7 +9,7 @@ export class MobileConfig {
    */
   get isMobileDevice(): boolean {
     return !!navigator.userAgent.match(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|Linux aarch64/gim
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|Linux aarch64/igm
     );
   }
 }
