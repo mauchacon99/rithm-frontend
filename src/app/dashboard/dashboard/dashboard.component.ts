@@ -192,7 +192,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ? 1920
       : 640;
     this.changedOptions();
-    console.log(navigator.userAgent, this.mobileConfig.isMobileDevice);
   }
 
   /** Get loading in service dashboard for show loading in dashboard component. */
