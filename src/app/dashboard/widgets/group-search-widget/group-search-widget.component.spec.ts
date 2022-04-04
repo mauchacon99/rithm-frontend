@@ -304,7 +304,7 @@ describe('GroupSearchWidgetComponent', () => {
     component.stationGroupRithmId = '123123-12313-123312';
     const mapService = TestBed.inject(MapService);
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
-    component.goToGroupOnMap();
+    component.goToStationGroupOnMap();
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
     expect(mapService.mapStationHelper.centerStationGroupRithmId$.value).toBe(
       component.stationGroupRithmId
