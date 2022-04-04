@@ -28,6 +28,7 @@ src/app/navigation/ @strut-software/team-leads
 
 # Team Phoenix rules -- map
 src/app/map/ @strut-software/map-reviewers
+src/helpers/map/ @strut-software/map-reviewers
 
 # Team Lion rules -- document, settings, station
 src/app/document/ @strut-software/team-lion
