@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
+import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import {
   StationGroupData,
   StationListGroup,
@@ -55,7 +57,8 @@ export class ExpansionMemberGroupAdminComponent {
 
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private dialog: MatDialog
   ) {}
 
   /**
@@ -86,5 +89,31 @@ export class ExpansionMemberGroupAdminComponent {
         );
       },
     });
+  }
+
+  /**
+   * Opens a modal with roster management.
+   *
+   * @param event Event from button for stop propagation.
+   */
+  openManagementRosterModal(event: Event): void {
+    event.stopPropagation();
+    if (!this.isGroup) {
+      const dialog = this.dialog.open(RosterManagementModalComponent, {
+        panelClass: ['w-5/6', 'sm:w-4/5'],
+        maxWidth: '1024px',
+        disableClose: true,
+        data: {
+          stationId: this.stationSelected.rithmId,
+          type: this.isAdmin ? 'owners' : 'workers',
+        },
+      });
+      dialog
+        .afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          this.getStationsMembers();
+        });
+    }
   }
 }
