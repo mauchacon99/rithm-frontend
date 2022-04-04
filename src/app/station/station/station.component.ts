@@ -875,6 +875,13 @@ export class StationComponent
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
         break;
+      case FrameType.Image:
+        inputFrame.cols = 4;
+        inputFrame.rows = 4;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.type = FrameType.Image;
+        break;
       default:
         break;
     }
