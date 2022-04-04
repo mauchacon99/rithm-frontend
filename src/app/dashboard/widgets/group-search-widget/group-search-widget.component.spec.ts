@@ -311,5 +311,28 @@ describe('GroupSearchWidgetComponent', () => {
       component.stationGroupRithmId
     );
     expect(mapService.mapHelper.viewStationButtonClick$.value).toBeTrue();
+
+    mapService.mapStationHelper.centerStationGroupRithmId$.subscribe(
+      (stationGroupRithmId) => {
+        expect(stationGroupRithmId).toBe(component.stationGroupRithmId);
+      }
+    );
+    mapService.mapHelper.viewStationButtonClick$.subscribe((view) => {
+      expect(view).toBe(true);
+    });
+  });
+
+  it('should call goToStationGroupOnMap', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.subStationGroupData = dataStationGroupWidget.subStationGroups;
+    component.stations = dataStationGroupWidget.stations;
+    fixture.detectChanges();
+    const spyDialog = spyOn(component, 'goToStationGroupOnMap');
+    const btn = fixture.debugElement.nativeElement.querySelector('#map-button');
+    expect(btn).toBeTruthy();
+    btn.click();
+    expect(spyDialog).toHaveBeenCalled();
   });
 });
