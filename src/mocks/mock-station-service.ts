@@ -44,6 +44,9 @@ export class MockStationService {
   /** The questions to be updated when it changes in station page. */
   currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
 
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
+
   /**
    * Gets a station information.
    *

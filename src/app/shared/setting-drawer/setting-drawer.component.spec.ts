@@ -7,6 +7,8 @@ import { QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks';
 
 describe('SettingDrawerComponent', () => {
   let component: SettingDrawerComponent;
@@ -24,6 +26,7 @@ describe('SettingDrawerComponent', () => {
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: StationService, useClass: MockStationService },
       ],
     }).compileComponents();
   });
