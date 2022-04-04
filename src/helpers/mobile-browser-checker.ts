@@ -1,7 +1,7 @@
 /**
  * Set configs for mobile devices.
  */
-export class MobileConfig {
+export class MobileBrowserChecker {
   /**
    * Detect mobile devices.
    *
@@ -9,7 +9,7 @@ export class MobileConfig {
    */
   get isMobileDevice(): boolean {
     return !!navigator.userAgent.match(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|Linux aarch64/igm
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|Linux aarch64/gim
     );
   }
 }

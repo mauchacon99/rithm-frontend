@@ -1,10 +1,10 @@
-import { MobileConfig } from './mobile-config';
+import { MobileBrowserChecker } from './mobile-browser-checker';
 
 describe('MobileConfig', () => {
-  let mobileConfig: MobileConfig;
+  let mobileConfig: MobileBrowserChecker;
 
   beforeEach(() => {
-    mobileConfig = new MobileConfig();
+    mobileConfig = new MobileBrowserChecker();
   });
 
   it('should be created', () => {

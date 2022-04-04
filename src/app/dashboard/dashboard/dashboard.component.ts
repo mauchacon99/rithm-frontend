@@ -29,7 +29,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
-import { MobileConfig } from 'src/helpers/mobile-config';
+import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 
 /**
  * Main component for the dashboard screens.
@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private mobileConfig: MobileConfig
+    private mobileBrowserChecker: MobileBrowserChecker
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -188,7 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Set config break point in mobile. */
   private setConfigMobileGridster(): void {
-    this.options.mobileBreakpoint = this.mobileConfig.isMobileDevice
+    this.options.mobileBreakpoint = this.mobileBrowserChecker.isMobileDevice
       ? 1920
       : 640;
     this.changedOptions();

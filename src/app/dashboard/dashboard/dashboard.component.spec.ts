@@ -49,7 +49,7 @@ import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-dr
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { MobileConfig } from 'src/helpers/mobile-config';
+import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -101,7 +101,7 @@ describe('DashboardComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         Renderer2,
         { provide: ElementRef, useValue: MockService(ElementRef) },
-        { provide: MobileConfig, useClass: MobileConfig },
+        { provide: MobileBrowserChecker, useClass: MobileBrowserChecker },
       ],
       imports: [
         MatSidenavModule,
@@ -829,7 +829,7 @@ describe('DashboardComponent', () => {
 
   it('should set config breakpoint for mobile devices', () => {
     spyOnProperty(
-      TestBed.inject(MobileConfig),
+      TestBed.inject(MobileBrowserChecker),
       'isMobileDevice'
     ).and.returnValue(true);
     component.ngOnInit();
@@ -857,7 +857,7 @@ describe('DashboardComponent', () => {
       'changedOptions'
     ).and.callThrough();
     spyOnProperty(
-      TestBed.inject(MobileConfig),
+      TestBed.inject(MobileBrowserChecker),
       'isMobileDevice'
     ).and.returnValue(true);
     component.ngOnInit();
