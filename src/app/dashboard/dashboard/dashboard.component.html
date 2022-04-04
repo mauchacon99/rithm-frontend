@@ -1,5 +1,6 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
   <mat-drawer
+    [disableClose]="drawerDisableClose"
     #drawer
     mode="over"
     [position]="drawerContext === 'menuDashboard' ? 'start' : 'end'"
@@ -51,8 +52,14 @@
         <button
           mat-button
           id="menu-button"
-          class="transition ease-in-out bg-darkBlue w-[40px] h-[40px] rounded hover:scale-x-110 hover:translate-x-1 -left-1 top-36 z-10 shadow-lg"
+          class="bg-darkBlue w-[40px] h-[40px] rounded -left-1 top-36 z-10 shadow-lg"
           (click)="toggleDrawer('menuDashboard')"
+          [ngClass]="{
+            'bg-darkBlue transition ease-in-out hover:scale-x-110 hover:translate-x-1':
+              !drawerDisableClose,
+            'bg-secondary-300': drawerDisableClose
+          }"
+          [disabled]="drawerDisableClose"
         >
           <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
         </button>
