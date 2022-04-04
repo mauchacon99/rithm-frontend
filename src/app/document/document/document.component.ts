@@ -327,7 +327,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.documentLoading = false;
         },
         error: (error: unknown) => {
-          this.navigateBack();
+          this.navigateBack(true);
           this.documentLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
