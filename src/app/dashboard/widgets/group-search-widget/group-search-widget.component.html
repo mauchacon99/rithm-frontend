@@ -14,7 +14,7 @@
 
 <div class="w-full h-full p-2" *ngIf="!isLoading && !errorStationGroup">
   <!-- Header widget -->
-  <div class="flex flex-col input-search m-2">
+  <div class="flex flex-col input-search mt-2">
     <h3 *ngIf="dataStationGroup" class="font-semibold truncate">
       {{ dataStationGroup.title || 'Untitled Group' }}
     </h3>
@@ -59,7 +59,13 @@
           {{ subStation.title || 'Untitled Group' }}</span
         >
 
-        <button mat-icon-button id="map-button" data-testid="map-button">
+        <button
+          mat-icon-button
+          [disabled]="editMode"
+          id="map-button"
+          (click)="goToStationGroupOnMap()"
+          data-testid="map-button"
+        >
           <i class="fa-solid fa-map text-base text-secondary-500"></i>
         </button>
       </div>

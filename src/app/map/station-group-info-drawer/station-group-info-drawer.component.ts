@@ -163,7 +163,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
         (stGroup) => stGroup.rithmId === this.stationGroupRithmId
       );
     this.mapService.mapStationGroupHelper.stationGroupElements[index].title =
-      this.groupName;
+      this.groupName.trimStart().trimEnd();
     this.mapService.mapStationGroupHelper.stationGroupElements[
       index
     ].isChained = this.isChained;
@@ -180,7 +180,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    */
   setStationGroupChanges(): void {
     this.groupName =
-      this.groupName.length > 0 ? this.groupName : 'Untitled Group';
+      this.groupName.trim().length > 0
+        ? this.groupName.trimStart().trimEnd()
+        : 'Untitled Group';
     if (
       this.currentMode === MapMode.Build ||
       this.currentMode === MapMode.StationGroupAdd ||

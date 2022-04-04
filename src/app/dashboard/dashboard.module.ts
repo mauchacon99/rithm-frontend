@@ -52,6 +52,7 @@ import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-t
 import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-search-widget.component';
 import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar-image-widget.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
+import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 
 @NgModule({
   declarations: [
@@ -110,6 +111,8 @@ import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/comi
     MatExpansionModule,
     MatListModule,
     MatButtonToggleModule,
+    ComingSoonMessageModule,
   ],
+  providers: [MobileBrowserChecker],
 })
 export class DashboardModule {}
