@@ -120,6 +120,7 @@ describe('UserGroupStationAdminComponent', () => {
 
     it('should redirect to map and center station', () => {
       component.selectedItem = stations;
+      const spyMethod = spyOn(component, 'goToStationOnMap').and.callThrough();
       const spySubjectCenter = spyOn(
         mapService.mapStationHelper.centerStationRithmId$,
         'next'
@@ -138,10 +139,12 @@ describe('UserGroupStationAdminComponent', () => {
       expect(spySubjectCenter).toHaveBeenCalledOnceWith(stations.rithmId);
       expect(spySubjectViewButton).toHaveBeenCalledOnceWith(true);
       expect(spyRouter).toHaveBeenCalledOnceWith('/map');
+      expect(spyMethod).toHaveBeenCalled();
     });
 
     it('should redirect to map and center stationGroup', () => {
       component.selectedItem = subStationGroups;
+      const spyMethod = spyOn(component, 'goToStationOnMap').and.callThrough();
       const spySubjectCenter = spyOn(
         mapService.mapStationHelper.centerStationGroupRithmId$,
         'next'
@@ -162,6 +165,7 @@ describe('UserGroupStationAdminComponent', () => {
         subStationGroups.rithmId
       );
       expect(spySubjectViewButton).toHaveBeenCalledOnceWith(true);
+      expect(spyMethod).toHaveBeenCalled();
       expect(spyRouter).toHaveBeenCalledOnceWith('/map');
     });
   });
