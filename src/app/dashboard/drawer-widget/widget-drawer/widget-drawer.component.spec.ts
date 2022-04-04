@@ -153,7 +153,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should show section upload image and defined input in button', () => {
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
     fixture.detectChanges();
     const uploadImageButton = fixture.debugElement.nativeElement.querySelector(
@@ -168,7 +168,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should remove image selected', () => {
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
     component.imageUploaded = {
       imageId: '24782-52555-4524-542-4555',
@@ -188,14 +188,19 @@ describe('WidgetDrawerComponent', () => {
       TestBed.inject(DocumentService),
       'uploadImage'
     ).and.callThrough();
+    const spyServiceDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'setDisableCloseDrawerOutside'
+    ).and.callThrough();
     const mockFile = new File([''], 'name', { type: 'text/png' });
     const mockEvt = { target: { files: [mockFile] } };
     component.uploadImage(mockEvt as unknown as Event);
     expect(spyService).toHaveBeenCalledOnceWith(mockFile);
+    expect(spyServiceDrawer).toHaveBeenCalled();
   });
 
   it('should show alert delete and remove image in widget', async () => {
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
     component.imageUploaded = {
       imageId: '24782-52555-4524-542-4555',
@@ -269,7 +274,7 @@ describe('WidgetDrawerComponent', () => {
       expect(sectionImageBanner).toBeDefined();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(method).toHaveBeenCalled();
-      expect(component.showImageBanner).toBeTrue();
+      expect(component.showProfileImageBanner).toBeTrue();
     });
 
     it('should show error if get split fail.', () => {
@@ -300,16 +305,23 @@ describe('WidgetDrawerComponent', () => {
         throw new Error();
       })
     );
+    const spyServiceDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'setDisableCloseDrawerOutside'
+    ).and.callThrough();
     const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
+
     component.uploadImage(mockEvt as unknown as Event);
+
     expect(spyError).toHaveBeenCalled();
+    expect(spyServiceDrawer).toHaveBeenCalled();
   });
 
   it('should show loading indicator when upload an image', () => {
-    component.showImageBanner = true;
+    component.showProfileImageBanner = true;
     component.widgetType = WidgetType.DocumentListBanner;
     component.isUploading = true;
     fixture.detectChanges();

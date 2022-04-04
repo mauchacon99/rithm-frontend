@@ -1,6 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { StationGroupData, StationListGroup } from 'src/models';
 
+/** Selected List element for StationGroupData | StationListGroup.*/
+interface itemSelected {
+  /** Selected item RithmId. */
+  rithmId: string;
+
+  /** Selected item name. */
+  name: string;
+
+  /** Selected item data. */
+  data: string;
+}
+
 /**
  * Component to show hierarchy on admin panel.
  */
@@ -13,8 +25,17 @@ export class GroupHierarchyComponent {
   /** Value to show or hidden this component based on permission. */
   @Input() showGroupHierarchy!: boolean;
 
-  /** Columns of render with stationGroupRithmId. */
-  columnsStationGroupRithmId: string[] = [''];
+  /** List element selected. */
+  itemListSelected: itemSelected[] = [];
+
+  /** List group selected. */
+  groupItemListSelected: itemSelected[] = [
+    {
+      rithmId: '',
+      name: 'Home',
+      data: '{}',
+    },
+  ];
 
   /** Value of selected item. */
   selectedItem!: StationGroupData | StationListGroup;
@@ -39,9 +60,46 @@ export class GroupHierarchyComponent {
     index: number
   ): void {
     this.selectedItem = itemSelected;
-    this.columnsStationGroupRithmId.splice(index + 1);
+    this.itemListSelected.splice(index);
+    this.groupItemListSelected.splice(index + 1);
+
+    this.itemListSelected.push({
+      rithmId: itemSelected.rithmId,
+      name: this.isGroup
+        ? (itemSelected as StationGroupData).title
+        : (itemSelected as StationListGroup).name,
+      data: JSON.stringify(itemSelected),
+    });
+
     if (this.isGroup) {
-      this.columnsStationGroupRithmId.push(itemSelected.rithmId);
+      this.groupItemListSelected.push({
+        rithmId: itemSelected.rithmId,
+        name: (itemSelected as StationGroupData).title,
+        data: JSON.stringify(itemSelected),
+      });
+    }
+  }
+
+  /**
+   * Navigate between the different columns of options.
+   *
+   * @param index Index selected.
+   */
+  moveList(index: number): void {
+    this.groupItemListSelected.splice(
+      index + 1,
+      this.groupItemListSelected.length
+    );
+    this.itemListSelected.splice(index, this.itemListSelected.length);
+
+    const dataItemSelected = this.itemListSelected.find(
+      (item) =>
+        item.rithmId ===
+        this.groupItemListSelected[this.groupItemListSelected.length - 1]
+          .rithmId
+    );
+    if (dataItemSelected) {
+      this.selectedItem = JSON.parse(dataItemSelected.data);
     }
   }
 }
