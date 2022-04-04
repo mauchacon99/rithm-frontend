@@ -44,6 +44,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   drawer!: MatDrawer;
 
   /**
+   * Detect mobile devices.
+   *
+   * @returns True if device is mobile.
+   */
+  get isMobileDevice(): boolean {
+    return !!(
+      navigator.userAgent.match(/Android/i) ||
+      navigator.userAgent.match(/webOS/i) ||
+      navigator.userAgent.match(/iPhone/i) ||
+      navigator.userAgent.match(/iPad/i) ||
+      navigator.userAgent.match(/iPod/i) ||
+      navigator.userAgent.match(/BlackBerry/i) ||
+      navigator.userAgent.match(/Windows Phone/i) ||
+      navigator.userAgent.match(/Linux aarch64/i)
+    );
+  }
+
+  /**
    * Whether the signed in user is an admin or not.
    *
    * @returns True if the user is an admin, false otherwise.
@@ -59,6 +77,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   get drawerHasBackdrop(): boolean {
     return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Get disable close drawer with Esc or click outside.
+   *
+   * @returns If is disabled the drawer.
+   */
+  get drawerDisableClose(): boolean {
+    return this.sidenavDrawerService.getDisableCloseDrawerOutside;
   }
 
   /**
@@ -163,6 +190,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Initialize split on page load.
    */
   ngOnInit(): void {
+    this.setConfigMobileGridster();
     this.subscribeIsLoadingDashboardService$();
     this.subscribeDrawerContext$();
     this.subscribeDrawerDataWidget$();
@@ -172,6 +200,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /** Set config break point in mobile. */
+  private setConfigMobileGridster(): void {
+    this.options.mobileBreakpoint = this.isMobileDevice ? 1920 : 640;
+    this.changedOptions();
   }
 
   /** Get loading in service dashboard for show loading in dashboard component. */
@@ -402,6 +436,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+    this.setConfigMobileGridster();
   }
 
   /**
@@ -496,14 +531,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.toggleDrawerOnlyForWidgets();
     this.isLoading = true;
     this.errorLoadingDashboard = false;
+    const bodyDashboardData = this.parseDashboardData();
     const updateDashboard$ =
       this.dashboardData.type === this.roleDashboardMenu.Company
-        ? this.dashboardService.updateOrganizationDashboard(
-            this.parseDashboardData()
-          )
-        : this.dashboardService.updatePersonalDashboard(
-            this.parseDashboardData()
-          );
+        ? this.dashboardService.updateOrganizationDashboard(bodyDashboardData)
+        : this.dashboardService.updatePersonalDashboard(bodyDashboardData);
     updateDashboard$.pipe(first()).subscribe({
       next: (dashboardUpdate) => {
         this.dashboardData = dashboardUpdate;
@@ -582,7 +614,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Open dialog add widget.
    */
   openDialogAddWidget(): void {
-    this.toggleDrawerOnlyForWidgets();
     const dialog = this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
@@ -602,5 +633,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.sidenavDrawerService.setDisableCloseDrawerOutside();
   }
 }

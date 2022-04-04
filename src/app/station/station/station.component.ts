@@ -20,7 +20,8 @@ import {
   Question,
   PossibleAnswer,
   FlowLogicRule,
-  InputFrameWidget,
+  StationFrameWidget,
+  FrameType,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
@@ -32,7 +33,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 /**
  * Main component for viewing a station.
  */
@@ -63,6 +64,9 @@ export class StationComponent
 
   /** The information about the station. */
   stationInformation!: StationInformation;
+
+  /** Different types of input frames components.*/
+  frameType = FrameType;
 
   /** Station Rithm id. */
   stationRithmId = '';
@@ -119,6 +123,7 @@ export class StationComponent
     pushItems: true,
     draggable: {
       enabled: true,
+      ignoreContent: true,
     },
     resizable: {
       enabled: true,
@@ -128,7 +133,13 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: InputFrameWidget[] = [];
+  inputFrameWidgetItems: StationFrameWidget[] = [];
+
+  /** The current focused/selected widget. */
+  widgetFocused = -1;
+
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
 
   /** Loading / Error variables. */
 
@@ -137,9 +148,6 @@ export class StationComponent
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
-
-  /** Indicates when the button to move the widget will be enabled. */
-  widgetMoveButton = -1;
 
   constructor(
     private stationService: StationService,
@@ -235,19 +243,6 @@ export class StationComponent
   }
 
   /**
-   * Listen the flowButtonText subject.
-   */
-  private subscribeFlowButtonText(): void {
-    this.stationService.flowButtonText$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        if (this.stationInformation) {
-          this.stationInformation.flowButton = data.length ? data : 'Flow';
-        }
-      });
-  }
-
-  /**
    * Populate and update possibleAnswers for an specific question.
    *
    * @param answer The question we are adding possible answers to.
@@ -298,7 +293,6 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
-    this.subscribeFlowButtonText();
 
     if (!this.editMode) this.setGridMode('preview');
   }
@@ -500,12 +494,6 @@ export class StationComponent
         this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value
       ),
-
-      // Update flow button text.
-      this.stationService.updateFlowButtonText(
-        this.stationInformation.rithmId,
-        this.stationInformation.flowButton
-      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
@@ -521,7 +509,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , , stationQuestions]) => {
+        next: ([, , , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
@@ -707,20 +695,28 @@ export class StationComponent
    * @param mode Value of the grid mode of the toolbarEditStation buttons.
    */
   setGridMode(mode: 'layout' | 'setting' | 'preview'): void {
-    const enabledMode = mode === 'layout' ? true : false;
-    /* If it is different from preview, we are in editable mode. */
-    if (mode !== 'preview') {
-      this.layoutMode = enabledMode;
-      this.settingMode = !enabledMode;
-    } else {
-      this.layoutMode = false;
-      this.settingMode = false;
+    let enabledMode = false;
+    /** Depending on the case, the mode is set. */
+    switch (mode) {
+      case 'preview':
+        this.layoutMode = false;
+        this.settingMode = false;
+        this.isOpenDrawerLeft = false;
+        this.closeSettingDrawer();
+        break;
+      case 'setting':
+        enabledMode = false;
+        this.isOpenDrawerLeft = false;
+        break;
+      case 'layout':
+        enabledMode = true;
+        this.closeSettingDrawer();
+        break;
+      default:
+        break;
     }
-
-    /*If the parameter 'mode' is different 'layout' hidden the drawer left.*/
-    if (mode !== 'layout') {
-      this.isOpenDrawerLeft = false;
-    }
+    this.layoutMode = enabledMode;
+    this.settingMode = !enabledMode;
 
     /* Make the grid visible.*/
     this.options.displayGrid = enabledMode ? 'always' : 'none';
@@ -732,6 +728,7 @@ export class StationComponent
     if (this.options.draggable) {
       this.options.draggable.enabled = enabledMode;
     }
+    this.widgetFocused = -1;
     /* Execute changes. */
     this.changedOptions();
   }
@@ -770,11 +767,27 @@ export class StationComponent
   }
 
   /**
-   * Save the changes make in the gridster.
+   * Save or update the changes make the station frame widgets.
    */
-  saveStationChanges(): void {
+  saveStationFramesChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
+
+    this.inputFrameWidgetItems.map((field) => {
+      field.data = JSON.stringify(field.questions);
+    });
+
+    this.stationService
+      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /** This cancel button clicked show alert. */
@@ -793,16 +806,33 @@ export class StationComponent
   }
 
   /** Remove widgets from the gridster in layout mode. */
-  removeWidgets(): void {
-    this.inputFrameWidgetItems.length = 0;
+  async removeWidgets(): Promise<void> {
+    if (this.widgetFocused > -1) {
+      const confirmRemove = await this.popupService.confirm({
+        title: 'Remove widget?',
+        message: '\nThe selected widget will be removed.',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirmRemove) {
+        this.inputFrameWidgetItems.splice(this.widgetFocused, 1);
+        this.widgetFocused = -1;
+      }
+    }
   }
 
   /**
    * Will add a new input frame in the station grid.
+   *
+   * @param type Information referent to widget selected.
    */
-  addInputFrame(): void {
-    const inputFrame: InputFrameWidget = {
-      frameRithmId: '',
+  addInputFrame(
+    type: CdkDragDrop<string, string, FrameType> | FrameType
+  ): void {
+    const inputFrame: StationFrameWidget = {
+      rithmId: this.randRithmId,
+      stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
       x: 0,
@@ -810,10 +840,44 @@ export class StationComponent
       minItemRows: 4,
       minItemCols: 6,
       questions: [],
-      type: '',
+      type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
     };
+
+    /**
+     * Identify typeof type, in case is emitted by CdkDragDrop it
+     * gonna be an object and in case comes from a click method it will be a string.
+     */
+    const value: string = typeof type === 'string' ? type : type.item.data;
+
+    /**Add individual properties for every Type. */
+    switch (value) {
+      case FrameType.Headline:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
+        inputFrame.minItemRows = 1;
+        inputFrame.type = FrameType.Headline;
+        break;
+      case FrameType.Body:
+        inputFrame.cols = 6;
+        inputFrame.rows = 2;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 2;
+        inputFrame.type = FrameType.Body;
+        break;
+      case FrameType.Title:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 24;
+        inputFrame.minItemRows = 1;
+        inputFrame.maxItemRows = 1;
+        inputFrame.type = FrameType.Title;
+        break;
+      default:
+        break;
+    }
     this.inputFrameWidgetItems.push(inputFrame);
     this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
   }
@@ -829,10 +893,29 @@ export class StationComponent
   }
 
   /**
-   * Toggles the open state of the right setting drawer.
+   * Open the right setting drawer for field setting.
+   *
+   * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openRightDrawer(): void {
-    this.sidenavDrawerService.openDrawer('fieldSetting');
+  openSettingDrawer(field: Question | string): void {
+    /** If the left drawer is open, it must be closed. */
+    if (this.isOpenDrawerLeft) {
+      this.isOpenDrawerLeft = false;
+    }
+    this.sidenavDrawerService.openDrawer('fieldSetting', field);
+  }
+
+  /**
+   * Close the right setting drawer for field setting.
+   */
+  closeSettingDrawer(): void {
+    /** If both are open, the field setting drawer must be closed. */
+    if (
+      this.sidenavDrawerService.isDrawerOpen &&
+      this.drawerContext === 'fieldSetting'
+    ) {
+      this.sidenavDrawerService.closeDrawer();
+    }
   }
 
   /**
@@ -844,6 +927,15 @@ export class StationComponent
    */
   trackBy(index: number, item: GridsterItem): number {
     return item.id;
+  }
+
+  /**
+   * Allow to select/unselect any clicked widget.
+   *
+   * @param index The index of the selected widget.
+   */
+  focusWidget(index: number): void {
+    this.widgetFocused = index === this.widgetFocused ? -1 : index;
   }
 
   /**

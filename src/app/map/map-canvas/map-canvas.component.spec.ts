@@ -411,6 +411,7 @@ describe('MapCanvasComponent', () => {
       '2d'
     ) as CanvasRenderingContext2D;
     service.registerCanvasContext(component['context']);
+    service.mapHelper.registerCanvasContext(component['context']);
     component.mapMode = MapMode.StationGroupAdd;
     component.stationGroups = groups;
     component.stations = updatedStations;

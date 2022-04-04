@@ -48,7 +48,7 @@ describe('MapToolbarComponent', () => {
 
   it('should toggle mapMode add station', () => {
     const mapServiceSpy = spyOn(
-      TestBed.inject(MapService),
+      TestBed.inject(MapService).mapStationHelper,
       'disableConnectedStationMode'
     );
     component.addStation();
@@ -62,7 +62,9 @@ describe('MapToolbarComponent', () => {
     );
     expect(connectedStationMode).toBeTrue();
     expect(mapServiceSpy).toHaveBeenCalled();
-    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
+    service.mapHelper.mapDataReceived$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
   });
 
   it('should toggle mapMode add station group', () => {

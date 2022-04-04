@@ -1,9 +1,11 @@
-::ng-deep {
-  .mat-select-panel {
-    max-height: 40vh !important;
-  }
+.mat-select-station {
+  ::ng-deep {
+    .mat-select-panel {
+      max-height: 40vh !important;
+    }
 
-  .mat-form-field-wrapper {
-    @apply p-0;
+    .mat-form-field-wrapper {
+      @apply p-0;
+    }
   }
 }

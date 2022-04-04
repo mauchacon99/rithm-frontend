@@ -22,6 +22,8 @@ import {
   RuleType,
   DocumentEvent,
   DocumentWidget,
+  DocumentImage,
+  ImageData,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1550,5 +1552,46 @@ export class MockDocumentService {
     } else {
       return of().pipe(delay(1000));
     }
+  }
+
+  /**
+   * Upload image.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  uploadImage(file: File): Observable<string> {
+    return of('ewf34tf-3ge343-g34g3e').pipe(delay(1000));
+  }
+
+  /**
+   * Get images document.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns data images document.
+   */
+  getImagesDocuments(documentRithmId: string): Observable<DocumentImage[]> {
+    const dataImagesDocument: DocumentImage[] = [
+      {
+        imageId: '231-456-654',
+        imageName: 'landscape.png',
+      },
+    ];
+    return of(dataImagesDocument).pipe(delay(1000));
+  }
+
+  /**
+   * Get image by rithmId of image.
+   *
+   * @param imageRithmId The Specific ID of image.
+   * @returns Returns data image.
+   */
+  getImageByRithmId(imageRithmId: string): Observable<ImageData> {
+    const response = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image name',
+    };
+    return of(response).pipe(delay(1000));
   }
 }

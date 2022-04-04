@@ -122,7 +122,6 @@ describe('DescriptionWidgetModalComponent', () => {
       data: '',
       minItemRows: 1,
       minItemCols: 3,
-      image: null,
     };
 
     let dialogRef: MatDialogRef<unknown>;

@@ -11,6 +11,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import {
   ColumnFieldsWidget,
+  DocumentImage,
   DocumentWidget,
   QuestionFieldType,
   WidgetType,
@@ -33,7 +34,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   @Input() widgetType: WidgetType = WidgetType.Document;
 
   /** Image to banner. */
-  @Input() image: string | File | null | undefined;
+  @Input() image!: DocumentImage;
 
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;

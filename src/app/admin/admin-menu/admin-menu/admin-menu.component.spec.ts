@@ -9,11 +9,13 @@ import {
   MockUserService,
   MockErrorService,
   MockOrganizationService,
+  MockSplitService,
 } from 'src/mocks';
 import { MatListModule } from '@angular/material/list';
 import { ListAdminOptionMenuType } from 'src/models/enums/admin-option-menu-type';
 
 import { AdminMenuComponent } from './admin-menu.component';
+import { SplitService } from 'src/app/core/split.service';
 
 describe('AdminMenuComponent', () => {
   let component: AdminMenuComponent;
@@ -29,6 +31,7 @@ describe('AdminMenuComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: OrganizationService, useClass: MockOrganizationService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
       imports: [MatListModule],
     }).compileComponents();
@@ -102,8 +105,7 @@ describe('AdminMenuComponent', () => {
   });
 
   it('should show loading organization info while data is loading', () => {
-    const data = '123-123';
-    component['getOrganizationInfo'](data);
+    component['getOrganizationInfo']();
     fixture.detectChanges();
     expect(component.isLoading).toBeTrue();
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(

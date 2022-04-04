@@ -32,6 +32,8 @@ import {
   RuleType,
   OperandType,
   OperatorType,
+  DocumentImage,
+  ImageData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -581,6 +583,53 @@ export class DocumentService {
     return this.http.put<void>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       rulesFromStationFlowLogic
+    );
+  }
+
+  /**
+   * Upload image.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http
+      .post<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/image`,
+        formData
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get images document.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns data images document.
+   */
+  getImagesDocuments(documentRithmId: string): Observable<DocumentImage[]> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentImage[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/images`,
+      { params }
+    );
+  }
+
+  /**
+   * Get image by rithmId of image.
+   *
+   * @param imageRithmId The Specific ID of image.
+   * @returns Returns data image.
+   */
+  getImageByRithmId(imageRithmId: string): Observable<ImageData> {
+    const params = new HttpParams().set('vaultFileRithmId', imageRithmId);
+    return this.http.get<ImageData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson`,
+      {
+        params,
+      }
     );
   }
 }

@@ -15,6 +15,7 @@ import {
   ColumnFieldsWidget,
   EditDataWidget,
   OptionsSelectWidgetDrawer,
+  DocumentImage,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -36,9 +37,13 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   });
 
   /** Image to banner. */
-  @Input() set image(value: File | null) {
-    if (this.widgetItem && this.widgetItem.image !== value) {
-      this.widgetItem.image = value;
+  @Input() set image(value: DocumentImage) {
+    if (
+      this.dataDrawerStation?.widgetItem &&
+      this.dataDrawerStation.widgetItem.imageId !== value.imageId
+    ) {
+      this.dataDrawerStation.widgetItem.imageId = value.imageId;
+      this.dataDrawerStation.widgetItem.imageName = value.imageName;
       this.updateWidget();
     }
   }
@@ -52,14 +57,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** All data of the widget. */
-  widgetItem!: DashboardItem;
-
   /** Station columns. */
   stationColumns!: ColumnFieldsWidget[];
 
   /** Questions the station. */
   questions!: Question[];
+
+  /** Data drawer station. */
+  dataDrawerStation!: EditDataWidget;
 
   /** Static columns. */
   documentInfo: OptionsSelectWidgetDrawer[] = [];
@@ -70,17 +75,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Station RithmId. */
   stationRithmId!: string;
 
-  /** Position of the widget. */
-  widgetIndex!: number;
-
   /** Loading drawer. */
   isLoading = false;
 
   /** Loading error. */
   failedLoadDrawer = false;
-
-  /** Element list in drawer. */
-  quantityElementsWidget = 0;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -103,14 +102,12 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const dataDrawer = data as EditDataWidget;
         if (dataDrawer) {
-          this.widgetItem = dataDrawer.widgetItem;
-          const dataWidget = JSON.parse(this.widgetItem.data);
+          this.dataDrawerStation = dataDrawer;
+          const dataWidget = JSON.parse(this.dataDrawerStation.widgetItem.data);
           this.stationColumns = dataWidget.columns || [];
           this.stationRithmId = dataWidget.stationRithmId;
-          this.widgetIndex = dataDrawer.widgetIndex;
-          this.quantityElementsWidget = dataDrawer.quantityElementsWidget;
-          this.getWidgetIndex.emit(this.widgetIndex);
-          this.getWidgetItem.emit(this.widgetItem);
+          this.getWidgetIndex.emit(this.dataDrawerStation.widgetIndex);
+          this.getWidgetItem.emit(this.dataDrawerStation.widgetItem);
           this.getDocumentFields();
         }
       });
@@ -283,14 +280,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Update widget. */
   private updateWidget(): void {
     this.loadColumnsSelect();
-    this.widgetItem.data = JSON.stringify({
+    this.dataDrawerStation.widgetItem.data = JSON.stringify({
       stationRithmId: this.stationRithmId,
       columns: this.stationColumns,
     });
     this.dashboardService.updateDashboardWidgets({
-      widgetItem: this.widgetItem,
-      widgetIndex: this.widgetIndex,
-      quantityElementsWidget: this.quantityElementsWidget,
+      widgetItem: this.dataDrawerStation.widgetItem,
+      widgetIndex: this.dataDrawerStation.widgetIndex,
+      quantityElementsWidget: this.dataDrawerStation.quantityElementsWidget,
     });
   }
 

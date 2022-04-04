@@ -1,5 +1,5 @@
 import { MapItemStatus, StationMapData } from 'src/models';
-import { ConnectionMapElement, StationMapElement } from '.';
+import { ConnectionMapElement, StationMapElement } from '..';
 
 const TEST_STATION_DATA: StationMapData = {
   rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',

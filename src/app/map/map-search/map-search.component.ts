@@ -64,7 +64,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
     private stationService: StationService
   ) {
     //This subscribe shows if there are any drawers open.
-    this.mapService.isDrawerOpened$
+    this.mapService.mapHelper.isDrawerOpened$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((drawerOpened) => {
         if (!drawerOpened) {
@@ -284,20 +284,20 @@ export class MapSearchComponent implements OnInit, OnDestroy {
    * @param drawerItem The selected item.
    */
   openDrawer(drawerItem: StationMapElement | StationGroupMapElement): void {
-    this.mapService.isDrawerOpened$.next(true);
+    this.mapService.mapHelper.isDrawerOpened$.next(true);
     //Close any open station option menus.
-    this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapHelper.matMenuStatus$.next(true);
     //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
-    this.mapService.centerActive$.next(true);
+    this.mapService.centerHelper.centerActive$.next(true);
     //Get the map drawer element.
     const drawer = document.getElementsByTagName('mat-drawer');
     if (drawerItem instanceof StationMapElement) {
       const dataInformationDrawer: StationInfoDrawerData = {
         stationRithmId: drawerItem.rithmId,
         stationName: drawerItem.stationName,
-        editMode: this.mapService.mapMode$.value === MapMode.Build,
+        editMode: this.mapService.mapHelper.mapMode$.value === MapMode.Build,
         stationStatus: drawerItem.status,
-        mapMode: this.mapService.mapMode$.value,
+        mapMode: this.mapService.mapHelper.mapMode$.value,
         openedFromMap: true,
         notes: drawerItem.notes,
       };
@@ -309,10 +309,10 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       this.stationService.updatedStationNameText(drawerItem.stationName);
       drawerItem.drawerOpened = true;
       //Increment centerCount to show that more centering of station needs to be done.
-      this.mapService.centerCount$.next(1);
+      this.mapService.centerHelper.centerCount$.next(1);
       //Call method to run logic for centering of the station.
       setTimeout(() => {
-        this.mapService.center(
+        this.mapService.centerHelper.center(
           CenterPanType.Station,
           drawer[0] ? drawer[0].clientWidth : 0
         );
@@ -321,7 +321,7 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       const dataInformationDrawer: StationGroupInfoDrawerData = {
         stationGroupRithmId: drawerItem.rithmId,
         stationGroupName: drawerItem.title,
-        editMode: this.mapService.mapMode$.value === MapMode.Build,
+        editMode: this.mapService.mapHelper.mapMode$.value === MapMode.Build,
         numberOfStations: drawerItem.stations.length,
         numberOfSubgroups: drawerItem.subStationGroups.length,
         stationGroupStatus: drawerItem.status,
@@ -334,10 +334,10 @@ export class MapSearchComponent implements OnInit, OnDestroy {
       );
       drawerItem.drawerOpened = true;
       //Increment centerCount to show that more centering of station group needs to be done.
-      this.mapService.centerCount$.next(1);
+      this.mapService.centerHelper.centerCount$.next(1);
       //Call method to run logic for centering of the station group.
       setTimeout(() => {
-        this.mapService.center(
+        this.mapService.centerHelper.center(
           CenterPanType.StationGroup,
           drawer[0] ? drawer[0].clientWidth : 0
         );

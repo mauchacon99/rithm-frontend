@@ -497,11 +497,6 @@ describe('DashboardComponent', () => {
         maxWidth: '1500px',
         data: dataDashboard.rithmId,
       };
-      const drawerContext = 'stationWidget';
-      sidenavDrawer.drawerContext$.next(drawerContext);
-      expect(component.drawerContext).toBe(drawerContext);
-      spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
-      const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       const spyDialog = spyOn(
         TestBed.inject(MatDialog),
         'open'
@@ -509,7 +504,6 @@ describe('DashboardComponent', () => {
         afterClosed: () => of(false),
       } as MatDialogRef<typeof component>);
       component.openDialogAddWidget();
-      expect(spyDrawer).toHaveBeenCalledWith(drawerContext);
       expect(spyDialog).toHaveBeenCalledOnceWith(
         AddWidgetModalComponent,
         dataExpectModal
@@ -829,5 +823,39 @@ describe('DashboardComponent', () => {
     component.dashboardData.widgets = [widgetItem];
     const expectedData = component['parseDashboardData']();
     expect(expectedData.widgets[0].rithmId).toEqual('');
+  });
+
+  it('should set config breakpoint for mobile devices', () => {
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(1920);
+  });
+
+  it('should set config breakpoint for not mobile devices', () => {
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(640);
+  });
+
+  it('should get and set config when init live cycle component and nor mobile device', () => {
+    const spyChangeGridster = spyOn(
+      component,
+      'changedOptions'
+    ).and.callThrough();
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(false);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(640);
+    expect(spyChangeGridster).toHaveBeenCalled();
+  });
+
+  it('should get and set config when init live cycle component and yes mobile device', () => {
+    const spyChangeGridster = spyOn(
+      component,
+      'changedOptions'
+    ).and.callThrough();
+    spyOnProperty(component, 'isMobileDevice').and.returnValue(true);
+    component.ngOnInit();
+    expect(component.options.mobileBreakpoint).toBe(1920);
+    expect(spyChangeGridster).toHaveBeenCalled();
   });
 });

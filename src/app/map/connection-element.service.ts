@@ -26,7 +26,7 @@ export class ConnectionElementService {
 
   constructor(private mapService: MapService) {
     //set this.mapScale to match the behavior subject in mapService.
-    this.mapService.mapScale$.subscribe((scale) => {
+    this.mapService.mapHelper.mapScale$.subscribe((scale) => {
       this.mapScale = scale;
     });
   }

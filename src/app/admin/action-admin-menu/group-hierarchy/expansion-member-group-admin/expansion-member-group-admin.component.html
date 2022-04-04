@@ -1,0 +1,28 @@
+<mat-expansion-panel
+  hideToggle
+  (opened)="panelOpenState = true"
+  (closed)="panelOpenState = false"
+  class="expansion-member"
+>
+  <mat-expansion-panel-header class="bg-secondary-50">
+    <mat-panel-title id="expansion-option" data-testid="expansion-option">
+      <div class="w-full flex justify-between">
+        <div class="flex items-center">
+          <i
+            [ngClass]="panelOpenState ? 'fa-angle-down' : 'fa-angle-right'"
+            class="fas text-lg ml-5"
+          ></i>
+          <span class="ml-8">{{ isAdmin ? 'ADMINS' : 'USERS' }} </span>
+        </div>
+        <button
+          mat-icon-button
+          id="add-user-button"
+          data-testid="add-user-button"
+          (click)="$event.stopPropagation()"
+        >
+          <i class="fa-solid fa-user-plus text-secondary-500"></i>
+        </button>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+</mat-expansion-panel>

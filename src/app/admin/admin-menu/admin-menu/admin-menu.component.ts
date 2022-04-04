@@ -62,18 +62,17 @@ export class AdminMenuComponent implements OnInit {
 
   /** Get signed in user and information about organization. */
   ngOnInit(): void {
-    this.getOrganizationInfo(this.userService.user.organization);
+    this.getOrganizationInfo();
   }
 
   /**
    * Get information about organization.
    *
-   * @param organizationId String of user organization.
    */
-  private getOrganizationInfo(organizationId: string): void {
+  private getOrganizationInfo(): void {
     this.isLoading = true;
     this.organizationService
-      .getOrganizationInfo(organizationId)
+      .getOrganizationInfo(this.userService.user.organization)
       .pipe(first())
       .subscribe({
         next: (organization) => {

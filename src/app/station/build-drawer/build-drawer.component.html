@@ -38,12 +38,11 @@
       data-testid="input-frame-container"
       cdkDropList
       cdkDropListConnectedTo="station-grid"
-      #customFieldsContainer="cdkDropList"
     >
       <div
         cdkDrag
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
-        (click)="addNewInputFrame()"
+        (click)="addNewInputFrame(frameTypes.Input)"
         data-testid="input-frame-item"
       >
         <p class="text-lg ml-auto text-primary-900 text-center">Input Frame</p>
@@ -56,7 +55,6 @@
       data-testid="custom-fields-container"
       cdkDropList
       [cdkDropListConnectedTo]="inputFrameList"
-      #customFieldsContainer="cdkDropList"
       [cdkDropListData]="customFields"
     >
       <div
@@ -106,6 +104,27 @@
           </ng-template>
         </mat-expansion-panel>
       </mat-accordion>
+    </div>
+    <div
+      *ngSwitchCase="'Components'"
+      id="custom-component-container"
+      data-testid="custom-component-container"
+      cdkDropList
+      cdkDropListConnectedTo="station-grid"
+    >
+      <div
+        cdkDrag
+        [cdkDragData]="customComponent.type"
+        *ngFor="let customComponent of customComponents; let i = index"
+        id="{{ customComponent.prompt }}-{{ i }}"
+        class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-move"
+        attr.data-testid="{{ customComponent.dataTestId }}-{{ i }}"
+      >
+        <p class="text-lg ml-auto text-primary-900 text-center">
+          {{ customComponent.prompt }}
+        </p>
+        <span class="{{ customComponent.icon }} fa-lg ml-auto"></span>
+      </div>
     </div>
   </section>
 </div>

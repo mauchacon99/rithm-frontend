@@ -17,9 +17,7 @@ export class MapComponent {
     private errorService: ErrorService
   ) {
     //To resolve Map is initially persisted across sessions between different user.
-    this.mapService.stationElements = [];
-    this.mapService.stationGroupElements = [];
-    this.mapService.connectionElements = [];
+    this.mapService.resetMapElements();
     //Subscribe to getMapData so that we can update the map with the data.
     this.mapService
       .getMapData()
@@ -32,7 +30,7 @@ export class MapComponent {
             true
           );
           //Note that the data from the backend has been received.
-          this.mapService.mapDataReceived$.next(true);
+          this.mapService.mapHelper.mapDataReceived$.next(true);
         },
       });
   }

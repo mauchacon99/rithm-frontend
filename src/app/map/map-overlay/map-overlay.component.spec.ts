@@ -97,6 +97,6 @@ describe('MapOverlayComponent', () => {
     const coords = { x: component.menuX - 5, y: component.menuY - 65 };
     component.addStation();
     expect(dialogSpy).toHaveBeenCalledWith(coords);
-    expect(service.matMenuStatus$.value).toBe(false);
+    expect(service.mapHelper.matMenuStatus$.value).toBe(false);
   });
 });

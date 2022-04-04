@@ -1,5 +1,5 @@
 import { StationGroupMapData, MapItemStatus } from 'src/models';
-import { StationGroupMapElement } from '.';
+import { StationGroupMapElement } from '..';
 
 const TEST_STATION_GROUP_DATA: StationGroupMapData = {
   rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',

@@ -27,6 +27,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 describe('DocumentWidgetDrawerComponent', () => {
   let component: DocumentWidgetDrawerComponent;
   let fixture: ComponentFixture<DocumentWidgetDrawerComponent>;
+  let sideNavService: SidenavDrawerService;
   const dataEditWidget: EditDataWidget = {
     widgetItem: {
       rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
@@ -69,7 +70,26 @@ describe('DocumentWidgetDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentWidgetDrawerComponent);
     component = fixture.componentInstance;
-    component.quantityElementsWidget = 2;
+    sideNavService = TestBed.inject(SidenavDrawerService);
+    component.showProfileImageBanner = false;
+    component.dataDrawerDocument = {
+      widgetItem: {
+        rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+        cols: 4,
+        data: '{"documentRithmId":"1bda1a41-e86a-4031-b3f5-f2329e108db5","columns":[]}',
+        maxItemCols: 0,
+        maxItemRows: 0,
+        minItemCols: 0,
+        minItemRows: 0,
+        rows: 2,
+        widgetType: WidgetType.Document,
+        x: 0,
+        y: 0,
+        profileImageId: '123132',
+      },
+      widgetIndex: 0,
+      quantityElementsWidget: 2,
+    };
     fixture.detectChanges();
   });
 
@@ -80,11 +100,14 @@ describe('DocumentWidgetDrawerComponent', () => {
   it('Should subscribe to SidenavDrawerService.drawerData$', () => {
     const dataWidget = JSON.parse(dataEditWidget.widgetItem.data);
     const spyEmit = spyOn(component.setWidgetIndex, 'emit').and.callThrough();
-
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
-    expect(component.widgetIndex).toEqual(dataEditWidget.widgetIndex);
-    expect(component.widgetItem).toEqual(dataEditWidget.widgetItem);
-    expect(component.quantityElementsWidget).toEqual(
+    sideNavService.drawerData$.next(dataEditWidget);
+    expect(component.dataDrawerDocument.widgetIndex).toEqual(
+      dataEditWidget.widgetIndex
+    );
+    expect(component.dataDrawerDocument.widgetItem).toEqual(
+      dataEditWidget.widgetItem
+    );
+    expect(component.dataDrawerDocument.quantityElementsWidget).toEqual(
       dataEditWidget.quantityElementsWidget
     );
     expect(component.documentColumns).toEqual(dataWidget.columns);
@@ -131,7 +154,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('Should emit getWidgetItem', () => {
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
+    sideNavService.drawerData$.next(dataEditWidget);
     const spySetWidgetType = spyOn(component.getWidgetItem, 'emit');
     component.ngOnInit();
     expect(spySetWidgetType).toHaveBeenCalledOnceWith(
@@ -226,17 +249,15 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should emit updateDataWidget$ to update widget', () => {
-    component.widgetItem = dataEditWidget.widgetItem;
-    component.widgetIndex = dataEditWidget.widgetIndex;
-    component.quantityElementsWidget = dataEditWidget.quantityElementsWidget;
     component.formColumns.setValue(['1020-65sdvsd4-05060708-090trhrth']);
     component.questions = [];
     const expectData = {
-      widgetItem: component.widgetItem,
-      widgetIndex: component.widgetIndex,
-      quantityElementsWidget: component.quantityElementsWidget,
+      widgetItem: component.dataDrawerDocument.widgetItem,
+      widgetIndex: component.dataDrawerDocument.widgetIndex,
+      quantityElementsWidget:
+        component.dataDrawerDocument.quantityElementsWidget,
     };
-    const expectDocmentColumns = [
+    const expectDocumentColumns = [
       {
         name: 'Question Document',
         questionId: component.formColumns.value[0],
@@ -249,11 +270,11 @@ describe('DocumentWidgetDrawerComponent', () => {
 
     component['updateWidget']();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
-    expect(component.documentColumns).toEqual(expectDocmentColumns);
+    expect(component.documentColumns).toEqual(expectDocumentColumns);
   });
 
   it('should render message for show user this document not have questions assigned', () => {
-    component.quantityElementsWidget = 0;
+    component.dataDrawerDocument.quantityElementsWidget = 0;
     component.isLoading = false;
     fixture.detectChanges();
     const renderMessage = fixture.debugElement.nativeElement.querySelector(
@@ -263,7 +284,7 @@ describe('DocumentWidgetDrawerComponent', () => {
   });
 
   it('should no render message for show user this document not have questions assigned', () => {
-    component.quantityElementsWidget = 1;
+    component.dataDrawerDocument.quantityElementsWidget = 1;
     component.isLoading = false;
     fixture.detectChanges();
     const renderMessage = fixture.debugElement.nativeElement.querySelector(
@@ -284,10 +305,101 @@ describe('DocumentWidgetDrawerComponent', () => {
     component['getDocumentWidget']();
     fixture.detectChanges();
     expect(component.failedLoadDrawer).toBeTrue();
+    expect(component.isLoading).toBeFalse();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#display-document-drawer-error'
     );
     expect(errorMessage).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should show error message when the document images request fails', () => {
+    const spyError = spyOn(
+      TestBed.inject(DocumentService),
+      'getImagesDocuments'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    component.showProfileImageBanner = true;
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.nativeElement.querySelector(
+      '#display-document-image-profile-drawer-error'
+    );
+    expect(component.showProfileImageBanner).toBeTrue();
+    expect(errorMessage).toBeTruthy();
+    expect(spyError).toHaveBeenCalled();
+    expect(component.isLoadingProfileImage).toBeFalse();
+    expect(component.failedLoadProfileImageData).toBeTrue();
+  });
+
+  it('should call method to get document images in service', () => {
+    const spyError = spyOn(
+      TestBed.inject(DocumentService),
+      'getImagesDocuments'
+    ).and.callThrough();
+    component.dataDrawerDocument = dataEditWidget;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    component.showProfileImageBanner = true;
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call updateWidget when change Input image', () => {
+    const image = {
+      imageId: '123-456-789',
+      imageName: 'Image name',
+    };
+    component.dataDrawerDocument.widgetItem = dataEditWidget.widgetItem;
+    const spyMethod = spyOn(component, 'updateWidget');
+
+    component.image = image;
+
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.dataDrawerDocument.widgetItem.imageId).toEqual(
+      image.imageId
+    );
+    expect(component.dataDrawerDocument.widgetItem.imageName).toEqual(
+      image.imageName
+    );
+  });
+
+  it('should show  profile image loading indicator', () => {
+    component.isLoadingProfileImage = true;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    component.showProfileImageBanner = true;
+    fixture.detectChanges();
+    const loading = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-profile-image'
+    );
+    expect(component.isLoadingProfileImage).toBeTrue();
+    expect(loading).toBeTruthy();
+  });
+
+  it('should show  profile section when showImage is true ', () => {
+    component.showProfileImageBanner = true;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    fixture.detectChanges();
+    const section = fixture.debugElement.nativeElement.querySelector(
+      '#profile-image-section-drawer'
+    );
+    expect(section).toBeTruthy();
+  });
+
+  it('should not  show  profile section when showImage is false ', () => {
+    component.showProfileImageBanner = false;
+    component.dataDrawerDocument.widgetItem.widgetType =
+      WidgetType.ContainerProfileBanner;
+    fixture.detectChanges();
+    const section = fixture.debugElement.nativeElement.querySelector(
+      '#profile-image-section-drawer'
+    );
+    expect(section).toBeNull();
   });
 });

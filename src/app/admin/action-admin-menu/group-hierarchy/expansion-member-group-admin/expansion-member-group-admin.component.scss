@@ -1,0 +1,15 @@
+.expansion-member {
+  .mat-expansion-panel-header {
+    padding: 0;
+    background-color: #f8f8f8;
+
+    .mat-expansion-panel-header-title {
+      padding: 0 0 0 6px;
+    }
+  }
+
+  &::ng-deep .mat-expansion-panel-body {
+    padding: 0 !important;
+    background-color: #f8f8f8;
+  }
+}
