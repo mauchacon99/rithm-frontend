@@ -200,12 +200,7 @@
           class="w-full py-2 flex justify-between"
           *ngIf="openedFromMap && !locallyCreated"
         >
-          <button
-            mat-stroked-button
-            color="accent"
-            class="font-semibold text-sm"
-            (click)="goToStation()"
-          >
+          <button mat-stroked-button color="accent" (click)="goToStation()">
             Edit Station
           </button>
           <button
