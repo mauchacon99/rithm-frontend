@@ -52,8 +52,14 @@
   </div>
 </div>
 <div class="w-full px-4 py-2">
-  <button mat-stroked-button id="delete-question-button" data-testId="delete-question-button" color="warn"
-    class="priority">
+  <button
+    mat-stroked-button
+    id="delete-question-button"
+    data-testId="delete-question-button"
+    color="warn"
+    class="priority"
+    (click)="deleteQuestion(fieldSetting)"
+  >
     Delete
   </button>
 </div>

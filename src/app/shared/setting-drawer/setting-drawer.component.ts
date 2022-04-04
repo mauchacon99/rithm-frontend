@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
 
 /**
@@ -18,7 +19,10 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   /** The field information for your setting. */
   fieldSetting!: Question;
 
-  constructor(private sideNavDrawerService: SidenavDrawerService) {}
+  constructor(
+    private sideNavDrawerService: SidenavDrawerService,
+    private stationService: StationService
+  ) {}
 
   /**
    * Listen the DrawerData Service.
@@ -45,5 +49,14 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Completes all subscriptions.
+   *
+   * @param questions The current questions to be deleted in field settings.
+   */
+  deleteQuestion(questions: Question): void {
+    this.stationService.deleteStationQuestion$.next(questions);
   }
 }

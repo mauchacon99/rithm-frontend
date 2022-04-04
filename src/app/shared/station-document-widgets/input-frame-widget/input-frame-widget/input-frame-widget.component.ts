@@ -1,10 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   CdkDragDrop,
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { QuestionFieldType, Question } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { Subject, takeUntil } from 'rxjs';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -14,7 +24,7 @@ import { QuestionFieldType, Question } from 'src/models';
   templateUrl: './input-frame-widget.component.html',
   styleUrls: ['./input-frame-widget.component.scss'],
 })
-export class InputFrameWidgetComponent {
+export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -36,6 +46,45 @@ export class InputFrameWidgetComponent {
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  constructor(
+    private stationService: StationService,
+    private sidenavDrawerService: SidenavDrawerService
+  ) {}
+
+  /**
+   * Listen the deleteStationQuestions Service.
+   */
+  private subscribeDeleteStationQuestion(): void {
+    this.stationService.deleteStationQuestion$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        if (questions && this.widgetMode === 'setting') {
+          this.fields = this.fields?.filter(
+            (e) => e.rithmId !== questions.rithmId
+          );
+          this.sidenavDrawerService.closeDrawer();
+        }
+      });
+  }
+
+  /**
+   * Set up deleteStationQuestions subscriptions.
+   */
+  ngOnInit(): void {
+    this.subscribeDeleteStationQuestion();
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   /**
    * Add the element draggable to the questions field.

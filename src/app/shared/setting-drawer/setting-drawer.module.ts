@@ -8,7 +8,13 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [SettingDrawerComponent],
-  imports: [CommonModule, MatInputModule, FormsModule, MatSlideToggleModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    MatInputModule,
+    FormsModule,
+    MatSlideToggleModule,
+    MatButtonModule,
+  ],
   exports: [SettingDrawerComponent],
 })
 export class SettingDrawerModule {}

@@ -55,6 +55,9 @@ export class StationService {
   /** The questions to be updated when it changes in station page. */
   currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
 
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
+
   constructor(private http: HttpClient) {}
 
   /**
