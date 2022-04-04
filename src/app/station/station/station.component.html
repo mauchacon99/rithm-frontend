@@ -3,7 +3,7 @@
   [itemInfo]="stationInformation"
 ></app-sub-header>
 <mat-drawer-container
-  [hasBackdrop]="drawerHasBackdrop"
+  [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
   class="h-full info-drawer-station"
 >
   <!-- right match drawer -->
