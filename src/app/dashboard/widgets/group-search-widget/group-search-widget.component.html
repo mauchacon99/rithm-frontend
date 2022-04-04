@@ -59,7 +59,13 @@
           {{ subStation.title || 'Untitled Group' }}</span
         >
 
-        <button mat-icon-button id="map-button" data-testid="map-button">
+        <button
+          mat-icon-button
+          [disabled]="editMode"
+          id="map-button"
+          (click)="goToStationGroupOnMap()"
+          data-testid="map-button"
+        >
           <i class="fa-solid fa-map text-base text-secondary-500"></i>
         </button>
       </div>
