@@ -11,12 +11,18 @@ import { throwError } from 'rxjs';
 import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockMapService,
+  MockStationService,
+} from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { StationGroupData } from 'src/models/station-group-data';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationComponent } from 'src/app/station/station/station.component';
+import { MapService } from 'src/app/map/map.service';
+import { Router } from '@angular/router';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -96,6 +102,7 @@ describe('GroupSearchWidgetComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: MapService, useClass: MockMapService },
       ],
     }).compileComponents();
   });
@@ -291,5 +298,41 @@ describe('GroupSearchWidgetComponent', () => {
     );
     expect(btnRedirectStation).toBeTruthy();
     expect(btnRedirectStation.disabled).toBeTrue();
+  });
+
+  it('should navigate to the station on the map', () => {
+    component.stationGroupRithmId = '123123-12313-123312';
+    component.editMode = false;
+    const mapService = TestBed.inject(MapService);
+    const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
+    component.goToStationGroupOnMap();
+    expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
+    expect(mapService.mapStationHelper.centerStationGroupRithmId$.value).toBe(
+      component.stationGroupRithmId
+    );
+    expect(mapService.mapHelper.viewStationButtonClick$.value).toBeTrue();
+
+    mapService.mapStationHelper.centerStationGroupRithmId$.subscribe(
+      (stationGroupRithmId) => {
+        expect(stationGroupRithmId).toBe(component.stationGroupRithmId);
+      }
+    );
+    mapService.mapHelper.viewStationButtonClick$.subscribe((view) => {
+      expect(view).toBe(true);
+    });
+  });
+
+  it('should call goToStationGroupOnMap', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.subStationGroupData = dataStationGroupWidget.subStationGroups;
+    component.stations = dataStationGroupWidget.stations;
+    fixture.detectChanges();
+    const spyDialog = spyOn(component, 'goToStationGroupOnMap');
+    const btn = fixture.debugElement.nativeElement.querySelector('#map-button');
+    expect(btn).toBeTruthy();
+    btn.click();
+    expect(spyDialog).toHaveBeenCalled();
   });
 });
