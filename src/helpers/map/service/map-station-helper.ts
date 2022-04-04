@@ -31,6 +31,9 @@ export class MapStationHelper {
   /** The Station rithm Id centered on the map. */
   centerStationRithmId$ = new BehaviorSubject('');
 
+  /** The station group rithm Id centered on the map. */
+  centerStationGroupRithmId$ = new BehaviorSubject('');
+
   /** Informs the center station button element whether to show on station selected. */
   stationCenter$ = new BehaviorSubject(false);
 

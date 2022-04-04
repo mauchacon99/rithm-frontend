@@ -633,4 +633,11 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should remover any extra white space from the station name', () => {
+    const stationName = component.deleteSpace(
+      'The name   of  a   station     '
+    );
+    expect(stationName).toEqual('The name of a station');
+  });
 });
