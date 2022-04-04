@@ -131,7 +131,7 @@ export class StationGroupMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created station group as deleted. ' +
-        'You should instead remove it from the array of station groups.'
+          'You should instead remove it from the array of station groups.'
       );
     }
   }
@@ -164,9 +164,9 @@ export class StationGroupMapElement {
     return (
       JSON.stringify(this.stations) === JSON.stringify(stationGroup.stations) &&
       JSON.stringify(this.subStationGroups) ===
-      JSON.stringify(stationGroup.subStationGroups) &&
+        JSON.stringify(stationGroup.subStationGroups) &&
       JSON.stringify(this.boundaryPoints) ===
-      JSON.stringify(stationGroup.boundaryPoints) &&
+        JSON.stringify(stationGroup.boundaryPoints) &&
       this.title === stationGroup.title
     );
   }
