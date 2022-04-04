@@ -61,6 +61,7 @@
 
         <button
           mat-icon-button
+          [disabled]="editMode"
           id="map-button"
           (click)="goToStationGroupOnMap()"
           data-testid="map-button"

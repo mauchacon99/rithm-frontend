@@ -302,6 +302,7 @@ describe('GroupSearchWidgetComponent', () => {
 
   it('should navigate to the station on the map', () => {
     component.stationGroupRithmId = '123123-12313-123312';
+    component.editMode = false;
     const mapService = TestBed.inject(MapService);
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
     component.goToStationGroupOnMap();
