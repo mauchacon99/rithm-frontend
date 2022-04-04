@@ -29,6 +29,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { MobileConfig } from 'src/helpers/mobile-config';
 
 /**
  * Main component for the dashboard screens.
@@ -37,22 +38,12 @@ import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widg
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  providers: [MobileConfig],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   /** The component for the side nav on the dashboard. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /**
-   * Detect mobile devices.
-   *
-   * @returns True if device is mobile.
-   */
-  get isMobileDevice(): boolean {
-    return !!navigator.userAgent.match(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|Linux aarch64/igm
-    );
-  }
 
   /**
    * Whether the signed in user is an admin or not.
@@ -166,7 +157,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private dialog: MatDialog,
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private mobileConfig: MobileConfig
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -197,9 +189,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Set config break point in mobile. */
   private setConfigMobileGridster(): void {
-    this.options.mobileBreakpoint = this.isMobileDevice ? 1920 : 640;
+    this.options.mobileBreakpoint = this.mobileConfig.isMobileDevice
+      ? 1920
+      : 640;
     this.changedOptions();
-    console.log(navigator.userAgent, this.isMobileDevice);
+    console.log(navigator.userAgent, this.mobileConfig.isMobileDevice);
   }
 
   /** Get loading in service dashboard for show loading in dashboard component. */
