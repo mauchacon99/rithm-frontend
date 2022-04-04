@@ -113,8 +113,6 @@ import { MobileConfig } from 'src/helpers/mobile-config';
     MatButtonToggleModule,
     ComingSoonMessageModule,
   ],
-  providers:[
-    MobileConfig
-  ]
+  providers: [MobileConfig],
 })
 export class DashboardModule {}
