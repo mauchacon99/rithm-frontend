@@ -28,7 +28,7 @@
 }
 
 .showButton {
-  display: none;
+  @apply md:hidden;
 }
 
 .item:hover .showButton {

@@ -20,6 +20,9 @@ export class ExpansionMemberGroupAdminComponent {
     this.stationSelected = value;
     if (!this.isGroup) {
       this.getStationsMembers();
+    } else {
+      // this line is temporary while done getStationsMembers for groups.
+      this.members = [];
     }
   }
 

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
@@ -52,7 +53,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(UserAvatarComponent),
       ],
-      imports: [MatExpansionModule, NoopAnimationsModule],
+      imports: [MatExpansionModule, NoopAnimationsModule, MatListModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
