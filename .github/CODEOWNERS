@@ -15,26 +15,26 @@ index.html @belugasanity
 index.testing.html @belugasanity
 
 # Core rules
-src/app/core/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/core/ @strut-software/team-leads
+src/helpers/ @strut-software/team-leads
+src/models/ @strut-software/team-leads
+src/mocks/ @strut-software/team-leads
 
 # Shared Module rules
-src/app/shared/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
-src/app/shared/**/*.html @belugasanity @AdamsContreras999 @cqmdeveloper
-src/app/shared/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/shared/ @strut-software/team-leads
 
 # Navigation module rules
-src/app/navigation/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
-src/app/navigation/**/*.html @belugasanity @AdamsContreras999 @cqmdeveloper
-src/app/navigation/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/navigation/ @strut-software/team-leads
 
-# Team Falcon rules -- map
+# Team Phoenix rules -- map
 src/app/map/ @strut-software/map-reviewers
+src/helpers/map/ @strut-software/map-reviewers
 
-# Team Lion rules -- admin, document, settings, station
-src/app/admin/ @strut-software/team-lion
+# Team Lion rules -- document, settings, station
 src/app/document/ @strut-software/team-lion
 src/app/settings/ @strut-software/team-lion
 src/app/station/ @strut-software/team-lion
 
-# Team Eagle rules -- dashboard
+# Team Eagle rules -- dashboard, admin
+src/app/admin/ @strut-software/team-eagle
 src/app/dashboard/ @strut-software/team-eagle
