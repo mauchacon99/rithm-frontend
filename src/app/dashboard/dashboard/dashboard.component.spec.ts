@@ -101,7 +101,7 @@ describe('DashboardComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         Renderer2,
         { provide: ElementRef, useValue: MockService(ElementRef) },
-        { provide: MobileConfig, useValue: MockService(MobileConfig) },
+        { provide: MobileConfig, useClass: MobileConfig },
       ],
       imports: [
         MatSidenavModule,
