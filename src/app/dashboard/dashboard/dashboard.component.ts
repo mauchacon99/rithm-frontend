@@ -80,6 +80,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get disable close drawer with Esc or click outside.
+   *
+   * @returns If is disabled the drawer.
+   */
+  get drawerDisableClose(): boolean {
+    return this.sidenavDrawerService.getDisableCloseDrawerOutside;
+  }
+
+  /**
    * Whether the drawer is open.
    *
    * @returns True if the drawer is open, false otherwise.
@@ -605,7 +614,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Open dialog add widget.
    */
   openDialogAddWidget(): void {
-    this.toggleDrawerOnlyForWidgets();
     const dialog = this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
@@ -625,5 +633,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.sidenavDrawerService.setDisableCloseDrawerOutside();
   }
 }
