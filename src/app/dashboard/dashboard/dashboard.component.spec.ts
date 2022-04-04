@@ -837,10 +837,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should set config breakpoint for not mobile devices', () => {
-    spyOnProperty(
-      TestBed.inject(MobileConfig),
-      'isMobileDevice'
-    ).and.returnValue(false);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(640);
   });
@@ -850,10 +846,6 @@ describe('DashboardComponent', () => {
       component,
       'changedOptions'
     ).and.callThrough();
-    spyOnProperty(
-      TestBed.inject(MobileConfig),
-      'isMobileDevice'
-    ).and.returnValue(false);
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(640);
     expect(spyChangeGridster).toHaveBeenCalled();

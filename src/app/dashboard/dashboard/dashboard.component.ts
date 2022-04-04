@@ -38,7 +38,6 @@ import { MobileConfig } from 'src/helpers/mobile-config';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers: [MobileConfig],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   /** The component for the side nav on the dashboard. */
