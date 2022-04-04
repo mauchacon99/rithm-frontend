@@ -17,7 +17,7 @@ export class HeadlineWidgetComponent {
   @Input() widgetMode!: 'layout' | 'setting';
 
   /** Headline text for the widget. */
-  headlineTextValue = 'Form Title';
+  public headlineTextValue = 'Form Title';
 
   /**
    * Open setting drawer.
