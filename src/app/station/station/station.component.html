@@ -3,7 +3,7 @@
   [itemInfo]="stationInformation"
 ></app-sub-header>
 <mat-drawer-container
-  [hasBackdrop]="drawerHasBackdrop"
+  [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
   class="h-full info-drawer-station"
 >
   <!-- right match drawer -->
@@ -421,6 +421,11 @@
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
                               (openSettingDrawer)="openSettingDrawer($event)"
                             ></app-body-text-widget>
+                            <app-banner-widget
+                              *ngSwitchCase="frameType.Image"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-banner-widget>
                             <app-input-frame-widget
                               *ngSwitchDefault
                               [fields]="widgetItem.questions"
