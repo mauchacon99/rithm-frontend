@@ -16,6 +16,7 @@
           placeholder="{{ fieldSetting.prompt }}"
           [(ngModel)]="fieldSetting.value"
           autocomplete="off"
+          (ngModelChange)="setQuestionTitle()"
         />
       </mat-form-field>
     </div>

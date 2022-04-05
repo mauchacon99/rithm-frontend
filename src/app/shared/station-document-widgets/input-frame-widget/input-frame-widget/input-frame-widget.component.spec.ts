@@ -8,6 +8,8 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Question, QuestionFieldType } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks';
 
 describe('InputFrameWidgetComponent', () => {
   let component: InputFrameWidgetComponent;
@@ -28,6 +30,7 @@ describe('InputFrameWidgetComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DragDropModule],
       declarations: [InputFrameWidgetComponent],
+      providers: [{ provide: StationService, useClass: MockStationService }],
     }).compileComponents();
   });
 
@@ -120,6 +123,7 @@ describe('InputFrameWidgetComponent', () => {
     const spyEmit = spyOn(component.openSettingDrawer, 'emit');
     const field = firstList[0];
     component.openFieldSettingDrawer(field);
+    expect(component.tempTitle).toEqual('');
     expect(spyEmit).toHaveBeenCalledWith(field);
   });
 });

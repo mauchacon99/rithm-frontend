@@ -55,6 +55,9 @@ export class StationService {
   /** The questions to be updated when it changes in station page. */
   currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
 
+  /** The question title to be updated when it's updated in setting drawer. */
+  stationQuestionTitle$ = new Subject<Question>();
+
   constructor(private http: HttpClient) {}
 
   /**

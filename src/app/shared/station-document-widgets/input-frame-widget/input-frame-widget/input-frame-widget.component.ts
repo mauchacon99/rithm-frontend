@@ -1,10 +1,18 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import {
   CdkDragDrop,
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { QuestionFieldType, Question } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { Subject, takeUntil } from 'rxjs';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -14,7 +22,7 @@ import { QuestionFieldType, Question } from 'src/models';
   templateUrl: './input-frame-widget.component.html',
   styleUrls: ['./input-frame-widget.component.scss'],
 })
-export class InputFrameWidgetComponent {
+export class InputFrameWidgetComponent implements OnDestroy {
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -30,12 +38,53 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** The list of questionFieldTypes. */
   fieldTypes = QuestionFieldType;
+
+  /** The list of questionFieldTypes. */
+  tempTitle = '';
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
+
+  constructor(private stationService: StationService) {
+    this.stationService.stationQuestionTitle$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questionTitle) => {
+        if (
+          questionTitle &&
+          this.widgetMode === 'setting' &&
+          this.fields &&
+          this.fields.length > 0
+        ) {
+          const questionIndex = this.fields?.findIndex(
+            (e) => e.rithmId === questionTitle.rithmId
+          );
+          if (
+            questionTitle.value &&
+            questionTitle.value?.length > 0 &&
+            this.tempTitle === ''
+          ) {
+            this.tempTitle = this.fields[questionIndex].prompt.slice();
+          }
+          this.fields[questionIndex].prompt = questionTitle.value
+            ? questionTitle.value
+            : this.tempTitle;
+        }
+      });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   /**
    * Add the element draggable to the questions field.
@@ -136,6 +185,7 @@ export class InputFrameWidgetComponent {
    */
   openFieldSettingDrawer(field: Question): void {
     if (this.widgetMode === 'setting') {
+      this.tempTitle = '';
       this.openSettingDrawer.emit(field);
     }
   }
