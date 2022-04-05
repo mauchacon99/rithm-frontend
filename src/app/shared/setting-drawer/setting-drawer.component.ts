@@ -51,6 +51,17 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get from the route parameters the id of the current station.
+   *
+   * @returns Is boolean.
+   */
+  get fieldReadOnly(): boolean {
+     this.fieldSetting.isReadOnly = !this.fieldSetting.isReadOnly;
+     this.fieldSetting.isRequired = (!this.fieldSetting.isReadOnly) ? this.fieldSetting.isReadOnly : this.fieldSetting.isRequired;
+     return this.fieldSetting.isReadOnly;
+  }
+
+  /**
+   * Get from the route parameters the id of the current station.
    */
   private getStationId(): void {
     this.route.params.pipe(first()).subscribe({
