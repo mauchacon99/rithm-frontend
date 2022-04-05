@@ -12,6 +12,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockSplitService,
   MockStationService,
   MockUserService,
 } from 'src/mocks';
@@ -35,6 +36,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
 import { MapComponent } from 'src/app/map/map/map.component';
 import { StationService } from 'src/app/core/station.service';
+import { SplitService } from 'src/app/core/split.service';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -80,6 +82,7 @@ describe('DocumentComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
