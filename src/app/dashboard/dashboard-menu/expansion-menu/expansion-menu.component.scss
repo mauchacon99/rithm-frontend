@@ -22,6 +22,14 @@
   }
 }
 
-.color-hover:hover {
+.showOptions {
+  @apply md:hidden;
+}
+
+.option-list:hover {
   @apply bg-accent-100;
+}
+
+.option-list:hover .showOptions {
+  @apply block;
 }

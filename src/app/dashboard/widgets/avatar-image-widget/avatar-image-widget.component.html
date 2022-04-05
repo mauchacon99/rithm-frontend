@@ -2,16 +2,16 @@
   class="h-[100px] w-[100px] lg:h-[120px] lg:w-[120px] rounded-full border-4 border-white bg-secondary-200 flex flex-col justify-center items-center"
 >
   <i
-    *ngIf="!profileImage"
+    *ngIf="!imageData || !imageData.imageData"
     class="far fa-user text-white text-4xl"
     [ngClass]="{ 'animate-pulse': isLoading }"
     id="profile-icon"
   ></i>
   <img
-    *ngIf="profileImage"
-    [src]="profileImage"
+    *ngIf="imageData && imageData.imageData"
+    [src]="imageData.imageData"
     class="w-full h-full object-cover rounded-full"
-    alt="Profile image container"
+    [alt]="imageData.imageName || 'Profile image container'"
     id="profile-image"
   />
 </div>

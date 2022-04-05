@@ -16,18 +16,8 @@ export class BannerImageWidgetComponent {
   /** WidgetType input. */
   @Input() widgetType!: WidgetType;
 
-  /** Profile image base64. */
-  profileImageBase64!: string;
-
-  /** Profile image of widget to get image Base64. */
-  @Input() set profileImage(value: string | null) {
-    if (value) {
-      this.getImageByRithmId(value, 'profile');
-    } else {
-      this.profileImageBase64 = '';
-      this.isLoadingProfileImage = false;
-    }
-  }
+  /** Profile image of widget. */
+  @Input() profileImage!: string | null;
 
   /** Image setter. */
   private _image!: DocumentImage;
@@ -37,7 +27,7 @@ export class BannerImageWidgetComponent {
     this._image = value;
     this.imageSrc = '';
     if (value && value.imageId && value.imageId !== 'TEMPLoading') {
-      this.getImageByRithmId(value.imageId, 'banner');
+      this.getImageByRithmId(value.imageId);
     } else if (value && value.imageId && value.imageId === 'TEMPLoading') {
       this.isLoading = true;
       this._image.imageId = null;
@@ -61,9 +51,6 @@ export class BannerImageWidgetComponent {
   /** Loading banner image. */
   isLoading = false;
 
-  /** Loading profile image. */
-  isLoadingProfileImage = false;
-
   /** Enum widgetType. */
   enumWidgetType = WidgetType;
 
@@ -76,38 +63,21 @@ export class BannerImageWidgetComponent {
    * Get banner image by id of image.
    *
    * @param imageRithmId RithmId of the image to get base64.
-   * @param type Type to set base64 'banner' | 'profile'.
    */
-  private getImageByRithmId(
-    imageRithmId: string,
-    type: 'banner' | 'profile'
-  ): void {
+  private getImageByRithmId(imageRithmId: string): void {
     if (imageRithmId) {
-      type === 'banner'
-        ? (this.isLoading = true)
-        : (this.isLoadingProfileImage = true);
-
+      this.isLoading = true;
       this.documentService
         .getImageByRithmId(imageRithmId)
         .pipe(first())
         .subscribe({
           next: (data) => {
-            if (type === 'banner') {
-              this.imageSrc = data.imageData || '';
-              this.isLoading = false;
-            } else {
-              this.profileImageBase64 = data.imageData || '';
-              this.isLoadingProfileImage = false;
-            }
+            this.imageSrc = data.imageData || '';
+            this.isLoading = false;
           },
           error: (error: unknown) => {
-            if (type === 'banner') {
-              this.imageSrc = '';
-              this.isLoading = false;
-            } else {
-              this.profileImageBase64 = '';
-              this.isLoadingProfileImage = false;
-            }
+            this.imageSrc = '';
+            this.isLoading = false;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
