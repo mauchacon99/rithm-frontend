@@ -90,8 +90,8 @@
         <button
           mat-icon-button
           [id]="'link-station-button-' + station.rithmId"
-          [attr.data-testid]="'link-station-button-' + station.rithmId"
           class="text-secondary-500"
+          [attr.data-testid]="'link-station-button-' + station.rithmId"
           [disabled]="editMode"
           [routerLink]="['/', 'station', station.rithmId]"
         >
