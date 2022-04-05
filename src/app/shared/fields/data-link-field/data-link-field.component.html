@@ -81,20 +81,17 @@
       </i>
     </mat-label>
     <mat-select
-      #selectDisplayFields
       multiple
       [disabled]="!questions.length || questionLoading"
       formControlName="selectedDisplayFields"
     >
-      <div (mouseleave)="selectDisplayFields.close()">
-        <mat-option
-          *ngFor="let option of questions"
-          class="text-sm"
-          [value]="option.rithmId"
-        >
-          <p>{{ option.prompt || 'Missing question label' }}</p>
-        </mat-option>
-      </div>
+      <mat-option
+        *ngFor="let option of questions"
+        class="text-sm"
+        [value]="option.rithmId"
+      >
+        <p>{{ option.prompt || 'Missing question label' }}</p>
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
