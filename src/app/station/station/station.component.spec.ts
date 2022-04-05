@@ -56,6 +56,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 import { SplitService } from 'src/app/core/split.service';
+import { TitleWidgetComponent } from 'src/app/shared/station-document-widgets/title-widget/title-widget.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -85,6 +86,7 @@ describe('StationComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(ToolbarComponent),
         MockComponent(StationTemplateComponent),
+        MockComponent(TitleWidgetComponent),
         MockComponent(InputFrameWidgetComponent),
         MockComponent(BuildDrawerComponent),
       ],
@@ -749,9 +751,9 @@ describe('StationComponent', () => {
 
     const spySaveChange = spyOn(
       component,
-      'saveStationChanges'
+      'saveStationFramesChanges'
     ).and.callThrough();
-    component.saveStationChanges();
+    component.saveStationFramesChanges();
     expect(spySaveChange).toHaveBeenCalled();
     expect(component.editMode).toBeFalsy();
   });
@@ -786,7 +788,8 @@ describe('StationComponent', () => {
     fixture.detectChanges();
     component.inputFrameWidgetItems = [
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 0,
@@ -794,12 +797,13 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 0,
       },
       {
-        frameRithmId: '',
+        rithmId: '',
+        stationRithmId: '',
         cols: 6,
         rows: 4,
         x: 7,
@@ -807,7 +811,7 @@ describe('StationComponent', () => {
         minItemRows: 4,
         minItemCols: 6,
         questions: [],
-        type: '',
+        type: FrameType.Input,
         data: '',
         id: 1,
       },

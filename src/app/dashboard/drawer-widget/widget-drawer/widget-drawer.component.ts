@@ -47,7 +47,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   widgetType!: WidgetType;
 
   /** Show section image banner. */
-  showImageBanner = false;
+  showProfileImageBanner = false;
 
   /** While the image its uploading. */
   isUploading = false;
@@ -84,7 +84,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        this.showImageBanner =
+        this.showProfileImageBanner =
           this.splitService.getStationUploadBannerTreatment() === 'on';
       },
       error: (error: unknown) => {
@@ -161,6 +161,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     const file = (target.files as FileList)[0];
     if (file) {
       // Loading banner image while upload image.
+      this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
       this.imageUploaded = {
         imageId: 'TEMPLoading',
         imageName: null,
@@ -176,6 +177,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
               imageId,
               imageName: file.name,
             };
+            this.sidenavDrawerService.setDisableCloseDrawerOutside();
           },
           error: (error: unknown) => {
             this.isUploading = false;
@@ -184,6 +186,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
               imageId: null,
               imageName: null,
             };
+            this.sidenavDrawerService.setDisableCloseDrawerOutside();
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error

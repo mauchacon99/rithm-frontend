@@ -1,5 +1,6 @@
 <ng-container *ngIf="stationViewMode === 'edit'; else previewMode">
   <div
+    *ngIf="fields"
     class="min-h-full"
     cdkDropList
     [id]="'inputFrameWidget-' + id"

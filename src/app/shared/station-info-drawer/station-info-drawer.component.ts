@@ -583,19 +583,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (status) {
             this.stationDocumentGenerationStatus = status;
           }
+          this.popupService.notify('The status has changed successfully');
         },
-        // eslint-disable-next-line
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.docGenLoading = false;
-          if (error?.status === 400) {
-            this.sidenavDrawerService.closeDrawer();
-            // return;
-          } else {
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          }
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
         },
       });
   }
@@ -617,6 +612,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (confirmNavigation || !this.editMode) {
       this.router.navigate([`/station/${this.stationRithmId}`]);
     }
+  }
+
+  /**
+   * Delete space the text to be evaluated to remove excess space.
+   *
+   * @param text The text to be evaluated to remove excess spaces.
+   * @returns A string to assign a character.
+   */
+  deleteSpace(text: string): string {
+    return text.replace(/\s+/g, ' ').trim();
   }
 
   /**
@@ -821,6 +826,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
+    this.sidenavDrawerService.drawerContext$.next('');
   }
 
   /**

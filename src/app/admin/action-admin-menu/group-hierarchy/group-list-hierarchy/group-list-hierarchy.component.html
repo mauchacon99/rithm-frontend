@@ -36,6 +36,7 @@
           *ngFor="let stationGroup of stationGroups.subStationGroups"
           [id]="'group-item-' + stationGroup.rithmId"
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
+          [value]="stationGroup"
           (click)="selectedListItem(stationGroup)"
         >
           <ng-container

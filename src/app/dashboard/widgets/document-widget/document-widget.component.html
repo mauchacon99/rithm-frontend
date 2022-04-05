@@ -17,22 +17,25 @@
   class="w-full h-full"
   [ngClass]="{
     'container-document-banner-image':
-      widgetType === typesWidget.DocumentListBanner,
+      widgetItem.widgetType === enumWidgetType.DocumentListBanner,
     'container-document-banner-profile':
-      widgetType === typesWidget.ContainerProfileBanner
+      widgetItem.widgetType === enumWidgetType.ContainerProfileBanner
   }"
 >
   <!--  Banner image-->
   <ng-container
     *ngIf="
-      widgetType === typesWidget.DocumentListBanner ||
-      widgetType === typesWidget.ContainerProfileBanner
+      widgetItem.widgetType === enumWidgetType.DocumentListBanner ||
+      widgetItem.widgetType === enumWidgetType.ContainerProfileBanner
     "
   >
     <app-banner-image-widget
-      [profileImage]="profileImage"
-      [widgetType]="widgetType"
-      [image]="image"
+      [profileImage]="widgetItem.profileImageId || null"
+      [widgetType]="widgetItem.widgetType"
+      [image]="{
+        imageId: widgetItem.imageId || null,
+        imageName: widgetItem.imageName || null
+      }"
     ></app-banner-image-widget>
   </ng-container>
 
@@ -40,7 +43,7 @@
   <div
     class="w-full px-2 pb-2 flex flex-col h-full"
     [ngClass]="{
-      'pt-2': widgetType !== typesWidget.DocumentListBanner
+      'pt-2': widgetItem.widgetType !== enumWidgetType.DocumentListBanner
     }"
   >
     <!--  Header Container -->

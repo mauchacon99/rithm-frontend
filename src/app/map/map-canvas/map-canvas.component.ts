@@ -159,6 +159,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The Station rithm Id centered on the map. */
   private centerStationRithmId = '';
 
+  /** The station group rithm Id centered on the map. */
+  private centerStationGroupRithmId = '';
+
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
 
@@ -282,6 +285,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.centerStationRithmId = stationRithmId;
       });
 
+    // Subscription is available for the station group centered on the map.
+    this.mapService.mapStationHelper.centerStationGroupRithmId$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationGroupRithmId) => {
+        this.centerStationGroupRithmId = stationGroupRithmId;
+      });
+
     //This subscribe shows if any station group has to be edited.
     this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$
       .pipe(takeUntil(this.destroyed$))
@@ -321,7 +331,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       '2d'
     ) as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
-    this.mapService.mapHelper.registerCanvasContext(this.context);
 
     //Sets the canvas to the size and DPI of the screen.
     this.setCanvasSize();
@@ -389,6 +398,51 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               }, 5);
               this.mapService.mapHelper.viewStationButtonClick$.next(false);
             }
+          } else if (this.centerStationGroupRithmId !== '') {
+            //Find the station group through rithmId
+            const stationGroupCenter =
+              this.mapService.stationGroupElements.find(
+                (stationGroup) =>
+                  stationGroup.rithmId === this.centerStationGroupRithmId
+              );
+            //Note that centering is beginning, this is necessary to allow recursive calls to the centerStation() method.
+            this.mapService.centerHelper.centerActive$.next(true);
+            //Increment centerCount to show that more centering of station needs to be done.
+            this.mapService.centerHelper.centerCount$.next(1);
+            // If drawer isn't open and there is station group to be centered.
+            if (
+              !this.mapService.mapHelper.isDrawerOpened$.value &&
+              stationGroupCenter
+            ) {
+              this.mapService.mapHelper.isDrawerOpened$.next(true);
+              const drawer = document.getElementsByTagName('mat-drawer');
+              const dataInformationDrawer: StationGroupInfoDrawerData = {
+                stationGroupRithmId: stationGroupCenter.rithmId,
+                stationGroupName: stationGroupCenter.title,
+                editMode:
+                  this.mapService.mapHelper.mapMode$.value === MapMode.Build,
+                numberOfStations: stationGroupCenter.stations.length,
+                numberOfSubgroups: stationGroupCenter.subStationGroups.length,
+                stationGroupStatus: stationGroupCenter.status,
+                isChained: stationGroupCenter.isChained,
+              };
+              //Open station group info drawer when station group is selected.
+              this.sidenavDrawerService.openDrawer(
+                'stationGroupInfo',
+                dataInformationDrawer
+              );
+              stationGroupCenter.drawerOpened = true;
+              //Increment centerCount to show that more centering of station group needs to be done.
+              this.mapService.centerHelper.centerCount$.next(1);
+              //Call method to run logic for centering of the station group.
+              setTimeout(() => {
+                this.mapService.centerHelper.center(
+                  CenterPanType.StationGroup,
+                  drawer[0] ? drawer[0].clientWidth : 0
+                );
+              }, 5);
+              this.mapService.mapHelper.viewStationButtonClick$.next(false);
+            }
           } else {
             this.mapService.centerHelper.centerActive$.next(true);
             this.mapService.centerHelper.centerCount$.next(1);
@@ -424,6 +478,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     });
     this.mapService.mapHelper.isDrawerOpened$.next(false);
     this.mapService.mapHelper.mapMode$.next(MapMode.View);
+    this.mapService.mapHelper.currentCanvasPoint$.next({ x: 0, y: 0 });
   }
 
   /**
@@ -1470,7 +1525,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Loop through the station group array to check if there is a station group being interacted with.
       for (const stationGroup of this.stationGroups) {
         //Checks whether the station group boundary is being hovered over.
-        stationGroup.checkElementHover(eventContextPoint, this.context);
+        stationGroup.checkElementHover(
+          eventContextPoint,
+          this.context,
+          this.mapMode
+        );
 
         //If hovering over the station group boundary or name and MapDragItem should not be Node and Station.
         if (
@@ -1964,7 +2023,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           });
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
-            stationGroup.checkElementHover(eventContextPoint, this.context);
+            stationGroup.checkElementHover(
+              eventContextPoint,
+              this.context,
+              this.mapMode
+            );
             //If cursor is over a group boundary or option button.
             if (
               stationGroup.hoverItem ===
@@ -2305,7 +2368,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   checkStationGroupClick(contextPoint: Point, point: Point): void {
     // Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
-      stationGroup.checkElementHover(contextPoint, this.context);
+      stationGroup.checkElementHover(contextPoint, this.context, this.mapMode);
 
       //If MapMode is StationGroupAdd we select the group.
       if (

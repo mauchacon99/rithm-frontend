@@ -29,6 +29,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 
 /**
  * Main component for the dashboard screens.
@@ -42,24 +43,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** The component for the side nav on the dashboard. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /**
-   * Detect mobile devices.
-   *
-   * @returns True if device is mobile.
-   */
-  get isMobileDevice(): boolean {
-    return !!(
-      navigator.userAgent.match(/Android/i) ||
-      navigator.userAgent.match(/webOS/i) ||
-      navigator.userAgent.match(/iPhone/i) ||
-      navigator.userAgent.match(/iPad/i) ||
-      navigator.userAgent.match(/iPod/i) ||
-      navigator.userAgent.match(/BlackBerry/i) ||
-      navigator.userAgent.match(/Windows Phone/i) ||
-      navigator.userAgent.match(/Linux aarch64/i)
-    );
-  }
 
   /**
    * Whether the signed in user is an admin or not.
@@ -77,6 +60,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   get drawerHasBackdrop(): boolean {
     return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Get disable close drawer with Esc or click outside.
+   *
+   * @returns If is disabled the drawer.
+   */
+  get drawerDisableClose(): boolean {
+    return this.sidenavDrawerService.getDisableCloseDrawerOutside;
   }
 
   /**
@@ -164,7 +156,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private dialog: MatDialog,
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private mobileBrowserChecker: MobileBrowserChecker
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -195,7 +188,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Set config break point in mobile. */
   private setConfigMobileGridster(): void {
-    this.options.mobileBreakpoint = this.isMobileDevice ? 1920 : 640;
+    this.options.mobileBreakpoint = this.mobileBrowserChecker.isMobileDevice
+      ? 1920
+      : 640;
     this.changedOptions();
   }
 
@@ -605,7 +600,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Open dialog add widget.
    */
   openDialogAddWidget(): void {
-    this.toggleDrawerOnlyForWidgets();
     const dialog = this.dialog.open(AddWidgetModalComponent, {
       panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
       maxWidth: '1500px',
@@ -625,5 +619,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.sidenavDrawerService.setDisableCloseDrawerOutside();
   }
 }

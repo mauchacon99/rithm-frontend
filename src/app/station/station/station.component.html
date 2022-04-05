@@ -348,6 +348,8 @@
                           mat-button
                           type="button"
                           color="accent"
+                          id="cancel-station-changes"
+                          data-testid="cancel-station-changes"
                           class="font-semibold text-sm"
                           (click)="cancelStationChanges()"
                         >
@@ -357,8 +359,10 @@
                           mat-raised-button
                           type="button"
                           color="accent"
+                          id="save-station-frames"
+                          data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="saveStationChanges()"
+                          (click)="saveStationFramesChanges()"
                         >
                           Save
                         </button>
@@ -406,15 +410,27 @@
                           >
                             <i class="fas fa-arrows fa-xl"></i>
                           </button>
-
-                          <app-input-frame-widget
-                            [fields]="widgetItem.questions"
-                            [stationViewMode]="editMode ? 'edit' : 'preview'"
-                            [stationRithmId]="stationRithmId"
-                            [id]="widgetItem.id"
-                            [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                            (openSettingDrawer)="openSettingDrawer($event)"
-                          ></app-input-frame-widget>
+                          <ng-container [ngSwitch]="widgetItem.type">
+                            <app-title-widget
+                              *ngSwitchCase="frameType.Title"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-title-widget>
+                            <app-body-text-widget
+                              *ngSwitchCase="frameType.Body"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-body-text-widget>
+                            <app-input-frame-widget
+                              *ngSwitchDefault
+                              [fields]="widgetItem.questions"
+                              [stationViewMode]="editMode ? 'edit' : 'preview'"
+                              [stationRithmId]="stationRithmId"
+                              [id]="widgetItem.id"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-input-frame-widget>
+                          </ng-container>
                         </div>
                       </gridster-item>
                     </gridster>

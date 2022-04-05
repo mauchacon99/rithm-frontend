@@ -17,6 +17,8 @@ import {
   DocumentNameField,
   StandardBooleanJSON,
   StationGroupData,
+  StationFrameWidget,
+  FrameType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1257,5 +1259,57 @@ describe('StationService', () => {
     expect(req.request.params.get('depth')).toBe('1');
 
     req.flush(expectedResponse);
+  });
+
+  it('should return the status when updated the flow button text', () => {
+    const expectedResponse: StandardStringJSON = {
+      data: 'test',
+    };
+    const flowButtonText = 'test';
+    service
+      .updateFlowButtonText(stationId, flowButtonText)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.data);
+      });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-button?stationRithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should save/update the array of stationFramesWidget', () => {
+    const InputFrameWidgetQuestions: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: JSON.stringify(InputFrameWidgetQuestions),
+        id: 0,
+      },
+    ];
+
+    service
+      .addFieldQuestionWidget(stationId, frameStationWidget)
+      .subscribe((response) => {
+        expect(response).toEqual(frameStationWidget[0]);
+      });
   });
 });
