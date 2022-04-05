@@ -38,7 +38,7 @@
     <mat-slide-toggle
       class="mat-slide"
       [checked]="fieldSetting.isReadOnly"
-      (toggleChange)="fieldReadOnly"
+      (toggleChange)="(fieldReadOnly)"
     >
     </mat-slide-toggle>
   </div>
@@ -47,7 +47,10 @@
     <mat-slide-toggle
       class="mat-slide"
       [checked]="fieldSetting.isRequired"
-      [disabled]="(fieldSetting.originalStationRithmId !== stationRithmId && !fieldSetting.isReadOnly)"
+      [disabled]="
+        fieldSetting.originalStationRithmId !== stationRithmId &&
+        !fieldSetting.isReadOnly
+      "
       (toggleChange)="fieldSetting.isRequired = !fieldSetting.isRequired"
     >
     </mat-slide-toggle>

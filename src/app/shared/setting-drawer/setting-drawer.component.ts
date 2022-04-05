@@ -55,9 +55,11 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
    * @returns Is boolean.
    */
   get fieldReadOnly(): boolean {
-     this.fieldSetting.isReadOnly = !this.fieldSetting.isReadOnly;
-     this.fieldSetting.isRequired = (!this.fieldSetting.isReadOnly) ? this.fieldSetting.isReadOnly : this.fieldSetting.isRequired;
-     return this.fieldSetting.isReadOnly;
+    this.fieldSetting.isReadOnly = !this.fieldSetting.isReadOnly;
+    this.fieldSetting.isRequired = !this.fieldSetting.isReadOnly
+      ? this.fieldSetting.isReadOnly
+      : this.fieldSetting.isRequired;
+    return this.fieldSetting.isReadOnly;
   }
 
   /**

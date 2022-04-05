@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -9,7 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('SettingDrawerComponent', () => {
@@ -78,9 +78,11 @@ describe('SettingDrawerComponent', () => {
   });
 
   it('should call getParams to get the stationId', () => {
-    TestBed.inject(Router).navigate(
-      ['/', 'station', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
-    );
+    TestBed.inject(Router).navigate([
+      '/',
+      'station',
+      '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5',
+    ]);
     const spyService = spyOn(
       TestBed.inject(ActivatedRoute).params,
       'subscribe'
