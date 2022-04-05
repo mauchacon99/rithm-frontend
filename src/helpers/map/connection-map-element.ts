@@ -79,8 +79,10 @@ export class ConnectionMapElement {
     ctx.save();
     //This will allow users to click in the area around connection line without having to click in the rendered space.
     ctx.lineWidth = 30;
-    //Set to true if cursor is on/near the connection line.
-    this.hovering = ctx.isPointInStroke(this.path, point.x, point.y);
+    if (this.path && this.path instanceof Path2D) {
+      //Set to true if cursor is on/near the connection line.
+      this.hovering = ctx.isPointInStroke(this.path, point.x, point.y);
+    }
     //Restore the saved context state and undo the changes to it.
     ctx.restore();
   }
