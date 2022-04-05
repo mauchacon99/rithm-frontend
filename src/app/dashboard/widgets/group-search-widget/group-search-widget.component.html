@@ -63,10 +63,11 @@
           mat-icon-button
           [disabled]="editMode"
           id="map-button"
-          (click)="goToStationGroupOnMap()"
+          class="text-secondary-500"
+          (click)="goToStationGroupOnMap(subStation.rithmId)"
           data-testid="map-button"
         >
-          <i class="fa-solid fa-map text-base text-secondary-500"></i>
+          <i class="fa-solid fa-map text-base"></i>
         </button>
       </div>
 
@@ -89,8 +90,8 @@
         <button
           mat-icon-button
           [id]="'link-station-button-' + station.rithmId"
-          [attr.data-testid]="'link-station-button-' + station.rithmId"
           class="text-secondary-500"
+          [attr.data-testid]="'link-station-button-' + station.rithmId"
           [disabled]="editMode"
           [routerLink]="['/', 'station', station.rithmId]"
         >

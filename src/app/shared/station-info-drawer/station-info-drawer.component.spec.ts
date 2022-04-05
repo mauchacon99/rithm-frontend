@@ -20,7 +20,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { MatInputModule } from '@angular/material/input';
-import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,7 +40,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
-  const formBuilder = new FormBuilder();
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
@@ -69,7 +68,6 @@ describe('StationInfoDrawerComponent', () => {
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
@@ -231,7 +229,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show none-status-loading while get data the status station document', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 0;
     component.getStationDocumentGenerationStatus();
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
@@ -245,7 +243,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show manual-status-loading while get data the status station document', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 0;
     component.getStationDocumentGenerationStatus();
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
@@ -259,7 +257,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show none-status-loading while update data the status station document', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 0;
     const newStatus = DocumentGenerationStatus.Manual;
     component.updateStationDocumentGenerationStatus(
       component.stationRithmId,
@@ -276,7 +274,6 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show manual-status-loading while update data the status station document', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
     const newStatus = DocumentGenerationStatus.Manual;
     component.updateStationDocumentGenerationStatus(
       component.stationRithmId,
@@ -392,7 +389,7 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 0;
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
@@ -426,7 +423,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 0;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     await component.createNewDocument();
@@ -522,7 +519,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 2;
+    component.selectedTabIndex = 1;
     component.updateAllowExternalWorkers();
     fixture.detectChanges();
     expect(component.allowExternalLoading).toBe(true);
@@ -534,7 +531,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 2;
+    component.selectedTabIndex = 1;
     component.updateAllOrgWorkersStation();
     fixture.detectChanges();
     expect(component.allowAllOrgLoading).toBe(true);
