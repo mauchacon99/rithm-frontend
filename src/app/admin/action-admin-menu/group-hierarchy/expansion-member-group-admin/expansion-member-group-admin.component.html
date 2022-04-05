@@ -80,7 +80,13 @@
             <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>Remove member</button>
+            <button
+              id="option-menu-item-{{ member.rithmId }}"
+              [attr.data-testid]="'option-menu-item-' + member.rithmId"
+              mat-menu-item
+            >
+              Remove member
+            </button>
           </mat-menu>
         </div>
       </mat-list-item>
