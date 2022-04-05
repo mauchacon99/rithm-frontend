@@ -2073,11 +2073,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.stationGroupElements.some((e) => e.drawerOpened)
     ) {
       const drawer = document.getElementsByTagName('mat-drawer');
+      /** Value for the centering pan type and assign to the behaviorSubject station center. */
+      let centerPanType: CenterPanType;
+      if (this.drawerMode === 'stationInfo') {
+        centerPanType = CenterPanType.Station;
+      } else if (this.drawerMode === 'stationGroupInfo') {
+        centerPanType = CenterPanType.StationGroup;
+      } else {
+        centerPanType = CenterPanType.MapCenter;
+      }
       this.mapService.mapStationHelper.stationCenter$.next(
         this.mapService.centerHelper.checkCenter(
-          this.drawerMode === 'stationInfo'
-            ? CenterPanType.Station
-            : CenterPanType.StationGroup,
+          centerPanType,
           drawer && drawer.length > 0 ? drawer[0].clientWidth : 0
         )
       );
