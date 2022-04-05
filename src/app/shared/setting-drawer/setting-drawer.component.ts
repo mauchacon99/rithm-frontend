@@ -3,6 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for setting drawer in the station.
@@ -20,6 +21,7 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   fieldSetting!: Question;
 
   constructor(
+    private popupService: PopupService,
     private sideNavDrawerService: SidenavDrawerService,
     private stationService: StationService
   ) {}
@@ -56,7 +58,16 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
    *
    * @param questions The current questions to be deleted in field settings.
    */
-  deleteQuestion(questions: Question): void {
-    this.stationService.deleteStationQuestion$.next(questions);
+  async deleteQuestion(questions: Question): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: '',
+      message: 'Are you sure you want to delete this field?',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true,
+    });
+    if (response) {
+      this.stationService.deleteStationQuestion$.next(questions);
+    }
   }
 }

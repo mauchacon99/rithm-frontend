@@ -1,17 +1,3 @@
-mat-slide-toggle.mat-slide ::ng-deep .mat-ripple {
-  display: none;
-}
-
-.mat-mini-fab {
-  &.priority {
-    &::ng-deep .mat-button-wrapper {
-      padding: 0;
-    }
-
-    @apply mt-1 w-7 h-7 leading-6;
-  }
-}
-
 .mat-setting-input {
   ::ng-deep .mat-form-field-wrapper {
     @apply m-0;
