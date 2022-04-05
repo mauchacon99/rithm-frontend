@@ -1,1 +1,9 @@
-<p>Banner Widget</p>
+<div
+  (click)="handleOpenSettingDrawer(imageWidgetObject)"
+  [ngClass]="{
+    'rounded border-2 border-secondary-100': widgetMode === 'setting'
+  }"
+  class="flex justify-center items-center h-full w-full"
+>
+  <i class="fa-solid fa-image fa-3x text-secondary-200"></i>
+</div>
