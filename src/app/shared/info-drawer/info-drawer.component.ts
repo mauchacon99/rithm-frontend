@@ -21,7 +21,11 @@ export class InfoDrawerComponent implements OnDestroy {
   drawerMode: '' | 'stationInfo' | 'documentInfo' | 'history' | 'fieldSetting' =
     '';
 
+  /** Whether the station drawer is opened from map or not. */
   openedFromMap = false;
+
+  /** The centering progress is active in station. */
+  centerActive = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -46,6 +50,19 @@ export class InfoDrawerComponent implements OnDestroy {
         if (dataDrawer) {
           this.openedFromMap = dataDrawer.openedFromMap;
         }
+      });
+
+    /** Subscribe to the active center on the center helper mapService. */
+    this.mapService.centerHelper.centerActive$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (centerActive) => {
+          // Set center active for the done button in the station.
+          this.centerActive = centerActive;
+        },
+        error: (error: unknown) => {
+          throw new Error(`Center active subscription error: ${error}`);
+        },
       });
   }
 
