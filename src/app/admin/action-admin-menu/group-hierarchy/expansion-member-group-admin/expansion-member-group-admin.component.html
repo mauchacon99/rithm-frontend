@@ -18,7 +18,7 @@
           mat-icon-button
           id="add-user-button"
           data-testid="add-user-button"
-          (click)="$event.stopPropagation()"
+          (click)="openManagementRosterModal($event)"
         >
           <i class="fa-solid fa-user-plus text-secondary-500"></i>
         </button>
@@ -26,7 +26,7 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
 
-  <div class="loading flex p-8" *ngIf="isLoading">
+  <div class="loading flex p-5" *ngIf="isLoading">
     <app-loading-indicator
       class="flex-grow m-auto"
       [inlineText]="'loading'"

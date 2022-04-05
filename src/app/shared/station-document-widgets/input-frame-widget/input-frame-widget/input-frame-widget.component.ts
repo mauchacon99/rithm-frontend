@@ -30,8 +30,8 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
-  /** The list of questionFieldTypes. */
-  fieldTypes = QuestionFieldType;
+  /** Emit an event to adjust its heigth when its number of children overpass its number of rows. */
+  @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
@@ -43,31 +43,30 @@ export class InputFrameWidgetComponent {
    * @param event Receive the element draggable as DragDrop type for move it.
    */
   addElementDrag(event: CdkDragDrop<Question[]>): void {
-    const fieldType =
-      event.previousContainer.data[event.previousIndex].questionType;
-    const prompt = event.previousContainer.data[event.previousIndex].prompt;
-    const newQuestion: Question = {
-      rithmId: this.randRithmId,
-      prompt: prompt,
-      questionType: fieldType,
-      isReadOnly: false,
-      isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
-      isPrivate: false,
-      children:
-        fieldType === QuestionFieldType.AddressLine
-          ? this.addAddressChildren()
-          : [],
-      originalStationRithmId: this.stationRithmId,
-    };
-    if (
-      fieldType === QuestionFieldType.CheckList ||
-      fieldType === QuestionFieldType.Select ||
-      fieldType === QuestionFieldType.MultiSelect
-    ) {
-      newQuestion.possibleAnswers = [];
-    }
+    const questionInfo = event.previousContainer.data[event.previousIndex];
+
+    const newQuestion: Question = questionInfo.rithmId
+      ? questionInfo
+      : {
+          rithmId: this.randRithmId,
+          prompt: questionInfo.prompt,
+          questionType: questionInfo.questionType,
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children:
+            questionInfo.questionType === QuestionFieldType.AddressLine
+              ? this.addAddressChildren()
+              : [],
+          originalStationRithmId: this.stationRithmId,
+          possibleAnswers: [],
+        };
+
     if (event.container.id !== event.previousContainer.id) {
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
+      if (this.fields && this.fields.length > 4) {
+        this.widgetRowAdjustment.emit(this.fields.length);
+      }
     } else {
       moveItemInArray(
         event.container.data,
@@ -122,7 +121,7 @@ export class InputFrameWidgetComponent {
         isRequired: element.required,
         isPrivate: false,
         children: [],
-        originalStationRithmId: '21316c62-8a45-4e79-ba58-0927652569cc',
+        originalStationRithmId: this.stationRithmId,
       };
       addressChildren.push(child);
     });
