@@ -3,7 +3,7 @@
   [itemInfo]="stationInformation"
 ></app-sub-header>
 <mat-drawer-container
-  [hasBackdrop]="drawerHasBackdrop"
+  [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
   class="h-full info-drawer-station"
 >
   <!-- right match drawer -->
@@ -400,7 +400,7 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster relative overflow-hidden">
+                        <div class="h-gridster">
                           <button
                             mat-icon-button
                             type="button"
@@ -426,6 +426,11 @@
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
                               (openSettingDrawer)="openSettingDrawer($event)"
                             ></app-body-text-widget>
+                            <app-banner-widget
+                              *ngSwitchCase="frameType.Image"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-banner-widget>
                             <app-input-frame-widget
                               *ngSwitchDefault
                               [fields]="widgetItem.questions"
@@ -433,6 +438,9 @@
                               [stationRithmId]="stationRithmId"
                               [id]="widgetItem.id"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (widgetRowAdjustment)="
+                                widgetRowAdjustment($event, widgetItem)
+                              "
                               (openSettingDrawer)="openSettingDrawer($event)"
                             ></app-input-frame-widget>
                           </ng-container>
