@@ -7,11 +7,13 @@ import {
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator,
+  Validators,
 } from '@angular/forms';
 import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { Question, Station } from 'src/models';
+import { DataLinkObject } from '../../../../models/data-link-object';
 
 /**
  * Reusable component for every field data-link.
@@ -39,6 +41,20 @@ export class DataLinkFieldComponent
   /** The form to add this field in the template. */
   dataLinkFieldForm!: FormGroup;
 
+  /**Filtered form station List. */
+  filteredStations$: Observable<Station[]> | undefined;
+
+  /** Default Data Link. */
+  dataLinkDefault: DataLinkObject = {
+    rithmId: '',
+    frameRithmId: '',
+    sourceStationRithmId: '',
+    targetStationRithmId: '',
+    baseQuestionRithmId: '',
+    matchingQuestionRithmId: '',
+    displayFields: [],
+  };
+
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -47,9 +63,6 @@ export class DataLinkFieldComponent
 
   /** The list of all stations. */
   stations: Station[] = [];
-
-  /**Filtered form station List. */
-  filteredStations$: Observable<Station[]> | undefined;
 
   /** The list of selected station questions for the select matching value.*/
   questions: Question[] = [];
@@ -94,11 +107,19 @@ export class DataLinkFieldComponent
    */
   ngOnInit(): void {
     this.dataLinkFieldForm = this.fb.group({
-      [this.field.questionType]: [this.fieldValue, []],
-      selectedMatchingValue: ['', []],
-      selectBaseValue: ['', []],
-      selectedDisplayFields: ['', []],
+      targetStation: [this.fieldValue, [Validators.required]],
+      selectedMatchingValue: ['', [Validators.required]],
+      selectBaseValue: ['', [Validators.required]],
+      selectedDisplayFields: ['', [Validators.required]],
     });
+    this.dataLinkDefault.frameRithmId = this.field.rithmId;
+    this.dataLinkDefault.rithmId = this.field.rithmId;
+    if (this.field.originalStationRithmId) {
+      this.dataLinkDefault.sourceStationRithmId =
+        this.field.originalStationRithmId;
+    }
+    this.dataLinkFieldForm.controls.targetStation.markAllAsTouched();
+    this.dataLinkFieldForm.controls.selectBaseValue.markAllAsTouched();
     this.subscribeCurrentStationQuestions();
     this.getAllStations();
   }
@@ -136,27 +157,30 @@ export class DataLinkFieldComponent
   getStationQuestions(nameStation: string): void {
     this.questions = [];
     this.questionLoading = true;
-    const stationRithmId = this.stations.find(
+    const targetStationId = this.stations.find(
       (station) => station.name === nameStation
     )?.rithmId;
-    if (stationRithmId) {
+    if (targetStationId) {
+      this.dataLinkDefault.targetStationRithmId = targetStationId;
       this.stationService
-        .getStationQuestions(stationRithmId)
+        .getStationQuestions(targetStationId)
         .pipe(first())
         .subscribe({
           next: (questions) => {
             /** Update label name matching value and  display fields if question array is empty. */
-            if (!questions.length) {
-              this.matchingValueLabel = 'No Questions Found';
-              this.displayFieldsLabel = 'No Questions Found';
-            } else {
-              this.matchingValueLabel = 'Matching Value';
-              this.displayFieldsLabel = 'Display Fields';
-            }
+            this.matchingValueLabel = !questions.length
+              ? 'No Questions Found'
+              : 'Matching Value';
+            this.displayFieldsLabel = !questions.length
+              ? 'No Questions Found'
+              : 'Display Fields';
+
             this.questions = questions;
             this.resetField('selectedDisplayFields', []);
             this.resetField('selectedMatchingValue', '');
             this.questionLoading = false;
+            this.dataLinkFieldForm.controls.selectedMatchingValue.markAllAsTouched();
+            this.dataLinkFieldForm.controls.selectedDisplayFields.markAllAsTouched();
           },
           error: (error: unknown) => {
             this.questionLoading = false;
@@ -211,6 +235,17 @@ export class DataLinkFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.dataLinkFieldForm.valueChanges.subscribe(fn);
+    this.dataLinkFieldForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((val) => {
+        if (this.dataLinkFieldForm.valid) {
+          this.dataLinkDefault.matchingQuestionRithmId =
+            val.selectedMatchingValue;
+          this.dataLinkDefault.baseQuestionRithmId = val.selectBaseValue;
+          this.dataLinkDefault.displayFields = val.selectedDisplayFields;
+          this.stationService.dataLinkObject$.next(this.dataLinkDefault);
+        }
+      });
   }
 
   /**
@@ -269,12 +304,11 @@ export class DataLinkFieldComponent
    */
   private filterStations(): void {
     /** Set the filter List for auto searching. */
-    this.filteredStations$ = this.dataLinkFieldForm.controls[
-      this.field.questionType
-    ]?.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value))
-    );
+    this.filteredStations$ =
+      this.dataLinkFieldForm.controls.targetStation.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value))
+      );
   }
 
   /**
