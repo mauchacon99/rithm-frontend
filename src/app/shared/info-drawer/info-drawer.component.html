@@ -21,6 +21,7 @@
     class="flex justify-center items-center border-t border-solid border-secondary-100 h-16"
   >
     <button
+      [disabled]="centerActive && drawerMode === 'stationInfo'"
       mat-button
       mat-raised-button
       color="accent"
