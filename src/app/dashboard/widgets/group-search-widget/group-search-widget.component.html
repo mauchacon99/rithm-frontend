@@ -63,8 +63,8 @@
           mat-icon-button
           [disabled]="editMode"
           id="map-button"
-          (click)="goToStationGroupOnMap()"
           [ngClass]="editMode ? 'text-secondary-200' : 'text-secondary-500'"
+          (click)="goToStationGroupOnMap(subStation.rithmId)"
           data-testid="map-button"
         >
           <i class="fa-solid fa-map text-base"></i>
