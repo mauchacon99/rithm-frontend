@@ -101,6 +101,7 @@
 </div>
 <div class="flex justify-center border-t border-solid border-secondary-50 py-2">
   <button
+    [disabled]="centerActive"
     mat-raised-button
     color="accent"
     (click)="toggleDrawer('stationGroupInfo')"
