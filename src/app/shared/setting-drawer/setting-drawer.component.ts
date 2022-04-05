@@ -50,15 +50,17 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get from the route parameters the id of the current station.
+   * Get isReadOnly and modify isRequired in case they are fields from previous questions.
    *
    * @returns Is boolean.
    */
   get fieldReadOnly(): boolean {
     this.fieldSetting.isReadOnly = !this.fieldSetting.isReadOnly;
-    this.fieldSetting.isRequired = !this.fieldSetting.isReadOnly
-      ? this.fieldSetting.isReadOnly
-      : this.fieldSetting.isRequired;
+    if (this.fieldSetting.originalStationRithmId !== this.stationRithmId) {
+      this.fieldSetting.isRequired = !this.fieldSetting.isReadOnly
+        ? this.fieldSetting.isReadOnly
+        : this.fieldSetting.isRequired;
+    }
     return this.fieldSetting.isReadOnly;
   }
 
