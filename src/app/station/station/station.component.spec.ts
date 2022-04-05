@@ -57,6 +57,7 @@ import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 import { SplitService } from 'src/app/core/split.service';
 import { TitleWidgetComponent } from 'src/app/shared/station-document-widgets/title-widget/title-widget.component';
+import { BannerWidgetComponent } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -88,6 +89,7 @@ describe('StationComponent', () => {
         MockComponent(StationTemplateComponent),
         MockComponent(TitleWidgetComponent),
         MockComponent(InputFrameWidgetComponent),
+        MockComponent(BannerWidgetComponent),
         MockComponent(BuildDrawerComponent),
       ],
       imports: [
@@ -910,6 +912,11 @@ describe('StationComponent', () => {
     it('should add a new title widget ', () => {
       expect(component.inputFrameWidgetItems).toHaveSize(0);
       component.addInputFrame(FrameType.Title);
+      expect(component.inputFrameWidgetItems).toHaveSize(1);
+    });
+    it('should add a new banner widget with different id', () => {
+      expect(component.inputFrameWidgetItems).toHaveSize(0);
+      component.addInputFrame(FrameType.Image);
       expect(component.inputFrameWidgetItems).toHaveSize(1);
     });
 
