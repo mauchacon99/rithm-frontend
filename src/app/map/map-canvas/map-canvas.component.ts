@@ -286,7 +286,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     // Subscription is available for the station group centered on the map.
-    this.mapService.mapStationHelper.centerStationGroupRithmId$
+    this.mapService.mapStationGroupHelper.centerStationGroupRithmId$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationGroupRithmId) => {
         this.centerStationGroupRithmId = stationGroupRithmId;
@@ -461,24 +461,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //Redraw again for good measure.
     this.drawElements();
-  }
-
-  /**
-   * Cleans up subscription when the component is destroyed. Reset several mapService properties.
-   */
-  ngOnDestroy(): void {
-    // Undoes the changes in case you are in StationGroupAdd or StationGroupEdit mode.
-    this.mapService.cancelMapChanges();
-    this.destroyed$.next();
-    this.destroyed$.complete();
-    this.connections = [];
-    this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$.next({
-      click: false,
-      data: {},
-    });
-    this.mapService.mapHelper.isDrawerOpened$.next(false);
-    this.mapService.mapHelper.mapMode$.next(MapMode.View);
-    this.mapService.mapHelper.currentCanvasPoint$.next({ x: 0, y: 0 });
   }
 
   /**
@@ -2677,5 +2659,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations[stationIndex].disabled = false;
     });
     this.animatePendingGroup();
+  }
+
+  /**
+   * Cleans up subscription when the component is destroyed. Reset several mapService properties.
+   */
+  ngOnDestroy(): void {
+    // Undoes the changes in case you are in StationGroupAdd or StationGroupEdit mode.
+    this.mapService.cancelMapChanges();
+    this.destroyed$.next();
+    this.destroyed$.complete();
+    this.connections = [];
+    this.mapService.mapStationGroupHelper.stationGroupOptionButtonClick$.next({
+      click: false,
+      data: {},
+    });
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
+    this.mapService.mapHelper.mapMode$.next(MapMode.View);
+    this.mapService.mapHelper.currentCanvasPoint$.next({ x: 0, y: 0 });
+    /** Clean the behaviorSubjects to restore a next centering. */
+    this.mapService.mapStationHelper.centerStationRithmId$.next('');
+    this.mapService.mapStationGroupHelper.centerStationGroupRithmId$.next('');
   }
 }
