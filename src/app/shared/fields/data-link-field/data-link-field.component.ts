@@ -12,8 +12,7 @@ import {
 import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { Question, Station } from 'src/models';
-import { DataLinkObject } from '../../../../models/data-link-object';
+import { Question, Station, DataLinkObject } from 'src/models';
 
 /**
  * Reusable component for every field data-link.
