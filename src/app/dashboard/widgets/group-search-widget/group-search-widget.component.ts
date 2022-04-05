@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
+import { MapService } from 'src/app/map/map.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationListGroup, WidgetType } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
@@ -53,7 +55,9 @@ export class GroupSearchWidgetComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private mapService: MapService
   ) {}
 
   /**
@@ -121,5 +125,16 @@ export class GroupSearchWidgetComponent implements OnInit {
         },
       });
     }
+  }
+
+  /**
+   * Navigate the user to the group on the map.
+   */
+  goToStationGroupOnMap(): void {
+    this.mapService.mapStationHelper.centerStationGroupRithmId$.next(
+      this.stationGroupRithmId
+    );
+    this.mapService.mapHelper.viewStationButtonClick$.next(true);
+    this.router.navigate([`/map`]);
   }
 }

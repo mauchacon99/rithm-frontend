@@ -5,6 +5,10 @@ import { StationListGroup, StationGroupData } from 'src/models';
 import { ExpansionMemberGroupAdminComponent } from '../expansion-member-group-admin/expansion-member-group-admin.component';
 
 import { UserGroupStationAdminComponent } from './user-group-station-admin.component';
+import { MapService } from 'src/app/map/map.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockMapService } from 'src/mocks';
+import { Router } from '@angular/router';
 
 describe('UserGroupStationAdminComponent', () => {
   let component: UserGroupStationAdminComponent;
@@ -70,7 +74,8 @@ describe('UserGroupStationAdminComponent', () => {
         UserGroupStationAdminComponent,
         MockComponent(ExpansionMemberGroupAdminComponent),
       ],
-      imports: [MatExpansionModule],
+      imports: [MatExpansionModule, RouterTestingModule],
+      providers: [{ provide: MapService, useClass: MockMapService }],
     }).compileComponents();
   });
 
@@ -102,5 +107,66 @@ describe('UserGroupStationAdminComponent', () => {
     component.selectedItem = subStationGroups;
     const result = component.nameElement;
     expect(result).toEqual(subStationGroups.title);
+  });
+
+  describe('Redirect to map', () => {
+    let mapService: MapService;
+    let router: Router;
+
+    beforeEach(() => {
+      mapService = TestBed.inject(MapService);
+      router = TestBed.inject(Router);
+    });
+
+    it('should redirect to map and center station', () => {
+      component.selectedItem = stations;
+      const spyMethod = spyOn(component, 'goToStationOnMap').and.callThrough();
+      const spySubjectCenter = spyOn(
+        mapService.mapStationHelper.centerStationRithmId$,
+        'next'
+      );
+      const spySubjectViewButton = spyOn(
+        mapService.mapHelper.viewStationButtonClick$,
+        'next'
+      );
+      const spyRouter = spyOn(router, 'navigateByUrl').and.callThrough();
+      fixture.detectChanges();
+      const btnRedirectToMap =
+        fixture.debugElement.nativeElement.querySelector('#redirect-to-map');
+      expect(btnRedirectToMap).toBeTruthy();
+      btnRedirectToMap.click();
+
+      expect(spySubjectCenter).toHaveBeenCalledOnceWith(stations.rithmId);
+      expect(spySubjectViewButton).toHaveBeenCalledOnceWith(true);
+      expect(spyRouter).toHaveBeenCalledOnceWith('/map');
+      expect(spyMethod).toHaveBeenCalled();
+    });
+
+    it('should redirect to map and center stationGroup', () => {
+      component.selectedItem = subStationGroups;
+      const spyMethod = spyOn(component, 'goToStationOnMap').and.callThrough();
+      const spySubjectCenter = spyOn(
+        mapService.mapStationHelper.centerStationGroupRithmId$,
+        'next'
+      );
+      const spySubjectViewButton = spyOn(
+        mapService.mapHelper.viewStationButtonClick$,
+        'next'
+      );
+      const spyRouter = spyOn(router, 'navigateByUrl').and.callThrough();
+      fixture.detectChanges();
+
+      const btnRedirectToMap =
+        fixture.debugElement.nativeElement.querySelector('#redirect-to-map');
+      expect(btnRedirectToMap).toBeTruthy();
+      btnRedirectToMap.click();
+
+      expect(spySubjectCenter).toHaveBeenCalledOnceWith(
+        subStationGroups.rithmId
+      );
+      expect(spySubjectViewButton).toHaveBeenCalledOnceWith(true);
+      expect(spyMethod).toHaveBeenCalled();
+      expect(spyRouter).toHaveBeenCalledOnceWith('/map');
+    });
   });
 });

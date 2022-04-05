@@ -6,6 +6,7 @@ import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading
 import { AnswersModalComponent } from './answers-modal/answers-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [PreviousFieldsComponent, AnswersModalComponent],
@@ -15,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     LoadingIndicatorModule,
     MatDialogModule,
     MatCheckboxModule,
+    DragDropModule,
   ],
   exports: [PreviousFieldsComponent],
 })
