@@ -400,7 +400,7 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster relative overflow-hidden">
+                        <div class="h-gridster">
                           <button
                             mat-icon-button
                             type="button"
@@ -433,6 +433,9 @@
                               [stationRithmId]="stationRithmId"
                               [id]="widgetItem.id"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (widgetRowAdjustment)="
+                                widgetRowAdjustment($event, widgetItem)
+                              "
                               (openSettingDrawer)="openSettingDrawer($event)"
                             ></app-input-frame-widget>
                           </ng-container>
