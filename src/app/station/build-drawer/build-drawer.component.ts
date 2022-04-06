@@ -170,7 +170,7 @@ export class BuildDrawerComponent implements OnInit {
     {
       prompt: 'Circular Image',
       icon: 'fa-solid fa-user-circle',
-      dataTestId: 'component-banner-image',
+      dataTestId: 'component-circle-image',
       type: this.frameTypes.Image,
     },
   ];
