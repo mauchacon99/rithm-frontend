@@ -133,7 +133,7 @@ export class GroupSearchWidgetComponent implements OnInit {
    * @param stationGroupRithmId RithmId specified station.
    */
   goToStationGroupOnMap(stationGroupRithmId: string): void {
-    this.mapService.mapStationHelper.centerStationGroupRithmId$.next(
+    this.mapService.mapStationGroupHelper.centerStationGroupRithmId$.next(
       stationGroupRithmId
     );
     this.mapService.mapHelper.viewStationButtonClick$.next(true);

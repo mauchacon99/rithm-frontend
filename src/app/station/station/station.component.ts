@@ -851,8 +851,8 @@ export class StationComponent
       case FrameType.Headline:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
+        inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Headline;
         break;
       case FrameType.Body:
