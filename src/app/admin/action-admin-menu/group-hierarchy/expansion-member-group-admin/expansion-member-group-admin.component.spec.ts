@@ -157,7 +157,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(StationService),
         'removeUsersFromOwnerRosterGroup'
       ).and.callThrough();
-      component['removeMemberFromRosterGroup'](idsUsers);
+      component.removeMemberFromRosterGroup(idsUsers);
       expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId, [
         idsUsers,
       ]);
@@ -178,7 +178,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(ErrorService),
         'displayError'
       ).and.callThrough();
-      component['removeMemberFromRosterGroup'](idsUsers);
+      component.removeMemberFromRosterGroup(idsUsers);
       expect(spyError).toHaveBeenCalled();
     });
 
@@ -189,7 +189,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(StationService),
         'removeUsersFromWorkerRosterGroup'
       ).and.callThrough();
-      component['removeMemberFromRosterGroup'](idsUsers);
+      component.removeMemberFromRosterGroup(idsUsers);
       expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId, [
         idsUsers,
       ]);
@@ -210,7 +210,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(ErrorService),
         'displayError'
       ).and.callThrough();
-      component['removeMemberFromRosterGroup'](idsUsers);
+      component.removeMemberFromRosterGroup(idsUsers);
       expect(spyError).toHaveBeenCalled();
     });
   });

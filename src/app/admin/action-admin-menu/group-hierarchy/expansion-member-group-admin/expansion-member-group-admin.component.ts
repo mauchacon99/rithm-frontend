@@ -124,7 +124,7 @@ export class ExpansionMemberGroupAdminComponent {
    *
    * @param usersId The selected user id to remove.
    */
-  private removeMemberFromRosterGroup(usersId: string): void {
+  removeMemberFromRosterGroup(usersId: string): void {
     this.isLoading = true;
     this.isErrorGetUsers = false;
     const removeUserMemberRosterGroup$ = this.isAdmin
