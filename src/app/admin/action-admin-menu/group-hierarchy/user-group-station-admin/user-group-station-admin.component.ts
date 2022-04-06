@@ -40,7 +40,7 @@ export class UserGroupStationAdminComponent {
    */
   goToStationOnMap(): void {
     const emitCenterOnMap$ = this.isGroup
-      ? this.mapService.mapStationHelper.centerStationGroupRithmId$
+      ? this.mapService.mapStationGroupHelper.centerStationGroupRithmId$
       : this.mapService.mapStationHelper.centerStationRithmId$;
     emitCenterOnMap$.next(this.selectedItem.rithmId);
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
