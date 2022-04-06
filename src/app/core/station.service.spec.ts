@@ -19,6 +19,7 @@ import {
   StationGroupData,
   StationFrameWidget,
   FrameType,
+  DocumentEvent,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1311,5 +1312,30 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(frameStationWidget[0]);
       });
+  });
+
+  it('should history station', () => {
+    const rithmId = '6375027-78345-73824-54244';
+    const expectHistoryResponse: DocumentEvent[] = [
+      {
+        eventTimeUTC: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+
+    service.getStationHistory(rithmId).subscribe((response) => {
+      expect(response).toEqual(expectHistoryResponse);
+    });
   });
 });
