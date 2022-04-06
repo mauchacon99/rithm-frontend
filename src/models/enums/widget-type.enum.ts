@@ -19,9 +19,9 @@ export enum WidgetType {
   DocumentListBanner = 'document-list-banner-widget',
   /** Widget type container-profile-banner-widget. */
   ContainerProfileBanner = 'container-profile-banner-widget',
-  /** Widget type station-group-search-widget. */
 
   // Group enum.
+  /** Widget type station-group-search-widget. */
   StationGroupSearch = 'station-group-search-widget',
   /** Widget type station-group. */
   StationGroup = 'station-group',
