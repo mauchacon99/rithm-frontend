@@ -7,10 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FileFieldComponent } from './file-field.component';
 import { UploadFileModalModule } from 'src/app/shared/fields/upload-file-modal/upload-file-modal.module';
+import { BrowserModule } from '@angular/platform-browser';
 @NgModule({
   declarations: [FileFieldComponent],
   imports: [
     CommonModule,
+    BrowserModule,
     MatNativeDateModule,
     MatFormFieldModule,
     ReactiveFormsModule,

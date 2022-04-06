@@ -12,13 +12,17 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
 import { FileFieldComponent } from './file-field.component';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockPopupService,
+} from 'src/mocks';
 import { DocumentService } from 'src/app/core/document.service';
 import { UploadFileModalComponent } from 'src/app/shared/fields/upload-file-modal/upload-file-modal.component';
 import { MockComponent } from 'ng-mocks';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ErrorService } from 'src/app/core/error.service';
-import { CommonModule } from '@angular/common';
+import { PopupService } from 'src/app/core/popup.service';
 
 const FIELD: Question = {
   rithmId: '3j4k-3h2j-hj4j',
@@ -57,7 +61,6 @@ describe('FileFieldComponent', () => {
         NoopAnimationsModule,
         MatDialogModule,
         RouterTestingModule,
-        CommonModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -65,6 +68,7 @@ describe('FileFieldComponent', () => {
         { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: ErrorService, useValue: MockErrorService },
+        { provide: PopupService, useValue: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -100,8 +104,6 @@ describe('FileFieldComponent', () => {
   });
 
   it('should to call MatDialog service when clicking on the upload-button', () => {
-    const uploadBtn = fixture.nativeElement.querySelector('#upload-button');
-    expect(uploadBtn).toBeTruthy();
     const expectDataModal = {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '500px',
@@ -113,31 +115,10 @@ describe('FileFieldComponent', () => {
       TestBed.inject(MatDialog),
       'open'
     ).and.callThrough();
-    uploadBtn.click();
+    component.openUploadFileModal();
     expect(dialogSpy).toHaveBeenCalledWith(
       UploadFileModalComponent,
       expectDataModal
     );
-  });
-
-  describe('UploadFileModalComponent', () => {
-    let componentUpload: UploadFileModalComponent;
-    let fixtureUpload: ComponentFixture<UploadFileModalComponent>;
-    beforeEach(() => {
-      fixtureUpload = TestBed.createComponent(UploadFileModalComponent);
-      componentUpload = fixtureUpload.componentInstance;
-      fixtureUpload.detectChanges();
-    });
-
-    it('should close the modal for upload file', () => {
-      const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
-      const spyMethod = spyOn(componentUpload, 'closeModal').and.callThrough();
-      const btnClose =
-        fixtureUpload.nativeElement.querySelector('#close-modal-btn');
-      expect(btnClose).toBeTruthy();
-      btnClose.click();
-      expect(spyMethod).toHaveBeenCalled();
-      expect(spyMatDialogRef).toHaveBeenCalled();
-    });
   });
 });

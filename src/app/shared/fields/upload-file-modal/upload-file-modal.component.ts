@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { DocumentAnswer, Question } from 'src/models';
 
@@ -16,9 +17,6 @@ import { DocumentAnswer, Question } from 'src/models';
   styleUrls: ['./upload-file-modal.component.scss'],
 })
 export class UploadFileModalComponent implements OnInit {
-  /** Number of files. */
-  fileCount = 0;
-
   /** Number of files. */
   file: File | undefined;
 
@@ -37,12 +35,16 @@ export class UploadFileModalComponent implements OnInit {
   /** Whether the request to save the file info is currently underway. */
   isLoading = false;
 
+  /** Whether the file upload is success or not. */
+  fileUpload = false;
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public modalData: Question,
     private documentService: DocumentService,
     private route: ActivatedRoute,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private popupService: PopupService
   ) {
     this.field = modalData;
   }
@@ -52,27 +54,6 @@ export class UploadFileModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getParams();
-  }
-
-  /**
-   * Close upload file modal.
-   */
-  closeModal(): void {
-    this.dialogRef.close();
-  }
-
-  /**
-   * Gets the details of selected file.
-   *
-   * @param event File selected event.
-   */
-  onFileSelected(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target.files as FileList;
-    this.file = files[0];
-    if (this.file) {
-      this.fileCount += 1;
-    }
   }
 
   /**
@@ -108,10 +89,31 @@ export class UploadFileModalComponent implements OnInit {
   }
 
   /**
+   * Close upload file modal.
+   */
+  closeModal(): void {
+    this.dialogRef.close();
+  }
+
+  /**
+   * Gets the details of selected file.
+   *
+   * @param event File selected event.
+   */
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const files = target.files as FileList;
+    this.file = files[0];
+    if (this.file) {
+      this.updateFieldAnswer();
+    }
+  }
+
+  /**
    * Save uploaded file.
    */
   saveData(): void {
-    this.updateFieldAnswer();
+    this.closeModal();
   }
 
   /**
@@ -137,7 +139,10 @@ export class UploadFileModalComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isLoading = false;
-          this.closeModal();
+          this.fileUpload = true;
+          this.popupService.notify(
+            'The document has been uploaded successfully.'
+          );
         },
         error: (error: unknown) => {
           this.isLoading = false;
