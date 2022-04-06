@@ -30,6 +30,9 @@ export class MapStationGroupHelper {
     data: {},
   });
 
+  /** The station group rithm Id centered on the map. */
+  centerStationGroupRithmId$ = new BehaviorSubject('');
+
   constructor(private mapHelper: MapHelper) {}
 
   /**

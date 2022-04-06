@@ -21,4 +21,22 @@ describe('HeadlineWidgetComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should evaluate the function that open setting drawer', () => {
+    const spySettingDrawer = spyOn(
+      component,
+      'openFieldSettingDrawer'
+    ).and.callThrough();
+    component.openFieldSettingDrawer(component.headlineTextValue);
+    expect(spySettingDrawer).toHaveBeenCalledOnceWith(
+      component.headlineTextValue
+    );
+  });
+
+  it('should emit event openSettingDrawer', () => {
+    component.widgetMode = 'setting';
+    const spyEmit = spyOn(component.openSettingDrawer, 'emit');
+    component.openFieldSettingDrawer(component.headlineTextValue);
+    expect(spyEmit).toHaveBeenCalledWith(component.headlineTextValue);
+  });
 });

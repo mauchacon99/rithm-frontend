@@ -5,6 +5,7 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { QuestionFieldType, Question } from 'src/models';
+import { RandomIdGenerator } from 'src/helpers';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -37,6 +38,13 @@ export class InputFrameWidgetComponent {
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
 
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
+  constructor() {
+    this.randomIdGenerator = new RandomIdGenerator();
+  }
+
   /**
    * Add the element draggable to the questions field.
    *
@@ -48,7 +56,7 @@ export class InputFrameWidgetComponent {
     const newQuestion: Question = questionInfo.rithmId
       ? questionInfo
       : {
-          rithmId: this.randRithmId,
+          rithmId: this.randomIdGenerator.getRandRithmId(4),
           prompt: questionInfo.prompt,
           questionType: questionInfo.questionType,
           isReadOnly: false,
@@ -77,20 +85,6 @@ export class InputFrameWidgetComponent {
   }
 
   /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
-  }
-
-  /**
    * Add the kind address.
    *
    * @returns Address children questions.
@@ -114,7 +108,7 @@ export class InputFrameWidgetComponent {
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
