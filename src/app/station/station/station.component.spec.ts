@@ -38,6 +38,7 @@ import {
   Question,
   QuestionFieldType,
   RuleType,
+  DataLinkObject,
 } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
@@ -884,6 +885,61 @@ describe('StationComponent', () => {
     );
     component.closeSettingDrawer();
     expect(spyCloseDrawer).toHaveBeenCalled();
+  });
+
+  it('should call subscribeStationDataLink on the ngOnInit', () => {
+    const spySubscribe = spyOn(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component as any,
+      'subscribeStationDataLink'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spySubscribe).toHaveBeenCalled();
+  });
+
+  it('should add a new element into the dataLinkArray', () => {
+    const service = TestBed.inject(StationService);
+    const dataLink: DataLinkObject = {
+      rithmId: '07e1-30b5-f21e',
+      frameRithmId: '07e1-30b5-f21e',
+      sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+      targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+      baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+      matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+      displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+    };
+    component.ngOnInit();
+    expect(component.dataLinkArray).toHaveSize(0);
+    service.dataLinkObject$.next(dataLink);
+    expect(component.dataLinkArray).toHaveSize(1);
+  });
+
+  it('should update an existing element in the dataLinkArray', () => {
+    const service = TestBed.inject(StationService);
+    component.dataLinkArray = [
+      {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      },
+    ];
+    const dataLink: DataLinkObject = {
+      rithmId: '07e1-30b5-f21e',
+      frameRithmId: '07e1-30b5-f21e',
+      sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+      targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+      baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+      matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+      displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+    };
+    component.ngOnInit();
+    expect(component.dataLinkArray).toHaveSize(1);
+    service.dataLinkObject$.next(dataLink);
+    expect(component.dataLinkArray).toHaveSize(1);
   });
 
   describe('should add value to the array of input frames', () => {
