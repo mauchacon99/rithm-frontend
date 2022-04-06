@@ -57,12 +57,6 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   /** Station Members . */
   members: StationRosterMember[] = [];
 
-  /** Station group rosters . */
-  stationGroupUsers!: StationRosterMember[];
-
-  /** Station group admins . */
-  stationGroupAdmins!: StationRosterMember[];
-
   /** Load indicator in dashboard. */
   isLoading = false;
 
