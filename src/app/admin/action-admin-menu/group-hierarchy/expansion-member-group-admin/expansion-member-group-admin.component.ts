@@ -37,6 +37,12 @@ export class ExpansionMemberGroupAdminComponent {
   /** Station Members . */
   members!: StationRosterMember[];
 
+  /** Station group rosters . */
+  stationGroupUsers!: StationRosterMember[];
+
+  /** Station group admins . */
+  stationGroupAdmins!: StationRosterMember[];
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
@@ -116,4 +122,11 @@ export class ExpansionMemberGroupAdminComponent {
         });
     }
   }
+
+  /**
+   * Get users or admin for a given station group.
+   *
+   *
+   */
+  getStationGroupUserOrAdmin(type: 'user' | 'admin'): void {}
 }

@@ -1312,4 +1312,40 @@ describe('StationService', () => {
         expect(response).toEqual(frameStationWidget[0]);
       });
   });
+
+  it('should get getStationGroupAdmin', () => {
+    const stationGroupRithmId = '123-456-789';
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service.getStationGroupAdmin(stationGroupRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
+  it('should get getStationGroupRoster', () => {
+    const stationGroupRithmId = '123-456-789';
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service.getStationGroupRoster(stationGroupRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
 });
