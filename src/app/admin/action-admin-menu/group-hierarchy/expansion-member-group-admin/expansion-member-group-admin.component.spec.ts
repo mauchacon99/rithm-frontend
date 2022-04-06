@@ -149,6 +149,70 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       const result = component.isGroup;
       expect(result).toBeTrue();
     });
+
+    it('should call method delete for remove admin in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = true;
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'removeUsersFromOwnerRosterGroup'
+      ).and.callThrough();
+      component['removeMemberFromRosterGroup'](idsUsers);
+      expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId, [
+        idsUsers,
+      ]);
+    });
+
+    it('should catch error if petition delete member admin in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = true;
+      spyOn(
+        TestBed.inject(StationService),
+        'removeUsersFromOwnerRosterGroup'
+      ).and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+      component['removeMemberFromRosterGroup'](idsUsers);
+      expect(spyError).toHaveBeenCalled();
+    });
+
+    it('should call method delete for remove users in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = false;
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'removeUsersFromWorkerRosterGroup'
+      ).and.callThrough();
+      component['removeMemberFromRosterGroup'](idsUsers);
+      expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId, [
+        idsUsers,
+      ]);
+    });
+
+    it('should catch error if petition delete member users in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = false;
+      spyOn(
+        TestBed.inject(StationService),
+        'removeUsersFromWorkerRosterGroup'
+      ).and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+      component['removeMemberFromRosterGroup'](idsUsers);
+      expect(spyError).toHaveBeenCalled();
+    });
   });
 
   describe('Selected item is station', () => {
@@ -168,7 +232,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         'getStationOwnerRoster'
       ).and.callThrough();
       component.isAdmin = true;
-      component.stationSelected = stations;
+      component.stationOrGroupSelected = stations;
       fixture.detectChanges();
       component.getStationsMembers();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
@@ -180,7 +244,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         'getStationWorkerRoster'
       ).and.callThrough();
       component.isAdmin = false;
-      component.stationSelected = stations;
+      component.stationOrGroupSelected = stations;
       fixture.detectChanges();
       component.getStationsMembers();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
@@ -196,7 +260,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         throw new Error();
       })
     );
-    component.stationSelected = subStationGroup;
+    component.stationOrGroupSelected = subStationGroup;
     component.getStationsMembers();
     fixture.detectChanges();
     const showMessage =
@@ -211,7 +275,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       stationService,
       'getStationWorkerRoster'
     ).and.callThrough();
-    component.stationSelected = subStationGroup;
+    component.stationOrGroupSelected = subStationGroup;
     component.getStationsMembers();
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
@@ -234,7 +298,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     };
 
     component.isAdmin = true;
-    component.stationSelected = stations;
+    component.stationOrGroupSelected = stations;
     fixture.detectChanges();
     const spyMethod = spyOn(
       component,

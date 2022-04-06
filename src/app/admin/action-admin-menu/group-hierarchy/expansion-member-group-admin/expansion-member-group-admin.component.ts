@@ -19,7 +19,7 @@ import {
 export class ExpansionMemberGroupAdminComponent {
   /** Value of selected item. */
   @Input() set selectedItem(value: StationGroupData | StationListGroup) {
-    this.stationSelected = value;
+    this.stationOrGroupSelected = value;
     if (!this.isGroup) {
       this.getStationsMembers();
     } else {
@@ -32,7 +32,7 @@ export class ExpansionMemberGroupAdminComponent {
   @Input() isAdmin!: boolean;
 
   /** Value of selected item. */
-  stationSelected!: StationGroupData | StationListGroup;
+  stationOrGroupSelected!: StationGroupData | StationListGroup;
 
   /** Station Members . */
   members!: StationRosterMember[];
@@ -52,7 +52,7 @@ export class ExpansionMemberGroupAdminComponent {
    * @returns Is group.
    */
   get isGroup(): boolean {
-    return 'stations' in this.stationSelected;
+    return 'stations' in this.stationOrGroupSelected;
   }
 
   constructor(
@@ -69,9 +69,11 @@ export class ExpansionMemberGroupAdminComponent {
     this.isLoading = true;
     this.isErrorGetUsers = false;
     const getMembersStation$ = this.isAdmin
-      ? this.stationService.getStationOwnerRoster(this.stationSelected.rithmId)
+      ? this.stationService.getStationOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
       : this.stationService.getStationWorkerRoster(
-          this.stationSelected.rithmId
+          this.stationOrGroupSelected.rithmId
         );
 
     getMembersStation$.pipe(first()).subscribe({
@@ -104,7 +106,7 @@ export class ExpansionMemberGroupAdminComponent {
         maxWidth: '1024px',
         disableClose: true,
         data: {
-          stationId: this.stationSelected.rithmId,
+          stationId: this.stationOrGroupSelected.rithmId,
           type: this.isAdmin ? 'owners' : 'workers',
         },
       });
@@ -115,5 +117,40 @@ export class ExpansionMemberGroupAdminComponent {
           this.getStationsMembers();
         });
     }
+  }
+
+  /**
+   * Remove users from the group specific roster.
+   *
+   * @param usersId The selected user id to remove.
+   */
+  private removeMemberFromRosterGroup(usersId: string): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const removeUserMemberRosterGroup$ = this.isAdmin
+      ? this.stationService.removeUsersFromOwnerRosterGroup(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        )
+      : this.stationService.removeUsersFromWorkerRosterGroup(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        );
+
+    removeUserMemberRosterGroup$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 }
