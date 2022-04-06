@@ -22,6 +22,7 @@ import {
   FlowLogicRule,
   StationFrameWidget,
   FrameType,
+  DataLinkObject,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
@@ -60,6 +61,9 @@ export class StationComponent
   /** Get station name from behaviour subject. */
   private stationName = '';
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   /** Station form. */
   stationForm: FormGroup;
 
@@ -69,11 +73,14 @@ export class StationComponent
   /** Different types of input frames components.*/
   frameType = FrameType;
 
-  /** Station Rithm id. */
-  stationRithmId = '';
-
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** The current focused/selected widget. */
+  widgetFocused = -1;
+
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
 
   /** The list of all the input frames in the grid. */
   inputFrameList: string[] = [];
@@ -89,6 +96,12 @@ export class StationComponent
 
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
+
+  /** Station Widgets array. */
+  inputFrameWidgetItems: StationFrameWidget[] = [];
+
+  /** Old interface station data link widgets. */
+  dataLinkArray: DataLinkObject[] = [];
 
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
@@ -134,14 +147,6 @@ export class StationComponent
     minCols: 24,
     maxCols: 24,
   };
-
-  inputFrameWidgetItems: StationFrameWidget[] = [];
-
-  /** The current focused/selected widget. */
-  widgetFocused = -1;
-
-  /** Indicates when the button to move the widget will be enabled. */
-  widgetMoveButton = -1;
 
   /** Loading / Error variables. */
 
@@ -251,6 +256,24 @@ export class StationComponent
   }
 
   /**
+   * Listen for added DataLinks object.
+   */
+  private subscribeStationDataLink(): void {
+    this.stationService.dataLinkObject$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((dataLinkRetrieved) => {
+        let dataLink = this.dataLinkArray.find(
+          (dl) => dl.rithmId === dataLinkRetrieved.rithmId
+        );
+        if (dataLink) {
+          dataLink = dataLinkRetrieved;
+        } else {
+          this.dataLinkArray.push(dataLinkRetrieved);
+        }
+      });
+  }
+
+  /**
    * Populate and update possibleAnswers for an specific question.
    *
    * @param answer The question we are adding possible answers to.
@@ -301,6 +324,7 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
+    this.subscribeStationDataLink();
 
     if (!this.editMode) this.setGridMode('preview');
   }
