@@ -391,7 +391,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: `Your changes will be lost and you will return to the ${
-        this.isWidget ? 'documents list' : 'dashboard'
+        this.isWidget ? 'documents list' : 'map'
       }.`,
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
