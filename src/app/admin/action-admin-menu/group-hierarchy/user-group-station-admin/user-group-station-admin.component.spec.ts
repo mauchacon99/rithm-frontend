@@ -146,7 +146,7 @@ describe('UserGroupStationAdminComponent', () => {
       component.selectedItem = subStationGroups;
       const spyMethod = spyOn(component, 'goToStationOnMap').and.callThrough();
       const spySubjectCenter = spyOn(
-        mapService.mapStationHelper.centerStationGroupRithmId$,
+        mapService.mapStationGroupHelper.centerStationGroupRithmId$,
         'next'
       );
       const spySubjectViewButton = spyOn(

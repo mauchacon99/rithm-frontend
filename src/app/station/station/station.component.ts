@@ -34,6 +34,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { RandomIdGenerator } from 'src/helpers';
 /**
  * Main component for viewing a station.
  */
@@ -150,6 +151,9 @@ export class StationComponent
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -167,6 +171,7 @@ export class StationComponent
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
     });
+    this.randomIdGenerator = new RandomIdGenerator();
   }
 
   /**
@@ -209,9 +214,11 @@ export class StationComponent
    * Listen the StationFormTouched subject.
    */
   private subscribeStationFormTouched(): void {
-    this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
-      this.stationForm.get('stationTemplateForm')?.markAsTouched();
-    });
+    this.stationService.stationFormTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -318,20 +325,6 @@ export class StationComponent
         this.errorService.logError(error);
       },
     });
-  }
-
-  /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
   }
 
   /**
@@ -449,7 +442,7 @@ export class StationComponent
    */
   addQuestion(fieldType: QuestionFieldType): void {
     const newQuestion: Question = {
-      rithmId: this.randRithmId,
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
@@ -659,7 +652,7 @@ export class StationComponent
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
@@ -835,7 +828,7 @@ export class StationComponent
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
     const inputFrame: StationFrameWidget = {
-      rithmId: this.randRithmId,
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
       stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
@@ -860,8 +853,8 @@ export class StationComponent
       case FrameType.Headline:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
+        inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Headline;
         break;
       case FrameType.Body:
