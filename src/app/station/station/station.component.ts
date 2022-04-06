@@ -214,9 +214,11 @@ export class StationComponent
    * Listen the StationFormTouched subject.
    */
   private subscribeStationFormTouched(): void {
-    this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
-      this.stationForm.get('stationTemplateForm')?.markAsTouched();
-    });
+    this.stationService.stationFormTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
