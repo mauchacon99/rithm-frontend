@@ -52,7 +52,7 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   }
 
   /** Value of selected item. */
-  _stationOrGroupSelected!: StationGroupData | StationListGroup;
+  private _stationOrGroupSelected!: StationGroupData | StationListGroup;
 
   /** Station Members . */
   members: StationRosterMember[] = [];
