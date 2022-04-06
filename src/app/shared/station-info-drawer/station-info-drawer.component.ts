@@ -210,11 +210,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                 this.mapService.stationElements[
                   currentStationIndex
                 ].drawerOpened = true;
+
+                this.numberOfContainers =
+                  this.mapService.stationElements[
+                    currentStationIndex
+                  ].noOfDocuments;
               }
-              this.numberOfContainers =
-                this.mapService.stationElements[
-                  currentStationIndex
-                ].noOfDocuments;
               this.mapService.mapHelper.mapDataReceived$.next(true);
             }
             if (
