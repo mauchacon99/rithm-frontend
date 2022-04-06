@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 /**
- * Component for station group stations.
+ * Component for station group traffic.
  */
 @Component({
   selector: 'app-group-traffic-widget[showButtonSetting][dataWidget][editMode]',
