@@ -35,6 +35,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { RandomIdGenerator } from 'src/helpers';
 /**
  * Main component for viewing a station.
  */
@@ -131,7 +132,8 @@ export class StationComponent
 
   /** Grid initial values. */
   options: GridsterConfig = {
-    gridType: 'scrollVertical',
+    gridType: 'verticalFixed',
+    fixedRowHeight: 50,
     displayGrid: 'always',
     pushItems: true,
     draggable: {
@@ -154,6 +156,9 @@ export class StationComponent
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -171,6 +176,7 @@ export class StationComponent
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
     });
+    this.randomIdGenerator = new RandomIdGenerator();
   }
 
   /**
@@ -213,9 +219,11 @@ export class StationComponent
    * Listen the StationFormTouched subject.
    */
   private subscribeStationFormTouched(): void {
-    this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
-      this.stationForm.get('stationTemplateForm')?.markAsTouched();
-    });
+    this.stationService.stationFormTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -344,20 +352,6 @@ export class StationComponent
   }
 
   /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
-  }
-
-  /**
    * Whether to show the backdrop for the comment and history drawers.
    *
    * @returns Whether to show the backdrop.
@@ -373,11 +367,11 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      (!this.stationForm.valid &&
-        !(
-          !this.stationForm.dirty ||
-          !this.stationForm.controls.stationTemplateForm.touched
-        )) ||
+      !this.stationForm.valid ||
+      !(
+        this.stationForm.dirty ||
+        this.stationForm.controls.stationTemplateForm.touched
+      ) ||
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
@@ -450,6 +444,7 @@ export class StationComponent
               this.stationInformation.questions
             );
           }
+          this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
         },
@@ -471,7 +466,7 @@ export class StationComponent
    */
   addQuestion(fieldType: QuestionFieldType): void {
     const newQuestion: Question = {
-      rithmId: this.randRithmId,
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
@@ -540,6 +535,7 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = stationQuestions as Question[];
           }
+          this.resetStationForm();
           this.popupService.notify('Station successfully saved');
         },
         error: (error: unknown) => {
@@ -566,6 +562,7 @@ export class StationComponent
           this.stationTabsIndex = 1;
           this.pendingFlowLogicRules = [];
           this.childFlowLogic.ruleLoading = false;
+          this.resetStationForm();
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -679,7 +676,7 @@ export class StationComponent
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
@@ -855,7 +852,7 @@ export class StationComponent
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
     const inputFrame: StationFrameWidget = {
-      rithmId: this.randRithmId,
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
       stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
@@ -880,8 +877,8 @@ export class StationComponent
       case FrameType.Headline:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
+        inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Headline;
         break;
       case FrameType.Body:
@@ -898,6 +895,13 @@ export class StationComponent
         inputFrame.minItemRows = 1;
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
+        break;
+      case FrameType.Image:
+        inputFrame.cols = 4;
+        inputFrame.rows = 4;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.type = FrameType.Image;
         break;
       default:
         break;
@@ -963,10 +967,34 @@ export class StationComponent
   }
 
   /**
+   * Add row at widget current.
+   *
+   * @param height The new height of widget.
+   * @param widget The widget selected.
+   */
+  widgetRowAdjustment(height: number, widget: StationFrameWidget): void {
+    if (height > widget.rows) {
+      widget.rows = height;
+      widget.minItemRows = height;
+    }
+    this.changedOptions();
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Resets the station form.
+   */
+  private resetStationForm() {
+    setTimeout(() => {
+      this.stationForm.markAsPristine();
+      this.stationForm.controls.stationTemplateForm.markAsUntouched();
+    }, 0);
   }
 }

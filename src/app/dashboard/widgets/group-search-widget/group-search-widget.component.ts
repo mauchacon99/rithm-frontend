@@ -129,10 +129,12 @@ export class GroupSearchWidgetComponent implements OnInit {
 
   /**
    * Navigate the user to the group on the map.
+   *
+   * @param stationGroupRithmId RithmId specified station.
    */
-  goToStationGroupOnMap(): void {
-    this.mapService.mapStationHelper.centerStationGroupRithmId$.next(
-      this.stationGroupRithmId
+  goToStationGroupOnMap(stationGroupRithmId: string): void {
+    this.mapService.mapStationGroupHelper.centerStationGroupRithmId$.next(
+      stationGroupRithmId
     );
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
