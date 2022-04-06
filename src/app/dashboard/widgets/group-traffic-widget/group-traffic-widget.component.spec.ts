@@ -6,7 +6,6 @@ describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
   let fixture: ComponentFixture<GroupTrafficWidgetComponent>;
   const dataWidget =
-    // eslint-disable-next-line max-len
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
   beforeEach(async () => {
