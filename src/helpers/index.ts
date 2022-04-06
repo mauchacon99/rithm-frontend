@@ -14,3 +14,4 @@ export * from './map/service/map-station-group-helper';
 export * from './map/service/center-helper';
 export * from './map/service/zoom-helper';
 export * from './randomId-generator';
+export * from './mobile-browser-checker';
