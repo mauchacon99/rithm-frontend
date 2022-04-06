@@ -588,27 +588,25 @@ export class MapStationGroupHelper {
       }
       /** Reset the deactivation status for each station group. */
       this.resetSelectedStationGroupStationStatus(stationHelper);
+
+      /** Temporary station group rithmId. */
+      const rithmId = this.tempStationGroup$.value.rithmId;
+
+      /* Find the parent station group through the temporary station group rithmId. */
+      const stationGroupParent = this.stationGroupElements.find(
+        (otherGroup) => {
+          return otherGroup.subStationGroups.includes(rithmId);
+        }
+      );
       /** Update the pendingStationGroup. */
       this.updatePendingStationGroup(stationHelper);
       /** Add the current station group. */
       this.stationGroupElements.push(this.tempStationGroup$.value);
-      /** Search for the index of the station group through the property isReadOnly. */
-      const stationGroupIsReadOnlyRootIndex =
-        this.stationGroupElements.findIndex(
-          (stationGroup) => stationGroup.isReadOnlyRootStationGroup
-        );
 
-      /** Check to add the corresponding rithmId to the subStationGroup. */
-      if (stationGroupIsReadOnlyRootIndex !== 1) {
-        const rithmId = this.tempStationGroup$.value.rithmId;
-        if (
-          !this.stationGroupElements[
-            stationGroupIsReadOnlyRootIndex
-          ].subStationGroups.includes(rithmId)
-        ) {
-          this.stationGroupElements[
-            stationGroupIsReadOnlyRootIndex
-          ].subStationGroups.push(rithmId);
+      /** Check to add the corresponding rithmId to the subStationGroups of the stationGroupParent. */
+      if (stationGroupParent !== undefined) {
+        if (!stationGroupParent.subStationGroups.includes(rithmId)) {
+          stationGroupParent.subStationGroups.push(rithmId);
         }
       }
       /** Emptying the temporary station group. */
