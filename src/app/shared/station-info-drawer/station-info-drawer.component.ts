@@ -139,6 +139,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
 
+  /** Use for get amount of containers of a station. */
+  numberOfContainers = 0;
+
   /**
    * Whether the station is selected and it's in center of the map.
    *
@@ -208,6 +211,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                   currentStationIndex
                 ].drawerOpened = true;
               }
+              this.numberOfContainers =
+                this.mapService.stationElements[
+                  currentStationIndex
+                ].noOfDocuments;
               this.mapService.mapHelper.mapDataReceived$.next(true);
             }
             if (
