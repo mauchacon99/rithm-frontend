@@ -69,16 +69,25 @@
               </span>
             </div>
           </div>
-
           <button
             mat-icon-button
-            id="option-button"
-            data-testid="option-button"
+            id="option-button-{{ member.rithmId }}"
+            [attr.data-testid]="'option-button-' + member.rithmId"
             (click)="$event.stopPropagation()"
             class="showButton"
+            [matMenuTriggerFor]="menu"
           >
             <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
+          <mat-menu #menu="matMenu">
+            <button
+              id="remove-member-{{ member.rithmId }}"
+              [attr.data-testid]="'remove-member-' + member.rithmId"
+              mat-menu-item
+            >
+              Remove member
+            </button>
+          </mat-menu>
         </div>
       </mat-list-item>
     </div>
