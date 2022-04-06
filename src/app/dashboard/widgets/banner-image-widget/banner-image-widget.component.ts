@@ -27,7 +27,7 @@ export class BannerImageWidgetComponent {
     this._image = value;
     this.imageSrc = '';
     if (value && value.imageId && value.imageId !== 'TEMPLoading') {
-      this.getImageByRithmId(value.imageId);
+      this.getImageByRithmId();
     } else if (value && value.imageId && value.imageId === 'TEMPLoading') {
       this.isLoading = true;
       this._image.imageId = null;
@@ -39,7 +39,7 @@ export class BannerImageWidgetComponent {
   /**
    * Get image.
    *
-   * @returns String or NUll of the image.
+   * @returns Data of DocumentImage.
    */
   get image(): DocumentImage {
     return this._image;
@@ -59,16 +59,12 @@ export class BannerImageWidgetComponent {
     private errorService: ErrorService
   ) {}
 
-  /**
-   * Get banner image by id of image.
-   *
-   * @param imageRithmId RithmId of the image to get base64.
-   */
-  private getImageByRithmId(imageRithmId: string): void {
-    if (imageRithmId) {
+  /** Get banner image by id of image. */
+  private getImageByRithmId(): void {
+    if (this.image.imageId) {
       this.isLoading = true;
       this.documentService
-        .getImageByRithmId(imageRithmId)
+        .getImageByRithmId(this.image.imageId)
         .pipe(first())
         .subscribe({
           next: (data) => {

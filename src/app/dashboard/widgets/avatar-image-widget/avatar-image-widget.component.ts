@@ -13,11 +13,24 @@ import { ImageData } from 'src/models';
   styleUrls: ['./avatar-image-widget.component.scss'],
 })
 export class AvatarImageWidgetComponent {
+  /** Image setter. */
+  private _profileImage!: string | null;
+
   /** Image base64 to show profile image. */
   @Input() set profileImage(value: string | null) {
+    this._profileImage = value;
     if (value) {
-      this.getImageByRithmId(value);
+      this.getImageByRithmId();
     }
+  }
+
+  /**
+   * Get profile image.
+   *
+   * @returns String or NUll of the profile image.
+   */
+  get profileImage(): string | null {
+    return this._profileImage;
   }
 
   /** Image to show on profile image. */
@@ -31,16 +44,12 @@ export class AvatarImageWidgetComponent {
     private errorService: ErrorService
   ) {}
 
-  /**
-   * Get profile image by id of image.
-   *
-   * @param imageRithmId RithmId of the image to get base64.
-   */
-  private getImageByRithmId(imageRithmId: string): void {
-    if (imageRithmId) {
+  /** Get profile image by id of image. */
+  private getImageByRithmId(): void {
+    if (this.profileImage) {
       this.isLoading = true;
       this.documentService
-        .getImageByRithmId(imageRithmId)
+        .getImageByRithmId(this.profileImage)
         .pipe(first())
         .subscribe({
           next: (data) => {

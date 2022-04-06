@@ -45,13 +45,12 @@ describe('BannerImageWidgetComponent', () => {
       TestBed.inject(DocumentService),
       'getImageByRithmId'
     ).and.callThrough();
-    component['getImageByRithmId']('123-456-789');
+    component.image = image;
 
     expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
   });
 
   it('should show error if the request getImageByRithmId fail', () => {
-    const expectedRithmId = '123-456-789';
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getImageByRithmId'
@@ -64,9 +63,9 @@ describe('BannerImageWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['getImageByRithmId'](expectedRithmId);
+    component.image = image;
 
-    expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
+    expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
     expect(spyError).toHaveBeenCalled();
   });
 

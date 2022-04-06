@@ -66,7 +66,8 @@ describe('AvatarImageWidgetComponent', () => {
       TestBed.inject(DocumentService),
       'getImageByRithmId'
     ).and.callThrough();
-    component['getImageByRithmId'](expectedRithmId);
+
+    component.profileImage = expectedRithmId;
 
     expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
   });
@@ -86,7 +87,7 @@ describe('AvatarImageWidgetComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component['getImageByRithmId'](expectedRithmId);
+    component.profileImage = expectedRithmId;
 
     expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
     expect(spyError).toHaveBeenCalled();
