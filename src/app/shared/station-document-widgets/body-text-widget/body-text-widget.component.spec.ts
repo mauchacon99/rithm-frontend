@@ -21,4 +21,12 @@ describe('BodyTextWidgetComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit event openSettingDrawer', () => {
+    component.widgetMode = 'setting';
+    const spyEmit = spyOn(component.openSettingDrawer, 'emit');
+    const field = component.bodyTextValue;
+    component.handleOpenSettingDrawer(field);
+    expect(spyEmit).toHaveBeenCalledWith(field);
+  });
 });

@@ -13,4 +13,9 @@ describe('SidenavDrawerService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should set and get drawerDisableClose', () => {
+    service.setDisableCloseDrawerOutside(true);
+    expect(service.getDisableCloseDrawerOutside).toBeTrue();
+  });
 });

@@ -26,7 +26,6 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -34,7 +33,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
-
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 /**
  * Main component for viewing a station.
  */
@@ -119,7 +118,8 @@ export class StationComponent
 
   /** Grid initial values. */
   options: GridsterConfig = {
-    gridType: 'scrollVertical',
+    gridType: 'verticalFixed',
+    fixedRowHeight: 50,
     displayGrid: 'always',
     pushItems: true,
     draggable: {
@@ -350,11 +350,11 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      (!this.stationForm.valid &&
-        !(
-          !this.stationForm.dirty ||
-          !this.stationForm.controls.stationTemplateForm.touched
-        )) ||
+      !this.stationForm.valid ||
+      !(
+        this.stationForm.dirty ||
+        this.stationForm.controls.stationTemplateForm.touched
+      ) ||
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
@@ -427,6 +427,7 @@ export class StationComponent
               this.stationInformation.questions
             );
           }
+          this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
         },
@@ -517,6 +518,7 @@ export class StationComponent
             //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = stationQuestions as Question[];
           }
+          this.resetStationForm();
           this.popupService.notify('Station successfully saved');
         },
         error: (error: unknown) => {
@@ -543,6 +545,7 @@ export class StationComponent
           this.stationTabsIndex = 1;
           this.pendingFlowLogicRules = [];
           this.childFlowLogic.ruleLoading = false;
+          this.resetStationForm();
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -854,6 +857,13 @@ export class StationComponent
 
     /**Add individual properties for every Type. */
     switch (value) {
+      case FrameType.Headline:
+        inputFrame.cols = 24;
+        inputFrame.rows = 1;
+        inputFrame.minItemCols = 6;
+        inputFrame.maxItemRows = 1;
+        inputFrame.type = FrameType.Headline;
+        break;
       case FrameType.Body:
         inputFrame.cols = 6;
         inputFrame.rows = 2;
@@ -868,6 +878,13 @@ export class StationComponent
         inputFrame.minItemRows = 1;
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
+        break;
+      case FrameType.Image:
+        inputFrame.cols = 4;
+        inputFrame.rows = 4;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.type = FrameType.Image;
         break;
       default:
         break;
@@ -891,7 +908,7 @@ export class StationComponent
    *
    * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openSettingDrawer(field: Question): void {
+  openSettingDrawer(field: Question | string): void {
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
@@ -933,10 +950,34 @@ export class StationComponent
   }
 
   /**
+   * Add row at widget current.
+   *
+   * @param height The new height of widget.
+   * @param widget The widget selected.
+   */
+  widgetRowAdjustment(height: number, widget: StationFrameWidget): void {
+    if (height > widget.rows) {
+      widget.rows = height;
+      widget.minItemRows = height;
+    }
+    this.changedOptions();
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Resets the station form.
+   */
+  private resetStationForm() {
+    setTimeout(() => {
+      this.stationForm.markAsPristine();
+      this.stationForm.controls.stationTemplateForm.markAsUntouched();
+    }, 0);
   }
 }
