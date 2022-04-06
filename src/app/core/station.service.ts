@@ -760,7 +760,7 @@ export class StationService {
    * @param stationGroupRithmId The id of the given station group.
    * @returns A rosterMember array.
    */
-  getStationGroupRoster(
+  getStationGroupUsers(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
@@ -814,5 +814,89 @@ export class StationService {
       },
     ];
     return of(mockGetStationGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
+    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Removes users from the group's workers roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Group information with worker roster.
+   */
+  removeUsersFromWorkerRosterGroup(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const data: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+    ];
+    return of(data).pipe(delay(1000));
   }
 }
