@@ -147,15 +147,16 @@ export class MockDashboardService {
     // Group traffic
     [WidgetType.StationGroupTraffic]: {
       title: 'Group traffic',
-      description: `The user can query all the values associated with the
-      documents managed in the stations within a flow. By default, the result of this is
-       a graph representing the movement of the documents.`,
+      description: `The user can consult all the values associated with the stations managed in the stations
+      stations managed in the stations within a flow. By default, the result is
+       a graph representing the movement of the documents within the stations.`,
       descriptionComponent: {
         title: 'Group Traffic Widget',
         type: 'Group Template',
         customizable: 'Group Traffic result values',
-        description: `The user can query all the values associated with the documents managed in the
-        stations within a chart. By default, the result of this is a graph representing the movement of the documents..`,
+        description: `The user can consult all the values associated with the stations managed in the stations
+        stations managed in the stations within a flow. By default, the result is
+         a graph representing the movement of the documents within the stations.`,
       },
     },
     // Profile widget document banner.
