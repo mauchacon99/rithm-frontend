@@ -86,8 +86,17 @@ export class DashboardService {
         Additional columns of data can be added as desired. Custom banner     images can also be added to the widget`,
       },
     },
-    // groups data
-    [WidgetType.StationGroup]: {
+    [WidgetType.StationMultiline]: {
+      title: '',
+      description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
+    },
+    [WidgetType.StationMultilineBanner]: {
       title: '',
       description: '',
       descriptionComponent: {
@@ -131,6 +140,18 @@ export class DashboardService {
         Values can be optionally be hidden from on the widget in needed.`,
       },
     },
+    [WidgetType.ContainerProfileBanner]: {
+      title: 'Profile With Banner Image',
+      description:
+        'Display an image uploaded to the container along with a banner image.',
+      descriptionComponent: {
+        title: 'List Widget',
+        type: 'Document Template',
+        customizable: 'List values & Image',
+        description: `Select an image from the container to display as a profile image, and upload a banner image of your choice.
+        List values can also be optionally hidden from on the widget as needed.`,
+      },
+    },
     // Group
     [WidgetType.StationGroupSearch]: {
       title: 'Search',
@@ -144,17 +165,14 @@ export class DashboardService {
         name and the field that matches your search.`,
       },
     },
-    // Profile widget document banner.
-    [WidgetType.ContainerProfileBanner]: {
-      title: 'Profile With Banner Image',
-      description:
-        'Display an image uploaded to the container along with a banner image.',
+    [WidgetType.StationGroup]: {
+      title: '',
+      description: '',
       descriptionComponent: {
-        title: 'List Widget',
-        type: 'Document Template',
-        customizable: 'List values & Image',
-        description: `Select an image from the container to display as a profile image, and upload a banner image of your choice.
-        List values can also be optionally hidden from on the widget as needed.`,
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
       },
     },
   };
