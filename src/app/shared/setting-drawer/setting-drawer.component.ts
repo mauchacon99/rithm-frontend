@@ -50,18 +50,12 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get isReadOnly and modify isRequired in case they are fields from previous questions.
+   * Whether the current field belongs to a previous field or not.
    *
    * @returns Is boolean.
    */
-  get fieldReadOnly(): boolean {
-    this.fieldSetting.isReadOnly = !this.fieldSetting.isReadOnly;
-    if (this.fieldSetting.originalStationRithmId !== this.stationRithmId) {
-      this.fieldSetting.isRequired = !this.fieldSetting.isReadOnly
-        ? this.fieldSetting.isReadOnly
-        : this.fieldSetting.isRequired;
-    }
-    return this.fieldSetting.isReadOnly;
+  get isPrevious(): boolean {
+    return this.fieldSetting.originalStationRithmId !== this.stationRithmId;
   }
 
   /**
@@ -81,6 +75,17 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  /**
+   * Shut off isRequired when isReadOnly is off and isPrevious = true.
+   */
+  public setReadOnlyFalse(): void {
+    if (this.isPrevious) {
+      this.fieldSetting.isRequired = !this.fieldSetting.isReadOnly
+        ? false
+        : this.fieldSetting.isRequired;
+    }
   }
 
   /**
