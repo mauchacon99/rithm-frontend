@@ -50,6 +50,7 @@ import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widg
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MobileBrowserChecker } from 'src/helpers';
+import { GroupTrafficWidgetComponent } from '../widgets/group-traffic-widget/group-traffic-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -90,6 +91,7 @@ describe('DashboardComponent', () => {
         MockComponent(DocumentWidgetComponent),
         MockComponent(WidgetDrawerComponent),
         MockComponent(AddWidgetModalComponent),
+        MockComponent(GroupTrafficWidgetComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
