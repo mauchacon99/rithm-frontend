@@ -148,8 +148,7 @@ describe('FlowLogicComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fdescribe('Old view block', () => {
-
+  describe('Old view block', () => {
     beforeEach(() => {
       component.flowLogicLoading = false;
       component.ruleLoading = false;
@@ -811,7 +810,6 @@ describe('FlowLogicComponent', () => {
     });
 
     describe('New rule modal afterClosed', () => {
-
       const ruleToAdd: RuleEquation = {
         leftOperand: {
           type: OperandType.String,

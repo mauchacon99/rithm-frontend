@@ -29,29 +29,33 @@ export class FlowLogicComponent implements OnInit {
   /** Station Rithm id. */
   @Input() rithmId = '';
 
+  /** Allow switch between new/old interface. */
+  @Input() flowLogicView = false;
+
   /** The modified Flow Logic Rule to send back to station. */
   @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule | null>();
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
 
-  /* Loading the list of stations flow logic*/
-  flowLogicLoading = true;
-
   /* Loading the rules list  by type  */
   flowLogicLoadingByRuleType: string | null = null;
-
-  /** The error if rules fails . */
-  flowRuleError = false;
 
   /** Contains the new flow logic rule for saved . */
   newFlowLogic!: FlowLogicRule;
 
+  /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
 
+  /* Loading the list of stations flow logic*/
+  flowLogicLoading = true;
+
   /** The error if rules fails . */
   ruleError = false;
+
+  /** The error if rules fails . */
+  flowRuleError = false;
 
   constructor(
     public dialog: MatDialog,
