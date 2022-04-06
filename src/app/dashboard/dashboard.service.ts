@@ -153,6 +153,19 @@ export class DashboardService {
       },
     },
     // Group
+    [WidgetType.StationGroupTraffic]: {
+      title: 'Group traffic',
+      description: `The user can query all the values associated with the
+      documents managed in the stations within a flow. By default, the result of this is
+       a graph representing the movement of the documents.`,
+      descriptionComponent: {
+        title: 'Group Traffic Widget',
+        type: 'Group Template',
+        customizable: 'Group Traffic result values',
+        description: `The user can query all the values associated with the documents managed in the
+        stations within a flow. By default, the result of this is a graph representing the movement of the documents..`,
+      },
+    },
     [WidgetType.StationGroupSearch]: {
       title: 'Search',
       description: `User can query all the values saved on documents within a flow. By default the search results display the document

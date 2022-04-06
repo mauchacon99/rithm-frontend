@@ -144,6 +144,20 @@ export class MockDashboardService {
           name and the field that matches your search.`,
       },
     },
+    // Group traffic
+    [WidgetType.StationGroupTraffic]: {
+      title: 'Group traffic',
+      description: `The user can query all the values associated with the
+      documents managed in the stations within a flow. By default, the result of this is
+       a graph representing the movement of the documents.`,
+      descriptionComponent: {
+        title: 'Group Traffic Widget',
+        type: 'Group Template',
+        customizable: 'Group Traffic result values',
+        description: `The user can query all the values associated with the documents managed in the
+        stations within a flow. By default, the result of this is a graph representing the movement of the documents..`,
+      },
+    },
     // Profile widget document banner.
     [WidgetType.ContainerProfileBanner]: {
       title: 'Profile With Banner Image',
