@@ -23,9 +23,10 @@ describe('ExpansionMemberGroupAdminComponent', () => {
   let component: ExpansionMemberGroupAdminComponent;
   let fixture: ComponentFixture<ExpansionMemberGroupAdminComponent>;
   let stationService: StationService;
+  let errorService: ErrorService;
 
-  const subStationGroup: StationGroupData = {
-    rithmId: '1375027-78345-73824-542442',
+  const subStationGroups: StationGroupData = {
+    rithmId: '1375027-78345-73824-54244',
     title: 'Sub Station Group',
     subStationGroups: [],
     stations: [],
@@ -101,8 +102,10 @@ describe('ExpansionMemberGroupAdminComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExpansionMemberGroupAdminComponent);
-    component = fixture.componentInstance;
     stationService = TestBed.inject(StationService);
+    errorService = TestBed.inject(ErrorService);
+    component = fixture.componentInstance;
+    component.stationOrGroupSelected = stations;
     fixture.detectChanges();
   });
 
@@ -111,37 +114,8 @@ describe('ExpansionMemberGroupAdminComponent', () => {
   });
 
   describe('Selected item is group', () => {
-    const subStationGroups: StationGroupData = {
-      rithmId: '1375027-78345-73824-54244',
-      title: 'Sub Station Group',
-      subStationGroups: [],
-      stations: [],
-      users: [
-        {
-          rithmId: '789-798-456',
-          firstName: 'Noah',
-          lastName: 'Smith',
-          email: 'name2@company.com',
-          isWorker: true,
-          isOwner: true,
-        },
-      ],
-      admins: [
-        {
-          rithmId: '159-753-456',
-          firstName: 'Taylor',
-          lastName: 'Du',
-          email: 'name3@company.com',
-          isWorker: true,
-          isOwner: true,
-        },
-      ],
-      isChained: true,
-      isImplicitRootStationGroup: true,
-    };
-
     beforeEach(() => {
-      component.selectedItem = subStationGroups;
+      component.stationOrGroupSelected = subStationGroups;
       fixture.detectChanges();
     });
 
@@ -149,11 +123,63 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       const result = component.isGroup;
       expect(result).toBeTrue();
     });
+
+    it('should call method delete for remove admin in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = true;
+      const spyService = spyOn(
+        stationService,
+        'removeUsersFromOwnerRosterGroup'
+      ).and.callThrough();
+      component.removeMemberFromRosterGroup(idsUsers);
+      expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId, [
+        idsUsers,
+      ]);
+    });
+
+    it('should catch error if petition delete member admin in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = true;
+      spyOn(stationService, 'removeUsersFromOwnerRosterGroup').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(errorService, 'displayError').and.callThrough();
+      component.removeMemberFromRosterGroup(idsUsers);
+      expect(spyError).toHaveBeenCalled();
+    });
+
+    it('should call method delete for remove users in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = false;
+      const spyService = spyOn(
+        stationService,
+        'removeUsersFromWorkerRosterGroup'
+      ).and.callThrough();
+      component.removeMemberFromRosterGroup(idsUsers);
+      expect(spyService).toHaveBeenCalledOnceWith(subStationGroups.rithmId, [
+        idsUsers,
+      ]);
+    });
+
+    it('should catch error if petition delete member users in group', () => {
+      const idsUsers = '123-654-789-95123687';
+      component.isAdmin = false;
+      spyOn(stationService, 'removeUsersFromWorkerRosterGroup').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(errorService, 'displayError').and.callThrough();
+      component.removeMemberFromRosterGroup(idsUsers);
+      expect(spyError).toHaveBeenCalled();
+    });
   });
 
   describe('Selected item is station', () => {
     beforeEach(() => {
-      component.selectedItem = stations;
+      component.stationOrGroupSelected = stations;
       fixture.detectChanges();
     });
 
@@ -168,9 +194,8 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         'getStationOwnerRoster'
       ).and.callThrough();
       component.isAdmin = true;
-      component.stationSelected = stations;
       fixture.detectChanges();
-      component.getStationsMembers();
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
 
@@ -180,24 +205,20 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         'getStationWorkerRoster'
       ).and.callThrough();
       component.isAdmin = false;
-      component.stationSelected = stations;
       fixture.detectChanges();
-      component.getStationsMembers();
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
   });
 
   it('should show error message when request getStationsMembers fail', () => {
-    const spyError = spyOn(
-      stationService,
-      'getStationWorkerRoster'
-    ).and.returnValue(
+    spyOn(stationService, 'getStationWorkerRoster').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    component.stationSelected = subStationGroup;
-    component.getStationsMembers();
+    const spyError = spyOn(errorService, 'displayError').and.returnValue();
+    component.ngOnInit();
     fixture.detectChanges();
     const showMessage =
       fixture.debugElement.nativeElement.querySelector('#failed-get-users');
@@ -211,8 +232,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       stationService,
       'getStationWorkerRoster'
     ).and.callThrough();
-    component.stationSelected = subStationGroup;
-    component.getStationsMembers();
+    component.ngOnInit();
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
       '#loading-get-members'
@@ -234,7 +254,6 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     };
 
     component.isAdmin = true;
-    component.stationSelected = stations;
     fixture.detectChanges();
     const spyMethod = spyOn(
       component,
@@ -242,8 +261,8 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     ).and.callThrough();
 
     const spyGetStationsMembers = spyOn(
-      component,
-      'getStationsMembers'
+      stationService,
+      'getStationOwnerRoster'
     ).and.callThrough();
 
     const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
