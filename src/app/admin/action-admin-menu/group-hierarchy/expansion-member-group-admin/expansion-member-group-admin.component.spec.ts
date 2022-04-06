@@ -25,8 +25,8 @@ describe('ExpansionMemberGroupAdminComponent', () => {
   let stationService: StationService;
   let errorService: ErrorService;
 
-  const subStationGroup: StationGroupData = {
-    rithmId: '1375027-78345-73824-542442',
+  const subStationGroups: StationGroupData = {
+    rithmId: '1375027-78345-73824-54244',
     title: 'Sub Station Group',
     subStationGroups: [],
     stations: [],
@@ -114,35 +114,6 @@ describe('ExpansionMemberGroupAdminComponent', () => {
   });
 
   describe('Selected item is group', () => {
-    const subStationGroups: StationGroupData = {
-      rithmId: '1375027-78345-73824-54244',
-      title: 'Sub Station Group',
-      subStationGroups: [],
-      stations: [],
-      users: [
-        {
-          rithmId: '789-798-456',
-          firstName: 'Noah',
-          lastName: 'Smith',
-          email: 'name2@company.com',
-          isWorker: true,
-          isOwner: true,
-        },
-      ],
-      admins: [
-        {
-          rithmId: '159-753-456',
-          firstName: 'Taylor',
-          lastName: 'Du',
-          email: 'name3@company.com',
-          isWorker: true,
-          isOwner: true,
-        },
-      ],
-      isChained: true,
-      isImplicitRootStationGroup: true,
-    };
-
     beforeEach(() => {
       component.stationOrGroupSelected = subStationGroups;
       fixture.detectChanges();
