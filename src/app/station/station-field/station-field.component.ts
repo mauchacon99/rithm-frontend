@@ -20,6 +20,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
+import { RandomIdGenerator } from 'src/helpers';
 import { Question, QuestionFieldType, PossibleAnswer } from 'src/models';
 
 /**
@@ -107,13 +108,15 @@ export class StationFieldComponent
   /** The RithmId of the Station. */
   @Input() stationRithmId = '';
 
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  constructor(
-    private fb: FormBuilder,
-    private stationService: StationService
-  ) {}
+  constructor(private fb: FormBuilder, private stationService: StationService) {
+    this.randomIdGenerator = new RandomIdGenerator();
+  }
 
   /**
    * On component initialization.
@@ -218,13 +221,7 @@ export class StationFieldComponent
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const answerRithmId = `ans-${genRanHex(8)}-${genRanHex(4)}-${genRanHex(
-      4
-    )}-${genRanHex(4)}-${genRanHex(12)}`;
+    const answerRithmId = this.randomIdGenerator.getRandRithmId(8, 'ans');
     /** Generate a new isolated option to add in the array of options. */
     const selectableOption: Question = {
       rithmId: '',
