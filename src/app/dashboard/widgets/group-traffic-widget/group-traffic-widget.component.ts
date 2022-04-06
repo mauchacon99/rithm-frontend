@@ -17,7 +17,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Set data for group traffic widget. */
   @Input() dataWidget!: string;
 
-  /** StationGroupRithmId for station groups list widget. */
+  /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
 
   /**
