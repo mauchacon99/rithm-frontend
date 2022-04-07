@@ -63,7 +63,7 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   isErrorGetUsers = false;
 
   /** Status expanded, this save the state the panel for show icon expanded. */
-  panelOpenState = false;
+  panelOpenState = true;
 
   constructor(
     private stationService: StationService,
