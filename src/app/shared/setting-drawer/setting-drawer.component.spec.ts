@@ -119,7 +119,7 @@ describe('SettingDrawerComponent', () => {
     component.setReadOnlyFalse();
     expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
   });
-  
+
   it('should display a confirmation Popup for delete filed', async () => {
     const questions: Question[] = [
       {
