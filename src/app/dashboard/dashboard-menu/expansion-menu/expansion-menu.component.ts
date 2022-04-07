@@ -23,7 +23,7 @@ export class ExpansionMenuComponent implements OnInit {
   @Input() dashboardRole!: RoleDashboardMenu;
 
   /** Status expanded, this save the state the panel for show icon expanded. */
-  panelOpenState = false;
+  panelOpenState = true;
 
   /** Loading for list menu. */
   isLoading = false;

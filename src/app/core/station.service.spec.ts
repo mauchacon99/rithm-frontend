@@ -1345,6 +1345,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    req.flush(expectedResponse);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual(usersIds);
+    httpTestingController.verify();
   });
 
   it('should remove a member from worker roster for group specific', () => {
@@ -1375,9 +1383,62 @@ describe('StationService', () => {
         isWorker: true,
       },
     ];
-
     service
       .removeUsersFromWorkerRosterGroup(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
+  it('should get getStationGroupOwnerRoster', () => {
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .getStationGroupOwnerRoster(stationGroupRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
+  it('should get getStationGroupWorkerRoster', () => {
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .getStationGroupWorkerRoster(stationGroupRithmId)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
