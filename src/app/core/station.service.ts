@@ -813,7 +813,6 @@ export class StationService {
   removeUsersFromWorkerRosterGroup(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     usersIds: string[]
   ): Observable<StationRosterMember[]> {
     return this.http.delete<StationRosterMember[]>(
