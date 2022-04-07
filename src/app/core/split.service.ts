@@ -33,15 +33,6 @@ export class SplitService {
   }
 
   /**
-   * Get the dashboard split.
-   *
-   * @returns Split treatment.
-   */
-  public getDashboardTreatment(): string {
-    return this.splitClient.getTreatment('dashboard_split');
-  }
-
-  /**
    * Get the station document split.
    *
    * @returns Split treatment.
