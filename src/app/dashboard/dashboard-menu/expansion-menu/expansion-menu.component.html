@@ -1,5 +1,6 @@
 <mat-expansion-panel
   hideToggle
+  expanded
   (opened)="panelOpenState = true"
   (closed)="panelOpenState = false"
   class="mat-elevation-z0 expansion-dashboards"
@@ -39,12 +40,15 @@
     </div>
 
     <div *ngIf="showError" id="error-dashboard-list">
-      <p class="text-error-500">Error: failed to obtain dashboards</p>
+      <p class="text-error-500 text-center">
+        Error: failed to obtain dashboards
+      </p>
     </div>
 
     <div
       *ngIf="!dashboardsList.length && !isLoading && !showError"
       id="empty-dashboards-list"
+      class="text-center"
     >
       <p>No dashboard for listing</p>
     </div>
@@ -67,7 +71,7 @@
           routerLinkActive="bg-accent-100"
         >
           <div class="w-full flex justify-between items-center ml-5">
-            {{ dashboard.name }}
+            {{ dashboard.name.trim() || 'Untitled Dashboard.' }}
             <app-options-menu
               class="showOptions"
               [isManageMember]="isManageMember"
