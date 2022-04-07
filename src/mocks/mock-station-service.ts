@@ -48,6 +48,9 @@ export class MockStationService {
   /** The datalink widget to be saved. */
   dataLinkObject$ = new Subject<DataLinkObject>();
 
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
+
   /**
    * Gets a station information.
    *
