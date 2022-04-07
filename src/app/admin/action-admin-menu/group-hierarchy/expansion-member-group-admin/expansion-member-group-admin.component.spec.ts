@@ -181,6 +181,55 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       component.removeMemberFromRosterGroup(idsUsers);
       expect(spyError).toHaveBeenCalled();
     });
+
+    it('should call service that return station group members for stations group how admin', () => {
+      component.isAdmin = true;
+      const spyService = spyOn(
+        stationService,
+        'getStationGroupOwnerRoster'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should call service that return station group members for stations group how user', () => {
+      const spyService = spyOn(
+        stationService,
+        'getStationGroupWorkerRoster'
+      ).and.callThrough();
+      component.isAdmin = false;
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should show error message when station group members for stations group how user fail', () => {
+      spyOn(stationService, 'getStationGroupWorkerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyService = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should show error message when station group members for stations group how admin fail', () => {
+      component.isAdmin = true;
+      spyOn(stationService, 'getStationGroupOwnerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyService = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
   });
 
   describe('Selected item is station', () => {
@@ -364,19 +413,15 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     expect(component.isErrorGetUsers).toBeTrue();
   });
 
-  it('should show loading while request getStationsMembers', () => {
-    const spyMethod = spyOn(
-      stationService,
-      'getStationWorkerRoster'
-    ).and.callThrough();
-    component.ngOnInit();
+  it('should show loading indicator', () => {
+    component.isLoading = true;
+
     fixture.detectChanges();
-    const loader = fixture.debugElement.nativeElement.querySelector(
+    const isLoading = fixture.debugElement.nativeElement.querySelector(
       '#loading-get-members'
     );
-    expect(spyMethod).toHaveBeenCalled();
-    expect(loader).toBeTruthy();
-    expect(component.isLoading).toBeTrue();
+
+    expect(isLoading).toBeTruthy();
   });
 
   it('should call modal RosterManagementModal', () => {
