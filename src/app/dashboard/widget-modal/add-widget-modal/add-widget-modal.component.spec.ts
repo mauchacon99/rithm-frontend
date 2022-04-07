@@ -177,6 +177,7 @@ describe('AddWidgetModalComponent', () => {
       expect(component.showGroupTemplate).toBeTrue();
       expect(component.showContainerProfileBanner).toBeTrue();
       expect(component.showStationLists).toBeTrue();
+      expect(component.showGroupTrafficTemplate).toBeTrue();
     });
 
     it('should not show treatments when permission does not exits.', () => {
@@ -209,6 +210,7 @@ describe('AddWidgetModalComponent', () => {
       expect(component.showGroupTemplate).toBeFalse();
       expect(component.showContainerProfileBanner).toBeFalse();
       expect(component.showStationLists).toBeFalse();
+      expect(component.showGroupTrafficTemplate).toBeFalse();
     });
 
     it('should catch split error ', () => {
@@ -227,6 +229,7 @@ describe('AddWidgetModalComponent', () => {
       expect(component.showGroupTemplate).toBeFalse();
       expect(component.showContainerProfileBanner).toBeFalse();
       expect(component.showStationLists).toBeFalse();
+      expect(component.showGroupTrafficTemplate).toBeFalse();
     });
   });
 });
