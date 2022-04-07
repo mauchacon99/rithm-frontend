@@ -799,28 +799,16 @@ export class StationService {
    * @returns A rosterMember array.
    */
   getStationGroupOwnerRoster(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
-    const mockGetStationGroupAdmin: StationRosterMember[] = [
-      {
-        rithmId: '123-456-789',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isOwner: false,
-        isWorker: true,
-      },
-      {
-        rithmId: '987-654-321',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isOwner: false,
-        isWorker: true,
-      },
-    ];
-    return of(mockGetStationGroupAdmin).pipe(delay(1000));
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins`,
+      { params }
+    );
   }
 
   /**
