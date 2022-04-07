@@ -12,13 +12,13 @@
     <i class="fa-solid fa-map text-base"></i>
   </button>
 </div>
-<mat-accordion>
+<mat-accordion multi>
   <app-expansion-member-group-admin
-    [selectedItem]="selectedItem"
+    [stationOrGroupSelected]="selectedItem"
     [isAdmin]="true"
   ></app-expansion-member-group-admin>
   <app-expansion-member-group-admin
-    [selectedItem]="selectedItem"
+    [stationOrGroupSelected]="selectedItem"
     [isAdmin]="false"
   ></app-expansion-member-group-admin>
 </mat-accordion>

@@ -63,7 +63,15 @@
 <!--Section for show station template-->
 <section *ngIf="itemWidgetModalSelected.itemType === 'station'">
   <hr class="text-secondary-100" />
-  <!-- Stations types list -->
+  <!-- Stations lists -->
+  <div *ngIf="showStationLists; else permissionDenied">
+    <div class="py-6">
+      <p class="font-semibold">Lists</p>
+    </div>
+    <hr class="text-secondary-100" />
+  </div>
+
+  <!-- Stations types tables -->
   <div class="py-6">
     <p class="font-semibold">Tables</p>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
