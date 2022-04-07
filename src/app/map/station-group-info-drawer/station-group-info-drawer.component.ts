@@ -1,4 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from '../map.service';
@@ -18,7 +23,9 @@ import {
   templateUrl: './station-group-info-drawer.component.html',
   styleUrls: ['./station-group-info-drawer.component.scss'],
 })
-export class StationGroupInfoDrawerComponent implements OnDestroy {
+export class StationGroupInfoDrawerComponent
+  implements OnDestroy, AfterViewChecked
+{
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -47,6 +54,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /** Number of sub groups included in station group. */
   numberOfSubgroups = 0;
 
+  /** The centering progress is active in station group. */
+  centerActive = false;
+
   /** Status of station group. */
   statusOfSubgroup = MapItemStatus.Normal;
 
@@ -65,7 +75,8 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private readonly changeDetector: ChangeDetectorRef
   ) {
     //Subscribe to the mapMode on the mapService.
     this.mapService.mapHelper.mapMode$
@@ -77,6 +88,19 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
         },
         error: (error: unknown) => {
           throw new Error(`Map overlay subscription error: ${error}`);
+        },
+      });
+
+    /** Subscribe to the active center on the center helper mapService. */
+    this.mapService.centerHelper.centerActive$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (centerActive) => {
+          // Set center active for the done button in the station group.
+          this.centerActive = centerActive;
+        },
+        error: (error: unknown) => {
+          throw new Error(`Center active subscription error: ${error}`);
         },
       });
 
@@ -113,6 +137,13 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   }
 
   /**
+   * Checks after the component views and child views.
+   */
+  ngAfterViewChecked(): void {
+    this.changeDetector.detectChanges();
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.
@@ -120,14 +151,6 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   toggleDrawer(drawerItem: 'stationGroupInfo'): void {
     this.mapService.mapHelper.isDrawerOpened$.next(false);
     this.sidenavDrawerService.toggleDrawer(drawerItem);
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   /**
@@ -163,7 +186,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
         (stGroup) => stGroup.rithmId === this.stationGroupRithmId
       );
     this.mapService.mapStationGroupHelper.stationGroupElements[index].title =
-      this.groupName;
+      this.groupName.trimStart().trimEnd();
     this.mapService.mapStationGroupHelper.stationGroupElements[
       index
     ].isChained = this.isChained;
@@ -180,7 +203,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    */
   setStationGroupChanges(): void {
     this.groupName =
-      this.groupName.length > 0 ? this.groupName : 'Untitled Group';
+      this.groupName.trim().length > 0
+        ? this.groupName.trimStart().trimEnd()
+        : 'Untitled Group';
     if (
       this.currentMode === MapMode.Build ||
       this.currentMode === MapMode.StationGroupAdd ||
@@ -229,5 +254,13 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
       CenterPanType.StationGroup,
       drawer[0] ? drawer[0].clientWidth : 0
     );
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -43,7 +43,8 @@ import { BuildDrawerComponent } from './build-drawer/build-drawer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BodyTextWidgetModule } from 'src/app/shared/station-document-widgets/body-text-widget/body-text-widget.module';
 import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/headline-widget/headline-widget.module';
-
+import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
+import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
 @NgModule({
   declarations: [
     StationComponent,
@@ -92,6 +93,8 @@ import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/he
     MatListModule,
     DragDropModule,
     HeadlineWidgetModule,
+    TitleWidgetModule,
+    BannerWidgetModule,
   ],
 })
 export class StationModule {}

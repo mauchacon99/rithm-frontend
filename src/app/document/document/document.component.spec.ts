@@ -12,6 +12,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockSplitService,
   MockStationService,
   MockUserService,
 } from 'src/mocks';
@@ -35,6 +36,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
 import { MapComponent } from 'src/app/map/map/map.component';
 import { StationService } from 'src/app/core/station.service';
+import { SplitService } from 'src/app/core/split.service';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -80,6 +82,7 @@ describe('DocumentComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
@@ -367,8 +370,7 @@ describe('DocumentComponent', () => {
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Are you sure?',
-      message:
-        'Your changes will be lost and you will return to the dashboard.',
+      message: 'Your changes will be lost and you will return to the map.',
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
@@ -773,6 +775,49 @@ describe('DocumentComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: false,
       isReloadListDocuments: true,
+    });
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    let userService: UserService;
+
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
+    });
+
+    it('should call split service and treatments', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const spyGetStationDocumentTreatment = spyOn(
+        splitService,
+        'getStationDocumentTreatment'
+      ).and.callThrough();
+
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetStationDocumentTreatment).toHaveBeenCalled();
+      expect(component.viewNewContainer).toBeTrue();
+    });
+
+    it('should catch split error ', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+      expect(component.viewNewContainer).toBeFalse();
     });
   });
 });

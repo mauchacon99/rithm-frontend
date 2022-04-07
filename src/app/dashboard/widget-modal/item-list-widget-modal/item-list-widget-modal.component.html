@@ -9,7 +9,14 @@
     class="w-full table-container"
   >
     <ng-container [matColumnDef]="'mainInformation'">
-      <td mat-cell class="min-w-[150px]" *matCellDef="let element">
+      <td
+        mat-cell
+        class="min-w-[150px] cursor-pointer"
+        *matCellDef="let element"
+        data-testid="show-document-widget-tab"
+        id="show-document-widget"
+        (click)="selectTypeElement(element)"
+      >
         <span class="text-base font-semibold text-accent-600">{{
           element.name || 'Untitled Document'
         }}</span
@@ -31,7 +38,14 @@
     </ng-container>
 
     <ng-container [matColumnDef]="'generalInformation'">
-      <td mat-cell class="min-w-[150px]" *matCellDef="let element">
+      <td
+        mat-cell
+        class="min-w-[150px] cursor-pointer"
+        *matCellDef="let element"
+        data-testid="show-document-widget-tab"
+        id="show-document-widget"
+        (click)="selectTypeElement(element)"
+      >
         <div *ngIf="itemType !== 'group'">
           <span class="text-base font-semibold">
             {{
@@ -61,16 +75,17 @@
     </ng-container>
 
     <ng-container [matColumnDef]="'action'" stickyEnd class="custom-action">
-      <td mat-cell class="pr-0 min-w-[50px]" *matCellDef="let element">
+      <td
+        mat-cell
+        class="pr-0 min-w-[50px] cursor-pointer"
+        *matCellDef="let element"
+        data-testid="show-document-widget-tab"
+        id="show-document-widget"
+        (click)="selectTypeElement(element)"
+      >
         <span class="text-xs text-secondary-500">
           <div class="text-right">
-            <button
-              mat-icon-button
-              class="text-secondary-500"
-              data-testid="show-document-widget-tab"
-              id="show-document-widget"
-              (click)="selectTypeElement(element)"
-            >
+            <button mat-icon-button class="text-secondary-500">
               <i class="fas text-lg fa-angle-right"></i>
             </button>
           </div>

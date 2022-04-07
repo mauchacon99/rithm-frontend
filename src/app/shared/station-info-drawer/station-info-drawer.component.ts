@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import {
@@ -160,7 +159,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
-    private fb: FormBuilder,
     private stationService: StationService,
     private utcTimeConversion: UtcTimeConversion,
     private errorService: ErrorService,
@@ -168,8 +166,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private documentService: DocumentService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute
+    private dialog: MatDialog
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -583,19 +580,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (status) {
             this.stationDocumentGenerationStatus = status;
           }
+          this.popupService.notify('The status has changed successfully');
         },
-        // eslint-disable-next-line
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.docGenLoading = false;
-          if (error?.status === 400) {
-            this.sidenavDrawerService.closeDrawer();
-            // return;
-          } else {
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          }
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
         },
       });
   }
@@ -617,6 +609,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (confirmNavigation || !this.editMode) {
       this.router.navigate([`/station/${this.stationRithmId}`]);
     }
+  }
+
+  /**
+   * Delete space the text to be evaluated to remove excess space.
+   *
+   * @param text The text to be evaluated to remove excess spaces.
+   * @returns A string to assign a character.
+   */
+  deleteSpace(text: string): string {
+    return text.replace(/\s+/g, ' ').trim();
   }
 
   /**
@@ -821,6 +823,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    /** If different from open from the map. */
+    if (!this.openedFromMap) {
+      this.mapService.mapHelper.isDrawerOpened$.next(false);
+      this.sidenavDrawerService.drawerContext$.next('');
+    }
   }
 
   /**
