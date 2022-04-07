@@ -158,7 +158,8 @@ describe('AddWidgetModalComponent', () => {
 
       const methodGroupTraffic = spyOn(
         splitService,
-        'getGroupTrafficTemplateTreatment').and.returnValue('on');
+        'getGroupTrafficTemplateTreatment'
+      ).and.returnValue('on');
 
       const methodStationList = spyOn(
         splitService,
@@ -191,7 +192,8 @@ describe('AddWidgetModalComponent', () => {
       ).and.returnValue('off');
       const methodGroupTraffic = spyOn(
         splitService,
-        'getGroupTrafficTemplateTreatment').and.returnValue('off');
+        'getGroupTrafficTemplateTreatment'
+      ).and.returnValue('off');
       const methodStationList = spyOn(
         splitService,
         'getStationListWidgetTreatment'
