@@ -180,26 +180,24 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       component.isAdmin = true;
       const spyService = spyOn(
         stationService,
-        'getStationGroupAdmin'
+        'getStationGroupOwnerRoster'
       ).and.callThrough();
-      fixture.detectChanges();
-      component.ngOnInit();
+      component.stationOrGroupSelected = subStationGroups;
       expect(spyService).toHaveBeenCalled();
     });
 
     it('should call service that return station group members for stations group how user', () => {
       const spyService = spyOn(
         stationService,
-        'getStationGroupUsers'
+        'getStationGroupWorkerRoster'
       ).and.callThrough();
       component.isAdmin = false;
-      fixture.detectChanges();
-      component.ngOnInit();
+      component.stationOrGroupSelected = subStationGroups;
       expect(spyService).toHaveBeenCalled();
     });
 
     it('should show error message when station group members for stations group how user fail', () => {
-      spyOn(stationService, 'getStationGroupUsers').and.returnValue(
+      spyOn(stationService, 'getStationGroupWorkerRoster').and.returnValue(
         throwError(() => {
           throw new Error();
         })
@@ -208,13 +206,13 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(ErrorService),
         'displayError'
       ).and.callThrough();
-      component.ngOnInit();
+      component.stationOrGroupSelected = subStationGroups;
       expect(spyService).toHaveBeenCalled();
     });
 
     it('should show error message when station group members for stations group how admin fail', () => {
       component.isAdmin = true;
-      spyOn(stationService, 'getStationGroupAdmin').and.returnValue(
+      spyOn(stationService, 'getStationGroupOwnerRoster').and.returnValue(
         throwError(() => {
           throw new Error();
         })
@@ -223,7 +221,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(ErrorService),
         'displayError'
       ).and.callThrough();
-      component.ngOnInit();
+      component.stationOrGroupSelected = subStationGroups;
       expect(spyService).toHaveBeenCalled();
     });
   });
@@ -246,7 +244,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       ).and.callThrough();
       component.isAdmin = true;
       fixture.detectChanges();
-      component.ngOnInit();
+      component.stationOrGroupSelected = stations;
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
 
@@ -257,7 +255,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       ).and.callThrough();
       component.isAdmin = false;
       fixture.detectChanges();
-      component.ngOnInit();
+      component.stationOrGroupSelected = stations;
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
   });
@@ -269,7 +267,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       })
     );
     const spyError = spyOn(errorService, 'displayError').and.returnValue();
-    component.ngOnInit();
+    component.stationOrGroupSelected = stations;
     fixture.detectChanges();
     const showMessage =
       fixture.debugElement.nativeElement.querySelector('#failed-get-users');
@@ -278,19 +276,15 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     expect(component.isErrorGetUsers).toBeTrue();
   });
 
-  it('should show loading while request getStationsMembers', () => {
-    const spyMethod = spyOn(
-      stationService,
-      'getStationWorkerRoster'
-    ).and.callThrough();
-    component.ngOnInit();
+  it('should show loading indicator', () => {
+    component.isLoading = true;
+
     fixture.detectChanges();
-    const loader = fixture.debugElement.nativeElement.querySelector(
+    const isLoading = fixture.debugElement.nativeElement.querySelector(
       '#loading-get-members'
     );
-    expect(spyMethod).toHaveBeenCalled();
-    expect(loader).toBeTruthy();
-    expect(component.isLoading).toBeTrue();
+
+    expect(isLoading).toBeTruthy();
   });
 
   it('should call modal RosterManagementModal', () => {

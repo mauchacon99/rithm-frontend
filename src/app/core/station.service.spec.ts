@@ -1386,7 +1386,7 @@ describe('StationService', () => {
       });
   });
 
-  it('should get getStationGroupAdmin', () => {
+  it('should get getStationGroupOwnerRoster', () => {
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '123-456-789',
@@ -1406,12 +1406,14 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationGroupAdmin(stationGroupRithmId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    service
+      .getStationGroupOwnerRoster(stationGroupRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
   });
 
-  it('should get getStationGroupRoster', () => {
+  it('should get getStationGroupWorkerRoster', () => {
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '123-456-789',
@@ -1431,8 +1433,10 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationGroupUsers(stationGroupRithmId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    service
+      .getStationGroupWorkerRoster(stationGroupRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
   });
 });

@@ -1321,12 +1321,12 @@ export class MockStationService {
   }
 
   /**
-   * Get users Roster for a given station group.
+   * Get worker roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.
    * @returns A rosterMember array.
    */
-  getStationGroupUsers(
+  getStationGroupWorkerRoster(
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
     const mockGetStationGroupRoster: StationRosterMember[] = [
@@ -1351,12 +1351,12 @@ export class MockStationService {
   }
 
   /**
-   * Get admin Roster for a given station group.
+   * Get owner roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.
    * @returns A rosterMember array.
    */
-  getStationGroupAdmin(
+  getStationGroupOwnerRoster(
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
     const mockGetStationGroupAdmin: StationRosterMember[] = [

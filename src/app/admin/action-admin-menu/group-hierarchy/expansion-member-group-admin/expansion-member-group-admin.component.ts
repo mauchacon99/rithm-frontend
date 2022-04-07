@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
@@ -16,21 +16,16 @@ import {
   templateUrl: './expansion-member-group-admin.component.html',
   styleUrls: ['./expansion-member-group-admin.component.scss'],
 })
-export class ExpansionMemberGroupAdminComponent implements OnInit {
+export class ExpansionMemberGroupAdminComponent {
   /** Is admin. */
-  @Input() isAdmin!: boolean;
+  @Input() isAdmin = false;
 
   /** Value of selected item. */
   @Input() set stationOrGroupSelected(
     value: StationGroupData | StationListGroup
   ) {
     this._stationOrGroupSelected = value;
-    if (this.isAdmin !== undefined && !this.isGroup) {
-      this.getStationsMembers();
-    } else {
-      // this line is temporary while done getStationsMembers for groups.
-      this.members = [];
-    }
+    this.isGroup ? this.getStationsGroupMembers() : this.getStationsMembers();
   }
 
   /**
@@ -71,17 +66,6 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
     private errorService: ErrorService,
     private dialog: MatDialog
   ) {}
-
-  /**
-   * Initialize split on page load.
-   */
-  ngOnInit(): void {
-    if (!this.isGroup) {
-      this.getStationsMembers();
-    } else {
-      this.getStationsGroupMembers();
-    }
-  }
 
   /**
    * Get stations OwnerRoster and WorkerRoster.
@@ -178,8 +162,8 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
     this.isErrorGetUsers = false;
     const rithmId = this.stationOrGroupSelected.rithmId;
     const getStationGroupUsersOrAdmins$ = this.isAdmin
-      ? this.stationService.getStationGroupAdmin(rithmId)
-      : this.stationService.getStationGroupUsers(rithmId);
+      ? this.stationService.getStationGroupOwnerRoster(rithmId)
+      : this.stationService.getStationGroupWorkerRoster(rithmId);
 
     getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
       next: (members) => {

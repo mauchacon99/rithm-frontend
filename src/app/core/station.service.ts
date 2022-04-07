@@ -755,12 +755,12 @@ export class StationService {
   }
 
   /**
-   * Get users Roster for a given station group.
+   * Get worker roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.
    * @returns A rosterMember array.
    */
-  getStationGroupUsers(
+  getStationGroupWorkerRoster(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
@@ -786,12 +786,12 @@ export class StationService {
   }
 
   /**
-   * Get admin Roster for a given station group.
+   * Get owner roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.
    * @returns A rosterMember array.
    */
-  getStationGroupAdmin(
+  getStationGroupOwnerRoster(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
