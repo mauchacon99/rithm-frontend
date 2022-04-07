@@ -641,7 +641,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(stationName).toEqual('The name of a station');
   });
 
-  it('should call the service to history station', () => {
+  it('should call the service to get the station history', () => {
     const spyMethod = spyOn(
       TestBed.inject(StationService),
       'getStationHistory'
@@ -651,7 +651,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyMethod).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
-  it('should call the service to history station display error message', () => {
+  it('should call the errorService if the request getStationHistory fails', () => {
     const historyEventSpy = spyOn(
       TestBed.inject(StationService),
       'getStationHistory'

@@ -142,7 +142,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   allowAllOrgError = false;
 
   /** Use for history station. */
-  historyEventList: DocumentEvent[] = [];
+  stationHistoryEvents: DocumentEvent[] = [];
 
   /**
    * Whether the station is selected and it's in center of the map.
@@ -878,7 +878,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (history) => {
-          this.historyEventList = history;
+          this.stationHistoryEvents = history;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
