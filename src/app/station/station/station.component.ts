@@ -770,7 +770,7 @@ export class StationComponent
   /**
    * Save or update the changes make the station frame widgets.
    */
-   saveStationWidgetsChanges(): void {
+  saveStationWidgetsChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
@@ -783,8 +783,8 @@ export class StationComponent
       .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
-        next: ( inputFrames ) => {
-          console.log(this.stationRithmId, this.inputFrameWidgetItems,inputFrames);
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
