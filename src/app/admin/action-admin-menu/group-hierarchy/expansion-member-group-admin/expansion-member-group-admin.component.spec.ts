@@ -182,7 +182,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         stationService,
         'getStationGroupOwnerRoster'
       ).and.callThrough();
-      component.stationOrGroupSelected = subStationGroups;
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -192,7 +192,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         'getStationGroupWorkerRoster'
       ).and.callThrough();
       component.isAdmin = false;
-      component.stationOrGroupSelected = subStationGroups;
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -206,7 +206,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(ErrorService),
         'displayError'
       ).and.callThrough();
-      component.stationOrGroupSelected = subStationGroups;
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -221,7 +221,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
         TestBed.inject(ErrorService),
         'displayError'
       ).and.callThrough();
-      component.stationOrGroupSelected = subStationGroups;
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalled();
     });
   });
@@ -244,7 +244,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       ).and.callThrough();
       component.isAdmin = true;
       fixture.detectChanges();
-      component.stationOrGroupSelected = stations;
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
 
@@ -255,7 +255,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       ).and.callThrough();
       component.isAdmin = false;
       fixture.detectChanges();
-      component.stationOrGroupSelected = stations;
+      component.ngOnInit();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
   });
@@ -267,7 +267,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       })
     );
     const spyError = spyOn(errorService, 'displayError').and.returnValue();
-    component.stationOrGroupSelected = stations;
+    component.ngOnInit();
     fixture.detectChanges();
     const showMessage =
       fixture.debugElement.nativeElement.querySelector('#failed-get-users');

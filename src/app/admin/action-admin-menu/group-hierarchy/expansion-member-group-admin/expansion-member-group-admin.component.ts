@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
@@ -16,16 +16,20 @@ import {
   templateUrl: './expansion-member-group-admin.component.html',
   styleUrls: ['./expansion-member-group-admin.component.scss'],
 })
-export class ExpansionMemberGroupAdminComponent {
+export class ExpansionMemberGroupAdminComponent implements OnInit {
   /** Is admin. */
-  @Input() isAdmin = false;
+  @Input() isAdmin!: boolean;
 
   /** Value of selected item. */
   @Input() set stationOrGroupSelected(
     value: StationGroupData | StationListGroup
   ) {
     this._stationOrGroupSelected = value;
-    this.isGroup ? this.getStationsGroupMembers() : this.getStationsMembers();
+    if (this.isAdmin !== undefined && !this.isGroup) {
+      this.getStationsMembers();
+    } else {
+      this.getStationsGroupMembers();
+    }
   }
 
   /**
@@ -68,16 +72,30 @@ export class ExpansionMemberGroupAdminComponent {
   ) {}
 
   /**
+   * Initialize split on page load.
+   */
+  ngOnInit(): void {
+    if (!this.isGroup) {
+      this.getStationsMembers();
+    } else {
+      this.getStationsGroupMembers();
+    }
+  }
+
+  /**
    * Get stations OwnerRoster and WorkerRoster.
    *
    */
   private getStationsMembers(): void {
     this.isLoading = true;
     this.isErrorGetUsers = false;
-    const rithmId = this.stationOrGroupSelected.rithmId;
     const getMembersStation$ = this.isAdmin
-      ? this.stationService.getStationOwnerRoster(rithmId)
-      : this.stationService.getStationWorkerRoster(rithmId);
+      ? this.stationService.getStationOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
+      : this.stationService.getStationWorkerRoster(
+          this.stationOrGroupSelected.rithmId
+        );
 
     getMembersStation$.pipe(first()).subscribe({
       next: (members) => {
@@ -130,12 +148,15 @@ export class ExpansionMemberGroupAdminComponent {
   removeMemberFromRosterGroup(usersId: string): void {
     this.isLoading = true;
     this.isErrorGetUsers = false;
-    const rithmId = this.stationOrGroupSelected.rithmId;
     const removeUserMemberRosterGroup$ = this.isAdmin
-      ? this.stationService.removeUsersFromOwnerRosterGroup(rithmId, [usersId])
-      : this.stationService.removeUsersFromWorkerRosterGroup(rithmId, [
-          usersId,
-        ]);
+      ? this.stationService.removeUsersFromOwnerRosterGroup(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        )
+      : this.stationService.removeUsersFromWorkerRosterGroup(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        );
 
     removeUserMemberRosterGroup$.pipe(first()).subscribe({
       next: (members) => {
@@ -160,10 +181,13 @@ export class ExpansionMemberGroupAdminComponent {
   private getStationsGroupMembers(): void {
     this.isLoading = true;
     this.isErrorGetUsers = false;
-    const rithmId = this.stationOrGroupSelected.rithmId;
     const getStationGroupUsersOrAdmins$ = this.isAdmin
-      ? this.stationService.getStationGroupOwnerRoster(rithmId)
-      : this.stationService.getStationGroupWorkerRoster(rithmId);
+      ? this.stationService.getStationGroupOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
+      : this.stationService.getStationGroupWorkerRoster(
+          this.stationOrGroupSelected.rithmId
+        );
 
     getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
       next: (members) => {
