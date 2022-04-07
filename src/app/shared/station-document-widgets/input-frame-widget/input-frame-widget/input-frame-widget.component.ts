@@ -103,19 +103,19 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
     const newQuestion: Question = questionInfo.rithmId
       ? questionInfo
       : {
-        rithmId: this.randomIdGenerator.getRandRithmId(4),
-        prompt: questionInfo.prompt,
-        questionType: questionInfo.questionType,
-        isReadOnly: false,
-        isRequired: false,
-        isPrivate: false,
-        children:
-          questionInfo.questionType === QuestionFieldType.AddressLine
-            ? this.addAddressChildren()
-            : [],
-        originalStationRithmId: this.stationRithmId,
-        possibleAnswers: [],
-      };
+          rithmId: this.randomIdGenerator.getRandRithmId(4),
+          prompt: questionInfo.prompt,
+          questionType: questionInfo.questionType,
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children:
+            questionInfo.questionType === QuestionFieldType.AddressLine
+              ? this.addAddressChildren()
+              : [],
+          originalStationRithmId: this.stationRithmId,
+          possibleAnswers: [],
+        };
 
     if (event.container.id !== event.previousContainer.id) {
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
