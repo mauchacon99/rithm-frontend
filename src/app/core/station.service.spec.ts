@@ -1349,6 +1349,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    req.flush(expectedResponse);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual(usersIds);
+    httpTestingController.verify();
   });
 
   it('should remove a member from worker roster for group specific', () => {
