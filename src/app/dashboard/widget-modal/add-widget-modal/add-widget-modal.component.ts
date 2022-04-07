@@ -38,7 +38,7 @@ export class AddWidgetModalComponent implements OnInit {
   showContainerProfileBanner = false;
 
   /** Show group traffic template. */
-  ShowGroupTrafficTemplate = false;
+  showGroupTrafficTemplate = false;
 
   /** Show section Stations lists. */
   showStationLists = false;
