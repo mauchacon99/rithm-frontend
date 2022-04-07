@@ -296,6 +296,56 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       component.removeMemberFromRosterStation(members[0].rithmId);
       expect(spyError).toHaveBeenCalled();
     });
+
+    it('should call method for remove members if is group', async () => {
+      component.stationOrGroupSelected = subStationGroups;
+      fixture.detectChanges();
+
+      const popUpConfirmSpy = spyOn(
+        TestBed.inject(PopupService),
+        'confirm'
+      ).and.callThrough();
+
+      const removeMemberFromRosterStation = spyOn(
+        component,
+        'removeMemberFromRosterStation'
+      ).and.callThrough();
+
+      const removeMemberFromRosterGroup = spyOn(
+        component,
+        'removeMemberFromRosterGroup'
+      ).and.callThrough();
+
+      await component.confirmRemoveMember(members[0].rithmId);
+      expect(popUpConfirmSpy).toHaveBeenCalled();
+      expect(removeMemberFromRosterStation).not.toHaveBeenCalled();
+      expect(removeMemberFromRosterGroup).toHaveBeenCalled();
+    });
+
+    it('should call method for remove members if is station', async () => {
+      component.stationOrGroupSelected = stations;
+      fixture.detectChanges();
+
+      const popUpConfirmSpy = spyOn(
+        TestBed.inject(PopupService),
+        'confirm'
+      ).and.callThrough();
+
+      const removeMemberFromRosterStation = spyOn(
+        component,
+        'removeMemberFromRosterStation'
+      ).and.callThrough();
+
+      const removeMemberFromRosterGroup = spyOn(
+        component,
+        'removeMemberFromRosterGroup'
+      ).and.callThrough();
+
+      await component.confirmRemoveMember(members[0].rithmId);
+      expect(popUpConfirmSpy).toHaveBeenCalled();
+      expect(removeMemberFromRosterStation).toHaveBeenCalled();
+      expect(removeMemberFromRosterGroup).not.toHaveBeenCalled();
+    });
   });
 
   it('should show error message when request getStationsMembers fail', () => {
