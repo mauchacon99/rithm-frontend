@@ -47,6 +47,7 @@ import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-
 import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar-image-widget.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
+import { GroupTrafficWidgetComponent } from './widgets/group-traffic-widget/group-traffic-widget.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
     GroupWidgetTemplateModalComponent,
     GroupSearchWidgetComponent,
     AvatarImageWidgetComponent,
+    GroupTrafficWidgetComponent,
   ],
   imports: [
     CommonModule,
