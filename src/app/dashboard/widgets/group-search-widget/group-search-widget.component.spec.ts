@@ -28,7 +28,6 @@ describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
   let fixture: ComponentFixture<GroupSearchWidgetComponent>;
   const dataWidget =
-    // eslint-disable-next-line max-len
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
   const dataStationGroupWidget: StationGroupData = {
