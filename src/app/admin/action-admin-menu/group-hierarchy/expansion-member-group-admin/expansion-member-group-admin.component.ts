@@ -26,10 +26,13 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
     value: StationGroupData | StationListGroup
   ) {
     this._stationOrGroupSelected = value;
-    if (this.isAdmin !== undefined && !this.isGroup) {
-      this.getStationsMembers();
-    } else {
-      this.getStationsGroupMembers();
+
+    if (this.isAdmin !== undefined) {
+      if (!this.isGroup) {
+        this.getStationsMembers();
+      } else {
+        this.getStationsGroupMembers();
+      }
     }
   }
 
