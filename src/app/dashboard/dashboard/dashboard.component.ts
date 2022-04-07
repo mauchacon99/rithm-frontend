@@ -485,6 +485,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         dashboardData.widgets[index].rithmId = '';
       }
     });
+    dashboardData.name = dashboardData.name.trim()
+      ? dashboardData.name.trim()
+      : 'Untitled Dashboard';
     return dashboardData;
   }
 
