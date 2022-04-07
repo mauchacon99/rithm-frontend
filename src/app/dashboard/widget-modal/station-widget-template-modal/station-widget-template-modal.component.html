@@ -68,11 +68,7 @@
 <!-- Preview widget type stationTableBanner -->
 <ng-template #previewStationTableBanner>
   <div class="h-full w-full rounded bg-white overflow-hidden leading-[5px]">
-    <div
-      class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
-    >
-      <i class="fas text-3xl text-secondary-300 fa-image animate-pulse"></i>
-    </div>
+    <ng-container *ngTemplateOutlet="ImageBanner"></ng-container>
     <br />
     <ng-container *ngTemplateOutlet="previewStation"></ng-container>
   </div>
@@ -102,11 +98,15 @@
 <!-- Preview widget type previewStationMultilineBanner -->
 <ng-template #previewStationMultilineBanner>
   <div class="h-full w-full rounded bg-white overflow-hidden">
-    <div
-      class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
-    >
-      <i class="fas text-3xl text-secondary-300 fa-image animate-pulse"></i>
-    </div>
+    <ng-container *ngTemplateOutlet="ImageBanner"></ng-container>
     <ng-container *ngTemplateOutlet="previewStationMultiline"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #ImageBanner>
+  <div
+    class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
+  >
+    <i class="fas text-3xl text-secondary-300 fa-image animate-pulse"></i>
   </div>
 </ng-template>

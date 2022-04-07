@@ -67,23 +67,18 @@
   <div *ngIf="showStationLists; else permissionDenied">
     <div class="py-6">
       <p class="font-semibold">Lists</p>
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+        <!-- Widget card type station StationMultiline-->
+        <app-station-widget-template-modal
+          [widgetType]="enumWidgetType.StationMultiline"
+        ></app-station-widget-template-modal>
+        <!-- Widget card type station StationMultilineBanner -->
+        <app-station-widget-template-modal
+          [widgetType]="enumWidgetType.StationMultilineBanner"
+        ></app-station-widget-template-modal>
+      </div>
     </div>
     <hr class="text-secondary-100" />
-  </div>
-
-  <!-- Stations types tables -->
-  <div class="py-6">
-    <p class="font-semibold">Lists</p>
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
-      <!-- Widget card type station StationMultiline-->
-      <app-station-widget-template-modal
-        [widgetType]="enumWidgetType.StationMultiline"
-      ></app-station-widget-template-modal>
-      <!-- Widget card type station StationMultilineBanner -->
-      <app-station-widget-template-modal
-        [widgetType]="enumWidgetType.StationMultilineBanner"
-      ></app-station-widget-template-modal>
-    </div>
   </div>
   <hr class="text-secondary-100" />
   <!-- Stations types Tables   -->
