@@ -24,6 +24,8 @@ import {
   MockStationService,
   MockDocumentService,
   MockPopupService,
+  MockSplitService,
+  MockUserService,
 } from 'src/mocks';
 
 import { ErrorService } from 'src/app/core/error.service';
@@ -41,11 +43,13 @@ import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { RuleEquation } from 'src/models/rule-equation';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 
-describe('FlowLogicComponent', () => {
+fdescribe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   let loader: HarnessLoader;
@@ -132,6 +136,8 @@ describe('FlowLogicComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: SplitService, useClass: MockSplitService },
+        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
@@ -154,6 +160,7 @@ describe('FlowLogicComponent', () => {
       component.ruleLoading = false;
       component.flowRuleError = false;
       component.ruleError = false;
+      component.flowLogicView = false;
       fixture.detectChanges();
     });
 
@@ -241,6 +248,9 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should show error if petition rules fails', () => {
+      const splitService = TestBed.inject(SplitService);
+      component.flowLogicView = false;
+      fixture.detectChanges();
       spyOn(
         TestBed.inject(DocumentService),
         'getStationFlowLogicRule'
@@ -249,6 +259,7 @@ describe('FlowLogicComponent', () => {
           throw new Error();
         })
       );
+      spyOn(splitService, 'getFlowLogicTreatment').and.returnValue('off');
       component.ngOnInit();
       fixture.detectChanges();
       const reviewError = fixture.debugElement.nativeElement.querySelector(
@@ -996,6 +1007,49 @@ describe('FlowLogicComponent', () => {
         btnOpenModal.click();
         expect(spyFunc).toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    let userService: UserService;
+
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
+    });
+
+    it('should call split service and treatments', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      const spyGetFlowLogicTreatment = spyOn(
+        splitService,
+        'getFlowLogicTreatment'
+      ).and.callThrough();
+
+      splitService.sdkReady$.next();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyGetFlowLogicTreatment).toHaveBeenCalled();
+      expect(component.flowLogicView).toBeTrue();
+    });
+
+    it('should catch split error ', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const errorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(errorService).toHaveBeenCalled();
+      expect(component.flowLogicView).toBeFalse();
     });
   });
 });

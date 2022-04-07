@@ -13,6 +13,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -29,11 +31,11 @@ export class FlowLogicComponent implements OnInit {
   /** Station Rithm id. */
   @Input() rithmId = '';
 
-  /** Allow switch between new/old interface. */
-  @Input() flowLogicView = false;
-
   /** The modified Flow Logic Rule to send back to station. */
   @Output() modifiedFlowRules = new EventEmitter<FlowLogicRule | null>();
+
+  /** Allow switch between new/old interface. */
+  flowLogicView = false;
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -61,14 +63,33 @@ export class FlowLogicComponent implements OnInit {
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private userService: UserService,
+    private splitService: SplitService
   ) {}
 
   /**
    * Life cycle init the component.
    */
   ngOnInit(): void {
+    this.getTreatment();
     this.getStationFlowLogicRule();
+  }
+
+  /**
+   * Get station document split.
+   */
+  private getTreatment(): void {
+    const orgRithmId = this.userService.user.organization;
+    this.splitService.initSdk(orgRithmId);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.flowLogicView = this.splitService.getFlowLogicTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /**

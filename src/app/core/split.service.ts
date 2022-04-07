@@ -123,4 +123,13 @@ export class SplitService {
   public getGroupSectionAddWidgetTreatment(): string {
     return this.splitClient.getTreatment('group_widget_split');
   }
+
+  /**
+   * Get the section group section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getFlowLogicTreatment(): string {
+    return this.splitClient.getTreatment('flow_logic_split');
+  }
 }
