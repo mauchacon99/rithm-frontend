@@ -51,7 +51,7 @@
             *ngIf="field.questionType === fieldType.DataLink; else textField"
           >
             <app-data-link-field
-              [field]="dataLinkField"
+              [field]="field"
               [formControlName]="field.questionType"
             ></app-data-link-field>
           </ng-container>

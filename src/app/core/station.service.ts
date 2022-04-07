@@ -21,6 +21,7 @@ import {
   StationFrameWidget,
   QuestionFieldType,
   FrameType,
+  DataLinkObject,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -37,14 +38,17 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new Subject<Question>();
-
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
   flowButtonText$ = new BehaviorSubject<string>('Flow');
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
@@ -52,8 +56,11 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be updated when it changes in station page. */
-  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The datalink widget to be saved. */
+  dataLinkObject$ = new Subject<DataLinkObject>();
+
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
 
   constructor(private http: HttpClient) {}
 
