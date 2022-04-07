@@ -17,8 +17,8 @@ import {
   StationGroupData,
   StationFrameWidget,
   FrameType,
-  DocumentEvent,
   DataLinkObject,
+  DocumentEvent,
 } from 'src/models';
 
 /**
@@ -1249,6 +1249,46 @@ export class MockStationService {
   }
 
   /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
+    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
    * Removes users from the group's workers roster.
    *
    * @param stationGroupRithmId The Specific id of group.
@@ -1286,44 +1326,6 @@ export class MockStationService {
       },
     ];
     return of(data).pipe(delay(1000));
-  }
-
-  /**
-   * Get history station.
-   *
-   * @param rithmId The current station id.
-   * @returns The history station.
-   */
-  getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
-    if (!rithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot response station history',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const historyResponse: DocumentEvent[] = [
-        {
-          eventTimeUTC: '2022-01-18T22:13:05.871Z',
-          description: 'Event Document #1',
-          user: {
-            rithmId: '123',
-            firstName: 'Testy',
-            lastName: 'Test',
-            email: 'test@test.com',
-            isEmailVerified: true,
-            notificationSettings: null,
-            createdDate: '1/2/34',
-            role: null,
-            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-          },
-        },
-      ];
-      return of(historyResponse).pipe(delay(1000));
-    }
   }
 
   /**
@@ -1384,5 +1386,43 @@ export class MockStationService {
       },
     ];
     return of(mockGetStationGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get history station.
+   *
+   * @param rithmId The current station id.
+   * @returns The history station.
+   */
+  getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
+    if (!rithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot response station history',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const historyResponse: DocumentEvent[] = [
+        {
+          eventTimeUTC: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(historyResponse).pipe(delay(1000));
+    }
   }
 }
