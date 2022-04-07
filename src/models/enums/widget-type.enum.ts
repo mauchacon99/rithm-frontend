@@ -25,6 +25,6 @@ export enum WidgetType {
   StationGroupSearch = 'station-group-search-widget',
   /** Widget type station-group. */
   StationGroup = 'station-group',
-  /** Widget type station-group-traffic. */
+  /** Widget type group-traffic. */
   StationGroupTraffic = 'group-traffic',
 }
