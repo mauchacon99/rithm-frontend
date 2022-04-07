@@ -10,7 +10,7 @@
   </div>
   <!-- Available Stations  -->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
-    <mat-label>{{ field.prompt }}</mat-label>
+    <mat-label>Available Stations</mat-label>
     <div matPrefix class="icon">
       <!-- Data link icon -->
       <i class="fas fa-search"></i>
@@ -18,8 +18,7 @@
     <input
       id="data-link-search"
       matInput
-      [required]="field.isRequired"
-      [formControlName]="field.questionType"
+      formControlName="targetStation"
       [matAutocomplete]="auto"
     />
     <mat-autocomplete
@@ -81,20 +80,17 @@
       </i>
     </mat-label>
     <mat-select
-      #selectDisplayFields
       multiple
       [disabled]="!questions.length || questionLoading"
       formControlName="selectedDisplayFields"
     >
-      <div (mouseleave)="selectDisplayFields.close()">
-        <mat-option
-          *ngFor="let option of questions"
-          class="text-sm"
-          [value]="option.rithmId"
-        >
-          <p>{{ option.prompt || 'Missing question label' }}</p>
-        </mat-option>
-      </div>
+      <mat-option
+        *ngFor="let option of questions"
+        class="text-sm"
+        [value]="option.rithmId"
+      >
+        <p>{{ option.prompt || 'Missing question label' }}</p>
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
