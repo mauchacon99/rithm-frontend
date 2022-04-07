@@ -28,8 +28,7 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
     if (this.isAdmin !== undefined && !this.isGroup) {
       this.getStationsMembers();
     } else {
-      // this line is temporary while done getStationsMembers for groups.
-      this.members = [];
+      this.getStationsGroupMembers();
     }
   }
 
@@ -78,6 +77,8 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   ngOnInit(): void {
     if (!this.isGroup) {
       this.getStationsMembers();
+    } else {
+      this.getStationsGroupMembers();
     }
   }
 
@@ -158,6 +159,37 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
         );
 
     removeUserMemberRosterGroup$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Get users Roster or admin for a given station group.
+   */
+  private getStationsGroupMembers(): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const getStationGroupUsersOrAdmins$ = this.isAdmin
+      ? this.stationService.getStationGroupOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
+      : this.stationService.getStationGroupWorkerRoster(
+          this.stationOrGroupSelected.rithmId
+        );
+
+    getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
       next: (members) => {
         this.isLoading = false;
         this.isErrorGetUsers = false;

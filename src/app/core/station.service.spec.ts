@@ -1387,9 +1387,62 @@ describe('StationService', () => {
         isWorker: true,
       },
     ];
-
     service
       .removeUsersFromWorkerRosterGroup(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
+  it('should get getStationGroupOwnerRoster', () => {
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .getStationGroupOwnerRoster(stationGroupRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
+  it('should get getStationGroupWorkerRoster', () => {
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .getStationGroupWorkerRoster(stationGroupRithmId)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
