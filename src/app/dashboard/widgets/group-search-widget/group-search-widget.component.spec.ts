@@ -308,12 +308,12 @@ describe('GroupSearchWidgetComponent', () => {
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
     component.goToStationGroupOnMap(rithmid);
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
-    expect(mapService.mapStationHelper.centerStationGroupRithmId$.value).toBe(
-      component.stationGroupRithmId
-    );
+    expect(
+      mapService.mapStationGroupHelper.centerStationGroupRithmId$.value
+    ).toBe(component.stationGroupRithmId);
     expect(mapService.mapHelper.viewStationButtonClick$.value).toBeTrue();
 
-    mapService.mapStationHelper.centerStationGroupRithmId$.subscribe(
+    mapService.mapStationGroupHelper.centerStationGroupRithmId$.subscribe(
       (stationGroupRithmId) => {
         expect(stationGroupRithmId).toBe(component.stationGroupRithmId);
       }

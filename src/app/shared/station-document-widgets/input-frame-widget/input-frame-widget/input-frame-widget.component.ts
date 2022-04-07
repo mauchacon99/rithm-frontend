@@ -15,6 +15,7 @@ import { QuestionFieldType, Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { RandomIdGenerator } from 'src/helpers';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -50,10 +51,15 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService
-  ) {}
+  ) {
+    this.randomIdGenerator = new RandomIdGenerator();
+  }
 
   /**
    * Listen the deleteStationQuestions Service.
@@ -97,19 +103,19 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
     const newQuestion: Question = questionInfo.rithmId
       ? questionInfo
       : {
-          rithmId: this.randRithmId,
-          prompt: questionInfo.prompt,
-          questionType: questionInfo.questionType,
-          isReadOnly: false,
-          isRequired: false,
-          isPrivate: false,
-          children:
-            questionInfo.questionType === QuestionFieldType.AddressLine
-              ? this.addAddressChildren()
-              : [],
-          originalStationRithmId: this.stationRithmId,
-          possibleAnswers: [],
-        };
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
+        prompt: questionInfo.prompt,
+        questionType: questionInfo.questionType,
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false,
+        children:
+          questionInfo.questionType === QuestionFieldType.AddressLine
+            ? this.addAddressChildren()
+            : [],
+        originalStationRithmId: this.stationRithmId,
+        possibleAnswers: [],
+      };
 
     if (event.container.id !== event.previousContainer.id) {
       copyArrayItem([newQuestion], event.container.data, 0, event.currentIndex);
@@ -123,20 +129,6 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
         event.currentIndex
       );
     }
-  }
-
-  /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
   }
 
   /**
@@ -163,7 +155,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
