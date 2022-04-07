@@ -821,7 +821,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.router.navigate([`/map`]);
   }
 
-
   /**
    * Save Buttons Settings.
    */

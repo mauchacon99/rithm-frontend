@@ -1316,8 +1316,6 @@ describe('StationService', () => {
       });
   });
 
-
-
   it('should remove a member the owner from the roster for group specific', () => {
     const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
     const expectedResponse: StationRosterMember[] = [

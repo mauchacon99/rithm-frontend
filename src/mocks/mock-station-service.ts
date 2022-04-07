@@ -1248,7 +1248,6 @@ export class MockStationService {
     }
   }
 
-
   /**
    * Removes users from the group's workers roster.
    *
@@ -1289,14 +1288,13 @@ export class MockStationService {
     return of(data).pipe(delay(1000));
   }
 
-
   /**
    * Get history station.
    *
    * @param rithmId The current station id.
    * @returns The history station.
    */
-   getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
+  getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
     if (!rithmId) {
       return throwError(
         () =>
