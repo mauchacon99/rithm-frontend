@@ -11,9 +11,9 @@ import { Question, ImageWidgetObject } from 'src/models';
 })
 export class BannerWidgetComponent {
   /** Event Emitter will open a field setting drawer on the right side of the station. */
-  @Output() openSettingDrawer: EventEmitter<
+  @Output() openSettingDrawer = new EventEmitter<
     Question | ImageWidgetObject | string
-  > = new EventEmitter<Question | ImageWidgetObject | string>();
+  >();
 
   /** The mode to display fields inside the widget. */
   @Input() widgetMode!: 'layout' | 'setting';
