@@ -1355,6 +1355,7 @@ describe('StationService', () => {
     );
     expect(req.request.method).toEqual('DELETE');
     req.flush(expectedResponse);
+    expect(req.request.body).toEqual(usersIds);
     httpTestingController.verify();
   });
 
