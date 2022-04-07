@@ -3,6 +3,8 @@
   *ngIf="!isWidget"
   class="fixed z-10 w-full"
   [itemInfo]="documentInformation"
+  [stationEditMode]="false"
+  [newContainer]="true"
   (checkClickSubHeader)="checkClickSubHeader($event)"
 ></app-sub-header>
 <mat-drawer-container

@@ -7,14 +7,18 @@ import {
   Output,
 } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, StationInformation } from 'src/models';
+import {
+  DocumentStationInformation,
+  StationInfoDrawerData,
+  StationInformation,
+} from 'src/models';
 
 /**
  * Component for the sub header on document/station views that houses the
  * comments and history.
  */
 @Component({
-  selector: 'app-sub-header[itemInfo]',
+  selector: 'app-sub-header[itemInfo][stationEditMode][newContainer]',
   templateUrl: './sub-header.component.html',
   styleUrls: ['./sub-header.component.scss'],
 })
@@ -24,6 +28,12 @@ export class SubHeaderComponent {
 
   /** Event to detect click comment outside. */
   @Output() checkClickSubHeader: EventEmitter<boolean> = new EventEmitter();
+
+  /** Is component viewed in station edit mode? */
+  @Input() stationEditMode!: boolean;
+
+  /** Is component for new container? */
+  @Input() newContainer!: boolean;
 
   /** Current active icon. */
   activeItem = 'none';
@@ -46,19 +56,58 @@ export class SubHeaderComponent {
   }
 
   /**
+   * Get name of station from StationInformation based on type.
+   *
+   * @returns The Station Name.
+   */
+  get stationName(): string {
+    if (!this.itemInfo) {
+      return '';
+    }
+    return 'stationName' in this.itemInfo
+      ? this.itemInfo.stationName
+      : this.itemInfo.name;
+  }
+
+  /**
+   * The id of the station or document.
+   *
+   * @returns The id of the station or document.
+   */
+  get stationRithmId(): string {
+    if (!this.itemInfo) {
+      return '';
+    }
+    return 'rithmId' in this.itemInfo
+      ? this.itemInfo.rithmId
+      : this.itemInfo.stationRithmId;
+  }
+
+  /**
    * Toggles the open state detail drawer for comments or history.
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawer(drawerItem: 'comments' | 'history'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem, this.itemInfo);
+  toggleDrawer(drawerItem: 'comments' | 'history' | 'stationInfo'): void {
     if (
       (drawerItem === 'history' && this.activeItem === 'none') ||
-      (drawerItem === 'comments' && this.activeItem === 'none')
+      (drawerItem === 'comments' && this.activeItem === 'none') ||
+      (drawerItem === 'stationInfo' && this.activeItem === 'none')
     ) {
       this.activeItem = drawerItem;
     } else {
       this.activeItem = 'none';
+    }
+    if (drawerItem === 'stationInfo') {
+      const dataInformationDrawer: StationInfoDrawerData = {
+        stationRithmId: this.stationRithmId,
+        stationName: this.stationName,
+        editMode: this.stationEditMode,
+        openedFromMap: false,
+      };
+      this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
+    } else {
+      this.sidenavDrawerService.toggleDrawer(drawerItem, this.itemInfo);
     }
   }
 
