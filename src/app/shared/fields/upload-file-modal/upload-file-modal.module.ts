@@ -6,11 +6,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [UploadFileModalComponent],
-  imports: [
-    MatDialogModule,
-    MatButtonModule,
-    MatProgressBarModule,
-  ],
+  imports: [MatDialogModule, MatButtonModule, MatProgressBarModule],
   exports: [UploadFileModalComponent],
 })
 export class UploadFileModalModule {}
