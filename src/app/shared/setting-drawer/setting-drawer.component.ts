@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for setting drawer in the station.
@@ -26,7 +28,9 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private sideNavDrawerService: SidenavDrawerService,
     private route: ActivatedRoute,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private popupService: PopupService,
+    private stationService: StationService
   ) {}
 
   /**
@@ -94,5 +98,23 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Completes all subscriptions.
+   *
+   * @param questions The current questions to be deleted in field settings.
+   */
+  async deleteQuestion(questions: Question): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: '',
+      message: 'Are you sure you want to delete this field?',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true,
+    });
+    if (response) {
+      this.stationService.deleteStationQuestion$.next(questions);
+    }
   }
 }
