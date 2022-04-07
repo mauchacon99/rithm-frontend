@@ -91,4 +91,25 @@ describe('SettingDrawerComponent', () => {
     component['getStationId']();
     expect(spyService).toHaveBeenCalled();
   });
+
+  it('should return false the method that modify isPrevious', () => {
+    const spyProperty = spyOnProperty(
+      component,
+      'isPrevious',
+      'get'
+    ).and.returnValue(false);
+
+    fixture.detectChanges();
+    expect(spyProperty).toHaveBeenCalled();
+  });
+
+  it('should call the method that set isRequired.', () => {
+    component.fieldSetting.isReadOnly = false;
+    const setReadOnlySpy = spyOn(
+      component,
+      'setReadOnlyFalse'
+    ).and.callThrough();
+    component.setReadOnlyFalse();
+    expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
+  });
 });
