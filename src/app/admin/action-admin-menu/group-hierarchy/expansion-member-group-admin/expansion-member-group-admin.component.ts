@@ -225,6 +225,12 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
       important: true,
     });
 
-    if (response) this.removeMemberFromRosterStation(usersId);
+    if (response) {
+      if (this.isGroup) {
+        this.removeMemberFromRosterGroup(usersId);
+      } else {
+        this.removeMemberFromRosterStation(usersId);
+      }
+    }
   }
 }
