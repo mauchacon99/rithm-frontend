@@ -61,6 +61,7 @@ describe('ListWidgetModalComponent', () => {
 
   it('should show group widget when permission is true', () => {
     component.showGroupTemplate = true;
+    component.ShowGroupTrafficTemplate = true;
     component.itemWidgetModalSelected.itemType = 'group';
     fixture.detectChanges();
     const sectionPermissionDenied =

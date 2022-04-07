@@ -123,4 +123,13 @@ export class SplitService {
   public getGroupSectionAddWidgetTreatment(): string {
     return this.splitClient.getTreatment('group_widget_split');
   }
+
+  /**
+   * Get the section group traffic in list-widget-modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupTrafficTemplateTreatment(): string {
+    return this.splitClient.getTreatment('group_traffic_template_split');
+  }
 }

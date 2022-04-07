@@ -155,6 +155,10 @@ describe('AddWidgetModalComponent', () => {
         splitService,
         'getProfileBannerTreatment'
       ).and.returnValue('on');
+      const methodGroupTraffic = spyOn(
+        splitService,
+        'getGroupTrafficTemplateTreatment'
+      ).and.returnValue('on');
 
       splitService.sdkReady$.next();
       component.ngOnInit();
@@ -162,6 +166,7 @@ describe('AddWidgetModalComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(methodGroupSection).toHaveBeenCalled();
       expect(methodProfileBanner).toHaveBeenCalled();
+      expect(methodGroupTraffic).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeTrue();
       expect(component.showContainerProfileBanner).toBeTrue();
     });
@@ -177,12 +182,17 @@ describe('AddWidgetModalComponent', () => {
         splitService,
         'getProfileBannerTreatment'
       ).and.returnValue('off');
+      const methodGroupTraffic = spyOn(
+        splitService,
+        'getGroupTrafficTemplateTreatment'
+      ).and.returnValue('off');
 
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(methodGroupSection).toHaveBeenCalled();
       expect(methodProfileBanner).toHaveBeenCalled();
+      expect(methodGroupTraffic).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeFalse();
       expect(component.showContainerProfileBanner).toBeFalse();
     });

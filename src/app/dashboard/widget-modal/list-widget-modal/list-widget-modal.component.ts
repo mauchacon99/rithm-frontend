@@ -20,6 +20,9 @@ export class ListWidgetModalComponent {
   /** Show section document profile. */
   @Input() showContainerProfileBanner = false;
 
+  /** Show group traffic widget template. */
+  @Input() ShowGroupTrafficTemplate = false;
+
   /** Title preview widget selected emit. */
   @Output() previewWidgetSelected = new EventEmitter<
     WidgetType | 'defaultDocument'
