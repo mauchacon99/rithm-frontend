@@ -1353,8 +1353,8 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
     );
-    expect(req.request.method).toEqual('DELETE');
     req.flush(expectedResponse);
+    expect(req.request.method).toEqual('DELETE');
     expect(req.request.body).toEqual(usersIds);
     httpTestingController.verify();
   });
