@@ -38,7 +38,7 @@ export class AddWidgetModalComponent implements OnInit {
   showContainerProfileBanner = false;
 
   /** Show group traffic template. */
-  ShowGroupTrafficTemplate = false;
+  showGroupTrafficTemplate = false;
 
   /** Show section Stations lists. */
   showStationLists = false;
@@ -95,7 +95,7 @@ export class AddWidgetModalComponent implements OnInit {
         this.showContainerProfileBanner =
           this.splitService.getProfileBannerTreatment() === 'on';
 
-        this.ShowGroupTrafficTemplate =
+        this.showGroupTrafficTemplate =
           this.splitService.getGroupTrafficTemplateTreatment() === 'on';
 
         this.showStationLists =
