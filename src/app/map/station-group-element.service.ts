@@ -398,16 +398,18 @@ export class StationGroupElementService {
       height: canvasBoundingRect.height,
     };
 
+    /** Limits the number of characters for the title. */
+    const titleLimit = stationGroup.title.substring(0, 35);
+
     // Calculates the position of the first straightest line.
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
-      ctx.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING * this.mapScale
+      ctx.measureText(titleLimit).width + STATION_GROUP_PADDING * this.mapScale
     );
 
     // Split station group name.
     const newTitle = this.splitStationGroupName(
-      stationGroup.title,
+      titleLimit,
       newPosition,
       stationGroup.boundaryPoints,
       stationGroup.isChained
