@@ -86,7 +86,8 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
    */
   public setReadOnlyFalse(): void {
     if (this.isPrevious) {
-      this.fieldSetting.isRequired =  this.fieldSetting.isReadOnly && this.fieldSetting.isRequired;
+      this.fieldSetting.isRequired =
+        this.fieldSetting.isReadOnly && this.fieldSetting.isRequired;
     }
   }
 
