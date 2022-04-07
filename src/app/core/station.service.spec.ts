@@ -1417,7 +1417,7 @@ describe('StationService', () => {
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params).toBeTruthy();
-    expect(req.request.params['map'].get('stationGroupRithmId')[0]).toEqual(
+    expect(req.request.params.get('stationGroupRithmId')).toEqual(
       stationGroupRithmId
     );
     req.flush(expectedResponse);
