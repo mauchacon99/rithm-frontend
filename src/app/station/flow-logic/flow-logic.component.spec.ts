@@ -49,7 +49,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 
-fdescribe('FlowLogicComponent', () => {
+describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
   let loader: HarnessLoader;
