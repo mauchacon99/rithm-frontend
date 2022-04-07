@@ -49,7 +49,7 @@ import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-dr
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
+import { MobileBrowserChecker } from 'src/helpers';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;

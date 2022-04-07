@@ -22,6 +22,7 @@ import {
   FlowLogicRule,
   StationFrameWidget,
   FrameType,
+  DataLinkObject,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
@@ -34,6 +35,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { RandomIdGenerator } from 'src/helpers';
 /**
  * Main component for viewing a station.
  */
@@ -59,6 +61,9 @@ export class StationComponent
   /** Get station name from behaviour subject. */
   private stationName = '';
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   /** Station form. */
   stationForm: FormGroup;
 
@@ -68,11 +73,14 @@ export class StationComponent
   /** Different types of input frames components.*/
   frameType = FrameType;
 
-  /** Station Rithm id. */
-  stationRithmId = '';
-
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** The current focused/selected widget. */
+  widgetFocused = -1;
+
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
 
   /** The list of all the input frames in the grid. */
   inputFrameList: string[] = [];
@@ -88,6 +96,12 @@ export class StationComponent
 
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
+
+  /** Station Widgets array. */
+  inputFrameWidgetItems: StationFrameWidget[] = [];
+
+  /** Old interface station data link widgets. */
+  dataLinkArray: DataLinkObject[] = [];
 
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
@@ -134,14 +148,6 @@ export class StationComponent
     maxCols: 24,
   };
 
-  inputFrameWidgetItems: StationFrameWidget[] = [];
-
-  /** The current focused/selected widget. */
-  widgetFocused = -1;
-
-  /** Indicates when the button to move the widget will be enabled. */
-  widgetMoveButton = -1;
-
   /** Loading / Error variables. */
 
   /** Whether the request to get the station info is currently underway. */
@@ -149,6 +155,9 @@ export class StationComponent
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
+
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
 
   constructor(
     private stationService: StationService,
@@ -167,6 +176,7 @@ export class StationComponent
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
     });
+    this.randomIdGenerator = new RandomIdGenerator();
   }
 
   /**
@@ -209,9 +219,11 @@ export class StationComponent
    * Listen the StationFormTouched subject.
    */
   private subscribeStationFormTouched(): void {
-    this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
-      this.stationForm.get('stationTemplateForm')?.markAsTouched();
-    });
+    this.stationService.stationFormTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -239,6 +251,24 @@ export class StationComponent
               );
             }
           }
+        }
+      });
+  }
+
+  /**
+   * Listen for added DataLinks object.
+   */
+  private subscribeStationDataLink(): void {
+    this.stationService.dataLinkObject$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((dataLinkRetrieved) => {
+        let dataLink = this.dataLinkArray.find(
+          (dl) => dl.rithmId === dataLinkRetrieved.rithmId
+        );
+        if (dataLink) {
+          dataLink = dataLinkRetrieved;
+        } else {
+          this.dataLinkArray.push(dataLinkRetrieved);
         }
       });
   }
@@ -294,6 +324,7 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
+    this.subscribeStationDataLink();
 
     if (!this.editMode) this.setGridMode('preview');
   }
@@ -318,20 +349,6 @@ export class StationComponent
         this.errorService.logError(error);
       },
     });
-  }
-
-  /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
   }
 
   /**
@@ -449,7 +466,7 @@ export class StationComponent
    */
   addQuestion(fieldType: QuestionFieldType): void {
     const newQuestion: Question = {
-      rithmId: this.randRithmId,
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
@@ -659,7 +676,7 @@ export class StationComponent
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
@@ -835,7 +852,7 @@ export class StationComponent
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
     const inputFrame: StationFrameWidget = {
-      rithmId: this.randRithmId,
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
       stationRithmId: this.stationRithmId,
       cols: 6,
       rows: 4,
