@@ -17,6 +17,7 @@ import {
   StationGroupData,
   StationFrameWidget,
   FrameType,
+  DataLinkObject,
 } from 'src/models';
 
 /**
@@ -26,14 +27,17 @@ export class MockStationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new Subject<Question>();
-
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
   flowButtonText$ = new BehaviorSubject<string>('Flow');
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
@@ -41,8 +45,11 @@ export class MockStationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be updated when it changes in station page. */
-  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The datalink widget to be saved. */
+  dataLinkObject$ = new Subject<DataLinkObject>();
+
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
 
   /**
    * Gets a station information.
@@ -1238,5 +1245,145 @@ export class MockStationService {
       };
       return of(frameStationWidget).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
+    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Removes users from the group's workers roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Group information with worker roster.
+   */
+  removeUsersFromWorkerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const data: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+    ];
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Get worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupWorkerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const mockGetStationGroupRoster: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockGetStationGroupRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Get owner roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupOwnerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const mockGetStationGroupAdmin: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockGetStationGroupAdmin).pipe(delay(1000));
   }
 }
