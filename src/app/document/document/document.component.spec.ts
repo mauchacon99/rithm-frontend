@@ -370,8 +370,7 @@ describe('DocumentComponent', () => {
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Are you sure?',
-      message:
-        'Your changes will be lost and you will return to the dashboard.',
+      message: 'Your changes will be lost and you will return to the map.',
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
