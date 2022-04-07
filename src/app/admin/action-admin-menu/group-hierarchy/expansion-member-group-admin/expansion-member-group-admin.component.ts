@@ -180,34 +180,33 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   /**
    * Get users Roster or admin for a given station group.
    */
-     private getStationsGroupMembers(): void {
-      this.isLoading = true;
-      this.isErrorGetUsers = false;
-      const getStationGroupUsersOrAdmins$ = this.isAdmin
-        ? this.stationService.getStationGroupOwnerRoster(
-            this.stationOrGroupSelected.rithmId
-          )
-        : this.stationService.getStationGroupWorkerRoster(
-            this.stationOrGroupSelected.rithmId
-          );
+  private getStationsGroupMembers(): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const getStationGroupUsersOrAdmins$ = this.isAdmin
+      ? this.stationService.getStationGroupOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
+      : this.stationService.getStationGroupWorkerRoster(
+          this.stationOrGroupSelected.rithmId
+        );
 
-      getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
-        next: (members) => {
-          this.isLoading = false;
-          this.isErrorGetUsers = false;
-          this.members = members;
-        },
-        error: (error: unknown) => {
-          this.isLoading = false;
-          this.isErrorGetUsers = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-    }
-
+    getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
 
   /**
    * Remove users from the station specific roster.
