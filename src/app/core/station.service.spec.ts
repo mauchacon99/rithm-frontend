@@ -1386,7 +1386,7 @@ describe('StationService', () => {
       });
   });
 
-  it('should get getStationGroupOwnerRoster ', () => {
+  it('should get getStationGroupOwnerRoster', () => {
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '123-456-789',
