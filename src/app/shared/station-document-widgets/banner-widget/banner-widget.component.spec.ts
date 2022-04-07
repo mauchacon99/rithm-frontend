@@ -24,7 +24,7 @@ describe('BannerWidgetComponent', () => {
   it('should emit event openSettingDrawer', () => {
     component.widgetMode = 'setting';
     const spyEmit = spyOn(component.openSettingDrawer, 'emit');
-    const image  = component.imageWidgetObject;
+    const image = component.imageWidgetObject;
     component.handleOpenSettingDrawer(image);
     expect(spyEmit).toHaveBeenCalledWith(image);
   });
