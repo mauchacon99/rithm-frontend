@@ -45,6 +45,7 @@ import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widg
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MobileBrowserChecker } from 'src/helpers';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
+import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -82,6 +83,7 @@ describe('DashboardComponent', () => {
         MockComponent(WidgetDrawerComponent),
         MockComponent(AddWidgetModalComponent),
         MockComponent(GroupTrafficWidgetComponent),
+        MockComponent(GroupSearchWidgetComponent),
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
