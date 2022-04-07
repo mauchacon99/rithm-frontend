@@ -23,225 +23,364 @@
     ></app-widget-drawer>
   </mat-drawer>
   <mat-drawer-content class="textured-bg h-calc scrollbar-hidden">
-    <ng-container *ngIf="!viewNewDashboard; else newDashboard">
-      <div class="container mx-auto px-3 py-5 lg:px-0">
-        <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
-          <app-header class="lg:col-span-6"></app-header>
-          <app-priority-queue class="lg:col-span-3"></app-priority-queue>
-          <app-previously-started-documents
-            class="lg:col-span-3"
-          ></app-previously-started-documents>
-          <app-my-stations class="lg:col-span-6"></app-my-stations>
-          <div *ngIf="isAdmin" class="lg:col-span-6">
-            <h6 class="text-orange-500">
-              TEMPORARY TESTING USE - Stations for Admin
-            </h6>
-            <ul>
-              <li *ngFor="let station of stations">
-                <a [routerLink]="['/station', station.rithmId]">
-                  {{ station.name }}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+    <div class="container mx-auto py-5">
+      <button
+        mat-button
+        id="menu-button"
+        class="bg-darkBlue w-[40px] h-[40px] rounded -left-1 top-36 z-10 shadow-lg"
+        (click)="toggleDrawer('menuDashboard')"
+        [ngClass]="{
+          'bg-darkBlue transition ease-in-out hover:scale-x-110 hover:translate-x-1':
+            !drawerDisableClose,
+          'bg-secondary-300': drawerDisableClose
+        }"
+        [disabled]="drawerDisableClose"
+      >
+        <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
+      </button>
+      <div class="loading flex" *ngIf="isLoading">
+        <app-loading-indicator
+          class="flex-grow m-auto"
+          id="loading-dashboard-widgets"
+        ></app-loading-indicator>
       </div>
-    </ng-container>
-    <ng-template #newDashboard>
-      <div class="container mx-auto py-5">
-        <button
-          mat-button
-          id="menu-button"
-          class="bg-darkBlue w-[40px] h-[40px] rounded -left-1 top-36 z-10 shadow-lg"
-          (click)="toggleDrawer('menuDashboard')"
-          [ngClass]="{
-            'bg-darkBlue transition ease-in-out hover:scale-x-110 hover:translate-x-1':
-              !drawerDisableClose,
-            'bg-secondary-300': drawerDisableClose
-          }"
-          [disabled]="drawerDisableClose"
-        >
-          <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
-        </button>
-        <div class="loading flex" *ngIf="isLoading">
-          <app-loading-indicator
-            class="flex-grow m-auto"
-            id="loading-dashboard-widgets"
-          ></app-loading-indicator>
-        </div>
 
-        <div
-          class="text-error-500 text-center my-4"
-          id="error-loading-dashboard"
-          *ngIf="errorLoadingDashboard"
-        >
-          Unable to retrieve dashboard.
-        </div>
-        <div
-          class="text-center my-4"
-          id="message-create-new-dashboard"
-          *ngIf="isCreateNewDashboard"
-        >
-          You don't have any dashboards, create one to get started.
-        </div>
-        <div
-          class="mx-5"
-          id="dashboard-widgets"
-          *ngIf="
-            !isLoading &&
-            dashboardData &&
-            !errorLoadingDashboard &&
-            !isCreateNewDashboard
-          "
-        >
-          <div class="flex justify-between items-center" *ngIf="!editMode">
-            <h2 class="my-2 font-semibold truncate">
-              {{ dashboardData.name }}
-            </h2>
-            <button
-              mat-icon-button
-              id="menu-edit-button"
-              data-testid="menu-edit-button"
-              class="py-3 text-secondary-500"
-              (click)="toggleEditMode(true)"
-            >
-              <i class="fas fa-cog text-lg"></i>
-            </button>
-          </div>
-          <!--Edit dashboard name.-->
-          <div *ngIf="editMode">
-            <div
-              class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100"
-            >
-              <div>
-                <mat-form-field
-                  appearance="outline"
-                  class="lg:w-72 w-full input-wrapper"
-                >
-                  <input
-                    matInput
-                    maxlength="45"
-                    id="name-dashboard-input"
-                    data-testid="name-dashboard-input"
-                    [(ngModel)]="dashboardData.name"
-                    type="text"
-                    placeholder="Untitled Dashboard"
-                    autocomplete="off"
-                  />
-                </mat-form-field>
-              </div>
-              <div class="justify-around">
-                <button
-                  mat-button
-                  id="cancel-button"
-                  data-testid="cancel-button"
-                  class="bg-white text-secondary-500 drop-shadow-md font-semibold"
-                  style="margin: 1em"
-                  (click)="toggleEditMode(false)"
-                >
-                  Cancel
-                </button>
-                <button
-                  (click)="updateDashboard()"
-                  mat-button
-                  id="save-button"
-                  data-testid="save-button"
-                  class="bg-accent-800 text-secondary-50 drop-shadow-md"
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-            <button
-              *ngIf="isAddWidget"
-              mat-button
-              id="add-widget-button"
-              data-testid="add-widget-button"
-              class="bg-accent-800 text-secondary-50 drop-shadow-md"
-              style="margin-top: 0.5em; margin-bottom: 0.5em"
-              (click)="openDialogAddWidget()"
-            >
-              <i class="fas fa-plus"></i> Add Widget
-            </button>
-          </div>
-          <div
-            class="col-span-full text-center my-4"
-            id="error-loading-widgets"
-            *ngIf="!dashboardData.widgets.length"
-          >
-            Current dashboard has no widgets to display.
-          </div>
-          <gridster
-            [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
-            class="bg-transparent px-0 scrollbar"
-            [options]="options"
-          >
-            <gridster-item
-              *ngFor="
-                let item of dashboardData.widgets;
-                let index = index;
-                trackBy: trackBy
-              "
-              [item]="item"
-              class="drop-shadow-md rounded min-h-[400px] sm:min-h-[250px]"
-              [id]="'gridster-item-' + index"
-            >
-              <app-station-widget
-                *ngIf="
-                  item.widgetType === widgetType.Station ||
-                  item.widgetType === widgetType.StationTableBanner
-                "
-                (expandWidget)="toggleExpandWidget(index, $event)"
-                [dataWidget]="item.data"
-                [widgetType]="item.widgetType"
-                [image]="{
-                  imageId: item.imageId || null,
-                  imageName: item.imageName || null
-                }"
-                [editMode]="editMode"
-                [showButtonSetting]="showButtonSetting"
-                (toggleDrawer)="
-                  toggleWidgetDrawer('stationWidget', item, index, $event)
-                "
-              >
-              </app-station-widget>
-              <app-document-widget
-                *ngIf="
-                  item.widgetType === widgetType.Document ||
-                  item.widgetType === widgetType.DocumentListBanner ||
-                  item.widgetType === widgetType.ContainerProfileBanner
-                "
-                [dataWidget]="item.data"
-                [widgetType]="item.widgetType"
-                [image]="{
-                  imageId: item.imageId || null,
-                  imageName: item.imageName || null
-                }"
-                [editMode]="editMode"
-                [showButtonSetting]="showButtonSetting"
-                (toggleDrawer)="
-                  toggleWidgetDrawer('documentWidget', item, index, $event)
-                "
-              >
-              </app-document-widget>
-              <app-group-search-widget
-                *ngIf="item.widgetType === widgetType.StationGroupSearch"
-                [dataWidget]="item.data"
-                [widgetType]="item.widgetType"
-                [editMode]="editMode"
-                [showButtonSetting]="showButtonSetting"
-              >
-              </app-group-search-widget>
-              <app-group-traffic-widget
-                *ngIf="item.widgetType === widgetType.StationGroupTraffic"
-                [showButtonSetting]="showButtonSetting"
-                [dataWidget]="item.data"
-                [editMode]="editMode"
-              ></app-group-traffic-widget>
-            </gridster-item>
-          </gridster>
-        </div>
+      <div
+        class="text-error-500 text-center my-4"
+        id="error-loading-dashboard"
+        *ngIf="errorLoadingDashboard"
+      >
+        Unable to retrieve dashboard.
       </div>
-    </ng-template>
+      <div
+        class="text-center my-4"
+        id="message-create-new-dashboard"
+        *ngIf="isCreateNewDashboard"
+      >
+        You don't have any dashboards, create one to get started.
+      </div>
+      <div
+        class="mx-5"
+        id="dashboard-widgets"
+        *ngIf="
+          !isLoading &&
+          dashboardData &&
+          !errorLoadingDashboard &&
+          !isCreateNewDashboard
+        "
+      >
+        <div class="flex justify-between items-center" *ngIf="!editMode">
+          <h2 class="my-2 font-semibold truncate">
+            {{ dashboardData.name }}
+          </h2>
+          <button
+            mat-icon-button
+            id="menu-edit-button"
+            data-testid="menu-edit-button"
+            class="py-3 text-secondary-500"
+            (click)="toggleEditMode(true)"
+          >
+            <i class="fas fa-cog text-lg"></i>
+          </button>
+        </div>
+        <!--Edit dashboard name.-->
+        <div *ngIf="editMode">
+          <div
+            class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100"
+          >
+            <div>
+              <mat-form-field
+                appearance="outline"
+                class="lg:w-72 w-full input-wrapper"
+              >
+                <input
+                  matInput
+                  maxlength="45"
+                  id="name-dashboard-input"
+                  data-testid="name-dashboard-input"
+                  [(ngModel)]="dashboardData.name"
+                  type="text"
+                  placeholder="Untitled Dashboard"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+            <div class="justify-around">
+              <button
+                mat-button
+                id="cancel-button"
+                data-testid="cancel-button"
+                class="bg-white text-secondary-500 drop-shadow-md font-semibold"
+                style="margin: 1em"
+                (click)="toggleEditMode(false)"
+              >
+                Cancel
+              </button>
+              <button
+                (click)="updateDashboard()"
+                mat-button
+                id="save-button"
+                data-testid="save-button"
+                class="bg-accent-800 text-secondary-50 drop-shadow-md"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <button
+            *ngIf="isAddWidget"
+            mat-button
+            id="add-widget-button"
+            data-testid="add-widget-button"
+            class="bg-accent-800 text-secondary-50 drop-shadow-md"
+            style="margin-top: 0.5em; margin-bottom: 0.5em"
+            (click)="openDialogAddWidget()"
+          >
+            <i class="fas fa-plus"></i> Add Widget
+          </button>
+        </div>
+        <div
+          class="col-span-full text-center my-4"
+          id="error-loading-widgets"
+          *ngIf="!dashboardData.widgets.length"
+        >
+          Current dashboard has no widgets to display.
+        </div>
+        <gridster
+          [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
+          class="bg-transparent px-0 scrollbar"
+          [options]="options"
+        >
+          <gridster-item
+            *ngFor="
+              let item of dashboardData.widgets;
+              let index = index;
+              trackBy: trackBy
+            "
+            [item]="item"
+            class="drop-shadow-md rounded min-h-[400px] sm:min-h-[250px]"
+            [id]="'gridster-item-' + index"
+          >
+            <app-station-widget
+              *ngIf="
+                item.widgetType === widgetType.Station ||
+                item.widgetType === widgetType.StationTableBanner
+              "
+              (expandWidget)="toggleExpandWidget(index, $event)"
+              [dataWidget]="item.data"
+              [widgetType]="item.widgetType"
+              [image]="{
+                imageId: item.imageId || null,
+                imageName: item.imageName || null
+              }"
+              [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer('stationWidget', item, index, $event)
+              "
+            >
+            </app-station-widget>
+            <app-document-widget
+              *ngIf="
+                item.widgetType === widgetType.Document ||
+                item.widgetType === widgetType.DocumentListBanner ||
+                item.widgetType === widgetType.ContainerProfileBanner
+              "
+              [dataWidget]="item.data"
+              [widgetType]="item.widgetType"
+              [image]="{
+                imageId: item.imageId || null,
+                imageName: item.imageName || null
+              }"
+              [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer('documentWidget', item, index, $event)
+              "
+            >
+            </app-document-widget>
+            <app-group-search-widget
+              *ngIf="item.widgetType === widgetType.StationGroupSearch"
+              [dataWidget]="item.data"
+              [widgetType]="item.widgetType"
+              [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+            >
+            </app-group-search-widget>
+            <app-group-traffic-widget
+              *ngIf="item.widgetType === widgetType.StationGroupTraffic"
+              [showButtonSetting]="showButtonSetting"
+              [dataWidget]="item.data"
+              [editMode]="editMode"
+            ></app-group-traffic-widget>
+          </gridster-item>
+        </gridster>
+      </div>
+      <div
+        class="text-error-500 text-center my-4"
+        id="error-loading-dashboard"
+        *ngIf="errorLoadingDashboard"
+      >
+        Unable to retrieve dashboard.
+      </div>
+      <div
+        class="text-center my-4"
+        id="message-create-new-dashboard"
+        *ngIf="isCreateNewDashboard"
+      >
+        You don't have any dashboards, create one to get started.
+      </div>
+      <div
+        class="mx-5"
+        id="dashboard-widgets"
+        *ngIf="
+          !isLoading &&
+          dashboardData &&
+          !errorLoadingDashboard &&
+          !isCreateNewDashboard
+        "
+      >
+        <div class="flex justify-between items-center" *ngIf="!editMode">
+          <h2 class="my-2 font-semibold truncate">
+            {{ dashboardData.name }}
+          </h2>
+          <button
+            mat-icon-button
+            id="menu-edit-button"
+            data-testid="menu-edit-button"
+            class="py-3 text-secondary-500"
+            (click)="toggleEditMode(true)"
+          >
+            <i class="fas fa-cog text-lg"></i>
+          </button>
+        </div>
+        <!--Edit dashboard name.-->
+        <div *ngIf="editMode">
+          <div
+            class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100"
+          >
+            <div>
+              <mat-form-field
+                appearance="outline"
+                class="lg:w-72 w-full input-wrapper"
+              >
+                <input
+                  matInput
+                  maxlength="45"
+                  id="name-dashboard-input"
+                  data-testid="name-dashboard-input"
+                  [(ngModel)]="dashboardData.name"
+                  type="text"
+                  placeholder="Untitled Dashboard"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+            <div class="justify-around">
+              <button
+                mat-button
+                id="cancel-button"
+                data-testid="cancel-button"
+                class="bg-white text-secondary-500 drop-shadow-md font-semibold"
+                style="margin: 1em"
+                (click)="toggleEditMode(false)"
+              >
+                Cancel
+              </button>
+              <button
+                (click)="updateDashboard()"
+                mat-button
+                id="save-button"
+                data-testid="save-button"
+                class="bg-accent-800 text-secondary-50 drop-shadow-md"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <button
+            *ngIf="isAddWidget"
+            mat-button
+            id="add-widget-button"
+            data-testid="add-widget-button"
+            class="bg-accent-800 text-secondary-50 drop-shadow-md"
+            style="margin-top: 0.5em; margin-bottom: 0.5em"
+            (click)="openDialogAddWidget()"
+          >
+            <i class="fas fa-plus"></i> Add Widget
+          </button>
+        </div>
+        <div
+          class="col-span-full text-center my-4"
+          id="error-loading-widgets"
+          *ngIf="!dashboardData.widgets.length"
+        >
+          Current dashboard has no widgets to display.
+        </div>
+        <gridster
+          [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
+          class="bg-transparent px-0 scrollbar"
+          [options]="options"
+        >
+          <gridster-item
+            *ngFor="
+              let item of dashboardData.widgets;
+              let index = index;
+              trackBy: trackBy
+            "
+            [item]="item"
+            class="drop-shadow-md rounded min-h-[400px] sm:min-h-[250px]"
+            [id]="'gridster-item-' + index"
+          >
+            <app-station-widget
+              *ngIf="
+                item.widgetType === widgetType.Station ||
+                item.widgetType === widgetType.StationTableBanner
+              "
+              (expandWidget)="toggleExpandWidget(index, $event)"
+              [dataWidget]="item.data"
+              [widgetType]="item.widgetType"
+              [image]="{
+                imageId: item.imageId || null,
+                imageName: item.imageName || null
+              }"
+              [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer('stationWidget', item, index, $event)
+              "
+            >
+            </app-station-widget>
+            <app-document-widget
+              *ngIf="
+                item.widgetType === widgetType.Document ||
+                item.widgetType === widgetType.DocumentListBanner ||
+                item.widgetType === widgetType.ContainerProfileBanner
+              "
+              [dataWidget]="item.data"
+              [widgetType]="item.widgetType"
+              [image]="{
+                imageId: item.imageId || null,
+                imageName: item.imageName || null
+              }"
+              [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer('documentWidget', item, index, $event)
+              "
+            >
+            </app-document-widget>
+            <app-group-search-widget
+              *ngIf="item.widgetType === widgetType.StationGroupSearch"
+              [dataWidget]="item.data"
+              [widgetType]="item.widgetType"
+              [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+            >
+            </app-group-search-widget>
+          </gridster-item>
+        </gridster>
+      </div>
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>

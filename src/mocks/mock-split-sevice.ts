@@ -22,15 +22,6 @@ export class MockSplitService {
   }
 
   /**
-   * Get the dashboard split.
-   *
-   * @returns Split treatment.
-   */
-  public getDashboardTreatment(): string {
-    return 'on';
-  }
-
-  /**
    * Get the widget settings config.
    *
    * @returns Split treatment.
