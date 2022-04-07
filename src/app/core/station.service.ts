@@ -873,7 +873,6 @@ export class StationService {
    * @returns New Group information with worker roster.
    */
   removeUsersFromWorkerRosterGroup(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string,
     usersIds: string[]
   ): Observable<StationRosterMember[]> {
