@@ -186,11 +186,11 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
     this.isErrorGetUsers = false;
     const removeUserMemberRosterStation$ = this.isAdmin
       ? this.stationService.removeUsersFromOwnerRoster(
-          this._stationOrGroupSelected.rithmId,
+          this.stationOrGroupSelected.rithmId,
           [usersId]
         )
       : this.stationService.removeUsersFromWorkerRoster(
-          this._stationOrGroupSelected.rithmId,
+          this.stationOrGroupSelected.rithmId,
           [usersId]
         );
 

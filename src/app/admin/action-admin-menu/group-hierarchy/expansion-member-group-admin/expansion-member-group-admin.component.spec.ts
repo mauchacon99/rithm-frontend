@@ -251,11 +251,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       const spyRemoveUsersFromOwnerRoster = spyOn(
         stationService,
         'removeUsersFromOwnerRoster'
-      ).and.returnValue(
-        throwError(() => {
-          throw new Error();
-        })
-      );
+      ).and.callThrough();
       component.removeMemberFromRosterStation(members[0].rithmId);
       expect(spyRemoveUsersFromOwnerRoster).toHaveBeenCalledOnceWith(
         stations.rithmId,
@@ -269,16 +265,36 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       const spyRemoveUsersFromWorkerRoster = spyOn(
         stationService,
         'removeUsersFromWorkerRoster'
-      ).and.returnValue(
-        throwError(() => {
-          throw new Error();
-        })
-      );
+      ).and.callThrough();
       component.removeMemberFromRosterStation(members[0].rithmId);
       expect(spyRemoveUsersFromWorkerRoster).toHaveBeenCalledOnceWith(
         stations.rithmId,
         [members[0].rithmId]
       );
+    });
+
+    it('should call alert error if petition removeMemberFromRosterStation for workers fail', () => {
+      component.isAdmin = false;
+      spyOn(stationService, 'removeUsersFromWorkerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(errorService, 'displayError').and.callThrough();
+      component.removeMemberFromRosterStation(members[0].rithmId);
+      expect(spyError).toHaveBeenCalled();
+    });
+
+    it('should call alert error if petition removeMemberFromRosterStation for owners fail', () => {
+      component.isAdmin = true;
+      spyOn(stationService, 'removeUsersFromOwnerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(errorService, 'displayError').and.callThrough();
+      component.removeMemberFromRosterStation(members[0].rithmId);
+      expect(spyError).toHaveBeenCalled();
     });
   });
 
