@@ -21,7 +21,7 @@ export class ListWidgetModalComponent {
   @Input() showContainerProfileBanner = false;
 
   /** Show group traffic widget template. */
-  @Input() ShowGroupTrafficTemplate = false;
+  @Input() showGroupTrafficTemplate = false;
 
   /** Show section Stations lists. */
   @Input() showStationLists = false;
