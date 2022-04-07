@@ -37,6 +37,9 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section document profile. */
   showContainerProfileBanner = false;
 
+  /** Show section Stations lists. */
+  showStationLists = false;
+
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
     @Inject(MAT_DIALOG_DATA) public matData: string,
@@ -88,6 +91,9 @@ export class AddWidgetModalComponent implements OnInit {
 
         this.showContainerProfileBanner =
           this.splitService.getProfileBannerTreatment() === 'on';
+
+        this.showStationLists =
+          this.splitService.getStationListWidgetTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

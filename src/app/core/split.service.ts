@@ -33,15 +33,6 @@ export class SplitService {
   }
 
   /**
-   * Get the dashboard split.
-   *
-   * @returns Split treatment.
-   */
-  public getDashboardTreatment(): string {
-    return this.splitClient.getTreatment('dashboard_split');
-  }
-
-  /**
    * Get the station document split.
    *
    * @returns Split treatment.
@@ -125,11 +116,20 @@ export class SplitService {
   }
 
   /**
-   * Get the section group section in add widget modal.
+   * Get flow logic treatment.
    *
    * @returns Split treatment.
    */
   public getFlowLogicTreatment(): string {
     return this.splitClient.getTreatment('flow_logic_split');
+  }
+
+  /**
+   * Get the section station list section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationListWidgetTreatment(): string {
+    return this.splitClient.getTreatment('station_lists_templates_split');
   }
 }
