@@ -29,7 +29,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
-import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
+import { MobileBrowserChecker } from 'src/helpers';
 
 /**
  * Main component for the dashboard screens.
