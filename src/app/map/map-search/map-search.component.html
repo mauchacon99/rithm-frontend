@@ -81,7 +81,8 @@
           class="group bg-contain bg-no-repeat w-5 h-4 inline-block align-middle mr-2"
         ></span>
         <span class="inline-block w-44">
-          {{ optionTitle }}
+          {{ optionTitle | slice: 0:15
+          }}{{ optionTitle.length > 16 ? '...' : '' }}
           <span class="block text-secondary-300 text-xs">{{
             !isStation(option) ? 'Group' : 'Station'
           }}</span>

@@ -20,7 +20,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { MatInputModule } from '@angular/material/input';
-import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,7 +40,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
-  const formBuilder = new FormBuilder();
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
@@ -69,7 +68,6 @@ describe('StationInfoDrawerComponent', () => {
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },

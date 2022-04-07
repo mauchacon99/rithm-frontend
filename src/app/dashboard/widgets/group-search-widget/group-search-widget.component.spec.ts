@@ -28,7 +28,6 @@ describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
   let fixture: ComponentFixture<GroupSearchWidgetComponent>;
   const dataWidget =
-    // eslint-disable-next-line max-len
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
   const dataStationGroupWidget: StationGroupData = {
@@ -308,12 +307,12 @@ describe('GroupSearchWidgetComponent', () => {
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
     component.goToStationGroupOnMap(rithmid);
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
-    expect(mapService.mapStationHelper.centerStationGroupRithmId$.value).toBe(
-      component.stationGroupRithmId
-    );
+    expect(
+      mapService.mapStationGroupHelper.centerStationGroupRithmId$.value
+    ).toBe(component.stationGroupRithmId);
     expect(mapService.mapHelper.viewStationButtonClick$.value).toBeTrue();
 
-    mapService.mapStationHelper.centerStationGroupRithmId$.subscribe(
+    mapService.mapStationGroupHelper.centerStationGroupRithmId$.subscribe(
       (stationGroupRithmId) => {
         expect(stationGroupRithmId).toBe(component.stationGroupRithmId);
       }

@@ -24,193 +24,367 @@
   </mat-drawer>
 
   <mat-drawer-content [ngClass]="{ scrollbar: isWidget }">
-    <div
-      class="textured-bg grid grid-cols-12 min-h-full"
-      [ngClass]="{ 'mt-12': !isWidget }"
-    >
-      <!-- Left column -->
-      <app-connected-station-pane
-        *ngIf="!isWidget"
-        [location]="'left'"
-        [stations]="previousStations"
-        class="hidden lg:inline-block col-span-2"
-      ></app-connected-station-pane>
-      <!-- Center column -->
+    <ng-container *ngIf="!viewNewContainer; else newContainer">
       <div
-        class="col-span-12 bg-white h-full relative"
-        [ngClass]="{
-          'lg:col-span-8 px-5': !isWidget,
-          'pb-12': !documentLoading && !isWidget
-        }"
+        class="textured-bg grid grid-cols-12 min-h-full"
+        [ngClass]="{ 'mt-12': !isWidget }"
       >
+        <!-- Left column -->
+        <app-connected-station-pane
+          *ngIf="!isWidget"
+          [location]="'left'"
+          [stations]="previousStations"
+          class="hidden lg:inline-block col-span-2"
+        ></app-connected-station-pane>
+        <!-- Center column -->
         <div
-          class="h-full flex justify-center items-center"
-          *ngIf="documentLoading"
-          [ngClass]="{ loading: !isWidget }"
+          class="col-span-12 bg-white h-full relative"
+          [ngClass]="{
+            'lg:col-span-8 px-5': !isWidget,
+            'pb-12': !documentLoading && !isWidget
+          }"
         >
-          <app-loading-indicator
-            class="flex-grow m-auto"
-          ></app-loading-indicator>
-        </div>
-        <form
-          *ngIf="!documentLoading"
-          id="document-info-template"
-          autocomplete="off"
-          [formGroup]="documentForm"
-          class="document-base-form"
-          (ngSubmit)="saveDocumentChanges()"
-        >
-          <app-station-info-header
-            *ngIf="!isWidget"
-            [stationInformation]="documentInformation"
-            [stationEditMode]="false"
-            [viewNewStation]="false"
+          <div
+            class="h-full flex justify-center items-center"
+            *ngIf="documentLoading"
+            [ngClass]="{ loading: !isWidget }"
           >
-          </app-station-info-header>
-          <app-document-info-header
-            (sendNewUserAssigned)="setNewAssignedUser($event)"
-            [isWidget]="isWidget"
-            (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
-            [documentInformation]="documentInformation"
-            [viewNewStation]="false"
-          ></app-document-info-header>
-          <app-document-template
-            class="flex flex-col"
-            [ngClass]="{ 'pb-7': !isWidget }"
-            [stationInstructions]="documentInformation.instructions"
-            [documentFields]="documentInformation.questions"
-            [isWidget]="isWidget"
-            formControlName="documentTemplateForm"
-          >
-          </app-document-template>
-          <div class="pb-5 px-px" *ngIf="!isWidget">
-            <mat-accordion>
-              <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
-                <mat-expansion-panel-header class="text-base">
-                  <mat-panel-title data-testid="all-fields">
-                    All
-                  </mat-panel-title>
-                  <mat-panel-description>
-                    <div class="hidden sm:flex justify-start w-full">
-                      View all items on this document
-                    </div>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-                <ng-template matExpansionPanelContent>
-                  <app-previous-fields
-                    [stationId]="documentInformation.stationRithmId"
-                    [documentId]="documentInformation.documentRithmId"
-                    [isPrivate]="false"
-                    [isStation]="false"
-                  >
-                  </app-previous-fields>
-                </ng-template>
-              </mat-expansion-panel>
-            </mat-accordion>
+            <app-loading-indicator
+              class="flex-grow m-auto"
+            ></app-loading-indicator>
           </div>
-          <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
-            <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
-              <div
-                class="flex space-x-4"
-                [ngClass]="{
-                  'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
-                    !isWidget
-                }"
-              >
-                <div class="flex-grow">
-                  <span *ngIf="!isWidget" class="mr-3 inline-block lg:hidden">
-                    <button mat-icon-button color="primary">
-                      <i
-                        class="fas fa-exclamation-circle text-3xl text-primary-500"
-                        matTooltip="Escalate Document"
-                      ></i>
-                    </button>
-                  </span>
-                  <span class="mr-3"
-                    ><button
-                      type="button"
-                      mat-stroked-button
-                      color="accent"
-                      (click)="cancelDocument()"
-                      data-testid="document-cancel"
-                      id="document-cancel"
+          <form
+            *ngIf="!documentLoading"
+            id="document-info-template"
+            autocomplete="off"
+            [formGroup]="documentForm"
+            class="document-base-form"
+            (ngSubmit)="saveDocumentChanges()"
+          >
+            <app-station-info-header
+              *ngIf="!isWidget"
+              [stationInformation]="documentInformation"
+              [stationEditMode]="false"
+              [viewNewStation]="false"
+            >
+            </app-station-info-header>
+            <app-document-info-header
+              (sendNewUserAssigned)="setNewAssignedUser($event)"
+              [isWidget]="isWidget"
+              (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
+              [documentInformation]="documentInformation"
+              [viewNewStation]="false"
+            ></app-document-info-header>
+            <app-document-template
+              class="flex flex-col"
+              [ngClass]="{ 'pb-7': !isWidget }"
+              [stationInstructions]="documentInformation.instructions"
+              [documentFields]="documentInformation.questions"
+              [isWidget]="isWidget"
+              formControlName="documentTemplateForm"
+            >
+            </app-document-template>
+            <div class="pb-5 px-px" *ngIf="!isWidget">
+              <mat-accordion>
+                <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
+                  <mat-expansion-panel-header class="text-base">
+                    <mat-panel-title data-testid="all-fields">
+                      All
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <div class="hidden sm:flex justify-start w-full">
+                        View all items on this document
+                      </div>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <ng-template matExpansionPanelContent>
+                    <app-previous-fields
+                      [stationId]="documentInformation.stationRithmId"
+                      [documentId]="documentInformation.documentRithmId"
+                      [isPrivate]="false"
+                      [isStation]="false"
                     >
-                      Cancel
-                    </button></span
-                  >
+                    </app-previous-fields>
+                  </ng-template>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+            <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
+              <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
+                <div
+                  class="flex space-x-4"
+                  [ngClass]="{
+                    'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
+                      !isWidget
+                  }"
+                >
+                  <div class="flex-grow">
+                    <span *ngIf="!isWidget" class="mr-3 inline-block lg:hidden">
+                      <button mat-icon-button color="primary">
+                        <i
+                          class="fas fa-exclamation-circle text-3xl text-primary-500"
+                          matTooltip="Escalate Document"
+                        ></i>
+                      </button>
+                    </span>
+                    <span class="mr-3"
+                      ><button
+                        type="button"
+                        mat-stroked-button
+                        color="accent"
+                        (click)="cancelDocument()"
+                        data-testid="document-cancel"
+                        id="document-cancel"
+                      >
+                        Cancel
+                      </button></span
+                    >
+                    <button
+                      mat-stroked-button
+                      type="submit"
+                      color="accent"
+                      class="mx-2"
+                      data-testid="document-save"
+                      id="document-save"
+                      [disabled]="
+                        !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                      "
+                    >
+                      Save
+                    </button>
+                  </div>
                   <button
-                    mat-stroked-button
-                    type="submit"
+                    *ngIf="allowPreviousButton && previousStations.length"
+                    type="button"
+                    mat-raised-button
                     color="accent"
-                    class="mx-2"
-                    data-testid="document-save"
-                    id="document-save"
+                    data-testid="document-previous-station"
+                    id="document-previous-station"
+                    (click)="flowDocumentToPreviousStation()"
+                  >
+                    Previous Station
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    data-testid="document-flow"
+                    id="document-flow"
                     [disabled]="
                       !documentForm.valid || (isWidget && !isUserAdminOrOwner)
                     "
+                    (click)="saveAnswersFlowDocument()"
                   >
-                    Save
+                    {{ flowButtonName }}
                   </button>
                 </div>
-                <button
-                  *ngIf="allowPreviousButton && previousStations.length"
-                  type="button"
-                  mat-raised-button
-                  color="accent"
-                  data-testid="document-previous-station"
-                  id="document-previous-station"
-                  (click)="flowDocumentToPreviousStation()"
-                >
-                  Previous Station
-                </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  data-testid="document-flow"
-                  id="document-flow"
-                  [disabled]="
-                    !documentForm.valid || (isWidget && !isUserAdminOrOwner)
-                  "
-                  (click)="saveAnswersFlowDocument()"
-                >
-                  {{ flowButtonName }}
-                </button>
-              </div>
-              <div *ngIf="!isWidget" class="relative hidden lg:block">
-                <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
-                  <g
-                    id="escalation_line"
-                    data-name="escalation_line"
-                    transform="translate(1)"
+                <div *ngIf="!isWidget" class="relative hidden lg:block">
+                  <svg
+                    class="absolute top-5"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <line
-                      id="Line_95"
-                      data-name="Line 95"
-                      x2="20"
-                      transform="translate(0 3.5)"
-                      fill="none"
-                      stroke="#031023"
-                      stroke-linecap="round"
-                      stroke-width="2"
-                    />
-                  </g>
-                </svg>
-                <i
-                  class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500"
-                  matTooltip="Escalate Document"
-                ></i>
+                    <g
+                      id="escalation_line"
+                      data-name="escalation_line"
+                      transform="translate(1)"
+                    >
+                      <line
+                        id="Line_95"
+                        data-name="Line 95"
+                        x2="20"
+                        transform="translate(0 3.5)"
+                        fill="none"
+                        stroke="#031023"
+                        stroke-linecap="round"
+                        stroke-width="2"
+                      />
+                    </g>
+                  </svg>
+                  <i
+                    class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500"
+                    matTooltip="Escalate Document"
+                  ></i>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
+        <!-- Right column -->
+        <app-connected-station-pane
+          *ngIf="!isWidget"
+          [location]="'right'"
+          [stations]="forwardStations"
+          class="hidden lg:inline-block col-span-2"
+        ></app-connected-station-pane>
       </div>
-      <!-- Right column -->
-      <app-connected-station-pane
-        *ngIf="!isWidget"
-        [location]="'right'"
-        [stations]="forwardStations"
-        class="hidden lg:inline-block col-span-2"
-      ></app-connected-station-pane>
-    </div>
+    </ng-container>
+    <ng-template #newContainer>
+      <div
+        class="textured-bg grid grid-cols-12 min-h-full"
+        [ngClass]="{ 'mt-12': !isWidget }"
+      >
+        <!-- Left column -->
+        <app-connected-station-pane
+          *ngIf="!isWidget"
+          [location]="'left'"
+          [stations]="previousStations"
+          class="hidden lg:inline-block col-span-2"
+        ></app-connected-station-pane>
+        <!-- Center column -->
+        <div
+          class="col-span-12 bg-white h-full relative"
+          [ngClass]="{
+            'lg:col-span-8 px-5': !isWidget,
+            'pb-12': !documentLoading && !isWidget
+          }"
+        >
+          <div
+            class="h-full flex justify-center items-center"
+            *ngIf="documentLoading"
+            [ngClass]="{ loading: !isWidget }"
+          >
+            <app-loading-indicator
+              class="flex-grow m-auto"
+            ></app-loading-indicator>
+          </div>
+          <form
+            *ngIf="!documentLoading"
+            id="document-info-template"
+            autocomplete="off"
+            [formGroup]="documentForm"
+            class="document-base-form"
+            (ngSubmit)="saveDocumentChanges()"
+          >
+            <app-station-info-header
+              *ngIf="!isWidget"
+              [stationInformation]="documentInformation"
+              [stationEditMode]="false"
+              [viewNewStation]="false"
+            >
+            </app-station-info-header>
+            <app-document-info-header
+              (sendNewUserAssigned)="setNewAssignedUser($event)"
+              [isWidget]="isWidget"
+              (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
+              [documentInformation]="documentInformation"
+              [viewNewStation]="false"
+            ></app-document-info-header>
+            <app-document-template
+              *ngIf="isWidget"
+              class="flex flex-col"
+              [ngClass]="{ 'pb-7': !isWidget }"
+              [stationInstructions]="documentInformation.instructions"
+              [documentFields]="documentInformation.questions"
+              [isWidget]="isWidget"
+              formControlName="documentTemplateForm"
+            >
+            </app-document-template>
+            <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
+              <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
+                <div
+                  class="flex space-x-4"
+                  [ngClass]="{
+                    'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
+                      !isWidget
+                  }"
+                >
+                  <div class="flex-grow">
+                    <span *ngIf="!isWidget" class="mr-3 inline-block lg:hidden">
+                      <button mat-icon-button color="primary">
+                        <i
+                          class="fas fa-exclamation-circle text-3xl text-primary-500"
+                          matTooltip="Escalate Document"
+                        ></i>
+                      </button>
+                    </span>
+                    <span class="mr-3"
+                      ><button
+                        type="button"
+                        mat-stroked-button
+                        color="accent"
+                        (click)="cancelDocument()"
+                        data-testid="document-cancel"
+                        id="document-cancel"
+                      >
+                        Cancel
+                      </button></span
+                    >
+                    <button
+                      mat-stroked-button
+                      type="submit"
+                      color="accent"
+                      class="mx-2"
+                      data-testid="document-save"
+                      id="document-save"
+                      [disabled]="
+                        !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                      "
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <button
+                    *ngIf="allowPreviousButton && previousStations.length"
+                    type="button"
+                    mat-raised-button
+                    color="accent"
+                    data-testid="document-previous-station"
+                    id="document-previous-station"
+                    (click)="flowDocumentToPreviousStation()"
+                  >
+                    Previous Station
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    data-testid="document-flow"
+                    id="document-flow"
+                    [disabled]="
+                      !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                    "
+                    (click)="saveAnswersFlowDocument()"
+                  >
+                    {{ flowButtonName }}
+                  </button>
+                </div>
+                <div *ngIf="!isWidget" class="relative hidden lg:block">
+                  <svg
+                    class="absolute top-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      id="escalation_line"
+                      data-name="escalation_line"
+                      transform="translate(1)"
+                    >
+                      <line
+                        id="Line_95"
+                        data-name="Line 95"
+                        x2="20"
+                        transform="translate(0 3.5)"
+                        fill="none"
+                        stroke="#031023"
+                        stroke-linecap="round"
+                        stroke-width="2"
+                      />
+                    </g>
+                  </svg>
+                  <i
+                    class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500"
+                    matTooltip="Escalate Document"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Right column -->
+        <app-connected-station-pane
+          *ngIf="!isWidget"
+          [location]="'right'"
+          [stations]="forwardStations"
+          class="hidden lg:inline-block col-span-2"
+        ></app-connected-station-pane>
+      </div>
+    </ng-template>
   </mat-drawer-content>
 </mat-drawer-container>
