@@ -98,9 +98,9 @@ export class DashboardService {
       },
     },
     [WidgetType.StationMultilineBanner]: {
-      title: 'Multiline List',
+      title: 'Multiline List With Banner',
       description:
-        'Select multiple document values to display on each row of the list.',
+        'Select multiple document values to display on each row of the list along with custom banner image.',
       descriptionComponent: {
         title: '',
         type: '',
