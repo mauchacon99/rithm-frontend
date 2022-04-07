@@ -103,7 +103,7 @@ describe('SettingDrawerComponent', () => {
     expect(spyProperty).toHaveBeenCalled();
   });
 
-  it('should call the method that set isRequired.', () => {
+  it('should set isRequired as false due to isReadOnly is false (isPrevious only).', () => {
     component.fieldSetting.isReadOnly = false;
     const setReadOnlySpy = spyOn(
       component,
