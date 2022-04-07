@@ -22,6 +22,7 @@ import {
   QuestionFieldType,
   FrameType,
   DocumentEvent,
+  DataLinkObject,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -38,14 +39,17 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new Subject<Question>();
-
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
   flowButtonText$ = new BehaviorSubject<string>('Flow');
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
@@ -53,8 +57,11 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be updated when it changes in station page. */
-  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The datalink widget to be saved. */
+  dataLinkObject$ = new Subject<DataLinkObject>();
+
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
 
   constructor(private http: HttpClient) {}
 
@@ -756,40 +763,124 @@ export class StationService {
   }
 
   /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
+    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Removes users from the group's workers roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Group information with worker roster.
+   */
+  removeUsersFromWorkerRosterGroup(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    const data: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+    ];
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
    * Get history station.
    *
    * @param rithmId The current station id.
    * @returns The history station.
    */
-  getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
-    if (!rithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot response station history',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const historyResponse: DocumentEvent[] = [
-        {
-          eventTimeUTC: '2022-01-18T22:13:05.871Z',
-          description: 'Event Document #1',
-          user: {
-            rithmId: '123',
-            firstName: 'Testy',
-            lastName: 'Test',
-            email: 'test@test.com',
-            isEmailVerified: true,
-            notificationSettings: null,
-            createdDate: '1/2/34',
-            role: null,
-            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-          },
-        },
-      ];
-      return of(historyResponse).pipe(delay(1000));
-    }
-  }
+ getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
+   if (!rithmId) {
+     return throwError(
+       () =>
+         new HttpErrorResponse({
+           error: {
+             error: 'Cannot response station history',
+           },
+         })
+     ).pipe(delay(1000));
+   } else {
+     const historyResponse: DocumentEvent[] = [
+       {
+         eventTimeUTC: '2022-01-18T22:13:05.871Z',
+         description: 'Event Document #1',
+         user: {
+           rithmId: '123',
+           firstName: 'Testy',
+           lastName: 'Test',
+           email: 'test@test.com',
+           isEmailVerified: true,
+           notificationSettings: null,
+           createdDate: '1/2/34',
+           role: null,
+           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+         },
+       },
+     ];
+     return of(historyResponse).pipe(delay(1000));
+   }
+ }
 }

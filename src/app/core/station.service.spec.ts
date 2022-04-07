@@ -30,6 +30,8 @@ describe('StationService', () => {
   let service: StationService;
   let httpTestingController: HttpTestingController;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+  const stationGroupRithmId = 'ED6148C9-ABB7-408E-A210-8556S88D5SDS2';
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -1314,6 +1316,80 @@ describe('StationService', () => {
       });
   });
 
+
+
+  it('should remove a member the owner from the roster for group specific', () => {
+    const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
+
+    service
+      .removeUsersFromOwnerRosterGroup(stationGroupRithmId, usersIds)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
+  it('should remove a member from worker roster for group specific', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .removeUsersFromWorkerRosterGroup(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
   it('should history station', () => {
     const rithmId = '6375027-78345-73824-54244';
     const expectHistoryResponse: DocumentEvent[] = [
@@ -1333,9 +1409,9 @@ describe('StationService', () => {
         },
       },
     ];
-
     service.getStationHistory(rithmId).subscribe((response) => {
       expect(response).toEqual(expectHistoryResponse);
     });
   });
+
 });

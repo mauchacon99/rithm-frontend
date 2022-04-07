@@ -22,17 +22,11 @@ import { of, throwError } from 'rxjs';
 import { MockComponent, MockService } from 'ng-mocks';
 
 import { DashboardComponent } from './dashboard.component';
-import { HeaderComponent } from 'src/app/dashboard/header/header.component';
-import { PriorityQueueComponent } from 'src/app/dashboard/priority-queue/priority-queue.component';
-import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
-import { MyStationsComponent } from '../my-stations/my-stations.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { StationService } from 'src/app/core/station.service';
 import {
   MockDashboardService,
   MockErrorService,
   MockSplitService,
-  MockStationService,
   MockUserService,
   MockPopupService,
 } from 'src/mocks';
@@ -49,7 +43,8 @@ import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-dr
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
+import { MobileBrowserChecker } from 'src/helpers';
+import { GroupSearchWidgetComponent } from '../widgets/group-search-widget/group-search-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -80,19 +75,15 @@ describe('DashboardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         DashboardComponent,
-        MockComponent(HeaderComponent),
-        MockComponent(PriorityQueueComponent),
-        MockComponent(PreviouslyStartedDocumentsComponent),
-        MockComponent(MyStationsComponent),
         MockComponent(MenuComponent),
         MockComponent(StationWidgetComponent),
         MockComponent(LoadingIndicatorComponent),
         MockComponent(DocumentWidgetComponent),
         MockComponent(WidgetDrawerComponent),
         MockComponent(AddWidgetModalComponent),
+        MockComponent(GroupSearchWidgetComponent),
       ],
       providers: [
-        { provide: StationService, useClass: MockStationService },
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SplitService, useClass: MockSplitService },
@@ -137,7 +128,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should render the app-loading-indicator component', () => {
-    component.viewNewDashboard = true;
     component.isLoading = true;
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
@@ -151,7 +141,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should show error message when return error dashboard', () => {
-    component.viewNewDashboard = true;
     component.errorLoadingDashboard = true;
     fixture.detectChanges();
     const errorLoadingDashboard =
@@ -166,7 +155,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should show message when dashboard its empty', () => {
-    component.viewNewDashboard = true;
     component.isCreateNewDashboard = true;
     fixture.detectChanges();
     const dashboardEmpty = fixture.debugElement.nativeElement.querySelector(
@@ -180,7 +168,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should click the dashboard menu button ', () => {
-    component.viewNewDashboard = true;
     fixture.detectChanges();
     const spy = spyOn(component, 'toggleDrawer');
     const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
@@ -204,7 +191,6 @@ describe('DashboardComponent', () => {
       'updatePersonalDashboard'
     ).and.callThrough();
 
-    component.viewNewDashboard = true;
     component.dashboardData = dashboardData;
     component.isLoading = false;
     component.editMode = true;
@@ -236,7 +222,6 @@ describe('DashboardComponent', () => {
       'updateOrganizationDashboard'
     ).and.callThrough();
 
-    component.viewNewDashboard = true;
     component.isLoading = false;
     component.dashboardData = dashboardData;
     component.editMode = true;
@@ -330,7 +315,6 @@ describe('DashboardComponent', () => {
 
   it('should call openDialog', () => {
     component.isLoading = false;
-    component.viewNewDashboard = true;
     component.editMode = true;
     component.errorLoadingDashboard = false;
     component.isCreateNewDashboard = false;
@@ -699,7 +683,6 @@ describe('DashboardComponent', () => {
   }));
 
   it('should not show the button add widget in edit mode', () => {
-    component.viewNewDashboard = true;
     component.editMode = true;
     component.isAddWidget = false;
     component.dashboardData = {
@@ -729,7 +712,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should show buttons and input when editMode is true and show new dashboard', () => {
-    component.viewNewDashboard = true;
     component.editMode = true;
     component.isLoading = false;
     component.errorLoadingDashboard = false;
@@ -766,11 +748,6 @@ describe('DashboardComponent', () => {
         splitService,
         'getConfigWidgetsTreatment'
       ).and.callThrough();
-      // viewNewDashboard
-      const spyGetDashboardTreatment = spyOn(
-        splitService,
-        'getDashboardTreatment'
-      ).and.callThrough();
       // isAddWidget
       const spyGetDashboardLibraryTreatment = spyOn(
         splitService,
@@ -782,10 +759,8 @@ describe('DashboardComponent', () => {
 
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
-      expect(spyGetDashboardTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
-      expect(component.viewNewDashboard).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
     });
 
@@ -803,7 +778,6 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
-      expect(component.viewNewDashboard).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
     });
   });

@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import {
@@ -164,7 +163,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
-    private fb: FormBuilder,
     private stationService: StationService,
     private utcTimeConversion: UtcTimeConversion,
     private errorService: ErrorService,
@@ -172,8 +170,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private documentService: DocumentService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute
+    private dialog: MatDialog
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -823,6 +820,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
   }
+
 
   /**
    * Save Buttons Settings.

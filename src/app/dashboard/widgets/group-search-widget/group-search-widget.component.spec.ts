@@ -301,18 +301,19 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should navigate to the station on the map', () => {
-    component.stationGroupRithmId = '123123-12313-123312';
+    const rithmid = '123123-12313-123312';
+    component.stationGroupRithmId = rithmid;
     component.editMode = false;
     const mapService = TestBed.inject(MapService);
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
-    component.goToStationGroupOnMap();
+    component.goToStationGroupOnMap(rithmid);
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);
-    expect(mapService.mapStationHelper.centerStationGroupRithmId$.value).toBe(
-      component.stationGroupRithmId
-    );
+    expect(
+      mapService.mapStationGroupHelper.centerStationGroupRithmId$.value
+    ).toBe(component.stationGroupRithmId);
     expect(mapService.mapHelper.viewStationButtonClick$.value).toBeTrue();
 
-    mapService.mapStationHelper.centerStationGroupRithmId$.subscribe(
+    mapService.mapStationGroupHelper.centerStationGroupRithmId$.subscribe(
       (stationGroupRithmId) => {
         expect(stationGroupRithmId).toBe(component.stationGroupRithmId);
       }
