@@ -399,7 +399,10 @@ export class StationGroupElementService {
     };
 
     /** Limits the number of characters for the title. */
-    const titleLimit = stationGroup.title.substring(0, 35);
+    const titleLimit =
+      stationGroup.title.length > 35
+        ? `${stationGroup.title.substring(0, 35)}...`
+        : stationGroup.title;
 
     // Calculates the position of the first straightest line.
     const newPosition = this.positionStraightestLine(
