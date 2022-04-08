@@ -1440,7 +1440,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  fit('should get getStationGroupWorkerRoster', () => {
+  it('should get getStationGroupWorkerRoster', () => {
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '123-456-789',
