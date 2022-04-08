@@ -40,6 +40,12 @@ export class GroupHierarchyComponent {
   /** Value of selected item. */
   selectedItem!: StationGroupData | StationListGroup;
 
+  /** Param for search. */
+  search = '';
+
+  /** Set search input disabled or not. */
+  isInputSearchDisabled = false;
+
   /**
    * Return if selectedItem is group.
    *
@@ -101,5 +107,17 @@ export class GroupHierarchyComponent {
     if (dataItemSelected) {
       this.selectedItem = JSON.parse(dataItemSelected.data);
     }
+  }
+
+  /**
+   * Set value of is input disabled.
+   *
+   * @param isInputSearchDisabled Value to set search input disabled or not.
+   */
+  getIsInputSearchDisabled(isInputSearchDisabled: boolean): void {
+    console.log(isInputSearchDisabled);
+    console.log('metodo llamado para habilitar el search');
+    this.isInputSearchDisabled = this.isInputSearchDisabled =
+      isInputSearchDisabled;
   }
 }

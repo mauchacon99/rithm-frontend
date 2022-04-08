@@ -8,7 +8,7 @@ import { StationGroupData, StationListGroup } from 'src/models';
  * Component to show options list.
  */
 @Component({
-  selector: 'app-group-list-hierarchy[stationGroupRithmId][depthGroup]',
+  selector: 'app-group-list-hierarchy[stationGroupRithmId][depthGroup][search]',
   templateUrl: './group-list-hierarchy.component.html',
   styleUrls: ['./group-list-hierarchy.component.scss'],
 })
@@ -19,16 +19,32 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Depth of the sub-stationGroups. */
   @Input() depthGroup = 1;
 
+  /** Param for search. */
+  @Input() set search(value: string) {
+    this.searchStation(value);
+  }
+
   /** Output value of selected item. */
   @Output() getSelectedItem = new EventEmitter<
     StationGroupData | StationListGroup
   >();
 
+  /** Set search input disabled or not. */
+  @Output() isInputSearchDisabled = new EventEmitter<boolean>();
+
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
 
+  /** Data to station group widget to show filtered results. */
+  stations!: StationListGroup[];
+
+  /** Data to station group widget to show filtered results. */
+  stationsGroups!: StationGroupData[];
+
   /** Load indicator get groups. */
-  isLoading = false;
+  set isLoading(value: boolean) {
+    this.getIsInputSearchDisabled(value);
+  }
 
   /** Show error if get groups fail. */
   isErrorGetGroups = false;
@@ -76,5 +92,31 @@ export class GroupListHierarchyComponent implements OnInit {
    */
   selectedListItem(itemSelected: StationGroupData | StationListGroup): void {
     this.getSelectedItem.emit(itemSelected);
+  }
+
+  /**
+   * Search similitude stations by name and substations.
+   *
+   * @param search Value to search.
+   */
+  searchStation(search: string): void {
+    console.log(search);
+    console.log(this.stationGroups);
+    /*  this.stations = this.stationGroups.stations.filter((station) =>
+      station.name.toLowerCase().includes(search.toLowerCase())
+    );
+    this.stationsGroups = this.stationGroups.subStationGroups.filter(
+      (subStation) =>
+        subStation.title.toLowerCase().includes(search.toLowerCase())
+    );*/
+  }
+
+  /**
+   * Emit value of is input disabled.
+   *
+   * @param isLoading IsLoading item data.
+   */
+  private getIsInputSearchDisabled(isLoading: boolean): void {
+    this.isInputSearchDisabled.emit(isLoading);
   }
 }
