@@ -109,7 +109,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   columnsAllField: ColumnFieldsWidget[] = [];
 
   /** Enum with types widget station. */
-  typesWidget = WidgetType;
+  enumWidgetType = WidgetType;
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
