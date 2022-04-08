@@ -1153,6 +1153,7 @@ describe('StationService', () => {
             {
               rithmId: '123-321-456',
               name: 'station 1',
+              totalDocuments: 3,
               workers: [
                 {
                   rithmId: '123-321-456',
@@ -1203,6 +1204,7 @@ describe('StationService', () => {
         {
           rithmId: '123-321-456',
           name: 'station 1',
+          totalDocuments: 3,
           workers: [
             {
               rithmId: '123-321-456',
@@ -1283,17 +1285,6 @@ describe('StationService', () => {
   });
 
   it('should save/update the array of stationFramesWidget', () => {
-    const InputFrameWidgetQuestions: Question[] = [
-      {
-        prompt: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
     const frameStationWidget: StationFrameWidget[] = [
       {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
@@ -1303,16 +1294,23 @@ describe('StationService', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
+        data: '',
         id: 0,
       },
     ];
 
     service
-      .addFieldQuestionWidget(stationId, frameStationWidget)
+      .saveStationWidgets(stationId, frameStationWidget)
       .subscribe((response) => {
-        expect(response).toEqual(frameStationWidget[0]);
+        expect(response).toEqual(frameStationWidget);
       });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames?stationRithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(frameStationWidget);
+
+    req.flush(frameStationWidget);
+    httpTestingController.verify();
   });
 
   it('should remove a member the owner from the roster for group specific', () => {
@@ -1465,5 +1463,15 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.params.get('stationGroupRithmId')).toEqual(
+      stationGroupRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
