@@ -18,6 +18,7 @@ import {
   StationFrameWidget,
   FrameType,
   DataLinkObject,
+  StandardNumberJSON,
   DocumentEvent,
 } from 'src/models';
 
@@ -1414,6 +1415,30 @@ export class MockStationService {
         },
       ];
       return of(historyResponse).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the number of container in a station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The number of container.
+   */
+  getNumberOfContainers(stationRithmId: string): Observable<number> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive the number of containers',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardNumberJSON = {
+        data: 10,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
     }
   }
 }
