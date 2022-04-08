@@ -20,6 +20,9 @@ export class ListWidgetModalComponent {
   /** Show section document profile. */
   @Input() showContainerProfileBanner = false;
 
+  /** Show group traffic widget template. */
+  @Input() showGroupTrafficTemplate = false;
+
   /** Show section Stations lists. */
   @Input() showStationLists = false;
 
