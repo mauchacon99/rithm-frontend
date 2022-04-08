@@ -87,8 +87,9 @@ export class DashboardService {
       },
     },
     [WidgetType.StationMultiline]: {
-      title: '',
-      description: '',
+      title: 'Multiline List',
+      description:
+        'Select multiple document values to display on each row of the list.',
       descriptionComponent: {
         title: '',
         type: '',
@@ -97,8 +98,9 @@ export class DashboardService {
       },
     },
     [WidgetType.StationMultilineBanner]: {
-      title: '',
-      description: '',
+      title: 'Multiline List With Banner',
+      description:
+        'Select multiple document values to display on each row of the list along with custom banner image.',
       descriptionComponent: {
         title: '',
         type: '',
@@ -153,6 +155,20 @@ export class DashboardService {
       },
     },
     // Group
+    [WidgetType.StationGroupTraffic]: {
+      title: 'Group traffic',
+      description: `The user can consult all the values associated with the stations managed in the stations
+      stations managed in the stations within a flow. By default, the result is
+       a graph representing the movement of the documents within the stations.`,
+      descriptionComponent: {
+        title: 'Group Traffic Widget',
+        type: 'Group Template',
+        customizable: 'Group Traffic result values',
+        description: `The user can consult all the values associated with the stations managed in the stations
+        stations managed in the stations within a flow. By default, the result is
+         a graph representing the movement of the documents within the stations.`,
+      },
+    },
     [WidgetType.StationGroupSearch]: {
       title: 'Search',
       description: `User can query all the values saved on documents within a flow. By default the search results display the document
