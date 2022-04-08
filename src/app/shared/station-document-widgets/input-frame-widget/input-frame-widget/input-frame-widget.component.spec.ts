@@ -123,6 +123,7 @@ describe('InputFrameWidgetComponent', () => {
     const spyEmit = spyOn(component.openSettingDrawer, 'emit');
     const field = firstList[0];
     component.openFieldSettingDrawer(field);
+    expect(component.tempTitle).toEqual('');
     expect(spyEmit).toHaveBeenCalledWith(field);
   });
 });
