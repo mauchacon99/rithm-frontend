@@ -87,8 +87,9 @@ export class MockDashboardService {
       },
     },
     [WidgetType.StationMultiline]: {
-      title: '',
-      description: '',
+      title: 'Multiline List',
+      description:
+        'Select multiple document values to display on each row of the list.',
       descriptionComponent: {
         title: '',
         type: '',
@@ -97,8 +98,9 @@ export class MockDashboardService {
       },
     },
     [WidgetType.StationMultilineBanner]: {
-      title: '',
-      description: '',
+      title: 'Multiline List With Banner',
+      description:
+        'Select multiple document values to display on each row of the list along with custom banner image.',
       descriptionComponent: {
         title: '',
         type: '',
