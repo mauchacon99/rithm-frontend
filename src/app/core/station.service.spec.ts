@@ -19,6 +19,7 @@ import {
   StationGroupData,
   StationFrameWidget,
   FrameType,
+  StandardNumberJSON,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1465,5 +1466,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+  });
+
+  it('should get getNumberOfContainer', () => {
+    const expectedResponse: StandardNumberJSON = {
+      data: 10,
+    };
+    service.getNumberOfContainers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
   });
 });

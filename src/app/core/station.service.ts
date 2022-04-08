@@ -22,6 +22,7 @@ import {
   QuestionFieldType,
   FrameType,
   DataLinkObject,
+  StandardNumberJSON,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -845,5 +846,30 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
       { body: usersIds }
     );
+  }
+
+  /**
+   * Get the number of container in a station.
+   *
+   * @param stationRithmId The id of the given station group.
+   * @returns Number of containers.
+   */
+  getNumberOfContainers(stationRithmId: string): Observable<number> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive  the number of container',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const numberOfContainer: StandardNumberJSON = {
+        data: 10,
+      };
+
+      return of(numberOfContainer).pipe(map((response) => response.data));
+    }
   }
 }

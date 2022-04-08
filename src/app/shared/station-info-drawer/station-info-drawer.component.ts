@@ -56,6 +56,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Display the ownerRoster length. */
   ownersRosterLength = -1;
 
+  /** Use for the number of containers in a station. */
+  numberOfContainers = 0;
+
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
@@ -482,6 +485,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               error
             );
           }
+        },
+      });
+  }
+
+  /**
+   * Get the number of container get in a station.
+   */
+  getNumberOfContainers(): void {
+    this.stationService
+      .getNumberOfContainers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (numberOfContainers) => {
+          this.numberOfContainers = numberOfContainers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
         },
       });
   }

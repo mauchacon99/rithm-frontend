@@ -637,4 +637,35 @@ describe('StationInfoDrawerComponent', () => {
     );
     expect(stationName).toEqual('The name of a station');
   });
+
+  it('should get the NumberOfContainers in a specific station', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'getNumberOfContainers'
+    ).and.callThrough();
+
+    component.getNumberOfContainers();
+    expect(spyMethod).toHaveBeenCalledOnceWith(component.stationRithmId);
+  });
+
+  it('should catch an error when get number of containers fails', () => {
+    const getNumberOfContainersSpy = spyOn(
+      TestBed.inject(StationService),
+      'getNumberOfContainers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getNumberOfContainers();
+
+    expect(getNumberOfContainersSpy).toHaveBeenCalledWith(
+      component.stationRithmId
+    );
+    expect(spyError).toHaveBeenCalled();
+  });
 });
