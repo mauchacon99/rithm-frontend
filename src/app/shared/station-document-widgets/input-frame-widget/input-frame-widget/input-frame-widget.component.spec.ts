@@ -10,8 +10,6 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Question, QuestionFieldType } from 'src/models';
-import { StationService } from 'src/app/core/station.service';
-import { MockStationService } from 'src/mocks';
 
 describe('InputFrameWidgetComponent', () => {
   let component: InputFrameWidgetComponent;
@@ -33,7 +31,6 @@ describe('InputFrameWidgetComponent', () => {
       imports: [DragDropModule],
       providers: [{ provide: StationService, useClass: MockStationService }],
       declarations: [InputFrameWidgetComponent],
-      providers: [{ provide: StationService, useClass: MockStationService }],
     }).compileComponents();
   });
 
