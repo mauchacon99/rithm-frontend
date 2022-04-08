@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -824,7 +824,7 @@ export class StationService {
       const numberOfContainer: StandardNumberJSON = {
         data: 10,
       };
-
+       
       return of(numberOfContainer).pipe(map((response) => response.data));
     }
   }
