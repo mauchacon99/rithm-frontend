@@ -59,8 +59,9 @@ describe('ListWidgetModalComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith(WidgetType.Station);
   });
 
-  it('should show group widget when permission is true', () => {
+  it('should show group traffic widget when permission is true', () => {
     component.showGroupTemplate = true;
+    component.showGroupTrafficTemplate = true;
     component.itemWidgetModalSelected.itemType = 'group';
     fixture.detectChanges();
     const sectionPermissionDenied =
@@ -89,6 +90,24 @@ describe('ListWidgetModalComponent', () => {
   it('should not show profile banner widget when permission is false', () => {
     component.showContainerProfileBanner = false;
     component.itemWidgetModalSelected.itemType = 'document';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeTruthy();
+  });
+
+  it('should show station list widget when permission is true', () => {
+    component.showStationLists = true;
+    component.itemWidgetModalSelected.itemType = 'station';
+    fixture.detectChanges();
+    const sectionPermissionDenied =
+      fixture.debugElement.nativeElement.querySelector('#comingSoonSection');
+    expect(sectionPermissionDenied).toBeNull();
+  });
+
+  it('should not show station list widget when permission is false', () => {
+    component.showStationLists = false;
+    component.itemWidgetModalSelected.itemType = 'station';
     fixture.detectChanges();
     const sectionPermissionDenied =
       fixture.debugElement.nativeElement.querySelector('#comingSoonSection');

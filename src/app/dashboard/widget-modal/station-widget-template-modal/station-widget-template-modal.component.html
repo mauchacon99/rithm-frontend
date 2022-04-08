@@ -23,6 +23,16 @@
         *ngSwitchCase="enumWidgetType.StationTableBanner"
         [ngTemplateOutlet]="previewStationTableBanner"
       ></ng-container>
+      <!-- Type StationMultiline -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.StationMultiline"
+        [ngTemplateOutlet]="previewStationMultiline"
+      ></ng-container>
+      <!-- Type StationMultilineBanner -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.StationMultilineBanner"
+        [ngTemplateOutlet]="previewStationMultilineBanner"
+      ></ng-container>
     </div>
     <!-- Info of card. -->
     <div class="p-2 overflow-auto h-2/6 scrollbar">
@@ -58,12 +68,45 @@
 <!-- Preview widget type stationTableBanner -->
 <ng-template #previewStationTableBanner>
   <div class="h-full w-full rounded bg-white overflow-hidden leading-[5px]">
-    <div
-      class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
-    >
-      <i class="fas text-3xl text-secondary-300 fa-image animate-pulse"></i>
-    </div>
+    <ng-container *ngTemplateOutlet="ImageBanner"></ng-container>
     <br />
     <ng-container *ngTemplateOutlet="previewStation"></ng-container>
+  </div>
+</ng-template>
+
+<!-- Preview widget type previewStationMultiline -->
+<ng-template #previewStationMultiline>
+  <div class="h-full w-full rounded overflow-hidden bg-white py-1">
+    <div class="px-2 leading-4">
+      <span class="text-sm font-semibold">Station name</span> <br />
+      <span class="text-xs">Subtitle</span>
+    </div>
+    <div
+      class="px-2 border-b border-b-secondary-50 animate-pulse"
+      *ngFor="let bars of [0, 0, 0, 0]"
+    >
+      <div class="w-full">
+        <div class="w-2/5 h-2 bg-secondary-100 rounded mt-2"></div>
+        <div class="w-1/4 h-2 bg-secondary-50 rounded mt-2"></div>
+        <div class="w-full h-2 bg-secondary-50 rounded mt-2"></div>
+        <div class="w-full h-2 bg-secondary-50 rounded mt-2"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Preview widget type previewStationMultilineBanner -->
+<ng-template #previewStationMultilineBanner>
+  <div class="h-full w-full rounded bg-white overflow-hidden">
+    <ng-container *ngTemplateOutlet="ImageBanner"></ng-container>
+    <ng-container *ngTemplateOutlet="previewStationMultiline"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #ImageBanner>
+  <div
+    class="w-full h-[70px] bg-secondary-100 flex items-center justify-center rounded-t"
+  >
+    <i class="fas text-3xl text-secondary-300 fa-image animate-pulse"></i>
   </div>
 </ng-template>
