@@ -1,5 +1,6 @@
 <mat-expansion-panel
   hideToggle
+  expanded
   (opened)="panelOpenState = true"
   (closed)="panelOpenState = false"
   class="expansion-member"
@@ -42,7 +43,7 @@
     class="list-options"
     *ngIf="members && !isLoading && !isErrorGetUsers"
   >
-    <div class="px-5" *ngIf="!members.length">
+    <div class="p-3" *ngIf="!members.length">
       <p>There are no members to display.</p>
     </div>
 
@@ -84,6 +85,7 @@
               id="remove-member-{{ member.rithmId }}"
               [attr.data-testid]="'remove-member-' + member.rithmId"
               mat-menu-item
+              (click)="confirmRemoveMember(member.rithmId)"
             >
               Remove member
             </button>

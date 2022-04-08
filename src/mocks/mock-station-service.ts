@@ -48,6 +48,9 @@ export class MockStationService {
   /** The datalink widget to be saved. */
   dataLinkObject$ = new Subject<DataLinkObject>();
 
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
+
   /**
    * Gets a station information.
    *
@@ -1204,31 +1207,20 @@ export class MockStationService {
    * @param stationFrames The value that will be update.
    * @returns The field question updated.
    */
-  addFieldQuestionWidget(
+  saveStationWidgets(
     stationRithmId: string,
     stationFrames: StationFrameWidget[]
   ): Observable<StationFrameWidget> {
-    if (!stationRithmId) {
+    if (!stationRithmId || !stationFrames) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update the widget field',
+              error: 'Cannot update station widgets',
             },
           })
       ).pipe(delay(1000));
     } else {
-      const InputFrameWidgetQuestions: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
       const frameStationWidget: StationFrameWidget = {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -1237,7 +1229,7 @@ export class MockStationService {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
+        data: '',
         id: 0,
       };
       return of(frameStationWidget).pipe(delay(1000));
@@ -1322,5 +1314,65 @@ export class MockStationService {
       },
     ];
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Get worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupWorkerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const mockGetStationGroupRoster: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockGetStationGroupRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Get owner roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupOwnerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const mockGetStationGroupAdmin: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockGetStationGroupAdmin).pipe(delay(1000));
   }
 }

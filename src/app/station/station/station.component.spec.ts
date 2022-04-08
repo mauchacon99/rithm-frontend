@@ -747,20 +747,6 @@ describe('StationComponent', () => {
     expect(component.editMode).toBeTrue();
   });
 
-  it('should change setting config after canceling', () => {
-    component.viewNewStation = true;
-    component.editMode = true;
-    fixture.detectChanges();
-
-    const spySaveChange = spyOn(
-      component,
-      'saveStationFramesChanges'
-    ).and.callThrough();
-    component.saveStationFramesChanges();
-    expect(spySaveChange).toHaveBeenCalled();
-    expect(component.editMode).toBeFalsy();
-  });
-
   it('should open a confirming Popup when clicking on the delete button', () => {
     component.viewNewStation = true;
     component.editMode = true;
