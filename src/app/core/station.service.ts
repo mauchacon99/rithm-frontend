@@ -824,7 +824,7 @@ export class StationService {
       const numberOfContainer: StandardNumberJSON = {
         data: 10,
       };
-       
+
       return of(numberOfContainer).pipe(map((response) => response.data));
     }
   }
