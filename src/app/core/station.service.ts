@@ -827,6 +827,7 @@ export class StationService {
    */
   removeUsersFromWorkerRosterGroup(
     stationGroupRithmId: string,
+
     usersIds: string[]
   ): Observable<StationRosterMember[]> {
     return this.http.delete<StationRosterMember[]>(
