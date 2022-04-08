@@ -9,6 +9,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import {
   CenterPanType,
+  DocumentEvent,
   DocumentGenerationStatus,
   MapItemStatus,
   MapMode,
@@ -138,6 +139,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
+
+  /** Use for history station. */
+  stationHistoryEvents: DocumentEvent[] = [];
 
   /**
    * Whether the station is selected and it's in center of the map.
@@ -818,19 +822,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-    /** If different from open from the map. */
-    if (!this.openedFromMap) {
-      this.mapService.mapHelper.isDrawerOpened$.next(false);
-      this.sidenavDrawerService.drawerContext$.next('');
-    }
-  }
-
-  /**
    * Save Buttons Settings.
    */
   saveButtonSettings(): void {
@@ -873,5 +864,35 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       CenterPanType.Station,
       drawer[0] ? drawer[0].clientWidth : 0
     );
+  }
+
+  /**
+   * Get Station History.
+   */
+  getStationHistory(): void {
+    this.stationService
+      .getStationHistory(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (history) => {
+          this.stationHistoryEvents = history;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+    this.mapService.mapHelper.isDrawerOpened$.next(false);
+    this.sidenavDrawerService.drawerContext$.next('');
   }
 }

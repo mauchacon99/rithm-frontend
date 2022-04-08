@@ -18,6 +18,7 @@ import {
   StationFrameWidget,
   FrameType,
   DataLinkObject,
+  DocumentEvent,
 } from 'src/models';
 
 /**
@@ -1101,6 +1102,7 @@ export class MockStationService {
             {
               rithmId: '123-321-456',
               name: 'station 1',
+              totalDocuments: 3,
               workers: [
                 {
                   rithmId: '123-321-456',
@@ -1151,6 +1153,7 @@ export class MockStationService {
         {
           rithmId: '123-321-456',
           name: 'station 1',
+          totalDocuments: 3,
           workers: [
             {
               rithmId: '123-321-456',
@@ -1207,31 +1210,20 @@ export class MockStationService {
    * @param stationFrames The value that will be update.
    * @returns The field question updated.
    */
-  addFieldQuestionWidget(
+  saveStationWidgets(
     stationRithmId: string,
     stationFrames: StationFrameWidget[]
   ): Observable<StationFrameWidget> {
-    if (!stationRithmId) {
+    if (!stationRithmId || !stationFrames) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update the widget field',
+              error: 'Cannot update station widgets',
             },
           })
       ).pipe(delay(1000));
     } else {
-      const InputFrameWidgetQuestions: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
       const frameStationWidget: StationFrameWidget = {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -1240,7 +1232,7 @@ export class MockStationService {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
+        data: '',
         id: 0,
       };
       return of(frameStationWidget).pipe(delay(1000));
@@ -1385,5 +1377,43 @@ export class MockStationService {
       },
     ];
     return of(mockGetStationGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get history station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The history station.
+   */
+  getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot response station history',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const historyResponse: DocumentEvent[] = [
+        {
+          eventTimeUTC: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(historyResponse).pipe(delay(1000));
+    }
   }
 }
