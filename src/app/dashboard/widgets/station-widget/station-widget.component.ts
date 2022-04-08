@@ -299,13 +299,20 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (documentRithmId) => {
-          this.viewDocument(documentRithmId);
-          this.reloadDocumentList = true;
-          this.isLoading = false;
-          this.displayDocumentError = false;
           this.popupService.notify(
             'The document has been created successfully.'
           );
+          if (
+            this.widgetType === this.enumWidgetType.Station ||
+            this.widgetType === this.enumWidgetType.StationTableBanner
+          ) {
+            this.viewDocument(documentRithmId);
+            this.reloadDocumentList = true;
+          } else {
+            this.getStationWidgetDocuments();
+          }
+          this.isLoading = false;
+          this.displayDocumentError = false;
         },
         error: (error: unknown) => {
           this.displayDocumentError = true;
