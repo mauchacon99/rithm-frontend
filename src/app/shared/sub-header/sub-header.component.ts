@@ -29,11 +29,11 @@ export class SubHeaderComponent {
   /** Event to detect click comment outside. */
   @Output() checkClickSubHeader: EventEmitter<boolean> = new EventEmitter();
 
- /** Is component viewed in station edit mode? */
- @Input() stationEditMode = false;
+  /** Is component viewed in station edit mode? */
+  @Input() stationEditMode = false;
 
- /** Is displayed in a new interface? */
- @Input() newInterfaceView = false;
+  /** Is displayed in a new interface? */
+  @Input() newInterfaceView = false;
 
   /** Current active icon. */
   activeItem = 'none';
