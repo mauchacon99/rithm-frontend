@@ -1400,7 +1400,7 @@ describe('StationService', () => {
   });
 
   it('should history station', () => {
-    const rithmId = '6375027-78345-73824-54244';
+    const stationRithmId = '6375027-78345-73824-54244';
     const expectHistoryResponse: DocumentEvent[] = [
       {
         eventTimeUTC: '2022-01-18T22:13:05.871Z',
@@ -1418,7 +1418,7 @@ describe('StationService', () => {
         },
       },
     ];
-    service.getStationHistory(rithmId).subscribe((response) => {
+    service.getStationHistory(stationRithmId).subscribe((response) => {
       expect(response).toEqual(expectHistoryResponse);
     });
   });

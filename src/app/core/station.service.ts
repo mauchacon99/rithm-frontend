@@ -818,11 +818,11 @@ export class StationService {
   /**
    * Get history station.
    *
-   * @param rithmId The current station id.
+   * @param stationRithmId The current station id.
    * @returns The history station.
    */
-  getStationHistory(rithmId: string): Observable<DocumentEvent[]> {
-    if (!rithmId) {
+  getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
+    if (!stationRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
