@@ -1392,6 +1392,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    req.flush(expectedResponse);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual(userIdList);
+    httpTestingController.verify();
   });
 
   it('should get getStationGroupOwnerRoster', () => {
@@ -1419,6 +1427,17 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.params.get('stationGroupRithmId')).toEqual(
+      stationGroupRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should get getStationGroupWorkerRoster', () => {
