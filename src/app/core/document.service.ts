@@ -34,6 +34,7 @@ import {
   OperatorType,
   DocumentImage,
   ImageData,
+  DataLinkObject,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -631,5 +632,30 @@ export class DocumentService {
         params,
       }
     );
+  }
+
+  /**
+   * Save/update a datalink object.
+   *
+   * @param stationRithmId The current station id.
+   * @param dataLinkObject The object to save.
+   * @returns A DataLinkObject.
+   */
+  saveDataLink(
+    stationRithmId: string,
+    dataLinkObject: DataLinkObject
+  ): Observable<DataLinkObject> {
+    if (!dataLinkObject || !stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot save data link object.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of(dataLinkObject).pipe(delay(1000));
+    }
   }
 }
