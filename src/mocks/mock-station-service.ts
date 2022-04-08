@@ -18,6 +18,8 @@ import {
   StationFrameWidget,
   FrameType,
   DataLinkObject,
+  StandardNumberJSON,
+  DocumentEvent,
 } from 'src/models';
 
 /**
@@ -1376,5 +1378,67 @@ export class MockStationService {
       },
     ];
     return of(mockGetStationGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get history station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The history station.
+   */
+  getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot response station history',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const historyResponse: DocumentEvent[] = [
+        {
+          eventTimeUTC: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(historyResponse).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the number of container in a station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The number of container.
+   */
+  getNumberOfContainers(stationRithmId: string): Observable<number> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive the number of containers',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardNumberJSON = {
+        data: 10,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
   }
 }

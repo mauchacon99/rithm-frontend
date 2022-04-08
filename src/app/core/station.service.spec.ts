@@ -19,6 +19,8 @@ import {
   StationGroupData,
   StationFrameWidget,
   FrameType,
+  StandardNumberJSON,
+  DocumentEvent,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1400,6 +1402,30 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should history station', () => {
+    const stationRithmId = '6375027-78345-73824-54244';
+    const expectHistoryResponse: DocumentEvent[] = [
+      {
+        eventTimeUTC: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getStationHistory(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectHistoryResponse);
+    });
+  });
+
   it('should get getStationGroupOwnerRoster', () => {
     const expectedResponse: StationRosterMember[] = [
       {
@@ -1473,5 +1499,14 @@ describe('StationService', () => {
     );
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should get getNumberOfContainer', () => {
+    const expectedResponse: StandardNumberJSON = {
+      data: 10,
+    };
+    service.getNumberOfContainers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
   });
 });
