@@ -83,7 +83,7 @@
             [attr.data-testid]="'show-documents-' + station.rithmId"
             class="whitespace-normal truncate text-xs font-normal"
             (click)="openDocsModal(station)"
-            ><a>Documents</a></span
+            ><a>{{ station.totalDocuments }} Documents</a></span
           >
         </span>
 
