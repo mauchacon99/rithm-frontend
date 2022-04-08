@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockDashboardService } from 'src/mocks';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
-
+import { MockErrorService, MockStationService } from 'src/mocks';
 import { GroupTrafficWidgetComponent } from './group-traffic-widget.component';
 import { throwError } from 'rxjs';
+import { StationService } from 'src/app/core/station.service';
 
 describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
@@ -17,7 +16,7 @@ describe('GroupTrafficWidgetComponent', () => {
       declarations: [GroupTrafficWidgetComponent],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DashboardService, useClass: MockDashboardService },
+        { provide: StationService, useClass: MockStationService },
       ],
     }).compileComponents();
   });
@@ -36,7 +35,7 @@ describe('GroupTrafficWidgetComponent', () => {
   it('should call getGroupTrafficData in dashboard service', () => {
     const spyMethod = spyOn(component, 'getGroupTrafficData').and.callThrough();
     const spyGetGroupTrafficData = spyOn(
-      TestBed.inject(DashboardService),
+      TestBed.inject(StationService),
       'getGroupTrafficData'
     ).and.callThrough();
     component.ngOnInit();
@@ -46,7 +45,7 @@ describe('GroupTrafficWidgetComponent', () => {
 
   it('should catch an error if the request getGroupTrafficData fails', () => {
     const spyError = spyOn(
-      TestBed.inject(DashboardService),
+      TestBed.inject(StationService),
       'getGroupTrafficData'
     ).and.returnValue(
       throwError(() => {
