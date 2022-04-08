@@ -59,8 +59,9 @@ describe('ListWidgetModalComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith(WidgetType.Station);
   });
 
-  it('should show group widget when permission is true', () => {
+  it('should show group traffic widget when permission is true', () => {
     component.showGroupTemplate = true;
+    component.showGroupTrafficTemplate = true;
     component.itemWidgetModalSelected.itemType = 'group';
     fixture.detectChanges();
     const sectionPermissionDenied =
