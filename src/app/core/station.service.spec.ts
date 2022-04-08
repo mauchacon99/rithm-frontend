@@ -1154,6 +1154,7 @@ describe('StationService', () => {
             {
               rithmId: '123-321-456',
               name: 'station 1',
+              totalDocuments: 3,
               workers: [
                 {
                   rithmId: '123-321-456',
@@ -1204,6 +1205,7 @@ describe('StationService', () => {
         {
           rithmId: '123-321-456',
           name: 'station 1',
+          totalDocuments: 3,
           workers: [
             {
               rithmId: '123-321-456',
@@ -1486,5 +1488,15 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.params.get('stationGroupRithmId')).toEqual(
+      stationGroupRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
