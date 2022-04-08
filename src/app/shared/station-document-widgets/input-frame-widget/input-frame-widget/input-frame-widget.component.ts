@@ -3,10 +3,7 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-<<<<<<< HEAD
-=======
   OnInit,
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
   Output,
 } from '@angular/core';
 import {
@@ -17,11 +14,8 @@ import {
 import { QuestionFieldType, Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { Subject, takeUntil } from 'rxjs';
-<<<<<<< HEAD
-=======
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RandomIdGenerator } from 'src/helpers';
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -31,11 +25,7 @@ import { RandomIdGenerator } from 'src/helpers';
   templateUrl: './input-frame-widget.component.html',
   styleUrls: ['./input-frame-widget.component.scss'],
 })
-<<<<<<< HEAD
-export class InputFrameWidgetComponent implements OnDestroy {
-=======
 export class InputFrameWidgetComponent implements OnInit, OnDestroy {
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -67,34 +57,6 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
 
-<<<<<<< HEAD
-  constructor(private stationService: StationService) {
-    this.stationService.stationQuestionTitle$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((questionTitle) => {
-        if (
-          questionTitle &&
-          this.widgetMode === 'setting' &&
-          this.fields &&
-          this.fields.length > 0
-        ) {
-          const questionIndex = this.fields?.findIndex(
-            (e) => e.rithmId === questionTitle.rithmId
-          );
-          if (
-            questionTitle.value &&
-            questionTitle.value?.length > 0 &&
-            this.tempTitle === ''
-          ) {
-            this.tempTitle = this.fields[questionIndex].prompt.slice();
-          }
-          this.fields[questionIndex].prompt = questionTitle.value
-            ? questionTitle.value
-            : this.tempTitle;
-=======
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
 
@@ -117,22 +79,44 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
             (e) => e.rithmId !== questions.rithmId
           );
           this.sidenavDrawerService.closeDrawer();
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
         }
       });
   }
 
   /**
-<<<<<<< HEAD
-=======
+   * Listen the stationQuestionTitle Service.
+   */
+  private stationQuestionTitle$(): void {
+    this.stationService.stationQuestionTitle$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questionTitle) => {
+        if (
+          questionTitle &&
+          this.widgetMode === 'setting' &&
+          this.fields &&
+          this.fields.length > 0
+        ) {
+          const questionIndex = this.fields?.findIndex(
+            (e) => e.rithmId === questionTitle.rithmId
+          );
+          if (!this.tempTitle) {
+            this.tempTitle = this.fields[questionIndex].prompt.slice();
+          }
+          this.fields[questionIndex].prompt =
+            questionTitle.value || this.tempTitle;
+        }
+      });
+  }
+
+  /**
    * Set up deleteStationQuestions subscriptions.
    */
   ngOnInit(): void {
     this.subscribeDeleteStationQuestion();
+    this.stationQuestionTitle$();
   }
 
   /**
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {

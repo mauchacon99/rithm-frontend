@@ -22,10 +22,6 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   /** The field information for your setting. */
   fieldSetting!: Question;
 
-<<<<<<< HEAD
-  constructor(
-    private sideNavDrawerService: SidenavDrawerService,
-=======
   /** The station id of the current station. */
   stationRithmId!: string;
 
@@ -34,7 +30,6 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private errorService: ErrorService,
     private popupService: PopupService,
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
     private stationService: StationService
   ) {}
 
@@ -105,12 +100,13 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-<<<<<<< HEAD
    * Set the question title.
    */
   setQuestionTitle(): void {
     this.stationService.stationQuestionTitle$.next(this.fieldSetting);
-=======
+  }
+
+  /**
    * Completes all subscriptions.
    *
    * @param questions The current questions to be deleted in field settings.
@@ -126,6 +122,5 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
     if (response) {
       this.stationService.deleteStationQuestion$.next(questions);
     }
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
   }
 }
