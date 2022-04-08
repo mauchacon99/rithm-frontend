@@ -2,7 +2,7 @@
   <div class="w-full">
     <app-station-field
       *ngFor="let field of fields; let i = index"
-      formControlName="stationFieldForm"
+      formControlName="stationFieldForm{{ i }}"
       [field]="field"
       [stationRithmId]="stationRithmId"
       [movableUp]="canFieldMoveUp(i)"
