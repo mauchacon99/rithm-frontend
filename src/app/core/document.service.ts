@@ -650,7 +650,7 @@ export class DocumentService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot be removed station flow logic rule.',
+              error: 'Cannot save data link object.',
             },
           })
       ).pipe(delay(1000));

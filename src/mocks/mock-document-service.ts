@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { DataLinkObject } from '../models/data-link-object';
 import {
   ConnectedStationInfo,
   DocumentStationInformation,
@@ -25,6 +24,7 @@ import {
   DocumentWidget,
   DocumentImage,
   ImageData,
+  DataLinkObject,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1612,7 +1612,7 @@ export class MockDocumentService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot be removed station flow logic rule.',
+              error: 'Cannot save data link object.',
             },
           })
       ).pipe(delay(1000));
