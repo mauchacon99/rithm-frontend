@@ -7,12 +7,12 @@ import { Question, QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { StationService } from 'src/app/core/station.service';
+import { MockPopupService, MockStationService } from 'src/mocks';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { StationService } from 'src/app/core/station.service';
-import { MockStationService, MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
 
 describe('SettingDrawerComponent', () => {
@@ -82,6 +82,13 @@ describe('SettingDrawerComponent', () => {
     const drawerSpy = spyOn(component, <never>'subscribeDrawerData$');
     component.ngOnInit();
     expect(drawerSpy).toHaveBeenCalled();
+  });
+
+  it('should set the question title to stationQuestionTitle observable', () => {
+    component.setQuestionTitle();
+    service.stationQuestionTitle$.subscribe((response) => {
+      expect(response).toBe(component.fieldSetting);
+    });
   });
 
   it('should call getParams to get the stationId', () => {

@@ -63,6 +63,9 @@ export class StationService {
   /** The question to be deleted when it delete in station field settings. */
   deleteStationQuestion$ = new Subject<Question>();
 
+  /** The question title to be updated when it's updated in setting drawer. */
+  stationQuestionTitle$ = new Subject<Question>();
+
   constructor(private http: HttpClient) {}
 
   /**
