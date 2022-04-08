@@ -37,6 +37,9 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section document profile. */
   showContainerProfileBanner = false;
 
+  /** Show group traffic template. */
+  showGroupTrafficTemplate = false;
+
   /** Show section Stations lists. */
   showStationLists = false;
 
@@ -91,6 +94,9 @@ export class AddWidgetModalComponent implements OnInit {
 
         this.showContainerProfileBanner =
           this.splitService.getProfileBannerTreatment() === 'on';
+
+        this.showGroupTrafficTemplate =
+          this.splitService.getGroupTrafficTemplateTreatment() === 'on';
 
         this.showStationLists =
           this.splitService.getStationListWidgetTreatment() === 'on';

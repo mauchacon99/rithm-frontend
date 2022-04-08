@@ -125,6 +125,15 @@ export class SplitService {
   }
 
   /**
+   * Get the section group traffic in list-widget-modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupTrafficTemplateTreatment(): string {
+    return this.splitClient.getTreatment('group_traffic_template_split');
+  }
+
+  /**
    * Get the section station list section in add widget modal.
    *
    * @returns Split treatment.
