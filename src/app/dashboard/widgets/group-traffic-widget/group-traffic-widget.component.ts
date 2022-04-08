@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { GroupTrafficData } from 'src/models';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 /**
  * Component for station group traffic.
  */
@@ -43,7 +43,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Get traffic data document in stations. */
   getGroupTrafficData(): void {
     this.dashboardService
-      .getGroupTrafficData('')
+      .getGroupTrafficData(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
         next: (trafficData) => {

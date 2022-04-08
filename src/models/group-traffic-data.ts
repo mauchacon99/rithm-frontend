@@ -4,11 +4,8 @@ export interface GroupTrafficData {
   stationGroupRithmId: string;
   /** Station names. */
   labels: string[];
-  /** Dataset chart. */
-  datasets: {
-    /** Represents the number of documents per station. */
-    stationDocuments: number[];
-    /** Represents the average number of document flows per station. */
-    averageDocumentStation: number[];
-  };
+  /** Represents the number of documents per station. */
+  stationDocuments: number[];
+  /** Represents the average number of document flows per station. */
+  averageDocumentStation: number[];
 }
