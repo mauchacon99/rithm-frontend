@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import {
@@ -25,11 +26,13 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
     value: StationGroupData | StationListGroup
   ) {
     this._stationOrGroupSelected = value;
-    if (this.isAdmin !== undefined && !this.isGroup) {
-      this.getStationsMembers();
-    } else {
-      // this line is temporary while done getStationsMembers for groups.
-      this.members = [];
+
+    if (this.isAdmin !== undefined) {
+      if (!this.isGroup) {
+        this.getStationsMembers();
+      } else {
+        this.getStationsGroupMembers();
+      }
     }
   }
 
@@ -69,7 +72,8 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private popupService: PopupService
   ) {}
 
   /**
@@ -78,6 +82,8 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
   ngOnInit(): void {
     if (!this.isGroup) {
       this.getStationsMembers();
+    } else {
+      this.getStationsGroupMembers();
     }
   }
 
@@ -172,5 +178,94 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
         );
       },
     });
+  }
+
+  /**
+   * Get users Roster or admin for a given station group.
+   */
+  private getStationsGroupMembers(): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const getStationGroupUsersOrAdmins$ = this.isAdmin
+      ? this.stationService.getStationGroupOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
+      : this.stationService.getStationGroupWorkerRoster(
+          this.stationOrGroupSelected.rithmId
+        );
+
+    getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Remove users from the station specific roster.
+   *
+   * @param usersId The selected user id to remove.
+   */
+  removeMemberFromRosterStation(usersId: string): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const removeUserMemberRosterStation$ = this.isAdmin
+      ? this.stationService.removeUsersFromOwnerRoster(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        )
+      : this.stationService.removeUsersFromWorkerRoster(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        );
+
+    removeUserMemberRosterStation$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Confirm remove member .
+   *
+   * @param usersId The selected user id to remove.
+   */
+  async confirmRemoveMember(usersId: string): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Remove Member?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+
+    if (response) {
+      if (this.isGroup) {
+        this.removeMemberFromRosterGroup(usersId);
+      } else {
+        this.removeMemberFromRosterStation(usersId);
+      }
+    }
   }
 }

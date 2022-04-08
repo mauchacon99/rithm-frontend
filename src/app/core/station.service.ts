@@ -762,6 +762,56 @@ export class StationService {
   }
 
   /**
+   * Get worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupWorkerRoster(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const mockGetStationGroupRoster: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockGetStationGroupRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Get owner roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupOwnerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins`,
+      { params }
+    );
+  }
+
+  /**
    * Remove owner from the group's roster.
    *
    * @param stationGroupRithmId The Specific id of group.
@@ -769,79 +819,31 @@ export class StationService {
    * @returns New Group information with owners roster.
    */
   removeUsersFromOwnerRosterGroup(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     usersIds: string[]
   ): Observable<StationRosterMember[]> {
-    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`,
       {
-        rithmId: '12dasd1-asd12asdasd-asdas',
-        firstName: 'Cesar',
-        lastName: 'Quijada',
-        email: 'strut@gmail.com',
-        isOwner: true,
-        isWorker: false,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-ffff1',
-        firstName: 'Maria',
-        lastName: 'Quintero',
-        email: 'Maquin@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-a231',
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pperez@gmail.com',
-        isOwner: true,
-        isWorker: false,
-      },
-    ];
-    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+        body: usersIds,
+      }
+    );
   }
 
   /**
-   * Removes users from the group's workers roster.
+   * Remove users from the group's workers roster.
    *
    * @param stationGroupRithmId The Specific id of group.
    * @param usersIds The selected users id array to removed.
    * @returns New Group information with worker roster.
    */
   removeUsersFromWorkerRosterGroup(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     usersIds: string[]
   ): Observable<StationRosterMember[]> {
-    const data: StationRosterMember[] = [
-      {
-        rithmId: '12dasd1-asd12asdasd-asdas',
-        firstName: 'Cesar',
-        lastName: 'Quijada',
-        email: 'strut@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-ffff1',
-        firstName: 'Maria',
-        lastName: 'Quintero',
-        email: 'Maquin@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-a231',
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pperez@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-    ];
-    return of(data).pipe(delay(1000));
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
+      { body: usersIds }
+    );
   }
 }

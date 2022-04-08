@@ -10,12 +10,17 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { of, throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockPopupService,
+  MockStationService,
+} from 'src/mocks';
 import { StationGroupData, StationListGroup } from 'src/models';
 import { ExpansionMemberGroupAdminComponent } from './expansion-member-group-admin.component';
 
@@ -96,6 +101,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -175,9 +181,69 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       component.removeMemberFromRosterGroup(idsUsers);
       expect(spyError).toHaveBeenCalled();
     });
+
+    it('should call service that return station group members for stations group how admin', () => {
+      component.isAdmin = true;
+      const spyService = spyOn(
+        stationService,
+        'getStationGroupOwnerRoster'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should call service that return station group members for stations group how user', () => {
+      const spyService = spyOn(
+        stationService,
+        'getStationGroupWorkerRoster'
+      ).and.callThrough();
+      component.isAdmin = false;
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should show error message when station group members for stations group how user fail', () => {
+      spyOn(stationService, 'getStationGroupWorkerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyService = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should show error message when station group members for stations group how admin fail', () => {
+      component.isAdmin = true;
+      spyOn(stationService, 'getStationGroupOwnerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyService = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
   });
 
   describe('Selected item is station', () => {
+    const members = [
+      {
+        rithmId: 'a3f2e8ef-c7cc-4eaf-8833-d6385d4b35f9',
+        firstName: 'Bo-Katan',
+        lastName: 'Kryze',
+        email: 'bokatan.kryze@inpivota.com',
+        isWorker: false,
+        isOwner: true,
+      },
+    ];
+
     beforeEach(() => {
       component.stationOrGroupSelected = stations;
       fixture.detectChanges();
@@ -209,6 +275,126 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       component.ngOnInit();
       expect(spyService).toHaveBeenCalledOnceWith(stations.rithmId);
     });
+
+    it('should display a confirmation pop up', async () => {
+      const confirmationData = {
+        title: 'Remove Member?',
+        message: 'This cannot be undone!',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      };
+
+      const popUpConfirmSpy = spyOn(
+        TestBed.inject(PopupService),
+        'confirm'
+      ).and.callThrough();
+
+      await component.confirmRemoveMember(members[0].rithmId);
+      expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+    });
+
+    it('should remove member admin on station specified', () => {
+      component.isAdmin = true;
+      fixture.detectChanges();
+      const spyRemoveUsersFromOwnerRoster = spyOn(
+        stationService,
+        'removeUsersFromOwnerRoster'
+      ).and.callThrough();
+      component.removeMemberFromRosterStation(members[0].rithmId);
+      expect(spyRemoveUsersFromOwnerRoster).toHaveBeenCalledOnceWith(
+        stations.rithmId,
+        [members[0].rithmId]
+      );
+    });
+
+    it('should remove member user on station specified', () => {
+      component.isAdmin = false;
+      fixture.detectChanges();
+      const spyRemoveUsersFromWorkerRoster = spyOn(
+        stationService,
+        'removeUsersFromWorkerRoster'
+      ).and.callThrough();
+      component.removeMemberFromRosterStation(members[0].rithmId);
+      expect(spyRemoveUsersFromWorkerRoster).toHaveBeenCalledOnceWith(
+        stations.rithmId,
+        [members[0].rithmId]
+      );
+    });
+
+    it('should call alert error if petition removeMemberFromRosterStation for workers fail', () => {
+      component.isAdmin = false;
+      spyOn(stationService, 'removeUsersFromWorkerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(errorService, 'displayError').and.callThrough();
+      component.removeMemberFromRosterStation(members[0].rithmId);
+      expect(spyError).toHaveBeenCalled();
+    });
+
+    it('should call alert error if petition removeMemberFromRosterStation for owners fail', () => {
+      component.isAdmin = true;
+      spyOn(stationService, 'removeUsersFromOwnerRoster').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyError = spyOn(errorService, 'displayError').and.callThrough();
+      component.removeMemberFromRosterStation(members[0].rithmId);
+      expect(spyError).toHaveBeenCalled();
+    });
+
+    it('should call method for remove members if is group', async () => {
+      component.stationOrGroupSelected = subStationGroups;
+      fixture.detectChanges();
+
+      const popUpConfirmSpy = spyOn(
+        TestBed.inject(PopupService),
+        'confirm'
+      ).and.callThrough();
+
+      const removeMemberFromRosterStation = spyOn(
+        component,
+        'removeMemberFromRosterStation'
+      ).and.callThrough();
+
+      const removeMemberFromRosterGroup = spyOn(
+        component,
+        'removeMemberFromRosterGroup'
+      ).and.callThrough();
+
+      await component.confirmRemoveMember(members[0].rithmId);
+      expect(popUpConfirmSpy).toHaveBeenCalled();
+      expect(removeMemberFromRosterStation).not.toHaveBeenCalled();
+      expect(removeMemberFromRosterGroup).toHaveBeenCalled();
+    });
+
+    it('should call method for remove members if is station', async () => {
+      component.stationOrGroupSelected = stations;
+      fixture.detectChanges();
+
+      const popUpConfirmSpy = spyOn(
+        TestBed.inject(PopupService),
+        'confirm'
+      ).and.callThrough();
+
+      const removeMemberFromRosterStation = spyOn(
+        component,
+        'removeMemberFromRosterStation'
+      ).and.callThrough();
+
+      const removeMemberFromRosterGroup = spyOn(
+        component,
+        'removeMemberFromRosterGroup'
+      ).and.callThrough();
+
+      await component.confirmRemoveMember(members[0].rithmId);
+      expect(popUpConfirmSpy).toHaveBeenCalled();
+      expect(removeMemberFromRosterStation).toHaveBeenCalled();
+      expect(removeMemberFromRosterGroup).not.toHaveBeenCalled();
+    });
   });
 
   it('should show error message when request getStationsMembers fail', () => {
@@ -227,19 +413,15 @@ describe('ExpansionMemberGroupAdminComponent', () => {
     expect(component.isErrorGetUsers).toBeTrue();
   });
 
-  it('should show loading while request getStationsMembers', () => {
-    const spyMethod = spyOn(
-      stationService,
-      'getStationWorkerRoster'
-    ).and.callThrough();
-    component.ngOnInit();
+  it('should show loading indicator', () => {
+    component.isLoading = true;
+
     fixture.detectChanges();
-    const loader = fixture.debugElement.nativeElement.querySelector(
+    const isLoading = fixture.debugElement.nativeElement.querySelector(
       '#loading-get-members'
     );
-    expect(spyMethod).toHaveBeenCalled();
-    expect(loader).toBeTruthy();
-    expect(component.isLoading).toBeTrue();
+
+    expect(isLoading).toBeTruthy();
   });
 
   it('should call modal RosterManagementModal', () => {

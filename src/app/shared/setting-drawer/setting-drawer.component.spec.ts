@@ -7,6 +7,10 @@ import { Question, QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StationService } from 'src/app/core/station.service';
 import { MockStationService, MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
@@ -25,6 +29,11 @@ describe('SettingDrawerComponent', () => {
         FormsModule,
         MatSlideToggleModule,
         MatButtonModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        RouterTestingModule.withRoutes([
+          { path: 'station/:stationId', component: SettingDrawerComponent },
+        ]),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -73,6 +82,42 @@ describe('SettingDrawerComponent', () => {
     const drawerSpy = spyOn(component, <never>'subscribeDrawerData$');
     component.ngOnInit();
     expect(drawerSpy).toHaveBeenCalled();
+  });
+
+  it('should call getParams to get the stationId', () => {
+    TestBed.inject(Router).navigate([
+      '/',
+      'station',
+      '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5',
+    ]);
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).params,
+      'subscribe'
+    );
+    fixture.detectChanges();
+    component['getStationId']();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should return false the method that modify isPrevious', () => {
+    const spyProperty = spyOnProperty(
+      component,
+      'isPrevious',
+      'get'
+    ).and.returnValue(false);
+
+    fixture.detectChanges();
+    expect(spyProperty).toHaveBeenCalled();
+  });
+
+  it('should set isRequired as false due to isReadOnly is false (isPrevious only).', () => {
+    component.fieldSetting.isReadOnly = false;
+    const setReadOnlySpy = spyOn(
+      component,
+      'setReadOnlyFalse'
+    ).and.callThrough();
+    component.setReadOnlyFalse();
+    expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
   });
 
   it('should display a confirmation Popup for delete filed', async () => {
