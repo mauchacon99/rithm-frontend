@@ -227,7 +227,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             throw new Error('There was no station info drawer data');
           }
           this.getStationInfo();
-          this.getNumberOfContainers();
         }
       });
   }
@@ -382,6 +381,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
+            this.getNumberOfContainers();
           },
           // eslint-disable-next-line
           error: (error: any) => {
