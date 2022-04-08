@@ -155,6 +155,12 @@ describe('AddWidgetModalComponent', () => {
         splitService,
         'getProfileBannerTreatment'
       ).and.returnValue('on');
+
+      const methodGroupTraffic = spyOn(
+        splitService,
+        'getGroupTrafficTemplateTreatment'
+      ).and.returnValue('on');
+
       const methodStationList = spyOn(
         splitService,
         'getStationListWidgetTreatment'
@@ -166,10 +172,12 @@ describe('AddWidgetModalComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(methodGroupSection).toHaveBeenCalled();
       expect(methodProfileBanner).toHaveBeenCalled();
+      expect(methodGroupTraffic).toHaveBeenCalled();
       expect(methodStationList).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeTrue();
       expect(component.showContainerProfileBanner).toBeTrue();
       expect(component.showStationLists).toBeTrue();
+      expect(component.showGroupTrafficTemplate).toBeTrue();
     });
 
     it('should not show treatments when permission does not exits.', () => {
@@ -183,6 +191,10 @@ describe('AddWidgetModalComponent', () => {
         splitService,
         'getProfileBannerTreatment'
       ).and.returnValue('off');
+      const methodGroupTraffic = spyOn(
+        splitService,
+        'getGroupTrafficTemplateTreatment'
+      ).and.returnValue('off');
       const methodStationList = spyOn(
         splitService,
         'getStationListWidgetTreatment'
@@ -194,9 +206,11 @@ describe('AddWidgetModalComponent', () => {
       expect(methodGroupSection).toHaveBeenCalled();
       expect(methodStationList).toHaveBeenCalled();
       expect(methodProfileBanner).toHaveBeenCalled();
+      expect(methodGroupTraffic).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeFalse();
       expect(component.showContainerProfileBanner).toBeFalse();
       expect(component.showStationLists).toBeFalse();
+      expect(component.showGroupTrafficTemplate).toBeFalse();
     });
 
     it('should catch split error ', () => {
@@ -215,6 +229,7 @@ describe('AddWidgetModalComponent', () => {
       expect(component.showGroupTemplate).toBeFalse();
       expect(component.showContainerProfileBanner).toBeFalse();
       expect(component.showStationLists).toBeFalse();
+      expect(component.showGroupTrafficTemplate).toBeFalse();
     });
   });
 });

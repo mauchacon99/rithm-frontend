@@ -106,6 +106,14 @@
     </div>
   </div>
   <hr class="text-secondary-100" />
+  <!-- Group types list -->
+  <div class="py-6" *ngIf="showGroupTrafficTemplate; else permissionDenied">
+    <p class="font-semibold">Reporting</p>
+    <div
+      class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5"
+    ></div>
+  </div>
+  <hr class="text-secondary-100" />
 </section>
 
 <ng-template #permissionDenied>
