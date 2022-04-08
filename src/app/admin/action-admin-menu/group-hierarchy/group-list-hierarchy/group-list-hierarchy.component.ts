@@ -99,9 +99,10 @@ export class GroupListHierarchyComponent implements OnInit {
    *
    * @param search Value to search.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   searchStation(search: string): void {
-    console.log(search);
-    console.log(this.stationGroups);
+    //console.log(search);
+    //console.log(this.stationGroups);
     /*  this.stations = this.stationGroups.stations.filter((station) =>
       station.name.toLowerCase().includes(search.toLowerCase())
     );

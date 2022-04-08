@@ -115,8 +115,8 @@ export class GroupHierarchyComponent {
    * @param isInputSearchDisabled Value to set search input disabled or not.
    */
   getIsInputSearchDisabled(isInputSearchDisabled: boolean): void {
-    console.log(isInputSearchDisabled);
-    console.log('metodo llamado para habilitar el search');
+    /*console.log(isInputSearchDisabled);
+    console.log('metodo llamado para habilitar el search');*/
     this.isInputSearchDisabled = this.isInputSearchDisabled =
       isInputSearchDisabled;
   }
