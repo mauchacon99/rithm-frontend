@@ -207,6 +207,12 @@
               [showButtonSetting]="showButtonSetting"
             >
             </app-group-search-widget>
+            <app-group-traffic-widget
+              *ngIf="item.widgetType === widgetType.StationGroupTraffic"
+              [showButtonSetting]="showButtonSetting"
+              [dataWidget]="item.data"
+              [editMode]="editMode"
+            ></app-group-traffic-widget>
           </gridster-item>
         </gridster>
       </div>

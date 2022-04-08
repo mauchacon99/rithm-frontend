@@ -101,4 +101,22 @@ export class MockSplitService {
   public getGroupSectionAddWidgetTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section group traffic in list-widget-modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupTrafficTemplateTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the section station list section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationListWidgetTreatment(): string {
+    return 'on';
+  }
 }
