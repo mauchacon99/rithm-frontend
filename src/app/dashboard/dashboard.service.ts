@@ -13,7 +13,7 @@ import {
   ColumnsLogicWidget,
   ItemListWidgetModal,
   WidgetType,
-  groupTrafficData,
+  GroupTrafficData,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -462,8 +462,8 @@ export class DashboardService {
   getGroupTrafficData(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
-  ): Observable<groupTrafficData> {
-    const mockGetGroupTrafficData: groupTrafficData = {
+  ): Observable<GroupTrafficData> {
+    const mockGetGroupTrafficData: GroupTrafficData = {
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
       labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
       datasets: {

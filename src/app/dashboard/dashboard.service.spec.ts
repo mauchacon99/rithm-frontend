@@ -11,7 +11,7 @@ import {
   RoleDashboardMenu,
   EditDataWidget,
   ItemListWidgetModal,
-  groupTrafficData,
+  GroupTrafficData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -710,7 +710,7 @@ describe('DashboardService', () => {
   });
 
   it('should call getGroupTrafficData', () => {
-    const expectedData: groupTrafficData = {
+    const expectedData: GroupTrafficData = {
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
       labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
       datasets: {

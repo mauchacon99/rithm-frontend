@@ -9,7 +9,7 @@ import {
   EditDataWidget,
   ColumnsDocumentInfo,
   ItemListWidgetModal,
-  groupTrafficData,
+  GroupTrafficData,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -733,8 +733,8 @@ export class MockDashboardService {
    */
   getGroupTrafficData(
     stationGroupRithmId: string
-  ): Observable<groupTrafficData> {
-    const mockGetGroupTrafficData: groupTrafficData = {
+  ): Observable<GroupTrafficData> {
+    const mockGetGroupTrafficData: GroupTrafficData = {
       stationGroupRithmId: '987-654-321',
       labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
       datasets: {

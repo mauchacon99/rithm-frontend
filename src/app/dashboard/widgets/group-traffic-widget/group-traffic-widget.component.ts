@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { groupTrafficData } from 'src/models';
+import { GroupTrafficData } from 'src/models';
 import { DashboardService } from '../../dashboard.service';
 /**
  * Component for station group traffic.
@@ -21,7 +21,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Set data for group traffic widget. */
   @Input() dataWidget!: string;
 
-  groupTrafficData!: groupTrafficData;
+  groupTrafficData!: GroupTrafficData;
 
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
