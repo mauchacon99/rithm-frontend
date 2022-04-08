@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
-  /** enum widget type. */
+  /** Enum widget type. */
   enumWidgetType = WidgetType;
 
   /** If it needs to create new dashboard. */
