@@ -32,7 +32,7 @@ describe('GroupTrafficWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getGroupTrafficData in dashboard service', () => {
+  it('should call getGroupTrafficData', () => {
     const spyMethod = spyOn(component, 'getGroupTrafficData').and.callThrough();
     const spyGetGroupTrafficData = spyOn(
       TestBed.inject(StationService),
