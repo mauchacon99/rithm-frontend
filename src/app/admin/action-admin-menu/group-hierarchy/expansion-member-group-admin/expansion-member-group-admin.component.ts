@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import {
@@ -12,30 +13,52 @@ import {
 
 /** Component expansions member. */
 @Component({
-  selector: 'app-expansion-member-group-admin[selectedItem][isAdmin]',
+  selector: 'app-expansion-member-group-admin[stationOrGroupSelected][isAdmin]',
   templateUrl: './expansion-member-group-admin.component.html',
   styleUrls: ['./expansion-member-group-admin.component.scss'],
 })
-export class ExpansionMemberGroupAdminComponent {
-  /** Value of selected item. */
-  @Input() set selectedItem(value: StationGroupData | StationListGroup) {
-    this.stationSelected = value;
-    if (!this.isGroup) {
-      this.getStationsMembers();
-    } else {
-      // this line is temporary while done getStationsMembers for groups.
-      this.members = [];
-    }
-  }
-
+export class ExpansionMemberGroupAdminComponent implements OnInit {
   /** Is admin. */
   @Input() isAdmin!: boolean;
 
   /** Value of selected item. */
-  stationSelected!: StationGroupData | StationListGroup;
+  @Input() set stationOrGroupSelected(
+    value: StationGroupData | StationListGroup
+  ) {
+    this._stationOrGroupSelected = value;
+
+    if (this.isAdmin !== undefined) {
+      if (!this.isGroup) {
+        this.getStationsMembers();
+      } else {
+        this.getStationsGroupMembers();
+      }
+    }
+  }
+
+  /**
+   * Get data item station o group selected.
+   *
+   * @returns Data for station or group selected.
+   */
+  get stationOrGroupSelected(): StationGroupData | StationListGroup {
+    return this._stationOrGroupSelected;
+  }
+
+  /**
+   * Return if element selected is group.
+   *
+   * @returns Is group.
+   */
+  get isGroup(): boolean {
+    return 'stations' in this.stationOrGroupSelected;
+  }
+
+  /** Value of selected item. */
+  private _stationOrGroupSelected!: StationGroupData | StationListGroup;
 
   /** Station Members . */
-  members!: StationRosterMember[];
+  members: StationRosterMember[] = [];
 
   /** Load indicator in dashboard. */
   isLoading = false;
@@ -44,34 +67,39 @@ export class ExpansionMemberGroupAdminComponent {
   isErrorGetUsers = false;
 
   /** Status expanded, this save the state the panel for show icon expanded. */
-  panelOpenState = false;
-
-  /**
-   * Return if selectedItem is group.
-   *
-   * @returns Is group.
-   */
-  get isGroup(): boolean {
-    return 'stations' in this.stationSelected;
-  }
+  panelOpenState = true;
 
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private popupService: PopupService
   ) {}
+
+  /**
+   * Initialize split on page load.
+   */
+  ngOnInit(): void {
+    if (!this.isGroup) {
+      this.getStationsMembers();
+    } else {
+      this.getStationsGroupMembers();
+    }
+  }
 
   /**
    * Get stations OwnerRoster and WorkerRoster.
    *
    */
-  getStationsMembers(): void {
+  private getStationsMembers(): void {
     this.isLoading = true;
     this.isErrorGetUsers = false;
     const getMembersStation$ = this.isAdmin
-      ? this.stationService.getStationOwnerRoster(this.stationSelected.rithmId)
+      ? this.stationService.getStationOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
       : this.stationService.getStationWorkerRoster(
-          this.stationSelected.rithmId
+          this.stationOrGroupSelected.rithmId
         );
 
     getMembersStation$.pipe(first()).subscribe({
@@ -104,7 +132,7 @@ export class ExpansionMemberGroupAdminComponent {
         maxWidth: '1024px',
         disableClose: true,
         data: {
-          stationId: this.stationSelected.rithmId,
+          stationId: this.stationOrGroupSelected.rithmId,
           type: this.isAdmin ? 'owners' : 'workers',
         },
       });
@@ -114,6 +142,130 @@ export class ExpansionMemberGroupAdminComponent {
         .subscribe(() => {
           this.getStationsMembers();
         });
+    }
+  }
+
+  /**
+   * Remove users from the group specific roster.
+   *
+   * @param usersId The selected user id to remove.
+   */
+  removeMemberFromRosterGroup(usersId: string): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const removeUserMemberRosterGroup$ = this.isAdmin
+      ? this.stationService.removeUsersFromOwnerRosterGroup(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        )
+      : this.stationService.removeUsersFromWorkerRosterGroup(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        );
+
+    removeUserMemberRosterGroup$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Get users Roster or admin for a given station group.
+   */
+  private getStationsGroupMembers(): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const getStationGroupUsersOrAdmins$ = this.isAdmin
+      ? this.stationService.getStationGroupOwnerRoster(
+          this.stationOrGroupSelected.rithmId
+        )
+      : this.stationService.getStationGroupWorkerRoster(
+          this.stationOrGroupSelected.rithmId
+        );
+
+    getStationGroupUsersOrAdmins$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Remove users from the station specific roster.
+   *
+   * @param usersId The selected user id to remove.
+   */
+  removeMemberFromRosterStation(usersId: string): void {
+    this.isLoading = true;
+    this.isErrorGetUsers = false;
+    const removeUserMemberRosterStation$ = this.isAdmin
+      ? this.stationService.removeUsersFromOwnerRoster(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        )
+      : this.stationService.removeUsersFromWorkerRoster(
+          this.stationOrGroupSelected.rithmId,
+          [usersId]
+        );
+
+    removeUserMemberRosterStation$.pipe(first()).subscribe({
+      next: (members) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = false;
+        this.members = members;
+      },
+      error: (error: unknown) => {
+        this.isLoading = false;
+        this.isErrorGetUsers = true;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Confirm remove member .
+   *
+   * @param usersId The selected user id to remove.
+   */
+  async confirmRemoveMember(usersId: string): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Remove Member?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+
+    if (response) {
+      if (this.isGroup) {
+        this.removeMemberFromRosterGroup(usersId);
+      } else {
+        this.removeMemberFromRosterStation(usersId);
+      }
     }
   }
 }

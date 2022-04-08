@@ -3,6 +3,10 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+<<<<<<< HEAD
+=======
+  OnInit,
+>>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
   Output,
 } from '@angular/core';
 import {
@@ -13,6 +17,11 @@ import {
 import { QuestionFieldType, Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { Subject, takeUntil } from 'rxjs';
+<<<<<<< HEAD
+=======
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { RandomIdGenerator } from 'src/helpers';
+>>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -22,7 +31,11 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './input-frame-widget.component.html',
   styleUrls: ['./input-frame-widget.component.scss'],
 })
+<<<<<<< HEAD
 export class InputFrameWidgetComponent implements OnDestroy {
+=======
+export class InputFrameWidgetComponent implements OnInit, OnDestroy {
+>>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -54,6 +67,7 @@ export class InputFrameWidgetComponent implements OnDestroy {
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
 
+<<<<<<< HEAD
   constructor(private stationService: StationService) {
     this.stationService.stationQuestionTitle$
       .pipe(takeUntil(this.destroyed$))
@@ -77,11 +91,48 @@ export class InputFrameWidgetComponent implements OnDestroy {
           this.fields[questionIndex].prompt = questionTitle.value
             ? questionTitle.value
             : this.tempTitle;
+=======
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
+  constructor(
+    private stationService: StationService,
+    private sidenavDrawerService: SidenavDrawerService
+  ) {
+    this.randomIdGenerator = new RandomIdGenerator();
+  }
+
+  /**
+   * Listen the deleteStationQuestions Service.
+   */
+  private subscribeDeleteStationQuestion(): void {
+    this.stationService.deleteStationQuestion$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        if (questions && this.widgetMode === 'setting') {
+          this.fields = this.fields?.filter(
+            (e) => e.rithmId !== questions.rithmId
+          );
+          this.sidenavDrawerService.closeDrawer();
+>>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
         }
       });
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * Set up deleteStationQuestions subscriptions.
+   */
+  ngOnInit(): void {
+    this.subscribeDeleteStationQuestion();
+  }
+
+  /**
+>>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -100,7 +151,7 @@ export class InputFrameWidgetComponent implements OnDestroy {
     const newQuestion: Question = questionInfo.rithmId
       ? questionInfo
       : {
-          rithmId: this.randRithmId,
+          rithmId: this.randomIdGenerator.getRandRithmId(4),
           prompt: questionInfo.prompt,
           questionType: questionInfo.questionType,
           isReadOnly: false,
@@ -129,20 +180,6 @@ export class InputFrameWidgetComponent implements OnDestroy {
   }
 
   /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
-  }
-
-  /**
    * Add the kind address.
    *
    * @returns Address children questions.
@@ -166,7 +203,7 @@ export class InputFrameWidgetComponent implements OnDestroy {
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,

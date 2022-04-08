@@ -10,8 +10,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 })
 export class StationWidgetTemplateModalComponent {
   /** Type of widget to show. */
-  @Input() widgetType: WidgetType.Station | WidgetType.StationTableBanner =
-    WidgetType.Station;
+  @Input() widgetType: WidgetType = WidgetType.Station;
 
   /** Widget type for validation. */
   enumWidgetType = WidgetType;

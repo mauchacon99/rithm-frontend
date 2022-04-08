@@ -6,7 +6,7 @@ import { SelectedItemWidgetModel, WidgetType } from 'src/models';
  */
 @Component({
   selector:
-    'app-list-widget-modal[itemWidgetModalSelected][showGroupTemplate][showContainerProfileBanner]',
+    'app-list-widget-modal[itemWidgetModalSelected][showGroupTemplate][showContainerProfileBanner][showStationLists]',
   templateUrl: './list-widget-modal.component.html',
   styleUrls: ['./list-widget-modal.component.scss'],
 })
@@ -19,6 +19,12 @@ export class ListWidgetModalComponent {
 
   /** Show section document profile. */
   @Input() showContainerProfileBanner = false;
+
+  /** Show group traffic widget template. */
+  @Input() showGroupTrafficTemplate = false;
+
+  /** Show section Stations lists. */
+  @Input() showStationLists = false;
 
   /** Title preview widget selected emit. */
   @Output() previewWidgetSelected = new EventEmitter<

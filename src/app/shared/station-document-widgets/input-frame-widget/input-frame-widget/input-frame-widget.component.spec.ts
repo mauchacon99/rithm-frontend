@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InputFrameWidgetComponent } from './input-frame-widget.component';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks';
 
 import {
   CdkDragDrop,
@@ -29,6 +31,7 @@ describe('InputFrameWidgetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DragDropModule],
+      providers: [{ provide: StationService, useClass: MockStationService }],
       declarations: [InputFrameWidgetComponent],
       providers: [{ provide: StationService, useClass: MockStationService }],
     }).compileComponents();

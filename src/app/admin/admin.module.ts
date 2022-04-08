@@ -18,6 +18,7 @@ import { ComingSoonMessageModule } from '../shared/coming-soon-message/coming-so
 import { ExpansionMemberGroupAdminComponent } from './action-admin-menu/group-hierarchy/expansion-member-group-admin/expansion-member-group-admin.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module'
     ComingSoonMessageModule,
     MatExpansionModule,
     UserAvatarModule,
+    MatMenuModule,
   ],
 })
 export class AdminModule {}

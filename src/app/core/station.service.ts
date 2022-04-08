@@ -21,6 +21,7 @@ import {
   StationFrameWidget,
   QuestionFieldType,
   FrameType,
+  DataLinkObject,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -37,14 +38,17 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new Subject<Question>();
-
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
   flowButtonText$ = new BehaviorSubject<string>('Flow');
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
@@ -52,8 +56,11 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be updated when it changes in station page. */
-  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The datalink widget to be saved. */
+  dataLinkObject$ = new Subject<DataLinkObject>();
+
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
 
   /** The question title to be updated when it's updated in setting drawer. */
   stationQuestionTitle$ = new Subject<Question>();
@@ -755,5 +762,91 @@ export class StationService {
       };
       return of(frameStationWidget).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupWorkerRoster(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const mockGetStationGroupRoster: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockGetStationGroupRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Get owner roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupOwnerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins`,
+      { params }
+    );
+  }
+
+  /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`,
+      {
+        body: usersIds,
+      }
+    );
+  }
+
+  /**
+   * Remove users from the group's workers roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Group information with worker roster.
+   */
+  removeUsersFromWorkerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
+      { body: usersIds }
+    );
   }
 }
