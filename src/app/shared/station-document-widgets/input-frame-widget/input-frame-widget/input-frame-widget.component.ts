@@ -1,10 +1,21 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   CdkDragDrop,
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { QuestionFieldType, Question } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { Subject, takeUntil } from 'rxjs';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { RandomIdGenerator } from 'src/helpers';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -14,7 +25,7 @@ import { QuestionFieldType, Question } from 'src/models';
   templateUrl: './input-frame-widget.component.html',
   styleUrls: ['./input-frame-widget.component.scss'],
 })
-export class InputFrameWidgetComponent {
+export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -37,6 +48,50 @@ export class InputFrameWidgetComponent {
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
+
+  constructor(
+    private stationService: StationService,
+    private sidenavDrawerService: SidenavDrawerService
+  ) {
+    this.randomIdGenerator = new RandomIdGenerator();
+  }
+
+  /**
+   * Listen the deleteStationQuestions Service.
+   */
+  private subscribeDeleteStationQuestion(): void {
+    this.stationService.deleteStationQuestion$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        if (questions && this.widgetMode === 'setting') {
+          this.fields = this.fields?.filter(
+            (e) => e.rithmId !== questions.rithmId
+          );
+          this.sidenavDrawerService.closeDrawer();
+        }
+      });
+  }
+
+  /**
+   * Set up deleteStationQuestions subscriptions.
+   */
+  ngOnInit(): void {
+    this.subscribeDeleteStationQuestion();
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   /**
    * Add the element draggable to the questions field.
    *
@@ -48,7 +103,7 @@ export class InputFrameWidgetComponent {
     const newQuestion: Question = questionInfo.rithmId
       ? questionInfo
       : {
-          rithmId: this.randRithmId,
+          rithmId: this.randomIdGenerator.getRandRithmId(4),
           prompt: questionInfo.prompt,
           questionType: questionInfo.questionType,
           isReadOnly: false,
@@ -77,20 +132,6 @@ export class InputFrameWidgetComponent {
   }
 
   /**
-   * Generate a random rithmId to added fields.
-   *
-   * @returns Random RithmId.
-   */
-  private get randRithmId(): string {
-    const genRanHex = (size: number) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join('');
-    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
-    return rithmId;
-  }
-
-  /**
    * Add the kind address.
    *
    * @returns Address children questions.
@@ -114,7 +155,7 @@ export class InputFrameWidgetComponent {
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randRithmId,
+        rithmId: this.randomIdGenerator.getRandRithmId(4),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,

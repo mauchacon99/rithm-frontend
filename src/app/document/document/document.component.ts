@@ -31,6 +31,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { StationService } from 'src/app/core/station.service';
+import { SplitService } from 'src/app/core/split.service';
 
 /**
  * Main component for viewing a document.
@@ -117,6 +118,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Get flow button name. */
   flowButtonName = '';
 
+  /** View new station. */
+  viewNewContainer = false;
+
   constructor(
     private documentService: DocumentService,
     private stationService: StationService,
@@ -127,7 +131,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     private fb: FormBuilder,
     private popupService: PopupService,
     @Inject(ChangeDetectorRef) private changeDetectorR: ChangeDetectorRef,
-    private userService: UserService
+    private userService: UserService,
+    private splitService: SplitService
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control(''),
@@ -138,6 +143,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
+    this.getTreatment();
     this.subscribeDrawerContext$();
     this.subscribeDocumentName$();
     this.subscribeDocumentAnswer$();
@@ -179,6 +185,23 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       (owner) => this.userService.user.rithmId === owner.rithmId
     );
     return !!ownerDocument || this.userService.isAdmin;
+  }
+
+  /**
+   * Get station document split.
+   */
+  private getTreatment(): void {
+    const orgRithmId = this.userService.user.organization;
+    this.splitService.initSdk(orgRithmId);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.viewNewContainer =
+          this.splitService.getStationDocumentTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /** Subscribe to drawerContext$. */
@@ -368,7 +391,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: `Your changes will be lost and you will return to the ${
-        this.isWidget ? 'documents list' : 'dashboard'
+        this.isWidget ? 'documents list' : 'map'
       }.`,
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',

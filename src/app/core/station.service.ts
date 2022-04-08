@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -19,8 +19,7 @@ import {
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
   StationFrameWidget,
-  QuestionFieldType,
-  FrameType,
+  DataLinkObject,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -37,14 +36,17 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new Subject<Question>();
-
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
   flowButtonText$ = new BehaviorSubject<string>('Flow');
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
@@ -52,8 +54,11 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be updated when it changes in station page. */
-  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The datalink widget to be saved. */
+  dataLinkObject$ = new Subject<DataLinkObject>();
+
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
 
   constructor(private http: HttpClient) {}
 
@@ -713,44 +718,88 @@ export class StationService {
    * @param stationFrames The value that will be update.
    * @returns The field question updated.
    */
-  addFieldQuestionWidget(
+  saveStationWidgets(
     stationRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationFrames: StationFrameWidget[]
-  ): Observable<StationFrameWidget> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update the widget field',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const InputFrameWidgetQuestions: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
-      const frameStationWidget: StationFrameWidget = {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
-        id: 0,
-      };
-      return of(frameStationWidget).pipe(delay(1000));
-    }
+  ): Observable<StationFrameWidget[]> {
+    return this.http.post<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames?stationRithmId=${stationRithmId}`,
+      stationFrames
+    );
+  }
+
+  /**
+   * Get worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupWorkerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster`,
+      { params }
+    );
+  }
+
+  /**
+   * Get owner roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupOwnerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins`,
+      { params }
+    );
+  }
+
+  /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`,
+      {
+        body: usersIds,
+      }
+    );
+  }
+
+  /**
+   * Remove users from the group's workers roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Group information with worker roster.
+   */
+  removeUsersFromWorkerRosterGroup(
+    stationGroupRithmId: string,
+
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
+      { body: usersIds }
+    );
   }
 }
