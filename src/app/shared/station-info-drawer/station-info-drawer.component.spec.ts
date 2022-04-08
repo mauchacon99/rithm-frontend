@@ -638,6 +638,35 @@ describe('StationInfoDrawerComponent', () => {
     expect(stationName).toEqual('The name of a station');
   });
 
+  it('should call the service to get the station history', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'getStationHistory'
+    ).and.callThrough();
+
+    component.getStationHistory();
+    expect(spyMethod).toHaveBeenCalledOnceWith(component.stationRithmId);
+  });
+
+  it('should call the errorService if the request getStationHistory fails', () => {
+    const historyEventSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationHistory'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getStationHistory();
+
+    expect(historyEventSpy).toHaveBeenCalledWith(component.stationRithmId);
+    expect(spyError).toHaveBeenCalled();
+  });
+
   it('should get the NumberOfContainers in a specific station', () => {
     const spyMethod = spyOn(
       TestBed.inject(StationService),
