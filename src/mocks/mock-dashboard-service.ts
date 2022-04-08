@@ -9,6 +9,7 @@ import {
   EditDataWidget,
   ColumnsDocumentInfo,
   ItemListWidgetModal,
+  groupTrafficData,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -722,5 +723,25 @@ export class MockDashboardService {
     ];
 
     return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Get traffic data document in stations.
+   *
+   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @returns The data to graph.
+   */
+  getGroupTrafficData(
+    stationGroupRithmId: string
+  ): Observable<groupTrafficData> {
+    const mockGetGroupTrafficData: groupTrafficData = {
+      stationGroupRithmId: '987-654-321',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      datasets: {
+        stationDocuments: [10, 5, 8, 10, 20],
+        averageDocumentStation: [2, 4, 1, 8, 9],
+      },
+    };
+    return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
 }

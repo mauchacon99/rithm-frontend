@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { delay, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -13,6 +13,7 @@ import {
   ColumnsLogicWidget,
   ItemListWidgetModal,
   WidgetType,
+  groupTrafficData,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -450,5 +451,26 @@ export class DashboardService {
         params,
       }
     );
+  }
+
+  /**
+   * Get traffic data document in stations.
+   *
+   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @returns The data to graph.
+   */
+  getGroupTrafficData(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<groupTrafficData> {
+    const mockGetGroupTrafficData: groupTrafficData = {
+      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      datasets: {
+        stationDocuments: [10, 5, 8, 10, 20],
+        averageDocumentStation: [2, 4, 1, 8, 9],
+      },
+    };
+    return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
 }
