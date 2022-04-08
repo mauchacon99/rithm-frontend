@@ -378,10 +378,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
               this.isChained = stationInfo.isChained || false;
+              this.getNumberOfContainers();
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
-            this.getNumberOfContainers();
           },
           // eslint-disable-next-line
           error: (error: any) => {
@@ -497,7 +497,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get the number of container get in a station.
    */
-  getNumberOfContainers(): void {
+  private getNumberOfContainers(): void {
     this.stationService
       .getNumberOfContainers(this.stationRithmId)
       .pipe(first())
