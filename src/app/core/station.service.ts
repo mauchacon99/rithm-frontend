@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -19,8 +19,6 @@ import {
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
   StationFrameWidget,
-  QuestionFieldType,
-  FrameType,
   DataLinkObject,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
@@ -720,45 +718,14 @@ export class StationService {
    * @param stationFrames The value that will be update.
    * @returns The field question updated.
    */
-  addFieldQuestionWidget(
+  saveStationWidgets(
     stationRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationFrames: StationFrameWidget[]
-  ): Observable<StationFrameWidget> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot update the widget field',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const InputFrameWidgetQuestions: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
-      const frameStationWidget: StationFrameWidget = {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
-        id: 0,
-      };
-      return of(frameStationWidget).pipe(delay(1000));
-    }
+  ): Observable<StationFrameWidget[]> {
+    return this.http.post<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames?stationRithmId=${stationRithmId}`,
+      stationFrames
+    );
   }
 
   /**
@@ -768,28 +735,16 @@ export class StationService {
    * @returns A rosterMember array.
    */
   getStationGroupWorkerRoster(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<StationRosterMember[]> {
-    const mockGetStationGroupRoster: StationRosterMember[] = [
-      {
-        rithmId: '123-456-789',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isOwner: false,
-        isWorker: true,
-      },
-      {
-        rithmId: '987-654-321',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isOwner: false,
-        isWorker: true,
-      },
-    ];
-    return of(mockGetStationGroupRoster).pipe(delay(1000));
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster`,
+      { params }
+    );
   }
 
   /**
@@ -839,6 +794,7 @@ export class StationService {
    */
   removeUsersFromWorkerRosterGroup(
     stationGroupRithmId: string,
+
     usersIds: string[]
   ): Observable<StationRosterMember[]> {
     return this.http.delete<StationRosterMember[]>(

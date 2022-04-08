@@ -1,4 +1,4 @@
-<div [formGroup]="fileFieldForm">
+<div [formGroup]="fileFieldForm" *ngIf="!isFileUploaded">
   <mat-form-field
     class="w-full"
     appearance="outline"
@@ -33,3 +33,15 @@
     <span class="text-base"> Upload </span>
   </button>
 </div>
+<section *ngIf="isFileUploaded" class="flex w-3/4 h-full justify-start">
+  <div class="w-14 text-center">
+    <i class="fa-solid fa-file text-4xl text-secondary-300 px-2 py-3"></i>
+  </div>
+  <div class="w-auto py-3">
+    <span class="block text-sm text-accent-300">{{ fileName }}</span>
+    <span class="block text-xs">{{ fileSize }}kb</span>
+  </div>
+  <div class="w-13 text-center">
+    <i class="fas fa-times text-xl text-secondary-500 px-4 py-3"></i>
+  </div>
+</section>

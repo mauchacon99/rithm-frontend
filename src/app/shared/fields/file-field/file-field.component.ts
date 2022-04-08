@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DocumentService } from 'src/app/core/document.service';
 import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 import { UploadFileModalComponent } from 'src/app/shared/fields/upload-file-modal/upload-file-modal.component';
+import { first } from 'rxjs';
 
 /**
  *
@@ -48,6 +49,15 @@ export class FileFieldComponent
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
+
+  /** Is file is uploaded or not. */
+  isFileUploaded = false;
+
+  /** The name of uploaded file. */
+  fileName = '';
+
+  /** The size of uploaded file. */
+  fileSize = '';
 
   constructor(
     private documentService: DocumentService,
@@ -157,12 +167,22 @@ export class FileFieldComponent
    * Open a modal upload-file-modal.
    */
   openUploadFileModal(): void {
-    this.dialog.open(UploadFileModalComponent, {
+    const dialog = this.dialog.open(UploadFileModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '500px',
       minHeight: '345px',
       disableClose: true,
       data: this.field,
     });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe((fileData) => {
+        if (fileData) {
+          this.isFileUploaded = true;
+          this.fileName = fileData.name;
+          this.fileSize = fileData.size;
+        }
+      });
   }
 }
