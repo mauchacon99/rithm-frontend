@@ -10,7 +10,7 @@ export interface StationListGroup {
   /** Name station. */
   name: string;
 
-  /** Number of Total documents. */
+  /** Total number of documents. */
   totalDocuments: number;
 
   /** List users workers. */
