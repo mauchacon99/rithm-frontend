@@ -7,18 +7,13 @@ import { Question, QuestionFieldType } from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
-<<<<<<< HEAD
 import { StationService } from 'src/app/core/station.service';
-import { MockStationService } from 'src/mocks';
-=======
+import { MockPopupService, MockStationService } from 'src/mocks';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { StationService } from 'src/app/core/station.service';
-import { MockStationService, MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
 
 describe('SettingDrawerComponent', () => {
   let component: SettingDrawerComponent;
@@ -43,10 +38,7 @@ describe('SettingDrawerComponent', () => {
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: StationService, useClass: MockStationService },
-<<<<<<< HEAD
-=======
         { provide: PopupService, useClass: MockPopupService },
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
       ],
     }).compileComponents();
     service = TestBed.inject(StationService);
@@ -92,12 +84,13 @@ describe('SettingDrawerComponent', () => {
     expect(drawerSpy).toHaveBeenCalled();
   });
 
-<<<<<<< HEAD
   it('should set the question title to stationQuestionTitle observable', () => {
     component.setQuestionTitle();
     service.stationQuestionTitle$.subscribe((response) => {
       expect(response).toBe(component.fieldSetting);
-=======
+    });
+  });
+
   it('should call getParams to get the stationId', () => {
     TestBed.inject(Router).navigate([
       '/',
@@ -170,7 +163,6 @@ describe('SettingDrawerComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(deleteConfirmPopup);
     service.deleteStationQuestion$.subscribe((response) => {
       expect(response).toEqual(questions[0]);
->>>>>>> a28c219fb19807d37a59284a1191e20e88a55fd2
     });
   });
 });
