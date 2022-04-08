@@ -17,7 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
  */
 @Component({
   selector:
-    'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
+    'app-station-info-header[stationInformation][stationEditMode][viewNewStation][newInterfaceView]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss'],
 })
@@ -42,6 +42,10 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Part of the new station ui. */
   @Input() viewNewStation = false;
+
+  /** Is displayed in a new interface? */
+ @Input() newInterfaceView = false;
+
 
   constructor(
     private fb: FormBuilder,

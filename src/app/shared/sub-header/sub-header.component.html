@@ -1,17 +1,17 @@
 <div
   class="grid grid-cols-3 py-1"
-  [ngClass]="newContainer ? 'textured-bg' : 'bg-secondary-400 '"
+  [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
 >
   <div
     [ngClass]="{
       'col-start-2 text-center': title,
       'h-10 ': !title,
-      'text-white': !newContainer
+      'text-white': !newInterfaceView
     }"
   >
-    <h6 class="leading-10">{{ newContainer ? stationName : title }}</h6>
+    <h6 class="leading-10">{{ newInterfaceView ? stationName : title }}</h6>
   </div>
-  <div class="justify-self-end px-3 md:px-5" *ngIf="newContainer">
+  <div class="justify-self-end px-3 md:px-5" *ngIf="newInterfaceView">
     <button
       class="group"
       type="button"

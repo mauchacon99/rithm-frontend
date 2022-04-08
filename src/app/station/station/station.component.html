@@ -2,7 +2,7 @@
   class="fixed z-10 w-full"
   [itemInfo]="stationInformation"
   [stationEditMode]="true"
-  [newContainer]="false"
+  [newInterfaceView]="false"
 ></app-sub-header>
 <mat-drawer-container
   [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
@@ -68,6 +68,7 @@
               [stationInformation]="stationInformation"
               [stationEditMode]="true"
               [viewNewStation]="viewNewStation"
+              [newInterfaceView]="true"
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->
@@ -246,6 +247,7 @@
               [stationInformation]="stationInformation"
               [stationEditMode]="true"
               [viewNewStation]="viewNewStation"
+              [newInterfaceView]="true"
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->

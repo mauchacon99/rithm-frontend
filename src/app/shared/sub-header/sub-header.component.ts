@@ -18,7 +18,7 @@ import {
  * comments and history.
  */
 @Component({
-  selector: 'app-sub-header[itemInfo][stationEditMode][newContainer]',
+  selector: 'app-sub-header[itemInfo][newInterfaceView]',
   templateUrl: './sub-header.component.html',
   styleUrls: ['./sub-header.component.scss'],
 })
@@ -29,11 +29,11 @@ export class SubHeaderComponent {
   /** Event to detect click comment outside. */
   @Output() checkClickSubHeader: EventEmitter<boolean> = new EventEmitter();
 
-  /** Is component viewed in station edit mode? */
-  @Input() stationEditMode!: boolean;
+ /** Is component viewed in station edit mode? */
+ @Input() stationEditMode = false;
 
-  /** Is component for new container? */
-  @Input() newContainer!: boolean;
+ /** Is displayed in a new interface? */
+ @Input() newInterfaceView = false;
 
   /** Current active icon. */
   activeItem = 'none';
