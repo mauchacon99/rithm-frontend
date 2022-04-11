@@ -34,7 +34,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Whether the action to get group traffic is loading. */
   isLoading = false;
 
-  /** Whether the action to get group traffic  fails. */
+  /** Whether the action to get group traffic fails. */
   errorGroupTraffic = false;
 
   /**
