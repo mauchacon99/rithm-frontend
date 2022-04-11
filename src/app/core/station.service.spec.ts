@@ -1531,7 +1531,7 @@ describe('StationService', () => {
         rows: 4,
         x: 0,
         y: 0,
-        type: FrameType.Body,
+        type: FrameType.Input,
         data: '',
         id: 0,
         questions: [
