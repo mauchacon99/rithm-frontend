@@ -4,6 +4,9 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { GroupTrafficWidgetComponent } from './group-traffic-widget.component';
 import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
+import { LoadingWidgetComponent } from '../loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from '../error-widget/error-widget.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
@@ -13,7 +16,11 @@ describe('GroupTrafficWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GroupTrafficWidgetComponent],
+      declarations: [
+        GroupTrafficWidgetComponent,
+        MockComponent(LoadingWidgetComponent),
+        MockComponent(ErrorWidgetComponent),
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
@@ -54,5 +61,39 @@ describe('GroupTrafficWidgetComponent', () => {
     );
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should rendered component loading for widget', () => {
+    component.isLoading = true;
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator-group-traffic'
+    );
+    expect(loadingIndicator).toBeTruthy();
+    expect(component.isLoading).toBeTrue();
+  });
+
+  it('should show error message when request group traffic data', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getGroupTrafficData'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyService = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    fixture.detectChanges();
+    const errorElement = fixture.debugElement.nativeElement.querySelector(
+      '#error-load-widget-group-traffic'
+    );
+    expect(errorElement).toBeTruthy();
+    expect(component.errorGroupTraffic).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
   });
 });

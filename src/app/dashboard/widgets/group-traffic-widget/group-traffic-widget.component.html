@@ -1,1 +1,16 @@
-<p>group-traffic-widget works!</p>
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoading"
+  id="app-loading-indicator-group-traffic"
+></app-loading-widget>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="errorGroupTraffic"
+  id="error-load-widget-group-traffic"
+  [errorMessage]="'Unable to retrieve group data'"
+  (tryAgain)="getGroupTrafficData()"
+>
+</app-error-widget>
+<div *ngIf="!isLoading && !errorGroupTraffic">
+  <p>group-traffic-widget works!</p>
+</div>
