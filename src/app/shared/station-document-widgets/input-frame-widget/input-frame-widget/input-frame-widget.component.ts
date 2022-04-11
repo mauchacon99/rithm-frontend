@@ -41,15 +41,21 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** The list of questionFieldTypes. */
+  fieldTypes = QuestionFieldType;
+
   /** Emit an event to adjust its heigth when its number of children overpass its number of rows. */
   @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
+
+  /** The list of questionFieldTypes. */
+  tempTitle = '';
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
-
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
 
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
@@ -78,10 +84,36 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Listen the stationQuestionTitle Service.
+   */
+  private stationQuestionTitle$(): void {
+    this.stationService.stationQuestionTitle$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questionTitle) => {
+        if (
+          questionTitle &&
+          this.widgetMode === 'setting' &&
+          this.fields &&
+          this.fields.length > 0
+        ) {
+          const questionIndex = this.fields?.findIndex(
+            (e) => e.rithmId === questionTitle.rithmId
+          );
+          if (!this.tempTitle) {
+            this.tempTitle = this.fields[questionIndex].prompt.slice();
+          }
+          this.fields[questionIndex].prompt =
+            questionTitle.value || this.tempTitle;
+        }
+      });
+  }
+
+  /**
    * Set up deleteStationQuestions subscriptions.
    */
   ngOnInit(): void {
     this.subscribeDeleteStationQuestion();
+    this.stationQuestionTitle$();
   }
 
   /**
@@ -176,6 +208,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
    */
   openFieldSettingDrawer(field: Question): void {
     if (this.widgetMode === 'setting') {
+      this.tempTitle = '';
       this.openSettingDrawer.emit(field);
     }
   }

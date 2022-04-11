@@ -18,6 +18,9 @@ import {
   StationFrameWidget,
   FrameType,
   DataLinkObject,
+  StandardNumberJSON,
+  DocumentEvent,
+  GroupTrafficData,
 } from 'src/models';
 
 /**
@@ -50,6 +53,9 @@ export class MockStationService {
 
   /** The question to be deleted when it delete in station field settings. */
   deleteStationQuestion$ = new Subject<Question>();
+
+  /** The question title to be updated when it's updated in setting drawer. */
+  stationQuestionTitle$ = new Subject<Question>();
 
   /**
    * Gets a station information.
@@ -1101,6 +1107,7 @@ export class MockStationService {
             {
               rithmId: '123-321-456',
               name: 'station 1',
+              totalDocuments: 3,
               workers: [
                 {
                   rithmId: '123-321-456',
@@ -1151,6 +1158,7 @@ export class MockStationService {
         {
           rithmId: '123-321-456',
           name: 'station 1',
+          totalDocuments: 3,
           workers: [
             {
               rithmId: '123-321-456',
@@ -1374,5 +1382,85 @@ export class MockStationService {
       },
     ];
     return of(mockGetStationGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get history station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The history station.
+   */
+  getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot response station history',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const historyResponse: DocumentEvent[] = [
+        {
+          eventTimeUTC: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(historyResponse).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the number of container in a station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The number of container.
+   */
+  getNumberOfContainers(stationRithmId: string): Observable<number> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive the number of containers',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardNumberJSON = {
+        data: 10,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get traffic data document in stations.
+   *
+   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @returns The data to graph.
+   */
+  getGroupTrafficData(
+    stationGroupRithmId: string
+  ): Observable<GroupTrafficData> {
+    const mockGetGroupTrafficData: GroupTrafficData = {
+      stationGroupRithmId: '987-654-321',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      stationDocuments: [10, 5, 8, 10, 20],
+      averageDocumentStation: [2, 4, 1, 8, 9],
+    };
+    return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
 }
