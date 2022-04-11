@@ -4,10 +4,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { StationWidgetDrawerComponent } from './station-widget-drawer.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
+  ColumnsDocumentInfo,
+  OptionsSelectWidgetDrawer,
   Question,
   QuestionFieldType,
   WidgetType,
-  OptionsSelectWidgetDrawer,
 } from 'src/models';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
@@ -23,7 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('StationWidgetDrawerComponent', () => {
+fdescribe('StationWidgetDrawerComponent', () => {
   let component: StationWidgetDrawerComponent;
   let fixture: ComponentFixture<StationWidgetDrawerComponent>;
   const dataEditWidget = {
@@ -515,5 +516,71 @@ describe('StationWidgetDrawerComponent', () => {
     expect(spySetWidgetType).toHaveBeenCalledOnceWith(
       dataEditWidget.widgetItem
     );
+  });
+
+  it('should set default columns if station columns are empty and station is type multiline', () => {
+    component.dataDrawerStation.widgetItem.widgetType =
+      WidgetType.StationMultiline;
+    component.stationColumns = [];
+    const dataExpected = [
+      { name: ColumnsDocumentInfo.Name },
+      { name: ColumnsDocumentInfo.LastUpdated },
+      { name: ColumnsDocumentInfo.AssignedUser },
+    ];
+
+    component['setDefaultColumnsStationMultiline']();
+
+    expect(component.stationColumns).toEqual(dataExpected);
+  });
+
+  it('should not set default columns when stationColumns have columns and station is type multiline', () => {
+    const dataExpected = [
+      { name: ColumnsDocumentInfo.Name },
+      { name: 'Question', questionId: '123-456-789' },
+      { name: ColumnsDocumentInfo.TimeInStation },
+    ];
+    component.dataDrawerStation.widgetItem.widgetType =
+      WidgetType.StationMultiline;
+    component.stationColumns = dataExpected;
+
+    component['setDefaultColumnsStationMultiline']();
+
+    expect(component.stationColumns).toEqual(dataExpected);
+  });
+
+  it('should be false check type question not able and station multiline', () => {
+    component.dataDrawerStation.widgetItem.widgetType =
+      WidgetType.StationMultiline;
+    const question: Question = {
+      prompt: 'Fake question 2',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: '2',
+    };
+
+    const response = component['checkTypeQuestionAndStation'](question);
+    expect(response).toBeFalse();
+  });
+
+  it('should be true check type question able and station multiline', () => {
+    component.dataDrawerStation.widgetItem.widgetType =
+      WidgetType.StationMultiline;
+    const question: Question = {
+      prompt: 'Fake question 2',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Select,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: '2',
+    };
+
+    const response = component['checkTypeQuestionAndStation'](question);
+    expect(response).toBeTrue();
   });
 });

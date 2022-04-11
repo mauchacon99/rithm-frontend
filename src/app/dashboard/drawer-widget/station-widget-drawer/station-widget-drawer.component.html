@@ -56,7 +56,13 @@
             </mat-form-field>
 
             <button
-              *ngIf="formChild"
+              *ngIf="
+                formChild &&
+                dataDrawerStation.widgetItem.widgetType !==
+                  enumWidgetType.StationMultiline &&
+                dataDrawerStation.widgetItem.widgetType !==
+                  enumWidgetType.StationMultilineBanner
+              "
               (click)="deleteColumn(formChild)"
               mat-icon-button
               [attr.data-testid]="'delete-column-' + formChild"
@@ -68,7 +74,15 @@
         </div>
       </form>
 
-      <div class="mt-2">
+      <div
+        class="mt-2"
+        *ngIf="
+          dataDrawerStation.widgetItem.widgetType !==
+            enumWidgetType.StationMultiline &&
+          dataDrawerStation.widgetItem.widgetType !==
+            enumWidgetType.StationMultilineBanner
+        "
+      >
         <button
           mat-stroked-button
           color="accent"

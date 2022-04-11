@@ -16,6 +16,9 @@ import {
   EditDataWidget,
   OptionsSelectWidgetDrawer,
   DocumentImage,
+  WidgetType,
+  ColumnsDocumentInfo,
+  QuestionFieldType,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -54,6 +57,28 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** WidgetType of item. */
   @Output() getWidgetItem = new EventEmitter<DashboardItem>();
 
+  /**
+   * Disable button new column.
+   *
+   * @returns True if all options is selected.
+   */
+  get disabledNewColumn(): boolean {
+    const allSelects = [...this.documentInfo, ...this.documentFields];
+    const isDisabled = !allSelects.find((option) => !option.disabled);
+    const isAllInputs =
+      allSelects.length === this.getFormColumns.controls.length;
+    return isDisabled || isAllInputs || this.getFormColumns.invalid;
+  }
+
+  /**
+   * Get array form.
+   *
+   * @returns FormArray to ngFor.
+   */
+  get getFormColumns(): FormArray {
+    return this.formColumns.get('columns') as FormArray;
+  }
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -80,6 +105,15 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Loading error. */
   failedLoadDrawer = false;
+
+  /** Enum widgetType. */
+  enumWidgetType = WidgetType;
+
+  /** Enum questions type. */
+  enumQuestionFieldType = QuestionFieldType;
+
+  /** Enum ColumnsDocumentInfo. */
+  enumColumnsDocumentInfo = ColumnsDocumentInfo;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -129,13 +163,42 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   private setDocumentFields(): void {
     this.documentFields = [];
     this.questions?.map((question) => {
+      const isDisabledQuestionOrStation =
+        this.checkTypeQuestionAndStation(question);
       this.documentFields.push({
         name: question.prompt,
         value: question.rithmId,
-        disabled: this.checkExistColumn(question.rithmId, 'questionId'),
+        disabled: isDisabledQuestionOrStation
+          ? isDisabledQuestionOrStation
+          : this.checkExistColumn(question.rithmId, 'questionId'),
         questionId: question.rithmId,
       });
     });
+  }
+
+  /**
+   * Check type of question and type of station.
+   *
+   * @param question Question to check.
+   * @returns A boolean, true if station is Multiline and check is invalid to station.
+   */
+  private checkTypeQuestionAndStation(question: Question): boolean {
+    if (
+      this.dataDrawerStation.widgetItem.widgetType ===
+        this.enumWidgetType.StationMultiline ||
+      this.dataDrawerStation.widgetItem.widgetType ===
+        this.enumWidgetType.StationMultilineBanner
+    ) {
+      return (
+        question.questionType === this.enumQuestionFieldType.Select ||
+        question.questionType === this.enumQuestionFieldType.MultiSelect ||
+        question.questionType === this.enumQuestionFieldType.CheckList ||
+        question.questionType === this.enumQuestionFieldType.Checkbox ||
+        question.questionType === this.enumQuestionFieldType.LongText ||
+        question.questionType === this.enumQuestionFieldType.URL
+      );
+    }
+    return false;
   }
 
   /**
@@ -161,15 +224,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       );
     }
     return check;
-  }
-
-  /**
-   * Get array form.
-   *
-   * @returns FormArray to ngFor.
-   */
-  get getFormColumns(): FormArray {
-    return this.formColumns.get('columns') as FormArray;
   }
 
   /**
@@ -238,6 +292,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (questions) => {
           this.questions = questions;
+          this.setDefaultColumnsStationMultiline();
           this.checkStationColumns();
           this.loadColumnsSelect();
           this.isLoading = false;
@@ -291,17 +346,21 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Disable button new column.
-   *
-   * @returns True if all options is selected.
-   */
-  get disabledNewColumn(): boolean {
-    const allSelects = [...this.documentInfo, ...this.documentFields];
-    const isDisabled = !allSelects.find((option) => !option.disabled);
-    const isAllInputs =
-      allSelects.length === this.getFormColumns.controls.length;
-    return isDisabled || isAllInputs || this.getFormColumns.invalid;
+  /** Set default columns if station columns are empty and station is type multiline. */
+  private setDefaultColumnsStationMultiline(): void {
+    if (
+      this.stationColumns.length < 2 &&
+      (this.dataDrawerStation.widgetItem.widgetType ===
+        this.enumWidgetType.StationMultilineBanner ||
+        this.dataDrawerStation.widgetItem.widgetType ===
+          this.enumWidgetType.StationMultiline)
+    ) {
+      this.stationColumns = [
+        { name: this.enumColumnsDocumentInfo.Name },
+        { name: this.enumColumnsDocumentInfo.LastUpdated },
+        { name: this.enumColumnsDocumentInfo.AssignedUser },
+      ];
+    }
   }
 
   /**
