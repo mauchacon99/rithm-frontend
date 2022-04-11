@@ -17,6 +17,7 @@ describe('UserGroupStationAdminComponent', () => {
   const stations: StationListGroup = {
     rithmId: '123-321-456',
     name: 'station 1',
+    totalDocuments: 3,
     workers: [
       {
         rithmId: '123-321-456',
@@ -146,7 +147,7 @@ describe('UserGroupStationAdminComponent', () => {
       component.selectedItem = subStationGroups;
       const spyMethod = spyOn(component, 'goToStationOnMap').and.callThrough();
       const spySubjectCenter = spyOn(
-        mapService.mapStationHelper.centerStationGroupRithmId$,
+        mapService.mapStationGroupHelper.centerStationGroupRithmId$,
         'next'
       );
       const spySubjectViewButton = spyOn(
