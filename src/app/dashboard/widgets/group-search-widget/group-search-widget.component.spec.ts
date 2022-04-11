@@ -28,7 +28,6 @@ describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
   let fixture: ComponentFixture<GroupSearchWidgetComponent>;
   const dataWidget =
-    // eslint-disable-next-line max-len
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
   const dataStationGroupWidget: StationGroupData = {
@@ -43,6 +42,7 @@ describe('GroupSearchWidgetComponent', () => {
           {
             rithmId: '5237520-7837-78378-78378',
             name: 'StationName',
+            totalDocuments: 3,
             workers: [],
             stationOwners: [],
           },
@@ -57,18 +57,21 @@ describe('GroupSearchWidgetComponent', () => {
       {
         rithmId: '3237520-7837-78378-78378',
         name: 'StationName',
+        totalDocuments: 3,
         workers: [],
         stationOwners: [],
       },
       {
         rithmId: '9267520-4837-78378-78378',
         name: 'StationName 2',
+        totalDocuments: 3,
         workers: [],
         stationOwners: [],
       },
       {
         rithmId: '1237620-2837-78378-78378',
         name: 'StationName 3',
+        totalDocuments: 3,
         workers: [],
         stationOwners: [],
       },
@@ -206,6 +209,7 @@ describe('GroupSearchWidgetComponent', () => {
       {
         rithmId: '1237620-2837-78378-78378',
         name: 'StationName 3',
+        totalDocuments: 3,
         workers: [],
         stationOwners: [],
       },
@@ -225,6 +229,7 @@ describe('GroupSearchWidgetComponent', () => {
           {
             rithmId: '5237520-7837-78378-78378',
             name: 'StationName',
+            totalDocuments: 3,
             workers: [],
             stationOwners: [],
           },

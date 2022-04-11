@@ -14,7 +14,6 @@ import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
-import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
@@ -22,14 +21,13 @@ import {
   DashboardItem,
   EditDataWidget,
   RoleDashboardMenu,
-  Station,
   WidgetType,
 } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
-import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
+import { MobileBrowserChecker } from 'src/helpers';
 
 /**
  * Main component for the dashboard screens.
@@ -92,11 +90,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
-  /** Value used to compare the widgets. */
-  widgetType = WidgetType;
-
-  /** View new dashboard. */
-  viewNewDashboard = false;
+  /** Enum widget type. */
+  enumWidgetType = WidgetType;
 
   /** If it needs to create new dashboard. */
   isCreateNewDashboard = false;
@@ -115,10 +110,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   showButtonSetting = false;
-
-  // TODO: remove when admin users can access stations through map
-  /** The list of all stations for an admin to view. */
-  stations: Station[] = [];
 
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
@@ -145,7 +136,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private stationService: StationService,
     private userService: UserService,
     private splitService: SplitService,
     private errorService: ErrorService,
@@ -158,17 +148,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private renderer: Renderer2,
     private mobileBrowserChecker: MobileBrowserChecker
-  ) {
-    // TODO: remove when admin users can access stations through map
-    if (this.isAdmin) {
-      this.stationService
-        .getAllStations()
-        .pipe(first())
-        .subscribe((stations) => {
-          this.stations = stations;
-        });
-    }
-  }
+  ) {}
 
   /**
    * Initialize split on page load.
@@ -179,6 +159,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscribeDrawerContext$();
     this.subscribeDrawerDataWidget$();
     this.split();
+    this.getParams();
     this.sidenavDrawerService.setDrawer(this.drawer);
 
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
@@ -236,15 +217,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        this.viewNewDashboard =
-          this.splitService.getDashboardTreatment() === 'on';
-        this.isAddWidget =
-          this.splitService.getDashboardLibraryTreatment() === 'on';
-        if (this.viewNewDashboard) {
-          this.getParams();
-        }
         this.showButtonSetting =
           this.splitService.getConfigWidgetsTreatment() === 'on';
+        this.isAddWidget =
+          this.splitService.getDashboardLibraryTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -509,6 +485,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         dashboardData.widgets[index].rithmId = '';
       }
     });
+    dashboardData.name = dashboardData.name.trim()
+      ? dashboardData.name.trim()
+      : 'Untitled Dashboard';
     return dashboardData;
   }
 

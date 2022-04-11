@@ -17,6 +17,7 @@ describe('UserGroupStationAdminComponent', () => {
   const stations: StationListGroup = {
     rithmId: '123-321-456',
     name: 'station 1',
+    totalDocuments: 3,
     workers: [
       {
         rithmId: '123-321-456',
