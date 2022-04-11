@@ -7,11 +7,27 @@ import { StationService } from 'src/app/core/station.service';
  * Component for station group traffic.
  */
 @Component({
-  selector: 'app-group-traffic-widget[showButtonSetting][dataWidget][editMode]',
+  selector:
+    'app-group-traffic-widget[showButtonSetting][dataWidget][editMode][isMobileDevice]',
   templateUrl: './group-traffic-widget.component.html',
   styleUrls: ['./group-traffic-widget.component.scss'],
 })
 export class GroupTrafficWidgetComponent implements OnInit {
+  /** Detect if is mobile device. */
+  @Input() set isMobileDevice(value: boolean) {
+    this._isMobileDevice = value;
+    console.log('isMobile', this._isMobileDevice);
+  }
+
+  /**
+   * Get data if is device mobile.
+   *
+   * @returns Data boolean if is mobile device.
+   */
+  get isMobileDevice(): boolean {
+    return this._isMobileDevice;
+  }
+
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
@@ -20,6 +36,9 @@ export class GroupTrafficWidgetComponent implements OnInit {
 
   /** Set data for group traffic widget. */
   @Input() dataWidget!: string;
+
+  /** Parameter private for save if is mobile device. */
+  private _isMobileDevice!: boolean;
 
   groupTrafficData!: GroupTrafficData;
 

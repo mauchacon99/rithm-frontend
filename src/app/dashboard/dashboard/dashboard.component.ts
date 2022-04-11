@@ -111,6 +111,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   showButtonSetting = false;
 
+  /** Is Mobile device. */
+  isMobileDevice = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
     'menuDashboard';
@@ -169,6 +172,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Set config break point in mobile. */
   private setConfigMobileGridster(): void {
+    this.isMobileDevice = this.mobileBrowserChecker.isMobileDevice;
     this.options.mobileBreakpoint = this.mobileBrowserChecker.isMobileDevice
       ? 1920
       : 640;
