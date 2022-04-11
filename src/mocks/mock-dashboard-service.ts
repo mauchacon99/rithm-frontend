@@ -91,7 +91,7 @@ export class MockDashboardService {
       description:
         'Select multiple document values to display on each row of the list.',
       descriptionComponent: {
-        title: 'Table Widget',
+        title: 'List Widget',
         type: 'Station Template',
         customizable: 'Row Information',
         description: `Great for displaying longer text fields in documents. By default, this widget displays the document name,

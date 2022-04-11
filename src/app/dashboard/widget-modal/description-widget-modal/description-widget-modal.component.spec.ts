@@ -88,17 +88,10 @@ describe('DescriptionWidgetModalComponent', () => {
     });
 
     it('should get data for station', () => {
+      component.widgetType = WidgetType.Station;
       const expectData = JSON.stringify({
         stationRithmId: itemWidgetModalSelected.itemList.rithmId,
-        columns:
-          component.widgetType === WidgetType.StationMultiline ||
-          component.widgetType === WidgetType.StationMultilineBanner
-            ? [
-                { name: 'name' },
-                { name: 'lastUpdatedUTC' },
-                { name: 'flowedTimeUTC' },
-              ]
-            : [{ name: 'name' }],
+        columns: [{ name: 'name' }],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'station';
@@ -115,6 +108,22 @@ describe('DescriptionWidgetModalComponent', () => {
       component.itemWidgetModalSelected.itemType = 'group';
       fixture.detectChanges();
 
+      expect(component.dataWidget).toEqual(expectData);
+    });
+
+    it('should get data for StationMultiline', () => {
+      component.widgetType = WidgetType.StationMultiline;
+      const expectData = JSON.stringify({
+        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        columns: [
+          { name: 'name' },
+          { name: 'lastUpdatedUTC' },
+          { name: 'flowedTimeUTC' },
+        ],
+      });
+      component.itemWidgetModalSelected = itemWidgetModalSelected;
+      component.itemWidgetModalSelected.itemType = 'station';
+      fixture.detectChanges();
       expect(component.dataWidget).toEqual(expectData);
     });
   });
