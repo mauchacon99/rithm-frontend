@@ -162,6 +162,7 @@ export class FileFieldComponent
       maxWidth: '500px',
       minHeight: '345px',
       disableClose: true,
+      data: this.field,
     });
   }
 }
