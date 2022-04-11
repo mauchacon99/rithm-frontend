@@ -102,7 +102,7 @@ export class DashboardService {
       description:
         'Select multiple document values to display on each row of the list along with custom banner image.',
       descriptionComponent: {
-        title: 'Table Widget',
+        title: 'List Widget',
         type: 'Station Template',
         customizable: 'Row information',
         description: `Great for display longer text fields in documents. By default. this widget displays the document name.

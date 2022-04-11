@@ -1,6 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
+import {
+  ColumnsDocumentInfo,
+  DashboardItem,
+  SelectedItemWidgetModel,
+  WidgetType,
+} from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 
@@ -35,11 +40,11 @@ export class DescriptionWidgetModalComponent implements OnInit {
           this.widgetType === WidgetType.StationMultiline ||
           this.widgetType === WidgetType.StationMultilineBanner
             ? [
-                { name: 'name' },
-                { name: 'lastUpdatedUTC' },
-                { name: 'flowedTimeUTC' },
+                { name: ColumnsDocumentInfo.Name },
+                { name: ColumnsDocumentInfo.LastUpdated },
+                { name: ColumnsDocumentInfo.TimeInStation },
               ]
-            : [{ name: 'name' }],
+            : [{ name: ColumnsDocumentInfo.Name }],
       });
     } else {
       return JSON.stringify({
