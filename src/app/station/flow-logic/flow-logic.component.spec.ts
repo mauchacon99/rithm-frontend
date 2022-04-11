@@ -845,75 +845,75 @@ describe('FlowLogicComponent', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.GreaterThan
       );
-      expect(translatorResponse).toEqual('Is Greater Than');
+      expect(translatorResponse).toEqual('is greater than');
     });
 
     it('should translate the operator LesserThan', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.LesserThan
       );
-      expect(translatorResponse).toEqual('Is Lesser Than');
+      expect(translatorResponse).toEqual('is less than');
     });
 
     it('should translate the operator GreaterOrEqual', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.GreaterOrEqual
       );
-      expect(translatorResponse).toEqual('Is Greater or Equal to');
+      expect(translatorResponse).toEqual('is greater than or equal to');
     });
 
     it('should translate the operator LesserOrEqual', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.LesserOrEqual
       );
-      expect(translatorResponse).toEqual('Is Lesser or Equal to');
+      expect(translatorResponse).toEqual('is lesser than or equal to');
     });
 
     it('should translate the operator EqualTo', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.EqualTo
       );
-      expect(translatorResponse).toEqual('Is Equal To');
+      expect(translatorResponse).toEqual('is');
     });
 
     it('should translate the operator NotEqualTo', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.NotEqualTo
       );
-      expect(translatorResponse).toEqual('Is Not Equal To');
+      expect(translatorResponse).toEqual('is not');
     });
 
     it('should translate the operator Before', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.Before
       );
-      expect(translatorResponse).toEqual('Is Before');
+      expect(translatorResponse).toEqual('before');
     });
 
     it('should translate the operator After', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.After
       );
-      expect(translatorResponse).toEqual('Is After');
+      expect(translatorResponse).toEqual('after');
     });
 
     it('should translate the operator Contains', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.Contains
       );
-      expect(translatorResponse).toEqual('Contains');
+      expect(translatorResponse).toEqual('contains');
     });
 
     it('should translate the operator NotContains', () => {
       const translatorResponse = component.translateOperator(
         OperatorType.NotContains
       );
-      expect(translatorResponse).toEqual('Does not contains');
+      expect(translatorResponse).toEqual('does not contains');
     });
 
     it('should translate the operator On', () => {
       const translatorResponse = component.translateOperator(OperatorType.On);
-      expect(translatorResponse).toEqual('Is On');
+      expect(translatorResponse).toEqual('on');
     });
   });
   describe('New rule modal afterClosed', () => {
