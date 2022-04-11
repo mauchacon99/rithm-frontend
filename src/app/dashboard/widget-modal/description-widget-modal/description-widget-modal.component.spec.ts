@@ -127,7 +127,7 @@ describe('DescriptionWidgetModalComponent', () => {
 
       expect(component.dataWidget).toEqual(expectData);
 
-      component.widgetType = WidgetType.StationMultilineBanner;
+      component.widgetType = WidgetType.StationMultiline;
       fixture.detectChanges();
       expect(component.dataWidget).toEqual(expectData);
     });
