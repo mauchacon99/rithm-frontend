@@ -73,7 +73,8 @@
         <app-station-widget
           *ngIf="
             widgetType === enumWidgetType.Station ||
-            widgetType === enumWidgetType.StationTableBanner
+            widgetType === enumWidgetType.StationTableBanner ||
+            widgetType === enumWidgetType.StationMultiline
           "
           class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
           [dataWidget]="dataWidget"

@@ -91,10 +91,11 @@ export class DashboardService {
       description:
         'Select multiple document values to display on each row of the list.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'Table Widget',
+        type: 'Station Template',
+        customizable: 'Row Information',
+        description: `Great for displaying longer text fields in documents. By default, this widget displays the document name,
+        late updated date, and the first text field from each document. Each of these three fields can be edited from the dashboard.`,
       },
     },
     [WidgetType.StationMultilineBanner]: {

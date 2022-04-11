@@ -90,7 +90,15 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for station', () => {
       const expectData = JSON.stringify({
         stationRithmId: itemWidgetModalSelected.itemList.rithmId,
-        columns: [{ name: 'name' }],
+        columns:
+          component.widgetType === WidgetType.StationMultiline ||
+          component.widgetType === WidgetType.StationMultilineBanner
+            ? [
+                { name: 'name' },
+                { name: 'lastUpdatedUTC' },
+                { name: 'flowedTimeUTC' },
+              ]
+            : [{ name: 'name' }],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'station';
