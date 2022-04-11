@@ -39,7 +39,7 @@ export class GroupListHierarchyComponent implements OnInit {
   stations!: StationListGroup[];
 
   /** Data to station group widget to show filtered results. */
-  stationsGroups!: StationGroupData[];
+  stationGroupsFiltered!: StationGroupData;
 
   /** Load indicator get groups. */
   set isLoading(value: boolean) {
@@ -73,6 +73,7 @@ export class GroupListHierarchyComponent implements OnInit {
           this.isLoading = false;
           this.isErrorGetGroups = false;
           this.stationGroups = stationGroup;
+          this.stationGroupsFiltered = stationGroup;
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -99,17 +100,18 @@ export class GroupListHierarchyComponent implements OnInit {
    *
    * @param search Value to search.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   searchStation(search: string): void {
-    //console.log(search);
-    //console.log(this.stationGroups);
-    /*  this.stations = this.stationGroups.stations.filter((station) =>
-      station.name.toLowerCase().includes(search.toLowerCase())
-    );
-    this.stationsGroups = this.stationGroups.subStationGroups.filter(
+    if (search.length){
+      this.stationGroupsFiltered.stations = this.stationGroups?.stations.filter((station) =>
+      station.name.toLowerCase().includes(search.toLowerCase()));
+
+      this.stationGroupsFiltered.subStationGroups = this.stationGroups?.subStationGroups.filter(
       (subStation) =>
         subStation.title.toLowerCase().includes(search.toLowerCase())
-    );*/
+    );
+    } else {
+      this.getStationGroups();
+    }
   }
 
   /**
