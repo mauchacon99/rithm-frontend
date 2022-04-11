@@ -24,7 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-fdescribe('StationWidgetDrawerComponent', () => {
+describe('StationWidgetDrawerComponent', () => {
   let component: StationWidgetDrawerComponent;
   let fixture: ComponentFixture<StationWidgetDrawerComponent>;
   const dataEditWidget = {
