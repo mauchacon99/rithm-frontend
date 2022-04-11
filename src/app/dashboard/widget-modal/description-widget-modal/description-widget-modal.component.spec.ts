@@ -112,7 +112,7 @@ describe('DescriptionWidgetModalComponent', () => {
     });
 
     it('should get data for StationMultiline', () => {
-      component.widgetType = WidgetType.StationMultilineBanner;
+      component.widgetType = WidgetType.StationMultiline;
       const expectData = JSON.stringify({
         stationRithmId: itemWidgetModalSelected.itemList.rithmId,
         columns: [
@@ -124,7 +124,6 @@ describe('DescriptionWidgetModalComponent', () => {
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'station';
       fixture.detectChanges();
-
       expect(component.dataWidget).toEqual(expectData);
     });
   });
