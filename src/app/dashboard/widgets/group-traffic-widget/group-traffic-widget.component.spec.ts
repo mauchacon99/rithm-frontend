@@ -4,8 +4,8 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { GroupTrafficWidgetComponent } from './group-traffic-widget.component';
 import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
-import { LoadingWidgetComponent } from '../loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from '../error-widget/error-widget.component';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 
 describe('GroupTrafficWidgetComponent', () => {
