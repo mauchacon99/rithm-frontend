@@ -854,15 +854,13 @@ export class StationService {
    * @returns Number of containers.
    */
   getNumberOfContainers(stationRithmId: string): Observable<number> {
-    const params = new HttpParams().set(
-      'stationRithmId',
-      stationRithmId
-    );
-    return this.http.get<StandardNumberJSON>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents`,
-      { params }
-    )
-    .pipe(map((response) => response.data as number));
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StandardNumberJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents`,
+        { params }
+      )
+      .pipe(map((response) => response.data as number));
   }
 
   /**

@@ -703,4 +703,20 @@ describe('StationInfoDrawerComponent', () => {
     component.getStationInfo();
     expect(spyNumberContainers).toHaveBeenCalled();
   });
+
+  it('should show number-containers-loading when get number of containers of current station ', () => {
+    component.stationLoading = false;
+
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      of(component.stationInformation)
+    );
+    component.getStationInfo();
+    fixture.detectChanges();
+
+    expect(component.numberContainersLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#number-containers-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
 });
