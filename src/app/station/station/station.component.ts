@@ -325,7 +325,7 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-
+    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
   }
 
