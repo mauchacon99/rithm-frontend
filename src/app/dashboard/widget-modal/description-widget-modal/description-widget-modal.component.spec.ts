@@ -127,7 +127,6 @@ describe('DescriptionWidgetModalComponent', () => {
 
       expect(component.dataWidget).toEqual(expectData);
     });
-
   });
 
   describe('Add new widget', () => {
