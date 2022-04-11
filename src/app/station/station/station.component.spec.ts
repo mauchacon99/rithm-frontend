@@ -39,6 +39,7 @@ import {
   QuestionFieldType,
   RuleType,
   DataLinkObject,
+  StationFrameWidget,
 } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
@@ -50,7 +51,7 @@ import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentService } from 'src/app/core/document.service';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { GridsterModule } from 'angular-gridster2';
@@ -928,6 +929,145 @@ describe('StationComponent', () => {
     expect(component.dataLinkArray).toHaveSize(1);
     service.dataLinkObject$.next(dataLink);
     expect(component.dataLinkArray).toHaveSize(1);
+  });
+
+  it('should call the method saveDataLinks if there are datalinks object added in the station', () => {
+    component.dataLinkArray = [
+      {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      },
+    ];
+    const saveDataLinkSpy = spyOn(component, 'saveDataLinks');
+    component.saveStationInformation();
+    expect(saveDataLinkSpy).toHaveBeenCalled();
+  });
+
+  it('should request saveStationWidgets service if there are dataLinkObjects added', () => {
+    component.dataLinkArray = [
+      {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      },
+    ];
+    const saveStationWidgetSpy = spyOn(
+      TestBed.inject(StationService),
+      'saveStationWidgets'
+    ).and.callThrough();
+    component.saveStationInformation();
+    expect(saveStationWidgetSpy).toHaveBeenCalled();
+  });
+
+  it('should request saveDataLink if saveStationWidgets succeed', () => {
+    component.dataLinkArray = [
+      {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      },
+    ];
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+    ];
+    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+      of(frameStationWidget)
+    );
+    const dataLinkSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'saveDataLink'
+    ).and.callThrough();
+    component.saveStationInformation();
+    expect(dataLinkSpy).toHaveBeenCalled();
+  });
+
+  it('should request errorService if the request to saveStationWidget fails', () => {
+    component.dataLinkArray = [
+      {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      },
+    ];
+    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const errorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.saveStationInformation();
+    expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should request errorService if saveStationWidget succeed but the request to saveDataLink fails', () => {
+    component.dataLinkArray = [
+      {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      },
+    ];
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+    ];
+    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+      of(frameStationWidget)
+    );
+    spyOn(TestBed.inject(DocumentService), 'saveDataLink').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const errorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.saveStationInformation();
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   describe('should add value to the array of input frames', () => {
