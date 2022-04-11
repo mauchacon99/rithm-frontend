@@ -31,11 +31,15 @@ export class DescriptionWidgetModalComponent implements OnInit {
     } else if (this.itemWidgetModalSelected.itemType === 'station') {
       return JSON.stringify({
         stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [
-          { name: 'name' },
-          { name: 'lastUpdatedUTC' },
-          { name: 'flowedTimeUTC' },
-        ],
+        columns:
+          this.widgetType === WidgetType.StationMultiline ||
+          this.widgetType === WidgetType.StationMultilineBanner
+            ? [
+                { name: 'name' },
+                { name: 'lastUpdatedUTC' },
+                { name: 'flowedTimeUTC' },
+              ]
+            : [{ name: 'name' }],
       });
     } else {
       return JSON.stringify({
