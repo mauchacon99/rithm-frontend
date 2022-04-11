@@ -31,7 +31,11 @@ export class DescriptionWidgetModalComponent implements OnInit {
     } else if (this.itemWidgetModalSelected.itemType === 'station') {
       return JSON.stringify({
         stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [{ name: 'name' }],
+        columns: [
+          { name: 'name' },
+          { name: 'lastUpdatedUTC' },
+          { name: 'flowedTimeUTC' },
+        ],
       });
     } else {
       return JSON.stringify({
@@ -75,7 +79,9 @@ export class DescriptionWidgetModalComponent implements OnInit {
       this.widgetTypeWithoutDefault ===
         this.enumWidgetType.StationTableBanner ||
       this.widgetTypeWithoutDefault ===
-        this.enumWidgetType.ContainerProfileBanner
+        this.enumWidgetType.ContainerProfileBanner ||
+      this.widgetTypeWithoutDefault ===
+        this.enumWidgetType.StationMultilineBanner
       ? 2
       : 1;
   }

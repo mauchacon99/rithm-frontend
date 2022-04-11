@@ -90,7 +90,11 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for station', () => {
       const expectData = JSON.stringify({
         stationRithmId: itemWidgetModalSelected.itemList.rithmId,
-        columns: [{ name: 'name' }],
+        columns: [
+          { name: 'name' },
+          { name: 'lastUpdatedUTC' },
+          { name: 'flowedTimeUTC' },
+        ],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'station';

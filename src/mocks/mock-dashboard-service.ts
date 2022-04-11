@@ -102,10 +102,11 @@ export class MockDashboardService {
       description:
         'Select multiple document values to display on each row of the list along with custom banner image.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'Table Widget',
+        type: 'Station Template',
+        customizable: 'Row information',
+        description: `Great for display longer text fields in documents. By default. this widget displays the document name.
+        Late update date, and the first text field from each document. Each of these three fields can be edited from the dashboard.`,
       },
     },
     // Document data
