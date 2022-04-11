@@ -23,6 +23,7 @@ import {
   DataLinkObject,
   StandardNumberJSON,
   GroupTrafficData,
+  FrameType,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -735,6 +736,41 @@ export class StationService {
   }
 
   /**
+   * Get the widgets of a station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The station widget data.
+   */
+  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive  the number of container',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationWidgets: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      return of(stationWidgets).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get worker roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.
@@ -850,7 +886,7 @@ export class StationService {
   /**
    * Get the number of container in a station.
    *
-   * @param stationRithmId The id of the given station group.
+   * @param stationRithmId The current station id.
    * @returns Number of containers.
    */
   getNumberOfContainers(stationRithmId: string): Observable<number> {

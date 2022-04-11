@@ -1511,6 +1511,48 @@ describe('StationService', () => {
     });
   });
 
+  it('should get getStationWidgets', () => {
+    const expectedResponse: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+      {
+        rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Body,
+        data: '',
+        id: 0,
+        questions: [
+          {
+            prompt: 'Fake question 1',
+            rithmId: '3j4k-3h2j-hj4j',
+            questionType: QuestionFieldType.Number,
+            isReadOnly: false,
+            isRequired: true,
+            isPrivate: false,
+            children: [],
+          },
+        ],
+      },
+    ];
+
+    service.getStationWidgets(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
   it('should call getGroupTrafficData', () => {
     const expectedData: GroupTrafficData = {
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',

@@ -885,6 +885,26 @@ export class StationComponent
       });
   }
 
+  /**
+   * Get the station frame widgets.
+   */
+  private getStationWidgets(): void {
+    this.stationService
+      .getStationWidgets(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
