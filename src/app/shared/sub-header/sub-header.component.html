@@ -15,11 +15,11 @@
     <button
       class="group"
       type="button"
-      data-testid="station-info-drawer"
+      [ngClass]="{ active: activeItem === 'stationInfo' }"
+      data-testid="station-info-button"
+      id="station-info-button"
       mat-icon-button
       (click)="toggleDrawer('stationInfo')"
-      id="station-button"
-      [ngClass]="{ active: activeItem === 'stationInfo' }"
     >
       <i class="fas fa-info-circle group-hover:text-accent-100 text-lg"></i>
     </button>
@@ -27,6 +27,7 @@
       class="group"
       type="button"
       [ngClass]="{ active: activeItem === 'comments' }"
+      data-testid="comment-button"
       id="comment-button"
       mat-icon-button
       (click)="toggleDrawer('comments')"
@@ -38,6 +39,7 @@
       type="button"
       [ngClass]="{ active: activeItem === 'history' }"
       id="history-button"
+      data-testid="comment-button"
       mat-icon-button
       (click)="toggleDrawer('history')"
       [disabled]="!itemInfo"
