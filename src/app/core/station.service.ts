@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -19,7 +19,10 @@ import {
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
   StationFrameWidget,
+  DocumentEvent,
   DataLinkObject,
+  StandardNumberJSON,
+  GroupTrafficData,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -59,6 +62,9 @@ export class StationService {
 
   /** The question to be deleted when it delete in station field settings. */
   deleteStationQuestion$ = new Subject<Question>();
+
+  /** The question title to be updated when it's updated in setting drawer. */
+  stationQuestionTitle$ = new Subject<Question>();
 
   constructor(private http: HttpClient) {}
 
@@ -801,5 +807,87 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
       { body: usersIds }
     );
+  }
+
+  /**
+   * Get history station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The history station.
+   */
+  getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot response station history',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const historyResponse: DocumentEvent[] = [
+        {
+          eventTimeUTC: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(historyResponse).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the number of container in a station.
+   *
+   * @param stationRithmId The id of the given station group.
+   * @returns Number of containers.
+   */
+  getNumberOfContainers(stationRithmId: string): Observable<number> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive  the number of container',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const numberOfContainer: StandardNumberJSON = {
+        data: 10,
+      };
+
+      return of(numberOfContainer).pipe(map((response) => response.data));
+    }
+  }
+
+  /**
+   * Get traffic data document in stations.
+   *
+   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @returns The data to graph.
+   */
+  getGroupTrafficData(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<GroupTrafficData> {
+    const mockGetGroupTrafficData: GroupTrafficData = {
+      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      stationDocuments: [10, 5, 8, 10, 20],
+      averageDocumentStation: [2, 4, 1, 8, 9],
+    };
+    return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
 }

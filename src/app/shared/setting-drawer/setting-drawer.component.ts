@@ -100,6 +100,13 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Set the question title.
+   */
+  setQuestionTitle(): void {
+    this.stationService.stationQuestionTitle$.next(this.fieldSetting);
+  }
+
+  /**
    * Completes all subscriptions.
    *
    * @param questions The current questions to be deleted in field settings.

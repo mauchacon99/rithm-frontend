@@ -24,6 +24,7 @@ import {
   DocumentWidget,
   DocumentImage,
   ImageData,
+  DataLinkObject,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1593,5 +1594,39 @@ export class MockDocumentService {
       imageName: 'Image name',
     };
     return of(response).pipe(delay(1000));
+  }
+
+  /**
+   * Save/update a datalink object.
+   *
+   * @param stationRithmId The current station id.
+   * @param dataLinkObject The object to save.
+   * @returns A DataLinkObject.
+   */
+  saveDataLink(
+    stationRithmId: string,
+    dataLinkObject: DataLinkObject
+  ): Observable<DataLinkObject> {
+    if (!dataLinkObject || !stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot save data link object.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const dataLink: DataLinkObject = {
+        rithmId: '07e1-30b5-f21e',
+        frameRithmId: '07e1-30b5-f21e',
+        sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+        targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+        baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+        matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+      };
+      return of(dataLink).pipe(delay(1000));
+    }
   }
 }
