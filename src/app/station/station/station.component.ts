@@ -26,7 +26,7 @@ import {
   DataLinkObject,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, Observable, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
@@ -491,11 +491,81 @@ export class StationComponent
   }
 
   /**
+   * Save datalink objects when they exists (old interface).
+   */
+  saveDataLinks(): void {
+    const framesForDatalink: StationFrameWidget[] = [];
+    /** Build a frame for each existing datalink. */
+    this.dataLinkArray.forEach((dl) => {
+      const frameTemplate = {
+        rithmId: this.randomIdGenerator.getRandRithmId(6),
+        stationRithmId: this.stationRithmId,
+        cols: 24,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: JSON.stringify(dl),
+        id: this.inputFrameWidgetItems.length,
+      };
+      framesForDatalink.push(frameTemplate);
+    });
+    this.stationService
+      .saveStationWidgets(this.stationRithmId, framesForDatalink)
+      .pipe(first())
+      .subscribe({
+        next: (frames) => {
+          if (frames && frames.length) {
+            const requestRow: Observable<DataLinkObject>[] = [];
+            Promise.all(
+              this.dataLinkArray.map(async (dl, ind) => {
+                dl.frameRithmId = frames[ind].rithmId;
+                requestRow.push(
+                  this.documentService.saveDataLink(this.stationRithmId, dl)
+                );
+              })
+            );
+            this.forkJoinDataLink(requestRow);
+          }
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Execute a fork join to save dataLink.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinDataLink(requestRow: Observable<DataLinkObject>[]): void {
+    forkJoin(requestRow)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Save Station information and executed petitions to api.
    *
    */
   saveStationInformation(): void {
     this.stationLoading = true;
+    if (this.dataLinkArray.length) {
+      this.saveDataLinks();
+    }
     const petitionsUpdateStation = [
       // Update station Name.
       this.stationService.updateStationName(
@@ -654,7 +724,7 @@ export class StationComponent
   }
 
   /**
-   * Comment.
+   * Add children when the parent is an Address field type.
    *
    * @returns Address children questions.
    */
@@ -791,18 +861,22 @@ export class StationComponent
   /**
    * Save or update the changes make the station frame widgets.
    */
-  saveStationFramesChanges(): void {
+  saveStationWidgetsChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
     this.inputFrameWidgetItems.map((field) => {
-      field.data = JSON.stringify(field.questions);
+      if (field.questions) {
+        field.data = JSON.stringify(field.questions);
+      }
     });
-
     this.stationService
-      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
+      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -861,7 +935,6 @@ export class StationComponent
       y: 0,
       minItemRows: 4,
       minItemCols: 6,
-      questions: [],
       type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
@@ -875,6 +948,9 @@ export class StationComponent
 
     /**Add individual properties for every Type. */
     switch (value) {
+      case FrameType.Input:
+        inputFrame.questions = [];
+        break;
       case FrameType.Headline:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
@@ -982,14 +1058,6 @@ export class StationComponent
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
    * Resets the station form.
    */
   private resetStationForm() {
@@ -997,5 +1065,13 @@ export class StationComponent
       this.stationForm.markAsPristine();
       this.stationForm.controls.stationTemplateForm.markAsUntouched();
     }, 0);
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
