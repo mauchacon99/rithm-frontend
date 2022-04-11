@@ -980,6 +980,7 @@ export class StationComponent
         inputFrame.type = FrameType.Image;
         break;
       default:
+        inputFrame.questions = [];
         break;
     }
     this.inputFrameWidgetItems.push(inputFrame);
