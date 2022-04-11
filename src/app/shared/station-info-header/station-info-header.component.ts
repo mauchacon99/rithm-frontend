@@ -17,7 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
  */
 @Component({
   selector:
-    'app-station-info-header[stationInformation][stationEditMode][viewNewStation][newInterfaceView]',
+    'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss'],
 })
