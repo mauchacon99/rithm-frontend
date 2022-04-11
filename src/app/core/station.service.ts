@@ -22,6 +22,7 @@ import {
   DocumentEvent,
   DataLinkObject,
   StandardNumberJSON,
+  GroupTrafficData,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -61,6 +62,9 @@ export class StationService {
 
   /** The question to be deleted when it delete in station field settings. */
   deleteStationQuestion$ = new Subject<Question>();
+
+  /** The question title to be updated when it's updated in setting drawer. */
+  stationQuestionTitle$ = new Subject<Question>();
 
   constructor(private http: HttpClient) {}
 
@@ -866,5 +870,24 @@ export class StationService {
 
       return of(numberOfContainer).pipe(map((response) => response.data));
     }
+  }
+
+  /**
+   * Get traffic data document in stations.
+   *
+   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @returns The data to graph.
+   */
+  getGroupTrafficData(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<GroupTrafficData> {
+    const mockGetGroupTrafficData: GroupTrafficData = {
+      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      stationDocuments: [10, 5, 8, 10, 20],
+      averageDocumentStation: [2, 4, 1, 8, 9],
+    };
+    return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
 }

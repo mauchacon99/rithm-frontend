@@ -1,12 +1,12 @@
 aside {
-  @apply flex flex-col justify-center h-full;
+  @apply block h-full;
 
-  &.left {
-    @apply items-end;
+  &.left > div {
+    @apply flex justify-end;
   }
 
-  &.right {
-    @apply items-start;
+  &.right > div {
+    @apply flex justify-start;
   }
 
   /* stylelint-disable-next-line */

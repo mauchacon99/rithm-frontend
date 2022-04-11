@@ -69,4 +69,5 @@ export * from './document-image';
 export * from './station-frame-widget';
 export * from './data-link-object';
 export * from './image-data';
+export * from './group-traffic-data';
 export * from './standard-number-json';
