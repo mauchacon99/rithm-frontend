@@ -667,16 +667,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should get the NumberOfContainers in a specific station', () => {
-    const spyMethod = spyOn(
-      TestBed.inject(StationService),
-      'getNumberOfContainers'
-    ).and.callThrough();
-
-    component.getNumberOfContainers();
-    expect(spyMethod).toHaveBeenCalledOnceWith(component.stationRithmId);
-  });
-
   it('should catch an error when get number of containers fails', () => {
     const getNumberOfContainersSpy = spyOn(
       TestBed.inject(StationService),
@@ -690,11 +680,27 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.getNumberOfContainers();
 
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      of(component.stationInformation)
+    );
+    component.getStationInfo();
     expect(getNumberOfContainersSpy).toHaveBeenCalledWith(
       component.stationRithmId
     );
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method that get number of containers from getStationInfo', () => {
+    const spyNumberContainers = spyOn(
+      TestBed.inject(StationService),
+      'getNumberOfContainers'
+    ).and.callThrough();
+
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      of(component.stationInformation)
+    );
+    component.getStationInfo();
+    expect(spyNumberContainers).toHaveBeenCalled();
   });
 });
