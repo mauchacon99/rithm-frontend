@@ -704,16 +704,12 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyNumberContainers).toHaveBeenCalled();
   });
 
-  it('should show number-containers-loading when get number of containers of current station ', () => {
+  it('should show number-containers-loading when numberContainersLoading is true', () => {
+    component.selectedTabIndex = 0;
     component.stationLoading = false;
-
-    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
-      of(component.stationInformation)
-    );
-    component.getStationInfo();
+    component.numberContainersLoading = true;
     fixture.detectChanges();
 
-    expect(component.numberContainersLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
       '#number-containers-loading'
     );
