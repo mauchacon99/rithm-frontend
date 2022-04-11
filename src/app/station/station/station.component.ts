@@ -929,12 +929,12 @@ export class StationComponent
     const inputFrame: StationFrameWidget = {
       rithmId: this.randomIdGenerator.getRandRithmId(4),
       stationRithmId: this.stationRithmId,
-      cols: 6,
-      rows: 4,
+      cols: 1,
+      rows: 1,
       x: 0,
       y: 0,
-      minItemRows: 4,
-      minItemCols: 6,
+      minItemRows: 1,
+      minItemCols: 1,
       type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
@@ -949,7 +949,12 @@ export class StationComponent
     /**Add individual properties for every Type. */
     switch (value) {
       case FrameType.Input:
+        inputFrame.cols = 6;
+        inputFrame.rows = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.minItemCols = 6;
         inputFrame.questions = [];
+        this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
         break;
       case FrameType.Headline:
         inputFrame.cols = 24;
@@ -981,11 +986,9 @@ export class StationComponent
         inputFrame.type = FrameType.Image;
         break;
       default:
-        inputFrame.questions = [];
         break;
     }
     this.inputFrameWidgetItems.push(inputFrame);
-    this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
   }
 
   /**
