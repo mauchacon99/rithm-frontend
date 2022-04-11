@@ -3,7 +3,6 @@
   *ngIf="!isWidget"
   class="fixed z-10 w-full"
   [itemInfo]="documentInformation"
-  [newInterfaceView]="viewNewContainer"
   (checkClickSubHeader)="checkClickSubHeader($event)"
 ></app-sub-header>
 <mat-drawer-container
@@ -67,7 +66,6 @@
               [stationInformation]="documentInformation"
               [stationEditMode]="false"
               [viewNewStation]="false"
-              [newInterfaceView]="false"
             >
             </app-station-info-header>
             <app-document-info-header
@@ -261,7 +259,6 @@
               [stationInformation]="documentInformation"
               [stationEditMode]="false"
               [viewNewStation]="false"
-              [newInterfaceView]="false"
             >
             </app-station-info-header>
             <app-document-info-header

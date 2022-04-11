@@ -18,7 +18,7 @@ import {
  * comments and history.
  */
 @Component({
-  selector: 'app-sub-header[itemInfo][newInterfaceView]',
+  selector: 'app-sub-header[itemInfo]',
   templateUrl: './sub-header.component.html',
   styleUrls: ['./sub-header.component.scss'],
 })
