@@ -13,6 +13,7 @@ import {
   DocumentGenerationStatus,
   QuestionFieldType,
   StationWidgetData,
+  WidgetType,
 } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
@@ -414,6 +415,43 @@ describe('StationWidgetComponent', () => {
     );
     expect(component.displayDocumentError).toBeTrue();
     expect(errorMessage).toBeTruthy();
+  });
+
+  it('should call viewDocument when  create document and widgetType is station type table', () => {
+    const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
+    component.widgetType = WidgetType.Station;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(of(expectDocumentRithmId));
+    const spyMethodViewDocument = spyOn(
+      component,
+      'viewDocument'
+    ).and.callThrough();
+    component.createNewDocument();
+
+    expect(spyMethodViewDocument).toHaveBeenCalledOnceWith(
+      expectDocumentRithmId
+    );
+    expect(spyService).toHaveBeenCalled();
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call getStationWidgetDocuments when create document and widgetType is station type list', () => {
+    const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
+    component.widgetType = WidgetType.StationMultiline;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(of(expectDocumentRithmId));
+    const spyMethodGetStationWidgetDocuments = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.createNewDocument();
+
+    expect(spyMethodGetStationWidgetDocuments).toHaveBeenCalled();
+    expect(spyService).toHaveBeenCalled();
   });
 
   it('should not display a message when there are documents', () => {
