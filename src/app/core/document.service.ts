@@ -34,6 +34,7 @@ import {
   OperatorType,
   DocumentImage,
   ImageData,
+  DataLinkObject,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -193,11 +194,13 @@ export class DocumentService {
           : element.value.replace(/\s/g, '')
       );
       formData.append(`answers[${index}].type`, element.type);
-      if (element.type === QuestionFieldType.File && element.file) {
-        formData.append(`answers[${index}].file`, element.file);
-      }
-      if (element.type === QuestionFieldType.File && element.filename) {
-        formData.append(`answers[${index}].filename`, element.filename);
+      if (element.type === QuestionFieldType.File) {
+        if (element.file) {
+          formData.append(`answers[${index}].file`, element.file);
+        }
+        if (element.filename) {
+          formData.append(`answers[${index}].filename`, element.filename);
+        }
       }
       formData.append(`answers[${index}].questionUpdated`, 'true');
     });
@@ -637,5 +640,30 @@ export class DocumentService {
         params,
       }
     );
+  }
+
+  /**
+   * Save/update a datalink object.
+   *
+   * @param stationRithmId The current station id.
+   * @param dataLinkObject The object to save.
+   * @returns A DataLinkObject.
+   */
+  saveDataLink(
+    stationRithmId: string,
+    dataLinkObject: DataLinkObject
+  ): Observable<DataLinkObject> {
+    if (!dataLinkObject || !stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot save data link object.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      return of(dataLinkObject).pipe(delay(1000));
+    }
   }
 }

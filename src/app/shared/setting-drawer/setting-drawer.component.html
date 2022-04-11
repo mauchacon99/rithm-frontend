@@ -19,7 +19,9 @@
           data-testid="field-setting-input"
           placeholder="{{ fieldSetting.prompt }}"
           [(ngModel)]="fieldSetting.value"
+          [maxlength]="fieldSetting.questionType === 'shortText' ? 50 : null"
           autocomplete="off"
+          (ngModelChange)="setQuestionTitle()"
         />
       </mat-form-field>
       <ng-template #fieldNameStatic>

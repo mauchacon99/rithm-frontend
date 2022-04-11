@@ -19,6 +19,9 @@ import {
   StationGroupData,
   StationFrameWidget,
   FrameType,
+  StandardNumberJSON,
+  DocumentEvent,
+  GroupTrafficData,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1153,6 +1156,7 @@ describe('StationService', () => {
             {
               rithmId: '123-321-456',
               name: 'station 1',
+              totalDocuments: 3,
               workers: [
                 {
                   rithmId: '123-321-456',
@@ -1203,6 +1207,7 @@ describe('StationService', () => {
         {
           rithmId: '123-321-456',
           name: 'station 1',
+          totalDocuments: 3,
           workers: [
             {
               rithmId: '123-321-456',
@@ -1283,17 +1288,6 @@ describe('StationService', () => {
   });
 
   it('should save/update the array of stationFramesWidget', () => {
-    const InputFrameWidgetQuestions: Question[] = [
-      {
-        prompt: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
     const frameStationWidget: StationFrameWidget[] = [
       {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
@@ -1303,16 +1297,23 @@ describe('StationService', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
+        data: '',
         id: 0,
       },
     ];
 
     service
-      .addFieldQuestionWidget(stationId, frameStationWidget)
+      .saveStationWidgets(stationId, frameStationWidget)
       .subscribe((response) => {
-        expect(response).toEqual(frameStationWidget[0]);
+        expect(response).toEqual(frameStationWidget);
       });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames?stationRithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(frameStationWidget);
+
+    req.flush(frameStationWidget);
+    httpTestingController.verify();
   });
 
   it('should remove a member the owner from the roster for group specific', () => {
@@ -1402,6 +1403,30 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should history station', () => {
+    const stationRithmId = '6375027-78345-73824-54244';
+    const expectHistoryResponse: DocumentEvent[] = [
+      {
+        eventTimeUTC: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getStationHistory(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectHistoryResponse);
+    });
+  });
+
   it('should get getStationGroupOwnerRoster', () => {
     const expectedResponse: StationRosterMember[] = [
       {
@@ -1464,6 +1489,39 @@ describe('StationService', () => {
       .getStationGroupWorkerRoster(stationGroupRithmId)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
+      });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.params.get('stationGroupRithmId')).toEqual(
+      stationGroupRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should get getNumberOfContainer', () => {
+    const expectedResponse: StandardNumberJSON = {
+      data: 10,
+    };
+    service.getNumberOfContainers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
+
+  it('should call getGroupTrafficData', () => {
+    const expectedData: GroupTrafficData = {
+      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      stationDocuments: [10, 5, 8, 10, 20],
+      averageDocumentStation: [2, 4, 1, 8, 9],
+    };
+    service
+      .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
+      .subscribe((response) => {
+        expect(response).toEqual(expectedData);
       });
   });
 });
