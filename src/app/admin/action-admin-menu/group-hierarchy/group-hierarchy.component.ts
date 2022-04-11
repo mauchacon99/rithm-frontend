@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { StationGroupData, StationListGroup } from 'src/models';
 
 /** Selected List element for StationGroupData | StationListGroup.*/
@@ -21,7 +21,7 @@ interface itemSelected {
   templateUrl: './group-hierarchy.component.html',
   styleUrls: ['./group-hierarchy.component.scss'],
 })
-export class GroupHierarchyComponent implements OnInit {
+export class GroupHierarchyComponent {
   /** Value to show or hidden this component based on permission. */
   @Input() showGroupHierarchy!: boolean;
 
@@ -53,13 +53,6 @@ export class GroupHierarchyComponent implements OnInit {
    */
   get isGroup(): boolean {
     return 'stations' in this.selectedItem;
-  }
-
-  /**
-   * Initial Method.
-   */
-  ngOnInit(): void {
-    this.getIsInputSearchDisabled(false);
   }
 
   /**
@@ -114,18 +107,5 @@ export class GroupHierarchyComponent implements OnInit {
     if (dataItemSelected) {
       this.selectedItem = JSON.parse(dataItemSelected.data);
     }
-  }
-
-  /**
-   * Set value of is input disabled.
-   *
-   * @param isInputSearchDisabled Value to set search input disabled or not.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getIsInputSearchDisabled(isInputSearchDisabled: boolean): void {
-    /*console.log(isInputSearchDisabled);
-    console.log('metodo llamado para habilitar el search');*/
-    /*this.isInputSearchDisabled =
-      isInputSearchDisabled;*/
   }
 }

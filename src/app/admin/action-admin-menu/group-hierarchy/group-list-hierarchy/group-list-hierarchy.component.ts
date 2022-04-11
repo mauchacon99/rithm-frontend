@@ -42,9 +42,7 @@ export class GroupListHierarchyComponent implements OnInit {
   stationGroupsFiltered!: StationGroupData;
 
   /** Load indicator get groups. */
-  set isLoading(value: boolean) {
-    this.getIsInputSearchDisabled(value);
-  }
+  isLoading = false;
 
   /** Show error if get groups fail. */
   isErrorGetGroups = false;

@@ -15,35 +15,6 @@ describe('GroupListHierarchyComponent', () => {
   let fixture: ComponentFixture<GroupListHierarchyComponent>;
   let stationService: StationService;
 
-  const subStationGroups: StationGroupData = {
-    rithmId: '1375027-78345-73824-54244',
-    title: 'Sub Station Group',
-    subStationGroups: [],
-    stations: [],
-    users: [
-      {
-        rithmId: '789-798-456',
-        firstName: 'Noah',
-        lastName: 'Smith',
-        email: 'name2@company.com',
-        isWorker: true,
-        isOwner: true,
-      },
-    ],
-    admins: [
-      {
-        rithmId: '159-753-456',
-        firstName: 'Taylor',
-        lastName: 'Du',
-        email: 'name3@company.com',
-        isWorker: true,
-        isOwner: true,
-      },
-    ],
-    isChained: true,
-    isImplicitRootStationGroup: true,
-  };
-
   const stations: StationListGroup = {
     rithmId: '123-321-456',
     name: 'station 1',
@@ -69,12 +40,40 @@ describe('GroupListHierarchyComponent', () => {
       },
     ],
   };
+  const subStationGroups: StationGroupData = {
+    rithmId: '1375027-78345-73824-54244',
+    title: 'Sub Station Group',
+    subStationGroups: [],
+    stations: [stations, stations],
+    users: [
+      {
+        rithmId: '789-798-456',
+        firstName: 'Noah',
+        lastName: 'Smith',
+        email: 'name2@company.com',
+        isWorker: true,
+        isOwner: true,
+      },
+    ],
+    admins: [
+      {
+        rithmId: '159-753-456',
+        firstName: 'Taylor',
+        lastName: 'Du',
+        email: 'name3@company.com',
+        isWorker: true,
+        isOwner: true,
+      },
+    ],
+    isChained: true,
+    isImplicitRootStationGroup: true,
+  };
 
   const stationGroupData: StationGroupData = {
     rithmId: '6375027-78345-73824-54244',
     title: 'Station Group',
     subStationGroups: [subStationGroups],
-    stations: [stations],
+    stations: [stations, stations],
     users: [
       {
         rithmId: '789-798-456',
@@ -118,6 +117,8 @@ describe('GroupListHierarchyComponent', () => {
     component = fixture.componentInstance;
     stationService = TestBed.inject(StationService);
     component.stationGroups = stationGroupData;
+    component.stationGroupsFiltered = subStationGroups;
+    component.search = 'search value';
     fixture.detectChanges();
   });
 
@@ -167,18 +168,14 @@ describe('GroupListHierarchyComponent', () => {
   });
 
   it('should show loading while request getStationGroups', () => {
-    const spyMethod = spyOn(
-      TestBed.inject(StationService),
-      'getStationGroups'
-    ).and.callThrough();
-    component['getStationGroups']();
+    component.isLoading = true;
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
       '#loader-groups-hierarchy'
     );
-    expect(spyMethod).toHaveBeenCalled();
-    expect(loader).toBeTruthy();
+    component.isLoading = true;
     expect(component.isLoading).toBeTrue();
+    expect(loader).toBeTruthy();
   });
 
   it('should reload getStationGroups if request fail', () => {
@@ -198,10 +195,13 @@ describe('GroupListHierarchyComponent', () => {
   it('should clicked in item', () => {
     component.isLoading = false;
     component.isErrorGetGroups = false;
+    component.stationGroupsFiltered = subStationGroups;
+    component.stationGroupsFiltered.subStationGroups.push(stationGroupData);
     fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemGroup = fixture.nativeElement.querySelector(
-      '#group-item-' + subStationGroups.rithmId
+      '#group-item-' +
+        component.stationGroupsFiltered.subStationGroups[0].rithmId
     );
     expect(itemGroup).toBeTruthy();
     itemGroup.click();
@@ -211,10 +211,12 @@ describe('GroupListHierarchyComponent', () => {
   it('should clicked in item station', () => {
     component.isLoading = false;
     component.isErrorGetGroups = false;
+    component.stationGroupsFiltered = subStationGroups;
+    component.stationGroupsFiltered.stations.push(stations);
     fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemStation = fixture.nativeElement.querySelector(
-      '#station-item-' + stations.rithmId
+      '#station-item-' + component.stationGroupsFiltered.stations[0].rithmId
     );
     expect(itemStation).toBeTruthy();
     itemStation.click();
@@ -250,5 +252,52 @@ describe('GroupListHierarchyComponent', () => {
     expect(btnReload).toBeTruthy();
     btnReload.click();
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  xit('should search stations and substations', () => {
+    component.stationGroups = subStationGroups;
+    component.stations = [stations, stations];
+    component.isLoading = false;
+    component.isErrorGetGroups = false;
+    const searchValue = 'stationName 3';
+    fixture.detectChanges();
+    const expectedStation = [
+      {
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
+        totalDocuments: 3,
+        workers: [],
+        stationOwners: [],
+      },
+    ];
+    component.searchStation(searchValue);
+    expect(component.stationGroupsFiltered.stations).toEqual(expectedStation);
+
+    fixture.detectChanges();
+
+    const expectedSubStation = [
+      {
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            totalDocuments: 3,
+            workers: [],
+            stationOwners: [],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
+      },
+    ];
+    component.searchStation(searchValue);
+    expect(component.stationGroupsFiltered.subStationGroups).toEqual(
+      expectedSubStation
+    );
   });
 });
