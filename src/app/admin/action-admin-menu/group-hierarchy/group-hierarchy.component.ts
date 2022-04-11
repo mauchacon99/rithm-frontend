@@ -21,7 +21,7 @@ interface itemSelected {
   templateUrl: './group-hierarchy.component.html',
   styleUrls: ['./group-hierarchy.component.scss'],
 })
-export class GroupHierarchyComponent  implements OnInit {
+export class GroupHierarchyComponent implements OnInit {
   /** Value to show or hidden this component based on permission. */
   @Input() showGroupHierarchy!: boolean;
 
@@ -58,9 +58,9 @@ export class GroupHierarchyComponent  implements OnInit {
   /**
    * Initial Method.
    */
- ngOnInit(): void {
-  this.getIsInputSearchDisabled(false);
-}
+  ngOnInit(): void {
+    this.getIsInputSearchDisabled(false);
+  }
 
   /**
    * Set value of item selected and generate columns.

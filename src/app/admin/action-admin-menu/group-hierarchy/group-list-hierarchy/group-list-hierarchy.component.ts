@@ -101,14 +101,15 @@ export class GroupListHierarchyComponent implements OnInit {
    * @param search Value to search.
    */
   searchStation(search: string): void {
-    if (search.length){
-      this.stationGroupsFiltered.stations = this.stationGroups?.stations.filter((station) =>
-      station.name.toLowerCase().includes(search.toLowerCase()));
+    if (search.length) {
+      this.stationGroupsFiltered.stations = this.stationGroups?.stations.filter(
+        (station) => station.name.toLowerCase().includes(search.toLowerCase())
+      );
 
-      this.stationGroupsFiltered.subStationGroups = this.stationGroups?.subStationGroups.filter(
-      (subStation) =>
-        subStation.title.toLowerCase().includes(search.toLowerCase())
-    );
+      this.stationGroupsFiltered.subStationGroups =
+        this.stationGroups?.subStationGroups.filter((subStation) =>
+          subStation.title.toLowerCase().includes(search.toLowerCase())
+        );
     } else {
       this.getStationGroups();
     }
