@@ -39,10 +39,10 @@
     <div
       class="border-t border-solid border-secondary-100 py-5 pl-3"
       *ngIf="
-        (widgetType === widgetTypeEnum.StationTableBanner ||
-          widgetType === widgetTypeEnum.StationMultilineBanner ||
-          widgetType === widgetTypeEnum.DocumentListBanner ||
-          widgetType === widgetTypeEnum.ContainerProfileBanner) &&
+        (widgetType === enumWidgetType.StationTableBanner ||
+          widgetType === enumWidgetType.StationMultilineBanner ||
+          widgetType === enumWidgetType.DocumentListBanner ||
+          widgetType === enumWidgetType.ContainerProfileBanner) &&
         showProfileImageBanner
       "
       id="section-image-banner"
