@@ -183,7 +183,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * @returns A boolean, true if station is Multiline and check is invalid question type.
    */
   private checkTypeQuestionAndStation(question: Question): boolean {
-    if (
+    if (question.questionType === this.enumQuestionFieldType.File) {
+      return true;
+    } else if (
       this.dataDrawerStation.widgetItem.widgetType ===
         this.enumWidgetType.StationMultiline ||
       this.dataDrawerStation.widgetItem.widgetType ===
