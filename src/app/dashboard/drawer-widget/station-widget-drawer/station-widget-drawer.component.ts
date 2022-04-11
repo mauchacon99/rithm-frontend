@@ -180,7 +180,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * Check type of question and type of station.
    *
    * @param question Question to check.
-   * @returns A boolean, true if station is Multiline and check is invalid to station.
+   * @returns A boolean, true if station is Multiline and check is invalid question type.
    */
   private checkTypeQuestionAndStation(question: Question): boolean {
     if (
