@@ -90,6 +90,7 @@ describe('DescriptionWidgetModalComponent', () => {
     });
 
     it('should get data for station', () => {
+      component.widgetType = WidgetType.Station;
       const expectData = JSON.stringify({
         stationRithmId: itemWidgetModalSelected.itemList.rithmId,
         columns: [{ name: 'name' }],
@@ -118,7 +119,22 @@ describe('DescriptionWidgetModalComponent', () => {
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'group';
       fixture.detectChanges();
+      expect(component.dataWidget).toEqual(expectData);
+    });
 
+    it('should get data for StationMultilineBanner', () => {
+      component.widgetType = WidgetType.StationMultilineBanner;
+      const expectData = JSON.stringify({
+        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        columns: [
+          { name: 'name' },
+          { name: 'lastUpdatedUTC' },
+          { name: 'assignedUser' },
+        ],
+      });
+      component.itemWidgetModalSelected = itemWidgetModalSelected;
+      component.itemWidgetModalSelected.itemType = 'station';
+      fixture.detectChanges();
       expect(component.dataWidget).toEqual(expectData);
     });
   });
