@@ -75,6 +75,9 @@
         <!-- Widget card type station StationMultilineBanner -->
         <app-station-widget-template-modal
           [widgetType]="enumWidgetType.StationMultilineBanner"
+          (click)="
+            emitPreviewWidgetSelected(enumWidgetType.StationMultilineBanner)
+          "
         ></app-station-widget-template-modal>
       </div>
     </div>

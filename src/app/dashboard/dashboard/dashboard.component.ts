@@ -90,8 +90,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
-  /** Value used to compare the widgets. */
-  widgetType = WidgetType;
+  /** Enum widget type. */
+  enumWidgetType = WidgetType;
 
   /** If it needs to create new dashboard. */
   isCreateNewDashboard = false;
@@ -147,7 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private mobileBrowserChecker: MobileBrowserChecker
+    public mobileBrowserChecker: MobileBrowserChecker
   ) {}
 
   /**

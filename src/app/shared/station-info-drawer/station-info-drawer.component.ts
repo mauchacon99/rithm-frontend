@@ -140,6 +140,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
 
+  /** Use for get amount of containers of a station. */
+  numberOfContainers = 0;
+
   /** Use for history station. */
   stationHistoryEvents: DocumentEvent[] = [];
 
@@ -310,10 +313,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   get displayDeleteStationButton(): boolean {
     return (
-      this.locallyCreated ||
-      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner) ||
-      (!this.openedFromMap && this.editMode) ||
-      (!this.openedFromMap && this.isUserAdminOrOwner)
+      (this.openedFromMap && this.locallyCreated) ||
+      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner)
     );
   }
 
@@ -375,6 +376,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
               this.isChained = stationInfo.isChained || false;
+              this.getNumberOfContainers();
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
@@ -486,6 +488,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               error
             );
           }
+        },
+      });
+  }
+
+  /**
+   * Get the number of container get in a station.
+   */
+  private getNumberOfContainers(): void {
+    this.stationService
+      .getNumberOfContainers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (numberOfContainers) => {
+          this.numberOfContainers = numberOfContainers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
         },
       });
   }

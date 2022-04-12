@@ -27,6 +27,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 /**
  * Component for Station widget.
@@ -109,7 +110,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   columnsAllField: ColumnFieldsWidget[] = [];
 
   /** Enum with types widget station. */
-  typesWidget = WidgetType;
+  enumWidgetType = WidgetType;
 
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
@@ -159,7 +160,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private sidenavDrawerService: SidenavDrawerService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private router: Router
   ) {}
 
   /**
@@ -299,13 +301,20 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (documentRithmId) => {
-          this.viewDocument(documentRithmId);
-          this.reloadDocumentList = true;
-          this.isLoading = false;
-          this.displayDocumentError = false;
           this.popupService.notify(
             'The document has been created successfully.'
           );
+          if (
+            this.widgetType === this.enumWidgetType.Station ||
+            this.widgetType === this.enumWidgetType.StationTableBanner
+          ) {
+            this.viewDocument(documentRithmId);
+            this.reloadDocumentList = true;
+          } else {
+            this.getStationWidgetDocuments();
+          }
+          this.isLoading = false;
+          this.displayDocumentError = false;
         },
         error: (error: unknown) => {
           this.displayDocumentError = true;
@@ -371,6 +380,20 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       }
     }
     return columnFieldsWidget.name;
+  }
+
+  /**
+   * Navigate the user to the document page.
+   *
+   * @param documentId The Id of the document to view.
+   */
+  goToDocument(documentId: string): void {
+    this.router.navigate(['/', 'document', documentId], {
+      queryParams: {
+        documentId: documentId,
+        stationId: this.stationRithmId,
+      },
+    });
   }
 
   /** Clean subscriptions. */

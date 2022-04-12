@@ -666,4 +666,41 @@ describe('StationInfoDrawerComponent', () => {
     expect(historyEventSpy).toHaveBeenCalledWith(component.stationRithmId);
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should catch an error when get number of containers fails', () => {
+    const getNumberOfContainersSpy = spyOn(
+      TestBed.inject(StationService),
+      'getNumberOfContainers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      of(component.stationInformation)
+    );
+    component.getStationInfo();
+    expect(getNumberOfContainersSpy).toHaveBeenCalledWith(
+      component.stationRithmId
+    );
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method that get number of containers from getStationInfo', () => {
+    const spyNumberContainers = spyOn(
+      TestBed.inject(StationService),
+      'getNumberOfContainers'
+    ).and.callThrough();
+
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      of(component.stationInformation)
+    );
+    component.getStationInfo();
+    expect(spyNumberContainers).toHaveBeenCalled();
+  });
 });
