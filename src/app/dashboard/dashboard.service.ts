@@ -105,8 +105,9 @@ export class DashboardService {
         title: 'List Widget',
         type: 'Station Template',
         customizable: 'Row information',
-        description: `Great for display longer text fields in documents. By default. this widget displays the document name.
-        Late update date, and the first text field from each document. Each of these three fields can be edited from the dashboard.`,
+        description: `Great for display longer text fields in documents. By default. this widget displays the document name with custom
+        banner images can also be added to the widget. Late update date, and the first text field from each document. Each of these three
+        fields can be edited from the dashboard.`,
       },
     },
     // Document data
