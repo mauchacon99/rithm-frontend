@@ -1,6 +1,6 @@
 <ng-container *ngIf="!viewNewStation; else newStationHeader">
   <section class="grid grid-cols-12 py-5 border-b border-secondary-400">
-    <div class="col-span-12">
+    <div class="col-span-12" *ngIf="newInterfaceView">
       <h6 class="text-center">Station Information</h6>
     </div>
     <div class="col-span-12">
