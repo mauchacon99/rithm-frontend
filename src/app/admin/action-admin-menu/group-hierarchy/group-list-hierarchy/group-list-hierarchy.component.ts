@@ -39,7 +39,7 @@ export class GroupListHierarchyComponent implements OnInit {
   stationGroupsFiltered!: StationGroupData;
 
   /** Load indicator get groups. */
-  isLoading = false;
+  isLoading!: boolean;
 
   /** Show error if get groups fail. */
   isErrorGetGroups = false;
@@ -67,7 +67,9 @@ export class GroupListHierarchyComponent implements OnInit {
         next: (stationGroup) => {
           this.isLoading = false;
           this.isErrorGetGroups = false;
-          this.stationGroups = stationGroup;
+          this.stationGroups = JSON.parse(
+            JSON.stringify(stationGroup)
+          ) as StationGroupData;
           this.stationGroupsFiltered = stationGroup;
         },
         error: (error: unknown) => {
@@ -96,17 +98,24 @@ export class GroupListHierarchyComponent implements OnInit {
    * @param search Value to search.
    */
   searchStation(search: string): void {
-    if (search.length) {
-      this.stationGroupsFiltered.stations = this.stationGroups?.stations.filter(
-        (station) => station.name.toLowerCase().includes(search.toLowerCase())
-      );
+    const _localStationGroups = this.stationGroups;
+    if (this.isLoading !== undefined && !this.isLoading) {
+      if (search.length) {
+        this.stationGroupsFiltered.stations =
+          _localStationGroups?.stations.filter((station) =>
+            station.name.toLowerCase().includes(search.toLowerCase())
+          );
 
-      this.stationGroupsFiltered.subStationGroups =
-        this.stationGroups?.subStationGroups.filter((subStation) =>
-          subStation.title.toLowerCase().includes(search.toLowerCase())
-        );
-    } else {
-      this.getStationGroups();
+        this.stationGroupsFiltered.subStationGroups =
+          _localStationGroups?.subStationGroups.filter((subStation) =>
+            subStation.title.toLowerCase().includes(search.toLowerCase())
+          );
+      } else {
+        /* console.log(this.stationGroupsFiltered);
+        console.log(this.stationGroups);
+        this.stationGroupsFiltered = this.stationGroups;
+        console.log(this.stationGroupsFiltered);*/
+      }
     }
   }
 }
