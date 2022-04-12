@@ -43,9 +43,6 @@ export class GroupHierarchyComponent {
   /** Param for search. */
   search = '';
 
-  /** Set search input disabled or not. */
-  isInputSearchDisabled = false;
-
   /**
    * Return if selectedItem is group.
    *

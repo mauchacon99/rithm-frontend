@@ -20,7 +20,6 @@
         data-testid="search-tabs"
         maxlength="55"
         autocomplete="off"
-        [disabled]="isInputSearchDisabled"
       />
       <span matPrefix
         ><i class="fas fa-search p-1 text-secondary-300"></i
@@ -38,7 +37,6 @@
           [depthGroup]="index + 1"
           [search]="search"
           (getSelectedItem)="setSelectItem($event, index)"
-          (isInputSearchDisabled)="getIsInputSearchDisabled($event)"
           [ngClass]="{
             'hidden md:block': index !== groupItemListSelected.length - 1
           }"
