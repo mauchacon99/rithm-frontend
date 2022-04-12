@@ -29,6 +29,9 @@ export class GroupListHierarchyComponent implements OnInit {
     StationGroupData | StationListGroup
   >();
 
+  /** Output value to disabled search input. */
+  @Output() isSearchDisabled = new EventEmitter<boolean>();
+
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
 
@@ -65,6 +68,7 @@ export class GroupListHierarchyComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (stationGroup) => {
+          this.isSearchDisabled.emit(true);
           this.isLoading = false;
           this.isErrorGetGroups = false;
           this.stationGroups = JSON.parse(
@@ -73,6 +77,7 @@ export class GroupListHierarchyComponent implements OnInit {
           this.stationGroupsFiltered = stationGroup;
         },
         error: (error: unknown) => {
+          this.isSearchDisabled.emit(false);
           this.isLoading = false;
           this.isErrorGetGroups = true;
           this.errorService.displayError(

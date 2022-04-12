@@ -52,6 +52,9 @@ export class GroupHierarchyComponent {
     return 'stations' in this.selectedItem;
   }
 
+  /** Show state input search. */
+  isSearchDisabled = false;
+
   /**
    * Set value of item selected and generate columns.
    *
@@ -104,5 +107,14 @@ export class GroupHierarchyComponent {
     if (dataItemSelected) {
       this.selectedItem = JSON.parse(dataItemSelected.data);
     }
+  }
+
+  /**
+   * Set if search input is disabled.
+   *
+   * @param isSearchDisabled Value to disabled.
+   */
+   setSearchDisabled(isSearchDisabled:boolean): void {
+    this.isSearchDisabled =isSearchDisabled;
   }
 }
