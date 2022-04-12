@@ -56,8 +56,8 @@ export class GroupWidgetTemplateModalComponent
           // Documents Flow
           label: 'Documents Flow',
           data: [5, 20, 7, 5, 6, 8, 9],
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59,130,246,0.63)',
+          borderColor: '#294F8E',
+          backgroundColor: '#8DA1C3',
           stack: 'combined',
           borderWidth: 1,
         },
