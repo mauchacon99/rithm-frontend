@@ -42,7 +42,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
             ? [
                 { name: ColumnsDocumentInfo.Name },
                 { name: ColumnsDocumentInfo.LastUpdated },
-                { name: ColumnsDocumentInfo.TimeInStation },
+                { name: ColumnsDocumentInfo.AssignedUser },
               ]
             : [{ name: ColumnsDocumentInfo.Name }],
       });
