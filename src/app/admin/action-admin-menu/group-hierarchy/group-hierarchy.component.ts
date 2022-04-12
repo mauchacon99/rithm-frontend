@@ -114,7 +114,7 @@ export class GroupHierarchyComponent {
    *
    * @param isSearchDisabled Value to disabled.
    */
-   setSearchDisabled(isSearchDisabled:boolean): void {
-    this.isSearchDisabled =isSearchDisabled;
+  setSearchDisabled(isSearchDisabled: boolean): void {
+    this.isSearchDisabled = isSearchDisabled;
   }
 }
