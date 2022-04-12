@@ -159,40 +159,54 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   uploadImage(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
+    const extension = file.type.split('/')[1];
     if (file) {
-      // Loading banner image while upload image.
-      this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
-      this.imageUploaded = {
-        imageId: 'TEMPLoading',
-        imageName: null,
-      };
-      this.isUploading = true;
-      this.documentService
-        .uploadImage(file)
-        .pipe(first())
-        .subscribe({
-          next: (imageId) => {
-            this.isUploading = false;
-            this.imageUploaded = {
-              imageId,
-              imageName: file.name,
-            };
-            this.sidenavDrawerService.setDisableCloseDrawerOutside();
-          },
-          error: (error: unknown) => {
-            this.isUploading = false;
-            // Loading banner image while upload image.
-            this.imageUploaded = {
-              imageId: null,
-              imageName: null,
-            };
-            this.sidenavDrawerService.setDisableCloseDrawerOutside();
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          },
+      if (
+        extension === 'jpeg' ||
+        extension === 'jpg' ||
+        extension === 'png' ||
+        extension === 'gif'
+      ) {
+        // Loading banner image while upload image.
+        this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
+        this.imageUploaded = {
+          imageId: 'TEMPLoading',
+          imageName: null,
+        };
+        this.isUploading = true;
+        this.documentService
+          .uploadImage(file)
+          .pipe(first())
+          .subscribe({
+            next: (imageId) => {
+              this.isUploading = false;
+              this.imageUploaded = {
+                imageId,
+                imageName: file.name,
+              };
+              this.sidenavDrawerService.setDisableCloseDrawerOutside();
+            },
+            error: (error: unknown) => {
+              this.isUploading = false;
+              // Loading banner image while upload image.
+              this.imageUploaded = {
+                imageId: null,
+                imageName: null,
+              };
+              this.sidenavDrawerService.setDisableCloseDrawerOutside();
+              this.errorService.displayError(
+                "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+                error
+              );
+            },
+          });
+      } else {
+        this.popupService.alert({
+          title: 'Invalid Extension.',
+          message: 'Please select a file with extension jpeg, jpg, png, gif',
+          important: true,
         });
+      }
     }
   }
 
