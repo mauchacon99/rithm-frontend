@@ -1512,10 +1512,11 @@ export class MockStationService {
     stationGroupRithmId: string
   ): Observable<GroupTrafficData> {
     const mockGetGroupTrafficData: GroupTrafficData = {
-      stationGroupRithmId: '987-654-321',
+      title: 'Group Eagle',
+      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
       labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocuments: [10, 5, 8, 10, 20],
-      averageDocumentStation: [2, 4, 1, 8, 9],
+      stationDocumentCounts: [10, 5, 8, 10, 20],
+      averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
