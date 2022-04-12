@@ -149,10 +149,11 @@
       </div>
       <button
         mat-icon-button
-        [id]="'link-document-button-' + document.rithmId"
         class="text-secondary-500"
+        [id]="'link-document-button-' + document.rithmId"
         [attr.data-testid]="'link-document-button-' + document.rithmId"
         [disabled]="editMode"
+        (click)="goToDocument(document.rithmId)"
       >
         <i class="fas fa-external-link-alt text-base"></i>
       </button>
