@@ -1,6 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
+import {
+  ColumnsDocumentInfo,
+  DashboardItem,
+  SelectedItemWidgetModel,
+  WidgetType,
+} from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 
@@ -31,7 +36,15 @@ export class DescriptionWidgetModalComponent implements OnInit {
     } else if (this.itemWidgetModalSelected.itemType === 'station') {
       return JSON.stringify({
         stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-        columns: [{ name: 'name' }],
+        columns:
+          this.widgetType === WidgetType.StationMultiline ||
+          this.widgetType === WidgetType.StationMultilineBanner
+            ? [
+                { name: ColumnsDocumentInfo.Name },
+                { name: ColumnsDocumentInfo.LastUpdated },
+                { name: ColumnsDocumentInfo.AssignedUser },
+              ]
+            : [{ name: ColumnsDocumentInfo.Name }],
       });
     } else {
       return JSON.stringify({
@@ -75,7 +88,9 @@ export class DescriptionWidgetModalComponent implements OnInit {
       this.widgetTypeWithoutDefault ===
         this.enumWidgetType.StationTableBanner ||
       this.widgetTypeWithoutDefault ===
-        this.enumWidgetType.ContainerProfileBanner
+        this.enumWidgetType.ContainerProfileBanner ||
+      this.widgetTypeWithoutDefault ===
+        this.enumWidgetType.StationMultilineBanner
       ? 2
       : 1;
   }
