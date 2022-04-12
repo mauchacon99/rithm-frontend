@@ -147,7 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private mobileBrowserChecker: MobileBrowserChecker
+    public mobileBrowserChecker: MobileBrowserChecker
   ) {}
 
   /**
