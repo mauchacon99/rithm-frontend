@@ -950,7 +950,7 @@ describe('StationComponent', () => {
     expect(saveDataLinkSpy).toHaveBeenCalled();
   });
 
-  it('should request saveStationWidgets service if there are dataLinkObjects added', () => {
+  it('should request saveDataLinkFrames service if there are dataLinkObjects added', () => {
     component.dataLinkArray = [
       {
         rithmId: '07e1-30b5-f21e',
@@ -962,15 +962,15 @@ describe('StationComponent', () => {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       },
     ];
-    const saveStationWidgetSpy = spyOn(
+    const saveDataLinkFramespy = spyOn(
       TestBed.inject(StationService),
-      'saveStationWidgets'
+      'saveDataLinkFrames'
     ).and.callThrough();
     component.saveStationInformation();
-    expect(saveStationWidgetSpy).toHaveBeenCalled();
+    expect(saveDataLinkFramespy).toHaveBeenCalled();
   });
 
-  it('should request saveDataLink if saveStationWidgets succeed', () => {
+  it('should request saveDataLink if saveDataLinkFrames succeed', () => {
     component.dataLinkArray = [
       {
         rithmId: '07e1-30b5-f21e',
@@ -995,7 +995,7 @@ describe('StationComponent', () => {
         id: 0,
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       of(frameStationWidget)
     );
     const dataLinkSpy = spyOn(
@@ -1018,7 +1018,7 @@ describe('StationComponent', () => {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -1056,7 +1056,7 @@ describe('StationComponent', () => {
         id: 0,
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       of(frameStationWidget)
     );
     spyOn(TestBed.inject(DocumentService), 'saveDataLink').and.returnValue(

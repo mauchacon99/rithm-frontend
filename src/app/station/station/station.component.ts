@@ -504,14 +504,14 @@ export class StationComponent
         rows: 4,
         x: 0,
         y: 0,
-        type: FrameType.Input,
+        type: FrameType.DataLink,
         data: JSON.stringify(dl),
         id: this.inputFrameWidgetItems.length,
       };
       framesForDatalink.push(frameTemplate);
     });
     this.stationService
-      .saveStationWidgets(this.stationRithmId, framesForDatalink)
+      .saveDataLinkFrames(this.stationRithmId, framesForDatalink)
       .pipe(first())
       .subscribe({
         next: (frames) => {
@@ -565,7 +565,10 @@ export class StationComponent
     this.stationLoading = true;
     if (this.dataLinkArray.length) {
       this.saveDataLinks();
-      this.stationInformation.questions = this.stationInformation.questions.filter( q => q.questionType !== QuestionFieldType.DataLink);
+      this.stationInformation.questions =
+        this.stationInformation.questions.filter(
+          (q) => q.questionType !== QuestionFieldType.DataLink
+        );
     }
     const petitionsUpdateStation = [
       // Update station Name.

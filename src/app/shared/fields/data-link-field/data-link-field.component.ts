@@ -12,7 +12,12 @@ import {
 import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { Question, Station, DataLinkObject, QuestionFieldType } from 'src/models';
+import {
+  Question,
+  Station,
+  DataLinkObject,
+  QuestionFieldType,
+} from 'src/models';
 
 /**
  * Reusable component for every field data-link.
@@ -98,7 +103,9 @@ export class DataLinkFieldComponent
     this.stationService.currentStationQuestions$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((questions) => {
-        this.currentStationQuestions = questions.filter(q => q.questionType !== QuestionFieldType.DataLink);
+        this.currentStationQuestions = questions.filter(
+          (q) => q.questionType !== QuestionFieldType.DataLink
+        );
       });
   }
 

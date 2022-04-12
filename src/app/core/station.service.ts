@@ -735,6 +735,23 @@ export class StationService {
   }
 
   /**
+   * Save or update the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param stationFrames The value that will be update.
+   * @returns The field question updated.
+   */
+  saveDataLinkFrames(
+    stationRithmId: string,
+    stationFrames: StationFrameWidget[]
+  ): Observable<StationFrameWidget[]> {
+    return this.http.put<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-links-frames?stationRithmId=${stationRithmId}`,
+      stationFrames
+    );
+  }
+
+  /**
    * Get worker roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.

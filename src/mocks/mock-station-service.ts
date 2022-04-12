@@ -1245,6 +1245,42 @@ export class MockStationService {
   }
 
   /**
+   * Save or update the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param stationFrames The value that will be update.
+   * @returns The field question updated.
+   */
+  saveDataLinkFrames(
+    stationRithmId: string,
+    stationFrames: StationFrameWidget[]
+  ): Observable<StationFrameWidget> {
+    if (!stationRithmId || !stationFrames) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update station widgets',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const frameStationWidget: StationFrameWidget = {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.DataLink,
+        data: '',
+        id: 0,
+      };
+      return of(frameStationWidget).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Remove owner from the group's roster.
    *
    * @param stationGroupRithmId The Specific id of group.
