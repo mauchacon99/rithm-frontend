@@ -38,8 +38,8 @@
       class="group"
       type="button"
       [ngClass]="{ active: activeItem === 'history' }"
+      data-testid="history-button"
       id="history-button"
-      data-testid="comment-button"
       mat-icon-button
       (click)="toggleDrawer('history')"
       [disabled]="!itemInfo"
