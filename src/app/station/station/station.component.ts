@@ -565,6 +565,7 @@ export class StationComponent
     this.stationLoading = true;
     if (this.dataLinkArray.length) {
       this.saveDataLinks();
+      this.stationInformation.questions = this.stationInformation.questions.filter( q => q.questionType !== QuestionFieldType.DataLink);
     }
     const petitionsUpdateStation = [
       // Update station Name.

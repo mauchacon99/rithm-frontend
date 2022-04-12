@@ -12,7 +12,7 @@ import {
 import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { Question, Station, DataLinkObject } from 'src/models';
+import { Question, Station, DataLinkObject, QuestionFieldType } from 'src/models';
 
 /**
  * Reusable component for every field data-link.
@@ -75,6 +75,7 @@ export class DataLinkFieldComponent
   /* The name for display fields  label  */
   displayFieldsLabel = 'Display Fields';
 
+  /** Loading/Errors block. */
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
@@ -97,7 +98,7 @@ export class DataLinkFieldComponent
     this.stationService.currentStationQuestions$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((questions) => {
-        this.currentStationQuestions = questions;
+        this.currentStationQuestions = questions.filter(q => q.questionType !== QuestionFieldType.DataLink);
       });
   }
 
