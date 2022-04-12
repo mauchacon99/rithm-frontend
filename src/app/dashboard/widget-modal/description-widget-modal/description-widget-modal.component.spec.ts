@@ -118,7 +118,7 @@ describe('DescriptionWidgetModalComponent', () => {
         columns: [
           { name: 'name' },
           { name: 'lastUpdatedUTC' },
-          { name: 'flowedTimeUTC' },
+          { name: 'assignedUser' },
         ],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
