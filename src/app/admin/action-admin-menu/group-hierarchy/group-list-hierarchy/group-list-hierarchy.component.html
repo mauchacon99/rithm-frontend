@@ -33,7 +33,7 @@
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
         <mat-list-option
-          *ngFor="let stationGroup of stationGroupsFiltered.subStationGroups"
+          *ngFor="let stationGroup of groupsFilter"
           [id]="'group-item-' + stationGroup.rithmId"
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
           [value]="stationGroup"
@@ -48,7 +48,7 @@
         </mat-list-option>
         <!-- stations -->
         <mat-list-option
-          *ngFor="let station of stationGroupsFiltered.stations"
+          *ngFor="let station of stationsFilter"
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
           (click)="selectedListItem(station)"
