@@ -43,6 +43,16 @@
                   </mat-option>
                 </mat-optgroup>
                 <mat-optgroup [label]="'Document Fields'">
+                  <ng-container *ngIf="!isStationMultiline">
+                    <mat-option
+                      *ngFor="let column of documentFields"
+                      [value]="column.value"
+                      [disabled]="column.disabled"
+                      (click)="optionSelected(column, formChild)"
+                    >
+                      {{ column.name }}
+                    </mat-option>
+                  </ng-container>
                   <ng-container *ngIf="isStationMultiline && formChild < 2">
                     <mat-option
                       *ngFor="let column of documentFields"

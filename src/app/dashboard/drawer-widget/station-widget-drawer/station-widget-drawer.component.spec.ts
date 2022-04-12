@@ -548,7 +548,7 @@ describe('StationWidgetDrawerComponent', () => {
     expect(component.stationColumns).toEqual(dataExpected);
   });
 
-  it('should be false check type question not able and station multiline', () => {
+  it('should return false when check type question not able and station multiline', () => {
     component.dataDrawerStation.widgetItem.widgetType =
       WidgetType.StationMultiline;
     const question: Question = {
@@ -566,13 +566,47 @@ describe('StationWidgetDrawerComponent', () => {
     expect(response).toBeFalse();
   });
 
-  it('should be true check type question able and station multiline', () => {
+  it('should return true when check type question able and station multiline', () => {
     component.dataDrawerStation.widgetItem.widgetType =
       WidgetType.StationMultiline;
     const question: Question = {
       prompt: 'Fake question 2',
       rithmId: '3j4k-3h2j-hj4j',
-      questionType: QuestionFieldType.Select,
+      questionType: QuestionFieldType.LongText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: '2',
+    };
+
+    const response = component['checkTypeQuestionAndStation'](question);
+    expect(response).toBeTrue();
+  });
+
+  it('should return false when check type question able and station multiline and its third select', () => {
+    component.dataDrawerStation.widgetItem.widgetType =
+      WidgetType.StationMultiline;
+    const question: Question = {
+      prompt: 'Fake question 2',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.LongText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: '2',
+    };
+
+    const response = component['checkTypeQuestionAndStation'](question, true);
+    expect(response).toBeFalse();
+  });
+
+  it('should return true when check type question its type file', () => {
+    const question: Question = {
+      prompt: 'Fake question 2',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.File,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,

@@ -222,7 +222,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       return true;
     } else if (this.isStationMultiline) {
       if (!isThirdSelect) {
-        console.log('1 - 2');
         return (
           question.questionType === this.enumQuestionFieldType.Select ||
           question.questionType === this.enumQuestionFieldType.MultiSelect ||
@@ -233,7 +232,6 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           question.questionType === this.enumQuestionFieldType.URL
         );
       } else {
-        console.log('3');
         return (
           question.questionType === this.enumQuestionFieldType.Select ||
           question.questionType === this.enumQuestionFieldType.MultiSelect ||
@@ -337,7 +335,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (questions) => {
           this.questions = questions;
-          this.setDefaultColumnsStationMultiline();
+          if (this.isStationMultiline) {
+            this.setDefaultColumnsStationMultiline();
+          }
           this.checkStationColumns();
           this.loadColumnsSelect();
           this.isLoading = false;
@@ -393,7 +393,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Set default columns if station columns are empty and station is type multiline. */
   private setDefaultColumnsStationMultiline(): void {
-    if (this.stationColumns.length < 3 && this.isStationMultiline) {
+    if (this.stationColumns.length < 3) {
       this.stationColumns = [
         { name: this.enumColumnsDocumentInfo.Name },
         { name: this.enumColumnsDocumentInfo.LastUpdated },
