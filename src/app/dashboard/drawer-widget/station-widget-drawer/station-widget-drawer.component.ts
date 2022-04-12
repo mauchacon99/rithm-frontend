@@ -97,6 +97,9 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document fields. */
   documentFields: OptionsSelectWidgetDrawer[] = [];
 
+  /** Document fields for third select, only station multiline. */
+  documentFieldsThirdSelect: OptionsSelectWidgetDrawer[] = [];
+
   /** Station RithmId. */
   stationRithmId!: string;
 
@@ -114,6 +117,20 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Enum ColumnsDocumentInfo. */
   enumColumnsDocumentInfo = ColumnsDocumentInfo;
+
+  /**
+   * Check if station is multiline.
+   *
+   * @returns Boolean true if station is multiline.
+   */
+  get isStationMultiline(): boolean {
+    return (
+      this.dataDrawerStation.widgetItem.widgetType ===
+        this.enumWidgetType.StationMultiline ||
+      this.dataDrawerStation.widgetItem.widgetType ===
+        this.enumWidgetType.StationMultilineBanner
+    );
+  }
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -163,7 +180,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   private setDocumentFields(): void {
     this.documentFields = [];
     this.questions?.map((question) => {
-      const isDisabledQuestionOrStation =
+      let isDisabledQuestionOrStation =
         this.checkTypeQuestionAndStation(question);
       this.documentFields.push({
         name: question.prompt,
@@ -173,6 +190,20 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           : this.checkExistColumn(question.rithmId, 'questionId'),
         questionId: question.rithmId,
       });
+      if (this.isStationMultiline) {
+        isDisabledQuestionOrStation = this.checkTypeQuestionAndStation(
+          question,
+          true
+        );
+        this.documentFieldsThirdSelect.push({
+          name: question.prompt,
+          value: question.rithmId,
+          disabled: isDisabledQuestionOrStation
+            ? isDisabledQuestionOrStation
+            : this.checkExistColumn(question.rithmId, 'questionId'),
+          questionId: question.rithmId,
+        });
+      }
     });
   }
 
@@ -180,25 +211,37 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * Check type of question and type of station.
    *
    * @param question Question to check.
+   * @param isThirdSelect Boolean true if its third select.
    * @returns A boolean, true if station is Multiline and check is invalid question type.
    */
-  private checkTypeQuestionAndStation(question: Question): boolean {
+  private checkTypeQuestionAndStation(
+    question: Question,
+    isThirdSelect = false
+  ): boolean {
     if (question.questionType === this.enumQuestionFieldType.File) {
       return true;
-    } else if (
-      this.dataDrawerStation.widgetItem.widgetType ===
-        this.enumWidgetType.StationMultiline ||
-      this.dataDrawerStation.widgetItem.widgetType ===
-        this.enumWidgetType.StationMultilineBanner
-    ) {
-      return (
-        question.questionType === this.enumQuestionFieldType.Select ||
-        question.questionType === this.enumQuestionFieldType.MultiSelect ||
-        question.questionType === this.enumQuestionFieldType.CheckList ||
-        question.questionType === this.enumQuestionFieldType.Checkbox ||
-        question.questionType === this.enumQuestionFieldType.LongText ||
-        question.questionType === this.enumQuestionFieldType.URL
-      );
+    } else if (this.isStationMultiline) {
+      if (!isThirdSelect) {
+        console.log('1 - 2');
+        return (
+          question.questionType === this.enumQuestionFieldType.Select ||
+          question.questionType === this.enumQuestionFieldType.MultiSelect ||
+          question.questionType === this.enumQuestionFieldType.CheckList ||
+          question.questionType === this.enumQuestionFieldType.Checkbox ||
+          question.questionType === this.enumQuestionFieldType.LongText ||
+          question.questionType === this.enumQuestionFieldType.AddressLine ||
+          question.questionType === this.enumQuestionFieldType.URL
+        );
+      } else {
+        console.log('3');
+        return (
+          question.questionType === this.enumQuestionFieldType.Select ||
+          question.questionType === this.enumQuestionFieldType.MultiSelect ||
+          question.questionType === this.enumQuestionFieldType.CheckList ||
+          question.questionType === this.enumQuestionFieldType.Checkbox ||
+          question.questionType === this.enumQuestionFieldType.URL
+        );
+      }
     }
     return false;
   }
@@ -350,13 +393,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Set default columns if station columns are empty and station is type multiline. */
   private setDefaultColumnsStationMultiline(): void {
-    if (
-      this.stationColumns.length < 2 &&
-      (this.dataDrawerStation.widgetItem.widgetType ===
-        this.enumWidgetType.StationMultilineBanner ||
-        this.dataDrawerStation.widgetItem.widgetType ===
-          this.enumWidgetType.StationMultiline)
-    ) {
+    if (this.stationColumns.length < 3 && this.isStationMultiline) {
       this.stationColumns = [
         { name: this.enumColumnsDocumentInfo.Name },
         { name: this.enumColumnsDocumentInfo.LastUpdated },
