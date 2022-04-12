@@ -7,9 +7,10 @@ import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
 import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
-import { MockStationService } from 'src/mocks';
-import { QuestionFieldType } from 'src/models';
+import { MockStationService, MockPopupService } from 'src/mocks';
+import { QuestionFieldType, DialogOptions } from 'src/models';
 import { StationFieldComponent } from './station-field.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('StationFieldComponent', () => {
   let component: StationFieldComponent;
@@ -24,6 +25,7 @@ describe('StationFieldComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -152,5 +154,29 @@ describe('StationFieldComponent', () => {
       ];
       expect(component.options.length).toBeGreaterThan(0);
     });
+  });
+
+  it('should open a confirmation pop up on click of delete station option.', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Remove Option',
+      message: `Are you sure you want to remove this option?`,
+      okButtonText: 'Remove',
+      cancelButtonText: 'Close',
+      important: true,
+    };
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.removeField();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
+  it('should emit remove option.', async () => {
+    const removeOption = spyOn(component.remove, 'emit');
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+    await component.removeField();
+    expect(removeOption).toHaveBeenCalled();
   });
 });

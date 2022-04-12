@@ -47,7 +47,9 @@
           <div class="w-4/5">
             <span class="block text-sm py-1">{{ file?.name }}</span>
             <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
-            <span class="block text-xs py-1">{{ fileSize + ' kb' }}</span>
+            <span class="block text-xs py-1">{{
+              fileSize.toFixed(2) + ' kb'
+            }}</span>
           </div>
           <div class="w-13 text-center">
             <i class="fas fa-times text-xl text-secondary-500 px-2 py-3"></i>

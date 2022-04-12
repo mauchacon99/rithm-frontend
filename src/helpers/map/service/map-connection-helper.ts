@@ -31,6 +31,10 @@ export class MapConnectionHelper {
           station.canvasPoint,
           this.mapHelper.mapScale$.value
         );
+        // If drawerOpened is true for that station, the connection is highlighted.
+        if (station.drawerOpened) {
+          connection.highlighted = true;
+        }
       }
       //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
@@ -38,6 +42,10 @@ export class MapConnectionHelper {
           station.canvasPoint,
           this.mapHelper.mapScale$.value
         );
+        // If drawerOpened is true for that station, the connection is highlighted.
+        if (station.drawerOpened) {
+          connection.highlighted = true;
+        }
       }
       //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(

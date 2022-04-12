@@ -121,8 +121,8 @@ export class UploadFileModalComponent implements OnInit {
    *
    * @returns Size of uploaded file.
    */
-  get fileSize(): string {
-    return this.file ? (this.file.size / 1024).toFixed(2) : '0';
+  get fileSize(): number {
+    return this.file ? this.file.size / 1024 : 0;
   }
 
   /**
