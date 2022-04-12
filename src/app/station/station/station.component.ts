@@ -875,7 +875,14 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
+          inputFrames.map((input) => {
+            if (input.data && JSON.parse(input.data)?.length > 0) {
+              input.questions = [];
+              input.questions = JSON.parse(input.data);
+            }
+          });
           this.inputFrameWidgetItems = inputFrames;
+
         },
         error: (error: unknown) => {
           this.errorService.displayError(
