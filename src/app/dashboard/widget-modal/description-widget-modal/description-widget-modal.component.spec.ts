@@ -9,7 +9,7 @@ import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-sear
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
-import { GroupTrafficWidgetComponent } from '../../widgets/group-traffic-widget/group-traffic-widget.component';
+import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
