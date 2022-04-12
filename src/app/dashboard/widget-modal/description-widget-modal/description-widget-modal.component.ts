@@ -49,7 +49,11 @@ export class DescriptionWidgetModalComponent implements OnInit {
     } else {
       return JSON.stringify(
         this.widgetType === this.enumWidgetType.StationGroupTraffic
-          ? { valueShowGraphic: 5 }
+          ? {
+              valueShowGraffic: 5,
+              stationGroupRithmId:
+                this.itemWidgetModalSelected.itemList.rithmId,
+            }
           : {
               stationGroupRithmId:
                 this.itemWidgetModalSelected.itemList.rithmId,
@@ -96,7 +100,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.ContainerProfileBanner ||
       this.widgetTypeWithoutDefault === this.enumWidgetType.StationMultiline ||
       this.widgetTypeWithoutDefault ===
-        this.enumWidgetType.StationMultilineBanner
+        this.enumWidgetType.StationMultilineBanner ||
+      this.widgetTypeWithoutDefault === this.enumWidgetType.StationGroupTraffic
       ? 2
       : 1;
   }

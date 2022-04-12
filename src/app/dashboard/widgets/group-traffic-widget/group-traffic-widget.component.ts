@@ -18,9 +18,9 @@ export class GroupTrafficWidgetComponent implements OnInit {
   @Input() set isMobileDevice(value: boolean) {
     this._isMobileDevice = value;
     if (this._isMobileDevice) {
-      this.valueShowGraphic = 5;
+      this.valueShowGraffic = 5;
     } else {
-      this.valueShowGraphic = this.copyValueShowGraphic;
+      this.valueShowGraffic = this.copyValueShowGraffic;
     }
   }
 
@@ -73,10 +73,10 @@ export class GroupTrafficWidgetComponent implements OnInit {
   optionsShowTraffic: number[] = [5, 10, 20, 30, 40, 50];
 
   /** Value Selected for show data in chart. */
-  valueShowGraphic = 5;
+  valueShowGraffic = 5;
 
   /** Copy value Selected for show data in chart. */
-  copyValueShowGraphic = 5;
+  copyValueShowGraffic = 5;
 
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
@@ -105,8 +105,8 @@ export class GroupTrafficWidgetComponent implements OnInit {
   private setDataWidget(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.valueShowGraphic = dataWidget.valueShowGraphic;
-    this.copyValueShowGraphic = this.valueShowGraphic;
+    this.valueShowGraffic = dataWidget.valueShowGraffic;
+    this.copyValueShowGraffic = this.valueShowGraffic;
   }
 
   /** Get traffic data document in stations. */
@@ -138,7 +138,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
    */
   updateDataWidget(): void {
     const setShowSelect = JSON.parse(this.dataWidget);
-    setShowSelect.valueShowGraphic = this.valueShowGraphic;
+    setShowSelect.valueShowGraffic = this.valueShowGraffic;
     this.widgetItem.data = JSON.stringify(setShowSelect);
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
