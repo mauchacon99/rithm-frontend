@@ -222,7 +222,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.stationStatus !== MapItemStatus.Created
             ) {
               this.getStationDocumentGenerationStatus();
-              this.getStationHistory();
             }
           } else {
             throw new Error('There was no station info drawer data');
