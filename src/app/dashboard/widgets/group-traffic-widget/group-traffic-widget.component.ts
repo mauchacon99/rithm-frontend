@@ -9,7 +9,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  */
 @Component({
   selector:
-    'app-group-traffic-widget[showButtonSetting][dataWidget][editMode][isMobileDevice][widgetItem][indexWidget]',
+    'app-group-traffic-widget[showButtonSetting][dataWidget][editMode][isMobileDevice]',
   templateUrl: './group-traffic-widget.component.html',
   styleUrls: ['./group-traffic-widget.component.scss'],
 })
@@ -18,9 +18,9 @@ export class GroupTrafficWidgetComponent implements OnInit {
   @Input() set isMobileDevice(value: boolean) {
     this._isMobileDevice = value;
     if (this._isMobileDevice) {
-      this.valueShowGraffic = 5;
+      this.valueShowGraphic = 5;
     } else {
-      this.valueShowGraffic = this.copyValueShowGraffic;
+      this.valueShowGraphic = this.copyValueShowGraphic;
     }
   }
 
@@ -73,10 +73,10 @@ export class GroupTrafficWidgetComponent implements OnInit {
   optionsShowTraffic: number[] = [5, 10, 20, 30, 40, 50];
 
   /** Value Selected for show data in chart. */
-  valueShowGraffic = 5;
+  valueShowGraphic = 5;
 
   /** Copy value Selected for show data in chart. */
-  copyValueShowGraffic = 5;
+  copyValueShowGraphic = 5;
 
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
@@ -99,8 +99,8 @@ export class GroupTrafficWidgetComponent implements OnInit {
   private setDataWidget(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.valueShowGraffic = dataWidget.valueShowGraffic;
-    this.copyValueShowGraffic = this.valueShowGraffic;
+    this.valueShowGraphic = dataWidget.valueShowGraphic;
+    this.copyValueShowGraphic = this.valueShowGraphic;
   }
 
   /** Get traffic data document in stations. */
@@ -126,7 +126,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
    */
   updateDataWidget(): void {
     const setShowSelect = JSON.parse(this.dataWidget);
-    setShowSelect.valueShowGraffic = this.valueShowGraffic;
+    setShowSelect.valueShowGraphic = this.valueShowGraphic;
     this.widgetItem.data = JSON.stringify(setShowSelect);
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,

@@ -34,9 +34,14 @@ export class DescriptionWidgetModalComponent implements OnInit {
         columns: [{ name: 'name' }],
       });
     } else {
-      return JSON.stringify({
-        stationGroupRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-      });
+      return JSON.stringify(
+        this.widgetType === this.enumWidgetType.StationGroupTraffic
+          ? { valueShowGraphic: 5 }
+          : {
+              stationGroupRithmId:
+                this.itemWidgetModalSelected.itemList.rithmId,
+            }
+      );
     }
   }
 
