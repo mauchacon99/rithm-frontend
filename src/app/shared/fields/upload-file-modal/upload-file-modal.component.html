@@ -1,14 +1,15 @@
-<div class="modal-container">
+<div class="modal-container flex flex-col">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
     <h4 class="text-center">Upload File</h4>
   </div>
-  <!-- File upload -->
-  <div class="flex justify-center mb-2">
+  <!-- File upload select section -->
+  <section class="flex justify-center mb-2">
     <div class="w-full pb-4 pt-6">
-      <div class="flex items-center justify-center w-full">
-        <div
-          class="flex flex-col w-full h-56 border-dashed border-2 border-secondary-200 hover:bg-secondary-50 hover:border-secondary-300"
+      <div class="flex justify-start w-full h-56">
+        <section
+          *ngIf="!isLoading && !fileUpload"
+          class="flex flex-col w-full h-full border-dashed border-2 border-secondary-200 hover:bg-secondary-50 hover:border-secondary-300"
         >
           <div class="flex flex-col items-center justify-center pt-7">
             <span
@@ -32,13 +33,42 @@
             type="file"
             id="upload-file-input"
             data-testid="upload-file-input"
+            (change)="onFileSelected($event)"
             [hidden]="true"
           />
-        </div>
+        </section>
+        <!-- File upload display section -->
+        <section *ngIf="fileUpload" class="flex w-full h-full justify-start">
+          <div class="w-14 text-center">
+            <i
+              class="fa-solid fa-file text-4xl text-secondary-300 px-2 py-3"
+            ></i>
+          </div>
+          <div class="w-4/5">
+            <span class="block text-sm py-1">{{ file?.name }}</span>
+            <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+            <span class="block text-xs py-1">{{
+              fileSize.toFixed(2) + ' kb'
+            }}</span>
+          </div>
+          <div class="w-13 text-center">
+            <i class="fas fa-times text-xl text-secondary-500 px-2 py-3"></i>
+          </div>
+        </section>
+        <!-- File upload progress display section -->
+        <section
+          *ngIf="isLoading && !fileUpload"
+          class="flex w-full justify-start"
+        >
+          <div class="w-full">
+            <span class="block text-sm py-1">{{ file?.name }}</span>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </div>
+        </section>
       </div>
     </div>
-  </div>
-  <div mat-dialog-actions class="flex justify-end space-x-4">
+  </section>
+  <section mat-dialog-actions class="flex justify-end space-x-4">
     <!-- Cancel -->
     <button
       type="button"
@@ -57,9 +87,10 @@
       data-testid="save-modal-btn"
       id="save-modal-btn"
       class="pl-3"
-      [disabled]="true"
+      [disabled]="!fileUpload"
+      (click)="saveData()"
     >
-      Save
+      Done
     </button>
-  </div>
+  </section>
 </div>
