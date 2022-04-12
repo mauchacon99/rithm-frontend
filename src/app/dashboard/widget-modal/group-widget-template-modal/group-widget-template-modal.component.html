@@ -18,6 +18,11 @@
         *ngSwitchCase="enumWidgetType.StationGroupSearch"
         [ngTemplateOutlet]="previewSearchGroup"
       ></ng-container>
+      <!-- Type traffic -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.StationGroupTraffic"
+        [ngTemplateOutlet]="previewTrafficGroup"
+      ></ng-container>
     </div>
     <!-- Info of card. -->
     <div class="p-2 overflow-auto h-2/6 scrollbar">
@@ -63,6 +68,15 @@
         <div class="h-2 bg-secondary-100 rounded"></div>
         <div class="w-4/5 h-2 bg-secondary-50 rounded mt-2"></div>
       </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #previewTrafficGroup>
+  <div class="h-full w-full bg-white rounded px-2 pt-2 overflow-hidden">
+    <p class="text-sm font-semibold truncate">Group Name Traffic</p>
+    <div class="mt-2 h-[calc(100%-36px)] animate-pulse">
+      <canvas id="chartTrafficGroup"></canvas>
     </div>
   </div>
 </ng-template>

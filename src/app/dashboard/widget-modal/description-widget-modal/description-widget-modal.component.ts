@@ -94,6 +94,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.StationTableBanner ||
       this.widgetTypeWithoutDefault ===
         this.enumWidgetType.ContainerProfileBanner ||
+      this.widgetTypeWithoutDefault === this.enumWidgetType.StationMultiline ||
       this.widgetTypeWithoutDefault ===
         this.enumWidgetType.StationMultilineBanner
       ? 2
