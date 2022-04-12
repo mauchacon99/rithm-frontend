@@ -41,6 +41,7 @@
     >
       <div
         cdkDrag
+        [cdkDragData]="frameTypes.Input"
         class="bg-white flex mb-2 p-2 items-center justify-center border border-solid border-primary-100 cursor-pointer active:cursor-move"
         (click)="addNewInputFrame(frameTypes.Input)"
         data-testid="input-frame-item"
