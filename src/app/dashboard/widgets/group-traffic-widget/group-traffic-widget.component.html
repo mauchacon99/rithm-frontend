@@ -5,7 +5,7 @@
       {{ groupTrafficData.title + ' Traffic' || 'Untitled Group Traffic' }}
     </h3>
     <div class="select-show-data">
-      <mat-form-field appearance="fill" *ngIf="editMode">
+      <mat-form-field appearance="outline" *ngIf="editMode">
         <mat-label>Value</mat-label>
         <mat-select
           [disabled]="isMobileDevice"
