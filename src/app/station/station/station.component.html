@@ -381,7 +381,7 @@
                     (cdkDropListDropped)="addInputFrame($event)"
                   >
                     <gridster
-                      class="p-0 bg-transparent h-screen"
+                      class="p-0 bg-transparent h-screen w-full"
                       [options]="options"
                     >
                       <gridster-item
@@ -390,7 +390,8 @@
                         [ngClass]="{
                           'widget-item-layout':
                             layoutMode && widgetFocused !== i,
-                          'border-accent-300 border-2': widgetFocused === i
+                            'circle-border': widgetItem.type === frameType.CircleImage,
+                            'border-accent-300 border-2': widgetFocused === i
                         }"
                         (click)="settingMode || focusWidget(i)"
                         *ngFor="
