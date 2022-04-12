@@ -21,8 +21,21 @@ export class GroupListHierarchyComponent implements OnInit {
 
   /** Param for search. */
   @Input() set search(value: string) {
+    this._search = value;
     this.searchStation(value);
   }
+
+  /**
+   * Get parameter search.
+   *
+   * @returns Value for search.
+   */
+  get search(): string {
+    return this._search;
+  }
+
+  /** Value search. */
+  private _search = '';
 
   /** Output value of selected item. */
   @Output() getSelectedItem = new EventEmitter<
@@ -33,10 +46,10 @@ export class GroupListHierarchyComponent implements OnInit {
   stationGroups!: StationGroupData;
 
   /** Data to station group widget to show filtered results. */
-  stations!: StationListGroup[];
+  stationsFilter: StationListGroup[] = [];
 
   /** Data to station group widget to show filtered results. */
-  stationGroupsFiltered!: StationGroupData;
+  groupsFilter: StationGroupData[] = [];
 
   /** Load indicator get groups. */
   isLoading!: boolean;
@@ -67,10 +80,9 @@ export class GroupListHierarchyComponent implements OnInit {
         next: (stationGroup) => {
           this.isLoading = false;
           this.isErrorGetGroups = false;
-          this.stationGroups = JSON.parse(
-            JSON.stringify(stationGroup)
-          ) as StationGroupData;
-          this.stationGroupsFiltered = stationGroup;
+          this.stationGroups = stationGroup;
+          this.stationsFilter = stationGroup.stations;
+          this.groupsFilter = stationGroup.subStationGroups;
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -98,23 +110,24 @@ export class GroupListHierarchyComponent implements OnInit {
    * @param search Value to search.
    */
   searchStation(search: string): void {
-    const _localStationGroups = this.stationGroups;
-    if (this.isLoading !== undefined && !this.isLoading) {
-      if (search.length) {
-        this.stationGroupsFiltered.stations =
-          _localStationGroups?.stations.filter((station) =>
-            station.name.toLowerCase().includes(search.toLowerCase())
-          );
+    if (this.isLoading !== undefined) {
+      if (this._search.length) {
+        //console.log('EJECUTA');
+        this.stationsFilter = this.stationGroups?.stations.filter((station) =>
+          station.name.toLowerCase().includes(search.toLowerCase())
+        );
 
-        this.stationGroupsFiltered.subStationGroups =
-          _localStationGroups?.subStationGroups.filter((subStation) =>
+        this.groupsFilter = this.stationGroups?.subStationGroups.filter(
+          (subStation) =>
             subStation.title.toLowerCase().includes(search.toLowerCase())
-          );
+        );
       } else {
+        this.stationsFilter = this.stationGroups.stations;
+        this.groupsFilter = this.stationGroups.subStationGroups;
         /* console.log(this.stationGroupsFiltered);
-        console.log(this.stationGroups);
-        this.stationGroupsFiltered = this.stationGroups;
-        console.log(this.stationGroupsFiltered);*/
+          console.log(this.stationGroups);
+          this.stationGroupsFiltered = this.stationGroups;
+          console.log(this.stationGroupsFiltered);*/
       }
     }
   }
