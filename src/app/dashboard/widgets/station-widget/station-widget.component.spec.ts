@@ -26,7 +26,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BannerImageWidgetComponent } from '../banner-image-widget/banner-image-widget.component';
+import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
