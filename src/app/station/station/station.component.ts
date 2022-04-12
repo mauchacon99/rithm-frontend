@@ -882,7 +882,6 @@ export class StationComponent
             }
           });
           this.inputFrameWidgetItems = inputFrames;
-
         },
         error: (error: unknown) => {
           this.errorService.displayError(

@@ -363,7 +363,9 @@
                           id="save-station-frames"
                           data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="layoutMode ? saveStationWidgetsChanges() : ''"
+                          (click)="
+                            layoutMode ? saveStationWidgetsChanges() : ''
+                          "
                         >
                           Save
                         </button>
