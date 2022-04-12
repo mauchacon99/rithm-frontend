@@ -21,8 +21,21 @@ export class GroupListHierarchyComponent implements OnInit {
 
   /** Param for search. */
   @Input() set search(value: string) {
-    this.searchStation(value);
+    this._search = value;
+    this.searchStationGroups();
   }
+
+  /**
+   * Get parameter search.
+   *
+   * @returns Value for search.
+   */
+  get search(): string {
+    return this._search;
+  }
+
+  /** Value search. */
+  private _search = '';
 
   /** Output value of selected item. */
   @Output() getSelectedItem = new EventEmitter<
@@ -36,10 +49,10 @@ export class GroupListHierarchyComponent implements OnInit {
   stationGroups!: StationGroupData;
 
   /** Data to station group widget to show filtered results. */
-  stations!: StationListGroup[];
+  stationsFilter: StationListGroup[] = [];
 
   /** Data to station group widget to show filtered results. */
-  stationGroupsFiltered!: StationGroupData;
+  groupsFilter: StationGroupData[] = [];
 
   /** Load indicator get groups. */
   isLoading!: boolean;
@@ -71,10 +84,10 @@ export class GroupListHierarchyComponent implements OnInit {
           this.isSearchDisabled.emit(true);
           this.isLoading = false;
           this.isErrorGetGroups = false;
-          this.stationGroups = JSON.parse(
-            JSON.stringify(stationGroup)
-          ) as StationGroupData;
-          this.stationGroupsFiltered = stationGroup;
+          this.stationGroups = stationGroup;
+          this.stationsFilter = stationGroup.stations;
+          this.groupsFilter = stationGroup.subStationGroups;
+          this.searchStationGroups();
         },
         error: (error: unknown) => {
           this.isSearchDisabled.emit(false);
@@ -99,27 +112,26 @@ export class GroupListHierarchyComponent implements OnInit {
 
   /**
    * Search similitude stations by name and substations.
-   *
-   * @param search Value to search.
    */
-  searchStation(search: string): void {
-    const _localStationGroups = this.stationGroups;
-    if (this.isLoading !== undefined && !this.isLoading) {
-      if (search.length) {
-        this.stationGroupsFiltered.stations =
-          _localStationGroups?.stations.filter((station) =>
-            station.name.toLowerCase().includes(search.toLowerCase())
-          );
+  searchStationGroups(): void {
+    if (this.isLoading !== undefined) {
+      if (this.search.length) {
+        //console.log('EJECUTA');
+        this.stationsFilter = this.stationGroups?.stations.filter((station) =>
+          station.name.toLowerCase().includes(this.search.toLowerCase())
+        );
 
-        this.stationGroupsFiltered.subStationGroups =
-          _localStationGroups?.subStationGroups.filter((subStation) =>
-            subStation.title.toLowerCase().includes(search.toLowerCase())
-          );
+        this.groupsFilter = this.stationGroups?.subStationGroups.filter(
+          (subStation) =>
+            subStation.title.toLowerCase().includes(this.search.toLowerCase())
+        );
       } else {
+        this.stationsFilter = this.stationGroups.stations;
+        this.groupsFilter = this.stationGroups.subStationGroups;
         /* console.log(this.stationGroupsFiltered);
-        console.log(this.stationGroups);
-        this.stationGroupsFiltered = this.stationGroups;
-        console.log(this.stationGroupsFiltered);*/
+          console.log(this.stationGroups);
+          this.stationGroupsFiltered = this.stationGroups;
+          console.log(this.stationGroupsFiltered);*/
       }
     }
   }
