@@ -49,6 +49,8 @@ export class GroupWidgetTemplateModalComponent
           backgroundColor: 'rgba(59,130,246,0.63)',
           stack: 'combined',
           type: 'bar',
+          borderWidth: 0,
+          barThickness: 8,
         },
         {
           // Documents Flow
@@ -57,6 +59,7 @@ export class GroupWidgetTemplateModalComponent
           borderColor: '#3b82f6',
           backgroundColor: 'rgba(59,130,246,0.63)',
           stack: 'combined',
+          borderWidth: 1,
         },
       ],
     },
@@ -65,6 +68,14 @@ export class GroupWidgetTemplateModalComponent
       plugins: {
         legend: {
           display: false,
+        },
+        tooltip: {
+          titleFont: {
+            size: 8,
+          },
+          bodyFont: {
+            size: 7,
+          },
         },
       },
       scales: {
