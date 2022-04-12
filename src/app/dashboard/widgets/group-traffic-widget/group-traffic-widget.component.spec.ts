@@ -71,7 +71,6 @@ describe('GroupTrafficWidgetComponent', () => {
       '#app-loading-indicator-group-traffic'
     );
     expect(loadingIndicator).toBeTruthy();
-    expect(component.isLoading).toBeTrue();
   });
 
   it('should show error message when request group traffic data', () => {
