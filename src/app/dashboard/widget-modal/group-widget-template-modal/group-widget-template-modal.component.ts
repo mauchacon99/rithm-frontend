@@ -45,8 +45,8 @@ export class GroupWidgetTemplateModalComponent
           // Documents
           label: 'Documents',
           data: [20, 50, 32, 45, 40, 51, 26],
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59,130,246,0.63)',
+          borderColor: '#3B82F6',
+          backgroundColor: '#8DA1C3',
           stack: 'combined',
           type: 'bar',
           borderWidth: 0,
