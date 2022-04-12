@@ -116,7 +116,6 @@ export class GroupListHierarchyComponent implements OnInit {
   searchStationGroups(): void {
     if (this.isLoading !== undefined) {
       if (this.search.length) {
-        //console.log('EJECUTA');
         this.stationsFilter = this.stationGroups?.stations.filter((station) =>
           station.name.toLowerCase().includes(this.search.toLowerCase())
         );
@@ -128,10 +127,6 @@ export class GroupListHierarchyComponent implements OnInit {
       } else {
         this.stationsFilter = this.stationGroups.stations;
         this.groupsFilter = this.stationGroups.subStationGroups;
-        /* console.log(this.stationGroupsFiltered);
-          console.log(this.stationGroups);
-          this.stationGroupsFiltered = this.stationGroups;
-          console.log(this.stationGroupsFiltered);*/
       }
     }
   }
