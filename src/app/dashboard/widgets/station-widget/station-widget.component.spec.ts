@@ -24,6 +24,9 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BannerImageWidgetComponent } from '../banner-image-widget/banner-image-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -40,8 +43,9 @@ describe('StationWidgetComponent', () => {
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
+        MockComponent(BannerImageWidgetComponent),
       ],
-      imports: [MatTableModule],
+      imports: [MatTableModule, RouterTestingModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -574,5 +578,33 @@ describe('StationWidgetComponent', () => {
     component.widgetReloadListDocuments(true, false);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
+  });
+
+  it('should redirect to document page', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.widgetType = WidgetType.StationMultilineBanner;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#link-document-button-' +
+        component.dataStationWidget.documents[0].rithmId
+    );
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const spyRoute = spyOn(
+      TestBed.inject(Router),
+      'navigate'
+    ).and.callThrough();
+    expect(button).toBeTruthy();
+    button.click(component.dataStationWidget.documents[0].rithmId);
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(
+      ['/', 'document', component.dataStationWidget.documents[0].rithmId],
+      {
+        queryParams: {
+          documentId: component.dataStationWidget.documents[0].rithmId,
+          stationId: component.stationRithmId,
+        },
+      }
+    );
   });
 });

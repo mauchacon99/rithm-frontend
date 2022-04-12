@@ -148,11 +148,16 @@
         </div>
       </div>
       <button
+        *ngIf="
+          widgetType === enumWidgetType.StationMultiline ||
+          widgetType === enumWidgetType.StationMultilineBanner
+        "
         mat-icon-button
-        [id]="'link-document-button-' + document.rithmId"
         class="text-secondary-500"
+        [id]="'link-document-button-' + document.rithmId"
         [attr.data-testid]="'link-document-button-' + document.rithmId"
         [disabled]="editMode"
+        (click)="goToDocument(document.rithmId)"
       >
         <i class="fas fa-external-link-alt text-base"></i>
       </button>
