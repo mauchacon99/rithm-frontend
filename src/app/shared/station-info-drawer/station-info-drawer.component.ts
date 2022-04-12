@@ -316,10 +316,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   get displayDeleteStationButton(): boolean {
     return (
-      this.locallyCreated ||
-      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner) ||
-      (!this.openedFromMap && this.editMode) ||
-      (!this.openedFromMap && this.isUserAdminOrOwner)
+      (this.openedFromMap && this.locallyCreated) ||
+      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner)
     );
   }
 
