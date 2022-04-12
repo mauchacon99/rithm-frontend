@@ -22,7 +22,7 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Param for search. */
   @Input() set search(value: string) {
     this._search = value;
-    this.searchStation(value);
+    this.searchStationGroups();
   }
 
   /**
@@ -83,6 +83,7 @@ export class GroupListHierarchyComponent implements OnInit {
           this.stationGroups = stationGroup;
           this.stationsFilter = stationGroup.stations;
           this.groupsFilter = stationGroup.subStationGroups;
+          this.searchStationGroups();
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -106,20 +107,18 @@ export class GroupListHierarchyComponent implements OnInit {
 
   /**
    * Search similitude stations by name and substations.
-   *
-   * @param search Value to search.
    */
-  searchStation(search: string): void {
+  searchStationGroups(): void {
     if (this.isLoading !== undefined) {
-      if (this._search.length) {
+      if (this.search.length) {
         //console.log('EJECUTA');
         this.stationsFilter = this.stationGroups?.stations.filter((station) =>
-          station.name.toLowerCase().includes(search.toLowerCase())
+          station.name.toLowerCase().includes(this.search.toLowerCase())
         );
 
         this.groupsFilter = this.stationGroups?.subStationGroups.filter(
           (subStation) =>
-            subStation.title.toLowerCase().includes(search.toLowerCase())
+            subStation.title.toLowerCase().includes(this.search.toLowerCase())
         );
       } else {
         this.stationsFilter = this.stationGroups.stations;

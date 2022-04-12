@@ -23,12 +23,11 @@
     <p class="text-error-500">Error: Unable to show groups or station.</p>
   </div>
 
-  <ng-container *ngIf="stationGroups && !isLoading && !isErrorGetGroups">
+  <ng-container
+    *ngIf="stationsFilter && groupsFilter && !isLoading && !isErrorGetGroups"
+  >
     <ng-container
-      *ngIf="
-        stationGroups.subStationGroups.length || stationGroups.stations.length;
-        else emptyList
-      "
+      *ngIf="stationsFilter.length || groupsFilter.length; else emptyList"
     >
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
@@ -89,6 +88,7 @@
   <div class="text-center text-sm md:text-base pt-4">
     There aren't groups or stations.
     <button
+      *ngIf="search.length"
       mat-icon-button
       id="reload-get-stations-group"
       data-testid="reload-get-stations-group"
