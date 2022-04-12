@@ -60,6 +60,7 @@ import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widge
 import { SplitService } from 'src/app/core/split.service';
 import { TitleWidgetComponent } from 'src/app/shared/station-document-widgets/title-widget/title-widget.component';
 import { BannerWidgetComponent } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.component';
+import { CircleImageWidgetComponent } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -93,6 +94,7 @@ describe('StationComponent', () => {
         MockComponent(InputFrameWidgetComponent),
         MockComponent(BannerWidgetComponent),
         MockComponent(BuildDrawerComponent),
+        MockComponent(CircleImageWidgetComponent),
       ],
       imports: [
         NoopAnimationsModule,
