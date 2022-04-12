@@ -254,7 +254,7 @@ describe('GroupListHierarchyComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
   });
 
-  xit('should search stations and substations', () => {
+  it('should search stations and substations', () => {
     component.stationGroups = subStationGroups;
     component.stations = [stations, stations];
     component.isLoading = false;
