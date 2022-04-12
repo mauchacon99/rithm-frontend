@@ -1,12 +1,29 @@
-<div class="grid grid-cols-3 bg-secondary-400 py-1">
+<div
+  class="grid grid-cols-3 py-1"
+  [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
+>
   <div
-    [ngClass]="{ 'col-start-2 text-center text-white': title, 'h-10': !title }"
+    [ngClass]="{
+      'col-start-2 text-center': title,
+      'h-10 ': !title,
+      'text-white': !newInterfaceView
+    }"
   >
-    <h3 class="leading-10">{{ title }}</h3>
+    <h6 class="leading-10">{{ newInterfaceView ? stationName : title }}</h6>
   </div>
-  <div class="justify-self-end px-3 md:px-5" *ngIf="title">
+  <div class="justify-self-end px-3 md:px-5" *ngIf="newInterfaceView">
     <button
-      *ngIf="title !== 'Station'"
+      class="group"
+      type="button"
+      data-testid="station-info-drawer"
+      mat-icon-button
+      (click)="toggleDrawer('stationInfo')"
+      id="station-button"
+      [ngClass]="{ active: activeItem === 'stationInfo' }"
+    >
+      <i class="fas fa-info-circle group-hover:text-accent-100 text-lg"></i>
+    </button>
+    <button
       class="group"
       type="button"
       [ngClass]="{ active: activeItem === 'comments' }"
@@ -14,12 +31,9 @@
       mat-icon-button
       (click)="toggleDrawer('comments')"
     >
-      <i
-        class="far fa-comment-alt text-white group-hover:text-accent-100 text-lg"
-      ></i>
+      <i class="far fa-comment-alt group-hover:text-accent-100 text-lg"></i>
     </button>
     <button
-      *ngIf="title !== 'Station'"
       class="group"
       type="button"
       [ngClass]="{ active: activeItem === 'history' }"
@@ -28,9 +42,7 @@
       (click)="toggleDrawer('history')"
       [disabled]="!itemInfo"
     >
-      <i
-        class="fas fa-history text-white group-hover:text-accent-100 text-lg"
-      ></i>
+      <i class="fas fa-history group-hover:text-accent-100 text-lg"></i>
     </button>
   </div>
 </div>
