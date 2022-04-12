@@ -933,8 +933,6 @@ export class StationComponent
       rows: 1,
       x: 0,
       y: 0,
-      minItemRows: 1,
-      minItemCols: 1,
       type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
