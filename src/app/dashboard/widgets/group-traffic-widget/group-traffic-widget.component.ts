@@ -87,6 +87,12 @@ export class GroupTrafficWidgetComponent implements OnInit {
     private dashboardService: DashboardService
   ) {}
 
+  /** Whether the action to get group traffic is loading. */
+  isLoading = false;
+
+  /** Whether the action to get group traffic fails. */
+  errorGroupTraffic = false;
+
   /**
    * Initial Method.
    */
@@ -105,14 +111,20 @@ export class GroupTrafficWidgetComponent implements OnInit {
 
   /** Get traffic data document in stations. */
   getGroupTrafficData(): void {
+    this.isLoading = true;
+    this.errorGroupTraffic = false;
     this.stationService
       .getGroupTrafficData(this.stationGroupRithmId)
       .pipe(first())
       .subscribe({
         next: (trafficData) => {
+          this.isLoading = false;
+          this.errorGroupTraffic = false;
           this.groupTrafficData = trafficData;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorGroupTraffic = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
