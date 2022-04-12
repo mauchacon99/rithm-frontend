@@ -27,7 +27,7 @@ import { UserAvatarModule } from '../user-avatar/user-avatar.module';
     MatTabsModule,
     MatSlideToggleModule,
     MatTooltipModule,
-    UserAvatarModule
+    UserAvatarModule,
   ],
   exports: [StationInfoDrawerComponent],
 })
