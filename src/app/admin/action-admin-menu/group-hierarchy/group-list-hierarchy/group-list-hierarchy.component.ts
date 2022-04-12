@@ -29,9 +29,6 @@ export class GroupListHierarchyComponent implements OnInit {
     StationGroupData | StationListGroup
   >();
 
-  /** Set search input disabled or not. */
-  @Output() isInputSearchDisabled = new EventEmitter<boolean>();
-
   /** Data of stationGroup. */
   stationGroups!: StationGroupData;
 
@@ -111,14 +108,5 @@ export class GroupListHierarchyComponent implements OnInit {
     } else {
       this.getStationGroups();
     }
-  }
-
-  /**
-   * Emit value of is input disabled.
-   *
-   * @param isLoading IsLoading item data.
-   */
-  private getIsInputSearchDisabled(isLoading: boolean): void {
-    this.isInputSearchDisabled.emit(isLoading);
   }
 }
