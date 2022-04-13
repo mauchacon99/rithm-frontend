@@ -820,4 +820,16 @@ describe('DocumentComponent', () => {
       expect(component.viewNewContainer).toBeFalse();
     });
   });
+  it('should get the method that get the list of frames by type', () => {
+    const stationId = component.documentInformation.stationRithmId;
+    const documentId = component.documentInformation.documentRithmId;
+
+    const framesSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getFramesType'
+    ).and.callThrough();
+
+    component.getFramesByType();
+    expect(framesSpy).toHaveBeenCalledOnceWith(stationId, documentId);
+  });
 });
