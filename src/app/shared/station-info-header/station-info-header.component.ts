@@ -43,6 +43,9 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
   /** Part of the new station ui. */
   @Input() viewNewStation = false;
 
+  /** Is displayed in a new interface? */
+  @Input() newInterfaceView = false;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,

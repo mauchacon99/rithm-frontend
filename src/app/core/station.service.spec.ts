@@ -1509,14 +1509,24 @@ describe('StationService', () => {
     service.getNumberOfContainers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents?stationRithmId=${stationId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should call getGroupTrafficData', () => {
     const expectedData: GroupTrafficData = {
+      title: 'Group Eagle',
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
       labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocuments: [10, 5, 8, 10, 20],
-      averageDocumentStation: [2, 4, 1, 8, 9],
+      stationDocumentCounts: [10, 5, 8, 10, 20],
+      averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     service
       .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')

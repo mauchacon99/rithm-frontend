@@ -57,9 +57,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Display the ownerRoster length. */
   ownersRosterLength = -1;
 
-  /** Use for the number of containers in a station. */
-  numberOfContainers = 0;
-
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
@@ -143,8 +140,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
 
+  /** Use for get amount of containers of a station. */
+  numberOfContainers = 0;
+
   /** Use for history station. */
   stationHistoryEvents: DocumentEvent[] = [];
+
+  /** Loading in the amount of containers of a station. */
+  numberContainersLoading = false;
 
   /**
    * Whether the station is selected and it's in center of the map.
@@ -313,10 +316,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   get displayDeleteStationButton(): boolean {
     return (
-      this.locallyCreated ||
-      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner) ||
-      (!this.openedFromMap && this.editMode) ||
-      (!this.openedFromMap && this.isUserAdminOrOwner)
+      (this.openedFromMap && this.locallyCreated) ||
+      (this.openedFromMap && this.editMode && this.isUserAdminOrOwner)
     );
   }
 
@@ -378,6 +379,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
                 stationInfo.flowButton || 'Flow';
               this.flowButtonName = this.stationInformation.flowButton;
               this.isChained = stationInfo.isChained || false;
+              this.getNumberOfContainers();
             }
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
@@ -496,15 +498,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get the number of container get in a station.
    */
-  getNumberOfContainers(): void {
+  private getNumberOfContainers(): void {
+    this.numberContainersLoading = true;
     this.stationService
       .getNumberOfContainers(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (numberOfContainers) => {
+          this.numberContainersLoading = false;
           this.numberOfContainers = numberOfContainers;
         },
         error: (error: unknown) => {
+          this.numberContainersLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

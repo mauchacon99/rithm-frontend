@@ -21,8 +21,8 @@ import {
   StationFrameWidget,
   DocumentEvent,
   DataLinkObject,
-  StandardNumberJSON,
   GroupTrafficData,
+  StandardNumberJSON,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -854,22 +854,13 @@ export class StationService {
    * @returns Number of containers.
    */
   getNumberOfContainers(stationRithmId: string): Observable<number> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive  the number of container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const numberOfContainer: StandardNumberJSON = {
-        data: 10,
-      };
-
-      return of(numberOfContainer).pipe(map((response) => response.data));
-    }
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StandardNumberJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents`,
+        { params }
+      )
+      .pipe(map((response) => response.data as number));
   }
 
   /**
@@ -883,10 +874,11 @@ export class StationService {
     stationGroupRithmId: string
   ): Observable<GroupTrafficData> {
     const mockGetGroupTrafficData: GroupTrafficData = {
+      title: 'Group Eagle',
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
       labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocuments: [10, 5, 8, 10, 20],
-      averageDocumentStation: [2, 4, 1, 8, 9],
+      stationDocumentCounts: [10, 5, 8, 10, 20],
+      averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
