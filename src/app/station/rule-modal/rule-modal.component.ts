@@ -320,6 +320,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         question.questionType !== QuestionFieldType.State &&
         question.questionType !== QuestionFieldType.City &&
         question.questionType !== QuestionFieldType.Zip &&
+        question.questionType !== QuestionFieldType.File &&
         question.prompt !== 'Address Line 1' &&
         question.prompt !== 'Address Line 2'
     );
