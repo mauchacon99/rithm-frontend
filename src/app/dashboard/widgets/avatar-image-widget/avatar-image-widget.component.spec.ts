@@ -5,7 +5,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { ImageData } from '../../../../models';
+import { ImageData } from 'src/models';
 
 describe('AvatarImageWidgetComponent', () => {
   let component: AvatarImageWidgetComponent;
