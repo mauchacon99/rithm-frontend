@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
@@ -74,7 +75,12 @@ describe('GroupHierarchyComponent', () => {
         MockComponent(GroupListHierarchyComponent),
         MockComponent(UserGroupStationAdminComponent),
       ],
-      imports: [MatInputModule, NoopAnimationsModule, ComingSoonMessageModule],
+      imports: [
+        MatInputModule,
+        NoopAnimationsModule,
+        ComingSoonMessageModule,
+        FormsModule,
+      ],
     }).compileComponents();
   });
 

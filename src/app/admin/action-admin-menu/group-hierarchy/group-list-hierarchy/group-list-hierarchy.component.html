@@ -23,21 +23,21 @@
     <p class="text-error-500">Error: Unable to show groups or station.</p>
   </div>
 
-  <ng-container *ngIf="stationGroups && !isLoading && !isErrorGetGroups">
+  <ng-container
+    *ngIf="stationsFilter && groupsFilter && !isLoading && !isErrorGetGroups"
+  >
     <ng-container
-      *ngIf="
-        stationGroups.subStationGroups.length || stationGroups.stations.length;
-        else emptyList
-      "
+      *ngIf="stationsFilter.length || groupsFilter.length; else emptyList"
     >
       <mat-selection-list [multiple]="false" class="item-select-groups">
         <!-- subStationGroups -->
         <mat-list-option
-          *ngFor="let stationGroup of stationGroups.subStationGroups"
+          *ngFor="let stationGroup of groupsFilter"
           [id]="'group-item-' + stationGroup.rithmId"
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
           [value]="stationGroup"
           (click)="selectedListItem(stationGroup)"
+          [selected]="itemSelectedRithmId === stationGroup.rithmId"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -48,10 +48,11 @@
         </mat-list-option>
         <!-- stations -->
         <mat-list-option
-          *ngFor="let station of stationGroups.stations"
+          *ngFor="let station of stationsFilter"
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
           (click)="selectedListItem(station)"
+          [selected]="itemSelectedRithmId === station.rithmId"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -87,7 +88,9 @@
 
 <ng-template #emptyList>
   <div class="text-center text-sm md:text-base pt-4">
-    There aren't groups or stations.
+    There aren't groups or stations
+    {{ search.length ? ' with "' + search + '" ' : '' }}.
+    <br *ngIf="search.length" />
     <button
       mat-icon-button
       id="reload-get-stations-group"

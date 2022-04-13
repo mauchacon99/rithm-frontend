@@ -40,6 +40,9 @@ export class GroupHierarchyComponent {
   /** Value of selected item. */
   selectedItem!: StationGroupData | StationListGroup;
 
+  /** Param for search. */
+  search = '';
+
   /**
    * Return if selectedItem is group.
    *

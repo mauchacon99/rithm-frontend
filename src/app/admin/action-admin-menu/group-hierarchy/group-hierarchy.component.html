@@ -12,6 +12,7 @@
       appearance="outline"
     >
       <input
+        [(ngModel)]="search"
         type="text"
         matInput
         placeholder="Search"
@@ -34,6 +35,7 @@
         <app-group-list-hierarchy
           [stationGroupRithmId]="list.rithmId"
           [depthGroup]="index + 1"
+          [search]="search"
           (getSelectedItem)="setSelectItem($event, index)"
           [ngClass]="{
             'hidden md:block': index !== groupItemListSelected.length - 1
