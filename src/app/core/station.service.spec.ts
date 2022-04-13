@@ -1538,6 +1538,15 @@ describe('StationService', () => {
     service.getNumberOfContainers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents?stationRithmId=${stationId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should call getGroupTrafficData', () => {

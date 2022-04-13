@@ -4,7 +4,12 @@ import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
-import { Question } from 'src/models';
+import {
+  FrameType,
+  ImageWidgetObject,
+  Question,
+  SettingDrawerData,
+} from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
@@ -20,7 +25,13 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** The field information for your setting. */
-  fieldSetting!: Question;
+  fieldSetting!: Question | ImageWidgetObject | string;
+
+  /** The field frame type for your setting. */
+  fieldFrameType!: FrameType;
+
+  /** Frame types list.  */
+  frameTypes = FrameType;
 
   /** The station id of the current station. */
   stationRithmId!: string;
@@ -40,8 +51,9 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
     this.sideNavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const dataDrawer = data as Question;
-        this.fieldSetting = dataDrawer;
+        const dataDrawer = data as SettingDrawerData;
+        this.fieldSetting = dataDrawer.field;
+        this.fieldFrameType = dataDrawer.frame;
         this.getStationId();
       });
   }
@@ -52,15 +64,15 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribeDrawerData$();
   }
-
+  // TODO: this method belong to the field-drawer component
   /**
    * Whether the current field belongs to a previous field or not.
    *
    * @returns Is boolean.
    */
-  get isPrevious(): boolean {
-    return this.fieldSetting.originalStationRithmId !== this.stationRithmId;
-  }
+  // get isPrevious(): boolean {
+  //   return this.fieldSetting.originalStationRithmId !== this.stationRithmId;
+  // }
 
   /**
    * Get from the route parameters the id of the current station.
@@ -80,16 +92,16 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
       },
     });
   }
-
+  // TODO: this method belong to the field-drawer component
   /**
    * Shut off isRequired when isReadOnly is off and isPrevious = true.
    */
-  public setReadOnlyFalse(): void {
-    if (this.isPrevious) {
-      this.fieldSetting.isRequired =
-        this.fieldSetting.isReadOnly && this.fieldSetting.isRequired;
-    }
-  }
+  // public setReadOnlyFalse(): void {
+  //   if (this.isPrevious) {
+  //     this.fieldSetting.isRequired =
+  //       this.fieldSetting.isReadOnly && this.fieldSetting.isRequired;
+  //   }
+  // }
 
   /**
    * Completes all subscriptions.
@@ -98,13 +110,13 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
+  // TODO: this method belong to the field-drawer component
   /**
    * Set the question title.
    */
-  setQuestionTitle(): void {
-    this.stationService.stationQuestionTitle$.next(this.fieldSetting);
-  }
+  // setQuestionTitle(): void {
+  //   this.stationService.stationQuestionTitle$.next(this.fieldSetting);
+  // }
 
   /**
    * Completes all subscriptions.

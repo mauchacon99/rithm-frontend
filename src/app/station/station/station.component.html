@@ -2,6 +2,7 @@
   class="fixed z-10 w-full"
   [itemInfo]="stationInformation"
   [stationEditMode]="true"
+  [newInterfaceView]="false"
 ></app-sub-header>
 <mat-drawer-container
   [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
@@ -415,27 +416,37 @@
                             <app-headline-widget
                               *ngSwitchCase="frameType.Headline"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="openSettingDrawer($event)"
+                              (openSettingDrawer)="
+                                openSettingDrawer($event, frameType.Headline)
+                              "
                             ></app-headline-widget>
                             <app-title-widget
                               *ngSwitchCase="frameType.Title"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="openSettingDrawer($event)"
+                              (openSettingDrawer)="
+                                openSettingDrawer($event, frameType.Title)
+                              "
                             ></app-title-widget>
                             <app-body-text-widget
                               *ngSwitchCase="frameType.Body"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="openSettingDrawer($event)"
+                              (openSettingDrawer)="
+                                openSettingDrawer($event, frameType.Body)
+                              "
                             ></app-body-text-widget>
                             <app-banner-widget
                               *ngSwitchCase="frameType.Image"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="openSettingDrawer($event)"
+                              (openSettingDrawer)="
+                                openSettingDrawer($event, frameType.Image)
+                              "
                             ></app-banner-widget>
                             <app-circle-image-widget
                               *ngSwitchCase="frameType.CircleImage"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="openSettingDrawer($event)"
+                              (openSettingDrawer)="
+                                openSettingDrawer($event, frameType.CircleImage)
+                              "
                             ></app-circle-image-widget>
                             <app-input-frame-widget
                               *ngSwitchDefault
@@ -447,7 +458,9 @@
                               (widgetRowAdjustment)="
                                 widgetRowAdjustment($event, widgetItem)
                               "
-                              (openSettingDrawer)="openSettingDrawer($event)"
+                              (openSettingDrawer)="
+                                openSettingDrawer($event, frameType.Input)
+                              "
                             ></app-input-frame-widget>
                           </ng-container>
                         </div>
