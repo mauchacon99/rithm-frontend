@@ -25,4 +25,7 @@ export enum FrameType {
 
   /** Input's list.*/
   Input = 'input',
+
+  /** Data link.*/
+  DataLink = 'data-link',
 }
