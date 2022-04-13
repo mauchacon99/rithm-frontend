@@ -3,7 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { FrameType, Question, QuestionFieldType, SettingDrawerData } from 'src/models';
+import {
+  FrameType,
+  Question,
+  QuestionFieldType,
+  SettingDrawerData,
+} from 'src/models';
 import { SettingDrawerComponent } from './setting-drawer.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';

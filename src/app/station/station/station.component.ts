@@ -1013,7 +1013,6 @@ export class StationComponent
    *
    * @param field The field information for the setting drawer through sidenavDrawerService.
    * @param type The field information for the setting drawer through sidenavDrawerService.
-   *
    */
   openSettingDrawer(
     field: Question | ImageWidgetObject | string,
