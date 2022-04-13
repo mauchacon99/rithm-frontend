@@ -37,6 +37,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -73,6 +74,7 @@ describe('DocumentInfoDrawerComponent', () => {
         FormsModule,
         RouterTestingModule,
         MatDialogModule,
+        MatTabsModule,
       ],
     }).compileComponents();
   });
