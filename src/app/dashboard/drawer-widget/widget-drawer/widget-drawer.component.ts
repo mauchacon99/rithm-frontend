@@ -17,7 +17,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { FormatValidate } from 'src/helpers/format-validate';
+import { FormatImageValidate } from 'src/helpers';
 
 /**
  * Component for widget drawer.
@@ -162,7 +162,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     const file = (target.files as FileList)[0];
     const extension = file.type.split('/')[1];
     if (file) {
-      if (FormatValidate.isValidFormatBanner(extension)) {
+      if (FormatImageValidate.isValidFormatImage(extension)) {
         // Loading banner image while upload image.
         this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
         this.imageUploaded = {

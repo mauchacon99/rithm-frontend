@@ -1,15 +1,15 @@
-import { FormatValidate } from './format-validate';
+import { FormatImageValidate } from './format-validate';
 
 describe('Format validate', () => {
   it('should be created', () => {
-    expect(FormatValidate).toBeTruthy();
+    expect(FormatImageValidate).toBeTruthy();
   });
 
   it('should validate format', () => {
-    expect(FormatValidate.isValidFormatBanner('pdf')).toBeFalse();
-    expect(FormatValidate.isValidFormatBanner('jpeg')).toBeTrue();
-    expect(FormatValidate.isValidFormatBanner('jpg')).toBeTrue();
-    expect(FormatValidate.isValidFormatBanner('png')).toBeTrue();
-    expect(FormatValidate.isValidFormatBanner('gif')).toBeTrue();
+    expect(FormatImageValidate.isValidFormatImage('pdf')).toBeFalse();
+    expect(FormatImageValidate.isValidFormatImage('jpeg')).toBeTrue();
+    expect(FormatImageValidate.isValidFormatImage('jpg')).toBeTrue();
+    expect(FormatImageValidate.isValidFormatImage('png')).toBeTrue();
+    expect(FormatImageValidate.isValidFormatImage('gif')).toBeTrue();
   });
 });
