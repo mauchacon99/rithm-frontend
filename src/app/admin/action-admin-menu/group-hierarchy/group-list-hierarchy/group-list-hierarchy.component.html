@@ -37,6 +37,7 @@
           [attr.data-testid]="'group-item-' + stationGroup.rithmId"
           [value]="stationGroup"
           (click)="selectedListItem(stationGroup)"
+          [selected]="itemSelectedRithmId === stationGroup.rithmId"
         >
           <ng-container
             *ngTemplateOutlet="
@@ -51,6 +52,7 @@
           [id]="'station-item-' + station.rithmId"
           [attr.data-testid]="'station-item-' + station.rithmId"
           (click)="selectedListItem(station)"
+          [selected]="itemSelectedRithmId === station.rithmId"
         >
           <ng-container
             *ngTemplateOutlet="

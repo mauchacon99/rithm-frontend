@@ -60,6 +60,9 @@ export class GroupListHierarchyComponent implements OnInit {
   /** Show error if get groups fail. */
   isErrorGetGroups = false;
 
+  /** RithmId Item selected. */
+  itemSelectedRithmId = '';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService
@@ -107,6 +110,7 @@ export class GroupListHierarchyComponent implements OnInit {
    * @param itemSelected Selected item data.
    */
   selectedListItem(itemSelected: StationGroupData | StationListGroup): void {
+    this.itemSelectedRithmId = itemSelected.rithmId;
     this.getSelectedItem.emit(itemSelected);
   }
 
