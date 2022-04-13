@@ -88,6 +88,8 @@ textarea {
   }
 
   .circle-border {
+    @apply border-2 border-secondary-100;
+    
     border-radius: 50% !important;
   }
 }
