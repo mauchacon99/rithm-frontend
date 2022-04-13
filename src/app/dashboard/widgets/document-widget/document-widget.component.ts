@@ -11,7 +11,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import {
   ColumnFieldsWidget,
-  DocumentImage,
+  DashboardItem,
   DocumentWidget,
   QuestionFieldType,
   WidgetType,
@@ -25,16 +25,13 @@ import { takeUntil } from 'rxjs/operators';
  */
 @Component({
   selector:
-    'app-document-widget[dataWidget][editMode][showButtonSetting][widgetType]',
+    'app-document-widget[dataWidget][editMode][showButtonSetting][widgetItem]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
 export class DocumentWidgetComponent implements OnInit, OnDestroy {
-  /** To load dom by WidgetType. */
-  @Input() widgetType: WidgetType = WidgetType.Document;
-
-  /** Image to banner. */
-  @Input() image!: DocumentImage;
+  /** All data of widget. */
+  @Input() widgetItem!: DashboardItem;
 
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
@@ -80,7 +77,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   dataDocumentWidget!: DocumentWidget;
 
   /** Enum with types widget station. */
-  typesWidget = WidgetType;
+  enumWidgetType = WidgetType;
 
   /** Type of drawer opened. */
   drawerContext!: string;
