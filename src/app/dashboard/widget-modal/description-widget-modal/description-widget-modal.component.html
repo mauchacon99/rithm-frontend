@@ -94,6 +94,16 @@
           [widgetType]="widgetTypeWithoutDefault"
         >
         </app-group-search-widget>
+
+        <app-group-traffic-widget
+          *ngIf="widgetType === enumWidgetType.StationGroupTraffic"
+          class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
+          [showButtonSetting]="false"
+          [dataWidget]="dataWidget"
+          [editMode]="false"
+          [isMobileDevice]="false"
+        >
+        </app-group-traffic-widget>
       </div>
     </div>
   </div>
