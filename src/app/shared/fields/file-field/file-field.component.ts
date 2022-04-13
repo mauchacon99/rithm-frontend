@@ -57,7 +57,7 @@ export class FileFieldComponent
   fileName = '';
 
   /** The size of uploaded file. */
-  fileSize = '';
+  fileSize = 0;
 
   constructor(
     private documentService: DocumentService,
