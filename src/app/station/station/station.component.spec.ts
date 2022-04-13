@@ -40,6 +40,7 @@ import {
   RuleType,
   DataLinkObject,
   StationFrameWidget,
+  SettingDrawerData,
 } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
@@ -859,8 +860,13 @@ describe('StationComponent', () => {
 
   it('should call sidenavService and display setting drawer', () => {
     const spyDrawer = spyOn(TestBed.inject(SidenavDrawerService), 'openDrawer');
-    component.openSettingDrawer(question);
-    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting', question);
+    component.openSettingDrawer(question, FrameType.Body);
+    const dataDrawer: SettingDrawerData = {
+      field: question,
+      frame: FrameType.Body,
+    };
+
+    expect(spyDrawer).toHaveBeenCalledOnceWith('fieldSetting', dataDrawer);
   });
 
   it('should call sidenavService and close setting drawer', () => {
