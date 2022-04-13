@@ -327,7 +327,7 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-
+    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
   }
 
@@ -882,6 +882,26 @@ export class StationComponent
               input.questions = JSON.parse(input.data);
             }
           });
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the station frame widgets.
+   */
+  private getStationWidgets(): void {
+    this.stationService
+      .getStationWidgets(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
           this.inputFrameWidgetItems = inputFrames;
         },
         error: (error: unknown) => {
