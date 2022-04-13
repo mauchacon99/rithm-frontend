@@ -922,6 +922,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.dialog.open(StationDocumentsModalComponent, {
       minWidth: '370px',
       data: {
+        stationName: this.stationInformation.name,
         stationId: this.stationRithmId,
       },
     });

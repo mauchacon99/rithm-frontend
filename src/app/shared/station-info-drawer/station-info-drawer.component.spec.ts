@@ -724,6 +724,7 @@ describe('StationInfoDrawerComponent', () => {
     const expectData = {
       minWidth: '370px',
       data: {
+        stationName: component.stationInformation.name,
         stationId: stationId,
       },
     };
