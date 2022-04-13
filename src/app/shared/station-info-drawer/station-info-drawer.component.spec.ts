@@ -50,7 +50,6 @@ describe('StationInfoDrawerComponent', () => {
         MockComponent(RosterComponent),
         MockComponent(LoadingIndicatorComponent),
         MockComponent(StationDocumentsModalComponent),
-
       ],
       imports: [
         MatInputModule,
