@@ -26,6 +26,7 @@ import {
   DocumentAutoFlow,
   MoveDocument,
   StationRosterMember,
+  StationFrameWidget,
 } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
@@ -120,6 +121,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** View new station. */
   viewNewContainer = false;
+
+  /** The list of frames related to the associated station and document. */
+  framesByType: StationFrameWidget[] = [];
 
   constructor(
     private documentService: DocumentService,
@@ -629,6 +633,29 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
         },
         error: (error: unknown) => {
           this.flowButtonName = 'Flow';
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get list of frames by type.
+   */
+  getFramesByType(): void {
+    this.documentService
+      .getFramesType(
+        this.documentInformation.stationRithmId,
+        this.documentInformation.documentRithmId
+      )
+      .pipe(first())
+      .subscribe({
+        next: (frames) => {
+          this.framesByType = frames;
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
