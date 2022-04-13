@@ -13,6 +13,7 @@ import {
   DocumentGenerationStatus,
   QuestionFieldType,
   StationWidgetData,
+  WidgetType,
 } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
@@ -23,6 +24,9 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -39,8 +43,9 @@ describe('StationWidgetComponent', () => {
         MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
+        MockComponent(BannerImageWidgetComponent),
       ],
-      imports: [MatTableModule],
+      imports: [MatTableModule, RouterTestingModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -416,6 +421,43 @@ describe('StationWidgetComponent', () => {
     expect(errorMessage).toBeTruthy();
   });
 
+  it('should call viewDocument when  create document and widgetType is station type table', () => {
+    const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
+    component.widgetType = WidgetType.Station;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(of(expectDocumentRithmId));
+    const spyMethodViewDocument = spyOn(
+      component,
+      'viewDocument'
+    ).and.callThrough();
+    component.createNewDocument();
+
+    expect(spyMethodViewDocument).toHaveBeenCalledOnceWith(
+      expectDocumentRithmId
+    );
+    expect(spyService).toHaveBeenCalled();
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call getStationWidgetDocuments when create document and widgetType is station type list', () => {
+    const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
+    component.widgetType = WidgetType.StationMultiline;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(of(expectDocumentRithmId));
+    const spyMethodGetStationWidgetDocuments = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.createNewDocument();
+
+    expect(spyMethodGetStationWidgetDocuments).toHaveBeenCalled();
+    expect(spyService).toHaveBeenCalled();
+  });
+
   it('should not display a message when there are documents', () => {
     const noDocsMessage =
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
@@ -536,5 +578,33 @@ describe('StationWidgetComponent', () => {
     component.widgetReloadListDocuments(true, false);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
+  });
+
+  it('should redirect to document page', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.widgetType = WidgetType.StationMultilineBanner;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#link-document-button-' +
+        component.dataStationWidget.documents[0].rithmId
+    );
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const spyRoute = spyOn(
+      TestBed.inject(Router),
+      'navigate'
+    ).and.callThrough();
+    expect(button).toBeTruthy();
+    button.click(component.dataStationWidget.documents[0].rithmId);
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(
+      ['/', 'document', component.dataStationWidget.documents[0].rithmId],
+      {
+        queryParams: {
+          documentId: component.dataStationWidget.documents[0].rithmId,
+          stationId: component.stationRithmId,
+        },
+      }
+    );
   });
 });

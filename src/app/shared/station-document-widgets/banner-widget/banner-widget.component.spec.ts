@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BannerWidgetComponent } from './banner-widget.component';
 
 describe('BannerWidgetComponent', () => {
@@ -20,5 +19,13 @@ describe('BannerWidgetComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit event openSettingDrawer', () => {
+    component.widgetMode = 'setting';
+    const spyEmit = spyOn(component.openSettingDrawer, 'emit');
+    const image = component.imageWidgetObject;
+    component.handleOpenSettingDrawer(image);
+    expect(spyEmit).toHaveBeenCalledWith(image);
   });
 });

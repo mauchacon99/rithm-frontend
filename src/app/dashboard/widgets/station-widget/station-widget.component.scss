@@ -1,11 +1,3 @@
-.container-document {
-  height: calc(100% - 40px);
-}
-
-.container-station {
-  height: calc(100% - 155px);
-}
-
 td.mat-cell {
   padding-right: 10px !important;
 }
@@ -21,4 +13,14 @@ th.mat-header-cell:first-of-type {
 
 tr.mat-header-row {
   height: 30px !important;
+}
+
+.line-clamp-custom {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.mat-icon-button {
+  margin-top: -10px !important;
 }

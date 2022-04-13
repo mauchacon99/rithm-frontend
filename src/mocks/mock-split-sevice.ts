@@ -103,6 +103,15 @@ export class MockSplitService {
   }
 
   /**
+   * Get the flow logic treatment.
+   *
+   * @returns Split treatment.
+   */
+  public getFlowLogicTreatment(): string {
+    return 'on';
+  }
+
+  /**
    * Get the section group traffic in list-widget-modal.
    *
    * @returns Split treatment.

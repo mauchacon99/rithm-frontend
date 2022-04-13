@@ -19,11 +19,18 @@
   id="show-docs"
   class="h-full w-full"
   [ngClass]="{
-    'container-station': widgetType === typesWidget.StationTableBanner
+    'h-[calc(100%-155px)]':
+      widgetType === enumWidgetType.StationTableBanner ||
+      widgetType === enumWidgetType.StationMultilineBanner
   }"
 >
   <!--  Banner image-->
-  <ng-container *ngIf="widgetType === typesWidget.StationTableBanner">
+  <ng-container
+    *ngIf="
+      widgetType === enumWidgetType.StationTableBanner ||
+      widgetType === enumWidgetType.StationMultilineBanner
+    "
+  >
     <app-banner-image-widget
       [widgetType]="widgetType"
       [image]="image"
@@ -31,8 +38,12 @@
   </ng-container>
   <!-- Header widget -->
   <div
-    class="w-full px-2 pb-2 flex flex-col h-full"
-    [ngClass]="{ 'pt-2': widgetType !== typesWidget.StationTableBanner }"
+    class="w-full p-2 flex flex-col h-full"
+    [ngClass]="{
+      'pt-2':
+        widgetType !== enumWidgetType.StationTableBanner &&
+        widgetType !== enumWidgetType.StationMultilineBanner
+    }"
   >
     <!--  Header Container  -->
     <div class="m-2">
@@ -84,15 +95,111 @@
           No documents found in station.
         </div>
         <ng-container *ngIf="dataStationWidget.documents.length">
-          <ng-container *ngTemplateOutlet="tableDocuments"></ng-container>
+          <ng-container
+            *ngIf="
+              widgetType === enumWidgetType.StationMultilineBanner ||
+                widgetType === enumWidgetType.StationMultiline;
+              then stationList;
+              else stationTable
+            "
+          ></ng-container>
         </ng-container>
       </div>
     </div>
   </div>
 </div>
 
-<!--Table documents-->
-<ng-template #tableDocuments>
+<!--Template to stations type list-->
+<ng-template #stationList>
+  <div
+    *ngFor="let document of dataStationWidget.documents"
+    class="py-3 border-b border-secondary-100 w-full"
+  >
+    <!-- header list-->
+    <div class="flex justify-between items-start w-full">
+      <div class="w-9/12">
+        <!-- title -->
+        <div class="text-base font-semibold truncate">
+          <ng-container
+            *ngTemplateOutlet="
+              setSpecificListType;
+              context: {
+                column: columnsAllField[0] || {
+                  name: columnsDocumentInfo.Name
+                },
+                document: document
+              }
+            "
+          ></ng-container>
+        </div>
+        <!-- subtitle -->
+        <div class="text-xs text-secondary-500 truncate">
+          <ng-container
+            *ngTemplateOutlet="
+              setSpecificListType;
+              context: {
+                column: columnsAllField[1] || {
+                  name: columnsDocumentInfo.LastUpdated
+                },
+                document: document
+              }
+            "
+          ></ng-container>
+        </div>
+      </div>
+      <button
+        mat-icon-button
+        class="text-secondary-500"
+        [id]="'link-document-button-' + document.rithmId"
+        [attr.data-testid]="'link-document-button-' + document.rithmId"
+        [disabled]="editMode"
+        (click)="goToDocument(document.rithmId)"
+      >
+        <i class="fas fa-external-link-alt text-base"></i>
+      </button>
+    </div>
+
+    <!-- description -->
+    <div
+      class="text-xs text-secondary-500 pt-2 text-ellipsis overflow-hidden line-clamp-custom"
+    >
+      <ng-container
+        *ngTemplateOutlet="
+          setSpecificListType;
+          context: {
+            column: columnsAllField[2] || {
+              name: columnsDocumentInfo.AssignedUser
+            },
+            document: document
+          }
+        "
+      ></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<!--logic for show column static or column with questionId-->
+<ng-template #setSpecificListType let-column="column" let-document="document">
+  <ng-container *ngIf="!column.questionId">
+    <ng-container
+      *ngTemplateOutlet="
+        documentColumnBasic;
+        context: { column: column.name, document: document }
+      "
+    ></ng-container>
+  </ng-container>
+  <ng-container *ngIf="column.questionId">
+    <ng-container
+      *ngTemplateOutlet="
+        columnQuestion;
+        context: { column: column, document: document }
+      "
+    ></ng-container>
+  </ng-container>
+</ng-template>
+
+<!--Template to stations type table-->
+<ng-template #stationTable>
   <table mat-table [dataSource]="dataSourceTable" class="w-full">
     <!--    Loop of the columns the widget-->
     <ng-container
@@ -108,10 +215,14 @@
           </div>
         </th>
         <!--        Value of column-->
-        <td mat-cell *matCellDef="let element" class="min-w-[150px] px-2">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="min-w-[150px] px-2 text-xs text-secondary-500"
+        >
           <ng-container
             *ngTemplateOutlet="
-              tableColumnBasic;
+              documentColumnBasic;
               context: { column: column.name, document: element }
             "
           >
@@ -128,10 +239,14 @@
           </div>
         </th>
         <!--        Value of column-->
-        <td mat-cell *matCellDef="let element" class="min-w-[150px]">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="min-w-[150px] text-xs text-secondary-500"
+        >
           <ng-container
             *ngTemplateOutlet="
-              tableColumnQuestion;
+              columnQuestion;
               context: { column: column, document: element }
             "
           >
@@ -180,10 +295,10 @@
 </ng-template>
 
 <!--template for show columns basic of the document-->
-<ng-template #tableColumnBasic let-column="column" let-document="document">
-  <div [ngSwitch]="column">
-    <div *ngSwitchCase="columnsDocumentInfo.AssignedUser">
-      <div *ngIf="document.assignedUser">
+<ng-template #documentColumnBasic let-column="column" let-document="document">
+  <ng-container [ngSwitch]="column">
+    <ng-container *ngSwitchCase="columnsDocumentInfo.AssignedUser">
+      <ng-container *ngIf="document.assignedUser">
         <div class="flex flex-col justify-center">
           <app-user-avatar
             [firstName]="document.assignedUser?.firstName"
@@ -191,47 +306,30 @@
           >
           </app-user-avatar>
         </div>
-      </div>
-      <div *ngIf="!document.assignedUser" class="text-xs text-secondary-500">
-        None
-      </div>
-    </div>
-    <div
-      *ngSwitchCase="columnsDocumentInfo.TimeInStation"
-      class="text-xs text-secondary-500"
-    >
+      </ng-container>
+      <ng-container *ngIf="!document.assignedUser"> None </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="columnsDocumentInfo.TimeInStation">
       {{ getElapsedTime(document.flowedTimeUTC) }}
-    </div>
-    <div
-      *ngSwitchCase="columnsDocumentInfo.LastUpdated"
-      class="text-xs text-secondary-500"
-    >
+    </ng-container>
+    <ng-container *ngSwitchCase="columnsDocumentInfo.LastUpdated">
       {{ getElapsedTime(document.lastUpdatedUTC) }}
-    </div>
-    <div
-      *ngSwitchCase="columnsDocumentInfo.Priority"
-      class="text-xs text-secondary-500"
-    >
+    </ng-container>
+    <ng-container *ngSwitchCase="columnsDocumentInfo.Priority">
       <i class="fas text-lg text-secondary-400 fa-exclamation-triangle"></i>
-    </div>
-    <div *ngSwitchDefault class="text-xs text-secondary-500">
+    </ng-container>
+    <ng-container *ngSwitchDefault>
       {{ document[column] }}
-    </div>
-  </div>
+    </ng-container>
+  </ng-container>
 </ng-template>
 
 <!--Template for show questions columns of the document-->
-<ng-template #tableColumnQuestion let-column="column" let-document="document">
+<ng-template #columnQuestion let-column="column" let-document="document">
   <ng-container *ngFor="let questions of document.questions[0].questions">
-    <div
-      *ngIf="questions.rithmId === column.questionId"
-      class="text-secondary-500"
-    >
-      <div [ngSwitch]="questions.questionType">
-        <p
-          *ngSwitchCase="questionFieldType.CheckList"
-          class="text-xs text-secondary-500"
-        >
+    <ng-container *ngIf="questions.rithmId === column.questionId">
+      <ng-container [ngSwitch]="questions.questionType">
+        <span *ngSwitchCase="questionFieldType.CheckList">
           <span *ngFor="let answer of questions.answer?.asArray">
             <i
               class="fas"
@@ -243,11 +341,8 @@
             ></i>
             - {{ answer.value }}<br />
           </span>
-        </p>
-        <p
-          *ngSwitchCase="questionFieldType.MultiSelect"
-          class="text-xs text-secondary-500"
-        >
+        </span>
+        <span *ngSwitchCase="questionFieldType.MultiSelect">
           <span *ngFor="let answer of questions.answer?.asArray">
             <i
               class="fas"
@@ -261,11 +356,8 @@
             {{ answer.value }}
             <br />
           </span>
-        </p>
-        <p
-          *ngSwitchCase="questionFieldType.Select"
-          class="text-xs text-secondary-500"
-        >
+        </span>
+        <span *ngSwitchCase="questionFieldType.Select">
           <span *ngFor="let answer of questions.answer?.asArray">
             <i
               class="fas"
@@ -277,15 +369,15 @@
             ></i>
             - {{ answer.value }} <br />
           </span>
-        </p>
-        <p *ngSwitchCase="'instructions'" class="text-xs text-secondary-500">
+        </span>
+        <span *ngSwitchCase="'instructions'">
           {{ questions.prompt }}
-        </p>
-        <p *ngSwitchDefault class="text-xs text-secondary-500">
+        </span>
+        <span *ngSwitchDefault>
           {{ questions.answer?.value || 'N/A' }}
-        </p>
-      </div>
-    </div>
+        </span>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </ng-template>
 
@@ -334,7 +426,7 @@
     </button>
   </div>
   <!--  Document component -->
-  <div class="container-document">
+  <div class="h-[calc(100%-40px)]">
     <app-document
       [isWidget]="true"
       (returnDocumentsWidget)="

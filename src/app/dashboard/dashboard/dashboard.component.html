@@ -163,8 +163,10 @@
           >
             <app-station-widget
               *ngIf="
-                item.widgetType === widgetType.Station ||
-                item.widgetType === widgetType.StationTableBanner
+                item.widgetType === enumWidgetType.Station ||
+                item.widgetType === enumWidgetType.StationTableBanner ||
+                item.widgetType === enumWidgetType.StationMultiline ||
+                item.widgetType === enumWidgetType.StationMultilineBanner
               "
               (expandWidget)="toggleExpandWidget(index, $event)"
               [dataWidget]="item.data"
@@ -182,9 +184,9 @@
             </app-station-widget>
             <app-document-widget
               *ngIf="
-                item.widgetType === widgetType.Document ||
-                item.widgetType === widgetType.DocumentListBanner ||
-                item.widgetType === widgetType.ContainerProfileBanner
+                item.widgetType === enumWidgetType.Document ||
+                item.widgetType === enumWidgetType.DocumentListBanner ||
+                item.widgetType === enumWidgetType.ContainerProfileBanner
               "
               [dataWidget]="item.data"
               [widgetItem]="item"
@@ -196,7 +198,7 @@
             >
             </app-document-widget>
             <app-group-search-widget
-              *ngIf="item.widgetType === widgetType.StationGroupSearch"
+              *ngIf="item.widgetType === enumWidgetType.StationGroupSearch"
               [dataWidget]="item.data"
               [widgetType]="item.widgetType"
               [editMode]="editMode"
@@ -204,10 +206,13 @@
             >
             </app-group-search-widget>
             <app-group-traffic-widget
-              *ngIf="item.widgetType === widgetType.StationGroupTraffic"
+              *ngIf="item.widgetType === enumWidgetType.StationGroupTraffic"
               [showButtonSetting]="showButtonSetting"
               [dataWidget]="item.data"
               [editMode]="editMode"
+              [widgetItem]="item"
+              [indexWidget]="index"
+              [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
             ></app-group-traffic-widget>
           </gridster-item>
         </gridster>

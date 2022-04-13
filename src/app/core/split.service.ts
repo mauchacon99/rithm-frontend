@@ -116,6 +116,15 @@ export class SplitService {
   }
 
   /**
+   * Get flow logic treatment.
+   *
+   * @returns Split treatment.
+   */
+  public getFlowLogicTreatment(): string {
+    return this.splitClient.getTreatment('flow_logic_split');
+  }
+
+  /**
    * Get the section group traffic in list-widget-modal.
    *
    * @returns Split treatment.
