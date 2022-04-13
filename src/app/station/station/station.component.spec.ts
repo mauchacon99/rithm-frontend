@@ -1124,4 +1124,27 @@ describe('StationComponent', () => {
       );
     });
   });
+
+  it('should call getStationWidgets', () => {
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'getStationWidgets'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return get station widgets fails', () => {
+    spyOn(TestBed.inject(StationService), 'getStationWidgets').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
