@@ -5,10 +5,15 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
-import { ImageDrawerComponent } from './image-drawer/image-drawer.component';
+import { SettingImagesComponent } from './setting-images/setting-images.component';
+import { SettingFieldsComponent } from './setting-fields/setting-fields.component';
 
 @NgModule({
-  declarations: [SettingDrawerComponent, ImageDrawerComponent],
+  declarations: [
+    SettingDrawerComponent,
+    SettingImagesComponent,
+    SettingFieldsComponent,
+  ],
   imports: [
     CommonModule,
     MatInputModule,
