@@ -86,7 +86,7 @@ describe('SettingFieldsComponent', () => {
     expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
   });
 
-  it('should display a confirmation Popup for delete filed', async () => {
+  it('should display a confirmation Popup for delete field', async () => {
     const questions: Question[] = [
       {
         prompt: 'Fake question 1',
