@@ -229,7 +229,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           question.questionType === this.enumQuestionFieldType.Checkbox ||
           question.questionType === this.enumQuestionFieldType.LongText ||
           question.questionType === this.enumQuestionFieldType.AddressLine ||
-          question.questionType === this.enumQuestionFieldType.URL
+          question.questionType === this.enumQuestionFieldType.URL ||
+          question.questionType === this.enumQuestionFieldType.DataLink
         );
       } else {
         return (
@@ -237,7 +238,8 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
           question.questionType === this.enumQuestionFieldType.MultiSelect ||
           question.questionType === this.enumQuestionFieldType.CheckList ||
           question.questionType === this.enumQuestionFieldType.Checkbox ||
-          question.questionType === this.enumQuestionFieldType.URL
+          question.questionType === this.enumQuestionFieldType.URL ||
+          question.questionType === this.enumQuestionFieldType.DataLink
         );
       }
     }

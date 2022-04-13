@@ -39,6 +39,13 @@
         (selectionChange)="updateWidget()"
       >
         <mat-option
+          *ngIf="!documentFields.length"
+          id="option-column-empty"
+          data-testid="option-column-empty"
+        >
+          There aren't fields to show.
+        </mat-option>
+        <mat-option
           *ngFor="let field of documentFields; index as index"
           [value]="field.questionId"
           [id]="'option-column' + index"
