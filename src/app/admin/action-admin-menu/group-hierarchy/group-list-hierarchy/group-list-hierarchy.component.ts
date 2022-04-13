@@ -118,12 +118,11 @@ export class GroupListHierarchyComponent implements OnInit {
    * Search similitude stations by name and substations.
    */
   searchStationGroups(): void {
-    if (this.isLoading !== undefined) {
+    if (this.isLoading !== undefined && this.stationGroups) {
       if (this.search.length) {
         this.stationsFilter = this.stationGroups?.stations.filter((station) =>
           station.name.toLowerCase().includes(this.search.toLowerCase())
         );
-
         this.groupsFilter = this.stationGroups?.subStationGroups.filter(
           (subStation) =>
             subStation.title.toLowerCase().includes(this.search.toLowerCase())

@@ -89,11 +89,8 @@
 <ng-template #emptyList>
   <div class="text-center text-sm md:text-base pt-4">
     There aren't groups or stations
-    {{
-      !stationsFilter.length && !groupsFilter.length
-        ? ' with "' + search + '" '
-        : ''
-    }}.
+    {{ search.length ? ' with "' + search + '" ' : '' }}.
+    <br *ngIf="search.length" />
     <button
       mat-icon-button
       id="reload-get-stations-group"
