@@ -1,19 +1,19 @@
 <ng-container [ngSwitch]="fieldFrameType">
-  <ng-container *ngSwitchCase="frameTypes.Image || frameTypes.CircleImage">
+  <ng-template *ngSwitchCase="frameTypes.Image || frameTypes.CircleImage">
     <app-image-drawer></app-image-drawer>
-  </ng-container>
-  <ng-container *ngSwitchCase="frameTypes.Body">
+  </ng-template>
+  <ng-template *ngSwitchCase="frameTypes.Body">
     <p>Componente Body</p>
-  </ng-container>
-  <ng-container *ngSwitchCase="frameTypes.Headline">
+  </ng-template>
+  <ng-template *ngSwitchCase="frameTypes.Headline">
     <p>Componente Body</p>
-  </ng-container>
-  <ng-container *ngSwitchCase="frameTypes.Title">
+  </ng-template>
+  <ng-template *ngSwitchCase="frameTypes.Title">
     <p>Componente Title</p>
-  </ng-container>
-  <ng-container *ngSwitchCase="frameTypes.Input">
+  </ng-template>
+  <ng-template *ngSwitchCase="frameTypes.Input">
     <p>Componente Question</p>
-  </ng-container>
+  </ng-template>
 </ng-container>
 <!-- <div class="grid grid-cols-1 px-4">
   <div class="w-full py-2" *ngIf="fieldSetting">

@@ -1,6 +1,6 @@
 import { Question, FrameType, ImageWidgetObject } from 'src/models';
 /**
- * Represents the data to be output to the drawer for the setting..
+ * Represents the data that will be send to the setting drawer.
  *
  */
 export interface SettingDrawerData {
