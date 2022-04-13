@@ -24,6 +24,7 @@ import {
   FrameType,
   ImageWidgetObject,
   DataLinkObject,
+  SettingDrawerData,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Observable, Subject } from 'rxjs';
@@ -326,7 +327,7 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-
+    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
   }
 
@@ -886,6 +887,26 @@ export class StationComponent
       });
   }
 
+  /**
+   * Get the station frame widgets.
+   */
+  private getStationWidgets(): void {
+    this.stationService
+      .getStationWidgets(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
   /** This cancel button clicked show alert. */
   async cancelStationChanges(): Promise<void> {
     const confirm = await this.popupService.confirm({
@@ -1011,13 +1032,22 @@ export class StationComponent
    * Open the right setting drawer for field setting.
    *
    * @param field The field information for the setting drawer through sidenavDrawerService.
+   * @param type The frame information for the setting drawer through sidenavDrawerService.
    */
-  openSettingDrawer(field: Question | ImageWidgetObject | string): void {
+  openSettingDrawer(
+    field: Question | ImageWidgetObject | string,
+    type: FrameType
+  ): void {
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
     }
-    this.sidenavDrawerService.openDrawer('fieldSetting', field);
+
+    const dataDrawer: SettingDrawerData = {
+      field,
+      frame: type,
+    };
+    this.sidenavDrawerService.openDrawer('fieldSetting', dataDrawer);
   }
 
   /**
