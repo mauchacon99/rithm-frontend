@@ -600,41 +600,51 @@ export class MapStationGroupHelper {
       );
 
       // Find the station group from this.stationGroupElements array.
-      const updatedGroup = this.stationGroupElements.find(
+      const updatedGroupIndex = this.stationGroupElements.findIndex(
         (group) => group.rithmId === rithmId
       );
 
-      if (updatedGroup && !stationGroupParent?.isReadOnlyRootStationGroup) {
-        this.stationGroupElements.forEach((group) => {
-          if (
-            //Find parent station group of incoming station group.
-            group.subStationGroups.includes(updatedGroup.rithmId)
-          ) {
-            //Remove deleting station group Id from it's parent group
-            group.subStationGroups = group.subStationGroups.filter(
-              (groupId) => groupId === rithmId
-            );
-            //Mark parent station group of updated station group as updated.
-            group.markAsUpdated();
+      // Find the subStationGroups differences between current station group and old station group.
+      const stationGroupDifference = this.stationGroupElements[
+        updatedGroupIndex
+      ].subStationGroups.filter(
+        (subGroup) =>
+          !(
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).subStationGroups.includes(subGroup)
+      );
+
+      // Find the station differences between current station group and old station group.
+      const stationDifference = this.stationGroupElements[
+        updatedGroupIndex
+      ].stations.filter(
+        (station) =>
+          !(
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).stations.includes(station)
+      );
+
+      if (updatedGroupIndex !== -1 && stationGroupParent) {
+        // Move sub Station Groups to old Station Group father.
+        stationGroupDifference.forEach((stationGroupId) => {
+          if (!stationGroupParent.subStationGroups.includes(stationGroupId)) {
+            stationGroupParent.subStationGroups =
+              stationGroupParent.subStationGroups.concat(stationGroupId);
+          }
+        });
+
+        // Move sub Station to old Station Group father.
+        stationDifference.forEach((stationId) => {
+          if (!stationGroupParent.stations.includes(stationId)) {
+            stationGroupParent.stations =
+              stationGroupParent.stations.concat(stationId);
           }
         });
       }
 
-      /** Update the pendingStationGroup. */
-      this.updatePendingStationGroup(stationHelper);
-
       /** Add the current station group. */
-      this.stationGroupElements.push(this.tempStationGroup$.value);
-
-      /** Check to add the corresponding rithmId to the subStationGroups of the stationGroupParent. */
-      if (stationGroupParent !== undefined) {
-        if (!stationGroupParent.subStationGroups.includes(rithmId)) {
-          if (!stationGroupParent.isReadOnlyRootStationGroup) {
-            stationGroupParent.subStationGroups = [];
-          }
-          stationGroupParent.subStationGroups.push(rithmId);
-        }
-      }
+      this.stationGroupElements[updatedGroupIndex] =
+        this.tempStationGroup$.value;
 
       /** Emptying the temporary station group. */
       this.tempStationGroup$.next({});
