@@ -1,4 +1,4 @@
-import { FormatImageValidate } from './format-validate';
+import { FormatImageValidate } from './format-image-validate';
 
 describe('Format validate', () => {
   it('should be created', () => {

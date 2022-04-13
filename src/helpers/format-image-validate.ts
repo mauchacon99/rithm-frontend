@@ -9,11 +9,11 @@ export class FormatImageValidate {
    * @returns Is valid.
    */
   static isValidFormatImage(extension: string): boolean {
-    return extension === 'jpeg' ||
+    return !!(
+      extension === 'jpeg' ||
       extension === 'jpg' ||
       extension === 'png' ||
       extension === 'gif'
-      ? true
-      : false;
+    );
   }
 }
