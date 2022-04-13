@@ -199,7 +199,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
       } else {
         this.popupService.alert({
           title: 'Image format is not valid.',
-          message: 'Please select a file with extension jpeg, jpg, png, gif',
+          message: 'Please select a file with extension jpeg, jpg, png, gif.',
           important: true,
         });
       }
