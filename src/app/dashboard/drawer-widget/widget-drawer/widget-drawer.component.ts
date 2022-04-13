@@ -40,8 +40,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Image selected in input file. */
   imageUploaded!: DocumentImage;
 
-  /** Validate if the widget is type station-table-banner-widget. */
-  widgetTypeEnum = WidgetType;
+  /** Enum widgetType. */
+  enumWidgetType = WidgetType;
 
   /** Widget type of opened widget-drawer.*/
   widgetType!: WidgetType;
