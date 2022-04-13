@@ -274,8 +274,7 @@ describe('GroupListHierarchyComponent', () => {
   it('should clicked in item station', () => {
     component.isLoading = false;
     component.isErrorGetGroups = false;
-    //component.stationGroupsFiltered = subStationGroups;
-    //component.stationGroupsFiltered.stations.push(stations);
+    component.stationsFilter = subStationGroups.stations;
     fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemStation = fixture.nativeElement.querySelector(

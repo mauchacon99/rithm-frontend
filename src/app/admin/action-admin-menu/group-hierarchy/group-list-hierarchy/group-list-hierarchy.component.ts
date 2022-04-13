@@ -52,7 +52,7 @@ export class GroupListHierarchyComponent implements OnInit {
   groupsFilter: StationGroupData[] = [];
 
   /** Load indicator get groups. */
-  isLoading!: boolean;
+  isLoading = false;
 
   /** Show error if get groups fail. */
   isErrorGetGroups = false;
@@ -113,19 +113,14 @@ export class GroupListHierarchyComponent implements OnInit {
    * Search similitude stations by name and substations.
    */
   searchStationGroups(): void {
-    if (this.isLoading !== undefined && this.stationGroups) {
-      if (this.search.length) {
-        this.stationsFilter = this.stationGroups?.stations.filter((station) =>
-          station.name.toLowerCase().includes(this.search.toLowerCase())
-        );
-        this.groupsFilter = this.stationGroups?.subStationGroups.filter(
-          (subStation) =>
-            subStation.title.toLowerCase().includes(this.search.toLowerCase())
-        );
-      } else {
-        this.stationsFilter = this.stationGroups.stations;
-        this.groupsFilter = this.stationGroups.subStationGroups;
-      }
+    if (this.stationGroups) {
+      this.stationsFilter = this.stationGroups?.stations.filter((station) =>
+        station.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+      this.groupsFilter = this.stationGroups?.subStationGroups.filter(
+        (subStation) =>
+          subStation.title.toLowerCase().includes(this.search.toLowerCase())
+      );
     }
   }
 }
