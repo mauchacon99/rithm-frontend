@@ -23,6 +23,7 @@ import { MockComponent } from 'ng-mocks';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { of } from 'rxjs';
 
 const FIELD: Question = {
   rithmId: '3j4k-3h2j-hj4j',
@@ -111,14 +112,20 @@ describe('FileFieldComponent', () => {
       disableClose: true,
       data: component.field,
     };
-    const dialogSpy = spyOn(
-      TestBed.inject(MatDialog),
-      'open'
-    ).and.callThrough();
+    const fileData = {
+      name: 'SomeFile.png',
+      size: 121321,
+    };
+    const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(fileData),
+    } as MatDialogRef<typeof component>);
     component.openUploadFileModal();
     expect(dialogSpy).toHaveBeenCalledWith(
       UploadFileModalComponent,
       expectDataModal
     );
+    expect(component.fileName).toBe(fileData.name);
+    expect(component.fileSize).toBe(fileData.size);
+    expect(component.isFileUploaded).toBeTrue();
   });
 });

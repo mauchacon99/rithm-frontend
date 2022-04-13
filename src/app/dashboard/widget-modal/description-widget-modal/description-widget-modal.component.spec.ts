@@ -9,6 +9,7 @@ import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-sear
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
+import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
@@ -38,6 +39,7 @@ describe('DescriptionWidgetModalComponent', () => {
         MockComponent(DocumentWidgetComponent),
         MockComponent(StationWidgetComponent),
         MockComponent(GroupSearchWidgetComponent),
+        MockComponent(GroupTrafficWidgetComponent),
       ],
       providers: [
         { provide: MatDialogRef, useValue: { close } },
@@ -108,6 +110,18 @@ describe('DescriptionWidgetModalComponent', () => {
       component.itemWidgetModalSelected.itemType = 'group';
       fixture.detectChanges();
 
+      expect(component.dataWidget).toEqual(expectData);
+    });
+
+    it('should get data for StationGroupTraffic', () => {
+      const expectData = JSON.stringify({
+        valueShowGraffic: 5,
+        stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
+      });
+      component.widgetType = WidgetType.StationGroupTraffic;
+      component.itemWidgetModalSelected = itemWidgetModalSelected;
+      component.itemWidgetModalSelected.itemType = 'group';
+      fixture.detectChanges();
       expect(component.dataWidget).toEqual(expectData);
     });
 
