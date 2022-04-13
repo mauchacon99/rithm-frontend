@@ -11,8 +11,11 @@ export enum FrameType {
   /** Input's body text.*/
   Body = 'body',
 
-  /** Input's image this could be Banner Image or Circular Image.*/
+  /** Input's image this could be Banner Image.*/
   Image = 'image',
+
+  /** Input's image this could be Circular Image.*/
+  CircleImage = 'circle-image',
 
   /** Input's graphs, this could be a Bar Graph, a Line Graph or a Pie Chart .*/
   Graph = 'graph',
