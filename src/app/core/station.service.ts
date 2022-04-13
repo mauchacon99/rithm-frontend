@@ -21,8 +21,8 @@ import {
   StationFrameWidget,
   DocumentEvent,
   DataLinkObject,
-  StandardNumberJSON,
   GroupTrafficData,
+  StandardNumberJSON,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -854,22 +854,13 @@ export class StationService {
    * @returns Number of containers.
    */
   getNumberOfContainers(stationRithmId: string): Observable<number> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive  the number of container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const numberOfContainer: StandardNumberJSON = {
-        data: 10,
-      };
-
-      return of(numberOfContainer).pipe(map((response) => response.data));
-    }
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StandardNumberJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents`,
+        { params }
+      )
+      .pipe(map((response) => response.data as number));
   }
 
   /**
