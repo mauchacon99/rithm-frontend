@@ -1,4 +1,4 @@
-<div [formGroup]="fileFieldForm" *ngIf="!isFileUploaded">
+<div [formGroup]="fileFieldForm">
   <mat-form-field
     class="w-full"
     appearance="outline"
@@ -21,6 +21,7 @@
     <p class="text-sm pb-4">{{ field.prompt }}</p>
   </ng-template>
   <button
+    *ngIf="!isFileUploaded"
     mat-stroked-button
     type="button"
     class="ml-2"
