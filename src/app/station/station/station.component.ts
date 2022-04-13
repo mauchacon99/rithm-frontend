@@ -983,9 +983,17 @@ export class StationComponent
         inputFrame.minItemRows = 4;
         inputFrame.type = FrameType.Image;
         break;
+      case FrameType.CircleImage:
+        inputFrame.cols = 4;
+        inputFrame.rows = 4;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.type = FrameType.CircleImage;
+        break;
       default:
         break;
     }
+
     this.inputFrameWidgetItems.push(inputFrame);
   }
 
