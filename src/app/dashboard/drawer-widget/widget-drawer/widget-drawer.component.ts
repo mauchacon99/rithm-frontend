@@ -17,6 +17,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { FormatValidate } from 'src/helpers/format-validate';
 
 /**
  * Component for widget drawer.
@@ -161,12 +162,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     const file = (target.files as FileList)[0];
     const extension = file.type.split('/')[1];
     if (file) {
-      if (
-        extension === 'jpeg' ||
-        extension === 'jpg' ||
-        extension === 'png' ||
-        extension === 'gif'
-      ) {
+      if (FormatValidate.isValidFormatBanner(extension)) {
         // Loading banner image while upload image.
         this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
         this.imageUploaded = {
@@ -202,7 +198,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
           });
       } else {
         this.popupService.alert({
-          title: 'Invalid Extension.',
+          title: 'Image format is not valid.',
           message: 'Please select a file with extension jpeg, jpg, png, gif',
           important: true,
         });
