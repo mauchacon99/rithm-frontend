@@ -1,6 +1,7 @@
 <app-sub-header
   class="fixed z-10 w-full"
   [itemInfo]="stationInformation"
+  [stationEditMode]="true"
 ></app-sub-header>
 <mat-drawer-container
   [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
@@ -362,7 +363,7 @@
                           id="save-station-frames"
                           data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="saveStationFramesChanges()"
+                          (click)="saveStationWidgetsChanges()"
                         >
                           Save
                         </button>
@@ -431,6 +432,11 @@
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
                               (openSettingDrawer)="openSettingDrawer($event)"
                             ></app-banner-widget>
+                            <app-circle-image-widget
+                              *ngSwitchCase="frameType.CircleImage"
+                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              (openSettingDrawer)="openSettingDrawer($event)"
+                            ></app-circle-image-widget>
                             <app-input-frame-widget
                               *ngSwitchDefault
                               [fields]="widgetItem.questions"

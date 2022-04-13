@@ -16,7 +16,7 @@
       >
         <i class="fas fa-chevron-up text-accent-100"></i>
       </button>
-      <button mat-icon-button (click)="removeField()">
+      <button type="button" mat-icon-button (click)="removeField()">
         <i class="fas fa-times text-accent-50"></i>
       </button>
       <button
@@ -51,7 +51,7 @@
             *ngIf="field.questionType === fieldType.DataLink; else textField"
           >
             <app-data-link-field
-              [field]="dataLinkField"
+              [field]="field"
               [formControlName]="field.questionType"
             ></app-data-link-field>
           </ng-container>

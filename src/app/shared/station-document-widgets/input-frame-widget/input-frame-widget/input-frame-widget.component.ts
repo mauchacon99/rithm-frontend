@@ -1,10 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   CdkDragDrop,
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { QuestionFieldType, Question } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { Subject, takeUntil } from 'rxjs';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RandomIdGenerator } from 'src/helpers';
 
 /**
@@ -15,7 +25,7 @@ import { RandomIdGenerator } from 'src/helpers';
   templateUrl: './input-frame-widget.component.html',
   styleUrls: ['./input-frame-widget.component.scss'],
 })
-export class InputFrameWidgetComponent {
+export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -31,8 +41,17 @@ export class InputFrameWidgetComponent {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** The list of questionFieldTypes. */
+  fieldTypes = QuestionFieldType;
+
   /** Emit an event to adjust its heigth when its number of children overpass its number of rows. */
   @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
+
+  /** The list of questionFieldTypes. */
+  tempTitle = '';
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
@@ -41,8 +60,68 @@ export class InputFrameWidgetComponent {
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
 
-  constructor() {
+  constructor(
+    private stationService: StationService,
+    private sidenavDrawerService: SidenavDrawerService
+  ) {
     this.randomIdGenerator = new RandomIdGenerator();
+  }
+
+  /**
+   * Listen the deleteStationQuestions Service.
+   */
+  private subscribeDeleteStationQuestion(): void {
+    this.stationService.deleteStationQuestion$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        if (questions && this.widgetMode === 'setting') {
+          this.fields = this.fields?.filter(
+            (e) => e.rithmId !== questions.rithmId
+          );
+          this.sidenavDrawerService.closeDrawer();
+        }
+      });
+  }
+
+  /**
+   * Listen the stationQuestionTitle Service.
+   */
+  private stationQuestionTitle$(): void {
+    this.stationService.stationQuestionTitle$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questionTitle) => {
+        if (
+          questionTitle &&
+          this.widgetMode === 'setting' &&
+          this.fields &&
+          this.fields.length > 0
+        ) {
+          const questionIndex = this.fields?.findIndex(
+            (e) => e.rithmId === questionTitle.rithmId
+          );
+          if (!this.tempTitle) {
+            this.tempTitle = this.fields[questionIndex].prompt.slice();
+          }
+          this.fields[questionIndex].prompt =
+            questionTitle.value || this.tempTitle;
+        }
+      });
+  }
+
+  /**
+   * Set up deleteStationQuestions subscriptions.
+   */
+  ngOnInit(): void {
+    this.subscribeDeleteStationQuestion();
+    this.stationQuestionTitle$();
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   /**
@@ -129,6 +208,7 @@ export class InputFrameWidgetComponent {
    */
   openFieldSettingDrawer(field: Question): void {
     if (this.widgetMode === 'setting') {
+      this.tempTitle = '';
       this.openSettingDrawer.emit(field);
     }
   }

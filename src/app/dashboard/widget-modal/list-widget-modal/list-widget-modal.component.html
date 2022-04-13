@@ -63,7 +63,28 @@
 <!--Section for show station template-->
 <section *ngIf="itemWidgetModalSelected.itemType === 'station'">
   <hr class="text-secondary-100" />
-  <!-- Stations types list -->
+  <!-- Stations lists -->
+  <div *ngIf="showStationLists; else permissionDenied">
+    <div class="py-6">
+      <p class="font-semibold">Lists</p>
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+        <!-- Widget card type station StationMultiline-->
+        <app-station-widget-template-modal
+          [widgetType]="enumWidgetType.StationMultiline"
+        ></app-station-widget-template-modal>
+        <!-- Widget card type station StationMultilineBanner -->
+        <app-station-widget-template-modal
+          [widgetType]="enumWidgetType.StationMultilineBanner"
+          (click)="
+            emitPreviewWidgetSelected(enumWidgetType.StationMultilineBanner)
+          "
+        ></app-station-widget-template-modal>
+      </div>
+    </div>
+    <hr class="text-secondary-100" />
+  </div>
+  <hr class="text-secondary-100" />
+  <!-- Stations types Tables   -->
   <div class="py-6">
     <p class="font-semibold">Tables</p>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
@@ -96,6 +117,14 @@
       >
       </app-group-widget-template-modal>
     </div>
+  </div>
+  <hr class="text-secondary-100" />
+  <!-- Group types list -->
+  <div class="py-6" *ngIf="showGroupTrafficTemplate; else permissionDenied">
+    <p class="font-semibold">Reporting</p>
+    <div
+      class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5"
+    ></div>
   </div>
   <hr class="text-secondary-100" />
 </section>

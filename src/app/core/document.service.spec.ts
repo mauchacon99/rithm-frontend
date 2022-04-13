@@ -26,6 +26,7 @@ import {
   DocumentEvent,
   DocumentWidget,
   DocumentImage,
+  DataLinkObject,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -343,7 +344,6 @@ describe('DocumentService', () => {
         documentRithmId: '123-654-789',
         stationRithmId: '741-951-753',
         value: 'Answer Dev',
-        file: 'dev.txt',
         filename: 'dev',
         type: QuestionFieldType.Email,
         questionUpdated: true,
@@ -353,7 +353,6 @@ describe('DocumentService', () => {
         documentRithmId: '123-654-789-856',
         stationRithmId: '741-951-753-741',
         value: 'Answer Dev2',
-        file: 'dev2.txt',
         filename: 'dev2',
         type: QuestionFieldType.City,
         questionUpdated: false,
@@ -969,5 +968,21 @@ describe('DocumentService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should make request to save a data link object', () => {
+    const dataLink: DataLinkObject = {
+      rithmId: '07e1-30b5-f21e',
+      frameRithmId: '07e1-30b5-f21e',
+      sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+      targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+      baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
+      matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
+      displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
+    };
+
+    service.saveDataLink(stationId, dataLink).subscribe((response) => {
+      expect(response).toEqual(dataLink);
+    });
   });
 });

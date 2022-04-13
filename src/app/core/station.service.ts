@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -19,8 +19,10 @@ import {
   ForwardPreviousStationsDocument,
   StandardBooleanJSON,
   StationFrameWidget,
-  QuestionFieldType,
-  FrameType,
+  DocumentEvent,
+  DataLinkObject,
+  StandardNumberJSON,
+  GroupTrafficData,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -37,14 +39,17 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new Subject<Question>();
-
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /** Contains the name of the Flow Button as BehaviorSubject. */
   flowButtonText$ = new BehaviorSubject<string>('Flow');
+
+  /** The questions to be updated when it changes in station page. */
+  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
@@ -52,8 +57,14 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** The questions to be updated when it changes in station page. */
-  currentStationQuestions$ = new BehaviorSubject<Question[]>([]);
+  /** The datalink widget to be saved. */
+  dataLinkObject$ = new Subject<DataLinkObject>();
+
+  /** The question to be deleted when it delete in station field settings. */
+  deleteStationQuestion$ = new Subject<Question>();
+
+  /** The question title to be updated when it's updated in setting drawer. */
+  stationQuestionTitle$ = new Subject<Question>();
 
   constructor(private http: HttpClient) {}
 
@@ -713,44 +724,171 @@ export class StationService {
    * @param stationFrames The value that will be update.
    * @returns The field question updated.
    */
-  addFieldQuestionWidget(
+  saveStationWidgets(
     stationRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationFrames: StationFrameWidget[]
-  ): Observable<StationFrameWidget> {
+  ): Observable<StationFrameWidget[]> {
+    return this.http.post<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames?stationRithmId=${stationRithmId}`,
+      stationFrames
+    );
+  }
+
+  /**
+   * Get worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupWorkerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster`,
+      { params }
+    );
+  }
+
+  /**
+   * Get owner roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @returns A rosterMember array.
+   */
+  getStationGroupOwnerRoster(
+    stationGroupRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set(
+      'stationGroupRithmId',
+      stationGroupRithmId
+    );
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins`,
+      { params }
+    );
+  }
+
+  /**
+   * Remove owner from the group's roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Group information with owners roster.
+   */
+  removeUsersFromOwnerRosterGroup(
+    stationGroupRithmId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`,
+      {
+        body: usersIds,
+      }
+    );
+  }
+
+  /**
+   * Remove users from the group's workers roster.
+   *
+   * @param stationGroupRithmId The Specific id of group.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Group information with worker roster.
+   */
+  removeUsersFromWorkerRosterGroup(
+    stationGroupRithmId: string,
+
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
+      { body: usersIds }
+    );
+  }
+
+  /**
+   * Get history station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The history station.
+   */
+  getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
     if (!stationRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot update the widget field',
+              error: 'Cannot response station history',
             },
           })
       ).pipe(delay(1000));
     } else {
-      const InputFrameWidgetQuestions: Question[] = [
+      const historyResponse: DocumentEvent[] = [
         {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
+          eventTimeUTC: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
         },
       ];
-      const frameStationWidget: StationFrameWidget = {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: JSON.stringify(InputFrameWidgetQuestions),
-        id: 0,
-      };
-      return of(frameStationWidget).pipe(delay(1000));
+      return of(historyResponse).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get the number of container in a station.
+   *
+   * @param stationRithmId The id of the given station group.
+   * @returns Number of containers.
+   */
+  getNumberOfContainers(stationRithmId: string): Observable<number> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive  the number of container',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const numberOfContainer: StandardNumberJSON = {
+        data: 10,
+      };
+
+      return of(numberOfContainer).pipe(map((response) => response.data));
+    }
+  }
+
+  /**
+   * Get traffic data document in stations.
+   *
+   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @returns The data to graph.
+   */
+  getGroupTrafficData(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationGroupRithmId: string
+  ): Observable<GroupTrafficData> {
+    const mockGetGroupTrafficData: GroupTrafficData = {
+      title: 'Group Eagle',
+      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
+      stationDocumentCounts: [10, 5, 8, 10, 20],
+      averageDocumentFlow: [2, 4, 1, 8, 9],
+    };
+    return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
 }

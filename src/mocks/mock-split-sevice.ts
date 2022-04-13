@@ -22,15 +22,6 @@ export class MockSplitService {
   }
 
   /**
-   * Get the dashboard split.
-   *
-   * @returns Split treatment.
-   */
-  public getDashboardTreatment(): string {
-    return 'on';
-  }
-
-  /**
    * Get the widget settings config.
    *
    * @returns Split treatment.
@@ -108,6 +99,33 @@ export class MockSplitService {
    * @returns Split treatment.
    */
   public getGroupSectionAddWidgetTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the flow logic treatment.
+   *
+   * @returns Split treatment.
+   */
+  public getFlowLogicTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the section group traffic in list-widget-modal.
+   *
+   * @returns Split treatment.
+   */
+  public getGroupTrafficTemplateTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the section station list section in add widget modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationListWidgetTreatment(): string {
     return 'on';
   }
 }

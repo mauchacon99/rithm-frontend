@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { RandomIdGenerator } from 'src/helpers';
 import { Question, QuestionFieldType, PossibleAnswer } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Station Field Component.
@@ -90,18 +91,6 @@ export class StationFieldComponent
     value: '',
   };
 
-  /** Data link field to display. */
-  dataLinkField: Question = {
-    rithmId: '',
-    prompt: 'Available Stations',
-    questionType: QuestionFieldType.DataLink,
-    isReadOnly: false,
-    isRequired: true,
-    isPrivate: false,
-    children: [],
-    value: '',
-  };
-
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[] = [];
 
@@ -114,7 +103,11 @@ export class StationFieldComponent
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private stationService: StationService) {
+  constructor(
+    private popupService: PopupService,
+    private fb: FormBuilder,
+    private stationService: StationService
+  ) {
     this.randomIdGenerator = new RandomIdGenerator();
   }
 
@@ -182,8 +175,17 @@ export class StationFieldComponent
   }
 
   /** Emits a new event to remove the field. */
-  removeField(): void {
-    this.remove.emit();
+  async removeField(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Remove Option',
+      message: `Are you sure you want to remove this option?`,
+      okButtonText: 'Remove',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (confirm) {
+      this.remove.emit();
+    }
   }
 
   /**

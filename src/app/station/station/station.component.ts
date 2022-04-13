@@ -22,9 +22,11 @@ import {
   FlowLogicRule,
   StationFrameWidget,
   FrameType,
+  ImageWidgetObject,
+  DataLinkObject,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, Observable, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
@@ -60,6 +62,9 @@ export class StationComponent
   /** Get station name from behaviour subject. */
   private stationName = '';
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   /** Station form. */
   stationForm: FormGroup;
 
@@ -69,11 +74,14 @@ export class StationComponent
   /** Different types of input frames components.*/
   frameType = FrameType;
 
-  /** Station Rithm id. */
-  stationRithmId = '';
-
   /** Index for station tabs. */
   stationTabsIndex = 0;
+
+  /** The current focused/selected widget. */
+  widgetFocused = -1;
+
+  /** Indicates when the button to move the widget will be enabled. */
+  widgetMoveButton = -1;
 
   /** The list of all the input frames in the grid. */
   inputFrameList: string[] = [];
@@ -89,6 +97,12 @@ export class StationComponent
 
   /** Contains the rules received from Flow Logic to save them. */
   pendingFlowLogicRules: FlowLogicRule[] = [];
+
+  /** Station Widgets array. */
+  inputFrameWidgetItems: StationFrameWidget[] = [];
+
+  /** Old interface station data link widgets. */
+  dataLinkArray: DataLinkObject[] = [];
 
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
@@ -134,14 +148,6 @@ export class StationComponent
     minCols: 24,
     maxCols: 24,
   };
-
-  inputFrameWidgetItems: StationFrameWidget[] = [];
-
-  /** The current focused/selected widget. */
-  widgetFocused = -1;
-
-  /** Indicates when the button to move the widget will be enabled. */
-  widgetMoveButton = -1;
 
   /** Loading / Error variables. */
 
@@ -214,9 +220,11 @@ export class StationComponent
    * Listen the StationFormTouched subject.
    */
   private subscribeStationFormTouched(): void {
-    this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
-      this.stationForm.get('stationTemplateForm')?.markAsTouched();
-    });
+    this.stationService.stationFormTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -244,6 +252,24 @@ export class StationComponent
               );
             }
           }
+        }
+      });
+  }
+
+  /**
+   * Listen for added DataLinks object.
+   */
+  private subscribeStationDataLink(): void {
+    this.stationService.dataLinkObject$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((dataLinkRetrieved) => {
+        let dataLink = this.dataLinkArray.find(
+          (dl) => dl.rithmId === dataLinkRetrieved.rithmId
+        );
+        if (dataLink) {
+          dataLink = dataLinkRetrieved;
+        } else {
+          this.dataLinkArray.push(dataLinkRetrieved);
         }
       });
   }
@@ -299,6 +325,7 @@ export class StationComponent
     this.subscribeStationName();
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
+    this.subscribeStationDataLink();
 
     if (!this.editMode) this.setGridMode('preview');
   }
@@ -464,11 +491,81 @@ export class StationComponent
   }
 
   /**
+   * Save datalink objects when they exists (old interface).
+   */
+  saveDataLinks(): void {
+    const framesForDatalink: StationFrameWidget[] = [];
+    /** Build a frame for each existing datalink. */
+    this.dataLinkArray.forEach((dl) => {
+      const frameTemplate = {
+        rithmId: this.randomIdGenerator.getRandRithmId(6),
+        stationRithmId: this.stationRithmId,
+        cols: 24,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: JSON.stringify(dl),
+        id: this.inputFrameWidgetItems.length,
+      };
+      framesForDatalink.push(frameTemplate);
+    });
+    this.stationService
+      .saveStationWidgets(this.stationRithmId, framesForDatalink)
+      .pipe(first())
+      .subscribe({
+        next: (frames) => {
+          if (frames && frames.length) {
+            const requestRow: Observable<DataLinkObject>[] = [];
+            Promise.all(
+              this.dataLinkArray.map(async (dl, ind) => {
+                dl.frameRithmId = frames[ind].rithmId;
+                requestRow.push(
+                  this.documentService.saveDataLink(this.stationRithmId, dl)
+                );
+              })
+            );
+            this.forkJoinDataLink(requestRow);
+          }
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Execute a fork join to save dataLink.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinDataLink(requestRow: Observable<DataLinkObject>[]): void {
+    forkJoin(requestRow)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Save Station information and executed petitions to api.
    *
    */
   saveStationInformation(): void {
     this.stationLoading = true;
+    if (this.dataLinkArray.length) {
+      this.saveDataLinks();
+    }
     const petitionsUpdateStation = [
       // Update station Name.
       this.stationService.updateStationName(
@@ -627,7 +724,7 @@ export class StationComponent
   }
 
   /**
-   * Comment.
+   * Add children when the parent is an Address field type.
    *
    * @returns Address children questions.
    */
@@ -764,18 +861,22 @@ export class StationComponent
   /**
    * Save or update the changes make the station frame widgets.
    */
-  saveStationFramesChanges(): void {
+  saveStationWidgetsChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
     this.inputFrameWidgetItems.map((field) => {
-      field.data = JSON.stringify(field.questions);
+      if (field.questions) {
+        field.data = JSON.stringify(field.questions);
+      }
     });
-
     this.stationService
-      .addFieldQuestionWidget(this.stationRithmId, this.inputFrameWidgetItems)
+      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -828,13 +929,10 @@ export class StationComponent
     const inputFrame: StationFrameWidget = {
       rithmId: this.randomIdGenerator.getRandRithmId(4),
       stationRithmId: this.stationRithmId,
-      cols: 6,
-      rows: 4,
+      cols: 1,
+      rows: 1,
       x: 0,
       y: 0,
-      minItemRows: 4,
-      minItemCols: 6,
-      questions: [],
       type: FrameType.Input,
       data: '',
       id: this.inputFrameWidgetItems.length,
@@ -848,6 +946,14 @@ export class StationComponent
 
     /**Add individual properties for every Type. */
     switch (value) {
+      case FrameType.Input:
+        inputFrame.cols = 6;
+        inputFrame.rows = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.minItemCols = 6;
+        inputFrame.questions = [];
+        this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
+        break;
       case FrameType.Headline:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
@@ -877,11 +983,18 @@ export class StationComponent
         inputFrame.minItemRows = 4;
         inputFrame.type = FrameType.Image;
         break;
+      case FrameType.CircleImage:
+        inputFrame.cols = 4;
+        inputFrame.rows = 4;
+        inputFrame.minItemCols = 4;
+        inputFrame.minItemRows = 4;
+        inputFrame.type = FrameType.CircleImage;
+        break;
       default:
         break;
     }
+
     this.inputFrameWidgetItems.push(inputFrame);
-    this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
   }
 
   /**
@@ -899,7 +1012,7 @@ export class StationComponent
    *
    * @param field The field information for the setting drawer through sidenavDrawerService.
    */
-  openSettingDrawer(field: Question | string): void {
+  openSettingDrawer(field: Question | ImageWidgetObject | string): void {
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
@@ -955,14 +1068,6 @@ export class StationComponent
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
    * Resets the station form.
    */
   private resetStationForm() {
@@ -970,5 +1075,13 @@ export class StationComponent
       this.stationForm.markAsPristine();
       this.stationForm.controls.stationTemplateForm.markAsUntouched();
     }, 0);
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

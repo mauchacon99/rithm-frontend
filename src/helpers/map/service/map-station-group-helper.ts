@@ -598,17 +598,44 @@ export class MapStationGroupHelper {
           return otherGroup.subStationGroups.includes(rithmId);
         }
       );
+
+      // Find the station group from this.stationGroupElements array.
+      const updatedGroup = this.stationGroupElements.find(
+        (group) => group.rithmId === rithmId
+      );
+
+      if (updatedGroup && !stationGroupParent?.isReadOnlyRootStationGroup) {
+        this.stationGroupElements.forEach((group) => {
+          if (
+            //Find parent station group of incoming station group.
+            group.subStationGroups.includes(updatedGroup.rithmId)
+          ) {
+            //Remove deleting station group Id from it's parent group
+            group.subStationGroups = group.subStationGroups.filter(
+              (groupId) => groupId === rithmId
+            );
+            //Mark parent station group of updated station group as updated.
+            group.markAsUpdated();
+          }
+        });
+      }
+
       /** Update the pendingStationGroup. */
       this.updatePendingStationGroup(stationHelper);
+
       /** Add the current station group. */
       this.stationGroupElements.push(this.tempStationGroup$.value);
 
       /** Check to add the corresponding rithmId to the subStationGroups of the stationGroupParent. */
       if (stationGroupParent !== undefined) {
         if (!stationGroupParent.subStationGroups.includes(rithmId)) {
+          if (!stationGroupParent.isReadOnlyRootStationGroup) {
+            stationGroupParent.subStationGroups = [];
+          }
           stationGroupParent.subStationGroups.push(rithmId);
         }
       }
+
       /** Emptying the temporary station group. */
       this.tempStationGroup$.next({});
       /** Changes in map data. */
