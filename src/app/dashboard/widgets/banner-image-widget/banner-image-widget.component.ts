@@ -16,6 +16,9 @@ export class BannerImageWidgetComponent {
   /** WidgetType input. */
   @Input() widgetType!: WidgetType;
 
+  /** Profile image of widget. */
+  @Input() profileImage!: string | null;
+
   /** Image setter. */
   private _image!: DocumentImage;
 
@@ -36,7 +39,7 @@ export class BannerImageWidgetComponent {
   /**
    * Get image.
    *
-   * @returns String or NUll of the image.
+   * @returns Data of DocumentImage.
    */
   get image(): DocumentImage {
     return this._image;
@@ -58,7 +61,7 @@ export class BannerImageWidgetComponent {
 
   /** Get banner image by id of image. */
   private getImageByRithmId(): void {
-    if (this.image && this.image.imageId) {
+    if (this.image.imageId) {
       this.isLoading = true;
       this.documentService
         .getImageByRithmId(this.image.imageId)
