@@ -26,6 +26,8 @@
     class="absolute top-[44%] lg:top-[32%] left-[5%]"
     *ngIf="widgetType === enumWidgetType.ContainerProfileBanner"
   >
-    <app-avatar-image-widget></app-avatar-image-widget>
+    <app-avatar-image-widget
+      [profileImage]="profileImage || null"
+    ></app-avatar-image-widget>
   </div>
 </div>

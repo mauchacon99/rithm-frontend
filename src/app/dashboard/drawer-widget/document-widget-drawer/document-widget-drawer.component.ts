@@ -41,7 +41,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     ) {
       this.dataDrawerDocument.widgetItem.imageId = value.imageId;
       this.dataDrawerDocument.widgetItem.imageName = value.imageName;
-      this.updateWidget();
+      this.emitUpdateWidget();
     }
   }
 
@@ -56,7 +56,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
         WidgetType.ContainerProfileBanner &&
       this._showProfileImageBanner
     ) {
-      this.getImagesDocuments();
+      this.getProfileImagesDocuments();
     }
   }
 
@@ -80,6 +80,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Form to multiselect columns to document. */
   formColumns = new FormControl();
+
+  /** Form to select profile image. */
+  formProfileImageId = new FormControl();
 
   /** Questions the document. */
   questions!: QuestionList[];
@@ -111,8 +114,8 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document columns. */
   documentColumns: ColumnFieldsWidget[] = [];
 
-  /** Document images. */
-  documentImages: DocumentImage[] = [];
+  /** Document profile images. */
+  documentProfileImages: DocumentImage[] = [];
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -143,6 +146,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           this.documentRithmId = dataWidget.documentRithmId;
           this.setWidgetIndex.emit(this.dataDrawerDocument.widgetIndex);
           this.getWidgetItem.emit(this.dataDrawerDocument.widgetItem);
+          this.formProfileImageId.setValue(
+            this.dataDrawerDocument.widgetItem.profileImageId
+          );
           this.getDocumentWidget();
         }
       });
@@ -197,8 +203,8 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     this.formColumns.setValue(dataForm);
   }
 
-  /** Update widget. */
-  updateWidget(): void {
+  /** Update columns list widget. */
+  updateColumnsListWidget(): void {
     this.documentColumns = [];
     this.formColumns.value?.map((questionId: string) => {
       this.documentColumns.push({
@@ -211,18 +217,14 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       columns: this.documentColumns,
     });
     this.loadColumnsSelect();
-    this.dashboardService.updateDashboardWidgets({
-      widgetItem: this.dataDrawerDocument.widgetItem,
-      widgetIndex: this.dataDrawerDocument.widgetIndex,
-      quantityElementsWidget: this.dataDrawerDocument.quantityElementsWidget,
-    });
+    this.emitUpdateWidget();
   }
 
   /**
-   * Get images document.
+   * Get profile images document.
    *
    */
-  getImagesDocuments(): void {
+  getProfileImagesDocuments(): void {
     this.isLoadingProfileImage = true;
     this.failedLoadProfileImageData = false;
     this.documentService
@@ -230,9 +232,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (imagesDocument) => {
+          this.documentProfileImages = imagesDocument;
           this.isLoadingProfileImage = false;
           this.failedLoadProfileImageData = false;
-          this.documentImages = imagesDocument;
         },
         error: (error: unknown) => {
           this.isLoadingProfileImage = false;
@@ -243,6 +245,22 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /** Update profile image. */
+  updateProfileImageWidget(): void {
+    this.dataDrawerDocument.widgetItem.profileImageId =
+      this.formProfileImageId.value;
+    this.emitUpdateWidget();
+  }
+
+  /** Emit update widget. */
+  private emitUpdateWidget(): void {
+    this.dashboardService.updateDashboardWidgets({
+      widgetItem: this.dataDrawerDocument.widgetItem,
+      widgetIndex: this.dataDrawerDocument.widgetIndex,
+      quantityElementsWidget: this.dataDrawerDocument.quantityElementsWidget,
+    });
   }
 
   /**

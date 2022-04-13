@@ -268,7 +268,7 @@ describe('DocumentWidgetDrawerComponent', () => {
       'updateDashboardWidgets'
     ).and.callThrough();
 
-    component['updateWidget']();
+    component['updateColumnsListWidget']();
     expect(spyService).toHaveBeenCalledOnceWith(expectData);
     expect(component.documentColumns).toEqual(expectDocumentColumns);
   });
@@ -349,23 +349,53 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call updateWidget when change Input image', () => {
+  it('should call updateDashboardWidgets when change Input image', () => {
     const image = {
       imageId: '123-456-789',
       imageName: 'Image name',
     };
     component.dataDrawerDocument.widgetItem = dataEditWidget.widgetItem;
-    const spyMethod = spyOn(component, 'updateWidget');
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'updateDashboardWidgets'
+    ).and.callThrough();
 
     component.image = image;
 
-    expect(spyMethod).toHaveBeenCalled();
+    expect(spyService).toHaveBeenCalled();
     expect(component.dataDrawerDocument.widgetItem.imageId).toEqual(
       image.imageId
     );
     expect(component.dataDrawerDocument.widgetItem.imageName).toEqual(
       image.imageName
     );
+  });
+
+  it('should call updateDashboardWidgets when use emitUpdateWidget', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'updateDashboardWidgets'
+    ).and.callThrough();
+
+    component['emitUpdateWidget']();
+
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should update profile image widget', () => {
+    const expectedRithmId = '123-456-789';
+    component.formProfileImageId.setValue(expectedRithmId);
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'updateDashboardWidgets'
+    ).and.callThrough();
+
+    component.updateProfileImageWidget();
+
+    expect(component.dataDrawerDocument.widgetItem.profileImageId).toEqual(
+      expectedRithmId
+    );
+    expect(spyService).toHaveBeenCalled();
   });
 
   it('should show  profile image loading indicator', () => {
