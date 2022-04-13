@@ -1,3 +1,23 @@
 .fa-times {
   @apply text-secondary-500;
 }
+
+.tabs-container {
+  ::ng-deep .mat-tab-header {
+    .mat-tab-label {
+      min-width: 49% !important;
+    }
+
+    .mat-tab-label:hover {
+      @apply opacity-100 text-accent-500;
+    }
+
+    .mat-tab-label.mat-tab-label-active {
+      @apply opacity-100 text-accent-500;
+    }
+  }
+
+  ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
+    @apply opacity-100 bg-accent-500;
+  }
+}

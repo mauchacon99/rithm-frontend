@@ -67,7 +67,7 @@
     "karma": "~6.3.18",
     "karma-chrome-launcher": "~3.1.1",
     "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~4.0.2",
+    "karma-jasmine": "~5.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
     "ng-mocks": "^v13.4.2",
     "pa11y-ci": "3.0.1",
@@ -78,7 +78,7 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-scss": "^3.21.0",
-    "tailwindcss": "^3.0.23",
+    "tailwindcss": "^3.0.24",
     "ts-node": "~10.7.0",
     "typescript": "~4.4.4"
   }
