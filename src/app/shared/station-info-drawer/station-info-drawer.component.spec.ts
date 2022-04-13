@@ -35,7 +35,8 @@ import { Router } from '@angular/router';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -48,6 +49,8 @@ describe('StationInfoDrawerComponent', () => {
         StationInfoDrawerComponent,
         MockComponent(RosterComponent),
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(StationDocumentsModalComponent),
+
       ],
       imports: [
         MatInputModule,
@@ -716,5 +719,20 @@ describe('StationInfoDrawerComponent', () => {
       '#number-containers-loading'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should open a modal that shows the containers of the current station', () => {
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationId: stationId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openContainersModal();
+    expect(spyModal).toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
   });
 });

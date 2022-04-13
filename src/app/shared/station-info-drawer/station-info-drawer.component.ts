@@ -22,6 +22,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { RosterManagementModalComponent } from 'src/app/shared/roster-management-modal/roster-management-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { StationDocumentsModalComponent } from '../station-documents-modal/station-documents-modal.component';
 
 /**
  * Component for info station.
@@ -912,6 +913,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Open Containers Modal.
+   */
+   openContainersModal(): void {
+    this.dialog.open(StationDocumentsModalComponent, {
+      minWidth: '370px',
+      data: {
+        stationId: this.stationRithmId,
+      },
+    });
   }
 
   /**
