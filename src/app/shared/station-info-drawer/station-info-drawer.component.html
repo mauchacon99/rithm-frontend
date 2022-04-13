@@ -318,14 +318,8 @@
     <ng-template matTabContent>
       <div class="grid grid-cols-1 px-2">
         <!-- Station Name -->
-        <section class="flex pt-4 pb-2">
-          <div
-            class="col-span-12 pt-2"
-            *ngIf="
-              (openedFromMap && !editMode) || (!openedFromMap && !editMode);
-              else editStationName
-            "
-          >
+        <section class="flex pt-4">
+          <div class="col-span-12 pt-2" *ngIf="!editMode; else editStationName">
             <p class="overline-font">Station Name</p>
             <p class="pt-2">{{ stationName }}</p>
           </div>
