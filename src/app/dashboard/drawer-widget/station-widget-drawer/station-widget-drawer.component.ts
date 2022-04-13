@@ -180,22 +180,10 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   private setDocumentFields(): void {
     this.documentFields = [];
     this.questions?.map((question) => {
-      let isDisabledQuestionOrStation =
-        this.checkTypeQuestionAndStation(question);
-      this.documentFields.push({
-        name: question.prompt,
-        value: question.rithmId,
-        disabled: isDisabledQuestionOrStation
-          ? isDisabledQuestionOrStation
-          : this.checkExistColumn(question.rithmId, 'questionId'),
-        questionId: question.rithmId,
-      });
-      if (this.isStationMultiline) {
-        isDisabledQuestionOrStation = this.checkTypeQuestionAndStation(
-          question,
-          true
-        );
-        this.documentFieldsThirdSelect.push({
+      if (question.questionType !== this.enumQuestionFieldType.File) {
+        let isDisabledQuestionOrStation =
+          this.checkTypeQuestionAndStation(question);
+        this.documentFields.push({
           name: question.prompt,
           value: question.rithmId,
           disabled: isDisabledQuestionOrStation
@@ -203,6 +191,20 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
             : this.checkExistColumn(question.rithmId, 'questionId'),
           questionId: question.rithmId,
         });
+        if (this.isStationMultiline) {
+          isDisabledQuestionOrStation = this.checkTypeQuestionAndStation(
+            question,
+            true
+          );
+          this.documentFieldsThirdSelect.push({
+            name: question.prompt,
+            value: question.rithmId,
+            disabled: isDisabledQuestionOrStation
+              ? isDisabledQuestionOrStation
+              : this.checkExistColumn(question.rithmId, 'questionId'),
+            questionId: question.rithmId,
+          });
+        }
       }
     });
   }
@@ -218,9 +220,7 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     question: Question,
     isThirdSelect = false
   ): boolean {
-    if (question.questionType === this.enumQuestionFieldType.File) {
-      return true;
-    } else if (this.isStationMultiline) {
+    if (this.isStationMultiline) {
       if (!isThirdSelect) {
         return (
           question.questionType === this.enumQuestionFieldType.Select ||

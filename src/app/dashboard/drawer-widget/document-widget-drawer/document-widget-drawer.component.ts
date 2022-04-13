@@ -184,7 +184,10 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     const dataForm: string[] = [];
     this.questions?.map((questionList) => {
       questionList.questions?.map((question) => {
-        if (question.questionType !== this.enumQuestionFieldType.File) {
+        if (
+          question.questionType !== this.enumQuestionFieldType.File &&
+          question.questionType !== this.enumQuestionFieldType.DataLink
+        ) {
           this.documentFields.push({
             name: question.prompt,
             questionId: question.rithmId,
