@@ -106,6 +106,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Enable error message if unassigned user request fails. */
   userErrorUnassigned = false;
 
+  /** The selected tab index/init. */
+  selectedTabIndex = 0;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,

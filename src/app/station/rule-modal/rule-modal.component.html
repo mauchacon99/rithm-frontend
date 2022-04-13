@@ -28,8 +28,17 @@
         *ngIf="!questionStationError"
         [ngClass]="{ 'text-center': questionStationLoading }"
       >
-        <p class="text-sm mt-1">
-          Select the field-set you'd like to apply a rule to.
+        <p
+          class="text-sm mt-1"
+          [ngClass]="{
+            'text-error-500': firstOperandQuestionList.length === 0
+          }"
+        >
+          {{
+            firstOperandQuestionList.length > 0
+              ? "Select the field-set you'd like to apply a rule to."
+              : 'Please add custom fields to the station to create a rule'
+          }}
         </p>
         <mat-form-field
           appearance="outline"
@@ -41,6 +50,7 @@
             [(value)]="firstOperandQuestionRithmId"
             id="first-operand-selector"
             data-testid="first-operand-selector"
+            [disabled]="firstOperandQuestionList.length === 0"
           >
             <ng-container *ngFor="let question of firstOperandQuestionList">
               <mat-option
