@@ -6,7 +6,7 @@ import { OrganizationManagementComponent } from './organization-management/organ
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 import { PaginationModule } from 'src/app/shared/pagination/pagination.module';
 import { AdminMenuComponent } from './admin-menu/admin-menu/admin-menu.component';
@@ -44,6 +44,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatExpansionModule,
     UserAvatarModule,
     MatMenuModule,
+    FormsModule,
   ],
 })
 export class AdminModule {}
