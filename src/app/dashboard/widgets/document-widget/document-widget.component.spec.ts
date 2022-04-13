@@ -11,7 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DashboardItem, WidgetType } from '../../../../models';
+import { DashboardItem, WidgetType } from 'src/models';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
