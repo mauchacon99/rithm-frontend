@@ -91,10 +91,11 @@ export class DashboardService {
       description:
         'Select multiple document values to display on each row of the list.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'List Widget',
+        type: 'Station Template',
+        customizable: 'Row Information',
+        description: `Great for displaying longer text fields in documents. By default, this widget displays the document name,
+        late updated date, and the first text field from each document. Each of these three fields can be edited from the dashboard.`,
       },
     },
     [WidgetType.StationMultilineBanner]: {
@@ -102,10 +103,12 @@ export class DashboardService {
       description:
         'Select multiple document values to display on each row of the list along with custom banner image.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'List Widget',
+        type: 'Station Template',
+        customizable: 'Row information',
+        description: `Great for display longer text fields in documents. By default. this widget displays the document name with custom
+        banner images can also be added to the widget. Late update date, and the first text field from each document. Each of these three
+        fields can be edited from the dashboard.`,
       },
     },
     // Document data
