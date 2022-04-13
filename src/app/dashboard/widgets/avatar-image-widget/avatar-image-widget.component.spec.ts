@@ -118,6 +118,6 @@ describe('AvatarImageWidgetComponent', () => {
     };
     component.profileImage = null;
 
-    expect(component.imageData).toHaveBeenCalledOnceWith(expectedDataImage);
+    expect(component.imageData).toEqual(expectedDataImage);
   });
 });
