@@ -5,6 +5,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { ImageData } from '../../../../models';
 
 describe('AvatarImageWidgetComponent', () => {
   let component: AvatarImageWidgetComponent;
@@ -74,6 +75,10 @@ describe('AvatarImageWidgetComponent', () => {
 
   it('should show error if the request getImageByRithmId fail', () => {
     const expectedRithmId = '123-456-789';
+    const expectedDataImage: ImageData = {
+      imageName: '',
+      imageData: '',
+    };
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getImageByRithmId'
@@ -91,6 +96,7 @@ describe('AvatarImageWidgetComponent', () => {
 
     expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
     expect(spyError).toHaveBeenCalled();
+    expect(component.imageData).toEqual(expectedDataImage);
   });
 
   it('should call method getImageByRithmId when exist a profileImageId', () => {
@@ -103,5 +109,15 @@ describe('AvatarImageWidgetComponent', () => {
     component.profileImage = expectedRithmId;
 
     expect(spyService).toHaveBeenCalledOnceWith(expectedRithmId);
+  });
+
+  it('should set imageData empty when profileImageId is null', () => {
+    const expectedDataImage: ImageData = {
+      imageName: '',
+      imageData: '',
+    };
+    component.profileImage = null;
+
+    expect(component.imageData).toHaveBeenCalledOnceWith(expectedDataImage);
   });
 });
