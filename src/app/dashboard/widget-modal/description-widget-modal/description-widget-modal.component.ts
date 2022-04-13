@@ -47,9 +47,18 @@ export class DescriptionWidgetModalComponent implements OnInit {
             : [{ name: ColumnsDocumentInfo.Name }],
       });
     } else {
-      return JSON.stringify({
-        stationGroupRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-      });
+      return JSON.stringify(
+        this.widgetType === this.enumWidgetType.StationGroupTraffic
+          ? {
+              valueShowGraffic: 5,
+              stationGroupRithmId:
+                this.itemWidgetModalSelected.itemList.rithmId,
+            }
+          : {
+              stationGroupRithmId:
+                this.itemWidgetModalSelected.itemList.rithmId,
+            }
+      );
     }
   }
 
@@ -113,7 +122,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.ContainerProfileBanner ||
       this.widgetTypeWithoutDefault === this.enumWidgetType.StationMultiline ||
       this.widgetTypeWithoutDefault ===
-        this.enumWidgetType.StationMultilineBanner
+        this.enumWidgetType.StationMultilineBanner ||
+      this.widgetTypeWithoutDefault === this.enumWidgetType.StationGroupTraffic
       ? 2
       : 1;
   }
