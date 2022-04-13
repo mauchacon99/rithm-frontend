@@ -11,6 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DashboardItem, WidgetType } from 'src/models';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -18,6 +19,20 @@ describe('DocumentWidgetComponent', () => {
   const dataWidget =
     '{"documentRithmId":"8263330A-BCAA-40DB-8C06-D4C111D5C9DA","columns":[{"name":"Test","questionId":"45454-54545-45454"}]}';
   const documentRithmId = '8263330A-BCAA-40DB-8C06-D4C111D5C9DA';
+
+  const widgetItem: DashboardItem = {
+    rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+    cols: 4,
+    rows: 1,
+    x: 0,
+    y: 0,
+    widgetType: WidgetType.Document,
+    data: '{"documentRithmId":"247cf568-27a4-4968-9338-046ccfee24f3","columns":[]}',
+    minItemCols: 4,
+    minItemRows: 4,
+    maxItemCols: 12,
+    maxItemRows: 12,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,6 +53,7 @@ describe('DocumentWidgetComponent', () => {
     fixture = TestBed.createComponent(DocumentWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
+    component.widgetItem = widgetItem;
     fixture.detectChanges();
   });
 
