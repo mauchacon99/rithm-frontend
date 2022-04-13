@@ -47,10 +47,41 @@ export class DescriptionWidgetModalComponent implements OnInit {
             : [{ name: ColumnsDocumentInfo.Name }],
       });
     } else {
-      return JSON.stringify({
-        stationGroupRithmId: this.itemWidgetModalSelected.itemList.rithmId,
-      });
+      return JSON.stringify(
+        this.widgetType === this.enumWidgetType.StationGroupTraffic
+          ? {
+              valueShowGraffic: 5,
+              stationGroupRithmId:
+                this.itemWidgetModalSelected.itemList.rithmId,
+            }
+          : {
+              stationGroupRithmId:
+                this.itemWidgetModalSelected.itemList.rithmId,
+            }
+      );
     }
+  }
+
+  /**
+   * Get all data of widget.
+   *
+   * @returns Data of dashboardItem.
+   */
+  get widgetItem(): DashboardItem {
+    const minItemRows = this.minItemRowsWidget();
+    const widgetType = this.widgetTypeWithoutDefault;
+    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
+    return {
+      rithmId,
+      cols: 3,
+      rows: minItemRows,
+      x: 0,
+      y: 0,
+      widgetType,
+      data: this.dataWidget,
+      minItemRows,
+      minItemCols: 3,
+    };
   }
 
   /** Enum widget type. */
@@ -91,27 +122,14 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.ContainerProfileBanner ||
       this.widgetTypeWithoutDefault === this.enumWidgetType.StationMultiline ||
       this.widgetTypeWithoutDefault ===
-        this.enumWidgetType.StationMultilineBanner
+        this.enumWidgetType.StationMultilineBanner ||
+      this.widgetTypeWithoutDefault === this.enumWidgetType.StationGroupTraffic
       ? 2
       : 1;
   }
 
   /** Save widget. */
   addWidget(): void {
-    const minItemRows = this.minItemRowsWidget();
-    const widgetType = this.widgetTypeWithoutDefault;
-    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
-    const widgetItem: DashboardItem = {
-      rithmId,
-      cols: 3,
-      rows: minItemRows,
-      x: 0,
-      y: 0,
-      widgetType,
-      data: this.dataWidget,
-      minItemRows,
-      minItemCols: 3,
-    };
-    this.dialogRef.close(widgetItem);
+    this.dialogRef.close(this.widgetItem);
   }
 }

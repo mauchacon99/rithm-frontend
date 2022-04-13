@@ -125,6 +125,7 @@
     <p class="font-semibold">Reporting</p>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
       <app-group-widget-template-modal
+        (click)="emitPreviewWidgetSelected(enumWidgetType.StationGroupTraffic)"
         [widgetType]="enumWidgetType.StationGroupTraffic"
       >
       </app-group-widget-template-modal>

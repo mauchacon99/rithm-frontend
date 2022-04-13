@@ -1245,6 +1245,51 @@ export class MockStationService {
   }
 
   /**
+   * Get the station widgets.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The station widget data.
+   */
+  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot response station widgets',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationWidgets: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+        {
+          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+      ];
+      return of(stationWidgets).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Remove owner from the group's roster.
    *
    * @param stationGroupRithmId The Specific id of group.
