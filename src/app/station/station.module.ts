@@ -45,6 +45,7 @@ import { BodyTextWidgetModule } from 'src/app/shared/station-document-widgets/bo
 import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/headline-widget/headline-widget.module';
 import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
 import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
+import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
 @NgModule({
   declarations: [
     StationComponent,
@@ -95,6 +96,7 @@ import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/bann
     HeadlineWidgetModule,
     TitleWidgetModule,
     BannerWidgetModule,
+    CircleImageWidgetModule,
   ],
 })
 export class StationModule {}
