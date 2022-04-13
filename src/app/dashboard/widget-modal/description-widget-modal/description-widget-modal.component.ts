@@ -62,6 +62,28 @@ export class DescriptionWidgetModalComponent implements OnInit {
     }
   }
 
+  /**
+   * Get all data of widget.
+   *
+   * @returns Data of dashboardItem.
+   */
+  get widgetItem(): DashboardItem {
+    const minItemRows = this.minItemRowsWidget();
+    const widgetType = this.widgetTypeWithoutDefault;
+    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
+    return {
+      rithmId,
+      cols: 3,
+      rows: minItemRows,
+      x: 0,
+      y: 0,
+      widgetType,
+      data: this.dataWidget,
+      minItemRows,
+      minItemCols: 3,
+    };
+  }
+
   /** Enum widget type. */
   enumWidgetType = WidgetType;
 
@@ -108,20 +130,6 @@ export class DescriptionWidgetModalComponent implements OnInit {
 
   /** Save widget. */
   addWidget(): void {
-    const minItemRows = this.minItemRowsWidget();
-    const widgetType = this.widgetTypeWithoutDefault;
-    const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
-    const widgetItem: DashboardItem = {
-      rithmId,
-      cols: 3,
-      rows: minItemRows,
-      x: 0,
-      y: 0,
-      widgetType,
-      data: this.dataWidget,
-      minItemRows,
-      minItemCols: 3,
-    };
-    this.dialogRef.close(widgetItem);
+    this.dialogRef.close(this.widgetItem);
   }
 }

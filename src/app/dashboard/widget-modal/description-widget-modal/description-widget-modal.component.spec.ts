@@ -187,7 +187,6 @@ describe('DescriptionWidgetModalComponent', () => {
       expectData.rows = 1;
       expectData.minItemRows = 1;
       expectData.data = component.dataWidget;
-      fixture.detectChanges();
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
@@ -207,7 +206,6 @@ describe('DescriptionWidgetModalComponent', () => {
       expectData.rows = 2;
       expectData.minItemRows = 2;
       expectData.data = component.dataWidget;
-      fixture.detectChanges();
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
@@ -227,7 +225,6 @@ describe('DescriptionWidgetModalComponent', () => {
       expectData.widgetType = WidgetType.Document;
       expectData.rows = 1;
       expectData.minItemRows = 1;
-      fixture.detectChanges();
       expectData.data = component.dataWidget;
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
