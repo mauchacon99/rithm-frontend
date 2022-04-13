@@ -114,7 +114,7 @@ describe('FileFieldComponent', () => {
     };
     const fileData = {
       name: 'SomeFile.png',
-      size: '121321',
+      size: 121321,
     };
     const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
       afterClosed: () => of(fileData),
