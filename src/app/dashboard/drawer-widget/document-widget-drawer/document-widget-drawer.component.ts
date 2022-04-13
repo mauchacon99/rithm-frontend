@@ -16,6 +16,7 @@ import {
   DashboardItem,
   DocumentImage,
   EditDataWidget,
+  QuestionFieldType,
   QuestionList,
   WidgetType,
 } from 'src/models';
@@ -117,6 +118,9 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Document profile images. */
   documentProfileImages: DocumentImage[] = [];
 
+  /** Enum questions type. */
+  enumQuestionFieldType = QuestionFieldType;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private documentService: DocumentService,
@@ -186,12 +190,17 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     const dataForm: string[] = [];
     this.questions?.map((questionList) => {
       questionList.questions?.map((question) => {
-        this.documentFields.push({
-          name: question.prompt,
-          questionId: question.rithmId,
-        });
-        if (!this.documentColumns.length) {
-          dataForm.push(question.rithmId);
+        if (
+          question.questionType !== this.enumQuestionFieldType.File &&
+          question.questionType !== this.enumQuestionFieldType.DataLink
+        ) {
+          this.documentFields.push({
+            name: question.prompt,
+            questionId: question.rithmId,
+          });
+          if (!this.documentColumns.length) {
+            dataForm.push(question.rithmId);
+          }
         }
       });
     });
