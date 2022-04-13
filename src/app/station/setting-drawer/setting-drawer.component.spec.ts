@@ -116,7 +116,7 @@ describe('SettingDrawerComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
   // TODO: these unit tests belong to the field-drawer component
-  it('should return false the method that modify isPrevious', () => {
+  xit('should return false the method that modify isPrevious', () => {
     // const spyProperty = spyOnProperty(
     //   component,
     //   'isPrevious',
