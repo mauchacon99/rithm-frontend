@@ -94,12 +94,12 @@ describe('SettingDrawerComponent', () => {
     expect(drawerSpy).toHaveBeenCalled();
   });
   // TODO: these unit tests belong to the field-drawer component
-  // it('should set the question title to stationQuestionTitle observable', () => {
-  //   component.setQuestionTitle();
-  //   service.stationQuestionTitle$.subscribe((response) => {
-  //     expect(response).toBe(component.fieldSetting);
-  //   });
-  // });
+  xit('should set the question title to stationQuestionTitle observable', () => {
+    //   component.setQuestionTitle();
+    //   service.stationQuestionTitle$.subscribe((response) => {
+    //     expect(response).toBe(component.fieldSetting);
+    //   });
+  });
 
   it('should call getParams to get the stationId', () => {
     TestBed.inject(Router).navigate([
@@ -116,26 +116,25 @@ describe('SettingDrawerComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
   // TODO: these unit tests belong to the field-drawer component
-  // it('should return false the method that modify isPrevious', () => {
-  //   const spyProperty = spyOnProperty(
-  //     component,
-  //     'isPrevious',
-  //     'get'
-  //   ).and.returnValue(false);
-
-  //   fixture.detectChanges();
-  //   expect(spyProperty).toHaveBeenCalled();
-  // });
-
-  // it('should set isRequired as false due to isReadOnly is false (isPrevious only).', () => {
-  //   component.fieldSetting.isReadOnly = false;
-  //   const setReadOnlySpy = spyOn(
-  //     component,
-  //     'setReadOnlyFalse'
-  //   ).and.callThrough();
-  //   component.setReadOnlyFalse();
-  //   expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
-  // });
+  it('should return false the method that modify isPrevious', () => {
+    // const spyProperty = spyOnProperty(
+    //   component,
+    //   'isPrevious',
+    //   'get'
+    // ).and.returnValue(false);
+    // fixture.detectChanges();
+    // expect(spyProperty).toHaveBeenCalled();
+  });
+  // TODO: these unit tests belong to the field-drawer component
+  xit('should set isRequired as false due to isReadOnly is false (isPrevious only).', () => {
+    // component.fieldSetting.isReadOnly = false;
+    // const setReadOnlySpy = spyOn(
+    //   component,
+    //   'setReadOnlyFalse'
+    // ).and.callThrough();
+    // component.setReadOnlyFalse();
+    // expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
+  });
 
   it('should display a confirmation Popup for delete filed', async () => {
     const questions: Question[] = [
