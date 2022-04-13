@@ -7,6 +7,7 @@ import {
   NG_VALIDATORS,
   ValidationErrors,
   Validator,
+  FormArray,
 } from '@angular/forms';
 import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
@@ -45,7 +46,7 @@ export class StationTemplateComponent
 
   constructor(private fb: FormBuilder, private stationService: StationService) {
     this.stationTemplateForm = this.fb.group({
-      stationFieldForm: this.fb.control(''),
+      stationFieldForm: new FormArray([]),
     });
   }
 
