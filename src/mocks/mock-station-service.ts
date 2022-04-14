@@ -1271,18 +1271,19 @@ export class MockStationService {
           y: 0,
           type: FrameType.Input,
           data: '',
-          id: 10,
+          questions:[],
+          id: 0,
         },
         {
           rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
           stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           cols: 6,
-          rows: 4,
+          rows: 1,
           x: 0,
           y: 0,
-          type: FrameType.Input,
+          type: FrameType.Headline,
           data: '',
-          id: 11,
+          id: 1,
         },
       ];
       return of(stationWidgets).pipe(delay(1000));
