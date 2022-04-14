@@ -720,6 +720,22 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
+  it('should call the method that open the modal of number of containers', () => {
+    component.selectedTabIndex = 0;
+    component.stationLoading = false;
+    fixture.detectChanges();
+    const spyOpenModal = spyOn(
+      component,
+      'openContainersModal'
+    ).and.callThrough();
+
+    const btnContainerModal =
+      fixture.debugElement.nativeElement.querySelector('#containers-modal');
+    expect(btnContainerModal).toBeTruthy();
+    btnContainerModal.click();
+    expect(spyOpenModal).toHaveBeenCalled();
+  });
+
   it('should open a modal that shows the containers of the current station', () => {
     const expectData = {
       minWidth: '370px',
