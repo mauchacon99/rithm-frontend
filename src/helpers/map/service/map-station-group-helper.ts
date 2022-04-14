@@ -624,7 +624,50 @@ export class MapStationGroupHelper {
           ).stations.includes(station)
       );
 
+      // Find the subStationGroups that is in the temporal and then remove it from the parent.
+      const stationGroupGetOutFatherGroup =
+        stationGroupParent?.subStationGroups.filter((subGroup) =>
+          (
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).subStationGroups.includes(subGroup)
+        );
+
+      // Find the stations that are in the temporal to later remove it from the parent.
+      const stationsGetOutFatherGroup = stationGroupParent?.stations.filter(
+        (station) =>
+          (
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).stations.includes(station)
+      );
+
       if (updatedGroupIndex !== -1 && stationGroupParent) {
+        //If there is station group raised outside the parent while we were making changes.
+        if (stationGroupGetOutFatherGroup) {
+          stationGroupGetOutFatherGroup.forEach((stationGroupGetOutId) => {
+            if (
+              stationGroupParent.subStationGroups.includes(stationGroupGetOutId)
+            ) {
+              //Remove the station group currently in parent.
+              stationGroupParent.subStationGroups =
+                stationGroupParent.subStationGroups.filter(
+                  (stationGroupId) => stationGroupId !== stationGroupGetOutId
+                );
+            }
+          });
+        }
+
+        // If there are stations raised outside the parent while we were making changes.
+        if (stationsGetOutFatherGroup) {
+          stationsGetOutFatherGroup.forEach((stationGetOutId) => {
+            // Remove the stations that are currently in the parent.
+            if (stationGroupParent.stations.includes(stationGetOutId)) {
+              stationGroupParent.stations = stationGroupParent.stations.filter(
+                (stationId) => stationId !== stationGetOutId
+              );
+            }
+          });
+        }
+        
         // Move sub Station Groups to old Station Group father.
         stationGroupDifference.forEach((stationGroupId) => {
           if (!stationGroupParent.subStationGroups.includes(stationGroupId)) {
