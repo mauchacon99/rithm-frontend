@@ -141,4 +141,13 @@ export class SplitService {
   public getStationListWidgetTreatment(): string {
     return this.splitClient.getTreatment('station_lists_templates_split');
   }
+
+  /**
+   * Get the section account profile photo.
+   *
+   * @returns Split treatment.
+   */
+  public getAccountProfilePhotoTreatment(): string {
+    return this.splitClient.getTreatment('profile_photo_split');
+  }
 }
