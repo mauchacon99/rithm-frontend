@@ -1271,7 +1271,7 @@ export class MockStationService {
           y: 0,
           type: FrameType.Input,
           data: '',
-          id: 0,
+          id: 10,
         },
         {
           rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
@@ -1282,7 +1282,7 @@ export class MockStationService {
           y: 0,
           type: FrameType.Input,
           data: '',
-          id: 0,
+          id: 11,
         },
       ];
       return of(stationWidgets).pipe(delay(1000));

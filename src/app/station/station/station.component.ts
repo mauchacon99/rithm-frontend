@@ -876,13 +876,15 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-          inputFrames.map((input) => {
+          inputFrames.map((input, index) => {
+            input.id = index;
             if (input.data && JSON.parse(input.data)?.length > 0) {
               input.questions = [];
               input.questions = JSON.parse(input.data);
             }
           });
           this.inputFrameWidgetItems = inputFrames;
+          this.changedOptions();
         },
         error: (error: unknown) => {
           this.errorService.displayError(
