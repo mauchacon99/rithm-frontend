@@ -21,8 +21,9 @@ import {
   StationFrameWidget,
   DocumentEvent,
   DataLinkObject,
-  StandardNumberJSON,
   GroupTrafficData,
+  FrameType,
+  StandardNumberJSON,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -735,6 +736,52 @@ export class StationService {
   }
 
   /**
+   * Get the widgets of a station.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The station widget data.
+   */
+  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive  the number of container',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationWidgets: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+        {
+          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      return of(stationWidgets).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get worker roster for a given station group.
    *
    * @param stationGroupRithmId The id of the given station group.
@@ -850,26 +897,17 @@ export class StationService {
   /**
    * Get the number of container in a station.
    *
-   * @param stationRithmId The id of the given station group.
+   * @param stationRithmId The current station id.
    * @returns Number of containers.
    */
   getNumberOfContainers(stationRithmId: string): Observable<number> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive  the number of container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const numberOfContainer: StandardNumberJSON = {
-        data: 10,
-      };
-
-      return of(numberOfContainer).pipe(map((response) => response.data));
-    }
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StandardNumberJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents`,
+        { params }
+      )
+      .pipe(map((response) => response.data as number));
   }
 
   /**

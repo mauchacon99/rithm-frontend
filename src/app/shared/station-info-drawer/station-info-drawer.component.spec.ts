@@ -519,7 +519,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 2;
     component.updateAllowExternalWorkers();
     fixture.detectChanges();
     expect(component.allowExternalLoading).toBe(true);
@@ -531,7 +531,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 2;
     component.updateAllOrgWorkersStation();
     fixture.detectChanges();
     expect(component.allowAllOrgLoading).toBe(true);
@@ -702,5 +702,19 @@ describe('StationInfoDrawerComponent', () => {
     );
     component.getStationInfo();
     expect(spyNumberContainers).toHaveBeenCalled();
+  });
+
+  it('should show number-containers-loading when getNumberOfContainers is underway', () => {
+    component.selectedTabIndex = 0;
+    component.stationLoading = false;
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(
+      of(component.stationInformation)
+    );
+    component.getStationInfo();
+    fixture.detectChanges();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#number-containers-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });

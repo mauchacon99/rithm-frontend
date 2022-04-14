@@ -125,7 +125,7 @@ export class UploadFileModalComponent implements OnInit {
    * Save uploaded file.
    */
   saveData(): void {
-    this.closeModal();
+    this.dialogRef.close({ name: this.file?.name, size: this.fileSize });
   }
 
   /**

@@ -1509,6 +1509,46 @@ describe('StationService', () => {
     service.getNumberOfContainers(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/number-of-documents?stationRithmId=${stationId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should get getStationWidgets', () => {
+    const expectedResponse: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+      {
+        rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+    ];
+
+    service.getStationWidgets(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 
   it('should call getGroupTrafficData', () => {

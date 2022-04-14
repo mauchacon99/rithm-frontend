@@ -53,7 +53,16 @@
           class="flex justify-between items-center w-full py-4 border-t-2 border-t-secondary-200"
         >
           <h6 class="w-11/12">Documents</h6>
-          <div class="flex justify-end items-center">
+          <div *ngIf="numberContainersLoading">
+            <app-loading-indicator
+              id="number-containers-loading"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <div
+            *ngIf="!numberContainersLoading"
+            class="flex justify-end items-center"
+          >
             <button
               class="rounded-full h-7 w-7 text-center text-sm font-semibold leading-7 text-white bg-secondary-500"
               data-testid="number-containers"
@@ -308,6 +317,101 @@
             Delete Station
           </button>
         </div>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="tab-history-info" aria-label="tab-history-info">
+    <ng-template mat-tab-label>
+      <i class="fas fa-clock-rotate-left fa-lg"></i>
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="grid grid-cols-1 px-2">
+        <!-- Station Name -->
+        <section class="flex pt-4">
+          <div class="col-span-12 pt-2" *ngIf="!editMode; else editStationName">
+            <p class="overline-font">Station Name</p>
+            <p class="pt-2">{{ stationName }}</p>
+          </div>
+          <ng-template #editStationName>
+            <mat-form-field
+              appearance="outline"
+              class="w-full mat-station-name"
+            >
+              <mat-label>Station Name</mat-label>
+              <input
+                matInput
+                type="text"
+                id="station"
+                data-testid="station-name-field"
+                [(ngModel)]="stationName"
+                (keyup)="reportNewStationMapChange()"
+                (blur)="stationName = deleteSpace(stationName)"
+                (focusout)="updateStationInfoDrawerName()"
+              />
+            </mat-form-field>
+          </ng-template>
+        </section>
+        <section class="flex w-full pb-4">
+          <div class="flex w-full flex-col justify-center">
+            <h6>Station History</h6>
+          </div>
+        </section>
+        <section>
+          <div *ngFor="let history of stationHistoryEvents">
+            <div>
+              <div class="flex">
+                <div
+                  class="flex justify-center w-1/4"
+                  *ngIf="history && history.user"
+                >
+                  <app-user-avatar
+                    [firstName]="history.user.firstName"
+                    [lastName]="history.user.lastName"
+                    [navProfile]="true"
+                  ></app-user-avatar>
+                </div>
+                <div
+                  *ngIf="history && !history.user"
+                  class="flex justify-center w-1/4"
+                >
+                  <div
+                    id="avatar-rithm"
+                    class="flex justify-center circle-40-primary"
+                  >
+                    <img
+                      src="assets/logo/white-icon-only.svg"
+                      class="w-5"
+                      alt="Logo Rithm"
+                    />
+                  </div>
+                </div>
+                <div class="w-3/4">
+                  <p class="font-semibold text-sm truncate">
+                    <span *ngIf="history.user; else noUser">
+                      {{ history.user?.firstName }} {{ history.user?.lastName }}
+                    </span>
+                    <ng-template #noUser>
+                      <span>Rithm Automation</span>
+                    </ng-template>
+                  </p>
+                  <p class="font-semibold text-xs text-primary-100">
+                    {{ history.eventTimeUTC | date: 'MM/dd/yyyy' }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex my-3">
+                <div class="flex justify-center w-1/4">
+                  <div class="border-r-2 border-primary-100"></div>
+                </div>
+                <div class="w-3/4">
+                  <p class="text-sm text-clip">
+                    {{ history.description }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </ng-template>
   </mat-tab>

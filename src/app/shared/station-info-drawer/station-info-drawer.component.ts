@@ -146,6 +146,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use for history station. */
   stationHistoryEvents: DocumentEvent[] = [];
 
+  /** Loading in the amount of containers of a station. */
+  numberContainersLoading = false;
+
   /**
    * Whether the station is selected and it's in center of the map.
    *
@@ -238,6 +241,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationStatus !== MapItemStatus.Created) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
+      this.getStationHistory();
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
         .subscribe({
@@ -496,14 +500,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Get the number of container get in a station.
    */
   private getNumberOfContainers(): void {
+    this.numberContainersLoading = true;
     this.stationService
       .getNumberOfContainers(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (numberOfContainers) => {
+          this.numberContainersLoading = false;
           this.numberOfContainers = numberOfContainers;
         },
         error: (error: unknown) => {
+          this.numberContainersLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
