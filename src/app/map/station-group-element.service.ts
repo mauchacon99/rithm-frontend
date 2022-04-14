@@ -302,30 +302,27 @@ export class StationGroupElementService {
     let scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
     let scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
     const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
+    /** Save the approximate scale of the title. */
+    const scaledTitle = 21 * GROUP_CHARACTER_SIZE * this.mapScale;
 
     /** New title if it is larger than the allowed scale we split the same one. */
     const newTitle: string[] = [];
 
     /* If the title is different from empty. */
     if (title !== '') {
-      /** Save the approximate scale of the title. */
-      const scaledTitle = 210 * this.mapScale;
-      /** If the size of the title is larger than the approximate scale. */
-      if (ctx.measureText(title).width > scaledTitle) {
-        newTitle.push(...this.splitStationGroupNameTooltip(title, scaledTitle));
-        const round = newTitle.length;
-        /** Scale of the tooltip to compare the height and set it if it is higher. */
-        const scaledTooltipCompareH =
-          ((scaledTooltipHeight - scaledTooltipPadding) / 2) * round;
-        if (scaledTooltipCompareH > scaledTooltipHeight) {
-          scaledTooltipHeight = scaledTooltipCompareH;
-        }
-        scaledTooltipWidth = scaledTitle;
-      } else {
-        newTitle.push(title);
+      newTitle.push(...this.splitStationGroupNameTooltip(title, scaledTitle));
+      /** Number of as line breaks for the title. */
+      const numberOfLines = newTitle.length;
+      /** Scale of the tooltip to compare the height and set it if it is higher. */
+      const scaledTooltipCompareH =
+        ((scaledTooltipHeight - scaledTooltipPadding) / 2) * numberOfLines;
+      if (scaledTooltipCompareH > scaledTooltipHeight) {
+        scaledTooltipHeight = scaledTooltipCompareH;
       }
+      scaledTooltipWidth = scaledTitle;
       /** Start Y-axis we move it a little higher for tooltip. */
-      startingY = pointStart.y - scaledTooltipHeight - TOOLTIP_PADDING;
+      startingY =
+        pointStart.y - scaledTooltipHeight - scaledTooltipPadding * 1.5;
     }
 
     ctx.save();
@@ -399,15 +396,14 @@ export class StationGroupElementService {
       /** Space of Y and will be incremented by word partitioning. */
       let spaceY = 12;
       /** The maximum number of pixels in width and if the scale of the title is exceeded, it is slightly enlarged. */
-      const maxWidth =
-        ctx.measureText(title).width > 210 * this.mapScale ? 180 : 140;
+      const maxWidth = scaledTitle - 2 * scaledTooltipPadding;
       /** We fill in the text for each cut of the title.  */
       newTitle.forEach((item) => {
         ctx.fillText(
           item,
           startingX + scaledTooltipPadding,
           startingY + spaceY * this.mapScale + scaledTooltipPadding,
-          maxWidth * this.mapScale
+          maxWidth
         );
         spaceY += 20;
       });
@@ -1068,20 +1064,23 @@ export class StationGroupElementService {
     /** Auxiliary title to allocate or concatenate each part. */
     let titleAux = '';
 
-    for (let index = 0; index < title.length; index++) {
-      /** The width of the part the station group name. */
-      const titleWidth =
-        ctx.measureText(titleAux).width + ctx.measureText(title[index]).width;
-
-      /** If the size of the title is larger than the approximate scale. */
-      if (titleWidth >= scaledTitle) {
-        /* Split station group name. */
-        newTitle.push(titleAux);
-        /* Assigns the following start of the title. */
-        titleAux = title[index];
-      } else {
-        titleAux = titleAux.concat(title[index]);
+    if (ctx.measureText(title).width > scaledTitle) {
+      for (let index = 0; index < title.length; index++) {
+        /** The width of the part the station group name. */
+        const titleWidth =
+          ctx.measureText(titleAux).width + ctx.measureText(title[index]).width;
+        /** If the size of the title is larger than the approximate scale. */
+        if (titleWidth >= scaledTitle) {
+          /* Split station group name. */
+          newTitle.push(titleAux);
+          /* Assigns the following start of the title. */
+          titleAux = title[index];
+        } else {
+          titleAux = titleAux.concat(title[index]);
+        }
       }
+    } else {
+      newTitle.push(title);
     }
     return newTitle;
   }
