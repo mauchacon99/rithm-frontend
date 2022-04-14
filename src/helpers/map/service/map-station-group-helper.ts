@@ -667,7 +667,7 @@ export class MapStationGroupHelper {
             }
           });
         }
-        
+
         // Move sub Station Groups to old Station Group father.
         stationGroupDifference.forEach((stationGroupId) => {
           if (!stationGroupParent.subStationGroups.includes(stationGroupId)) {
