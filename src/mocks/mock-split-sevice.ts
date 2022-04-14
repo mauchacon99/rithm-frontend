@@ -128,4 +128,13 @@ export class MockSplitService {
   public getStationListWidgetTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section station containers modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationContainersModalTreatment(): string {
+    return 'on';
+  }
 }

@@ -39,6 +39,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** The user type enum object. */
   userTypeEnum = UserType;
 
+  /** Whether the action to get split get container modal. */
+  showContainerModal = false;
+
   constructor(
     private documentService: DocumentService,
     @Inject(MAT_DIALOG_DATA) public modalData: StationDocumentsModalData,
@@ -49,6 +52,7 @@ export class StationDocumentsModalComponent implements OnInit {
     private userService: UserService
   ) {
     this.stationRithmId = this.modalData.stationId;
+    this.showContainerModal = this.modalData.showContainer;
   }
 
   /**

@@ -141,4 +141,13 @@ export class SplitService {
   public getStationListWidgetTreatment(): string {
     return this.splitClient.getTreatment('station_lists_templates_split');
   }
+
+  /**
+   * Get the section station containers modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationContainersModalTreatment(): string {
+    return this.splitClient.getTreatment('station_containers_modal_split');
+  }
 }

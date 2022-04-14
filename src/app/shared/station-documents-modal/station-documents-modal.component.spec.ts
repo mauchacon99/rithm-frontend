@@ -31,6 +31,7 @@ import { UserService } from 'src/app/core/user.service';
 const DIALOG_TEST_DATA: StationDocumentsModalData = {
   stationName: 'A Station',
   stationId: 'jk34jk34jk34',
+  showContainer: true,
 };
 
 describe('StationDocumentsModalComponent', () => {

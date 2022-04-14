@@ -3,7 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
+import { UserService } from 'src/app/core/user.service';
 import { MapService } from 'src/app/map/map.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationListGroup, WidgetType } from 'src/models';
@@ -52,12 +54,17 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Whether the action to get list station group fails. */
   errorStationGroup = false;
 
+  /** Whether the action to get split get container modal. */
+  showContainerModal = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
     private dialog: MatDialog,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    private splitService: SplitService,
+    private userService: UserService
   ) {}
 
   /**
@@ -67,6 +74,7 @@ export class GroupSearchWidgetComponent implements OnInit {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
     this.getStationGroups();
+    this.split();
   }
 
   /**
@@ -122,6 +130,7 @@ export class GroupSearchWidgetComponent implements OnInit {
         data: {
           stationName: station.name,
           stationId: station.rithmId,
+          showContainer: this.showContainerModal,
         },
       });
     }
@@ -138,5 +147,21 @@ export class GroupSearchWidgetComponent implements OnInit {
     );
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
+  }
+
+  /**
+   * Split Service for show or hidden section Admin Portal.
+   */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showContainerModal =
+          this.splitService.getStationContainersModalTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 }
