@@ -2,6 +2,7 @@
   class="grid grid-cols-3 py-1"
   [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
 >
+  <div></div>
   <div
     [ngClass]="{
       'col-start-2 text-center': title,
@@ -33,18 +34,6 @@
       (click)="toggleDrawer('comments')"
     >
       <i class="far fa-comment-alt group-hover:text-accent-100 text-lg"></i>
-    </button>
-    <button
-      class="group"
-      type="button"
-      [ngClass]="{ active: activeItem === 'history' }"
-      data-testid="history-button"
-      id="history-button"
-      mat-icon-button
-      (click)="toggleDrawer('history')"
-      [disabled]="!itemInfo"
-    >
-      <i class="fas fa-history group-hover:text-accent-100 text-lg"></i>
     </button>
   </div>
 </div>
