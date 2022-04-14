@@ -9,7 +9,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  */
 @Component({
   selector:
-    'app-group-traffic-widget[showButtonSetting][dataWidget][editMode][isMobileDevice][widgetItem][indexWidget]',
+    'app-group-traffic-widget[showButtonSetting][dataWidget][editMode][isMobileDevice]',
   templateUrl: './group-traffic-widget.component.html',
   styleUrls: ['./group-traffic-widget.component.scss'],
 })
