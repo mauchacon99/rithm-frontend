@@ -199,6 +199,17 @@ describe('WidgetDrawerComponent', () => {
     expect(spyServiceDrawer).toHaveBeenCalled();
   });
 
+  it('should call alert invalid extension when upload file with extension invalid', () => {
+    const spyAlert = spyOn(
+      TestBed.inject(PopupService),
+      'alert'
+    ).and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'document/pdf' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyAlert).toHaveBeenCalled();
+  });
+
   it('should show alert delete and remove image in widget', async () => {
     component.showProfileImageBanner = true;
     component.widgetType = WidgetType.StationTableBanner;
