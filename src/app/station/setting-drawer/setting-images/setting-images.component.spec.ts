@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImageDrawerComponent } from './image-drawer.component';
+import { SettingImagesComponent } from './setting-images.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-describe('ImageDrawerComponent', () => {
-  let component: ImageDrawerComponent;
-  let fixture: ComponentFixture<ImageDrawerComponent>;
+describe('SettingImagesComponent', () => {
+  let component: SettingImagesComponent;
+  let fixture: ComponentFixture<SettingImagesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ImageDrawerComponent],
+      declarations: [SettingImagesComponent],
       imports: [MatSlideToggleModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImageDrawerComponent);
+    fixture = TestBed.createComponent(SettingImagesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
