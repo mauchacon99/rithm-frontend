@@ -9,6 +9,7 @@ import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-sear
 import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
+import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
@@ -38,6 +39,7 @@ describe('DescriptionWidgetModalComponent', () => {
         MockComponent(DocumentWidgetComponent),
         MockComponent(StationWidgetComponent),
         MockComponent(GroupSearchWidgetComponent),
+        MockComponent(GroupTrafficWidgetComponent),
       ],
       providers: [
         { provide: MatDialogRef, useValue: { close } },
@@ -111,6 +113,18 @@ describe('DescriptionWidgetModalComponent', () => {
       expect(component.dataWidget).toEqual(expectData);
     });
 
+    it('should get data for StationGroupTraffic', () => {
+      const expectData = JSON.stringify({
+        valueShowGraffic: 5,
+        stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
+      });
+      component.widgetType = WidgetType.StationGroupTraffic;
+      component.itemWidgetModalSelected = itemWidgetModalSelected;
+      component.itemWidgetModalSelected.itemType = 'group';
+      fixture.detectChanges();
+      expect(component.dataWidget).toEqual(expectData);
+    });
+
     it('should get data for StationMultiline', () => {
       component.widgetType = WidgetType.StationMultiline;
       const expectData = JSON.stringify({
@@ -173,7 +187,6 @@ describe('DescriptionWidgetModalComponent', () => {
       expectData.rows = 1;
       expectData.minItemRows = 1;
       expectData.data = component.dataWidget;
-      fixture.detectChanges();
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
@@ -193,7 +206,6 @@ describe('DescriptionWidgetModalComponent', () => {
       expectData.rows = 2;
       expectData.minItemRows = 2;
       expectData.data = component.dataWidget;
-      fixture.detectChanges();
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');
       expect(btnAddWidget).toBeTruthy();
@@ -213,7 +225,6 @@ describe('DescriptionWidgetModalComponent', () => {
       expectData.widgetType = WidgetType.Document;
       expectData.rows = 1;
       expectData.minItemRows = 1;
-      fixture.detectChanges();
       expectData.data = component.dataWidget;
       const btnAddWidget =
         fixture.nativeElement.querySelector('#add-widget-button');

@@ -191,12 +191,20 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
       value: OperatorType.NotEqualTo,
     },
     {
-      text: 'greater than',
+      text: 'is greater than',
       value: OperatorType.GreaterThan,
     },
     {
-      text: 'less than',
+      text: 'is less than',
       value: OperatorType.LesserThan,
+    },
+    {
+      text: 'is greater than or equal to',
+      value: OperatorType.GreaterOrEqual,
+    },
+    {
+      text: 'is lesser than or equal to',
+      value: OperatorType.LesserOrEqual,
     },
   ];
 
@@ -320,6 +328,7 @@ export class RuleModalComponent implements OnInit, OnDestroy, AfterViewChecked {
         question.questionType !== QuestionFieldType.State &&
         question.questionType !== QuestionFieldType.City &&
         question.questionType !== QuestionFieldType.Zip &&
+        question.questionType !== QuestionFieldType.File &&
         question.prompt !== 'Address Line 1' &&
         question.prompt !== 'Address Line 2'
     );

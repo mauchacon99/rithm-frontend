@@ -15,66 +15,128 @@ describe('GroupListHierarchyComponent', () => {
   let fixture: ComponentFixture<GroupListHierarchyComponent>;
   let stationService: StationService;
 
+  const stations: StationListGroup[] = [
+    {
+      rithmId: '1237620-2837-78378-78378',
+      name: 'station 1',
+      totalDocuments: 3,
+      workers: [
+        {
+          rithmId: '1237620-2837-78378-78378',
+          firstName: 'John',
+          lastName: 'Wayne',
+          email: 'name@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '789-798-456',
+          firstName: 'Peter',
+          lastName: 'Doe',
+          email: 'name1@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+    },
+    {
+      rithmId: '1237620-2837-78378-78378',
+      name: 'StationName 3',
+      totalDocuments: 3,
+      workers: [
+        {
+          rithmId: '1237620-2837-78378-78378',
+          firstName: 'John',
+          lastName: 'Wayne',
+          email: 'name@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '789-798-456',
+          firstName: 'Peter',
+          lastName: 'Doe',
+          email: 'name1@company.com',
+          isWorker: true,
+          isOwner: true,
+        },
+      ],
+    },
+  ];
   const subStationGroups: StationGroupData = {
-    rithmId: '1375027-78345-73824-54244',
-    title: 'Sub Station Group',
-    subStationGroups: [],
-    stations: [],
-    users: [
+    rithmId: '2375027-78345-73824-54244',
+    title: 'substation Group',
+    subStationGroups: [
       {
-        rithmId: '789-798-456',
-        firstName: 'Noah',
-        lastName: 'Smith',
-        email: 'name2@company.com',
-        isWorker: true,
-        isOwner: true,
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            totalDocuments: 3,
+            workers: [],
+            stationOwners: [
+              {
+                rithmId: '789-798-456',
+                firstName: 'Peter',
+                lastName: 'Doe',
+                email: 'name1@company.com',
+                isWorker: true,
+                isOwner: true,
+              },
+            ],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
       },
     ],
-    admins: [
+    stations: [
       {
-        rithmId: '159-753-456',
-        firstName: 'Taylor',
-        lastName: 'Du',
-        email: 'name3@company.com',
-        isWorker: true,
-        isOwner: true,
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
+        totalDocuments: 3,
+        workers: [
+          {
+            rithmId: '1237620-2837-78378-78378',
+            firstName: 'John',
+            lastName: 'Wayne',
+            email: 'name@company.com',
+            isWorker: true,
+            isOwner: true,
+          },
+        ],
+        stationOwners: [
+          {
+            rithmId: '789-798-456',
+            firstName: 'Peter',
+            lastName: 'Doe',
+            email: 'name1@company.com',
+            isWorker: true,
+            isOwner: true,
+          },
+        ],
       },
     ],
+    admins: [],
+    users: [],
     isChained: true,
     isImplicitRootStationGroup: true,
-  };
-
-  const stations: StationListGroup = {
-    rithmId: '123-321-456',
-    name: 'station 1',
-    totalDocuments: 3,
-    workers: [
-      {
-        rithmId: '123-321-456',
-        firstName: 'John',
-        lastName: 'Wayne',
-        email: 'name@company.com',
-        isWorker: true,
-        isOwner: true,
-      },
-    ],
-    stationOwners: [
-      {
-        rithmId: '789-798-456',
-        firstName: 'Peter',
-        lastName: 'Doe',
-        email: 'name1@company.com',
-        isWorker: true,
-        isOwner: true,
-      },
-    ],
   };
 
   const stationGroupData: StationGroupData = {
     rithmId: '6375027-78345-73824-54244',
     title: 'Station Group',
     subStationGroups: [subStationGroups],
-    stations: [stations],
+    stations: stations,
     users: [
       {
         rithmId: '789-798-456',
@@ -118,6 +180,9 @@ describe('GroupListHierarchyComponent', () => {
     component = fixture.componentInstance;
     stationService = TestBed.inject(StationService);
     component.stationGroups = stationGroupData;
+    component.stationsFilter = subStationGroups.stations;
+    component.groupsFilter = subStationGroups.subStationGroups;
+    component.search = 'search value';
     fixture.detectChanges();
   });
 
@@ -167,18 +232,14 @@ describe('GroupListHierarchyComponent', () => {
   });
 
   it('should show loading while request getStationGroups', () => {
-    const spyMethod = spyOn(
-      TestBed.inject(StationService),
-      'getStationGroups'
-    ).and.callThrough();
-    component['getStationGroups']();
+    component.isLoading = true;
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
       '#loader-groups-hierarchy'
     );
-    expect(spyMethod).toHaveBeenCalled();
-    expect(loader).toBeTruthy();
+    component.isLoading = true;
     expect(component.isLoading).toBeTrue();
+    expect(loader).toBeTruthy();
   });
 
   it('should reload getStationGroups if request fail', () => {
@@ -198,10 +259,12 @@ describe('GroupListHierarchyComponent', () => {
   it('should clicked in item', () => {
     component.isLoading = false;
     component.isErrorGetGroups = false;
+    component.groupsFilter = subStationGroups.subStationGroups;
+    component.groupsFilter.push(stationGroupData);
     fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemGroup = fixture.nativeElement.querySelector(
-      '#group-item-' + subStationGroups.rithmId
+      '#group-item-' + component.groupsFilter[0].rithmId
     );
     expect(itemGroup).toBeTruthy();
     itemGroup.click();
@@ -211,10 +274,11 @@ describe('GroupListHierarchyComponent', () => {
   it('should clicked in item station', () => {
     component.isLoading = false;
     component.isErrorGetGroups = false;
+    component.stationsFilter = subStationGroups.stations;
     fixture.detectChanges();
     const method = spyOn(component, 'selectedListItem');
     const itemStation = fixture.nativeElement.querySelector(
-      '#station-item-' + stations.rithmId
+      '#station-item-' + component.stationsFilter[0].rithmId
     );
     expect(itemStation).toBeTruthy();
     itemStation.click();
@@ -230,6 +294,8 @@ describe('GroupListHierarchyComponent', () => {
   it('should reload get stations group', () => {
     component.isLoading = false;
     component.isErrorGetGroups = false;
+    component.stationsFilter = [];
+    component.groupsFilter = [];
     const spyMethod = spyOn(component, 'getStationGroups');
     component.stationGroups = {
       rithmId: '6375027-78345-73824-54244',
@@ -250,5 +316,78 @@ describe('GroupListHierarchyComponent', () => {
     expect(btnReload).toBeTruthy();
     btnReload.click();
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should search stations and substations', () => {
+    component.stationGroups = subStationGroups;
+    component.stationsFilter = subStationGroups.stations;
+    component.groupsFilter = subStationGroups.subStationGroups;
+    component.isLoading = false;
+    component.isErrorGetGroups = false;
+    component.search = 'stationName 3';
+    fixture.detectChanges();
+    const expectedStation = [
+      {
+        rithmId: '1237620-2837-78378-78378',
+        name: 'StationName 3',
+        totalDocuments: 3,
+        workers: [
+          {
+            rithmId: '1237620-2837-78378-78378',
+            firstName: 'John',
+            lastName: 'Wayne',
+            email: 'name@company.com',
+            isWorker: true,
+            isOwner: true,
+          },
+        ],
+        stationOwners: [
+          {
+            rithmId: '789-798-456',
+            firstName: 'Peter',
+            lastName: 'Doe',
+            email: 'name1@company.com',
+            isWorker: true,
+            isOwner: true,
+          },
+        ],
+      },
+    ];
+    component.searchStationGroups();
+    expect(component.stationsFilter).toEqual(expectedStation);
+
+    fixture.detectChanges();
+    component.search = 'substation Group';
+    const expectedSubStation = [
+      {
+        rithmId: '2375027-78345-73824-54244',
+        title: 'substation Group',
+        subStationGroups: [],
+        stations: [
+          {
+            rithmId: '5237520-7837-78378-78378',
+            name: 'StationName',
+            totalDocuments: 3,
+            workers: [],
+            stationOwners: [
+              {
+                rithmId: '789-798-456',
+                firstName: 'Peter',
+                lastName: 'Doe',
+                email: 'name1@company.com',
+                isWorker: true,
+                isOwner: true,
+              },
+            ],
+          },
+        ],
+        admins: [],
+        users: [],
+        isChained: true,
+        isImplicitRootStationGroup: true,
+      },
+    ];
+    component.searchStationGroups();
+    expect(component.groupsFilter).toEqual(expectedSubStation);
   });
 });

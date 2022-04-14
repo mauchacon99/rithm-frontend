@@ -3,9 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationService } from 'src/app/core/station.service';
-import { Question } from 'src/models';
-import { PopupService } from 'src/app/core/popup.service';
+import {
+  FrameType,
+  ImageWidgetObject,
+  Question,
+  SettingDrawerData,
+} from 'src/models';
 
 /**
  * Component for setting drawer in the station.
@@ -20,7 +23,16 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** The field information for your setting. */
-  fieldSetting!: Question;
+  fieldSetting!: Question | ImageWidgetObject | string;
+
+  /** Field to be passed. */
+  field!: Question;
+
+  /** The field frame type for your setting. */
+  fieldFrameType!: FrameType;
+
+  /** Frame types list.  */
+  frameTypes = FrameType;
 
   /** The station id of the current station. */
   stationRithmId!: string;
@@ -28,9 +40,7 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private sideNavDrawerService: SidenavDrawerService,
     private route: ActivatedRoute,
-    private errorService: ErrorService,
-    private popupService: PopupService,
-    private stationService: StationService
+    private errorService: ErrorService
   ) {}
 
   /**
@@ -40,8 +50,15 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
     this.sideNavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const dataDrawer = data as Question;
-        this.fieldSetting = dataDrawer;
+        const dataDrawer = data as SettingDrawerData;
+        this.fieldSetting = dataDrawer.field;
+        this.fieldFrameType = dataDrawer.frame;
+        if (
+          typeof dataDrawer.field !== 'string' &&
+          'rithmId' in (dataDrawer.field as Question)
+        ) {
+          this.field = this.fieldSetting as Question;
+        }
         this.getStationId();
       });
   }
@@ -51,15 +68,6 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.subscribeDrawerData$();
-  }
-
-  /**
-   * Whether the current field belongs to a previous field or not.
-   *
-   * @returns Is boolean.
-   */
-  get isPrevious(): boolean {
-    return this.fieldSetting.originalStationRithmId !== this.stationRithmId;
   }
 
   /**
@@ -82,45 +90,10 @@ export class SettingDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Shut off isRequired when isReadOnly is off and isPrevious = true.
-   */
-  public setReadOnlyFalse(): void {
-    if (this.isPrevious) {
-      this.fieldSetting.isRequired =
-        this.fieldSetting.isReadOnly && this.fieldSetting.isRequired;
-    }
-  }
-
-  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Set the question title.
-   */
-  setQuestionTitle(): void {
-    this.stationService.stationQuestionTitle$.next(this.fieldSetting);
-  }
-
-  /**
-   * Completes all subscriptions.
-   *
-   * @param questions The current questions to be deleted in field settings.
-   */
-  async deleteQuestion(questions: Question): Promise<void> {
-    const response = await this.popupService.confirm({
-      title: '',
-      message: 'Are you sure you want to delete this field?',
-      okButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
-      important: true,
-    });
-    if (response) {
-      this.stationService.deleteStationQuestion$.next(questions);
-    }
   }
 }

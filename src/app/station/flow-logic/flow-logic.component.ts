@@ -305,37 +305,37 @@ export class FlowLogicComponent implements OnInit {
     let operatorTranslated = '';
     switch (operator) {
       case OperatorType.GreaterThan:
-        operatorTranslated = 'Is Greater Than';
+        operatorTranslated = 'is greater than';
         break;
       case OperatorType.LesserThan:
-        operatorTranslated = 'Is Lesser Than';
+        operatorTranslated = 'is less than';
         break;
       case OperatorType.GreaterOrEqual:
-        operatorTranslated = 'Is Greater or Equal to';
+        operatorTranslated = 'is greater than or equal to';
         break;
       case OperatorType.LesserOrEqual:
-        operatorTranslated = 'Is Lesser or Equal to';
+        operatorTranslated = 'is lesser than or equal to';
         break;
       case OperatorType.EqualTo:
-        operatorTranslated = 'Is Equal To';
+        operatorTranslated = 'is';
         break;
       case OperatorType.NotEqualTo:
-        operatorTranslated = 'Is Not Equal To';
+        operatorTranslated = 'is not';
         break;
       case OperatorType.Before:
-        operatorTranslated = 'Is Before';
+        operatorTranslated = 'before';
         break;
       case OperatorType.After:
-        operatorTranslated = 'Is After';
+        operatorTranslated = 'after';
         break;
       case OperatorType.Contains:
-        operatorTranslated = 'Contains';
+        operatorTranslated = 'contains';
         break;
       case OperatorType.NotContains:
-        operatorTranslated = 'Does not contains';
+        operatorTranslated = 'does not contains';
         break;
       case OperatorType.On:
-        operatorTranslated = 'Is On';
+        operatorTranslated = 'on';
         break;
     }
     return operatorTranslated;

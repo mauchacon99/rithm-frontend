@@ -1,28 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Question, QuestionFieldType } from 'src/models';
-import { SettingDrawerComponent } from './setting-drawer.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
-import { StationService } from 'src/app/core/station.service';
-import { MockPopupService, MockStationService } from 'src/mocks';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PopupService } from 'src/app/core/popup.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService, MockPopupService } from 'src/mocks';
+import { Question, QuestionFieldType } from 'src/models';
 
-describe('SettingDrawerComponent', () => {
-  let component: SettingDrawerComponent;
-  let fixture: ComponentFixture<SettingDrawerComponent>;
-  let sideNavService: SidenavDrawerService;
+import { SettingFieldsComponent } from './setting-fields.component';
+
+describe('SettingFieldsComponent', () => {
+  let component: SettingFieldsComponent;
+  let fixture: ComponentFixture<SettingFieldsComponent>;
   let service: StationService;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SettingDrawerComponent],
+      declarations: [SettingFieldsComponent],
       imports: [
         MatInputModule,
         NoopAnimationsModule,
@@ -31,9 +30,6 @@ describe('SettingDrawerComponent', () => {
         MatButtonModule,
         MatDialogModule,
         MatSnackBarModule,
-        RouterTestingModule.withRoutes([
-          { path: 'station/:stationId', component: SettingDrawerComponent },
-        ]),
       ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -45,10 +41,9 @@ describe('SettingDrawerComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingDrawerComponent);
+    fixture = TestBed.createComponent(SettingFieldsComponent);
     component = fixture.componentInstance;
-    sideNavService = TestBed.inject(SidenavDrawerService);
-    component.fieldSetting = {
+    component.field = {
       prompt: 'Fake question 1',
       rithmId: '3j4k-3h2j-hj4j',
       questionType: QuestionFieldType.ShortText,
@@ -64,46 +59,11 @@ describe('SettingDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should test sideNavService', () => {
-    const field = {
-      prompt: 'Fake question 1',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [],
-    };
-    sideNavService.drawerData$.next(field);
-    expect(component.fieldSetting).toBe(field);
-  });
-
-  it('should subscribe drawerData', () => {
-    const drawerSpy = spyOn(component, <never>'subscribeDrawerData$');
-    component.ngOnInit();
-    expect(drawerSpy).toHaveBeenCalled();
-  });
-
   it('should set the question title to stationQuestionTitle observable', () => {
     component.setQuestionTitle();
     service.stationQuestionTitle$.subscribe((response) => {
-      expect(response).toBe(component.fieldSetting);
+      expect(response).toBe(component.field);
     });
-  });
-
-  it('should call getParams to get the stationId', () => {
-    TestBed.inject(Router).navigate([
-      '/',
-      'station',
-      '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5',
-    ]);
-    const spyService = spyOn(
-      TestBed.inject(ActivatedRoute).params,
-      'subscribe'
-    );
-    fixture.detectChanges();
-    component['getStationId']();
-    expect(spyService).toHaveBeenCalled();
   });
 
   it('should return false the method that modify isPrevious', () => {
@@ -112,13 +72,12 @@ describe('SettingDrawerComponent', () => {
       'isPrevious',
       'get'
     ).and.returnValue(false);
-
     fixture.detectChanges();
     expect(spyProperty).toHaveBeenCalled();
   });
 
   it('should set isRequired as false due to isReadOnly is false (isPrevious only).', () => {
-    component.fieldSetting.isReadOnly = false;
+    component.field.isReadOnly = false;
     const setReadOnlySpy = spyOn(
       component,
       'setReadOnlyFalse'
@@ -127,7 +86,7 @@ describe('SettingDrawerComponent', () => {
     expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
   });
 
-  it('should display a confirmation Popup for delete filed', async () => {
+  it('should display a confirmation Popup for delete field', async () => {
     const questions: Question[] = [
       {
         prompt: 'Fake question 1',

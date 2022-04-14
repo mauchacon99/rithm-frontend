@@ -1,0 +1,22 @@
+<div class="grid grid-cols-1 px-4">
+  <ng-container [ngSwitch]="fieldFrameType">
+    <div *ngSwitchCase="frameTypes.Image || frameTypes.CircleImage">
+      <app-setting-images></app-setting-images>
+    </div>
+    <div *ngSwitchCase="frameTypes.Body">
+      <p>Componente Body</p>
+    </div>
+    <div *ngSwitchCase="frameTypes.Headline">
+      <p>Componente Headline</p>
+    </div>
+    <div *ngSwitchCase="frameTypes.Title">
+      <p>Componente Title</p>
+    </div>
+    <div *ngSwitchCase="frameTypes.Input">
+      <app-setting-fields
+        [field]="field"
+        [stationRithmId]="stationRithmId"
+      ></app-setting-fields>
+    </div>
+  </ng-container>
+</div>
