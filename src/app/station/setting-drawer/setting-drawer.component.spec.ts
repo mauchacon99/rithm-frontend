@@ -24,7 +24,7 @@ describe('SettingDrawerComponent', () => {
   let component: SettingDrawerComponent;
   let fixture: ComponentFixture<SettingDrawerComponent>;
   let sideNavService: SidenavDrawerService;
-  let service: StationService;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingDrawerComponent],
@@ -46,7 +46,6 @@ describe('SettingDrawerComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
-    service = TestBed.inject(StationService);
   });
 
   beforeEach(() => {
@@ -93,13 +92,6 @@ describe('SettingDrawerComponent', () => {
     component.ngOnInit();
     expect(drawerSpy).toHaveBeenCalled();
   });
-  // TODO: these unit tests belong to the field-drawer component
-  xit('should set the question title to stationQuestionTitle observable', () => {
-    //   component.setQuestionTitle();
-    //   service.stationQuestionTitle$.subscribe((response) => {
-    //     expect(response).toBe(component.fieldSetting);
-    //   });
-  });
 
   it('should call getParams to get the stationId', () => {
     TestBed.inject(Router).navigate([
@@ -114,64 +106,5 @@ describe('SettingDrawerComponent', () => {
     fixture.detectChanges();
     component['getStationId']();
     expect(spyService).toHaveBeenCalled();
-  });
-  // TODO: these unit tests belong to the field-drawer component
-  xit('should return false the method that modify isPrevious', () => {
-    // const spyProperty = spyOnProperty(
-    //   component,
-    //   'isPrevious',
-    //   'get'
-    // ).and.returnValue(false);
-    // fixture.detectChanges();
-    // expect(spyProperty).toHaveBeenCalled();
-  });
-  // TODO: these unit tests belong to the field-drawer component
-  xit('should set isRequired as false due to isReadOnly is false (isPrevious only).', () => {
-    // component.fieldSetting.isReadOnly = false;
-    // const setReadOnlySpy = spyOn(
-    //   component,
-    //   'setReadOnlyFalse'
-    // ).and.callThrough();
-    // component.setReadOnlyFalse();
-    // expect(setReadOnlySpy).toHaveBeenCalledOnceWith();
-  });
-
-  it('should display a confirmation Popup for delete filed', async () => {
-    const questions: Question[] = [
-      {
-        prompt: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-    const deleteConfirmPopup = {
-      title: '',
-      message: 'Are you sure you want to delete this field?',
-      okButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
-      important: true,
-    };
-    const popUpConfirmSpy = spyOn(
-      TestBed.inject(PopupService),
-      'confirm'
-    ).and.callThrough();
-    await component.deleteQuestion(questions[0]);
-    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(deleteConfirmPopup);
-    service.deleteStationQuestion$.subscribe((response) => {
-      expect(response).toEqual(questions[0]);
-    });
   });
 });
