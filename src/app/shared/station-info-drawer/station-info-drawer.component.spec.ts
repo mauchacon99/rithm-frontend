@@ -521,7 +521,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 2;
     component.updateAllowExternalWorkers();
     fixture.detectChanges();
     expect(component.allowExternalLoading).toBe(true);
@@ -533,7 +533,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 2;
     component.updateAllOrgWorkersStation();
     fixture.detectChanges();
     expect(component.allowAllOrgLoading).toBe(true);
