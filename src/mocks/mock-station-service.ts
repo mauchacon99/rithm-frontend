@@ -1271,7 +1271,7 @@ export class MockStationService {
           y: 0,
           type: FrameType.Input,
           data: '',
-          questions:[],
+          questions: [],
           id: 0,
         },
         {

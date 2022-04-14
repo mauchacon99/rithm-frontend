@@ -881,7 +881,7 @@ export class StationComponent
             if (input.data && JSON.parse(input.data)?.length > 0) {
               input.questions = [];
               input.questions = JSON.parse(input.data);
-            } else if (input.type === FrameType.Input){
+            } else if (input.type === FrameType.Input) {
               input.questions = [];
             }
           });
@@ -906,47 +906,50 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-           /**Add individual properties for every Type. */
-           inputFrames.forEach((frame, index)=>{
-             switch (frame.type) {
-               case FrameType.Input:
-                 frame.minItemRows = 4;
-                 frame.minItemCols = 6;
-                 frame.questions = (frame.questions && frame.questions?.length > 0) ? frame.questions : [];
-                 this.inputFrameList.push('inputFrameWidget-' + index);
-                 break;
-               case FrameType.Headline:
-                 frame.minItemCols = 6;
-                 frame.maxItemRows = 1;
-                 frame.type = FrameType.Headline;
-                 break;
-               case FrameType.Body:
-                 frame.minItemCols = 4;
-                 frame.minItemRows = 2;
-                 frame.type = FrameType.Body;
-                 break;
-               case FrameType.Title:
-                 frame.minItemCols = 24;
-                 frame.minItemRows = 1;
-                 frame.maxItemRows = 1;
-                 frame.type = FrameType.Title;
-                 break;
-               case FrameType.Image:
-                 frame.minItemCols = 4;
-                 frame.minItemRows = 4;
-                 frame.type = FrameType.Image;
-                 break;
-               case FrameType.CircleImage:
-                 frame.minItemCols = 4;
-                 frame.minItemRows = 4;
-                 frame.type = FrameType.CircleImage;
-                 break;
-               default:
-                 break;
-             }
-             this.inputFrameWidgetItems.push(frame);
-             this.changedOptions();
-           });
+          /**Add individual properties for every Type. */
+          inputFrames.forEach((frame, index) => {
+            switch (frame.type) {
+              case FrameType.Input:
+                frame.minItemRows = 4;
+                frame.minItemCols = 6;
+                frame.questions =
+                  frame.questions && frame.questions?.length > 0
+                    ? frame.questions
+                    : [];
+                this.inputFrameList.push('inputFrameWidget-' + index);
+                break;
+              case FrameType.Headline:
+                frame.minItemCols = 6;
+                frame.maxItemRows = 1;
+                frame.type = FrameType.Headline;
+                break;
+              case FrameType.Body:
+                frame.minItemCols = 4;
+                frame.minItemRows = 2;
+                frame.type = FrameType.Body;
+                break;
+              case FrameType.Title:
+                frame.minItemCols = 24;
+                frame.minItemRows = 1;
+                frame.maxItemRows = 1;
+                frame.type = FrameType.Title;
+                break;
+              case FrameType.Image:
+                frame.minItemCols = 4;
+                frame.minItemRows = 4;
+                frame.type = FrameType.Image;
+                break;
+              case FrameType.CircleImage:
+                frame.minItemCols = 4;
+                frame.minItemRows = 4;
+                frame.type = FrameType.CircleImage;
+                break;
+              default:
+                break;
+            }
+            this.inputFrameWidgetItems.push(frame);
+            this.changedOptions();
+          });
         },
         error: (error: unknown) => {
           this.errorService.displayError(
