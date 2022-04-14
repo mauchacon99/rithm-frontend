@@ -327,7 +327,7 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-
+    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
   }
 
@@ -877,6 +877,32 @@ export class StationComponent
     });
     this.stationService
       .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          inputFrames.map((input) => {
+            if (input.data && JSON.parse(input.data)?.length > 0) {
+              input.questions = [];
+              input.questions = JSON.parse(input.data);
+            }
+          });
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the station frame widgets.
+   */
+  private getStationWidgets(): void {
+    this.stationService
+      .getStationWidgets(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
