@@ -150,4 +150,13 @@ export class SplitService {
   public getAccountProfilePhotoTreatment(): string {
     return this.splitClient.getTreatment('profile_photo_split');
   }
+
+  /**
+   * Get the section Pre built.
+   *
+   * @returns Split treatment.
+   */
+  public getPreBuiltWidgetTreatment(): string {
+    return this.splitClient.getTreatment('pre_built_widgets_split');
+  }
 }
