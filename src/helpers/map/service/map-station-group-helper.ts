@@ -588,29 +588,107 @@ export class MapStationGroupHelper {
       }
       /** Reset the deactivation status for each station group. */
       this.resetSelectedStationGroupStationStatus(stationHelper);
-      /** Update the pendingStationGroup. */
-      this.updatePendingStationGroup(stationHelper);
-      /** Add the current station group. */
-      this.stationGroupElements.push(this.tempStationGroup$.value);
-      /** Search for the index of the station group through the property isReadOnly. */
-      const stationGroupIsReadOnlyRootIndex =
-        this.stationGroupElements.findIndex(
-          (stationGroup) => stationGroup.isReadOnlyRootStationGroup
+
+      /** Temporary station group rithmId. */
+      const rithmId = this.tempStationGroup$.value.rithmId;
+
+      /* Find the parent station group through the temporary station group rithmId. */
+      const stationGroupParent = this.stationGroupElements.find(
+        (otherGroup) => {
+          return otherGroup.subStationGroups.includes(rithmId);
+        }
+      );
+
+      // Find the station group from this.stationGroupElements array.
+      const updatedGroupIndex = this.stationGroupElements.findIndex(
+        (group) => group.rithmId === rithmId
+      );
+
+      // Find the subStationGroups differences between current station group and old station group.
+      const stationGroupDifference = this.stationGroupElements[
+        updatedGroupIndex
+      ].subStationGroups.filter(
+        (subGroup) =>
+          !(
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).subStationGroups.includes(subGroup)
+      );
+
+      // Find the station differences between current station group and old station group.
+      const stationDifference = this.stationGroupElements[
+        updatedGroupIndex
+      ].stations.filter(
+        (station) =>
+          !(
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).stations.includes(station)
+      );
+
+      // Find the subStationGroups that is in the temporal and then remove it from the parent.
+      const stationGroupGetOutFatherGroup =
+        stationGroupParent?.subStationGroups.filter((subGroup) =>
+          (
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).subStationGroups.includes(subGroup)
         );
 
-      /** Check to add the corresponding rithmId to the subStationGroup. */
-      if (stationGroupIsReadOnlyRootIndex !== 1) {
-        const rithmId = this.tempStationGroup$.value.rithmId;
-        if (
-          !this.stationGroupElements[
-            stationGroupIsReadOnlyRootIndex
-          ].subStationGroups.includes(rithmId)
-        ) {
-          this.stationGroupElements[
-            stationGroupIsReadOnlyRootIndex
-          ].subStationGroups.push(rithmId);
+      // Find the stations that are in the temporal to later remove it from the parent.
+      const stationsGetOutFatherGroup = stationGroupParent?.stations.filter(
+        (station) =>
+          (
+            this.tempStationGroup$.value as StationGroupMapElement
+          ).stations.includes(station)
+      );
+
+      if (updatedGroupIndex !== -1 && stationGroupParent) {
+        //If there is station group raised outside the parent while we were making changes.
+        if (stationGroupGetOutFatherGroup) {
+          stationGroupGetOutFatherGroup.forEach((stationGroupGetOutId) => {
+            if (
+              stationGroupParent.subStationGroups.includes(stationGroupGetOutId)
+            ) {
+              //Remove the station group currently in parent.
+              stationGroupParent.subStationGroups =
+                stationGroupParent.subStationGroups.filter(
+                  (stationGroupId) => stationGroupId !== stationGroupGetOutId
+                );
+            }
+          });
         }
+
+        // If there are stations raised outside the parent while we were making changes.
+        if (stationsGetOutFatherGroup) {
+          stationsGetOutFatherGroup.forEach((stationGetOutId) => {
+            // Remove the stations that are currently in the parent.
+            if (stationGroupParent.stations.includes(stationGetOutId)) {
+              stationGroupParent.stations = stationGroupParent.stations.filter(
+                (stationId) => stationId !== stationGetOutId
+              );
+            }
+          });
+        }
+
+        // Move sub Station Groups to old Station Group father.
+        stationGroupDifference.forEach((stationGroupId) => {
+          if (!stationGroupParent.subStationGroups.includes(stationGroupId)) {
+            stationGroupParent.subStationGroups =
+              stationGroupParent.subStationGroups.concat(stationGroupId);
+          }
+        });
+
+        // Move sub Station to old Station Group father.
+        stationDifference.forEach((stationId) => {
+          if (!stationGroupParent.stations.includes(stationId)) {
+            stationGroupParent.stations =
+              stationGroupParent.stations.concat(stationId);
+          }
+        });
       }
+
+      /** Add the current station group. */
+      this.stationGroupElements[updatedGroupIndex] =
+        this.tempStationGroup$.value;
+
       /** Emptying the temporary station group. */
       this.tempStationGroup$.next({});
       /** Changes in map data. */
