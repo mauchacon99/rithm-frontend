@@ -1565,4 +1565,30 @@ describe('StationService', () => {
         expect(response).toEqual(expectedData);
       });
   });
+
+  it('should call getUserStationData', () => {
+    const expectedData: StationRosterMember[] = [
+      {
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    service
+      .getUserStationData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
+      .subscribe((response) => {
+        expect(response).toEqual(expectedData);
+      });
+  });
 });

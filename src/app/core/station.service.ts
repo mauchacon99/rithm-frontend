@@ -929,4 +929,35 @@ export class StationService {
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
+
+  /**
+   * Get user stations.
+   *
+   * @param userRithmId RithmId of user.
+   * @returns User Stations.
+   */
+  getUserStationData(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    userRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const listStations: StationRosterMember[] = [
+      {
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(listStations).pipe(delay(1000));
+  }
 }
