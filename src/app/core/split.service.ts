@@ -148,6 +148,6 @@ export class SplitService {
    * @returns Split treatment.
    */
   public getPreBuiltWidgetTreatment(): string {
-    return this.splitClient.getTreatment('pre_built_widgets_split ');
+    return this.splitClient.getTreatment('pre_built_widgets_split');
   }
 }
