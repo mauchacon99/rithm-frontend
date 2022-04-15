@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
-import { ErrorService } from 'src/app/core/error.service';
-import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 /**
  * Component for station prebuilt.
@@ -11,21 +9,9 @@ import { StationRosterMember } from 'src/models';
   templateUrl: './station-pre-built-widget.component.html',
   styleUrls: ['./station-pre-built-widget.component.scss'],
 })
-export class StationPreBuiltWidgetComponent implements OnInit {
+export class StationPreBuiltWidgetComponent {
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
-
-  constructor(
-    private stationService: StationService,
-    private errorService: ErrorService
-  ) {}
-
-  /**
-   * Initial Method.
-   */
-  ngOnInit(): void {
-    this.getUserStationData();
-  }
 
   /**
    * Get user stations.
