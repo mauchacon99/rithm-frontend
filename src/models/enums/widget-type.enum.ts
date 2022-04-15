@@ -27,4 +27,10 @@ export enum WidgetType {
   StationGroup = 'station-group',
   /** Widget type group-traffic. */
   StationGroupTraffic = 'group-traffic',
+
+  // Pre Built container sections.
+  /** Widget type pre-built-container. */
+  PreBuiltContainer = 'pre-built-container',
+  /** Widget type pre-built-station. */
+  PreBuiltStation = 'pre-built-station',
 }

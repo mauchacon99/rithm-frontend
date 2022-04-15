@@ -194,6 +194,27 @@ export class DashboardService {
         description: ``,
       },
     },
+    //Pre built section container.
+    [WidgetType.PreBuiltContainer]: {
+      title: '',
+      description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
+    },
+    [WidgetType.PreBuiltStation]: {
+      title: '',
+      description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
+    },
   };
 
   constructor(private http: HttpClient) {}
