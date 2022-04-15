@@ -137,4 +137,13 @@ export class MockSplitService {
   public getStationContainersModalTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section Pre built.
+   *
+   * @returns Split treatment.
+   */
+  public getPreBuiltWidgetTreatment(): string {
+    return 'on';
+  }
 }
