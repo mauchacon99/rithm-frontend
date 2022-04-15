@@ -327,7 +327,11 @@
       </div>
     </ng-template>
   </mat-tab>
-  <mat-tab label="tab-history-info" aria-label="tab-history-info">
+  <mat-tab
+    label="tab-history-info"
+    aria-label="tab-history-info"
+    bodyClass="tab-history-content"
+  >
     <ng-template mat-tab-label>
       <i class="fas fa-clock-rotate-left fa-lg"></i>
     </ng-template>
@@ -363,7 +367,10 @@
             <h6>Station History</h6>
           </div>
         </section>
-        <section>
+        <section
+          class="events-content"
+          *ngIf="!eventsLoading; else eventLoadingBox"
+        >
           <div *ngFor="let history of stationHistoryEvents">
             <div>
               <div class="flex">
@@ -419,6 +426,11 @@
             </div>
           </div>
         </section>
+        <ng-template #eventLoadingBox>
+          <div id="events-loading" class="pt-5">
+            <app-loading-indicator></app-loading-indicator>
+          </div>
+        </ng-template>
       </div>
     </ng-template>
   </mat-tab>

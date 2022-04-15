@@ -39,6 +39,15 @@
   ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
     @apply opacity-100 bg-accent-500;
   }
+
+  ::ng-deep .tab-history-content ::ng-deep .mat-tab-body-content {
+    max-height: calc(100vh - 220px);
+
+    .events-content {
+      max-height: calc(100vh - 360px);
+      overflow-y: scroll;
+    }
+  }
 }
 
 .mat-station-name {
