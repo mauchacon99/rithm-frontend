@@ -720,7 +720,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should call the method that open the modal of number of containers', () => {
+  it('should call the method that open the modal of number of containers clicking on the documents arrow', () => {
     component.selectedTabIndex = 0;
     component.stationLoading = false;
     fixture.detectChanges();
@@ -731,6 +731,22 @@ describe('StationInfoDrawerComponent', () => {
 
     const btnContainerModal =
       fixture.debugElement.nativeElement.querySelector('#containers-modal');
+    expect(btnContainerModal).toBeTruthy();
+    btnContainerModal.click();
+    expect(spyOpenModal).toHaveBeenCalled();
+  });
+
+  it('should call the method that open the modal of number of containers clicking on the documents number', () => {
+    component.selectedTabIndex = 0;
+    component.stationLoading = false;
+    fixture.detectChanges();
+    const spyOpenModal = spyOn(
+      component,
+      'openContainersModal'
+    ).and.callThrough();
+
+    const btnContainerModal =
+      fixture.debugElement.nativeElement.querySelector('#number-containers');
     expect(btnContainerModal).toBeTruthy();
     btnContainerModal.click();
     expect(spyOpenModal).toHaveBeenCalled();
