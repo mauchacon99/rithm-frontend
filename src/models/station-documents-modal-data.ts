@@ -7,7 +7,4 @@ export interface StationDocumentsModalData {
 
   /** The id of the station where documents are being viewed. */
   stationId: string;
-
-  /** Whether the action to get split get container modal. */
-  showContainer: boolean;
 }

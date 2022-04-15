@@ -14,9 +14,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import {
   MockErrorService,
   MockMapService,
-  MockSplitService,
   MockStationService,
-  MockUserService,
 } from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
@@ -25,8 +23,6 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { StationComponent } from 'src/app/station/station/station.component';
 import { MapService } from 'src/app/map/map.service';
 import { Router } from '@angular/router';
-import { SplitService } from 'src/app/core/split.service';
-import { UserService } from 'src/app/core/user.service';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -111,8 +107,6 @@ describe('GroupSearchWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: MapService, useClass: MockMapService },
         { provide: MapService, useClass: MockMapService },
-        { provide: SplitService, useClass: MockSplitService },
-        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
@@ -252,13 +246,11 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should executed modal for render documents the specific station', () => {
-    component.showContainerModal = true;
     const expectData = {
       minWidth: '370px',
       data: {
         stationName: dataStationGroupWidget.stations[0].name,
         stationId: dataStationGroupWidget.stations[0].rithmId,
-        showContainer: true,
       },
     };
     const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
@@ -349,61 +341,5 @@ describe('GroupSearchWidgetComponent', () => {
     expect(btn).toBeTruthy();
     btn.click();
     expect(spyDialog).toHaveBeenCalled();
-  });
-
-  describe('Testing split.io', () => {
-    let splitService: SplitService;
-    let userService: UserService;
-    beforeEach(() => {
-      splitService = TestBed.inject(SplitService);
-      userService = TestBed.inject(UserService);
-    });
-
-    it('should call split and treatments.', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-      const methodShowContainer = spyOn(
-        splitService,
-        'getStationContainersModalTreatment'
-      ).and.returnValue('on');
-
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(methodShowContainer).toHaveBeenCalled();
-      expect(component.showContainerModal).toBeTrue();
-    });
-
-    it('should not show treatments when permission does not exits.', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-      const methodShowContainer = spyOn(
-        splitService,
-        'getStationContainersModalTreatment'
-      ).and.returnValue('off');
-
-      splitService.sdkReady$.next();
-      component.ngOnInit();
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(methodShowContainer).toHaveBeenCalled();
-      expect(component.showContainerModal).toBeFalse();
-    });
-
-    it('should catch split error ', () => {
-      const dataOrganization = userService.user.organization;
-      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
-
-      splitService.sdkReady$.error('error');
-      const errorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
-      ).and.callThrough();
-      component.ngOnInit();
-
-      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
-      expect(component.showContainerModal).toBeFalse();
-    });
   });
 });

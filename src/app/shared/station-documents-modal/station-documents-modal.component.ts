@@ -7,6 +7,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from 'src/app/core/user.service';
 import { Router } from '@angular/router';
+import { SplitService } from 'src/app/core/split.service';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -49,10 +50,10 @@ export class StationDocumentsModalComponent implements OnInit {
     private utcTimeConversion: UtcTimeConversion,
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>,
     private router: Router,
+    private splitService: SplitService,
     private userService: UserService
   ) {
     this.stationRithmId = this.modalData.stationId;
-    this.showContainerModal = this.modalData.showContainer;
   }
 
   /**
@@ -60,6 +61,7 @@ export class StationDocumentsModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocuments(1);
+    this.split();
   }
 
   /**
@@ -142,5 +144,21 @@ export class StationDocumentsModalComponent implements OnInit {
   getNamePortion(fullName: string, firstLastIndex: 0 | 1): string {
     const names = fullName.split(' ');
     return names[firstLastIndex];
+  }
+
+  /**
+   * Split Service for show or hidden section Admin Portal.
+   */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showContainerModal =
+          this.splitService.getStationContainersModalTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 }
