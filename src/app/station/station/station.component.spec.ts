@@ -1219,7 +1219,6 @@ describe('StationComponent', () => {
       expect(spyService).toHaveBeenCalled();
     });
 
-
     it('should check properties when it is an title', () => {
       const frameStationWidget: StationFrameWidget[] = [
         {
