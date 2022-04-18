@@ -35,6 +35,7 @@ import {
   DocumentImage,
   ImageData,
   DataLinkObject,
+  ContainerWidgetPreBuilt,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -665,5 +666,31 @@ export class DocumentService {
     } else {
       return of(dataLinkObject).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get containers.
+   *
+   * @returns Data containers.
+   */
+  getContainerWidgetPreBuilt(): Observable<ContainerWidgetPreBuilt[]> {
+    const containers: ContainerWidgetPreBuilt[] = [
+      {
+        flowedTimeUTC: '',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationOwners: [
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'John',
+            lastName: 'wick',
+            email: 'John@Rithm.com',
+          },
+        ],
+      },
+    ];
+    return of(containers).pipe(delay(1000));
   }
 }
