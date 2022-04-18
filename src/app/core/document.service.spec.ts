@@ -970,11 +970,11 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should make request to save a data link object', () => {
+  fit('should make request to save a data link object', () => {
     const dataLink: DataLinkObject = {
       rithmId: '07e1-30b5-f21e',
       frameRithmId: '07e1-30b5-f21e',
-      sourceStationRithmId: '96f807ed-a9cc-430e-9950-086f03debdea',
+      sourceStationRithmId: stationId,
       targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
       baseQuestionRithmId: '21e08092-5a6a-4cea-b175-c9390ae65744',
       matchingQuestionRithmId: 'ee6e866a-4d54-4d97-92d2-84a07028a401',
@@ -984,5 +984,14 @@ describe('DocumentService', () => {
     service.saveDataLink(stationId, dataLink).subscribe((response) => {
       expect(response).toEqual(dataLink);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-data-link?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toBe(dataLink);
+
+    req.flush(dataLink);
+    httpTestingController.verify();
   });
 });
