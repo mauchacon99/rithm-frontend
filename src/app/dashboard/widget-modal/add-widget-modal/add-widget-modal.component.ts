@@ -47,6 +47,7 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section Pre built. */
   showPreBuilt = false;
 
+  /** Data to force pre built template. */
   itemWidgetModalSelectedData: SelectedItemWidgetModel = {
     itemType: 'preBuilt',
     itemList: {
