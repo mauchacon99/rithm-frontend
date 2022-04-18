@@ -666,4 +666,20 @@ export class DocumentService {
       return of(dataLinkObject).pipe(delay(1000));
     }
   }
+
+  /**
+   * Gets uploaded document details.
+   *
+   * @param documentId The document id of which details are required.
+   * @returns A DataLinkObject.
+   */
+  getDocumentDetails(documentId: string): Observable<ImageData> {
+    const params = new HttpParams().set('vaultFileRithmId', documentId);
+    return this.http.get<ImageData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson`,
+      {
+        params,
+      }
+    );
+  }
 }
