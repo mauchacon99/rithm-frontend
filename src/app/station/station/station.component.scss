@@ -88,8 +88,18 @@ textarea {
   }
 
   .circle-border {
-    @apply border-2 border-secondary-100;
+    @apply pt-3 border-none bg-transparent;
 
-    border-radius: 50% !important;
+    .h-gridster {
+      @apply mx-auto border-2 border-secondary-100 bg-white;
+
+      height: 93% !important;
+      width: 98% !important;
+      border-radius: 50% !important;
+    }
+
+  }
+  .gridster-item.circle-border.gridster-item-moving, .gridster-item.circle-border.gridster-item-resizing ::ng-deep{
+    box-shadow: none !important;
   }
 }
