@@ -81,17 +81,17 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
 
-  constructor(
-    private stationService: StationService,
-    private errorService: ErrorService,
-    private dashboardService: DashboardService
-  ) {}
-
   /** Whether the action to get group traffic is loading. */
   isLoading = false;
 
   /** Whether the action to get group traffic fails. */
   errorGroupTraffic = false;
+
+  constructor(
+    private stationService: StationService,
+    private errorService: ErrorService,
+    private dashboardService: DashboardService
+  ) {}
 
   /**
    * Initial Method.
