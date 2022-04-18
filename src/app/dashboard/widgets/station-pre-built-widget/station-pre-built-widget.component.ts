@@ -16,7 +16,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   @Input() editMode = false;
 
   /** Containers widget pre built. */
-  container!: ContainerWidgetPreBuilt[];
+  containers!: ContainerWidgetPreBuilt[];
 
   constructor(
     private documentService: DocumentService,
@@ -38,7 +38,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (containers) => {
-          this.container = containers;
+          this.containers = containers;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
