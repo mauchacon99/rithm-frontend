@@ -44,7 +44,13 @@
     <!-- Tab Pre Build widget -->
     <mat-tab label="Pre Built" aria-label="Pre Built">
       <div *ngIf="showPreBuilt; else permissionDenied">
-        <app-pre-built-widget-template-modal></app-pre-built-widget-template-modal>
+        <app-list-widget-modal
+          [itemWidgetModalSelected]="itemWidgetModalSelectedData"
+          [showGroupTemplate]="showGroupTemplate"
+          [showContainerProfileBanner]="showContainerProfileBanner"
+          [showStationLists]="showStationLists"
+          [showGroupTrafficTemplate]="showGroupTrafficTemplate"
+        ></app-list-widget-modal>
       </div>
       <ng-template #permissionDenied>
         <app-coming-soon-message></app-coming-soon-message>

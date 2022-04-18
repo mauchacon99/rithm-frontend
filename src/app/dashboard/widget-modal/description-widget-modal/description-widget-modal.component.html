@@ -7,8 +7,8 @@
   <p class="text-base">
     Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
     <span class="font-semibold">{{
-      itemWidgetModalSelected.itemList.name ||
-        'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
+      itemWidgetModalSelected?.itemList?.name ||
+        'Untitled ' + (itemWidgetModalSelected?.itemType | titlecase)
     }}</span>
   </p>
 </div>

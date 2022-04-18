@@ -23,7 +23,8 @@ export class AddWidgetModalComponent implements OnInit {
   dashboardRithmId = '';
 
   /** The element type to be shown. */
-  identifyShowElement: 'document' | 'station' | 'group' | 'tabs' = 'tabs';
+  identifyShowElement: 'document' | 'station' | 'group' | 'preBuilt' | 'tabs' =
+    'tabs';
 
   /** Tab Parents selected. */
   tabParentSelect = 0;
@@ -45,6 +46,21 @@ export class AddWidgetModalComponent implements OnInit {
 
   /** Show section Pre built. */
   showPreBuilt = false;
+
+  itemWidgetModalSelectedData: SelectedItemWidgetModel = {
+    itemType: 'preBuilt',
+    itemList: {
+      isChained: false,
+      name: '',
+      rithmId: '',
+      groupName: '',
+      stationGroupName: '',
+      stationName: '',
+      totalDocuments: 0,
+      totalStations: 0,
+      totalSubGroups: 0,
+    },
+  };
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
