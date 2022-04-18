@@ -166,6 +166,11 @@ describe('AddWidgetModalComponent', () => {
         'getStationListWidgetTreatment'
       ).and.returnValue('on');
 
+      const methodPreBuilt = spyOn(
+        splitService,
+        'getPreBuiltWidgetTreatment'
+      ).and.returnValue('on');
+
       splitService.sdkReady$.next();
       component.ngOnInit();
 
@@ -174,10 +179,12 @@ describe('AddWidgetModalComponent', () => {
       expect(methodProfileBanner).toHaveBeenCalled();
       expect(methodGroupTraffic).toHaveBeenCalled();
       expect(methodStationList).toHaveBeenCalled();
+      expect(methodPreBuilt).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeTrue();
       expect(component.showContainerProfileBanner).toBeTrue();
       expect(component.showStationLists).toBeTrue();
       expect(component.showGroupTrafficTemplate).toBeTrue();
+      expect(component.showPreBuilt).toBeTrue();
     });
 
     it('should not show treatments when permission does not exits.', () => {
@@ -200,6 +207,11 @@ describe('AddWidgetModalComponent', () => {
         'getStationListWidgetTreatment'
       ).and.returnValue('off');
 
+      const methodPreBuilt = spyOn(
+        splitService,
+        'getPreBuiltWidgetTreatment'
+      ).and.returnValue('off');
+
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
@@ -207,10 +219,12 @@ describe('AddWidgetModalComponent', () => {
       expect(methodStationList).toHaveBeenCalled();
       expect(methodProfileBanner).toHaveBeenCalled();
       expect(methodGroupTraffic).toHaveBeenCalled();
+      expect(methodPreBuilt).toHaveBeenCalled();
       expect(component.showGroupTemplate).toBeFalse();
       expect(component.showContainerProfileBanner).toBeFalse();
       expect(component.showStationLists).toBeFalse();
       expect(component.showGroupTrafficTemplate).toBeFalse();
+      expect(component.showPreBuilt).toBeFalse();
     });
 
     it('should catch split error ', () => {

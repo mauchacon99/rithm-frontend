@@ -189,11 +189,7 @@
                 item.widgetType === enumWidgetType.ContainerProfileBanner
               "
               [dataWidget]="item.data"
-              [widgetType]="item.widgetType"
-              [image]="{
-                imageId: item.imageId || null,
-                imageName: item.imageName || null
-              }"
+              [widgetItem]="item"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="
@@ -218,6 +214,10 @@
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
             ></app-group-traffic-widget>
+            <app-station-pre-built-widget
+              *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
+              [editMode]="editMode"
+            ></app-station-pre-built-widget>
           </gridster-item>
         </gridster>
       </div>

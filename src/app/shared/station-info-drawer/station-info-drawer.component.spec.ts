@@ -35,7 +35,8 @@ import { Router } from '@angular/router';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -48,6 +49,7 @@ describe('StationInfoDrawerComponent', () => {
         StationInfoDrawerComponent,
         MockComponent(RosterComponent),
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(StationDocumentsModalComponent),
       ],
       imports: [
         MatInputModule,
@@ -519,7 +521,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-external when calling updateAllowExternalWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 2;
     component.updateAllowExternalWorkers();
     fixture.detectChanges();
     expect(component.allowExternalLoading).toBe(true);
@@ -531,7 +533,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should show loading-indicator-allow-org-workers while update field allowAllOrgWorkers', () => {
     component.stationLoading = false;
-    component.selectedTabIndex = 1;
+    component.selectedTabIndex = 2;
     component.updateAllOrgWorkersStation();
     fixture.detectChanges();
     expect(component.allowAllOrgLoading).toBe(true);
@@ -716,5 +718,53 @@ describe('StationInfoDrawerComponent', () => {
       '#number-containers-loading'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should call the method that open the modal of number of containers clicking on the documents arrow', () => {
+    component.selectedTabIndex = 0;
+    component.stationLoading = false;
+    fixture.detectChanges();
+    const spyOpenModal = spyOn(
+      component,
+      'openContainersModal'
+    ).and.callThrough();
+
+    const btnContainerModal =
+      fixture.debugElement.nativeElement.querySelector('#containers-modal');
+    expect(btnContainerModal).toBeTruthy();
+    btnContainerModal.click();
+    expect(spyOpenModal).toHaveBeenCalled();
+  });
+
+  it('should call the method that open the modal of number of containers clicking on the documents number', () => {
+    component.selectedTabIndex = 0;
+    component.stationLoading = false;
+    fixture.detectChanges();
+    const spyOpenModal = spyOn(
+      component,
+      'openContainersModal'
+    ).and.callThrough();
+
+    const btnContainerModal =
+      fixture.debugElement.nativeElement.querySelector('#number-containers');
+    expect(btnContainerModal).toBeTruthy();
+    btnContainerModal.click();
+    expect(spyOpenModal).toHaveBeenCalled();
+  });
+
+  it('should open a modal that shows the containers of the current station', () => {
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: component.stationInformation.name,
+        stationId: stationId,
+      },
+    };
+    const spyModal = spyOn(TestBed.inject(MatDialog), 'open');
+    component.openContainersModal();
+    expect(spyModal).toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
   });
 });
