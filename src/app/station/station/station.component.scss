@@ -97,9 +97,9 @@ textarea {
       width: 98% !important;
       border-radius: 50% !important;
     }
-
   }
-  .gridster-item.circle-border.gridster-item-moving, .gridster-item.circle-border.gridster-item-resizing ::ng-deep{
+  .gridster-item.circle-border.gridster-item-moving,
+  .gridster-item.circle-border.gridster-item-resizing ::ng-deep {
     box-shadow: none !important;
   }
 }
