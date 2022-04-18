@@ -21,6 +21,7 @@ import {
   StandardNumberJSON,
   DocumentEvent,
   GroupTrafficData,
+  StationWidgetPreBuilt,
 } from 'src/models';
 
 /**
@@ -1509,5 +1510,40 @@ export class MockStationService {
       averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
+  }
+
+  /**
+   * Get user stations.
+   *
+   * @returns User Stations.
+   */
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [
+      {
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
+      },
+    ];
+    return of(stationWidgetData).pipe(delay(1000));
   }
 }
