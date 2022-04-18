@@ -85,7 +85,7 @@ describe('DashboardComponent', () => {
         MockComponent(AddWidgetModalComponent),
         MockComponent(GroupSearchWidgetComponent),
         MockComponent(GroupTrafficWidgetComponent),
-        MockComponent(ContainerPreBuiltWidgetComponent)
+        MockComponent(ContainerPreBuiltWidgetComponent),
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
