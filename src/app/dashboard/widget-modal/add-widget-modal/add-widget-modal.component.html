@@ -43,7 +43,10 @@
 
     <!-- Tab Pre Build widget -->
     <mat-tab label="Pre Built" aria-label="Pre Built">
-      <app-coming-soon-message></app-coming-soon-message>
+      <div *ngIf="showPreBuilt; else permissionDenied">new pre built</div>
+      <ng-template #permissionDenied>
+        <app-coming-soon-message></app-coming-soon-message>
+      </ng-template>
     </mat-tab>
   </mat-tab-group>
 </div>

@@ -194,6 +194,27 @@ export class MockDashboardService {
         description: ``,
       },
     },
+    //Pre built section container.
+    [WidgetType.PreBuiltContainer]: {
+      title: '',
+      description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
+    },
+    [WidgetType.PreBuiltStation]: {
+      title: '',
+      description: '',
+      descriptionComponent: {
+        title: '',
+        type: '',
+        customizable: '',
+        description: ``,
+      },
+    },
   };
 
   /**
