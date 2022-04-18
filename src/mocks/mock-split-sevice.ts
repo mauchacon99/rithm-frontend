@@ -128,4 +128,22 @@ export class MockSplitService {
   public getStationListWidgetTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section account profile photo.
+   *
+   * @returns Split treatment.
+   */
+  public getAccountProfilePhotoTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get the section Pre built.
+   *
+   * @returns Split treatment.
+   */
+  public getPreBuiltWidgetTreatment(): string {
+    return 'on';
+  }
 }
