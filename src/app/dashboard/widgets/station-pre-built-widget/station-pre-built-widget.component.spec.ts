@@ -33,17 +33,12 @@ describe('StationPreBuiltWidgetComponent', () => {
   });
 
   it('should call getStationWidgetPreBuiltData', () => {
-    const spyMethod = spyOn(
-      component,
-      'getStationWidgetPreBuiltData'
-    ).and.callThrough();
-    const spyGetUserStationData = spyOn(
+    const spyGetStationWidgetPreBuiltData = spyOn(
       stationService,
       'getStationWidgetPreBuiltData'
     ).and.callThrough();
     component.ngOnInit();
-    expect(spyMethod).toHaveBeenCalled();
-    expect(spyGetUserStationData).toHaveBeenCalled();
+    expect(spyGetStationWidgetPreBuiltData).toHaveBeenCalled();
   });
 
   it('should catch an error if the request getStationWidgetPreBuiltData fails', () => {
