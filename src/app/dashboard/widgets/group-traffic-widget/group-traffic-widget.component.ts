@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardItem, GroupTrafficData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { Chart, ChartConfiguration } from 'chart.js';
+
 /**
  * Component for station group traffic.
  */
@@ -13,7 +15,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
   templateUrl: './group-traffic-widget.component.html',
   styleUrls: ['./group-traffic-widget.component.scss'],
 })
-export class GroupTrafficWidgetComponent implements OnInit {
+export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   /** Detect if is mobile device. */
   @Input() set isMobileDevice(value: boolean) {
     this._isMobileDevice = value;
@@ -69,6 +71,9 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Data for traffic in group. */
   groupTrafficData!: GroupTrafficData;
 
+  /** Chart traffic. */
+  chartGroupTraffic!: Chart;
+
   /** Options for show traffic in chart. */
   optionsShowTraffic: number[] = [5, 10, 20, 30, 40, 50];
 
@@ -80,6 +85,71 @@ export class GroupTrafficWidgetComponent implements OnInit {
 
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
+
+  /** Config static chart data. */
+  configChart: ChartConfiguration = {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [
+        {
+          // Documents
+          type: 'bar',
+          label: 'Documents',
+          data: [],
+          backgroundColor: '#8DA1C3',
+          stack: 'combined',
+          yAxisID: 'y',
+          order: 2,
+        },
+        {
+          // Documents Flow
+          type: 'line',
+          label: '[]',
+          data: [],
+          borderColor: '#294F8E',
+          backgroundColor: '#8DA1C3',
+          stack: 'combined',
+          borderWidth: 1.5,
+          yAxisID: 'y2',
+          order: 1,
+        },
+      ],
+    },
+    options: {
+      datasets: {
+        bar: {
+          barThickness: 8,
+        },
+      },
+      onResize: (chart) => {
+        if (
+          chart.options &&
+          chart.options.datasets &&
+          chart.options.datasets.bar &&
+          chart.options.datasets.bar.barThickness
+        ) {
+          chart.options.datasets.bar.barThickness =
+            chart.width <= 335 ? (chart.width <= 245 ? 9 : 15) : 25;
+        }
+      },
+      scales: {
+        y: {
+          stacked: true,
+          position: 'left',
+          beginAtZero: true,
+        },
+        y2: {
+          stacked: true,
+          position: 'right',
+          beginAtZero: true,
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+      },
+    },
+  };
 
   constructor(
     private stationService: StationService,
@@ -121,6 +191,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
           this.isLoading = false;
           this.errorGroupTraffic = false;
           this.groupTrafficData = trafficData;
+          this.createChart();
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -145,5 +216,63 @@ export class GroupTrafficWidgetComponent implements OnInit {
       widgetIndex: this.indexWidget,
       quantityElementsWidget: this.groupTrafficData.labels.length,
     });
+  }
+
+  /** Parse data and generate char traffic. */
+  createChart(): void {
+    const {
+      labels,
+      averageDocumentFlow,
+      stationDocumentCounts,
+      formData,
+      stationGroupRithmId,
+    } = this.groupTrafficData;
+    this.configChart.data.labels = labels;
+    // position 0 are documents
+    this.configChart.data.datasets[0].data = stationDocumentCounts;
+    // position 1 are documents flow
+    this.configChart.data.datasets[1].data = averageDocumentFlow;
+    this.configChart.data.datasets[1].label = JSON.stringify(formData || []);
+    // set tooltips
+    this.setTooltips();
+    const id = `${this.indexWidget}-${stationGroupRithmId}`;
+    setTimeout(() => {
+      this.chartGroupTraffic = new Chart(id, this.configChart);
+    }, 1);
+  }
+
+  /** Set custom tooltips. */
+  setTooltips(): void {
+    this.configChart.options = {
+      ...this.configChart.options,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          displayColors: false,
+          callbacks: {
+            label: (tooltipItem) => {
+              if (tooltipItem.dataset.type === 'line') {
+                const dataLabels = JSON.parse(
+                  tooltipItem.dataset.label || '[]'
+                );
+                return dataLabels[tooltipItem.dataIndex] || [''];
+              }
+              return `${tooltipItem.dataset.data[tooltipItem.dataIndex]} ${
+                tooltipItem.dataset.label
+              }`;
+            },
+          },
+        },
+      },
+    };
+  }
+
+  /** Destroy component. */
+  ngOnDestroy(): void {
+    if (this.groupTrafficData) {
+      this.chartGroupTraffic.destroy();
+    }
   }
 }
