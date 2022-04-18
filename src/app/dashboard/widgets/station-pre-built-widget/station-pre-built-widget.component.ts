@@ -27,14 +27,14 @@ export class StationPreBuiltWidgetComponent implements OnInit {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.getUserStationData();
+    this.getStationWidgetPreBuiltData();
   }
 
   /**
    * Get user stations.
    *
    */
-  getUserStationData(): void {
+  getStationWidgetPreBuiltData(): void {
     this.stationService
       .getStationWidgetPreBuiltData()
       .pipe(first())

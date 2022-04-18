@@ -33,7 +33,10 @@ describe('StationPreBuiltWidgetComponent', () => {
   });
 
   it('should call getStationWidgetPreBuiltData', () => {
-    const spyMethod = spyOn(component, 'getUserStationData').and.callThrough();
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetPreBuiltData'
+    ).and.callThrough();
     const spyGetUserStationData = spyOn(
       stationService,
       'getStationWidgetPreBuiltData'
