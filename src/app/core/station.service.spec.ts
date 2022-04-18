@@ -22,6 +22,7 @@ import {
   StandardNumberJSON,
   DocumentEvent,
   GroupTrafficData,
+  StationWidgetPreBuilt,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1567,28 +1568,34 @@ describe('StationService', () => {
   });
 
   it('should call getUserStationData', () => {
-    const expectedData: StationRosterMember[] = [
+    const expectedData: StationWidgetPreBuilt[] = [
       {
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isOwner: false,
-        isWorker: true,
-      },
-      {
-        rithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isOwner: false,
-        isWorker: true,
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
       },
     ];
-    service
-      .getUserStationData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
-      .subscribe((response) => {
-        expect(response).toEqual(expectedData);
-      });
+    service.getStationWidgetPreBuiltData().subscribe((response) => {
+      expect(response).toEqual(expectedData);
+    });
   });
 });

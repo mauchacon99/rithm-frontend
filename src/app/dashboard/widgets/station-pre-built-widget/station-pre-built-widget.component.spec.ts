@@ -1,14 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import {
-  MockErrorService,
-  MockStationService,
-  MockUserService,
-} from 'src/mocks';
+import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
-import { UserService } from 'src/app/core/user.service';
 import { throwError } from 'rxjs';
 
 describe('StationPreBuiltWidgetComponent', () => {
@@ -22,7 +17,6 @@ describe('StationPreBuiltWidgetComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
-        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
@@ -38,21 +32,21 @@ describe('StationPreBuiltWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getUserStationData', () => {
+  it('should call getStationWidgetPreBuiltData', () => {
     const spyMethod = spyOn(component, 'getUserStationData').and.callThrough();
     const spyGetUserStationData = spyOn(
       stationService,
-      'getUserStationData'
+      'getStationWidgetPreBuiltData'
     ).and.callThrough();
     component.ngOnInit();
     expect(spyMethod).toHaveBeenCalled();
     expect(spyGetUserStationData).toHaveBeenCalled();
   });
 
-  it('should catch an error if the request getUserStationData fails', () => {
+  it('should catch an error if the request getStationWidgetPreBuiltData fails', () => {
     const spyError = spyOn(
       stationService,
-      'getUserStationData'
+      'getStationWidgetPreBuiltData'
     ).and.returnValue(
       throwError(() => {
         throw new Error();

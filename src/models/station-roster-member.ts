@@ -26,8 +26,5 @@ export interface StationRosterMember {
   isAssigned?: boolean;
 
   /** User Image or Photo. */
-  userImageId?: string;
-
-  /** Name Image user. */
-  userImageName?: string;
+  readonly userImageId?: string;
 }

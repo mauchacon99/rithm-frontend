@@ -2,8 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { UserService } from 'src/app/core/user.service';
-import { StationRosterMember } from 'src/models';
+import { StationWidgetPreBuilt } from 'src/models';
 /**
  * Component for station prebuilt.
  */
@@ -17,12 +16,11 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   @Input() editMode = false;
 
   /*User station data. */
-  userStations: StationRosterMember[] = [];
+  stationWidgetData: StationWidgetPreBuilt[] = [];
 
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService,
-    private userService: UserService
+    private errorService: ErrorService
   ) {}
 
   /**
@@ -38,11 +36,11 @@ export class StationPreBuiltWidgetComponent implements OnInit {
    */
   getUserStationData(): void {
     this.stationService
-      .getUserStationData(this.userService.user.rithmId)
+      .getStationWidgetPreBuiltData()
       .pipe(first())
       .subscribe({
-        next: (userStations) => {
-          this.userStations = userStations;
+        next: (stationWidgetData) => {
+          this.stationWidgetData = stationWidgetData;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

@@ -24,6 +24,7 @@ import {
   GroupTrafficData,
   FrameType,
   StandardNumberJSON,
+  StationWidgetPreBuilt,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -933,31 +934,35 @@ export class StationService {
   /**
    * Get user stations.
    *
-   * @param userRithmId RithmId of user.
    * @returns User Stations.
    */
-  getUserStationData(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    userRithmId: string
-  ): Observable<StationRosterMember[]> {
-    const listStations: StationRosterMember[] = [
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [
       {
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isOwner: false,
-        isWorker: true,
-      },
-      {
-        rithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isOwner: false,
-        isWorker: true,
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
       },
     ];
-    return of(listStations).pipe(delay(1000));
+    return of(stationWidgetData).pipe(delay(1000));
   }
 }
