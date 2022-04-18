@@ -34,7 +34,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
    * Get user stations.
    *
    */
-  getStationWidgetPreBuiltData(): void {
+  private getStationWidgetPreBuiltData(): void {
     this.stationService
       .getStationWidgetPreBuiltData()
       .pipe(first())

@@ -1516,8 +1516,8 @@ export class MockStationService {
    *
    * @returns User Stations.
    */
-  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt> {
-    const stationWidgetData: StationWidgetPreBuilt = {
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [{
       stationRithmId: 'qwe-321-ert-123',
       stationName: 'Mars station',
       totalContainers: 5,
@@ -1540,7 +1540,7 @@ export class MockStationService {
           isWorker: true,
         },
       ],
-    };
+    }];
     return of(stationWidgetData).pipe(delay(1000));
   }
 }
