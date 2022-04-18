@@ -16,7 +16,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   @Input() editMode = false;
 
   /** Containers widget pre built. */
-  containers!: ContainerWidgetPreBuilt[];
+  containers: ContainerWidgetPreBuilt[] = [];
 
   constructor(
     private documentService: DocumentService,
