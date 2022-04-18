@@ -35,3 +35,33 @@
     line-height: 2rem !important;
   }
 }
+
+.gridster-container ::ng-deep {
+  .gridster-column,
+  .gridster-row {
+    @apply border-secondary-50;
+  }
+
+  .gridster-item {
+    @apply px-0 pb-0 rounded transition-colors overflow-visible;
+
+    ::ng-deep .mat-form-field-wrapper {
+      margin: 0 0 14px !important;
+    }
+  }
+
+  //Widget item in layout mode
+  .widget-item-layout {
+    @apply border-2 border-secondary-100 hover:border-accent-500;
+  }
+
+  .h-gridster {
+    @apply h-full;
+  }
+
+  .drag-handler {
+    @apply text-accent-500 bg-white hover:bg-accent-300 hover:text-white hover:cursor-move absolute top-0 right-0 z-10 rounded-full shadow-xl border-secondary-100;
+
+    position: absolute !important;
+  }
+}

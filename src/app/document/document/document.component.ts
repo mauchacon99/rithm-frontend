@@ -26,7 +26,10 @@ import {
   DocumentAutoFlow,
   MoveDocument,
   StationRosterMember,
+  StationFrameWidget,
+  FrameType,
 } from 'src/models';
+import { GridsterConfig } from 'angular-gridster2';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
@@ -53,6 +56,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Whether de container is displayed inside a widget or not. */
   @Input() isWidget = false;
 
+  /** Station Widgets array. */
+  inputFrameWidgetItems: StationFrameWidget[] = [];
+
   /** Id for station in widget. */
   @Input() stationRithmIdWidget!: string;
 
@@ -75,6 +81,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
+
+  /** Different types of input frames components.*/
+  frameType = FrameType;
 
   /** Document Id. */
   private documentId = '';
@@ -105,6 +114,24 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Whether the document allow previous button or not. */
   allowPreviousButton = false;
+
+  /** Grid initial values. */
+  options: GridsterConfig = {
+    gridType: 'verticalFixed',
+    fixedRowHeight: 50,
+    displayGrid: 'none',
+    pushItems: false,
+    draggable: {
+      enabled: false,
+      ignoreContent: false,
+    },
+    resizable: {
+      enabled: false,
+    },
+    margin: 12,
+    minCols: 24,
+    maxCols: 24,
+  };
 
   /** The list of stations that this document could flow to. */
   forwardStations: ConnectedStationInfo[] = [];

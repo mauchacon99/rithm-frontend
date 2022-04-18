@@ -29,6 +29,13 @@ import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fi
 import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
 import { DocumentComponent } from './document/document.component';
 import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.module';
+import { GridsterModule } from 'angular-gridster2';
+import { BodyTextWidgetModule } from 'src/app/shared/station-document-widgets/body-text-widget/body-text-widget.module';
+import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/headline-widget/headline-widget.module';
+import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
+import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
+import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
+import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget.module';
 
 @NgModule({
   declarations: [
@@ -63,6 +70,13 @@ import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.mod
     MatAutocompleteModule,
     MatInputModule,
     FileFieldModule,
+    GridsterModule,
+    BodyTextWidgetModule,
+    HeadlineWidgetModule,
+    TitleWidgetModule,
+    BannerWidgetModule,
+    CircleImageWidgetModule,
+    InputFrameWidgetModule,
   ],
   exports: [DocumentComponent],
 })
