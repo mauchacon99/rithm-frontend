@@ -21,6 +21,7 @@ import {
   StandardNumberJSON,
   DocumentEvent,
   GroupTrafficData,
+  StationWidgetPreBuilt,
 } from 'src/models';
 
 /**
@@ -1508,5 +1509,82 @@ export class MockStationService {
       averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
+  }
+
+  /**
+   * Get user stations.
+   *
+   * @returns User Stations.
+   */
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [
+      {
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
+      },
+    ];
+    return of(stationWidgetData).pipe(delay(1000));
+  }
+
+  /**
+   * Save input frames questions.
+   *
+   * @param frameRithmId The id of the current input frame.
+   * @param fQuestions Questions to be saved.
+   * @returns Frame questions array.
+   */
+  saveInputFrameQuestions(frameRithmId: string, fQuestions: Question[]): Observable<Question[]>{
+    if (!frameRithmId || !fQuestions) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot save input frame questions',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const frameQuestions: Question[] = [
+        {
+          prompt: 'Example question#1',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Example question#2',
+          rithmId: '3j5k-3h2j-hj5j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ];
+      return of(frameQuestions).pipe(delay(1000));
+    }
   }
 }

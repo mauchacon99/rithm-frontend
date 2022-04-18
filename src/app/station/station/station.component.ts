@@ -859,10 +859,11 @@ export class StationComponent
     }
   }
 
+
   /**
    * Save or update the changes make the station frame widgets.
    */
-  saveStationWidgetsChanges(): void {
+   saveStationWidgetsChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
@@ -883,6 +884,9 @@ export class StationComponent
             }
           });
           this.inputFrameWidgetItems = inputFrames;
+          if (inputFrames.length) {
+            this.saveInputFrameQuestions(inputFrames.filter(iframe => iframe.type === FrameType.Input));
+          }
         },
         error: (error: unknown) => {
           this.errorService.displayError(
@@ -891,6 +895,43 @@ export class StationComponent
           );
         },
       });
+  }
+
+  /**
+   * Save input frame widgets.
+   *
+   * @param frames An array of input frameWidgets.
+   */
+  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
+    if (frames.length){
+      const frameQuestionRequest: Observable<Question[]>[] = [];
+      frames.forEach(frame => {
+        const fQuestions: Question[] = JSON.parse(frame.data);
+        if (fQuestions.length) {
+          frameQuestionRequest.push(this.stationService.saveInputFrameQuestions(frame.rithmId, fQuestions));
+        }
+      });
+      this.forkJoinFrameQuestions(frameQuestionRequest);
+    }
+  }
+
+  /**
+   * Execute a fork join to save input frame questions.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
+    forkJoin(requestRow)
+    .pipe(first())
+    .subscribe({
+      error: (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
