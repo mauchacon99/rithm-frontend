@@ -25,7 +25,6 @@ import {
   FrameType,
   StandardNumberJSON,
   StationWidgetPreBuilt,
-  QuestionFieldType,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -974,38 +973,13 @@ export class StationService {
    * @param fQuestions Questions to be saved.
    * @returns Frame questions array.
    */
-   saveInputFrameQuestions(frameRithmId: string, fQuestions: Question[]): Observable<Question[]>{
-    if (!frameRithmId || !fQuestions) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot save input frame questions',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const frameQuestions: Question[] = [
-        {
-          prompt: 'Example question#1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'Example question#2',
-          rithmId: '3j5k-3h2j-hj5j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
-      return of(frameQuestions).pipe(delay(1000));
-    }
+  saveInputFrameQuestions(
+    frameRithmId: string,
+    fQuestions: Question[]
+  ): Observable<Question[]> {
+    return this.http.post<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
+      fQuestions
+    );
   }
 }

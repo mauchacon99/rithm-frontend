@@ -1553,7 +1553,10 @@ export class MockStationService {
    * @param fQuestions Questions to be saved.
    * @returns Frame questions array.
    */
-  saveInputFrameQuestions(frameRithmId: string, fQuestions: Question[]): Observable<Question[]>{
+  saveInputFrameQuestions(
+    frameRithmId: string,
+    fQuestions: Question[]
+  ): Observable<Question[]> {
     if (!frameRithmId || !fQuestions) {
       return throwError(
         () =>

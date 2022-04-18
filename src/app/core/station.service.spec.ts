@@ -1621,8 +1621,18 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    service.saveInputFrameQuestions(frameRithmId, frameQuestions).subscribe((response) => {
-      expect(response).toEqual(frameQuestions);
-    });
+    service
+      .saveInputFrameQuestions(frameRithmId, frameQuestions)
+      .subscribe((response) => {
+        expect(response).toEqual(frameQuestions);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`
+    );
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(frameQuestions);
+    httpTestingController.verify();
   });
 });
