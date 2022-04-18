@@ -43,6 +43,9 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section Stations lists. */
   showStationLists = false;
 
+  /** Show section Pre built. */
+  showPreBuilt = false;
+
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
     @Inject(MAT_DIALOG_DATA) public matData: string,
@@ -100,6 +103,9 @@ export class AddWidgetModalComponent implements OnInit {
 
         this.showStationLists =
           this.splitService.getStationListWidgetTreatment() === 'on';
+
+        this.showPreBuilt =
+          this.splitService.getPreBuiltWidgetTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
