@@ -336,33 +336,8 @@
       <i class="fas fa-clock-rotate-left fa-lg"></i>
     </ng-template>
     <ng-template matTabContent>
-      <div class="grid grid-cols-1 px-2">
-        <!-- Station Name -->
-        <section class="flex pt-4">
-          <div class="col-span-12 pt-2" *ngIf="!editMode; else editStationName">
-            <p class="overline-font">Station Name</p>
-            <p class="pt-2">{{ stationName }}</p>
-          </div>
-          <ng-template #editStationName>
-            <mat-form-field
-              appearance="outline"
-              class="w-full mat-station-name"
-            >
-              <mat-label>Station Name</mat-label>
-              <input
-                matInput
-                type="text"
-                id="station"
-                data-testid="station-name-field"
-                [(ngModel)]="stationName"
-                (keyup)="reportNewStationMapChange()"
-                (blur)="stationName = deleteSpace(stationName)"
-                (focusout)="updateStationInfoDrawerName()"
-              />
-            </mat-form-field>
-          </ng-template>
-        </section>
-        <section class="flex w-full pb-4">
+      <div class="grid grid-cols-1">
+        <section class="flex w-full p-4">
           <div class="flex w-full flex-col justify-center">
             <h6>Station History</h6>
           </div>
