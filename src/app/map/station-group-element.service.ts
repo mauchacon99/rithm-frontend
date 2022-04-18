@@ -108,49 +108,6 @@ export class StationGroupElementService {
 
     //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
-    //If there is a tooltip hovered, draw that in the correct position.
-    if (this.isTooltipDisplayed) {
-      // Check if there still hovering over a group boundary.
-      const hover = this.mapService.stationGroupElements.find(
-        (stationGroup) =>
-          (this.mapService.mapHelper.mapMode$.value ===
-            MapMode.StationGroupAdd ||
-            this.mapService.mapHelper.mapMode$.value ===
-              MapMode.StationGroupEdit) &&
-          stationGroup.disabled &&
-          !stationGroup.selected &&
-          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-      );
-      const isLastGroupHover = this.mapService.stationGroupElements.find(
-        (stationGroup) =>
-          this.mapService.mapHelper.mapMode$.value ===
-            MapMode.StationGroupEdit &&
-          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-          this.mapService.isLastStationGroup
-      );
-      // Check if you are in view mode and the group station is hovering.
-      const hoverViewMode = this.mapService.stationGroupElements.find(
-        (stationGroup) =>
-          this.mapService.mapHelper.mapMode$.value === MapMode.View &&
-          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-      );
-      if (hover) {
-        this.drawStationGroupToolTip(this.tooltipPosition);
-      } else if (isLastGroupHover) {
-        //If hover over the last group then, should update the message.
-        this.drawStationGroupToolTip(this.tooltipPosition, true);
-      } else if (hoverViewMode) {
-        // If you hover over the group in view mode then, should show the tooltip.
-        this.drawStationGroupToolTip(
-          this.tooltipPosition,
-          false,
-          hoverViewMode.title
-        );
-      } else {
-        this.isTooltipDisplayed = false;
-        this.tooltipPosition = { x: -1, y: -1 };
-      }
-    }
   }
 
   /**
@@ -407,6 +364,55 @@ export class StationGroupElementService {
         );
         spaceY += 20;
       });
+    }
+  }
+
+  /**
+   * Draw tooltip the station group according to the map mode, method for external use.
+   */
+  drawStationGroupToolTipExternal(): void {
+    //If there is a tooltip hovered, draw that in the correct position.
+    if (this.isTooltipDisplayed) {
+      // Check if there still hovering over a group boundary.
+      const hover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          (this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+            this.mapService.mapHelper.mapMode$.value ===
+              MapMode.StationGroupEdit) &&
+          stationGroup.disabled &&
+          !stationGroup.selected &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      );
+      const isLastGroupHover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupEdit &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          this.mapService.isLastStationGroup
+      );
+      // Check if you are in view mode and the group station is hovering.
+      const hoverViewMode = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          this.mapService.mapHelper.mapMode$.value === MapMode.View &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      );
+      if (hover) {
+        this.drawStationGroupToolTip(this.tooltipPosition);
+      } else if (isLastGroupHover) {
+        //If hover over the last group then, should update the message.
+        this.drawStationGroupToolTip(this.tooltipPosition, true);
+      } else if (hoverViewMode) {
+        // If you hover over the group in view mode then, should show the tooltip.
+        this.drawStationGroupToolTip(
+          this.tooltipPosition,
+          false,
+          hoverViewMode.title
+        );
+      } else {
+        this.isTooltipDisplayed = false;
+        this.tooltipPosition = { x: -1, y: -1 };
+      }
     }
   }
 
