@@ -214,6 +214,16 @@
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
             ></app-group-traffic-widget>
+            <app-station-pre-built-widget
+              *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
+              [editMode]="editMode"
+            ></app-station-pre-built-widget>
+
+            <app-container-pre-built-widget
+              *ngIf="item.widgetType === enumWidgetType.PreBuiltContainer"
+              [editMode]="editMode"
+            >
+            </app-container-pre-built-widget>
           </gridster-item>
         </gridster>
       </div>

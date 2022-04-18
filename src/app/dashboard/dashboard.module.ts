@@ -48,6 +48,9 @@ import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 import { GroupTrafficWidgetComponent } from './widgets/group-traffic-widget/group-traffic-widget.component';
+import { StationPreBuiltWidgetComponent } from './widgets/station-pre-built-widget/station-pre-built-widget.component';
+import { PreBuiltWidgetTemplateModalComponent } from './widget-modal/pre-built-widget-template-modal/pre-built-widget-template-modal.component';
+import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-widget/container-pre-built-widget.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +78,9 @@ import { GroupTrafficWidgetComponent } from './widgets/group-traffic-widget/grou
     GroupSearchWidgetComponent,
     AvatarImageWidgetComponent,
     GroupTrafficWidgetComponent,
+    StationPreBuiltWidgetComponent,
+    PreBuiltWidgetTemplateModalComponent,
+    ContainerPreBuiltWidgetComponent,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 <!--header-->
-<div class="pt-3">
+<div class="pt-3" *ngIf="itemWidgetModalSelected.itemType !== 'preBuilt'">
   <h3 class="text-lg font-semibold">
     {{ itemWidgetModalSelected.itemType | titlecase }}
     Templates
@@ -131,7 +131,13 @@
       </app-group-widget-template-modal>
     </div>
   </div>
-  <hr class="text-secondary-100" />
+</section>
+<!--Section for show prebuilt template-->
+<section *ngIf="itemWidgetModalSelected.itemType === 'preBuilt'">
+  <!-- Pre built  -->
+  <div class="py-6">
+    <app-pre-built-widget-template-modal></app-pre-built-widget-template-modal>
+  </div>
 </section>
 
 <ng-template #permissionDenied>
