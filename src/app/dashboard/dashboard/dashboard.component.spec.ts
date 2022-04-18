@@ -46,6 +46,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MobileBrowserChecker } from 'src/helpers';
 import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
+import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -84,6 +85,7 @@ describe('DashboardComponent', () => {
         MockComponent(AddWidgetModalComponent),
         MockComponent(GroupSearchWidgetComponent),
         MockComponent(GroupTrafficWidgetComponent),
+        MockComponent(ContainerPreBuiltWidgetComponent)
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
