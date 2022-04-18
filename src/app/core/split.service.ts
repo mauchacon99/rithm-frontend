@@ -143,6 +143,24 @@ export class SplitService {
   }
 
   /**
+   * Get the section station containers modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationContainersModalTreatment(): string {
+    return this.splitClient.getTreatment('station_containers_modal_split');
+  }
+
+  /**
+   * Get the section account profile photo.
+   *
+   * @returns Split treatment.
+   */
+  public getAccountProfilePhotoTreatment(): string {
+    return this.splitClient.getTreatment('profile_photo_split');
+  }
+
+  /**
    * Get the section Pre built.
    *
    * @returns Split treatment.
