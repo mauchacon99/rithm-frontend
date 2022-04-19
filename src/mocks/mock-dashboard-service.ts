@@ -196,13 +196,13 @@ export class MockDashboardService {
     },
     //Pre built section container.
     [WidgetType.PreBuiltContainer]: {
-      title: '',
-      description: '',
+      title: 'My Containers',
+      description: 'Display all containers assigned to the logged in user, as the station and group those containers belong to.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'My Containers Widget',
+        type: 'Container Template',
+        customizable: 'My Containers result values',
+        description: `Display all containers assigned to the logged in user, as the station and group those containers belong to.`,
       },
     },
     [WidgetType.PreBuiltStation]: {
