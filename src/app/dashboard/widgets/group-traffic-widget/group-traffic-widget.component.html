@@ -43,11 +43,12 @@
   </div>
 
   <div class="h-full w-full p-4 scrollbar overflow-auto">
-
-    <canvas baseChart
+    <canvas
+      baseChart
       [datasets]="configChart.data.datasets"
       [labels]="configChart.data.labels"
-      [options]="configChart.options">
+      [options]="configChart.options"
+    >
     </canvas>
 
     <div class="flex justify-between" *ngIf="!editMode">
