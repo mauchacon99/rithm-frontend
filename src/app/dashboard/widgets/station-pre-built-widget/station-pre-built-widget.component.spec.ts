@@ -18,6 +18,7 @@ describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
   let fixture: ComponentFixture<StationPreBuiltWidgetComponent>;
   let stationService: StationService;
+  let documentService: DocumentService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,6 +39,7 @@ describe('StationPreBuiltWidgetComponent', () => {
     fixture = TestBed.createComponent(StationPreBuiltWidgetComponent);
     component = fixture.componentInstance;
     stationService = TestBed.inject(StationService);
+    documentService = TestBed.inject(DocumentService);
     fixture.detectChanges();
   });
 
@@ -66,7 +68,7 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should show error message when request station prebuilt data', () => {
     const spyError = spyOn(
-      TestBed.inject(StationService),
+      stationService,
       'getStationWidgetPreBuiltData'
     ).and.returnValue(
       throwError(() => {
@@ -90,7 +92,7 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should call getContainerWidgetPreBuilt', () => {
     const spyGetContainerWidgetPreBuilt = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.callThrough();
     component.ngOnInit();
@@ -99,7 +101,7 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should catch an error if the request getContainerWidgetPreBuilt fails', () => {
     const spyError = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.returnValue(
       throwError(() => {
@@ -108,5 +110,29 @@ describe('StationPreBuiltWidgetComponent', () => {
     );
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should show message error and try again', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetPreBuiltData'
+    ).and.callThrough();
+
+    const spyError = spyOn(
+      stationService,
+      'getStationWidgetPreBuiltData'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const errorComponent = fixture.nativeElement.querySelector(
+      '#error-load-widget-station-prebuilt'
+    );
+    expect(errorComponent).toBeTruthy();
+    expect(spyError).toHaveBeenCalled();
+    expect(spyMethod).toHaveBeenCalled();
   });
 });

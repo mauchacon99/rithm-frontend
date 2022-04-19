@@ -10,7 +10,7 @@
   [errorMessage]="'Unable to retrieve stations prebuilt data'"
   (tryAgain)="getStationWidgetPreBuiltData()"
 >
-  <div *ngIf="!isLoading && !errorStationPrebuilt">
-    <p>station-pre-built-widget works!</p>
-  </div>
 </app-error-widget>
+<div *ngIf="!isLoading && !errorStationPrebuilt">
+  <p>station-pre-built-widget works!</p>
+</div>
