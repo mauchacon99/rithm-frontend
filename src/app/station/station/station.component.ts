@@ -145,6 +145,7 @@ export class StationComponent
     resizable: {
       enabled: true,
     },
+    itemChangeCallback: this.resizeCircleRowCols.bind(this),
     margin: 12,
     minCols: 24,
     maxCols: 24,
@@ -1111,6 +1112,23 @@ export class StationComponent
       this.stationForm.markAsPristine();
       this.stationForm.controls.stationTemplateForm.markAsUntouched();
     }, 0);
+  }
+
+  /**
+   * Resize the circle modified.
+   *
+   * @param item The widget changed.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public resizeCircleRowCols(item: GridsterItem) {
+    if (item.type === FrameType.CircleImage) {
+      if (item.rows > item.cols) {
+        this.inputFrameWidgetItems[item.id].cols = item.rows;
+      } else if (item.rows < item.cols) {
+        this.inputFrameWidgetItems[item.id].rows = item.cols;
+      }
+      this.changedOptions();
+    }
   }
 
   /**
