@@ -42,7 +42,10 @@
     </div>
   </div>
 
-  <div class="h-full w-full pt-4 scrollbar overflow-auto">
+  <div
+    class="h-full w-full pt-4 scrollbar overflow-auto"
+    *ngIf="groupTrafficData.labels.length"
+  >
     <canvas
       baseChart
       [datasets]="configChart.data.datasets"
@@ -77,4 +80,5 @@
       </button>
     </div>
   </div>
+  <div class="text-sm text-center p-4">There are not stations to graph.</div>
 </div>
