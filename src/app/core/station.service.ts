@@ -952,11 +952,11 @@ export class StationService {
    */
   saveInputFrameQuestions(
     frameRithmId: string,
-    fQuestions: Question[]
+    frameQuestions: Question[]
   ): Observable<Question[]> {
     return this.http.post<Question[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
-      fQuestions
+      frameQuestions
     );
   }
 }
