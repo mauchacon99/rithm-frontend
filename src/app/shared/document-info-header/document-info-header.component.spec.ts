@@ -81,7 +81,14 @@ describe('DocumentInfoHeaderComponent', () => {
           email: 'workeruser@inpivota.com',
         },
       ],
-      workers: [],
+      workers: [
+        {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+        },
+      ],
       questions: [],
       instructions: 'General instructions',
       isChained: false,
@@ -468,5 +475,19 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(expectValue).toBeTrue();
     expect(button).toBeTruthy();
     expect(button.disabled).toBeFalse();
+  });
+
+  it('should validate if user logged is in workers', () => {
+    expect(component.isUserInWorkers).toBeTrue();
+    component.documentInformation.workers = [
+      {
+        rithmId: '372',
+        firstName: 'Dev',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+      },
+    ];
+    fixture.detectChanges();
+    expect(component.isUserInWorkers).toBeFalse();
   });
 });

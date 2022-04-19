@@ -137,9 +137,7 @@
   <div class="py-2 border-b border-secondary-400">
     <ng-container
       *ngIf="
-        isAdmin ||
-          isUserAdminOrOwner ||
-          (isDocumentNameEditable && isUserInWorkers);
+        isUserAdminOrOwner || (isDocumentNameEditable && isUserInWorkers);
         then inputEditDocumentName;
         else nonEditableDocNameWidget
       "

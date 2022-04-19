@@ -131,15 +131,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Checking if the current user is an admin.
-   *
-   * @returns Is admin.
-   */
-  get isAdmin(): boolean {
-    return this.userService.isAdmin;
-  }
-
-  /**
    * Is the current user an owner or an admin for this station.
    *
    * @returns Validate if user is owner or admin of current station.
