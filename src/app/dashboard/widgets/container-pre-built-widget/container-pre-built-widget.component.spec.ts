@@ -76,7 +76,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
 
     const loading = fixture.nativeElement.querySelector(
-      '#app-loading-indicator'
+      '#app-loading-indicator-container-pre-built'
     );
     expect(loading).toBeTruthy();
   });
@@ -97,8 +97,9 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     );
     component.ngOnInit();
     fixture.detectChanges();
-    const errorComponent =
-      fixture.nativeElement.querySelector('#error-load-widget');
+    const errorComponent = fixture.nativeElement.querySelector(
+      '#error-load-widget-container-pre-built'
+    );
     expect(errorComponent).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
