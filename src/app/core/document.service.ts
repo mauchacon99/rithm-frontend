@@ -654,18 +654,10 @@ export class DocumentService {
     stationRithmId: string,
     dataLinkObject: DataLinkObject
   ): Observable<DataLinkObject> {
-    if (!dataLinkObject || !stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot save data link object.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return of(dataLinkObject).pipe(delay(1000));
-    }
+    return this.http.put<DataLinkObject>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-data-link?stationRithmId=${stationRithmId}`,
+      dataLinkObject
+    );
   }
 
   /**
