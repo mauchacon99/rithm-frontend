@@ -197,7 +197,8 @@ export class DashboardService {
     //Pre built section container.
     [WidgetType.PreBuiltContainer]: {
       title: 'My Containers',
-      description: 'Display all containers assigned to the logged in user, as the station and group those containers belong to.',
+      description:
+        'Display all containers assigned to the logged in user, as the station and group those containers belong to.',
       descriptionComponent: {
         title: 'My Containers Widget',
         type: 'Container Template',

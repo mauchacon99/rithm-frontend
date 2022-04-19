@@ -2,17 +2,17 @@
 <ng-container
   *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
 ></ng-container>
-<!-- Preview widget type station -->
+<!-- Preview widget type container -->
 <ng-template #previewMyContainers>
   <div class="h-full w-full rounded overflow-hidden">
     <div class="w-full bg-white h-full py-1 rounded shadow">
-      <div class="px-2 leading-3">
+      <div class="px-2 py-2 leading-3">
         <span class="text-sm font-semibold">My Containers</span> <br />
       </div>
       <div class="w-full px-1">
         <div
-          class="flex gap-x-2 animate-pulse border-b border-b-secondary-50"
-          *ngFor="let i of [0, 0, 0, 0, 0, 0, 0]"
+          class="flex gap-x-2 py-1 animate-pulse border-b border-b-secondary-50"
+          *ngFor="let i of [0, 0, 0, 0]"
         >
           <div
             class="w-[20%] h-2 bg-secondary-50 rounded m-[5px]"
@@ -24,7 +24,7 @@
   </div>
 </ng-template>
 
-<!-- Card of the station widget -->
+<!-- Card of the container widget -->
 <ng-template let-description="description" let-title="title" #cardOfWidget>
   <div
     class="h-[300px] w-full rounded border border-secondary-100 cursor-pointer"
