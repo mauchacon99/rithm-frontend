@@ -42,8 +42,15 @@ describe('ContainerPreBuiltWidgetComponent', () => {
       TestBed.inject(DocumentService),
       'getContainerWidgetPreBuilt'
     ).and.callThrough();
+
+    const spyMethod = spyOn(
+      component,
+      'getContainerWidgetPreBuilt'
+    ).and.callThrough();
+
     component.ngOnInit();
     expect(spyGetContainerWidgetPreBuilt).toHaveBeenCalled();
+    expect(spyMethod).toHaveBeenCalled();
   });
 
   it('should catch an error if the request getContainerWidgetPreBuilt fails', () => {

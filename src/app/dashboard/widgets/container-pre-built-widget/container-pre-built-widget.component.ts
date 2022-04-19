@@ -45,8 +45,8 @@ export class ContainerPreBuiltWidgetComponent implements OnInit {
       .subscribe({
         next: (containers) => {
           this.isLoading = false;
-          this.containers = containers;
           this.failedGetContainers = false;
+          this.containers = containers;
         },
         error: (error: unknown) => {
           this.isLoading = false;

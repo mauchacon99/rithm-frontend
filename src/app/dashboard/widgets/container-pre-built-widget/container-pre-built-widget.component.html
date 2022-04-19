@@ -1,4 +1,3 @@
-<p>container-pre-built-widget works!</p>
 <!--Loading the widget-->
 <app-loading-widget
   *ngIf="isLoading"
@@ -13,3 +12,7 @@
   (tryAgain)="getContainerWidgetPreBuilt()"
 >
 </app-error-widget>
+
+<div *ngIf="!isLoading && !failedGetContainers">
+  <p>container-pre-built-widget works!</p>
+</div>
