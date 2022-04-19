@@ -73,5 +73,6 @@ export * from './image-widget-object';
 export * from './group-traffic-data';
 export * from './standard-number-json';
 export * from './setting-drawer-data';
+export * from './container-widget-pre-built-data';
 export * from './station-widget-pre-built';
 export * from './document-current-station';

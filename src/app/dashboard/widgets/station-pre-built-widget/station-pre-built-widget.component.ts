@@ -15,7 +15,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
-  /*User station data. */
+  /* User station data. */
   stationWidgetData: StationWidgetPreBuilt[] = [];
 
   constructor(
@@ -23,9 +23,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
     private errorService: ErrorService
   ) {}
 
-  /**
-   * Initial Method.
-   */
+  /** Init method. */
   ngOnInit(): void {
     this.getStationWidgetPreBuiltData();
   }
