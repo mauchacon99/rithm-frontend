@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { StationWidgetPreBuilt } from 'src/models';
+import { ContainerWidgetPreBuilt, StationWidgetPreBuilt } from 'src/models';
 /**
  * Component for station prebuilt.
  */
@@ -18,7 +18,6 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /* User station data. */
   stationWidgetData: StationWidgetPreBuilt[] = [];
 
-<<<<<<< HEAD
   /** Containers widget pre built. */
   containers: ContainerWidgetPreBuilt[] = [];
 
@@ -28,8 +27,6 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /** Whether the action to get station prebuilt fails. */
   errorStationPrebuilt = false;
 
-=======
->>>>>>> dev
   constructor(
     private stationService: StationService,
     private errorService: ErrorService
