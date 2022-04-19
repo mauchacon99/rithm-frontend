@@ -640,7 +640,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(stationName).toEqual('The name of a station');
   });
 
-  it('should call the service to get the station history', () => {
+  it('should call the service to get the station events history', () => {
     const spyMethod = spyOn(
       TestBed.inject(StationService),
       'getStationHistory'
