@@ -200,9 +200,9 @@ export class DashboardService {
       description:
         'Display all containers assigned to the logged in user, as the station and group those containers belong to.',
       descriptionComponent: {
-        title: 'My Containers Widget',
-        type: 'Container Template',
-        customizable: 'My Containers result values',
+        title: 'Table Widget',
+        type: 'Pre-Built',
+        customizable: 'None',
         description: `Display all containers assigned to the logged in user, as the station and group those containers belong to.`,
       },
     },

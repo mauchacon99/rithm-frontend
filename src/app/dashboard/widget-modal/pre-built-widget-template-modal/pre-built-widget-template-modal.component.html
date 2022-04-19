@@ -2,6 +2,7 @@
 <ng-container
   *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
 ></ng-container>
+
 <!-- Preview widget type container -->
 <ng-template #previewMyContainers>
   <div class="h-full w-full rounded overflow-hidden">
@@ -12,11 +13,11 @@
       <div class="w-full px-1">
         <div
           class="flex gap-x-2 py-1 animate-pulse border-b border-b-secondary-50"
-          *ngFor="let i of [0, 0, 0, 0]"
+          *ngFor="let i of [0, 0, 0, 0, 0]"
         >
           <div
             class="w-[20%] h-2 bg-secondary-50 rounded m-[5px]"
-            *ngFor="let i of [0, 0, 0, 0]"
+            *ngFor="let i of [0, 0, 0, 0, 0]"
           ></div>
         </div>
       </div>
