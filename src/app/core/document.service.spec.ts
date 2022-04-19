@@ -971,7 +971,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  fit('should make request to save a data link object', () => {
+  it('should make request to save a data link object', () => {
     const dataLink: DataLinkObject = {
       rithmId: '07e1-30b5-f21e',
       frameRithmId: '07e1-30b5-f21e',
