@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { WidgetType } from 'src/models';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 /**
  * The component for pre built widget modal.
  */
