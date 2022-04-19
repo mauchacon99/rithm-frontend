@@ -28,6 +28,7 @@ import {
   StationRosterMember,
   StationFrameWidget,
   FrameType,
+  QuestionFieldType,
 } from 'src/models';
 import { GridsterConfig } from 'angular-gridster2';
 import { PopupService } from 'src/app/core/popup.service';
@@ -57,7 +58,96 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() isWidget = false;
 
   /** Station Widgets array. */
-  inputFrameWidgetItems: StationFrameWidget[] = [];
+  inputFrameWidgetItems: StationFrameWidget[] = [
+    {
+      rithmId: '7f38-effe-47d1',
+      stationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+      cols: 24,
+      rows: 1,
+      x: 0,
+      y: 0,
+      type: FrameType.Headline,
+      data: '',
+      id: 0,
+      minItemCols: 6,
+      maxItemRows: 1,
+    },
+    {
+      rithmId: '4b51-35c8-1f9c',
+      stationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+      cols: 24,
+      rows: 1,
+      x: 0,
+      y: 1,
+      type: FrameType.Title,
+      data: '',
+      id: 1,
+      minItemCols: 24,
+      minItemRows: 1,
+      maxItemRows: 1,
+    },
+    {
+      rithmId: '746d-2f6c-5e48',
+      stationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+      cols: 4,
+      rows: 4,
+      x: 0,
+      y: 2,
+      type: FrameType.Image,
+      data: '',
+      id: 2,
+      minItemCols: 4,
+      minItemRows: 4,
+    },
+    {
+      rithmId: '698e-ce70-8f5d',
+      stationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+      cols: 6,
+      rows: 4,
+      x: 4,
+      y: 2,
+      type: FrameType.Input,
+      data: '',
+      id: 3,
+      minItemRows: 4,
+      minItemCols: 6,
+      questions: [
+        {
+          rithmId: 'f7a4-01d2-25c8',
+          prompt: 'Short Text',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+          originalStationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+          possibleAnswers: [],
+        },
+        {
+          rithmId: '16d3-f14a-0a72',
+          prompt: 'Long Text',
+          questionType: QuestionFieldType.LongText,
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+          originalStationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+          possibleAnswers: [],
+        },
+        {
+          rithmId: 'f3d8-b620-b5ee',
+          prompt: 'Email',
+          questionType: QuestionFieldType.Email,
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+          originalStationRithmId: 'a5146c2d-a398-4cf3-9bbd-a0f137569856',
+          possibleAnswers: [],
+        },
+      ],
+    },
+  ];
 
   /** Id for station in widget. */
   @Input() stationRithmIdWidget!: string;
