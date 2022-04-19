@@ -5,8 +5,8 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
-import { LoadingWidgetComponent } from '../loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from '../error-widget/error-widget.component';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 
 describe('StationPreBuiltWidgetComponent', () => {
