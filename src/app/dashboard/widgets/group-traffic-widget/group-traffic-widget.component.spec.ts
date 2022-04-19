@@ -121,7 +121,7 @@ describe('GroupTrafficWidgetComponent', () => {
     );
     const spyService = spyOn(
       TestBed.inject(ErrorService),
-      'displayError'
+      'logError'
     ).and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();

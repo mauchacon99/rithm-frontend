@@ -95,12 +95,17 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         throw new Error();
       })
     );
+    const spyMethodError = spyOn(
+      TestBed.inject(ErrorService),
+      'logError'
+    ).and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorComponent = fixture.nativeElement.querySelector(
       '#error-load-widget-container-pre-built'
     );
     expect(errorComponent).toBeTruthy();
+    expect(spyMethodError).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
   });

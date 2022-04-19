@@ -51,8 +51,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit {
         error: (error: unknown) => {
           this.isLoading = false;
           this.failedGetContainers = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          this.errorService.logError(
             error
           );
         },

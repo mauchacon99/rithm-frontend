@@ -86,7 +86,7 @@ describe('DocumentWidgetComponent', () => {
 
     const spyError = spyOn(
       TestBed.inject(ErrorService),
-      'displayError'
+      'logError'
     ).and.callThrough();
 
     component.getDocumentWidget();
