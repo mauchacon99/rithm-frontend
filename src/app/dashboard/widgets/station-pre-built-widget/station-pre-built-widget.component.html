@@ -1,1 +1,16 @@
-<p>station-pre-built-widget works!</p>
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoading"
+  id="app-loading-indicator-station-pre-built"
+></app-loading-widget>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="errorStationPrebuilt"
+  id="error-load-widget-station-pre-built"
+  [errorMessage]="'Unable to retrieve stations data'"
+  (tryAgain)="getStationWidgetPreBuiltData()"
+>
+</app-error-widget>
+<div *ngIf="!isLoading && !errorStationPrebuilt">
+  <p>station-pre-built-widget works!</p>
+</div>
