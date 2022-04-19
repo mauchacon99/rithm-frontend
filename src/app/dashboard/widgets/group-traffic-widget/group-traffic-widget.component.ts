@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardItem, GroupTrafficData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { Chart, ChartConfiguration, LegendItem } from 'chart.js';
+import { ChartConfiguration, LegendItem } from 'chart.js';
 
 /**
  * Component for station group traffic.
@@ -15,14 +15,14 @@ import { Chart, ChartConfiguration, LegendItem } from 'chart.js';
   templateUrl: './group-traffic-widget.component.html',
   styleUrls: ['./group-traffic-widget.component.scss'],
 })
-export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
+export class GroupTrafficWidgetComponent implements OnInit {
   /** Detect if is mobile device. */
   @Input() set isMobileDevice(value: boolean) {
     this._isMobileDevice = value;
     if (this._isMobileDevice) {
-      this.valueShowGraffic = 5;
+      this.valueShowGraphic = 5;
     } else {
-      this.valueShowGraffic = this.copyValueShowGraffic;
+      this.valueShowGraphic = this.copyValueShowGraphic;
     }
   }
 
@@ -71,23 +71,29 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   /** Data for traffic in group. */
   groupTrafficData!: GroupTrafficData;
 
-  /** Chart traffic. */
-  chartGroupTraffic!: Chart;
-
   /** Options for show traffic in chart. */
   optionsShowTraffic: number[] = [5, 10, 20, 30, 40, 50];
 
   /** Value Selected for show data in chart. */
-  valueShowGraffic = 5;
+  valueShowGraphic = 5;
 
   /** Copy value Selected for show data in chart. */
-  copyValueShowGraffic = 5;
+  copyValueShowGraphic = 5;
 
   /** Value of page to chart. */
   paginationChart = 0;
 
+  /** With of chart. */
+  private widthChart = 400;
+
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
+
+  /** Whether the action to get group traffic is loading. */
+  isLoading = false;
+
+  /** Whether the action to get group traffic fails. */
+  errorGroupTraffic = false;
 
   /** Config static chart data. */
   configChart: ChartConfiguration = {
@@ -101,6 +107,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           label: 'Documents',
           data: [],
           backgroundColor: '#8DA1C3',
+          hoverBackgroundColor: '#8DA1C3',
           stack: 'combined',
           yAxisID: 'y',
           order: 2,
@@ -112,6 +119,8 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           data: [],
           borderColor: '#294F8E',
           backgroundColor: '#8DA1C3',
+          hoverBackgroundColor: '#8DA1C3',
+          pointBorderColor: '#294F8E',
           stack: 'combined',
           borderWidth: 1.5,
           yAxisID: 'y2',
@@ -122,7 +131,8 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
     options: {
       datasets: {
         bar: {
-          barThickness: 8,
+          barThickness:
+            this.widthChart <= 335 ? (this.widthChart <= 245 ? 9 : 15) : 25,
         },
       },
       onResize: (chart) => {
@@ -133,7 +143,8 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           chart.options.datasets.bar.barThickness
         ) {
           chart.options.datasets.bar.barThickness =
-            chart.width <= 335 ? (chart.width <= 245 ? 9 : 15) : 25;
+            chart.width <= 430 ? (chart.width <= 305 ? 9 : 15) : 25;
+          this.widthChart = chart.width;
         }
       },
       scales: {
@@ -160,12 +171,6 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService
   ) {}
 
-  /** Whether the action to get group traffic is loading. */
-  isLoading = false;
-
-  /** Whether the action to get group traffic fails. */
-  errorGroupTraffic = false;
-
   /**
    * Initial Method.
    */
@@ -178,8 +183,8 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   private setDataWidget(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.valueShowGraffic = dataWidget.valueShowGraffic;
-    this.copyValueShowGraffic = this.valueShowGraffic;
+    this.valueShowGraphic = dataWidget.valueShowGraic;
+    this.copyValueShowGraphic = this.valueShowGraphic;
   }
 
   /** Get traffic data document in stations. */
@@ -207,12 +212,10 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Set and update data in widget specific.
-   */
+  /** Set and update data in widget specific. */
   updateDataWidget(): void {
     const setShowSelect = JSON.parse(this.dataWidget);
-    setShowSelect.valueShowGraffic = this.valueShowGraffic;
+    setShowSelect.valueShowGraphic = this.valueShowGraphic;
     this.widgetItem.data = JSON.stringify(setShowSelect);
     this.dashboardService.updateDashboardWidgets({
       widgetItem: this.widgetItem,
@@ -229,8 +232,8 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
       this.groupTrafficData;
     const startSlice = this.paginationChart ? this.paginationChart - 1 : 0;
     const endSlice = this.paginationChart
-      ? this.valueShowGraffic + this.valueShowGraffic
-      : this.valueShowGraffic;
+      ? this.valueShowGraphic + this.valueShowGraphic
+      : this.valueShowGraphic;
 
     this.configChart.data.labels = labels.slice(startSlice, endSlice);
     // position 0 are documents
@@ -249,27 +252,15 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
 
     // set custom tooltips
     this.setTooltips();
-
-    // update or create chart
-    if (this.chartGroupTraffic) {
-      this.chartGroupTraffic.update();
-    } else {
-      setTimeout(() => {
-        this.chartGroupTraffic = new Chart(
-          `${this.indexWidget}-${this.groupTrafficData.stationGroupRithmId}`,
-          this.configChart
-        );
-      }, 1);
-    }
   }
 
   /** Set custom tooltips. */
   private setTooltips(): void {
-    this.configChart.options = {
-      ...this.configChart.options,
-      plugins: {
+    if (this.configChart.options) {
+      this.configChart.options.plugins = {
         legend: {
           labels: {
+            boxWidth: 15,
             generateLabels: () => {
               return [
                 {
@@ -281,6 +272,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
                   text: 'Avg. Document completion time',
                   datasetIndex: 1,
                   fillStyle: '#294F8E',
+                  lineWidth: 2,
                 },
               ] as LegendItem[];
             },
@@ -302,8 +294,8 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
             },
           },
         },
-      },
-    };
+      };
+    }
   }
 
   /**
@@ -314,16 +306,9 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   paginate(type: 'next' | 'previous'): void {
     this.paginationChart =
       type === 'next'
-        ? this.paginationChart + this.valueShowGraffic
-        : this.paginationChart - this.valueShowGraffic;
+        ? this.paginationChart + this.valueShowGraphic
+        : this.paginationChart - this.valueShowGraphic;
 
     this.setConfigChart();
-  }
-
-  /** Destroy component. */
-  ngOnDestroy(): void {
-    if (this.chartGroupTraffic) {
-      this.chartGroupTraffic.destroy();
-    }
   }
 }

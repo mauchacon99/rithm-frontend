@@ -50,7 +50,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
       return JSON.stringify(
         this.widgetType === this.enumWidgetType.StationGroupTraffic
           ? {
-              valueShowGraffic: 5,
+              valueShowGraphic: 5,
               stationGroupRithmId:
                 this.itemWidgetModalSelected.itemList.rithmId,
             }

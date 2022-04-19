@@ -13,15 +13,15 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 import { MockComponent } from 'ng-mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardItem, GroupTrafficData, WidgetType } from 'src/models';
-import { TooltipItem, ChartType } from 'chart.js';
+import { NgChartsModule } from 'ng2-charts';
 
-xdescribe('GroupTrafficWidgetComponent', () => {
+fdescribe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
   let fixture: ComponentFixture<GroupTrafficWidgetComponent>;
   let stationService: StationService;
   let dashboardService: DashboardService;
   const dataWidget =
-    '{"stationGroupRithmId":"7f0611fe-dfd2-42ec-9e06-9f4e4e0b24bb", "valueShowGraffic":"5"}';
+    '{"stationGroupRithmId":"7f0611fe-dfd2-42ec-9e06-9f4e4e0b24bb", "valueShowGraphic":"5"}';
   const widgetItem: DashboardItem = {
     rithmId: '3F73BDEA-3C7B-42B7-93A3-FA318D225DFF',
     cols: 4,
@@ -60,6 +60,7 @@ xdescribe('GroupTrafficWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
+      imports: [NgChartsModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
@@ -139,7 +140,7 @@ xdescribe('GroupTrafficWidgetComponent', () => {
     expect(spyService).toHaveBeenCalledOnceWith(dataExpect);
   });
 
-  xit('should create chart', () => {
+  it('should set config chart', () => {
     const { labels, averageDocumentFlow, stationDocumentCounts, formData } =
       dataGroupTraffic;
 
@@ -156,31 +157,49 @@ xdescribe('GroupTrafficWidgetComponent', () => {
     );
   });
 
-  xit('should call setTooltips and ser plugins to chart', () => {
-    const expectedOptionsPlugins = {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        displayColors: false,
-        callbacks: {
-          label: (tooltipItem: TooltipItem<ChartType>) => {
-            if (tooltipItem.dataset.type === 'line') {
-              const dataLabels = JSON.parse(tooltipItem.dataset.label || '[]');
-              return dataLabels[tooltipItem.dataIndex] || [''];
-            }
-            return `${tooltipItem.dataset.data[tooltipItem.dataIndex]} ${
-              tooltipItem.dataset.label
-            }`;
-          },
-        },
-      },
-    };
-
+  it('should call setTooltips and plugins should be object', () => {
     component['setTooltips']();
 
-    expect(component.configChart.options?.plugins).toEqual(
-      expectedOptionsPlugins
-    );
+    expect(typeof component.configChart.options?.plugins).toEqual('object');
+  });
+
+  describe('Paginate chart', () => {
+    beforeEach(() => {
+      component.isLoading = false;
+      component.errorGroupTraffic = false;
+      component.editMode = false;
+      component.valueShowGraphic = 5;
+    });
+
+    it('should paginate next', () => {
+      component.paginationChart = 0;
+      fixture.detectChanges();
+      const spyPaginateMethod = spyOn(component, 'paginate').and.callThrough();
+
+      const btnNext = fixture.debugElement.nativeElement.querySelector(
+        '#next-paginate-button'
+      );
+      expect(btnNext).toBeTruthy();
+      btnNext.disabled = false;
+      btnNext.click();
+
+      expect(component.paginationChart).toEqual(component.valueShowGraphic);
+      expect(spyPaginateMethod).toHaveBeenCalledOnceWith('next');
+    });
+
+    it('should paginate previous', () => {
+      component.paginationChart = 5;
+      fixture.detectChanges();
+      const spyPaginateMethod = spyOn(component, 'paginate').and.callThrough();
+
+      const btnPrevious = fixture.debugElement.nativeElement.querySelector(
+        '#previous-paginate-button'
+      );
+      expect(btnPrevious).toBeTruthy();
+      btnPrevious.click();
+
+      expect(component.paginationChart).toEqual(0);
+      expect(spyPaginateMethod).toHaveBeenCalledOnceWith('previous');
+    });
   });
 });
