@@ -1433,7 +1433,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should history station', () => {
+  it('should get station events history', () => {
     const stationRithmId = '6375027-78345-73824-54244';
     const expectHistoryResponse: DocumentEvent[] = [
       {
@@ -1455,6 +1455,15 @@ describe('StationService', () => {
     service.getStationHistory(stationRithmId).subscribe((response) => {
       expect(response).toEqual(expectHistoryResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history?rithmId=${stationRithmId}`
+    );
+    req.flush(expectHistoryResponse);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBeTruthy();
+    expect(req.request.params.get('rithmId')).toEqual(stationRithmId);
+    httpTestingController.verify();
   });
 
   it('should get getStationGroupOwnerRoster', () => {

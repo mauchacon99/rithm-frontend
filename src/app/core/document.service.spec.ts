@@ -27,6 +27,7 @@ import {
   DocumentWidget,
   DocumentImage,
   DataLinkObject,
+  ContainerWidgetPreBuilt,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -993,5 +994,28 @@ describe('DocumentService', () => {
 
     req.flush(dataLink);
     httpTestingController.verify();
+  });
+
+  it('should return data of method getContainerWidgetPreBuilt', () => {
+    const containers: ContainerWidgetPreBuilt[] = [
+      {
+        flowedTimeUTC: '',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationOwners: [
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'Testy',
+            lastName: 'Testy',
+            email: 'Testy@Rithm.com',
+          },
+        ],
+      },
+    ];
+    service.getContainerWidgetPreBuilt().subscribe((response) => {
+      expect(response).toEqual(containers);
+    });
   });
 });
