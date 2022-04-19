@@ -21,7 +21,7 @@ import {
   StandardNumberJSON,
   DocumentEvent,
   GroupTrafficData,
-  DocumentCurrentStation,
+  StationWidgetPreBuilt,
 } from 'src/models';
 
 /**
@@ -1272,18 +1272,19 @@ export class MockStationService {
           y: 0,
           type: FrameType.Input,
           data: '',
+          questions: [],
           id: 0,
         },
         {
           rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
           stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           cols: 6,
-          rows: 4,
+          rows: 1,
           x: 0,
           y: 0,
-          type: FrameType.Input,
+          type: FrameType.Headline,
           data: '',
-          id: 0,
+          id: 1,
         },
       ];
       return of(stationWidgets).pipe(delay(1000));
@@ -1512,32 +1513,37 @@ export class MockStationService {
   }
 
   /**
-   * Get the current stations from containers.
+   * Get user stations.
    *
-   * @param stationRithmId The current station id.
-   * @returns The current stations.
+   * @returns User Stations.
    */
-  getCurrentStations(
-    stationRithmId: string
-  ): Observable<DocumentCurrentStation[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot response station history',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const currentStationsResponse: DocumentCurrentStation[] = [
-        {
-          name: 'Testy',
-          rithmId: '123',
-          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
-        },
-      ];
-      return of(currentStationsResponse).pipe(delay(1000));
-    }
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [
+      {
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
+      },
+    ];
+    return of(stationWidgetData).pipe(delay(1000));
   }
 }
