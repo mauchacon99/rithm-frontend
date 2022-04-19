@@ -865,35 +865,11 @@ export class StationService {
    * @returns The history station.
    */
   getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot response station history',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const historyResponse: DocumentEvent[] = [
-        {
-          eventTimeUTC: '2022-01-18T22:13:05.871Z',
-          description: 'Event Document #1',
-          user: {
-            rithmId: '123',
-            firstName: 'Testy',
-            lastName: 'Test',
-            email: 'test@test.com',
-            isEmailVerified: true,
-            notificationSettings: null,
-            createdDate: '1/2/34',
-            role: null,
-            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-          },
-        },
-      ];
-      return of(historyResponse).pipe(delay(1000));
-    }
+    const params = new HttpParams().set('rithmId', stationRithmId);
+    return this.http.get<DocumentEvent[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history`,
+      { params }
+    );
   }
 
   /**
