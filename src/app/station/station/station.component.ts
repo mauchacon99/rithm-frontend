@@ -862,7 +862,7 @@ export class StationComponent
   /**
    * Save or update the changes make the station frame widgets.
    */
-  saveStationWidgetsChanges(): void {
+  private saveStationWidgetsChanges(): void {
     this.editMode = false;
     this.setGridMode('preview');
 
@@ -958,6 +958,35 @@ export class StationComponent
           );
         },
       });
+  }
+
+  /**
+   * This save button clicked show confirm If no questions
+   * and Save or update the changes to the station frame widgets.
+   */
+  async saveStationWidgetChanges(): Promise<void> {
+    let hasQuestions = false;
+    this.inputFrameWidgetItems.map((field) => {
+      if (field.questions?.length === 0) {
+        hasQuestions = true;
+      }
+    });
+    if (hasQuestions) {
+      const confirm = await this.popupService.confirm({
+        title: ' ',
+        message:
+          '\nYou have empty input frames, would you like to save anyway?',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirm) {
+        this.saveStationWidgetsChanges();
+        hasQuestions = false;
+      }
+    } else {
+      this.saveStationWidgetsChanges();
+    }
   }
 
   /** This cancel button clicked show alert. */

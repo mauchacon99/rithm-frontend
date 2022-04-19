@@ -1,6 +1,10 @@
 <ng-container *ngIf="stationViewMode === 'edit'; else previewMode">
   <div
     *ngIf="fields"
+    [ngClass]="{
+      'border-2 border-error-500':
+        fields.length === 0 && widgetMode === 'setting'
+    }"
     class="min-h-full"
     cdkDropList
     [id]="'inputFrameWidget-' + id"
