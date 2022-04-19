@@ -63,7 +63,9 @@
         id="next-paginate-button"
         data-testid="next-paginate-button"
         class="text-secondary-500"
-        [disabled]="paginationChart >= (groupTrafficData.labels.length - valueShowGraffic)"
+        [disabled]="
+          paginationChart >= groupTrafficData.labels.length - valueShowGraffic
+        "
         (click)="paginate('next')"
       >
         Next <i class="fa-solid text-xl fa-circle-arrow-right"></i>

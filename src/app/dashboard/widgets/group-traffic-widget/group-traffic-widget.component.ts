@@ -225,21 +225,27 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
 
   /** Set data and config to chart. */
   private setConfigChart(): void {
-    const {
-      labels,
-      averageDocumentFlow,
-      stationDocumentCounts,
-      formData,
-    } = this.groupTrafficData;
-    const startSlice = this.paginationChart ? this.paginationChart-1 : 0;
-    const endSlice = this.paginationChart ? this.valueShowGraffic + this.valueShowGraffic : this.valueShowGraffic;
+    const { labels, averageDocumentFlow, stationDocumentCounts, formData } =
+      this.groupTrafficData;
+    const startSlice = this.paginationChart ? this.paginationChart - 1 : 0;
+    const endSlice = this.paginationChart
+      ? this.valueShowGraffic + this.valueShowGraffic
+      : this.valueShowGraffic;
 
     this.configChart.data.labels = labels.slice(startSlice, endSlice);
     // position 0 are documents
-    this.configChart.data.datasets[0].data = stationDocumentCounts.slice(startSlice, endSlice);
+    this.configChart.data.datasets[0].data = stationDocumentCounts.slice(
+      startSlice,
+      endSlice
+    );
     // position 1 are documents flow
-    this.configChart.data.datasets[1].data = averageDocumentFlow.slice(startSlice, endSlice);
-    this.configChart.data.datasets[1].label = JSON.stringify(formData.slice(startSlice, endSlice) || []);
+    this.configChart.data.datasets[1].data = averageDocumentFlow.slice(
+      startSlice,
+      endSlice
+    );
+    this.configChart.data.datasets[1].label = JSON.stringify(
+      formData.slice(startSlice, endSlice) || []
+    );
 
     // set custom tooltips
     this.setTooltips();
@@ -252,7 +258,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
         this.chartGroupTraffic = new Chart(
           `${this.indexWidget}-${this.groupTrafficData.stationGroupRithmId}`,
           this.configChart
-          );
+        );
       }, 1);
     }
   }
@@ -265,20 +271,20 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
         legend: {
           labels: {
             generateLabels: () => {
-                return [
-                  {
-                    text: 'Document Count',
-                    datasetIndex: 0,
-                    fillStyle: '#8DA1C3',
-                  },
-                  {
-                    text: 'Avg. Document completion time',
-                    datasetIndex: 1,
-                    fillStyle: '#294F8E',
-                  },
-                ] as LegendItem[];
-            }
-          }
+              return [
+                {
+                  text: 'Document Count',
+                  datasetIndex: 0,
+                  fillStyle: '#8DA1C3',
+                },
+                {
+                  text: 'Avg. Document completion time',
+                  datasetIndex: 1,
+                  fillStyle: '#294F8E',
+                },
+              ] as LegendItem[];
+            },
+          },
         },
         tooltip: {
           displayColors: false,
@@ -306,9 +312,10 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
    * @param type Of pagination 'next' | 'previous.
    */
   paginate(type: 'next' | 'previous'): void {
-    this.paginationChart = type === 'next'
-    ? this.paginationChart+this.valueShowGraffic
-    : this.paginationChart-this.valueShowGraffic;
+    this.paginationChart =
+      type === 'next'
+        ? this.paginationChart + this.valueShowGraffic
+        : this.paginationChart - this.valueShowGraffic;
 
     this.setConfigChart();
   }

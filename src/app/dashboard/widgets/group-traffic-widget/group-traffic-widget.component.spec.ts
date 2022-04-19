@@ -106,10 +106,7 @@ xdescribe('GroupTrafficWidgetComponent', () => {
   });
 
   it('should show error message when request group traffic data', () => {
-    spyOn(
-      stationService,
-      'getGroupTrafficData'
-    ).and.returnValue(
+    spyOn(stationService, 'getGroupTrafficData').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -142,47 +139,48 @@ xdescribe('GroupTrafficWidgetComponent', () => {
     expect(spyService).toHaveBeenCalledOnceWith(dataExpect);
   });
 
-
   xit('should create chart', () => {
-    const {
-      labels,
-      averageDocumentFlow,
-      stationDocumentCounts,
-      formData,
-    } = dataGroupTraffic;
+    const { labels, averageDocumentFlow, stationDocumentCounts, formData } =
+      dataGroupTraffic;
 
     component['setConfigChart']();
     expect(component.configChart.data.labels).toEqual(labels);
-    expect(component.configChart.data.datasets[0].data).toEqual(stationDocumentCounts);
-    expect(component.configChart.data.datasets[1].data).toEqual(averageDocumentFlow);
-    expect(component.configChart.data.datasets[1].label).toEqual(JSON.stringify(formData || []));
+    expect(component.configChart.data.datasets[0].data).toEqual(
+      stationDocumentCounts
+    );
+    expect(component.configChart.data.datasets[1].data).toEqual(
+      averageDocumentFlow
+    );
+    expect(component.configChart.data.datasets[1].label).toEqual(
+      JSON.stringify(formData || [])
+    );
   });
 
   xit('should call setTooltips and ser plugins to chart', () => {
     const expectedOptionsPlugins = {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          displayColors: false,
-          callbacks: {
-            label: (tooltipItem: TooltipItem<ChartType>) => {
-              if (tooltipItem.dataset.type === 'line') {
-                const dataLabels = JSON.parse(
-                  tooltipItem.dataset.label || '[]'
-                );
-                return dataLabels[tooltipItem.dataIndex] || [''];
-              }
-              return `${tooltipItem.dataset.data[tooltipItem.dataIndex]} ${
-                tooltipItem.dataset.label
-              }`;
-            },
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        displayColors: false,
+        callbacks: {
+          label: (tooltipItem: TooltipItem<ChartType>) => {
+            if (tooltipItem.dataset.type === 'line') {
+              const dataLabels = JSON.parse(tooltipItem.dataset.label || '[]');
+              return dataLabels[tooltipItem.dataIndex] || [''];
+            }
+            return `${tooltipItem.dataset.data[tooltipItem.dataIndex]} ${
+              tooltipItem.dataset.label
+            }`;
           },
         },
+      },
     };
 
     component['setTooltips']();
 
-    expect(component.configChart.options?.plugins).toEqual(expectedOptionsPlugins);
+    expect(component.configChart.options?.plugins).toEqual(
+      expectedOptionsPlugins
+    );
   });
 });
