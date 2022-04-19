@@ -284,9 +284,10 @@ export class GroupTrafficWidgetComponent implements OnInit {
           callbacks: {
             title: (tooltipItem) => {
               const { label, dataset } = tooltipItem[0];
-              const title = dataset.type === 'line'
-              ? 'Avg. Document completion time'
-              : 'Document Count';
+              const title =
+                dataset.type === 'line'
+                  ? 'Avg. Document completion time'
+                  : 'Document Count';
               return [title, label];
             },
             label: (tooltipItem) => {
