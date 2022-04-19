@@ -1555,9 +1555,18 @@ describe('StationService', () => {
     const expectedData: GroupTrafficData = {
       title: 'Group Eagle',
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocumentCounts: [10, 5, 8, 10, 20],
-      averageDocumentFlow: [2, 4, 1, 8, 9],
+      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5', 'station 6', 'station 7'],
+      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
+      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
+      formData: [
+        ['2 days', '50 hours'],
+        ['7 weeks', '50 days'],
+        ['1 hour', '60 minutes'],
+        ['2 days', '50 hours'],
+        ['1 weeks', '7 days'],
+        ['40 minutes'],
+        ['2 hour', '120 minutes'],
+      ],
     };
     service
       .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')

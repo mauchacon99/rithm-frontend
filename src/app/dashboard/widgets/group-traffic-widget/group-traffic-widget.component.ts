@@ -4,7 +4,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { DashboardItem, GroupTrafficData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { Chart, ChartConfiguration } from 'chart.js';
+import { Chart, ChartConfiguration, LegendItem } from 'chart.js';
 
 /**
  * Component for station group traffic.
@@ -82,6 +82,9 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
 
   /** Copy value Selected for show data in chart. */
   copyValueShowGraffic = 5;
+
+  /** Value of page to chart. */
+  paginationChart = 0;
 
   /** StationGroupRithmId for station groups traffic widget. */
   stationGroupRithmId = '';
@@ -191,7 +194,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.errorGroupTraffic = false;
           this.groupTrafficData = trafficData;
-          this.createChart();
+          this.setConfigChart();
         },
         error: (error: unknown) => {
           this.isLoading = false;
@@ -216,38 +219,66 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
       widgetIndex: this.indexWidget,
       quantityElementsWidget: this.groupTrafficData.labels.length,
     });
+    this.paginationChart = 0;
+    this.setConfigChart();
   }
 
-  /** Parse data and generate char traffic. */
-  createChart(): void {
+  /** Set data and config to chart. */
+  private setConfigChart(): void {
     const {
       labels,
       averageDocumentFlow,
       stationDocumentCounts,
       formData,
-      stationGroupRithmId,
     } = this.groupTrafficData;
-    this.configChart.data.labels = labels;
+    const startSlice = this.paginationChart ? this.paginationChart-1 : 0;
+    const endSlice = this.paginationChart ? this.valueShowGraffic + this.valueShowGraffic : this.valueShowGraffic;
+
+    this.configChart.data.labels = labels.slice(startSlice, endSlice);
     // position 0 are documents
-    this.configChart.data.datasets[0].data = stationDocumentCounts;
+    this.configChart.data.datasets[0].data = stationDocumentCounts.slice(startSlice, endSlice);
     // position 1 are documents flow
-    this.configChart.data.datasets[1].data = averageDocumentFlow;
-    this.configChart.data.datasets[1].label = JSON.stringify(formData || []);
-    // set tooltips
+    this.configChart.data.datasets[1].data = averageDocumentFlow.slice(startSlice, endSlice);
+    this.configChart.data.datasets[1].label = JSON.stringify(formData.slice(startSlice, endSlice) || []);
+
+    // set custom tooltips
     this.setTooltips();
-    const id = `${this.indexWidget}-${stationGroupRithmId}`;
-    setTimeout(() => {
-      this.chartGroupTraffic = new Chart(id, this.configChart);
-    }, 1);
+
+    // update or create chart
+    if (this.chartGroupTraffic) {
+      this.chartGroupTraffic.update();
+    } else {
+      setTimeout(() => {
+        this.chartGroupTraffic = new Chart(
+          `${this.indexWidget}-${this.groupTrafficData.stationGroupRithmId}`,
+          this.configChart
+          );
+      }, 1);
+    }
   }
 
   /** Set custom tooltips. */
-  setTooltips(): void {
+  private setTooltips(): void {
     this.configChart.options = {
       ...this.configChart.options,
       plugins: {
         legend: {
-          display: false,
+          labels: {
+            generateLabels: () => {
+                return [
+                  {
+                    text: 'Document Count',
+                    datasetIndex: 0,
+                    fillStyle: '#8DA1C3',
+                  },
+                  {
+                    text: 'Avg. Document completion time',
+                    datasetIndex: 1,
+                    fillStyle: '#294F8E',
+                  },
+                ] as LegendItem[];
+            }
+          }
         },
         tooltip: {
           displayColors: false,
@@ -269,9 +300,22 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Paginate chart.
+   *
+   * @param type Of pagination 'next' | 'previous.
+   */
+  paginate(type: 'next' | 'previous'): void {
+    this.paginationChart = type === 'next'
+    ? this.paginationChart+this.valueShowGraffic
+    : this.paginationChart-this.valueShowGraffic;
+
+    this.setConfigChart();
+  }
+
   /** Destroy component. */
   ngOnDestroy(): void {
-    if (this.groupTrafficData) {
+    if (this.chartGroupTraffic) {
       this.chartGroupTraffic.destroy();
     }
   }

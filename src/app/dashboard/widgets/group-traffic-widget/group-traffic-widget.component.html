@@ -42,9 +42,32 @@
     </div>
   </div>
 
-  <div class="h-full w-full p-4">
+  <div class="h-full w-full p-4 scrollbar overflow-auto">
     <canvas
       [id]="indexWidget + '-' + groupTrafficData.stationGroupRithmId"
     ></canvas>
+
+    <div class="flex justify-between" *ngIf="!editMode">
+      <button
+        mat-button
+        id="previous-paginate-button"
+        data-testid="previous-paginate-button"
+        class="text-secondary-500"
+        (click)="paginate('previous')"
+        [disabled]="!paginationChart"
+      >
+        <i class="fa-solid text-xl fa-circle-arrow-left"></i> Previous
+      </button>
+      <button
+        mat-button
+        id="next-paginate-button"
+        data-testid="next-paginate-button"
+        class="text-secondary-500"
+        [disabled]="paginationChart >= (groupTrafficData.labels.length - valueShowGraffic)"
+        (click)="paginate('next')"
+      >
+        Next <i class="fa-solid text-xl fa-circle-arrow-right"></i>
+      </button>
+    </div>
   </div>
 </div>
