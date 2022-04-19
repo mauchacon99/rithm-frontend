@@ -236,7 +236,14 @@ export class GroupTrafficWidgetComponent implements OnInit {
       ? this.valueShowGraphic + this.valueShowGraphic
       : this.valueShowGraphic;
 
-    this.configChart.data.labels = labels.slice(startSlice, endSlice);
+    // truncate labels with length > 10
+    const truncateLabels = labels.map((label) => {
+      if (label.length >= 10) {
+        return `${label.slice(0, 8)}...`;
+      }
+      return label;
+    });
+    this.configChart.data.labels = truncateLabels.slice(startSlice, endSlice);
     // position 0 are documents
     this.configChart.data.datasets[0].data = stationDocumentCounts.slice(
       startSlice,

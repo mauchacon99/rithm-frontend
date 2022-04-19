@@ -906,7 +906,7 @@ export class StationService {
         'station 2',
         'station 3',
         'station 4',
-        'station 5',
+        'station 5 with a long text for test view',
         'station 6',
         'station 7',
       ],
