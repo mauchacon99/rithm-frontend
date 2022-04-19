@@ -18,6 +18,12 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /*User station data. */
   stationWidgetData: StationWidgetPreBuilt[] = [];
 
+  /** Whether the action to get station prebuilt is loading. */
+  isLoading = false;
+
+  /** Whether the action to get station prebuilt fails. */
+  errorStationPrebuilt = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService
@@ -34,15 +40,21 @@ export class StationPreBuiltWidgetComponent implements OnInit {
    * Get user stations.
    *
    */
-  private getStationWidgetPreBuiltData(): void {
+  getStationWidgetPreBuiltData(): void {
+    this.isLoading = true;
+    this.errorStationPrebuilt = false;
     this.stationService
       .getStationWidgetPreBuiltData()
       .pipe(first())
       .subscribe({
         next: (stationWidgetData) => {
+          this.isLoading = false;
+          this.errorStationPrebuilt = false;
           this.stationWidgetData = stationWidgetData;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorStationPrebuilt = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
