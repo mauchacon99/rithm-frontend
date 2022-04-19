@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ContainerWidgetPreBuilt } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { ContainerWidgetPreBuilt, StationWidgetPreBuilt } from 'src/models';
 /**
  * Component for station prebuilt.
  */
@@ -15,17 +16,43 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
+  /* User station data. */
+  stationWidgetData: StationWidgetPreBuilt[] = [];
+
   /** Containers widget pre built. */
   containers: ContainerWidgetPreBuilt[] = [];
 
   constructor(
     private documentService: DocumentService,
+    private stationService: StationService,
     private errorService: ErrorService
   ) {}
 
   /** Init method. */
   ngOnInit(): void {
+    this.getStationWidgetPreBuiltData();
     this.getContainerWidgetPreBuilt();
+  }
+
+  /**
+   * Get user stations.
+   *
+   */
+  private getStationWidgetPreBuiltData(): void {
+    this.stationService
+      .getStationWidgetPreBuiltData()
+      .pipe(first())
+      .subscribe({
+        next: (stationWidgetData) => {
+          this.stationWidgetData = stationWidgetData;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
