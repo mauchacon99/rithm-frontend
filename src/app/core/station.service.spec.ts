@@ -1404,7 +1404,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should history station', () => {
+  it('should get station events history', () => {
     const stationRithmId = '6375027-78345-73824-54244';
     const expectHistoryResponse: DocumentEvent[] = [
       {
@@ -1426,6 +1426,15 @@ describe('StationService', () => {
     service.getStationHistory(stationRithmId).subscribe((response) => {
       expect(response).toEqual(expectHistoryResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history?rithmId=${stationRithmId}`
+    );
+    req.flush(expectHistoryResponse);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBeTruthy();
+    expect(req.request.params.get('rithmId')).toEqual(stationRithmId);
+    httpTestingController.verify();
   });
 
   it('should get getStationGroupOwnerRoster', () => {
@@ -1532,18 +1541,19 @@ describe('StationService', () => {
         y: 0,
         type: FrameType.Input,
         data: '',
+        questions: [],
         id: 0,
       },
       {
         rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         cols: 6,
-        rows: 4,
+        rows: 1,
         x: 0,
         y: 0,
-        type: FrameType.Input,
+        type: FrameType.Headline,
         data: '',
-        id: 0,
+        id: 1,
       },
     ];
 
