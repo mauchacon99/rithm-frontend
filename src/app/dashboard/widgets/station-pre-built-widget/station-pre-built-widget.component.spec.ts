@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockStationService,
+} from 'src/mocks';
 
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
@@ -14,7 +18,6 @@ describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
   let fixture: ComponentFixture<StationPreBuiltWidgetComponent>;
   let stationService: StationService;
-  let documentService: DocumentService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,6 +29,7 @@ describe('StationPreBuiltWidgetComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -34,7 +38,6 @@ describe('StationPreBuiltWidgetComponent', () => {
     fixture = TestBed.createComponent(StationPreBuiltWidgetComponent);
     component = fixture.componentInstance;
     stationService = TestBed.inject(StationService);
-    documentService = TestBed.inject(DocumentService);
     fixture.detectChanges();
   });
 
@@ -56,7 +59,7 @@ describe('StationPreBuiltWidgetComponent', () => {
     fixture.detectChanges();
     expect(component.isLoading).toBeTrue();
     const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
-      '#app-loading-indicator-station-prebuilt'
+      '#app-loading-indicator-station-pre-built'
     );
     expect(loadingIndicator).toBeTruthy();
   });
@@ -77,33 +80,11 @@ describe('StationPreBuiltWidgetComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
-      '#error-load-widget-station-prebuilt'
+      '#error-load-widget-station-pre-built'
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorStationPrebuilt).toBeTrue();
     expect(spyService).toHaveBeenCalled();
-    expect(spyError).toHaveBeenCalled();
-  });
-
-  it('should call getContainerWidgetPreBuilt', () => {
-    const spyGetContainerWidgetPreBuilt = spyOn(
-      documentService,
-      'getContainerWidgetPreBuilt'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyGetContainerWidgetPreBuilt).toHaveBeenCalled();
-  });
-
-  it('should catch an error if the request getContainerWidgetPreBuilt fails', () => {
-    const spyError = spyOn(
-      documentService,
-      'getContainerWidgetPreBuilt'
-    ).and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -124,7 +105,7 @@ describe('StationPreBuiltWidgetComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
     const errorComponent = fixture.nativeElement.querySelector(
-      '#error-load-widget-station-prebuilt'
+      '#error-load-widget-station-pre-built'
     );
     expect(errorComponent).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
