@@ -231,7 +231,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
   private setConfigChart(): void {
     const { labels, averageDocumentFlow, stationDocumentCounts, formData } =
       this.groupTrafficData;
-    const startSlice = this.paginationChart ? this.paginationChart - 1 : 0;
+    const startSlice = this.paginationChart;
     const endSlice = this.paginationChart
       ? this.valueShowGraphic + this.valueShowGraphic
       : this.valueShowGraphic;
@@ -282,6 +282,13 @@ export class GroupTrafficWidgetComponent implements OnInit {
         tooltip: {
           displayColors: false,
           callbacks: {
+            title: (tooltipItem) => {
+              const { label, dataset } = tooltipItem[0];
+              const title = dataset.type === 'line'
+              ? 'Avg. Document completion time'
+              : 'Document Count';
+              return [title, label];
+            },
             label: (tooltipItem) => {
               if (tooltipItem.dataset.type === 'line') {
                 const dataLabels = JSON.parse(
