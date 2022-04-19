@@ -70,9 +70,11 @@ textarea {
     ::ng-deep .mat-form-field-wrapper {
       height: 50px;
       margin: 0 0 12px !important;
+
       .mat-form-field-outline {
         height: 50px;
       }
+
       .mat-form-field-infix {
         border-top: 0.15em solid transparent;
       }
@@ -82,6 +84,7 @@ textarea {
   //Widget item in layout mode
   .widget-item-layout {
     @apply hover:border-accent-500;
+
     outline: 2px solid rgb(206 209 213);
 
     &:hover {
