@@ -118,6 +118,28 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Checking if the current user is in workers.
+   *
+   * @returns Is in workers.
+   */
+  get isUserInWorkers(): boolean {
+    return (
+      this.documentInformation.workers?.find(
+        (workers) => this.userService.user.rithmId === workers.rithmId
+      ) !== undefined
+    );
+  }
+
+  /**
+   * Checking if the current user is an admin.
+   *
+   * @returns Is admin.
+   */
+  get isAdmin(): boolean {
+    return this.userService.isAdmin;
+  }
+
+  /**
    * Is the current user an owner or an admin for this station.
    *
    * @returns Validate if user is owner or admin of current station.
