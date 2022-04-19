@@ -132,7 +132,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
       datasets: {
         bar: {
           barThickness:
-            this.widthChart <= 335 ? (this.widthChart <= 245 ? 9 : 15) : 25,
+            this.widthChart <= 430 ? (this.widthChart <= 305 ? 9 : 15) : 25,
         },
       },
       onResize: (chart) => {
@@ -183,7 +183,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
   private setDataWidget(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
-    this.valueShowGraphic = dataWidget.valueShowGraic;
+    this.valueShowGraphic = dataWidget.valueShowGraphic || 5;
     this.copyValueShowGraphic = this.valueShowGraphic;
   }
 
