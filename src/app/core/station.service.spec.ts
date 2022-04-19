@@ -1317,6 +1317,35 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should save/update the array of stationDataLinkFrames', () => {
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.DataLink,
+        data: '',
+        id: 0,
+      },
+    ];
+
+    service
+      .saveDataLinkFrames(stationId, frameStationWidget)
+      .subscribe((response) => {
+        expect(response).toEqual(frameStationWidget);
+      });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-links-frames?stationRithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(frameStationWidget);
+
+    req.flush(frameStationWidget);
+    httpTestingController.verify();
+  });
+
   it('should remove a member the owner from the roster for group specific', () => {
     const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
     const expectedResponse: StationRosterMember[] = [
