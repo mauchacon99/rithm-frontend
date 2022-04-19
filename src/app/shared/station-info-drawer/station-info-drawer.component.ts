@@ -61,6 +61,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** Use for get amount of containers of a station. */
+  numberOfContainers = 0;
+
+  /** Use for station events history. */
+  stationHistoryEvents: DocumentEvent[] = [];
+
   /** Whether the worker roster us public or not. */
   isPublic = false;
 
@@ -132,6 +138,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the toggle to allow previous button or not. */
   statusAllowPreviousLoading = false;
 
+  /** Whether the station events history is underway. */
+  eventsLoading = false;
+
   /** Loading while saving the button text is underway. */
   savingButtonText = false;
 
@@ -140,12 +149,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Use for catch error in update for permission of all org workers. */
   allowAllOrgError = false;
-
-  /** Use for get amount of containers of a station. */
-  numberOfContainers = 0;
-
-  /** Use for history station. */
-  stationHistoryEvents: DocumentEvent[] = [];
 
   /** Loading in the amount of containers of a station. */
   numberContainersLoading = false;
@@ -900,14 +903,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Get Station History.
    */
   getStationHistory(): void {
+    this.eventsLoading = true;
     this.stationService
       .getStationHistory(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (history) => {
           this.stationHistoryEvents = history;
+          this.eventsLoading = false;
         },
         error: (error: unknown) => {
+          this.eventsLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
