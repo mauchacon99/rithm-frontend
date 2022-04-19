@@ -947,7 +947,7 @@ export class StationService {
    * Save input frames questions.
    *
    * @param frameRithmId The id of the current input frame.
-   * @param fQuestions Questions to be saved.
+   * @param frameQuestions Questions to be saved.
    * @returns Frame questions array.
    */
   saveInputFrameQuestions(
