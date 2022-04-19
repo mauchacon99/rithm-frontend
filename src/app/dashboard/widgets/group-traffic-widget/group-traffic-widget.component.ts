@@ -19,10 +19,11 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Detect if is mobile device. */
   @Input() set isMobileDevice(value: boolean) {
     this._isMobileDevice = value;
-    if (this._isMobileDevice) {
-      this.valueShowGraphic = 5;
-    } else {
-      this.valueShowGraphic = this.copyValueShowGraphic;
+    this.valueShowGraphic = value ? 5 : this.copyValueShowGraphic;
+
+    if (this.groupTrafficData) {
+      this.paginationChart = 0;
+      this.setConfigChart();
     }
   }
 

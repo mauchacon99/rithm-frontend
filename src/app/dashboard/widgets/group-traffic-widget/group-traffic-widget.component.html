@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="h-full w-full p-4 scrollbar overflow-auto">
+  <div class="h-full w-full pt-4 scrollbar overflow-auto">
     <canvas
       baseChart
       [datasets]="configChart.data.datasets"
@@ -51,14 +51,14 @@
     >
     </canvas>
 
-    <div class="flex justify-between" *ngIf="!editMode">
+    <div class="flex justify-between">
       <button
         mat-button
         id="previous-paginate-button"
         data-testid="previous-paginate-button"
         class="text-secondary-500"
         (click)="paginate('previous')"
-        [disabled]="!paginationChart"
+        [disabled]="!paginationChart || editMode"
       >
         <i class="fa-solid text-xl fa-circle-arrow-left"></i> Previous
       </button>
@@ -68,7 +68,8 @@
         data-testid="next-paginate-button"
         class="text-secondary-500"
         [disabled]="
-          paginationChart >= groupTrafficData.labels.length - valueShowGraphic
+          paginationChart >=
+            groupTrafficData.labels.length - valueShowGraphic || editMode
         "
         (click)="paginate('next')"
       >
