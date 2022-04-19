@@ -15,7 +15,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardItem, GroupTrafficData, WidgetType } from 'src/models';
 import { NgChartsModule } from 'ng2-charts';
 
-fdescribe('GroupTrafficWidgetComponent', () => {
+describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
   let fixture: ComponentFixture<GroupTrafficWidgetComponent>;
   let stationService: StationService;
