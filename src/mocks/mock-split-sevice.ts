@@ -138,7 +138,8 @@ export class MockSplitService {
     return 'on';
   }
 
-  /** Get the section account profile photo.
+  /**
+   * Get the section account profile photo.
    *
    * @returns Split treatment.
    */
