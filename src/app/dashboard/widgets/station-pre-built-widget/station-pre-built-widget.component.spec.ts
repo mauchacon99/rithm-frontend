@@ -1,23 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import {
-  MockDocumentService,
-  MockErrorService,
-  MockStationService,
-} from 'src/mocks';
+import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
-import { DocumentService } from 'src/app/core/document.service';
 
 describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
   let fixture: ComponentFixture<StationPreBuiltWidgetComponent>;
   let stationService: StationService;
+  let errorService: ErrorService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,15 +25,15 @@ describe('StationPreBuiltWidgetComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
-        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    stationService = TestBed.inject(StationService);
+    errorService = TestBed.inject(ErrorService);
     fixture = TestBed.createComponent(StationPreBuiltWidgetComponent);
     component = fixture.componentInstance;
-    stationService = TestBed.inject(StationService);
     fixture.detectChanges();
   });
 
@@ -73,10 +69,7 @@ describe('StationPreBuiltWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(
-      TestBed.inject(ErrorService),
-      'logError'
-    ).and.callThrough();
+    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(

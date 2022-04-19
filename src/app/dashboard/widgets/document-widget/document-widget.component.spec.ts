@@ -16,6 +16,8 @@ import { DashboardItem, WidgetType } from 'src/models';
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
   let fixture: ComponentFixture<DocumentWidgetComponent>;
+  let errorService: ErrorService;
+  let documentService: DocumentService;
   const dataWidget =
     '{"documentRithmId":"8263330A-BCAA-40DB-8C06-D4C111D5C9DA","columns":[{"name":"Test","questionId":"45454-54545-45454"}]}';
   const documentRithmId = '8263330A-BCAA-40DB-8C06-D4C111D5C9DA';
@@ -50,6 +52,8 @@ describe('DocumentWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    errorService = TestBed.inject(ErrorService);
+    documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(DocumentWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
@@ -63,7 +67,7 @@ describe('DocumentWidgetComponent', () => {
 
   it('should call method getDocumentWidget', () => {
     const methodGetDocumentWidget = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getDocumentWidget'
     ).and.callThrough();
 
@@ -76,7 +80,7 @@ describe('DocumentWidgetComponent', () => {
 
   it('should show error if the request getDocumentWidget fail', () => {
     const deleteCompanyDashboard = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getDocumentWidget'
     ).and.returnValue(
       throwError(() => {
@@ -84,10 +88,7 @@ describe('DocumentWidgetComponent', () => {
       })
     );
 
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'logError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getDocumentWidget();
 
@@ -99,7 +100,7 @@ describe('DocumentWidgetComponent', () => {
 
   it('should call method getDocumentWidget', () => {
     const spyDocumentWidget = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getDocumentWidget'
     ).and.callThrough();
     component.getDocumentWidget();

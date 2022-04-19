@@ -12,6 +12,8 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
   let fixture: ComponentFixture<ContainerPreBuiltWidgetComponent>;
+  let errorService: ErrorService;
+  let documentService: DocumentService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,6 +30,8 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    errorService = TestBed.inject(ErrorService);
+    documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(ContainerPreBuiltWidgetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -39,7 +43,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
 
   it('should call getContainerWidgetPreBuilt', () => {
     const spyGetContainerWidgetPreBuilt = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.callThrough();
 
@@ -55,7 +59,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
 
   it('should catch an error if the request getContainerWidgetPreBuilt fails', () => {
     const spyError = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.returnValue(
       throwError(() => {
@@ -88,17 +92,14 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     ).and.callThrough();
 
     const spyError = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const spyMethodError = spyOn(
-      TestBed.inject(ErrorService),
-      'logError'
-    ).and.callThrough();
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorComponent = fixture.nativeElement.querySelector(
