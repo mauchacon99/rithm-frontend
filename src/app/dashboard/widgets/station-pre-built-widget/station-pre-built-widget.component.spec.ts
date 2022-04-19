@@ -1,11 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import {
-  MockDocumentService,
-  MockErrorService,
-  MockStationService,
-} from 'src/mocks';
+import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
@@ -29,7 +25,6 @@ describe('StationPreBuiltWidgetComponent', () => {
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService },
         { provide: StationService, useClass: MockStationService },
       ],
     }).compileComponents();
@@ -134,5 +129,6 @@ describe('StationPreBuiltWidgetComponent', () => {
     expect(errorComponent).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 });

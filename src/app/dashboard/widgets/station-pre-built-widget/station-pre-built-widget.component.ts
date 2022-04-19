@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs';
-import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { ContainerWidgetPreBuilt, StationWidgetPreBuilt } from 'src/models';
+import { StationWidgetPreBuilt } from 'src/models';
 /**
  * Component for station prebuilt.
  */
@@ -19,6 +18,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /* User station data. */
   stationWidgetData: StationWidgetPreBuilt[] = [];
 
+<<<<<<< HEAD
   /** Containers widget pre built. */
   containers: ContainerWidgetPreBuilt[] = [];
 
@@ -28,8 +28,9 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /** Whether the action to get station prebuilt fails. */
   errorStationPrebuilt = false;
 
+=======
+>>>>>>> dev
   constructor(
-    private documentService: DocumentService,
     private stationService: StationService,
     private errorService: ErrorService
   ) {}
@@ -37,7 +38,6 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   /** Init method. */
   ngOnInit(): void {
     this.getStationWidgetPreBuiltData();
-    this.getContainerWidgetPreBuilt();
   }
 
   /**
@@ -59,27 +59,6 @@ export class StationPreBuiltWidgetComponent implements OnInit {
         error: (error: unknown) => {
           this.isLoading = false;
           this.errorStationPrebuilt = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Get containers.
-   *
-   */
-  private getContainerWidgetPreBuilt(): void {
-    this.documentService
-      .getContainerWidgetPreBuilt()
-      .pipe(first())
-      .subscribe({
-        next: (containers) => {
-          this.containers = containers;
-        },
-        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
