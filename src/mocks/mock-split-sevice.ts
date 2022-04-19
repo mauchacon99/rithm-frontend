@@ -130,7 +130,15 @@ export class MockSplitService {
   }
 
   /**
-   * Get the section account profile photo.
+   * Get the section station containers modal.
+   *
+   * @returns Split treatment.
+   */
+  public getStationContainersModalTreatment(): string {
+    return 'on';
+  }
+
+  /** Get the section account profile photo.
    *
    * @returns Split treatment.
    */

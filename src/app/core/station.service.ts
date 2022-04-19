@@ -24,6 +24,7 @@ import {
   GroupTrafficData,
   FrameType,
   StandardNumberJSON,
+  StationWidgetPreBuilt,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -762,18 +763,19 @@ export class StationService {
           y: 0,
           type: FrameType.Input,
           data: '',
+          questions: [],
           id: 0,
         },
         {
           rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
           stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           cols: 6,
-          rows: 4,
+          rows: 1,
           x: 0,
           y: 0,
-          type: FrameType.Input,
+          type: FrameType.Headline,
           data: '',
-          id: 0,
+          id: 1,
         },
       ];
 
@@ -928,5 +930,40 @@ export class StationService {
       averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
+  }
+
+  /**
+   * Get user stations.
+   *
+   * @returns User Stations.
+   */
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [
+      {
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
+      },
+    ];
+    return of(stationWidgetData).pipe(delay(1000));
   }
 }
