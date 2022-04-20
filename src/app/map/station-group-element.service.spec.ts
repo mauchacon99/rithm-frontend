@@ -463,6 +463,16 @@ describe('StationGroupElementService', () => {
     );
   });
 
+  it('should return Throw Error in the method splitStationGroupNameTooltip', () => {
+    expect(() =>
+      service.splitStationGroupNameTooltip('Title Demo', 210 * 0.5)
+    ).toThrow(
+      new Error(
+        'Cannot split station group name for the tooltip if context is not defined'
+      )
+    );
+  });
+
   it('should return Throw Error in the method drawStationGroupIcon', () => {
     const stationGroup = new StationGroupMapElement(stationGroupsMapData[0]);
     expect(() =>
