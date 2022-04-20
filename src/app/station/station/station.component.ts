@@ -509,14 +509,14 @@ export class StationComponent
         rows: 4,
         x: 0,
         y: 0,
-        type: FrameType.Input,
+        type: FrameType.DataLink,
         data: JSON.stringify(dl),
         id: this.inputFrameWidgetItems.length,
       };
       framesForDatalink.push(frameTemplate);
     });
     this.stationService
-      .saveStationWidgets(this.stationRithmId, framesForDatalink)
+      .saveDataLinkFrames(this.stationRithmId, framesForDatalink)
       .pipe(first())
       .subscribe({
         next: (frames) => {
@@ -570,6 +570,10 @@ export class StationComponent
     this.stationLoading = true;
     if (this.dataLinkArray.length) {
       this.saveDataLinks();
+      this.stationInformation.questions =
+        this.stationInformation.questions.filter(
+          (q) => q.questionType !== QuestionFieldType.DataLink
+        );
     }
     const petitionsUpdateStation = [
       // Update station Name.
@@ -890,9 +894,56 @@ export class StationComponent
             }
           });
           this.inputFrameWidgetItems = inputFrames;
+          if (inputFrames.length) {
+            this.saveInputFrameQuestions(
+              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+            );
+          }
           this.changedOptions();
         },
         error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save input frame widgets.
+   *
+   * @param frames An array of input frameWidgets.
+   */
+  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
+    if (frames.length) {
+      const frameQuestionRequest: Observable<Question[]>[] = [];
+      frames.forEach((frame) => {
+        const fQuestions: Question[] = JSON.parse(frame.data);
+        if (fQuestions.length) {
+          frameQuestionRequest.push(
+            this.stationService.saveInputFrameQuestions(
+              frame.rithmId,
+              fQuestions
+            )
+          );
+        }
+      });
+      this.forkJoinFrameQuestions(frameQuestionRequest);
+    }
+  }
+
+  /**
+   * Execute a fork join to save input frame questions.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
+    forkJoin(requestRow)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

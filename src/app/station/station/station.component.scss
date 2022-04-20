@@ -68,13 +68,28 @@ textarea {
     @apply px-0 pb-0 rounded transition-colors overflow-visible;
 
     ::ng-deep .mat-form-field-wrapper {
-      margin: 0 0 14px !important;
+      height: 50px;
+      margin: 0 0 12px !important;
+
+      .mat-form-field-outline {
+        height: 50px;
+      }
+
+      .mat-form-field-infix {
+        border-top: 0.15em solid transparent;
+      }
     }
   }
 
   //Widget item in layout mode
   .widget-item-layout {
-    @apply border-2 border-secondary-100 hover:border-accent-500;
+    @apply hover:border-accent-500;
+
+    outline: 2px solid rgb(206 209 213);
+
+    &:hover {
+      outline: 2px solid rgb(27 67 135);
+    }
   }
 
   .h-gridster {
