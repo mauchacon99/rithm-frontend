@@ -108,36 +108,6 @@ export class StationGroupElementService {
 
     //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
-    //If there is a tooltip hovered, draw that in the correct position.
-    if (this.isTooltipDisplayed) {
-      // Check if there still hovering over a group boundary.
-      const hover = this.mapService.stationGroupElements.find(
-        (stationGroup) =>
-          (this.mapService.mapHelper.mapMode$.value ===
-            MapMode.StationGroupAdd ||
-            this.mapService.mapHelper.mapMode$.value ===
-              MapMode.StationGroupEdit) &&
-          stationGroup.disabled &&
-          !stationGroup.selected &&
-          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-      );
-      const isLastGroupHover = this.mapService.stationGroupElements.find(
-        (stationGroup) =>
-          this.mapService.mapHelper.mapMode$.value ===
-            MapMode.StationGroupEdit &&
-          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-          this.mapService.isLastStationGroup
-      );
-      if (hover) {
-        this.drawStationGroupToolTip(this.tooltipPosition);
-      } else if (isLastGroupHover) {
-        //If hover over the last group then, should update the message.
-        this.drawStationGroupToolTip(this.tooltipPosition, true);
-      } else {
-        this.isTooltipDisplayed = false;
-        this.tooltipPosition = { x: -1, y: -1 };
-      }
-    }
   }
 
   /**
@@ -270,22 +240,50 @@ export class StationGroupElementService {
    *
    * @param pointStart The point at which tooltip begins.
    * @param editMode Check for station edit mode to update message.
+   * @param title The station group name for the tooltip.
    */
-  drawStationGroupToolTip(pointStart: Point, editMode = false): void {
+  drawStationGroupToolTip(
+    pointStart: Point,
+    editMode = false,
+    title = ''
+  ): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the tooltip if context is not defined');
     }
     const ctx = this.canvasContext;
 
     const startingX = pointStart.x;
-    const startingY = pointStart.y - 65 * this.mapScale;
+    let startingY = pointStart.y - 65 * this.mapScale;
 
     const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
-    const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
-    const scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
+    let scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
+    let scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
     const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
+    /** Save the approximate scale of the title. */
+    const scaledTitle = 21 * GROUP_CHARACTER_SIZE * this.mapScale;
+
+    /** New title if it is larger than the allowed scale we split the same one. */
+    const newTitle: string[] = [];
+
+    /* If the title is different from empty. */
+    if (title !== '') {
+      newTitle.push(...this.splitStationGroupNameTooltip(title, scaledTitle));
+      /** Number of as line breaks for the title. */
+      const numberOfLines = newTitle.length;
+      /** Scale of the tooltip to compare the height and set it if it is higher. */
+      const scaledTooltipCompareH =
+        ((scaledTooltipHeight - scaledTooltipPadding) / 2) * numberOfLines;
+      if (scaledTooltipCompareH > scaledTooltipHeight) {
+        scaledTooltipHeight = scaledTooltipCompareH;
+      }
+      scaledTooltipWidth = scaledTitle;
+      /** Start Y-axis we move it a little higher for tooltip. */
+      startingY =
+        pointStart.y - scaledTooltipHeight - scaledTooltipPadding * 1.5;
+    }
 
     ctx.save();
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(startingX + scaledTooltipRadius, startingY);
     ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
@@ -337,18 +335,85 @@ export class StationGroupElementService {
     ctx.fillStyle = MAP_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     ctx.font = `normal ${fontSize}px Montserrat`;
-    ctx.fillText(
-      editMode ? 'Cannot have an' : 'Cannot add group to',
-      startingX + scaledTooltipPadding,
-      startingY + 12 * this.mapScale + scaledTooltipPadding,
-      140 * this.mapScale
-    );
-    ctx.fillText(
-      editMode ? 'empty Station Group' : 'current selection',
-      startingX + scaledTooltipPadding,
-      startingY + 32 * this.mapScale + scaledTooltipPadding,
-      140 * this.mapScale
-    );
+
+    if (title === '') {
+      ctx.fillText(
+        editMode ? 'Cannot have an' : 'Cannot add group to',
+        startingX + scaledTooltipPadding,
+        startingY + 12 * this.mapScale + scaledTooltipPadding,
+        140 * this.mapScale
+      );
+      ctx.fillText(
+        editMode ? 'empty Station Group' : 'current selection',
+        startingX + scaledTooltipPadding,
+        startingY + 32 * this.mapScale + scaledTooltipPadding,
+        140 * this.mapScale
+      );
+    } else {
+      /** Space of Y and will be incremented by word partitioning. */
+      let spaceY = 12;
+      /** The maximum number of pixels in width and if the scale of the title is exceeded, it is slightly enlarged. */
+      const maxWidth = scaledTitle - 2 * scaledTooltipPadding;
+      /** We fill in the text for each cut of the title.  */
+      newTitle.forEach((item) => {
+        ctx.fillText(
+          item,
+          startingX + scaledTooltipPadding,
+          startingY + spaceY * this.mapScale + scaledTooltipPadding,
+          maxWidth
+        );
+        spaceY += 20;
+      });
+    }
+  }
+
+  /**
+   * Draw tooltip the station group according to the map mode, method for external use.
+   */
+  drawStationGroupToolTipExternal(): void {
+    //If there is a tooltip hovered, draw that in the correct position.
+    if (this.isTooltipDisplayed) {
+      // Check if there still hovering over a group boundary.
+      const hover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          (this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupAdd ||
+            this.mapService.mapHelper.mapMode$.value ===
+              MapMode.StationGroupEdit) &&
+          stationGroup.disabled &&
+          !stationGroup.selected &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      );
+      const isLastGroupHover = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          this.mapService.mapHelper.mapMode$.value ===
+            MapMode.StationGroupEdit &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          this.mapService.isLastStationGroup
+      );
+      // Check if you are in view mode and the group station is hovering.
+      const hoverViewMode = this.mapService.stationGroupElements.find(
+        (stationGroup) =>
+          this.mapService.mapHelper.mapMode$.value === MapMode.View &&
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      );
+      if (hover) {
+        this.drawStationGroupToolTip(this.tooltipPosition);
+      } else if (isLastGroupHover) {
+        //If hover over the last group then, should update the message.
+        this.drawStationGroupToolTip(this.tooltipPosition, true);
+      } else if (hoverViewMode) {
+        // If you hover over the group in view mode then, should show the tooltip.
+        this.drawStationGroupToolTip(
+          this.tooltipPosition,
+          false,
+          hoverViewMode.title
+        );
+      } else {
+        this.isTooltipDisplayed = false;
+        this.tooltipPosition = { x: -1, y: -1 };
+      }
+    }
   }
 
   /**
@@ -492,7 +557,9 @@ export class StationGroupElementService {
           (this.mapService.mapHelper.mapMode$.value ===
             MapMode.StationGroupEdit &&
             stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-            this.mapService.isLastStationGroup)
+            this.mapService.isLastStationGroup) ||
+          (this.mapService.mapHelper.mapMode$.value === MapMode.View &&
+            stationGroup.hoverItem === StationGroupElementHoverItem.Boundary)
         ) {
           this.isTooltipDisplayed = true;
           /* Need to deep copy the boundary points object so that when it gets overwritten
@@ -980,6 +1047,47 @@ export class StationGroupElementService {
       }
     }
 
+    return newTitle;
+  }
+
+  /**
+   * Split station group name according to line width for tooltip.
+   *
+   * @param title The station group name.
+   * @param scaledTitle The station group name.
+   * @returns The array with split title.
+   */
+  splitStationGroupNameTooltip(title: string, scaledTitle: number): string[] {
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot split station group name for the tooltip if context is not defined'
+      );
+    }
+
+    const ctx = this.canvasContext;
+    /** New title if it is larger than the allowed scale we split the same one.  */
+    const newTitle: string[] = [];
+    /** Auxiliary title to allocate or concatenate each part. */
+    let titleAux = '';
+
+    if (ctx.measureText(title).width > scaledTitle) {
+      for (let index = 0; index < title.length; index++) {
+        /** The width of the part the station group name. */
+        const titleWidth =
+          ctx.measureText(titleAux).width + ctx.measureText(title[index]).width;
+        /** If the size of the title is larger than the approximate scale. */
+        if (titleWidth >= scaledTitle) {
+          /* Split station group name. */
+          newTitle.push(titleAux);
+          /* Assigns the following start of the title. */
+          titleAux = title[index];
+        } else {
+          titleAux = titleAux.concat(title[index]);
+        }
+      }
+    } else {
+      newTitle.push(title);
+    }
     return newTitle;
   }
 
