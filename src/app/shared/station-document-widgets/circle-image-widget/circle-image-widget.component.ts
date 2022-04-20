@@ -6,7 +6,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { ImageWidgetObject, Question } from 'src/models';
+import { ImageWidgetObject } from 'src/models';
 
 /**
  *
@@ -18,9 +18,7 @@ import { ImageWidgetObject, Question } from 'src/models';
 })
 export class CircleImageWidgetComponent implements AfterViewChecked {
   /** Event Emitter will open a field setting drawer on the right side of the station. */
-  @Output() openSettingDrawer = new EventEmitter<
-    Question | ImageWidgetObject | string
-  >();
+  @Output() openSettingDrawer = new EventEmitter<ImageWidgetObject>();
 
   /** The mode to display fields inside the widget. */
   @Input() widgetMode!: 'layout' | 'setting';
@@ -32,6 +30,9 @@ export class CircleImageWidgetComponent implements AfterViewChecked {
     isRequired: false,
     allowUserUpload: false,
   };
+
+  /** If the circle have focus. */
+  @Input() circleFocused!: true | false;
 
   constructor(private elem: ElementRef<HTMLElement>) {}
 
@@ -48,11 +49,10 @@ export class CircleImageWidgetComponent implements AfterViewChecked {
   /**
    * Open setting drawer.
    *
-   * @param field The field for the setting drawer.
    */
-  handleOpenSettingDrawer(field?: Question | ImageWidgetObject | string): void {
+  handleOpenSettingDrawer(): void {
     if (this.widgetMode === 'setting') {
-      this.openSettingDrawer.emit(field);
+      this.openSettingDrawer.emit(this.imageWidgetObject);
     }
   }
 }

@@ -1,5 +1,11 @@
 <div class="grid grid-cols-1 px-4">
   <ng-container [ngSwitch]="fieldFrameType">
+    <div *ngSwitchCase="frameTypes.Image">
+      <app-setting-images></app-setting-images>
+    </div>
+    <div *ngSwitchCase="frameTypes.CircleImage">
+      <app-setting-images></app-setting-images>
+    </div>
     <div *ngSwitchCase="frameTypes.Body">
       <p>Componente Body</p>
     </div>
@@ -14,14 +20,6 @@
         [field]="field"
         [stationRithmId]="stationRithmId"
       ></app-setting-fields>
-    </div>
-    <div
-      *ngIf="
-        fieldFrameType === frameTypes.Image ||
-        fieldFrameType === frameTypes.CircleImage
-      "
-    >
-      <app-setting-images></app-setting-images>
     </div>
   </ng-container>
 </div>
