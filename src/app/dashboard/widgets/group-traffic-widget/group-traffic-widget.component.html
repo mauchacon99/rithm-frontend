@@ -46,6 +46,7 @@
     class="h-full w-full scrollbar overflow-auto"
     *ngIf="groupTrafficData.labels.length"
   >
+    <<<<<<< HEAD
     <div class="h-[calc(100%-36px)]">
       <canvas
         baseChart
@@ -55,6 +56,15 @@
       >
       </canvas>
     </div>
+    =======
+    <canvas
+      baseChart
+      [datasets]="configChart.data.datasets"
+      [labels]="configChart.data.labels"
+      [options]="configChart.options"
+    >
+    </canvas>
+    >>>>>>> 97a88f9a123cc7df35c20372a5755d9ac7e41aad
 
     <div class="flex justify-between">
       <button
