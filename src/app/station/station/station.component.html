@@ -455,10 +455,10 @@
                               *ngSwitchCase="frameType.CircleImage"
                               class="app-circle-image-widget"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [circleFocused]="widgetFocused === i"
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.CircleImage)
                               "
-                              [circleFocused]="widgetFocused === i"
                             ></app-circle-image-widget>
                             <app-input-frame-widget
                               *ngSwitchDefault

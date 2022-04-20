@@ -1228,13 +1228,17 @@ export class StationComponent
           if (element.id === item.id) {
             const circleOld = JSON.parse(this.circlesWidget);
             if (item.rows < circleOld.rows || item.cols < circleOld.cols) {
-              element.cols = item.rows < circleOld.rows ? item.rows : element.cols;
-              element.rows = item.cols < circleOld.cols ? item.cols : element.rows;
+              element.cols =
+                item.rows < circleOld.rows ? item.rows : element.cols;
+              element.rows =
+                item.cols < circleOld.cols ? item.cols : element.rows;
             }
 
             if (item.rows > circleOld.rows || item.cols > circleOld.cols) {
-              element.cols = item.rows > circleOld.rows ? item.rows : element.cols;
-              element.rows = item.cols > circleOld.cols ? item.cols : element.rows;
+              element.cols =
+                item.rows > circleOld.rows ? item.rows : element.cols;
+              element.rows =
+                item.cols > circleOld.cols ? item.cols : element.rows;
             }
             this.circlesWidget = JSON.stringify(item);
             this.changedOptions();

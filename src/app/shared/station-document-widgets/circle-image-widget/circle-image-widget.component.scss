@@ -4,15 +4,12 @@
   border-radius: 50%;
 
   &.circle-image-layout {
-
     &:hover {
       @apply hover:border-accent-500;
-
     }
 
     &.circle-image-focus {
       @apply border-accent-500 border-2;
-
     }
   }
 }
