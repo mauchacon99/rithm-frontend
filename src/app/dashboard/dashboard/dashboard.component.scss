@@ -39,3 +39,9 @@ gridster {
 .edit-mode-gridster {
   height: 68vh !important;
 }
+
+::ng-deep .custom-margin-modal {
+  mat-dialog-container {
+    padding: 20px;
+  }
+}
