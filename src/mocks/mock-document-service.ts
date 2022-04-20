@@ -1642,7 +1642,7 @@ export class MockDocumentService {
   getDataLinkFrames(
     stationRithmId: string,
     documentRithmId: string,
-    frameType?: FrameType
+    frameType: FrameType
   ): Observable<StationFrameWidget[]> {
     if (!stationRithmId || !documentRithmId) {
       return throwError(

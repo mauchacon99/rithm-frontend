@@ -27,6 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import {
+  FrameType,
   MoveDocument,
   QuestionFieldType,
   StationRosterMember,
@@ -830,6 +831,6 @@ describe('DocumentComponent', () => {
     ).and.callThrough();
 
     component.getDataLinkFrames();
-    expect(framesSpy).toHaveBeenCalledOnceWith(stationId, documentId);
+    expect(framesSpy).toHaveBeenCalledOnceWith(stationId, documentId, FrameType.DataLink);
   });
 });

@@ -700,7 +700,7 @@ export class DocumentService {
     stationRithmId: string,
     documentRithmId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    frameType?: FrameType
+    frameType: FrameType
   ): Observable<StationFrameWidget[]> {
     if (!stationRithmId || !documentRithmId) {
       return throwError(

@@ -1034,7 +1034,7 @@ describe('DocumentService', () => {
         id: 0,
       },
     ];
-    service.getDataLinkFrames(stationId, documentId).subscribe((response) => {
+    service.getDataLinkFrames(stationId, documentId, FrameType.DataLink).subscribe((response) => {
       expect(response).toEqual(frameByType);
     });
   });

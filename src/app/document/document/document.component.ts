@@ -27,6 +27,7 @@ import {
   MoveDocument,
   StationRosterMember,
   StationFrameWidget,
+  FrameType,
 } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
@@ -648,7 +649,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.documentService
       .getDataLinkFrames(
         this.documentInformation.stationRithmId,
-        this.documentInformation.documentRithmId
+        this.documentInformation.documentRithmId,
+        FrameType.DataLink
       )
       .pipe(first())
       .subscribe({
