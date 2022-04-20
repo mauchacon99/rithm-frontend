@@ -831,6 +831,10 @@ describe('DocumentComponent', () => {
     ).and.callThrough();
 
     component.getDataLinkFrames();
-    expect(framesSpy).toHaveBeenCalledOnceWith(stationId, documentId, FrameType.DataLink);
+    expect(framesSpy).toHaveBeenCalledOnceWith(
+      stationId,
+      documentId,
+      FrameType.DataLink
+    );
   });
 });
