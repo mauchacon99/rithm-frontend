@@ -44,12 +44,12 @@ describe('GroupTrafficWidgetComponent', () => {
     labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
     stationDocumentCounts: [10, 5, 8, 10, 20],
     averageDocumentFlow: [3000, 72000, 60, 2880, 10080],
-    formData: [
-      ['2 days', '50 hours'],
-      ['7 weeks', '50 days'],
-      ['1 hour', '60 minutes'],
-      ['2 days', '50 hours'],
-      ['1 weeks', '7 days'],
+    averageDocumentFlowLabels: [
+      '2 days',
+      '7 weeks',
+      '1 hour',
+      '2 days',
+      '1 weeks',
     ],
   };
 
@@ -141,8 +141,12 @@ describe('GroupTrafficWidgetComponent', () => {
   });
 
   it('should set config chart', () => {
-    const { labels, averageDocumentFlow, stationDocumentCounts, formData } =
-      dataGroupTraffic;
+    const {
+      labels,
+      averageDocumentFlow,
+      stationDocumentCounts,
+      averageDocumentFlowLabels,
+    } = dataGroupTraffic;
 
     component['setConfigChart']();
     expect(component.configChart.data.labels).toEqual(labels);
@@ -153,7 +157,7 @@ describe('GroupTrafficWidgetComponent', () => {
       averageDocumentFlow
     );
     expect(component.configChart.data.datasets[1].label).toEqual(
-      JSON.stringify(formData || [])
+      JSON.stringify(averageDocumentFlowLabels || [])
     );
   });
 

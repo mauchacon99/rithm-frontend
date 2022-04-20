@@ -105,7 +105,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
         {
           // Documents
           type: 'bar',
-          label: 'Documents',
+          label: 'Containers',
           data: [],
           backgroundColor: '#8DA1C3',
           hoverBackgroundColor: '#8DA1C3',
@@ -240,8 +240,12 @@ export class GroupTrafficWidgetComponent implements OnInit {
 
   /** Set data and config to chart. */
   private setConfigChart(): void {
-    const { labels, averageDocumentFlow, stationDocumentCounts, formData } =
-      this.groupTrafficData;
+    const {
+      labels,
+      averageDocumentFlow,
+      stationDocumentCounts,
+      averageDocumentFlowLabels,
+    } = this.groupTrafficData;
     const startSlice = this.paginationChart;
     const endSlice = this.paginationChart
       ? this.valueShowGraphic + this.valueShowGraphic
@@ -259,7 +263,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
       endSlice
     );
     this.configChart.data.datasets[1].label = JSON.stringify(
-      formData.slice(startSlice, endSlice) || []
+      averageDocumentFlowLabels.slice(startSlice, endSlice) || []
     );
 
     // set custom tooltips
@@ -276,12 +280,12 @@ export class GroupTrafficWidgetComponent implements OnInit {
             generateLabels: () => {
               return [
                 {
-                  text: 'Document Count',
+                  text: 'Container Count',
                   datasetIndex: 0,
                   fillStyle: '#8DA1C3',
                 },
                 {
-                  text: 'Avg. Document completion time',
+                  text: 'Avg. Container completion time',
                   datasetIndex: 1,
                   fillStyle: '#294F8E',
                   lineWidth: 2,
@@ -297,8 +301,8 @@ export class GroupTrafficWidgetComponent implements OnInit {
               const { label, dataset } = tooltipItem[0];
               const title =
                 dataset.type === 'line'
-                  ? 'Avg. Document completion time'
-                  : 'Document Count';
+                  ? 'Avg. Container completion time'
+                  : 'Container Count';
               return [title, label];
             },
             label: (tooltipItem) => {

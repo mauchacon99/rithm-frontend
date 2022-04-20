@@ -69,18 +69,19 @@ export class DescriptionWidgetModalComponent implements OnInit {
    */
   get widgetItem(): DashboardItem {
     const minItemRows = this.minItemRowsWidget();
+    const minItemCols = this.minItemColsWidget();
     const widgetType = this.widgetTypeWithoutDefault;
     const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
     return {
       rithmId,
-      cols: 3,
+      cols: minItemCols,
       rows: minItemRows,
       x: 0,
       y: 0,
       widgetType,
       data: this.dataWidget,
       minItemRows,
-      minItemCols: 3,
+      minItemCols,
     };
   }
 
@@ -125,6 +126,18 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.StationMultilineBanner
       ? 2
       : 1;
+  }
+
+  /**
+   * Parse item cols for widget.
+   *
+   * @returns A number with minCols.
+   */
+  private minItemColsWidget(): number {
+    return this.widgetTypeWithoutDefault ===
+      this.enumWidgetType.StationGroupTraffic
+      ? 4
+      : 3;
   }
 
   /** Save widget. */

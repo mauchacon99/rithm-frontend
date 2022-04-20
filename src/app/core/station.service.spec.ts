@@ -1606,14 +1606,14 @@ describe('StationService', () => {
       ],
       stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
       averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
-      formData: [
-        ['2 days', '50 hours'],
-        ['7 weeks', '50 days'],
-        ['1 hour', '60 minutes'],
-        ['2 days', '50 hours'],
-        ['1 weeks', '7 days'],
-        ['40 minutes'],
-        ['2 hour', '120 minutes'],
+      averageDocumentFlowLabels: [
+        '2 days',
+        '7 weeks',
+        '1 hour',
+        '2 days',
+        '1 weeks',
+        '40 minutes',
+        '2 hour',
       ],
     };
     service
