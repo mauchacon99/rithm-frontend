@@ -17,6 +17,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { SplitService } from 'src/app/core/split.service';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent;
@@ -36,6 +37,7 @@ describe('AccountSettingsComponent', () => {
         AccountSettingsComponent,
         MockComponent(UserFormComponent),
         MockComponent(NotificationSettingsComponent),
+        MockComponent(UserAvatarComponent),
       ],
       imports: [MatCardModule, MatDialogModule, ReactiveFormsModule],
       providers: [
@@ -112,5 +114,24 @@ describe('AccountSettingsComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.showProfilePhoto).toBeFalse();
     });
+  });
+
+  it('should call uploadImage', () => {
+    const spyMethod = spyOn(component, 'uploadImage').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should call alert invalid extension when upload file with extension invalid', () => {
+    const spyAlert = spyOn(
+      TestBed.inject(PopupService),
+      'alert'
+    ).and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'document/pdf' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyAlert).toHaveBeenCalled();
   });
 });

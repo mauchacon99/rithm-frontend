@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
 import { AccountSettingsService } from 'src/app/core/account-settings.service';
 import { firstValueFrom } from 'rxjs';
 import { SplitService } from 'src/app/core/split.service';
+import { FormatImageValidate } from 'src/helpers';
+import { User } from 'src/models';
 
 /**
  * Component for all of the account settings.
@@ -27,6 +29,9 @@ export class AccountSettingsComponent implements OnInit {
 
   /** Show section Stations lists. */
   showProfilePhoto = false;
+
+  /** Current user logged in for user-avatar. */
+  currentUser!: User;
 
   // TODO: Re-enable when addressing notification settings
   // /** Notification settings model. */
@@ -54,6 +59,7 @@ export class AccountSettingsComponent implements OnInit {
    */
   ngOnInit(): void {
     this.split();
+    this.currentUser = this.userService.user;
   }
 
   /**
@@ -72,7 +78,6 @@ export class AccountSettingsComponent implements OnInit {
   private updateUserAccount(): void {
     const userFormData = this.settingsForm.get('userForm')?.value;
     const { firstName, lastName, confirmPassword } = userFormData;
-
     this.userService
       .updateUserAccount({ firstName, lastName, password: confirmPassword })
       .pipe(first())
@@ -136,6 +141,28 @@ export class AccountSettingsComponent implements OnInit {
         "Something went wrong on our end and we're looking into it. Please try again in a little while.",
         error
       );
+    }
+  }
+
+  /**
+   * Select image.
+   *
+   * @param event Event of select image.
+   */
+  uploadImage(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = (target.files as FileList)[0];
+    if (file) {
+      const extension = file.type.split('/')[1];
+      if (FormatImageValidate.isValidFormatImage(extension)) {
+        //here will go the process with the image
+      } else {
+        this.popupService.alert({
+          title: 'Image format is not valid.',
+          message: 'Please select a file with extension jpeg, jpg, png.',
+          important: true,
+        });
+      }
     }
   }
 
