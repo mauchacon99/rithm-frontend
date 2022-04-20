@@ -941,7 +941,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    this.mapService.mapHelper.isDrawerOpened$.next(false);
-    this.sidenavDrawerService.drawerContext$.next('');
+    /** If it is different from the station drawer open from the map, the values are reset. */
+    if (!this.openedFromMap) {
+      this.mapService.mapHelper.isDrawerOpened$.next(false);
+      this.sidenavDrawerService.drawerContext$.next('');
+    }
   }
 }
