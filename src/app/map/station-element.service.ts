@@ -304,6 +304,7 @@ export class StationElementService {
     const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
 
     ctx.save();
+    ctx.lineWidth = 1;
 
     ctx.beginPath();
     ctx.moveTo(startingX + scaledTooltipRadius, startingY);
