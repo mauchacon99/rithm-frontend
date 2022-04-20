@@ -10,4 +10,6 @@ export interface GroupTrafficData {
   stationDocumentCounts: number[];
   /** Represents the average number of document flows per station. */
   averageDocumentFlow: number[];
+  /** Each position represents tooltip of each position of the averageDocumentFlow. */
+  averageDocumentFlowLabels: string[];
 }
