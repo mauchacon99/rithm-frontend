@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 import { UserFormModule } from 'src/app/shared/user-form/user-form.module';
-import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [AccountSettingsComponent, NotificationSettingsComponent],
@@ -20,7 +19,6 @@ import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module'
     ReactiveFormsModule,
     LoadingIndicatorModule,
     UserFormModule,
-    UserAvatarModule,
   ],
 })
 export class SettingsModule {}

@@ -13,37 +13,7 @@
       class="relative"
       [formGroup]="settingsForm"
     >
-      <div *ngIf="showProfilePhoto">
-        <h4 class="pb-3">General Account Settings</h4>
-      </div>
-
-      <div class="w-full flex space-x-3 p-5">
-        <app-user-avatar
-          [firstName]="currentUser.firstName"
-          [lastName]="currentUser.lastName"
-        ></app-user-avatar>
-
-        <button
-          mat-stroked-button
-          color="accent"
-          mat-button
-          id="upload-image-button"
-          data-testid="upload-image-button"
-          type="button"
-          (click)="fileInput.click()"
-        >
-          <i class="fa-solid fa-cloud-arrow-up"></i>
-          Upload photo
-          <input
-            #fileInput
-            type="file"
-            accept="image/png,image/jpeg,image/jpg"
-            id="upload-image-input"
-            [hidden]="true"
-            (change)="uploadImage($event)"
-          />
-        </button>
-      </div>
+      <h4 class="pb-3">General Account Settings</h4>
 
       <app-user-form
         formControlName="userForm"
