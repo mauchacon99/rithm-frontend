@@ -406,7 +406,13 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster">
+                        <div
+                          class="h-gridster"
+                          [ngClass]="{
+                            'circle-image-container':
+                              widgetItem.type === frameType.CircleImage
+                          }"
+                        >
                           <button
                             mat-icon-button
                             type="button"
@@ -447,6 +453,7 @@
                             ></app-banner-widget>
                             <app-circle-image-widget
                               *ngSwitchCase="frameType.CircleImage"
+                              class="app-circle-image-widget"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.CircleImage)

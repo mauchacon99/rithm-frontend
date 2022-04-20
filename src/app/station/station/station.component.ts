@@ -162,6 +162,9 @@ export class StationComponent
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
 
+  /** Circles in the gridster. */
+  circlesWidget!: string;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -1169,12 +1172,29 @@ export class StationComponent
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public resizeCircleRowCols(item: GridsterItem) {
     if (item.type === FrameType.CircleImage) {
-      if (item.rows > item.cols) {
-        this.inputFrameWidgetItems[item.id].cols = item.rows;
-      } else if (item.rows < item.cols) {
-        this.inputFrameWidgetItems[item.id].rows = item.cols;
+      if (this.circlesWidget) {
+        this.inputFrameWidgetItems.map((element) => {
+          if (element.id === item.id) {
+            const circleOld = JSON.parse(this.circlesWidget);
+            if (item.rows < circleOld.rows) {
+              element.cols = item.rows;
+            }
+            if (item.cols < circleOld.cols) {
+              element.rows = item.cols;
+            }
+            if (item.rows > item.cols) {
+              element.cols = item.rows;
+            }
+            if (item.cols > item.rows) {
+              element.rows = item.cols;
+            }
+            this.circlesWidget = JSON.stringify(item);
+            this.changedOptions();
+          }
+        });
+      } else {
+        this.circlesWidget = JSON.stringify(item);
       }
-      this.changedOptions();
     }
   }
 

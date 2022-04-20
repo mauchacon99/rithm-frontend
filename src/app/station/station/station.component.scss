@@ -79,6 +79,15 @@ textarea {
 
   .h-gridster {
     @apply h-full;
+
+    &.circle-image-container{
+      @apply flex items-center;
+
+      .app-circle-image-widget{
+        @apply block w-full;
+
+      }
+    }
   }
 
   .drag-handler {
@@ -88,19 +97,17 @@ textarea {
   }
 
   .circle-border {
-    @apply pt-3 border-none bg-transparent;
-
-    .h-gridster {
-      @apply mx-auto border-2 border-secondary-100 bg-white;
-
-      height: 93% !important;
-      width: 98% !important;
-      border-radius: 50% !important;
-    }
+    @apply border-none bg-transparent;
   }
 
-  .gridster-item.circle-border.gridster-item-moving,
-  .gridster-item.circle-border.gridster-item-resizing ::ng-deep {
-    box-shadow: none !important;
+  .gridster-item{
+    &.circle-border{
+      &.gridster-item-moving{
+        box-shadow: none !important;
+      }
+      &.gridster-item-resizing{
+        box-shadow: none !important;
+      }
+    }
   }
 }
