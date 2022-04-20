@@ -2212,6 +2212,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
             this.mapService.setSelectedStation(station);
+            /* Find the parent station group through the station rithmId. */
+            const stationGroupParent =
+              this.mapService.stationGroupElements.find((otherGroup) => {
+                return otherGroup.stations.includes(station.rithmId);
+              });
+            if (stationGroupParent) {
+              /* Disable the station group to prevent it from being selected. */
+              stationGroupParent.disabled = true;
+            }
             //Draw the boundary for the pending stationGroup.
             this.mapService.updatePendingStationGroup();
             // Add animate effect for pending station group.
