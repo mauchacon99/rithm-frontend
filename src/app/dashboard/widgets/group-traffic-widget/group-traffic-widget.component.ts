@@ -149,6 +149,17 @@ export class GroupTrafficWidgetComponent implements OnInit {
         }
       },
       scales: {
+        x: {
+          ticks: {
+            callback: function (val) {
+              const label = this.getLabelForValue(val as number);
+              if (label.length >= 10) {
+                return `${label.slice(0, 8)}...`;
+              }
+              return label;
+          }
+          }
+        },
         y: {
           stacked: true,
           position: 'left',
@@ -236,14 +247,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
       ? this.valueShowGraphic + this.valueShowGraphic
       : this.valueShowGraphic;
 
-    // truncate labels with length > 10
-    const truncateLabels = labels.map((label) => {
-      if (label.length >= 10) {
-        return `${label.slice(0, 8)}...`;
-      }
-      return label;
-    });
-    this.configChart.data.labels = truncateLabels.slice(startSlice, endSlice);
+    this.configChart.data.labels = labels.slice(startSlice, endSlice);
     // position 0 are documents
     this.configChart.data.datasets[0].data = stationDocumentCounts.slice(
       startSlice,
