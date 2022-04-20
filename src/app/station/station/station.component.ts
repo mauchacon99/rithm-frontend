@@ -505,14 +505,14 @@ export class StationComponent
         rows: 4,
         x: 0,
         y: 0,
-        type: FrameType.Input,
+        type: FrameType.DataLink,
         data: JSON.stringify(dl),
         id: this.inputFrameWidgetItems.length,
       };
       framesForDatalink.push(frameTemplate);
     });
     this.stationService
-      .saveStationWidgets(this.stationRithmId, framesForDatalink)
+      .saveDataLinkFrames(this.stationRithmId, framesForDatalink)
       .pipe(first())
       .subscribe({
         next: (frames) => {
@@ -566,6 +566,10 @@ export class StationComponent
     this.stationLoading = true;
     if (this.dataLinkArray.length) {
       this.saveDataLinks();
+      this.stationInformation.questions =
+        this.stationInformation.questions.filter(
+          (q) => q.questionType !== QuestionFieldType.DataLink
+        );
     }
     const petitionsUpdateStation = [
       // Update station Name.
@@ -876,15 +880,66 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-          inputFrames.map((input) => {
+          inputFrames.map((input, index) => {
+            input.id = index;
             if (input.data && JSON.parse(input.data)?.length > 0) {
               input.questions = [];
               input.questions = JSON.parse(input.data);
+            } else if (input.type === FrameType.Input) {
+              input.questions = [];
             }
           });
           this.inputFrameWidgetItems = inputFrames;
+          if (inputFrames.length) {
+            this.saveInputFrameQuestions(
+              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+            );
+          }
+          this.changedOptions();
         },
         error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save input frame widgets.
+   *
+   * @param frames An array of input frameWidgets.
+   */
+  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
+    if (frames.length) {
+      const frameQuestionRequest: Observable<Question[]>[] = [];
+      frames.forEach((frame) => {
+        const fQuestions: Question[] = JSON.parse(frame.data);
+        if (fQuestions.length) {
+          frameQuestionRequest.push(
+            this.stationService.saveInputFrameQuestions(
+              frame.rithmId,
+              fQuestions
+            )
+          );
+        }
+      });
+      this.forkJoinFrameQuestions(frameQuestionRequest);
+    }
+  }
+
+  /**
+   * Execute a fork join to save input frame questions.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
+    forkJoin(requestRow)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -902,7 +957,50 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-          this.inputFrameWidgetItems = inputFrames;
+          /**Add individual properties for every Type. */
+          inputFrames.forEach((frame, index) => {
+            switch (frame.type) {
+              case FrameType.Input:
+                frame.minItemRows = 4;
+                frame.minItemCols = 6;
+                frame.questions =
+                  frame.questions && frame.questions?.length > 0
+                    ? frame.questions
+                    : [];
+                this.inputFrameList.push('inputFrameWidget-' + index);
+                break;
+              case FrameType.Headline:
+                frame.minItemCols = 6;
+                frame.maxItemRows = 1;
+                frame.type = FrameType.Headline;
+                break;
+              case FrameType.Body:
+                frame.minItemCols = 4;
+                frame.minItemRows = 2;
+                frame.type = FrameType.Body;
+                break;
+              case FrameType.Title:
+                frame.minItemCols = 24;
+                frame.minItemRows = 1;
+                frame.maxItemRows = 1;
+                frame.type = FrameType.Title;
+                break;
+              case FrameType.Image:
+                frame.minItemCols = 4;
+                frame.minItemRows = 4;
+                frame.type = FrameType.Image;
+                break;
+              case FrameType.CircleImage:
+                frame.minItemCols = 4;
+                frame.minItemRows = 4;
+                frame.type = FrameType.CircleImage;
+                break;
+              default:
+                break;
+            }
+            this.inputFrameWidgetItems.push(frame);
+            this.changedOptions();
+          });
         },
         error: (error: unknown) => {
           this.errorService.displayError(

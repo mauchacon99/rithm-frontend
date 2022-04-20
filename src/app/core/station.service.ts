@@ -24,6 +24,7 @@ import {
   GroupTrafficData,
   FrameType,
   StandardNumberJSON,
+  StationWidgetPreBuilt,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -736,6 +737,23 @@ export class StationService {
   }
 
   /**
+   * Save or update the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param stationFrames The value that will be update.
+   * @returns The field question updated.
+   */
+  saveDataLinkFrames(
+    stationRithmId: string,
+    stationFrames: StationFrameWidget[]
+  ): Observable<StationFrameWidget[]> {
+    return this.http.put<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-links-frames?stationRithmId=${stationRithmId}`,
+      stationFrames
+    );
+  }
+
+  /**
    * Get the widgets of a station.
    *
    * @param stationRithmId The current station id.
@@ -762,18 +780,19 @@ export class StationService {
           y: 0,
           type: FrameType.Input,
           data: '',
+          questions: [],
           id: 0,
         },
         {
           rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
           stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           cols: 6,
-          rows: 4,
+          rows: 1,
           x: 0,
           y: 0,
-          type: FrameType.Input,
+          type: FrameType.Headline,
           data: '',
-          id: 0,
+          id: 1,
         },
       ];
 
@@ -863,35 +882,11 @@ export class StationService {
    * @returns The history station.
    */
   getStationHistory(stationRithmId: string): Observable<DocumentEvent[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot response station history',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const historyResponse: DocumentEvent[] = [
-        {
-          eventTimeUTC: '2022-01-18T22:13:05.871Z',
-          description: 'Event Document #1',
-          user: {
-            rithmId: '123',
-            firstName: 'Testy',
-            lastName: 'Test',
-            email: 'test@test.com',
-            isEmailVerified: true,
-            notificationSettings: null,
-            createdDate: '1/2/34',
-            role: null,
-            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-          },
-        },
-      ];
-      return of(historyResponse).pipe(delay(1000));
-    }
+    const params = new HttpParams().set('rithmId', stationRithmId);
+    return this.http.get<DocumentEvent[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history`,
+      { params }
+    );
   }
 
   /**
@@ -928,5 +923,57 @@ export class StationService {
       averageDocumentFlow: [2, 4, 1, 8, 9],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
+  }
+
+  /**
+   * Get user stations.
+   *
+   * @returns User Stations.
+   */
+  getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
+    const stationWidgetData: StationWidgetPreBuilt[] = [
+      {
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: '132-123-132',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
+      },
+    ];
+    return of(stationWidgetData).pipe(delay(1000));
+  }
+
+  /**
+   * Save input frames questions.
+   *
+   * @param frameRithmId The id of the current input frame.
+   * @param frameQuestions Questions to be saved.
+   * @returns Frame questions array.
+   */
+  saveInputFrameQuestions(
+    frameRithmId: string,
+    frameQuestions: Question[]
+  ): Observable<Question[]> {
+    return this.http.post<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
+      frameQuestions
+    );
   }
 }

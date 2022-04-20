@@ -13,7 +13,9 @@
       class="relative"
       [formGroup]="settingsForm"
     >
-      <h4 class="pb-3">General Account Settings</h4>
+      <div *ngIf="showProfilePhoto">
+        <h4 class="pb-3">General Account Settings</h4>
+      </div>
 
       <app-user-form
         formControlName="userForm"

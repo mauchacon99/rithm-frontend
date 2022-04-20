@@ -956,7 +956,7 @@ describe('StationComponent', () => {
     expect(saveDataLinkSpy).toHaveBeenCalled();
   });
 
-  it('should request saveStationWidgets service if there are dataLinkObjects added', () => {
+  it('should request saveDataLinkFrames service if there are dataLinkObjects added', () => {
     component.dataLinkArray = [
       {
         rithmId: '07e1-30b5-f21e',
@@ -968,15 +968,15 @@ describe('StationComponent', () => {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       },
     ];
-    const saveStationWidgetSpy = spyOn(
+    const saveDataLinkFramespy = spyOn(
       TestBed.inject(StationService),
-      'saveStationWidgets'
+      'saveDataLinkFrames'
     ).and.callThrough();
     component.saveStationInformation();
-    expect(saveStationWidgetSpy).toHaveBeenCalled();
+    expect(saveDataLinkFramespy).toHaveBeenCalled();
   });
 
-  it('should request saveDataLink if saveStationWidgets succeed', () => {
+  it('should request saveDataLink if saveDataLinkFrames succeed', () => {
     component.dataLinkArray = [
       {
         rithmId: '07e1-30b5-f21e',
@@ -1001,7 +1001,7 @@ describe('StationComponent', () => {
         id: 0,
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       of(frameStationWidget)
     );
     const dataLinkSpy = spyOn(
@@ -1024,7 +1024,7 @@ describe('StationComponent', () => {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -1062,7 +1062,7 @@ describe('StationComponent', () => {
         id: 0,
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       of(frameStationWidget)
     );
     spyOn(TestBed.inject(DocumentService), 'saveDataLink').and.returnValue(
@@ -1076,6 +1076,29 @@ describe('StationComponent', () => {
     ).and.callThrough();
     component.saveStationInformation();
     expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should call getStationWidgets', () => {
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'getStationWidgets'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return get station widgets fails', () => {
+    spyOn(TestBed.inject(StationService), 'getStationWidgets').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 
   describe('should add value to the array of input frames', () => {
@@ -1125,26 +1148,144 @@ describe('StationComponent', () => {
     });
   });
 
-  it('should call getStationWidgets', () => {
-    const spyService = spyOn(
-      TestBed.inject(StationService),
-      'getStationWidgets'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
-  });
+  describe('should call the method that gets the frame types of the current station', () => {
+    it('should check properties when it is an input frame', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          questions: [],
+          id: 0,
+        },
+      ];
 
-  it('should catch error if petition to return get station widgets fails', () => {
-    spyOn(TestBed.inject(StationService), 'getStationWidgets').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyError).toHaveBeenCalled();
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an headline', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 1,
+          x: 0,
+          y: 0,
+          type: FrameType.Headline,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an body', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 4,
+          rows: 2,
+          x: 0,
+          y: 0,
+          type: FrameType.Body,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an title', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 24,
+          rows: 1,
+          x: 0,
+          y: 0,
+          type: FrameType.Title,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an image', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 4,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Image,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an circle-image', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 4,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.CircleImage,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
   });
 });
