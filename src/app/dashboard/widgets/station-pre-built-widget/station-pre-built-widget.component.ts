@@ -56,10 +56,7 @@ export class StationPreBuiltWidgetComponent implements OnInit {
         error: (error: unknown) => {
           this.isLoading = false;
           this.errorStationPrebuilt = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          this.errorService.logError(error);
         },
       });
   }

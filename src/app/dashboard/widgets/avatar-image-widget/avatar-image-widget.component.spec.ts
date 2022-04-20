@@ -10,6 +10,8 @@ import { ImageData } from 'src/models';
 describe('AvatarImageWidgetComponent', () => {
   let component: AvatarImageWidgetComponent;
   let fixture: ComponentFixture<AvatarImageWidgetComponent>;
+  let errorService: ErrorService;
+  let documentService: DocumentService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,6 +24,8 @@ describe('AvatarImageWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    errorService = TestBed.inject(ErrorService);
+    documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(AvatarImageWidgetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -64,7 +68,7 @@ describe('AvatarImageWidgetComponent', () => {
   it('should call method getImageByRithmId', () => {
     const expectedRithmId = '123-456-789';
     const spyService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getImageByRithmId'
     ).and.callThrough();
 
@@ -87,10 +91,7 @@ describe('AvatarImageWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
 
     component.profileImage = expectedRithmId;
 
