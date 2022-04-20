@@ -9,7 +9,7 @@ describe('PreBuiltWidgetTemplateModalComponent', () => {
   let component: PreBuiltWidgetTemplateModalComponent;
   let fixture: ComponentFixture<PreBuiltWidgetTemplateModalComponent>;
   const widgetType = WidgetType.Station;
-
+  let dashboardService: DashboardService;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PreBuiltWidgetTemplateModalComponent],
@@ -23,6 +23,7 @@ describe('PreBuiltWidgetTemplateModalComponent', () => {
     fixture = TestBed.createComponent(PreBuiltWidgetTemplateModalComponent);
     component = fixture.componentInstance;
     component.widgetType = widgetType;
+    dashboardService = TestBed.inject(DashboardService);
     fixture.detectChanges();
   });
 
@@ -32,7 +33,7 @@ describe('PreBuiltWidgetTemplateModalComponent', () => {
 
   it('should set data template', () => {
     const expectedDataTemplate =
-      TestBed.inject(DashboardService).dataTemplatePreviewWidgetModal;
+      dashboardService.dataTemplatePreviewWidgetModal;
     expect(component.dataTemplate).toEqual(expectedDataTemplate);
     expect(component.dataTemplate[component.widgetType]).toEqual(
       expectedDataTemplate[widgetType]
