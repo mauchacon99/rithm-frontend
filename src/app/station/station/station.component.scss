@@ -95,12 +95,11 @@ textarea {
   .h-gridster {
     @apply h-full;
 
-    &.circle-image-container{
+    &.circle-image-container {
       @apply flex items-center;
 
-      .app-circle-image-widget{
+      .app-circle-image-widget {
         @apply block w-full;
-
       }
     }
   }
@@ -115,12 +114,12 @@ textarea {
     @apply border-none bg-transparent;
   }
 
-  .gridster-item{
-    &.circle-border{
-      &.gridster-item-moving{
+  .gridster-item {
+    &.circle-border {
+      &.gridster-item-moving {
         box-shadow: none !important;
       }
-      &.gridster-item-resizing{
+      &.gridster-item-resizing {
         box-shadow: none !important;
       }
     }

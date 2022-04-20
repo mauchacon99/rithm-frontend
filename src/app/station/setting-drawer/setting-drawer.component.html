@@ -11,11 +11,16 @@
     </div>
     <div *ngSwitchCase="frameTypes.Input">
       <app-setting-fields
-      [field]="field"
-      [stationRithmId]="stationRithmId"
+        [field]="field"
+        [stationRithmId]="stationRithmId"
       ></app-setting-fields>
     </div>
-    <div *ngIf="fieldFrameType === frameTypes.Image || fieldFrameType === frameTypes.CircleImage">
+    <div
+      *ngIf="
+        fieldFrameType === frameTypes.Image ||
+        fieldFrameType === frameTypes.CircleImage
+      "
+    >
       <app-setting-images></app-setting-images>
     </div>
   </ng-container>
