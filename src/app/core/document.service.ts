@@ -696,7 +696,7 @@ export class DocumentService {
    * @param frameType The frame type.
    * @returns A StationFrameWidget.
    */
-  getFramesType(
+   getDataLinkFrames(
     stationRithmId: string,
     documentRithmId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

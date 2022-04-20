@@ -826,10 +826,10 @@ describe('DocumentComponent', () => {
 
     const framesSpy = spyOn(
       TestBed.inject(DocumentService),
-      'getFramesType'
+      'getDataLinkFrames'
     ).and.callThrough();
 
-    component.getFramesByType();
+    component.getDataLinkFrames();
     expect(framesSpy).toHaveBeenCalledOnceWith(stationId, documentId);
   });
 });
