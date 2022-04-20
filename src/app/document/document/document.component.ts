@@ -644,7 +644,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Get list of frames by type.
    */
-   getDataLinkFrames(): void {
+  getDataLinkFrames(): void {
     this.documentService
       .getDataLinkFrames(
         this.documentInformation.stationRithmId,

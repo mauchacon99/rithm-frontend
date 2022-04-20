@@ -1639,7 +1639,7 @@ export class MockDocumentService {
    * @param frameType The frame type.
    * @returns A StationFrameWidget.
    */
-   getDataLinkFrames(
+  getDataLinkFrames(
     stationRithmId: string,
     documentRithmId: string,
     frameType?: FrameType
