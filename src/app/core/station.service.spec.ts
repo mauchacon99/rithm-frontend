@@ -1637,4 +1637,41 @@ describe('StationService', () => {
       expect(response).toEqual(expectedData);
     });
   });
+
+  it('should call saveInputFrameQuestions', () => {
+    const frameRithmId = '3j4k-3h2j-hj4j-3j4k';
+    const frameQuestions: Question[] = [
+      {
+        prompt: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    service
+      .saveInputFrameQuestions(frameRithmId, frameQuestions)
+      .subscribe((response) => {
+        expect(response).toEqual(frameQuestions);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`
+    );
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(frameQuestions);
+    httpTestingController.verify();
+  });
 });
