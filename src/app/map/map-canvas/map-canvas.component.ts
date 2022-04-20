@@ -2217,7 +2217,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.stationGroupElements.find((otherGroup) => {
                 return otherGroup.stations.includes(station.rithmId);
               });
-            if (stationGroupParent) {
+            if (stationGroupParent && !stationGroupParent.isReadOnlyRootStationGroup) {
               /* Disable the station group to prevent it from being selected. */
               stationGroupParent.disabled = true;
             }
