@@ -88,7 +88,9 @@
   <!-- Stations types Tables   -->
   <div class="py-6">
     <p class="font-semibold">Tables</p>
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+    <div
+      class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-5"
+    >
       <!-- Widget card type station -->
       <app-station-widget-template-modal
         (click)="emitPreviewWidgetSelected(enumWidgetType.Station)"
@@ -132,11 +134,17 @@
     </div>
   </div>
 </section>
+
 <!--Section for show prebuilt template-->
 <section *ngIf="itemWidgetModalSelected.itemType === 'preBuilt'">
   <!-- Pre built  -->
-  <div class="py-6">
-    <app-pre-built-widget-template-modal></app-pre-built-widget-template-modal>
+  <div class="py-6 px-4">
+    <p class="font-semibold">Title</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 pt-5">
+      <app-pre-built-widget-template-modal
+        [widgetType]="enumWidgetType.PreBuiltStation"
+      ></app-pre-built-widget-template-modal>
+    </div>
   </div>
 </section>
 
