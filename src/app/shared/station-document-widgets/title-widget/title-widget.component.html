@@ -4,9 +4,13 @@
 >
   {{ titleTextValue }}
 </h2>
-<input
-  type="text"
+<div
   *ngIf="widgetMode === 'setting'"
-  [(ngModel)]="titleTextValue"
-  class="w-full font-light text-4xl border-2 border-transparent rounded hover:border-accent-600"
-/>
+  class="w-full flex border-2 rounded h-12 border-transparent hover:border-accent-600"
+>
+  <textarea
+    *ngIf="widgetMode === 'setting'"
+    [(ngModel)]="titleTextValue"
+    class="w-full font-semibold text-xl border-transparent focus:outline-none h-10"
+  ></textarea>
+</div>

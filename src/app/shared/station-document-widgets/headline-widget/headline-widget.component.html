@@ -7,11 +7,11 @@
 </h1>
 <div
   *ngIf="widgetMode === 'setting'"
-  class="w-full font-light border-2 text-2xl rounded py-1 hover:border-accent-600"
+  class="w-full flex border-2 rounded h-12 border-transparent hover:border-accent-600"
 >
-  <input
-    type="text"
+  <textarea
+    *ngIf="widgetMode === 'setting'"
     [(ngModel)]="headlineTextValue"
-    class="w-full border-transparent my-1"
-  />
+    class="w-full text-2xl font-light border-transparent focus:outline-none h-10"
+  ></textarea>
 </div>

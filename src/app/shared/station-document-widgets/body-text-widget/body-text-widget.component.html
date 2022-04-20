@@ -7,8 +7,10 @@
     {{ bodyTextValue }}
   </p>
 </div>
-<textarea
-  *ngIf="widgetMode === 'setting'"
-  [(ngModel)]="bodyTextValue"
-  class="textarea-inline-control body-text-widget h-full w-full p-2 text-xs text-primary-200 border-2 border-transparent rounded hover:border-accent-600"
-></textarea>
+<div *ngIf="widgetMode === 'setting'" class="">
+  <textarea
+    *ngIf="widgetMode === 'setting'"
+    [(ngModel)]="bodyTextValue"
+    class="textarea-inline-control body-text-widget h-full w-full p-2 text-xs text-primary-200 border-2 border-transparent rounded hover:border-accent-600"
+  ></textarea>
+</div>
