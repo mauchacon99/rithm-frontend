@@ -1,3 +1,17 @@
-<h1 class="text-2xl" (click)="openFieldSettingDrawer(headlineTextValue)">
+<h1
+  *ngIf="widgetMode === 'layout'"
+  class="text-2xl"
+  (click)="openFieldSettingDrawer(headlineTextValue)"
+>
   {{ headlineTextValue }}
 </h1>
+<div
+  *ngIf="widgetMode === 'setting'"
+  class="w-full font-light border-2 text-2xl rounded py-1 hover:border-accent-600"
+>
+  <input
+    type="text"
+    [(ngModel)]="headlineTextValue"
+    class="w-full border-transparent my-1"
+  />
+</div>

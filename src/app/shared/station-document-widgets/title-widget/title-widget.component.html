@@ -1,1 +1,12 @@
-<h2 (click)="openFieldSettingDrawer(titleTextValue)">{{ titleTextValue }}</h2>
+<h2
+  *ngIf="widgetMode === 'layout'"
+  (click)="openFieldSettingDrawer(titleTextValue)"
+>
+  {{ titleTextValue }}
+</h2>
+<input
+  type="text"
+  *ngIf="widgetMode === 'setting'"
+  [(ngModel)]="titleTextValue"
+  class="w-full font-light text-4xl border-2 border-transparent rounded hover:border-accent-600"
+/>
