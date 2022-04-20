@@ -1,1 +1,18 @@
-<p>container-pre-built-widget works!</p>
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoading"
+  id="app-loading-indicator-container-pre-built"
+></app-loading-widget>
+
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="failedGetContainers"
+  id="error-load-widget-container-pre-built"
+  [errorMessage]="'Unable to retrieve containers data'"
+  (tryAgain)="getContainerWidgetPreBuilt()"
+>
+</app-error-widget>
+
+<div *ngIf="!isLoading && !failedGetContainers">
+  <p>container-pre-built-widget works!</p>
+</div>
