@@ -1610,7 +1610,7 @@ describe('StationService', () => {
     });
   });
 
-  it('should current station', () => {
+  it('should get a current stations list for containers', () => {
     const stationRithmId = '6375027-78345-73824-54244';
     const expectCurrentStationsResponse: DocumentCurrentStation[] = [
       {
