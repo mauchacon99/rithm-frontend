@@ -216,10 +216,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
         error: (error: unknown) => {
           this.isLoading = false;
           this.errorGroupTraffic = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          this.errorService.logError(error);
         },
       });
   }

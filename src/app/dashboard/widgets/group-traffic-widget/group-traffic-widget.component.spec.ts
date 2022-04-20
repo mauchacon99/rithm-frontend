@@ -20,6 +20,7 @@ describe('GroupTrafficWidgetComponent', () => {
   let fixture: ComponentFixture<GroupTrafficWidgetComponent>;
   let stationService: StationService;
   let dashboardService: DashboardService;
+  let errorService: ErrorService;
   const dataWidget =
     '{"stationGroupRithmId":"7f0611fe-dfd2-42ec-9e06-9f4e4e0b24bb", "valueShowGraphic":"5"}';
   const widgetItem: DashboardItem = {
@@ -70,9 +71,10 @@ describe('GroupTrafficWidgetComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupTrafficWidgetComponent);
     stationService = TestBed.inject(StationService);
     dashboardService = TestBed.inject(DashboardService);
+    errorService = TestBed.inject(ErrorService);
+    fixture = TestBed.createComponent(GroupTrafficWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
     component.widgetItem = widgetItem;
@@ -112,10 +114,7 @@ describe('GroupTrafficWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
