@@ -5,7 +5,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  * The component for pre built widget modal.
  */
 @Component({
-  selector: 'app-pre-built-widget-template-modal',
+  selector: 'app-pre-built-widget-template-modal[widgetType]',
   templateUrl: './pre-built-widget-template-modal.component.html',
   styleUrls: ['./pre-built-widget-template-modal.component.scss'],
 })
