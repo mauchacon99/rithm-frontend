@@ -79,6 +79,16 @@ textarea {
         border-top: 0.15em solid transparent;
       }
     }
+
+    &.circle-border {
+      &.gridster-item-moving {
+        box-shadow: none !important;
+      }
+
+      &.gridster-item-resizing {
+        box-shadow: none !important;
+      }
+    }
   }
 
   //Widget item in layout mode
@@ -112,16 +122,5 @@ textarea {
 
   .circle-border {
     @apply border-none bg-transparent;
-  }
-
-  .gridster-item {
-    &.circle-border {
-      &.gridster-item-moving {
-        box-shadow: none !important;
-      }
-      &.gridster-item-resizing {
-        box-shadow: none !important;
-      }
-    }
   }
 }
