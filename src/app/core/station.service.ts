@@ -959,4 +959,21 @@ export class StationService {
     ];
     return of(stationWidgetData).pipe(delay(1000));
   }
+
+  /**
+   * Save input frames questions.
+   *
+   * @param frameRithmId The id of the current input frame.
+   * @param frameQuestions Questions to be saved.
+   * @returns Frame questions array.
+   */
+  saveInputFrameQuestions(
+    frameRithmId: string,
+    frameQuestions: Question[]
+  ): Observable<Question[]> {
+    return this.http.post<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
+      frameQuestions
+    );
+  }
 }
