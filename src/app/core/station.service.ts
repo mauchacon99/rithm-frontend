@@ -738,6 +738,23 @@ export class StationService {
   }
 
   /**
+   * Save or update the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param stationFrames The value that will be update.
+   * @returns The field question updated.
+   */
+  saveDataLinkFrames(
+    stationRithmId: string,
+    stationFrames: StationFrameWidget[]
+  ): Observable<StationFrameWidget[]> {
+    return this.http.put<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-links-frames?stationRithmId=${stationRithmId}`,
+      stationFrames
+    );
+  }
+
+  /**
    * Get the widgets of a station.
    *
    * @param stationRithmId The current station id.
@@ -942,6 +959,23 @@ export class StationService {
       },
     ];
     return of(stationWidgetData).pipe(delay(1000));
+  }
+
+  /**
+   * Save input frames questions.
+   *
+   * @param frameRithmId The id of the current input frame.
+   * @param frameQuestions Questions to be saved.
+   * @returns Frame questions array.
+   */
+  saveInputFrameQuestions(
+    frameRithmId: string,
+    frameQuestions: Question[]
+  ): Observable<Question[]> {
+    return this.http.post<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
+      frameQuestions
+    );
   }
 
   /**
