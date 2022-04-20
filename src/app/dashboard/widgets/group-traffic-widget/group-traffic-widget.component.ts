@@ -130,6 +130,8 @@ export class GroupTrafficWidgetComponent implements OnInit {
       ],
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       datasets: {
         bar: {
           barThickness:

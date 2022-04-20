@@ -108,7 +108,7 @@ describe('GroupTrafficWidgetComponent', () => {
     expect(loadingIndicator).toBeTruthy();
   });
 
-  it('should show error message when request group traffic data', () => {
+  it('should show error message when request group traffic data fail', () => {
     spyOn(stationService, 'getGroupTrafficData').and.returnValue(
       throwError(() => {
         throw new Error();

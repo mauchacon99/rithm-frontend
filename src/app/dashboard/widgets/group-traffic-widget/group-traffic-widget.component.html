@@ -43,17 +43,18 @@
   </div>
 
   <div
-    class="h-full w-full pt-4 scrollbar overflow-auto"
+    class="h-full w-full scrollbar overflow-auto"
     *ngIf="groupTrafficData.labels.length"
   >
-    <canvas
-      baseChart
-      class="min-h-[185px]"
-      [datasets]="configChart.data.datasets"
-      [labels]="configChart.data.labels"
-      [options]="configChart.options"
-    >
-    </canvas>
+    <div class="h-[calc(100%-36px)]">
+      <canvas
+        baseChart
+        [datasets]="configChart.data.datasets"
+        [labels]="configChart.data.labels"
+        [options]="configChart.options"
+      >
+      </canvas>
+    </div>
 
     <div class="flex justify-between">
       <button

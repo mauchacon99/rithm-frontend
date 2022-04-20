@@ -255,17 +255,4 @@ describe('DescriptionWidgetModalComponent', () => {
     const responseData = component['minItemRowsWidget']();
     expect(responseData).toEqual(2);
   });
-
-  it('should return 3 minItemCols when widget type are not StationGroupTraffic', () => {
-    component.widgetTypeWithoutDefault = WidgetType.Station;
-
-    const responseData = component['minItemColsWidget']();
-    expect(responseData).toEqual(3);
-  });
-
-  it('should return 4 minItemCols when widget type for StationGroupTraffic', () => {
-    component.widgetTypeWithoutDefault = WidgetType.StationGroupTraffic;
-    const responseData = component['minItemColsWidget']();
-    expect(responseData).toEqual(4);
-  });
 });
