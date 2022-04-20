@@ -992,7 +992,7 @@ export class StationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot response station history',
+              error: 'retrieve a list of stations for this container',
             },
           })
       ).pipe(delay(1000));
