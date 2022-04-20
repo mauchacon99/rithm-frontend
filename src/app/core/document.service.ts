@@ -693,11 +693,14 @@ export class DocumentService {
    *
    * @param stationRithmId The current station id.
    * @param documentRithmId The Specific ID of document.
+   * @param frameType The frame type.
    * @returns A StationFrameWidget.
    */
-  getFramesType(
+   getFramesType(
     stationRithmId: string,
-    documentRithmId: string
+    documentRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    frameType?:FrameType
   ): Observable<StationFrameWidget[]> {
     if (!stationRithmId || !documentRithmId) {
       return throwError(

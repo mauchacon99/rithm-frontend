@@ -1636,11 +1636,13 @@ export class MockDocumentService {
    *
    * @param stationRithmId The current station id.
    * @param documentRithmId The Specific ID of document.
+   * @param frameType The frame type.
    * @returns A StationFrameWidget.
    */
   getFramesType(
     stationRithmId: string,
-    documentRithmId: string
+    documentRithmId: string,
+    frameType?:FrameType
   ): Observable<StationFrameWidget[]> {
     if (!stationRithmId || !documentRithmId) {
       return throwError(
