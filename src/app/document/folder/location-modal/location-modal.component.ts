@@ -9,5 +9,5 @@ import { Component } from '@angular/core';
 })
 export class LocationModalComponent {
   /** Location Text of the modal for the title.. */
-  public LocationModalTextValue = 'Location Modal';
+  public locationValue = 'Location Modal';
 }
