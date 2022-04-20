@@ -11,3 +11,7 @@
     padding-bottom: 0 !important;
   }
 }
+
+.pagination-button ::ng-deep .mat-button {
+  padding: 0 !important;
+}
