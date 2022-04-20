@@ -16,7 +16,7 @@
       <!-- Type station -->
       <ng-container
         *ngSwitchCase="enumWidgetType.PreBuiltStation"
-        [ngTemplateOutlet]="previewMyContainers"
+        [ngTemplateOutlet]="previewStation"
       ></ng-container>
     </div>
     <!-- Info of card. -->
@@ -27,8 +27,8 @@
   </div>
 </ng-template>
 
-<!-- Preview widget type container -->
-<ng-template #previewMyContainers>
+<!-- Preview widget -->
+<ng-template #previewStation>
   <div class="h-full w-full rounded overflow-hidden">
     <div class="w-full bg-white h-full py-1 rounded shadow">
       <div class="px-2 py-2 leading-3">
