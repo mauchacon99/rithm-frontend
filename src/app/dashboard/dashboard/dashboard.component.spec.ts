@@ -483,7 +483,13 @@ describe('DashboardComponent', () => {
 
     it('should call toggle drawer for close drawer when show dialog add new widget', () => {
       const dataExpectModal = {
-        panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6','custom-margin-modal'],
+        panelClass: [
+          'w-11/12',
+          'sm:w-4/5',
+          'h-[95%]',
+          'sm:h-5/6',
+          'custom-margin-modal',
+        ],
         maxWidth: '1500px',
         data: dataDashboard.rithmId,
       };
