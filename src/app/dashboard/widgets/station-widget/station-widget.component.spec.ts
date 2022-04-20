@@ -31,6 +31,9 @@ import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-ima
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
+  let documentService: DocumentService;
+  let errorService: ErrorService;
+  let popupService: PopupService;
   const dataWidget =
     // eslint-disable-next-line max-len
     '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "name"}, {"name":"Test QuestionId","questionId":"37534-453543-453453"}]}';
@@ -56,6 +59,9 @@ describe('StationWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    documentService = TestBed.inject(DocumentService);
+    errorService = TestBed.inject(ErrorService);
+    popupService = TestBed.inject(PopupService);
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
@@ -121,7 +127,7 @@ describe('StationWidgetComponent', () => {
     const columns = ['756-789-953'];
     component.columnsFieldPetition = columns;
     const spyService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getStationWidgetDocuments'
     ).and.callThrough();
     component.ngOnInit();
@@ -132,18 +138,12 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should show error message when request station widget document  data', () => {
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationWidgetDocuments'
-    ).and.returnValue(
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const spyService = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
@@ -189,10 +189,9 @@ describe('StationWidgetComponent', () => {
       ],
     };
 
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationWidgetDocuments'
-    ).and.returnValue(of(dataWidgetStation));
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      of(dataWidgetStation)
+    );
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -246,10 +245,9 @@ describe('StationWidgetComponent', () => {
       ],
     };
 
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationWidgetDocuments'
-    ).and.returnValue(of(dataWidgetStation));
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      of(dataWidgetStation)
+    );
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -261,6 +259,7 @@ describe('StationWidgetComponent', () => {
     );
     expect(button).toBeFalsy();
   });
+
   it('should create new document on widget', () => {
     const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
     component.isLoading = false;
@@ -270,14 +269,11 @@ describe('StationWidgetComponent', () => {
       'createNewDocument'
     ).and.callThrough();
     const spyMethodService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'createNewDocument'
     ).and.returnValue(of(expectDocumentRithmId));
 
-    const notifyMethodService = spyOn(
-      TestBed.inject(PopupService),
-      'notify'
-    ).and.callThrough();
+    const notifyMethodService = spyOn(popupService, 'notify').and.callThrough();
 
     const buttonNewDocument = fixture.debugElement.nativeElement.querySelector(
       '#create-new-document'
@@ -407,17 +403,19 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should show error under the new document button', () => {
-    spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
+    spyOn(documentService, 'createNewDocument').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
     component.createNewDocument();
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.nativeElement.querySelector(
       '#create-document-error'
     );
     expect(component.displayDocumentError).toBeTrue();
+    expect(spyError).toHaveBeenCalled();
     expect(errorMessage).toBeTruthy();
   });
 
@@ -425,7 +423,7 @@ describe('StationWidgetComponent', () => {
     const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
     component.widgetType = WidgetType.Station;
     const spyService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'createNewDocument'
     ).and.returnValue(of(expectDocumentRithmId));
     const spyMethodViewDocument = spyOn(
@@ -445,7 +443,7 @@ describe('StationWidgetComponent', () => {
     const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
     component.widgetType = WidgetType.StationMultiline;
     const spyService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'createNewDocument'
     ).and.returnValue(of(expectDocumentRithmId));
     const spyMethodGetStationWidgetDocuments = spyOn(
