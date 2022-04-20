@@ -157,8 +157,8 @@ export class GroupTrafficWidgetComponent implements OnInit {
                 return `${label.slice(0, 8)}...`;
               }
               return label;
-          }
-          }
+            },
+          },
         },
         y: {
           stacked: true,
