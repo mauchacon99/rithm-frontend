@@ -35,6 +35,7 @@ import {
   DocumentImage,
   ImageData,
   DataLinkObject,
+  ContainerWidgetPreBuilt,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -653,17 +654,35 @@ export class DocumentService {
     stationRithmId: string,
     dataLinkObject: DataLinkObject
   ): Observable<DataLinkObject> {
-    if (!dataLinkObject || !stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot save data link object.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return of(dataLinkObject).pipe(delay(1000));
-    }
+    return this.http.put<DataLinkObject>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-data-link?stationRithmId=${stationRithmId}`,
+      dataLinkObject
+    );
+  }
+
+  /**
+   * Get containers.
+   *
+   * @returns Data containers.
+   */
+  getContainerWidgetPreBuilt(): Observable<ContainerWidgetPreBuilt[]> {
+    const containers: ContainerWidgetPreBuilt[] = [
+      {
+        flowedTimeUTC: '',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationOwners: [
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'Testy',
+            lastName: 'Testy',
+            email: 'Testy@Rithm.com',
+          },
+        ],
+      },
+    ];
+    return of(containers).pipe(delay(1000));
   }
 }
