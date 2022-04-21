@@ -90,7 +90,7 @@ describe('RosterComponent', () => {
   });
 
   it('should set rosterMembers when stationOwners have data', () => {
-    component.stationOwners = [
+    component.stationMembers = [
       {
         rithmId: '',
         firstName: 'Worker',
@@ -103,7 +103,7 @@ describe('RosterComponent', () => {
 
     component.ngOnInit();
 
-    expect(component.rosterMembers).toEqual(component.stationOwners);
+    expect(component.rosterMembers).toEqual(component.stationMembers);
   });
 
   it('should set call getStationOwnerRoster when stationOwners dont have data', () => {
@@ -112,7 +112,7 @@ describe('RosterComponent', () => {
       'getStationOwnerRoster'
     ).and.callThrough();
     component.isWorker = false;
-    component.stationOwners = [];
+    component.stationMembers = [];
     component.ngOnInit();
     expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
   });
