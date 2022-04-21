@@ -112,7 +112,6 @@ describe('RosterComponent', () => {
       'getStationOwnerRoster'
     ).and.callThrough();
     component.isWorker = false;
-    component.stationMembers = [];
     component.ngOnInit();
     expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
   });

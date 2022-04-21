@@ -30,7 +30,7 @@ export class RosterComponent implements OnInit {
   @Input() fromDrawer = false;
 
   /** Roster Members previewed load. */
-  @Input() stationMembers: StationRosterMember[] = [];
+  @Input() stationMembers!: StationRosterMember[];
 
   /** Emit the roster member length to be displayed as text.*/
   @Output() rosterMemberLength = new EventEmitter<number>();
@@ -54,7 +54,7 @@ export class RosterComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (!this.stationMembers.length) {
+    if (!this.stationMembers) {
       this.getStationUsersRoster();
     } else {
       this.rosterMembers = this.stationMembers;
