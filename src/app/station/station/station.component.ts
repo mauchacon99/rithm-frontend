@@ -5,7 +5,7 @@ import {
   ViewChild,
   AfterContentChecked,
   ChangeDetectorRef,
-  Inject
+  Inject,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
@@ -1214,7 +1214,8 @@ export class StationComponent
       );
       this.gridItem.gridster.grid[widget.id].$item.rows = height;
 
-      if (itemResized.pushItems(itemResized.fromNorth)) { // push items from a direction
+      if (itemResized.pushItems(itemResized.fromNorth)) {
+        // push items from a direction
         itemResized.checkPushBack(); // check for items can restore to original position
         itemResized.setPushedItems(); // save the items pushed
         this.gridItem.gridster.grid[widget.id].setSize();
