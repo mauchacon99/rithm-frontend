@@ -67,9 +67,9 @@ export class RosterComponent implements OnInit {
   openRosterModal(): void {
     if (!this.editMode) {
       this.dialog.open(RosterModalComponent, {
-      minWidth: '325px',
-      data: { stationId: this.stationId, isWorker: this.isWorker },
-    });
+        minWidth: '325px',
+        data: { stationId: this.stationId, isWorker: this.isWorker },
+      });
     }
   }
 
