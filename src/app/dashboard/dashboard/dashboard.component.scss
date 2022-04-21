@@ -33,7 +33,7 @@ gridster {
 }
 
 .gridster {
-  height: 80vh !important;
+  height: calc(100vh - 150px) !important;
 }
 
 .edit-mode-gridster {
