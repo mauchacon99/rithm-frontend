@@ -11,16 +11,17 @@
           appearance="outline"
           class="w-full mat-setting-input"
         >
-          <mat-label>Label</mat-label>
+          <mat-label>Name your field</mat-label>
           <input
             matInput
             type="text"
             id="field-setting-input"
             data-testid="field-setting-input"
-            placeholder="{{ field.prompt }}"
+            placeholder="Name your field"
             [(ngModel)]="field.value"
             [maxlength]="field.questionType === 'shortText' ? 50 : null"
             autocomplete="off"
+            (blur)="deleteSpace()"
             (ngModelChange)="setQuestionTitle()"
           />
         </mat-form-field>
