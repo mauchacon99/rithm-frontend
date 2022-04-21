@@ -25,6 +25,8 @@ import {
   DocumentImage,
   ImageData,
   DataLinkObject,
+  FrameType,
+  StationFrameWidget,
   ContainerWidgetPreBuilt,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -1626,6 +1628,46 @@ export class MockDocumentService {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       };
       return of(dataLink).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get frames by type.
+   *
+   * @param stationRithmId The current station id.
+   * @param documentRithmId The Specific ID of document.
+   * @param frameType The frame type.
+   * @returns A StationFrameWidget.
+   */
+  getDataLinkFrames(
+    stationRithmId: string,
+    documentRithmId: string,
+    frameType: FrameType
+  ): Observable<StationFrameWidget[]> {
+    if (!stationRithmId || !documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get the frames by type.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const frameByType: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.DataLink,
+          data: '',
+          id: 0,
+        },
+      ];
+      return of(frameByType).pipe(delay(1000));
     }
   }
 
