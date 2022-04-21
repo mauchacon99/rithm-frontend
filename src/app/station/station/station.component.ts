@@ -5,7 +5,7 @@ import {
   ViewChild,
   AfterContentChecked,
   ChangeDetectorRef,
-  Inject,
+  Inject
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
@@ -29,7 +29,12 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
+import {
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponent,
+  GridsterPush,
+} from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -56,6 +61,10 @@ export class StationComponent
   /** Indicate error when saving flow rule. */
   @ViewChild(FlowLogicComponent, { static: false })
   childFlowLogic!: FlowLogicComponent;
+
+  /** Indicate item of Gridster to modify. */
+  @ViewChild(GridsterItemComponent, { static: false })
+  gridItem!: GridsterItemComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -138,6 +147,7 @@ export class StationComponent
     fixedRowHeight: 50,
     displayGrid: 'always',
     pushItems: true,
+    pushResizeItems: true,
     draggable: {
       enabled: true,
       ignoreContent: true,
@@ -1197,6 +1207,23 @@ export class StationComponent
     if (height > widget.rows) {
       widget.rows = height;
       widget.minItemRows = height;
+
+      /**Set in gridster properties to avoid overlapping widgets. */
+      const itemResized = new GridsterPush(
+        this.gridItem.gridster.grid[widget.id]
+      );
+      this.gridItem.gridster.grid[widget.id].$item.rows = height;
+
+      if (itemResized.pushItems(itemResized.fromNorth)) { // push items from a direction
+        itemResized.checkPushBack(); // check for items can restore to original position
+        itemResized.setPushedItems(); // save the items pushed
+        this.gridItem.gridster.grid[widget.id].setSize();
+        this.gridItem.gridster.grid[widget.id].checkItemChanges(
+          this.gridItem.gridster.grid[widget.id].$item,
+          this.gridItem.gridster.grid[widget.id].item
+        );
+      }
+      itemResized.destroy();
     }
     this.changedOptions();
   }
