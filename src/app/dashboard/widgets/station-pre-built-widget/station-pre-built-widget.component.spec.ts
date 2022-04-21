@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
+import { RosterModule } from 'src/app/shared/roster/roster.module';
 
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
@@ -22,6 +23,7 @@ describe('StationPreBuiltWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
+      imports: [RosterModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
