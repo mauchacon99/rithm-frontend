@@ -1,5 +1,5 @@
 <ng-container [formGroup]="userForm">
-  <div *ngIf="accountCreate || showProfilePhoto">
+  <div *ngIf="accountCreate && showProfilePhoto">
     <div class="w-full flex space-x-3 py-5 items-center">
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"
