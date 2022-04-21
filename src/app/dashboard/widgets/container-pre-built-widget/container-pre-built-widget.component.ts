@@ -23,10 +23,10 @@ export class ContainerPreBuiltWidgetComponent implements OnInit {
   /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<ContainerWidgetPreBuilt>;
 
+  /** Columns staticts to show on table. */
   displayedColumns = [
     'nameContainer',
     'flowedTimeUTC',
-
     'stationName',
     'stationOwners',
     'viewDocument',
