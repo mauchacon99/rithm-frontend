@@ -99,7 +99,7 @@
         <app-roster
           [stationId]="element['stationRithmId'] || ''"
           [isWorker]="false"
-          [editMode]="editMode"
+          [editMode]="!editMode"
           [stationMembers]="element['stationOwners']"
           [fromDrawer]="true"
         >
