@@ -10,6 +10,7 @@ import {
   UserAccountInfo,
   StationInformation,
 } from 'src/models';
+import { ImageData } from 'src/models/index';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -296,5 +297,20 @@ export class MockUserService {
    */
   get isAdmin(): boolean {
     return this.user.role === 'admin';
+  }
+
+  /**
+   * Get Image user.
+   *
+   * @param imageRithmId Image Rithm Id.
+   * @returns Image Data.
+   */
+  getImageUser(imageRithmId: string): Observable<ImageData> {
+    const image: ImageData = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image Name',
+    };
+    return of(image).pipe(delay(1000));
   }
 }

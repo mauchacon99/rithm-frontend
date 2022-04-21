@@ -2,8 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {
+  firstValueFrom,
+  Observable,
+  of,
+  ReplaySubject,
+  throwError,
+} from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import {
@@ -13,6 +19,7 @@ import {
   UserAccountInfo,
   StationInformation,
 } from 'src/models';
+import { ImageData } from 'src/models/index';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -349,4 +356,20 @@ export class UserService {
   //   return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
   //     notificationSettings);
   // }
+
+  /**
+   * Get Image user.
+   *
+   * @param imageRithmId Image Rithm Id.
+   * @returns Image Data.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getImageUser(imageRithmId: string): Observable<ImageData> {
+    const image: ImageData = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image Name',
+    };
+    return of(image).pipe(delay(1000));
+  }
 }

@@ -1,4 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
+import { ImageData } from 'src/models/index';
 
 /**
  * Reusable component for displaying a user's avatar.
@@ -8,7 +12,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
 })
-export class UserAvatarComponent {
+export class UserAvatarComponent implements OnInit {
   /** The first name of the user. */
   @Input() firstName!: string;
 
@@ -32,6 +36,24 @@ export class UserAvatarComponent {
 
   /** Whether is displayed from the drawer. */
   @Input() isDrawer = false;
+
+  /** Image Rithm Id. */
+  imageRithmId!: string;
+
+  /** Image data. */
+  imageData!: ImageData;
+
+  constructor(
+    private userService: UserService,
+    private errorService: ErrorService
+  ) {}
+
+  /**
+   * Initial method.
+   */
+  ngOnInit(): void {
+    this.getImageUser();
+  }
 
   /**
    * The first + last initials for the user.
@@ -64,5 +86,25 @@ export class UserAvatarComponent {
       : this.badge === 'minus'
       ? '\u2212'
       : '';
+  }
+
+  /**
+   * Get Image user.
+   */
+  getImageUser(): void {
+    this.userService
+      .getImageUser(this.imageRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (imageData) => {
+          this.imageData = imageData;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
