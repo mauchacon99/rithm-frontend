@@ -27,6 +27,8 @@ import {
   DocumentWidget,
   DocumentImage,
   DataLinkObject,
+  StationFrameWidget,
+  FrameType,
   ContainerWidgetPreBuilt,
 } from 'src/models';
 import { DocumentService } from './document.service';
@@ -1017,5 +1019,25 @@ describe('DocumentService', () => {
     service.getContainerWidgetPreBuilt().subscribe((response) => {
       expect(response).toEqual(containers);
     });
+  });
+  it('should get a frame by type', () => {
+    const frameByType: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.DataLink,
+        data: '',
+        id: 0,
+      },
+    ];
+    service
+      .getDataLinkFrames(stationId, documentId, FrameType.DataLink)
+      .subscribe((response) => {
+        expect(response).toEqual(frameByType);
+      });
   });
 });
