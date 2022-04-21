@@ -1,16 +1,17 @@
 <h2
   *ngIf="widgetMode === 'layout'"
+  class="font-semibold text-xl"
   (click)="openFieldSettingDrawer(titleTextValue)"
 >
   {{ titleTextValue }}
 </h2>
 <div
   *ngIf="widgetMode === 'setting'"
-  class="w-full flex border-2 rounded h-12 border-transparent hover:border-accent-600"
+  class="w-full flex items-start border-2 border-transparent hover:border-accent-600 rounded h-full"
 >
-  <textarea
-    *ngIf="widgetMode === 'setting'"
+  <input
+    type="text"
     [(ngModel)]="titleTextValue"
-    class="w-full font-semibold text-xl border-transparent focus:outline-none h-10"
-  ></textarea>
+    class="w-full font-semibold text-xl border-transparent focus:outline-none"
+  />
 </div>
