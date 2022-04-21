@@ -35,3 +35,17 @@
     line-height: 2rem !important;
   }
 }
+
+.gridster-container ::ng-deep {
+  .gridster-item {
+    @apply px-0 pb-0 rounded transition-colors overflow-visible;
+
+    ::ng-deep .mat-form-field-wrapper {
+      margin: 0 0 14px !important;
+    }
+  }
+
+  .h-gridster {
+    @apply h-full;
+  }
+}
