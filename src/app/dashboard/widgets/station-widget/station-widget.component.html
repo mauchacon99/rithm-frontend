@@ -244,6 +244,7 @@
           *matCellDef="let element"
           class="min-w-[150px] text-xs text-secondary-500"
         >
+          <!---***-->
           <ng-container
             *ngTemplateOutlet="
               columnQuestion;
@@ -323,12 +324,82 @@
     </ng-container>
   </ng-container>
 </ng-template>
-
+<ng-template #linkMap let-value="value">
+  <div *ngIf="value; else withOutLink">
+    <a
+      [href]="'https://www.google.com/maps/place/' + value"
+      target="_blank"
+      class="text-accent-500 underline"
+    >
+      {{ value }}
+    </a>
+  </div>
+</ng-template>
+<ng-template #withOutLink>
+  <span class="cursor-default" title="Without Link">N/A</span>
+</ng-template>
 <!--Template for show questions columns of the document-->
 <ng-template #columnQuestion let-column="column" let-document="document">
   <ng-container *ngFor="let questions of document.questions[0].questions">
     <ng-container *ngIf="questions.rithmId === column.questionId">
       <ng-container [ngSwitch]="questions.questionType">
+        <span *ngSwitchCase="questionFieldType.Zip">
+          <ng-container
+            *ngTemplateOutlet="
+              linkMap;
+              context: { value: questions.answer?.value }
+            "
+          ></ng-container>
+        </span>
+        <span *ngSwitchCase="questionFieldType.City">
+          <ng-container
+            *ngTemplateOutlet="
+              linkMap;
+              context: { value: questions.answer?.value }
+            "
+          ></ng-container>
+        </span>
+        <span *ngSwitchCase="questionFieldType.State">
+          <ng-container
+            *ngTemplateOutlet="
+              linkMap;
+              context: { value: questions.answer?.value }
+            "
+          ></ng-container>
+        </span>
+        <span *ngSwitchCase="questionFieldType.Phone">
+          <div *ngIf="questions.answer?.value; else withOutLink">
+            <a
+              [href]="'tel:+' + questions.answer?.value"
+              target="_blank"
+              class="text-accent-500 underline"
+            >
+              {{ questions.answer?.value }}
+            </a>
+          </div>
+        </span>
+        <span *ngSwitchCase="questionFieldType.Email">
+          <div *ngIf="questions.answer?.value; else withOutLink">
+            <a
+              [href]="'mailto:' + questions.answer?.value"
+              target="_blank"
+              class="text-accent-500 underline"
+            >
+              {{ questions.answer?.value }}
+            </a>
+          </div>
+        </span>
+        <span *ngSwitchCase="questionFieldType.URL">
+          <div *ngIf="questions.answer?.value; else withOutLink">
+            <a
+              [attr.href]="questions.answer?.value"
+              [attr.target]="'_blank'"
+              class="text-accent-500 underline"
+            >
+              {{ questions.answer?.value }}</a
+            >
+          </div>
+        </span>
         <span *ngSwitchCase="questionFieldType.CheckList">
           <span *ngFor="let answer of questions.answer?.asArray">
             <i

@@ -176,8 +176,83 @@
           : questions.prompt
       }}
     </p>
+    <ng-template #withOutLink>
+      <span class="cursor-default" title="Without Link"
+        >This question doesn't have an answer.</span
+      >
+    </ng-template>
+
+    <ng-template #linkMap let-value="value">
+      <div *ngIf="value; else withOutLink">
+        <a
+          [href]="'https://www.google.com/maps/place/' + value"
+          target="_blank"
+          class="text-accent-500 underline"
+        >
+          {{ value }}
+        </a>
+      </div>
+    </ng-template>
 
     <div [ngSwitch]="questions.questionType">
+      <span *ngSwitchCase="questionFieldType.Zip">
+        <ng-container
+          *ngTemplateOutlet="
+            linkMap;
+            context: { value: questions.answer?.value }
+          "
+        ></ng-container>
+      </span>
+      <span *ngSwitchCase="questionFieldType.City">
+        <ng-container
+          *ngTemplateOutlet="
+            linkMap;
+            context: { value: questions.answer?.value }
+          "
+        ></ng-container>
+      </span>
+      <span *ngSwitchCase="questionFieldType.State">
+        <ng-container
+          *ngTemplateOutlet="
+            linkMap;
+            context: { value: questions.answer?.value }
+          "
+        ></ng-container>
+      </span>
+
+      <span *ngSwitchCase="questionFieldType.Phone">
+        <div *ngIf="questions.answer?.value; else withOutLink">
+          <a
+            [href]="'tel:+' + questions.answer?.value"
+            target="_blank"
+            class="text-accent-500 underline"
+          >
+            {{ questions.answer?.value }}
+          </a>
+        </div>
+      </span>
+      <span *ngSwitchCase="questionFieldType.Email">
+        <div *ngIf="questions.answer?.value; else withOutLink">
+          <a
+            [href]="'mailto:' + questions.answer?.value"
+            target="_blank"
+            class="text-accent-500 underline"
+          >
+            {{ questions.answer?.value }}
+          </a>
+        </div>
+      </span>
+      <span *ngSwitchCase="questionFieldType.URL">
+        <div *ngIf="questions.answer?.value; else withOutLink">
+          <a
+            [attr.href]="questions.answer?.value"
+            [attr.target]="'_blank'"
+            class="text-accent-500 underline"
+          >
+            {{ questions.answer?.value }}</a
+          >
+        </div>
+      </span>
       <p *ngSwitchCase="questionFieldType.CheckList" class="pt-3 text-sm">
         <span *ngFor="let answer of questions.answer?.asArray">
           <i
