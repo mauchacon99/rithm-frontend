@@ -27,6 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import {
+  FrameType,
   MoveDocument,
   QuestionFieldType,
   StationRosterMember,
@@ -819,5 +820,21 @@ describe('DocumentComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.viewNewContainer).toBeFalse();
     });
+  });
+  it('should get the method that get the list of frames by type', () => {
+    const stationId = component.documentInformation.stationRithmId;
+    const documentId = component.documentInformation.documentRithmId;
+
+    const framesSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getDataLinkFrames'
+    ).and.callThrough();
+
+    component.getDataLinkFrames();
+    expect(framesSpy).toHaveBeenCalledOnceWith(
+      stationId,
+      documentId,
+      FrameType.DataLink
+    );
   });
 });
