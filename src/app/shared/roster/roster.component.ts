@@ -33,7 +33,7 @@ export class RosterComponent implements OnInit {
   @Input() fromDrawer = false;
 
   /** Roster Members previewed load. */
-  @Input() stationOwners: StationRosterMember[] = [];
+  @Input() stationMembers: StationRosterMember[] = [];
 
   /** Emit the roster member length to be displayed as text.*/
   @Output() rosterMemberLength = new EventEmitter<number>();
@@ -54,10 +54,10 @@ export class RosterComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (!this.stationOwners.length) {
+    if (!this.stationMembers.length) {
       this.getStationUsersRoster();
     } else {
-      this.rosterMembers = this.stationOwners;
+      this.rosterMembers = this.stationMembers;
     }
   }
 
@@ -65,10 +65,12 @@ export class RosterComponent implements OnInit {
    * Opens a modal with roster information.
    */
   openRosterModal(): void {
-    this.dialog.open(RosterModalComponent, {
+    if (!this.editMode) {
+      this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
       data: { stationId: this.stationId, isWorker: this.isWorker },
     });
+    }
   }
 
   /**
