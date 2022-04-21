@@ -993,4 +993,16 @@ export class StationService {
       frameQuestions
     );
   }
+
+  /**
+   * Gets the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @returns The data link objects.
+   */
+  getDataLinks(stationRithmId: string): Observable<DataLinkObject[]> {
+    return this.http.get<DataLinkObject[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-links?stationRithmId=${stationRithmId}`
+    );
+  }
 }
