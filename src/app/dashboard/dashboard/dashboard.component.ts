@@ -580,7 +580,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   openDialogAddWidget(): void {
     const dialog = this.dialog.open(AddWidgetModalComponent, {
-      panelClass: ['w-11/12', 'sm:w-4/5', 'h-[95%]', 'sm:h-5/6'],
+      panelClass: [
+        'w-11/12',
+        'sm:w-4/5',
+        'h-[95%]',
+        'sm:h-5/6',
+        'custom-margin-modal',
+      ],
       maxWidth: '1500px',
       data: this.dashboardData.rithmId,
     });
