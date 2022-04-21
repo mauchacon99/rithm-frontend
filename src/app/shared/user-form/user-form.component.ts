@@ -74,7 +74,7 @@ export class UserFormComponent
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
+    public userService: UserService,
     private popupService: PopupService,
     private splitService: SplitService,
     private errorService: ErrorService
