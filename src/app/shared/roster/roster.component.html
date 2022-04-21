@@ -3,12 +3,12 @@
     *ngFor="let member of rosterMembers | slice: 0:slices"
     (click)="openRosterModal()"
     class="float-left my-1 mx-px first:ml-0"
-    [ngClass]="{ 'custom-roster-avatar': stationMembers.length }"
   >
     <app-user-avatar
       [firstName]="member.firstName"
       [lastName]="member.lastName"
       [isDrawer]="fromDrawer"
+      [isSmall]="!!stationMembers.length"
     ></app-user-avatar>
   </div>
   <p

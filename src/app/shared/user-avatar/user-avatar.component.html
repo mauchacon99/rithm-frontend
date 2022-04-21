@@ -2,8 +2,8 @@
   id="avatar"
   [ngClass]="{
     'circle-40-secondary': navProfile && !isDrawer,
-    'circle-30-secondary': !navProfile && !isDrawer,
-    'circle-36-secondary': isDrawer,
+    'circle-30-secondary': (!navProfile && !isDrawer) || isSmall,
+    'circle-36-secondary': isDrawer && !isSmall,
     '-ml-2.5': isDrawer
   }"
   matTooltip="{{ firstName + ' ' + lastName }}"

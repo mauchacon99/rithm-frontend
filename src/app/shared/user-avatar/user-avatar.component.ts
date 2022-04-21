@@ -33,6 +33,9 @@ export class UserAvatarComponent {
   /** Whether is displayed from the drawer. */
   @Input() isDrawer = false;
 
+  /** If avatars are small. */
+  @Input() isSmall = false;
+
   /**
    * The first + last initials for the user.
    *
