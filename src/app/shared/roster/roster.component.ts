@@ -65,7 +65,7 @@ export class RosterComponent implements OnInit {
    * Opens a modal with roster information.
    */
   openRosterModal(): void {
-    if (!this.editMode) {
+    if (this.editMode) {
       this.dialog.open(RosterModalComponent, {
         minWidth: '325px',
         data: { stationId: this.stationId, isWorker: this.isWorker },
