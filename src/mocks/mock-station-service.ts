@@ -1246,6 +1246,42 @@ export class MockStationService {
   }
 
   /**
+   * Save or update the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @param stationFrames The value that will be update.
+   * @returns The field question updated.
+   */
+  saveDataLinkFrames(
+    stationRithmId: string,
+    stationFrames: StationFrameWidget[]
+  ): Observable<StationFrameWidget> {
+    if (!stationRithmId || !stationFrames) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot save station data-link frames',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const frameStationWidget: StationFrameWidget = {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.DataLink,
+        data: '',
+        id: 0,
+      };
+      return of(frameStationWidget).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get the station widgets.
    *
    * @param stationRithmId The current station id.
@@ -1257,7 +1293,7 @@ export class MockStationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot response station widgets',
+              error: 'Cannot retrieve station widgets',
             },
           })
       ).pipe(delay(1000));
@@ -1505,9 +1541,26 @@ export class MockStationService {
     const mockGetGroupTrafficData: GroupTrafficData = {
       title: 'Group Eagle',
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocumentCounts: [10, 5, 8, 10, 20],
-      averageDocumentFlow: [2, 4, 1, 8, 9],
+      labels: [
+        'station 1',
+        'station 2',
+        'station 3',
+        'station 4',
+        'station 5 with a long text for test view',
+        'station 6',
+        'station 7',
+      ],
+      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
+      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
+      averageDocumentFlowLabels: [
+        '2 days',
+        '7 weeks',
+        '1 hour',
+        '2 days',
+        '1 weeks',
+        '40 minutes',
+        '2 hour',
+      ],
     };
     return of(mockGetGroupTrafficData).pipe(delay(1000));
   }
@@ -1545,5 +1598,50 @@ export class MockStationService {
       },
     ];
     return of(stationWidgetData).pipe(delay(1000));
+  }
+
+  /**
+   * Save input frames questions.
+   *
+   * @param frameRithmId The id of the current input frame.
+   * @param fQuestions Questions to be saved.
+   * @returns Frame questions array.
+   */
+  saveInputFrameQuestions(
+    frameRithmId: string,
+    fQuestions: Question[]
+  ): Observable<Question[]> {
+    if (!frameRithmId || !fQuestions) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot save input frame questions',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const frameQuestions: Question[] = [
+        {
+          prompt: 'Example question#1',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Example question#2',
+          rithmId: '3j5k-3h2j-hj5j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ];
+      return of(frameQuestions).pipe(delay(1000));
+    }
   }
 }

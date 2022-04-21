@@ -1105,6 +1105,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.dragItem
         );
       });
+
+      // Draw tooltip for station group, finally this element to overlay it on top of the others.
+      this.stationGroupElementService.drawStationGroupToolTipExternal();
     });
   }
 

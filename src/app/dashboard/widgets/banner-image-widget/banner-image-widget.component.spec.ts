@@ -11,6 +11,8 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 describe('BannerImageWidgetComponent', () => {
   let component: BannerImageWidgetComponent;
   let fixture: ComponentFixture<BannerImageWidgetComponent>;
+  let errorService: ErrorService;
+  let documentService: DocumentService;
 
   const image = {
     imageId: '123-456-789',
@@ -31,6 +33,8 @@ describe('BannerImageWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    errorService = TestBed.inject(ErrorService);
+    documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(BannerImageWidgetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -42,7 +46,7 @@ describe('BannerImageWidgetComponent', () => {
 
   it('should call method getImageByRithmId', () => {
     const spyService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getImageByRithmId'
     ).and.callThrough();
     component.image = image;
@@ -52,17 +56,14 @@ describe('BannerImageWidgetComponent', () => {
 
   it('should show error if the request getImageByRithmId fail', () => {
     const spyService = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getImageByRithmId'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
     component.image = image;
 
     expect(spyService).toHaveBeenCalledOnceWith(image.imageId);
@@ -72,7 +73,7 @@ describe('BannerImageWidgetComponent', () => {
   describe('Input image', () => {
     it('should get image by imageId', () => {
       const spyService = spyOn(
-        TestBed.inject(DocumentService),
+        documentService,
         'getImageByRithmId'
       ).and.callThrough();
 

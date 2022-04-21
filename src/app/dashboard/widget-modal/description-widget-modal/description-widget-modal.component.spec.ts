@@ -115,7 +115,7 @@ describe('DescriptionWidgetModalComponent', () => {
 
     it('should get data for StationGroupTraffic', () => {
       const expectData = JSON.stringify({
-        valueShowGraffic: 5,
+        valueShowGraphic: 5,
         stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
       });
       component.widgetType = WidgetType.StationGroupTraffic;
