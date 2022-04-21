@@ -10,4 +10,7 @@ export interface UserAccountInfo {
 
   /** The user's new password. */
   password?: string;
+
+  /** User Image or Photo. */
+  userImageId?: string;
 }

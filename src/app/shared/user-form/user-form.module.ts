@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PasswordRequirementsModule } from '../password-requirements/password-requirements.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { UserAvatarModule } from '../user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [UserFormComponent],
@@ -16,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
     PasswordRequirementsModule,
     MatInputModule,
     MatButtonModule,
+    UserAvatarModule,
   ],
   exports: [UserFormComponent],
 })
