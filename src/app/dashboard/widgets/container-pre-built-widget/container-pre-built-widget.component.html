@@ -97,14 +97,16 @@
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
       >
-        <app-roster
-          [stationId]="element['stationRithmId'] || ''"
-          [isWorker]="false"
-          [editMode]="!editMode"
-          [stationMembers]="element['stationOwners']"
-          [fromDrawer]="true"
-        >
-        </app-roster>
+        <div class="ml-2.5">
+          <app-roster
+            [stationId]="element['stationRithmId'] || ''"
+            [isWorker]="false"
+            [editMode]="!editMode"
+            [stationMembers]="element['stationOwners']"
+            [fromDrawer]="true"
+          >
+          </app-roster>
+        </div>
       </td>
     </ng-container>
 

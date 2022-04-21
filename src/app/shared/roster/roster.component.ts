@@ -17,9 +17,6 @@ import { StationService } from 'src/app/core/station.service';
 export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
-  /** The list of members on the roster. */
-  rosterMembers: StationRosterMember[] = [];
-
   /** Station ID. Needed for openRosterModal. */
   @Input() stationId!: string;
 
@@ -37,6 +34,9 @@ export class RosterComponent implements OnInit {
 
   /** Emit the roster member length to be displayed as text.*/
   @Output() rosterMemberLength = new EventEmitter<number>();
+
+  /** The list of members on the roster. */
+  rosterMembers: StationRosterMember[] = [];
 
   /** Whether the request is underway. */
   loadingRoster = false;
