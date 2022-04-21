@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationWidgetPreBuilt } from 'src/models';
 /**
  * Component for station prebuilt.
@@ -38,7 +40,8 @@ export class StationPreBuiltWidgetComponent implements OnInit {
 
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private dialog: MatDialog
   ) {}
 
   /** Init method. */
@@ -66,5 +69,22 @@ export class StationPreBuiltWidgetComponent implements OnInit {
           this.errorService.logError(error);
         },
       });
+  }
+
+  /**
+   * Opens Station Docs Modal with document information.
+   *
+   * @param station Station specific for render modal and documents.
+   */
+  openDocsModal(station: StationWidgetPreBuilt): void {
+    if (!this.editMode) {
+      this.dialog.open(StationDocumentsModalComponent, {
+        minWidth: '370px',
+        data: {
+          stationName: station.stationName,
+          stationId: station.stationRithmId,
+        },
+      });
+    }
   }
 }

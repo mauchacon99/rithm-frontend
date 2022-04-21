@@ -3,18 +3,39 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
   let fixture: ComponentFixture<StationPreBuiltWidgetComponent>;
   let stationService: StationService;
   let errorService: ErrorService;
+  let matDialog: MatDialog;
+
+  const stationWidgetData = [
+    {
+      stationRithmId: 'qwe-321-ert-123',
+      stationName: 'Mars station',
+      totalContainers: 5,
+      stationGroup: 'Eagle',
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ],
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,8 +43,9 @@ describe('StationPreBuiltWidgetComponent', () => {
         StationPreBuiltWidgetComponent,
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
+        MockComponent(StationDocumentsModalComponent),
       ],
-      imports: [RosterModule],
+      imports: [RosterModule, MatDialogModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
@@ -32,10 +54,12 @@ describe('StationPreBuiltWidgetComponent', () => {
   });
 
   beforeEach(() => {
-    stationService = TestBed.inject(StationService);
-    errorService = TestBed.inject(ErrorService);
     fixture = TestBed.createComponent(StationPreBuiltWidgetComponent);
     component = fixture.componentInstance;
+    stationService = TestBed.inject(StationService);
+    errorService = TestBed.inject(ErrorService);
+    matDialog = TestBed.inject(MatDialog);
+    component.stationWidgetData = stationWidgetData;
     fixture.detectChanges();
   });
 
@@ -106,5 +130,38 @@ describe('StationPreBuiltWidgetComponent', () => {
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should executed modal for render documents the specific station', () => {
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: stationWidgetData[0].stationName,
+        stationId: stationWidgetData[0].stationRithmId,
+      },
+    };
+    const spyModal = spyOn(matDialog, 'open');
+    component.openDocsModal(stationWidgetData[0]);
+    expect(spyModal).toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
+  });
+
+  it('should not show modal when edit mode is active', () => {
+    component.editMode = true;
+    const expectData = {
+      minWidth: '370px',
+      data: {
+        stationName: stationWidgetData[0].stationName,
+        stationId: stationWidgetData[0].stationRithmId,
+      },
+    };
+    const spyModal = spyOn(matDialog, 'open');
+    component.openDocsModal(stationWidgetData[0]);
+    expect(spyModal).not.toHaveBeenCalledOnceWith(
+      StationDocumentsModalComponent,
+      expectData
+    );
   });
 });
