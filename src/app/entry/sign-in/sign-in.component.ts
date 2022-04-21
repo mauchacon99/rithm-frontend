@@ -27,6 +27,9 @@ export class SignInComponent implements OnInit {
   /** Is it loading. */
   isLoading = false;
 
+  /** On hover For password visible. */
+  viewPassword = false;
+
   constructor(
     public fb: FormBuilder,
     private popupService: PopupService,
@@ -82,6 +85,15 @@ export class SignInComponent implements OnInit {
         this.showInvalidLinkMessage(error);
       },
     });
+  }
+
+  /**
+   * For real viewing eye icon display in the password.
+   *
+   * @returns Display the eye icon for view password, hides it else.
+   */
+  get iconVisible(): boolean {
+    return this.signInForm.get('password')?.value;
   }
 
   /**

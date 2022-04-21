@@ -49,12 +49,21 @@
               <input
                 data-testid="password-field"
                 id="password"
-                type="password"
+                [type]="viewPassword ? 'text' : 'password'"
                 matInput
                 placeholder="Password"
                 formControlName="password"
                 autocomplete="current-password"
               />
+              <mat-icon
+                *ngIf="iconVisible"
+                matSuffix
+                class="text-secondary-300 cursor-pointer text-lg"
+                (mouseover)="viewPassword = true"
+                (mouseout)="viewPassword = false"
+              >
+                <i class="fas fa-eye"></i>
+              </mat-icon>
             </mat-form-field>
             <button
               data-testid="sign-in"
