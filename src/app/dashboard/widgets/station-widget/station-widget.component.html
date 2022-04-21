@@ -324,18 +324,7 @@
     </ng-container>
   </ng-container>
 </ng-template>
-<ng-template #linkMap let-value="value">
-  <div *ngIf="value; else withOutLink">
-    <a
-      [href]="'https://www.google.com/maps/place/' + value"
-      target="_blank"
-      class="text-accent-500 underline"
-    >
-      {{ value }}
-    </a>
-  </div>
-</ng-template>
-<ng-template #withOutLink>
+<ng-template #withOutData>
   <span class="cursor-default" title="Without Link">N/A</span>
 </ng-template>
 <!--Template for show questions columns of the document-->
@@ -343,32 +332,8 @@
   <ng-container *ngFor="let questions of document.questions[0].questions">
     <ng-container *ngIf="questions.rithmId === column.questionId">
       <ng-container [ngSwitch]="questions.questionType">
-        <span *ngSwitchCase="questionFieldType.Zip">
-          <ng-container
-            *ngTemplateOutlet="
-              linkMap;
-              context: { value: questions.answer?.value }
-            "
-          ></ng-container>
-        </span>
-        <span *ngSwitchCase="questionFieldType.City">
-          <ng-container
-            *ngTemplateOutlet="
-              linkMap;
-              context: { value: questions.answer?.value }
-            "
-          ></ng-container>
-        </span>
-        <span *ngSwitchCase="questionFieldType.State">
-          <ng-container
-            *ngTemplateOutlet="
-              linkMap;
-              context: { value: questions.answer?.value }
-            "
-          ></ng-container>
-        </span>
         <span *ngSwitchCase="questionFieldType.Phone">
-          <div *ngIf="questions.answer?.value; else withOutLink">
+          <div *ngIf="questions.answer?.value; else withOutData">
             <a
               [href]="'tel:+' + questions.answer?.value"
               target="_blank"
@@ -379,7 +344,7 @@
           </div>
         </span>
         <span *ngSwitchCase="questionFieldType.Email">
-          <div *ngIf="questions.answer?.value; else withOutLink">
+          <div *ngIf="questions.answer?.value; else withOutData">
             <a
               [href]="'mailto:' + questions.answer?.value"
               target="_blank"
@@ -390,7 +355,7 @@
           </div>
         </span>
         <span *ngSwitchCase="questionFieldType.URL">
-          <div *ngIf="questions.answer?.value; else withOutLink">
+          <div *ngIf="questions.answer?.value; else withOutData">
             <a
               [attr.href]="questions.answer?.value"
               [attr.target]="'_blank'"
@@ -444,9 +409,13 @@
         <span *ngSwitchCase="'instructions'">
           {{ questions.prompt }}
         </span>
-        <span *ngSwitchDefault>
+        <p
+          title="{{ questions.answer?.value || 'N/A' }}"
+          *ngSwitchDefault
+          class="text-xs truncate w-[150px]"
+        >
           {{ questions.answer?.value || 'N/A' }}
-        </span>
+        </p>
       </ng-container>
     </ng-container>
   </ng-container>

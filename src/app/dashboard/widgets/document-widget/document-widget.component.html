@@ -182,44 +182,7 @@
       >
     </ng-template>
 
-    <ng-template #linkMap let-value="value">
-      <div *ngIf="value; else withOutLink">
-        <a
-          [href]="'https://www.google.com/maps/place/' + value"
-          target="_blank"
-          class="text-accent-500 underline"
-        >
-          {{ value }}
-        </a>
-      </div>
-    </ng-template>
-
     <div [ngSwitch]="questions.questionType">
-      <span *ngSwitchCase="questionFieldType.Zip">
-        <ng-container
-          *ngTemplateOutlet="
-            linkMap;
-            context: { value: questions.answer?.value }
-          "
-        ></ng-container>
-      </span>
-      <span *ngSwitchCase="questionFieldType.City">
-        <ng-container
-          *ngTemplateOutlet="
-            linkMap;
-            context: { value: questions.answer?.value }
-          "
-        ></ng-container>
-      </span>
-      <span *ngSwitchCase="questionFieldType.State">
-        <ng-container
-          *ngTemplateOutlet="
-            linkMap;
-            context: { value: questions.answer?.value }
-          "
-        ></ng-container>
-      </span>
-
       <span *ngSwitchCase="questionFieldType.Phone">
         <div *ngIf="questions.answer?.value; else withOutLink">
           <a
