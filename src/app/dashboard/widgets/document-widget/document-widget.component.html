@@ -189,6 +189,10 @@
             [href]="'tel:+' + questions.answer?.value"
             target="_blank"
             class="text-accent-500 underline"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
           >
             {{ questions.answer?.value }}
           </a>
@@ -200,6 +204,10 @@
             [href]="'mailto:' + questions.answer?.value"
             target="_blank"
             class="text-accent-500 underline"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
           >
             {{ questions.answer?.value }}
           </a>
@@ -211,6 +219,10 @@
             [attr.href]="questions.answer?.value"
             [attr.target]="'_blank'"
             class="text-accent-500 underline"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
           >
             {{ questions.answer?.value }}</a
           >
