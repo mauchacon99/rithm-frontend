@@ -76,7 +76,13 @@
   <div class="h-full w-full bg-white rounded px-2 pt-2 overflow-hidden">
     <p class="text-sm font-semibold truncate">Group Name Traffic</p>
     <div class="mt-2 h-[calc(100%-36px)] animate-pulse">
-      <canvas id="chartTrafficGroup"></canvas>
+      <canvas
+        baseChart
+        [datasets]="configChart.data.datasets"
+        [labels]="configChart.data.labels"
+        [options]="configChart.options"
+      >
+      </canvas>
     </div>
   </div>
 </ng-template>
