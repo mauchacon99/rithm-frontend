@@ -13,6 +13,126 @@
 >
 </app-error-widget>
 
-<div *ngIf="!isLoading && !failedGetContainers">
-  <p>container-pre-built-widget works!</p>
+<div
+  *ngIf="!isLoading && !failedGetContainers && containers"
+  class="h-full w-full p-2"
+>
+  <h3 class="font-semibold truncate mb-2">My Containers</h3>
+
+  <div class="flex-grow overflow-auto scrollbar h-[calc(100%-40px)]">
+    <ng-container
+      *ngIf="containers.length; then tableContainers; else emptyContainers"
+    >
+    </ng-container>
+  </div>
 </div>
+
+<ng-template #tableContainers>
+  <table mat-table [dataSource]="dataSourceTable" class="w-full">
+    <!-- Name Container -->
+    <ng-container matColumnDef="nameContainer">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+      >
+        CONTAINER
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        {{ element['nameContainer']?.trim() || 'N/A' }}
+      </td>
+    </ng-container>
+
+    <!-- Flowed Time UTC -->
+    <ng-container matColumnDef="flowedTimeUTC">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+      >
+        TIME IN STATION
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        {{ getElapsedTime(element['flowedTimeUTC']) }}
+      </td>
+    </ng-container>
+
+    <!-- Station Name -->
+    <ng-container matColumnDef="stationName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+      >
+        STATION
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        {{ element['stationName']?.trim() || 'N/A' }}
+      </td>
+    </ng-container>
+
+    <!-- Station Owners -->
+    <ng-container matColumnDef="stationOwners">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+      >
+        STATION OWNERS
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        <app-roster
+          [stationId]="element['stationRithmId'] || ''"
+          [isWorker]="false"
+          [editMode]="editMode"
+          [stationOwners]="element['stationOwners']"
+          [fromDrawer]="true"
+        >
+        </app-roster>
+      </td>
+    </ng-container>
+
+    <!-- Button to view document-->
+    <ng-container [matColumnDef]="'viewDocument'" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <div class="text-right">
+          <button
+            mat-icon-button
+            class="text-secondary-500"
+            [attr.data-testid]="
+              'show-document-widget-' + element['containerRithmId']
+            "
+            [id]="'show-document-widget-' + element['containerRithmId']"
+            [disabled]="editMode"
+          >
+            <i class="fas text-lg fa-angle-double-right"></i>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</ng-template>
+
+<ng-template #emptyContainers>
+  <div class="text-center my-4 text-sm">There are not containers.</div>
+</ng-template>

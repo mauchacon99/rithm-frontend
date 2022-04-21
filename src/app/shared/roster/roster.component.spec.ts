@@ -88,4 +88,32 @@ describe('RosterComponent', () => {
     component.ngOnInit();
     expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
   });
+
+  it('should set rosterMembers when stationOwners have data', () => {
+    component.stationOwners = [
+      {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isWorker: true,
+        isOwner: false,
+      },
+    ];
+
+    component.ngOnInit();
+
+    expect(component.rosterMembers).toEqual(component.stationOwners);
+  });
+
+  it('should set call getStationOwnerRoster when stationOwners dont have data', () => {
+    const rosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationOwnerRoster'
+    ).and.callThrough();
+    component.isWorker = false;
+    component.stationOwners = [];
+    component.ngOnInit();
+    expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
+  });
 });
