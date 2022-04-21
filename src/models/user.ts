@@ -31,4 +31,7 @@ export interface User {
 
   /** The IDs of the organizations user belongs to. */
   readonly organization: string;
+
+  /** User Image or Photo. */
+  readonly userImageId?: string;
 }
