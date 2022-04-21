@@ -29,6 +29,7 @@ import { PreviousFieldsModule } from 'src/app/shared/previous-fields/previous-fi
 import { InfoDrawerModule } from 'src/app/shared/info-drawer/info-drawer.module';
 import { DocumentComponent } from './document/document.component';
 import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.module';
+import { LocationModalComponent } from './folder/location-modal/location-modal.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { FileFieldModule } from 'src/app/shared/fields/file-field/file-field.mod
     DocumentFieldComponent,
     DocumentTemplateComponent,
     ConnectedStationsModalComponent,
+    LocationModalComponent,
   ],
   imports: [
     CommonModule,
