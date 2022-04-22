@@ -397,7 +397,7 @@ export class StationComponent
           this.handleInvalidParams();
         } else {
           this.stationRithmId = params.stationId;
-          this.getStationInfo(params.stationId);
+          (this.viewNewStation)? this.getStationWidgets : this.getStationInfo(params.stationId);
         }
       },
       error: (error: unknown) => {
@@ -978,7 +978,8 @@ export class StationComponent
       .subscribe({
         next: (inputFrames) => {
           /**Add individual properties for every Type. */
-          inputFrames.forEach((frame, index) => {
+          inputFrames?.forEach((frame, index) => {
+            frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
                 frame.minItemRows = 4;
@@ -986,7 +987,7 @@ export class StationComponent
                 frame.questions =
                   frame.questions && frame.questions?.length > 0
                     ? frame.questions
-                    : [];
+                    : JSON.parse(frame.data);
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:

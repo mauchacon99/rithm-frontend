@@ -1560,7 +1560,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  fit('should get getStationWidgets', () => {
+  it('should get getStationWidgets', () => {
     const expectedResponse: StationInformation =
       {
         rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
