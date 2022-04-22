@@ -108,8 +108,8 @@ describe('SettingFieldsComponent', () => {
       },
     ];
     const deleteConfirmPopup = {
-      title: '',
-      message: 'Are you sure you want to delete this field?',
+      title: 'Are you sure?',
+      message: 'You are about to remove this field from the widget.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
       important: true,
@@ -123,5 +123,43 @@ describe('SettingFieldsComponent', () => {
     service.deleteStationQuestion$.subscribe((response) => {
       expect(response).toEqual(questions[0]);
     });
+  });
+
+  it('should delete extra spaces in fields name', () => {
+    component.field = {
+      prompt: 'Fake question 1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: 'Short     Text     Field',
+    };
+    fixture.detectChanges();
+    component.deleteExtraSpaces();
+    expect(component.field.value).toEqual('Short Text Field');
+  });
+
+  it('should set the default field value as its own type', () => {
+    component.field = {
+      prompt: 'Fake question 1',
+      rithmId: '3j4k-3h2j-hj4j',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: undefined,
+    };
+    fixture.detectChanges();
+    component.deleteExtraSpaces();
+    expect(component.field.value).toEqual(component.inputTextTag);
+  });
+
+  it('should convert a camelCase string into Title Case', () => {
+    /** In this case the field is ShortTextType = shortText. */
+    const myFieldName = component.inputTextTag;
+    expect(myFieldName).toEqual('Short Text');
   });
 });
