@@ -3,6 +3,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDashboardService } from 'src/mocks';
+import { NgChartsModule } from 'ng2-charts';
 
 import { GroupWidgetTemplateModalComponent } from './group-widget-template-modal.component';
 
@@ -13,7 +14,7 @@ describe('GroupWidgetTemplateModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [GroupWidgetTemplateModalComponent],
-      imports: [MatInputModule, NoopAnimationsModule],
+      imports: [MatInputModule, NoopAnimationsModule, NgChartsModule],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
       ],
