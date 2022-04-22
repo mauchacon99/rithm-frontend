@@ -15,6 +15,7 @@ import {
 } from 'src/models';
 
 import { UserService } from './user.service';
+import { ImageData } from 'src/models/index';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -299,5 +300,18 @@ describe('UserService', () => {
 
     req.flush(termsAndConditions);
     httpTestingController.verify();
+  });
+
+  it('should call getImageUser', () => {
+    const expectedData: ImageData = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image Name',
+    };
+    service
+      .getImageUser('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
+      .subscribe((response) => {
+        expect(response).toEqual(expectedData);
+      });
   });
 });

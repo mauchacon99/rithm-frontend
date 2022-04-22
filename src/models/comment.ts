@@ -34,7 +34,4 @@ export interface Comment {
 
   /** User Image or Photo. */
   readonly userImageId?: string;
-
-  /** Name Image user. */
-  readonly profileImageRithmId?: string;
 }
