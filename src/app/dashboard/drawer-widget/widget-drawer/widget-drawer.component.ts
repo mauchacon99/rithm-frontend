@@ -160,8 +160,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   uploadImage(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
-    const extension = file.type.split('/')[1];
     if (file) {
+      const extension = file.type.split('/')[1];
       if (FormatImageValidate.isValidFormatImage(extension)) {
         // Loading banner image while upload image.
         this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
