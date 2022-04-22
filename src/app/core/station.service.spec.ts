@@ -23,6 +23,7 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1681,7 +1682,7 @@ describe('StationService', () => {
         stationRithmId: 'qwe-321-ert-123',
         stationName: 'Mars station',
         totalContainers: 5,
-        stationGroup: '132-123-132',
+        stationGroup: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1700,6 +1701,13 @@ describe('StationService', () => {
             isWorker: true,
           },
         ],
+      },
+      {
+        stationRithmId: '123-456-789',
+        stationName: 'Grogu station',
+        totalContainers: 1,
+        stationGroup: '  ',
+        stationOwners: [],
       },
     ];
     service.getStationWidgetPreBuiltData().subscribe((response) => {
@@ -1742,5 +1750,19 @@ describe('StationService', () => {
 
     req.flush(frameQuestions);
     httpTestingController.verify();
+  });
+
+  it('should get a current stations list for containers', () => {
+    const stationRithmId = '6375027-78345-73824-54244';
+    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+      {
+        name: 'Testy',
+        rithmId: '123',
+        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+      },
+    ];
+    service.getCurrentStations(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectCurrentStationsResponse);
+    });
   });
 });
