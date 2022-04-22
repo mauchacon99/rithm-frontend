@@ -88,7 +88,7 @@ export class UserAvatarComponent {
   /**
    * Get Image user.
    */
-  getImageUser(): void {
+  private getImageUser(): void {
     this.userService
       .getImageUser(this.imageRithmId)
       .pipe(first())
