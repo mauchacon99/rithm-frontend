@@ -1227,7 +1227,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'saveStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.saveStationWidgetsChanges();
+      component['saveStationWidgetsChanges']();
       fixture.detectChanges();
       const stationLoading =
         fixture.debugElement.nativeElement.querySelector('#gridster-loading');

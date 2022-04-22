@@ -877,10 +877,7 @@ export class StationComponent
    * Save or update the changes make the station frame widgets.
    */
   private saveStationWidgetsChanges(): void {
-    this.editMode = false;
-    this.setGridMode('preview');
     this.stationLoading = true;
-
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
         field.data = JSON.stringify(field.questions);
