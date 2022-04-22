@@ -17,9 +17,6 @@ import { StationService } from 'src/app/core/station.service';
 export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
-  /** The list of members on the roster. */
-  rosterMembers: StationRosterMember[] = [];
-
   /** Station ID. Needed for openRosterModal. */
   @Input() stationId!: string;
 
@@ -32,8 +29,14 @@ export class RosterComponent implements OnInit {
   /** Determines if this is a roster being viewed in the drawer. */
   @Input() fromDrawer = false;
 
+  /** Roster Members previewed load. */
+  @Input() stationMembers!: StationRosterMember[];
+
   /** Emit the roster member length to be displayed as text.*/
   @Output() rosterMemberLength = new EventEmitter<number>();
+
+  /** The list of members on the roster. */
+  rosterMembers: StationRosterMember[] = [];
 
   /** Whether the request is underway. */
   loadingRoster = false;
@@ -51,17 +54,23 @@ export class RosterComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    this.getStationUsersRoster();
+    if (!this.stationMembers) {
+      this.getStationUsersRoster();
+    } else {
+      this.rosterMembers = this.stationMembers;
+    }
   }
 
   /**
    * Opens a modal with roster information.
    */
   openRosterModal(): void {
-    this.dialog.open(RosterModalComponent, {
-      minWidth: '325px',
-      data: { stationId: this.stationId, isWorker: this.isWorker },
-    });
+    if (this.editMode) {
+      this.dialog.open(RosterModalComponent, {
+        minWidth: '325px',
+        data: { stationId: this.stationId, isWorker: this.isWorker },
+      });
+    }
   }
 
   /**
