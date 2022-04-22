@@ -22,7 +22,6 @@ import {
   DocumentEvent,
   DataLinkObject,
   GroupTrafficData,
-  FrameType,
   StandardNumberJSON,
   StationWidgetPreBuilt,
   DocumentCurrentStation,
