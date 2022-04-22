@@ -107,6 +107,18 @@
                       ></textarea>
                     </mat-form-field>
                   </div>
+                  <span (click)="displayDataLinks()" [hidden]="true"
+                    >Data Link</span
+                  >
+                  <ng-container
+                    *ngFor="let data of savedDataLinkArray; let i = index"
+                  >
+                    <app-data-link-field
+                      [field]="savedDataLinkArrayQuestions[i]"
+                      formArrayName="dataLink"
+                      [data]="data"
+                    ></app-data-link-field>
+                  </ng-container>
                   <app-station-template
                     [stationRithmId]="stationRithmId"
                     [fields]="stationInformation.questions"
@@ -234,8 +246,8 @@
         <div
           class="flex flex-col col-span-12 lg:col-span-8 bg-white h-full w-full"
         >
+          <!-- Tabs -->
           <form
-            *ngIf="!stationLoading"
             [formGroup]="stationForm"
             autocomplete="off"
             class="station-base-form"
@@ -248,8 +260,6 @@
               [viewNewStation]="viewNewStation"
               #stationInfoHeader
             ></app-station-info-header>
-            <!-- Tabs -->
-
             <mat-tab-group
               mat-align-tabs="left"
               class="mt-2 w-full pb-8 mat-tab-label-container"
@@ -267,7 +277,6 @@
                     #documentNameFields
                     [documentInformation]="stationInformation"
                     [viewNewStation]="viewNewStation"
-                    *ngIf="!stationLoading"
                   ></app-document-info-header>
 
                   <!--  Toolbar Edit -->
@@ -353,6 +362,7 @@
                           id="cancel-station-changes"
                           data-testid="cancel-station-changes"
                           class="font-semibold text-sm"
+                          [disabled]="stationLoading && editMode"
                           (click)="cancelStationChanges()"
                         >
                           Cancel
@@ -364,111 +374,125 @@
                           id="save-station-frames"
                           data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="
-                            layoutMode ? saveStationWidgetsChanges() : ''
-                          "
+                          (click)="saveStationWidgetsChanges()"
+                          [disabled]="stationLoading && editMode"
                         >
                           Save
                         </button>
                       </div>
                     </div>
                   </ng-template>
-                  <div
-                    class="gridster-container pb-4 w-full"
-                    cdkDropList
-                    id="station-grid"
-                    [attr.cdkDropListConnectedTo]="[
-                      'input-frame-container',
-                      'custom-component-container'
-                    ]"
-                    (cdkDropListDropped)="addInputFrame($event)"
-                  >
-                    <gridster
-                      class="p-0 bg-transparent h-screen"
-                      [options]="options"
+                  <ng-container *ngIf="!stationLoading; else gridsterLoading">
+                    <div
+                      class="gridster-container pb-4 w-full"
+                      cdkDropList
+                      id="station-grid"
+                      [attr.cdkDropListConnectedTo]="[
+                        'input-frame-container',
+                        'custom-component-container'
+                      ]"
+                      (cdkDropListDropped)="addInputFrame($event)"
                     >
-                      <gridster-item
-                        [item]="widgetItem"
-                        class="gridster-item"
-                        [ngClass]="{
-                          'widget-item-layout':
-                            layoutMode && widgetFocused !== i,
-                          'border-accent-300 border-2': widgetFocused === i
-                        }"
-                        (click)="settingMode || focusWidget(i)"
-                        *ngFor="
-                          let widgetItem of inputFrameWidgetItems;
-                          let i = index;
-                          trackBy: trackBy
-                        "
-                        (mouseenter)="widgetMoveButton = i"
-                        (mouseleave)="widgetMoveButton = -1"
+                      <gridster
+                        class="p-0 bg-transparent h-screen"
+                        [options]="options"
                       >
-                        <div class="h-gridster">
-                          <button
-                            mat-icon-button
-                            type="button"
-                            class="drag-handler"
-                            data-testid="button-drag-handler"
-                            *ngIf="widgetMoveButton === i && layoutMode"
-                          >
-                            <i class="fas fa-arrows fa-xl"></i>
-                          </button>
-                          <ng-container [ngSwitch]="widgetItem.type">
-                            <app-headline-widget
-                              *ngSwitchCase="frameType.Headline"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Headline)
-                              "
-                            ></app-headline-widget>
-                            <app-title-widget
-                              *ngSwitchCase="frameType.Title"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Title)
-                              "
-                            ></app-title-widget>
-                            <app-body-text-widget
-                              *ngSwitchCase="frameType.Body"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Body)
-                              "
-                            ></app-body-text-widget>
-                            <app-banner-widget
-                              *ngSwitchCase="frameType.Image"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Image)
-                              "
-                            ></app-banner-widget>
-                            <app-circle-image-widget
-                              *ngSwitchCase="frameType.CircleImage"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.CircleImage)
-                              "
-                            ></app-circle-image-widget>
-                            <app-input-frame-widget
-                              *ngSwitchDefault
-                              [fields]="widgetItem.questions"
-                              [stationViewMode]="editMode ? 'edit' : 'preview'"
-                              [stationRithmId]="stationRithmId"
-                              [id]="widgetItem.id"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (widgetRowAdjustment)="
-                                widgetRowAdjustment($event, widgetItem)
-                              "
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Input)
-                              "
-                            ></app-input-frame-widget>
-                          </ng-container>
-                        </div>
-                      </gridster-item>
-                    </gridster>
-                  </div>
+                        <gridster-item
+                          [item]="widgetItem"
+                          class="gridster-item"
+                          [ngClass]="{
+                            'widget-item-layout':
+                              layoutMode && widgetFocused !== i,
+                            'border-accent-300 border-2': widgetFocused === i
+                          }"
+                          (click)="settingMode || focusWidget(i)"
+                          *ngFor="
+                            let widgetItem of inputFrameWidgetItems;
+                            let i = index;
+                            trackBy: trackBy
+                          "
+                          (mouseenter)="widgetMoveButton = i"
+                          (mouseleave)="widgetMoveButton = -1"
+                        >
+                          <div class="h-gridster">
+                            <button
+                              mat-icon-button
+                              type="button"
+                              class="drag-handler"
+                              data-testid="button-drag-handler"
+                              *ngIf="widgetMoveButton === i && layoutMode"
+                            >
+                              <i class="fas fa-arrows fa-xl"></i>
+                            </button>
+                            <ng-container [ngSwitch]="widgetItem.type">
+                              <app-headline-widget
+                                *ngSwitchCase="frameType.Headline"
+                                [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                                (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Headline)
+                                "
+                              ></app-headline-widget>
+                              <app-title-widget
+                                *ngSwitchCase="frameType.Title"
+                                [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                                (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Title)
+                                "
+                              ></app-title-widget>
+                              <app-body-text-widget
+                                *ngSwitchCase="frameType.Body"
+                                [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                                (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Body)
+                                "
+                              ></app-body-text-widget>
+                              <app-banner-widget
+                                *ngSwitchCase="frameType.Image"
+                                [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                                (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Image)
+                                "
+                              ></app-banner-widget>
+                              <app-circle-image-widget
+                                *ngSwitchCase="frameType.CircleImage"
+                                [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                                (openSettingDrawer)="
+                                  openSettingDrawer(
+                                    $event,
+                                    frameType.CircleImage
+                                  )
+                                "
+                              ></app-circle-image-widget>
+                              <app-input-frame-widget
+                                *ngSwitchDefault
+                                [fields]="widgetItem.questions"
+                                [stationViewMode]="
+                                  editMode ? 'edit' : 'preview'
+                                "
+                                [stationRithmId]="stationRithmId"
+                                [id]="widgetItem.id"
+                                [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                                (widgetRowAdjustment)="
+                                  widgetRowAdjustment($event, widgetItem)
+                                "
+                                (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Input)
+                                "
+                              ></app-input-frame-widget>
+                            </ng-container>
+                          </div>
+                        </gridster-item>
+                      </gridster>
+                    </div>
+                  </ng-container>
+                  <ng-template #gridsterLoading>
+                    <div
+                      id="gridster-loading"
+                      class="flex items-center justify-center w-full h-[calc(100vh-430px)] overflow-hidden"
+                    >
+                      <app-loading-indicator></app-loading-indicator>
+                    </div>
+                  </ng-template>
                 </ng-template>
               </mat-tab>
               <!-- Flow Logic Tab -->

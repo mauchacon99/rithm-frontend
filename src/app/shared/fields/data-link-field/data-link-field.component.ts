@@ -62,6 +62,9 @@ export class DataLinkFieldComponent
   /** The document field to display. */
   @Input() field!: Question;
 
+  /** The document field to display. */
+  @Input() data!: DataLinkObject;
+
   /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
@@ -106,6 +109,9 @@ export class DataLinkFieldComponent
         this.currentStationQuestions = questions.filter(
           (q) => q.questionType !== QuestionFieldType.DataLink
         );
+        if (this.data) {
+          this.bindSavedDataLinkToForm('selectBaseValue');
+        }
       });
   }
 
@@ -144,6 +150,9 @@ export class DataLinkFieldComponent
           this.stations = stations;
           this.filterStations();
           this.stationLoading = false;
+          if (this.data) {
+            this.bindSavedDataLinkToForm('targetStation');
+          }
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -188,6 +197,10 @@ export class DataLinkFieldComponent
             this.questionLoading = false;
             this.dataLinkFieldForm.controls.selectedMatchingValue.markAllAsTouched();
             this.dataLinkFieldForm.controls.selectedDisplayFields.markAllAsTouched();
+            if (this.data) {
+              this.bindSavedDataLinkToForm('selectedMatchingValue');
+              this.bindSavedDataLinkToForm('selectedDisplayFields');
+            }
           },
           error: (error: unknown) => {
             this.questionLoading = false;
@@ -324,5 +337,67 @@ export class DataLinkFieldComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Completes all subscriptions.
+   *
+   * @param field Form field to which data is binding.
+   */
+  private bindSavedDataLinkToForm(field: string): void {
+    const displayIds = [];
+    switch (field) {
+      case 'selectBaseValue':
+        this.dataLinkFieldForm
+          .get('selectBaseValue')
+          ?.setValue(
+            this.currentStationQuestions.find(
+              (e) => e.rithmId === this.data.baseQuestionRithmId
+            )?.rithmId
+          );
+        this.dataLinkFieldForm.controls.selectBaseValue.markAllAsTouched();
+        break;
+      case 'selectedMatchingValue':
+        this.dataLinkFieldForm
+          .get('selectedMatchingValue')
+          ?.setValue(
+            this.questions.find(
+              (e) => e.rithmId === this.data.matchingQuestionRithmId
+            )?.rithmId
+          );
+        this.dataLinkFieldForm.controls.selectedMatchingValue.markAllAsTouched();
+        break;
+      case 'selectedDisplayFields':
+        for (const id of this.data.displayFields) {
+          displayIds.push(
+            this.questions.find((e) => e.rithmId.includes(id))?.rithmId
+          );
+        }
+        this.dataLinkFieldForm
+          .get('selectedDisplayFields')
+          ?.setValue(displayIds);
+        this.dataLinkFieldForm.controls.selectedDisplayFields.markAllAsTouched();
+        break;
+      case 'targetStation':
+        this.dataLinkFieldForm
+          .get('targetStation')
+          ?.setValue(
+            this.stations.find(
+              (e) => e.rithmId === this.data.sourceStationRithmId
+            )?.name
+          );
+        this.getStationQuestions(
+          <string>(
+            this.stations.find(
+              (e) => e.rithmId === this.data.sourceStationRithmId
+            )?.name
+          )
+        );
+        this.dataLinkFieldForm.controls.targetStation.markAllAsTouched();
+        this.subscribeCurrentStationQuestions();
+        break;
+      default:
+        return;
+    }
   }
 }

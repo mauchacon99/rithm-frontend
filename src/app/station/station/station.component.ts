@@ -29,7 +29,12 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
+import {
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponent,
+  GridsterPush,
+} from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -56,6 +61,10 @@ export class StationComponent
   /** Indicate error when saving flow rule. */
   @ViewChild(FlowLogicComponent, { static: false })
   childFlowLogic!: FlowLogicComponent;
+
+  /** Indicate item of Gridster to modify. */
+  @ViewChild(GridsterItemComponent, { static: false })
+  gridItem!: GridsterItemComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -138,6 +147,7 @@ export class StationComponent
     fixedRowHeight: 50,
     displayGrid: 'always',
     pushItems: true,
+    pushResizeItems: true,
     draggable: {
       enabled: true,
       ignoreContent: true,
@@ -161,6 +171,12 @@ export class StationComponent
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
 
+  /** Saved station data link widgets. */
+  savedDataLinkArray: DataLinkObject[] = [];
+
+  /** Saved station data link widgets. */
+  savedDataLinkArrayQuestions: Question[] = [];
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -177,6 +193,7 @@ export class StationComponent
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
+      dataLink: this.fb.control(''),
     });
     this.randomIdGenerator = new RandomIdGenerator();
   }
@@ -320,7 +337,6 @@ export class StationComponent
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
-
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -796,6 +812,7 @@ export class StationComponent
     /** Depending on the case, the mode is set. */
     switch (mode) {
       case 'preview':
+        this.editMode = false;
         this.layoutMode = false;
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
@@ -867,8 +884,7 @@ export class StationComponent
    * Save or update the changes make the station frame widgets.
    */
   saveStationWidgetsChanges(): void {
-    this.editMode = false;
-    this.setGridMode('preview');
+    this.stationLoading = true;
 
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
@@ -894,10 +910,14 @@ export class StationComponent
             this.saveInputFrameQuestions(
               inputFrames.filter((iframe) => iframe.type === FrameType.Input)
             );
+          } else {
+            this.stationLoading = false;
+            this.setGridMode('preview');
           }
           this.changedOptions();
         },
         error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -926,6 +946,9 @@ export class StationComponent
         }
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
+    } else {
+      this.stationLoading = false;
+      this.setGridMode('preview');
     }
   }
 
@@ -938,8 +961,13 @@ export class StationComponent
     forkJoin(requestRow)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
+        },
         error: (error: unknown) => {
           this.stationLoading = false;
+          this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1197,6 +1225,24 @@ export class StationComponent
     if (height > widget.rows) {
       widget.rows = height;
       widget.minItemRows = height;
+
+      /**Set in gridster properties to avoid overlapping widgets. */
+      const itemResized = new GridsterPush(
+        this.gridItem.gridster.grid[widget.id]
+      );
+      this.gridItem.gridster.grid[widget.id].$item.rows = height;
+
+      if (itemResized.pushItems(itemResized.fromNorth)) {
+        // push items from a direction
+        itemResized.checkPushBack(); // check for items can restore to original position
+        itemResized.setPushedItems(); // save the items pushed
+        this.gridItem.gridster.grid[widget.id].setSize();
+        this.gridItem.gridster.grid[widget.id].checkItemChanges(
+          this.gridItem.gridster.grid[widget.id].$item,
+          this.gridItem.gridster.grid[widget.id].item
+        );
+      }
+      itemResized.destroy();
     }
     this.changedOptions();
   }
@@ -1217,5 +1263,35 @@ export class StationComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Listen the DocumentStationNameFields subject.
+   */
+  displayDataLinks(): void {
+    const newQuestion: Question = {
+      rithmId: this.randomIdGenerator.getRandRithmId(4),
+      prompt: '',
+      questionType: QuestionFieldType.DataLink,
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      children: [],
+      originalStationRithmId: this.stationRithmId,
+    };
+    this.savedDataLinkArrayQuestions.push(newQuestion);
+    const obj: DataLinkObject = {
+      rithmId: '2130AA93-6629-41C2-A668-D6B25D12878C',
+      sourceStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+      targetStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+      baseQuestionRithmId: '5e6ea31b-36f0-48ab-8b52-5c8810692424',
+      matchingQuestionRithmId: '02dd90a6-0873-48d8-9ce4-897bb3153816',
+      displayFields: [
+        'ee6e866a-4d54-4d97-92d2-84a07028a401',
+        '0562a405-4b43-4337-b09b-680194c1fe39',
+      ],
+      frameRithmId: '',
+    };
+    this.savedDataLinkArray.push(obj);
   }
 }
