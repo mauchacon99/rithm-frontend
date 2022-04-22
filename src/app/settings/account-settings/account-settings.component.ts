@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { AccountSettingsService } from 'src/app/core/account-settings.service';
 import { firstValueFrom } from 'rxjs';
-import { SplitService } from 'src/app/core/split.service';
 
 /**
  * Component for all of the account settings.
@@ -18,15 +17,12 @@ import { SplitService } from 'src/app/core/split.service';
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.scss'],
 })
-export class AccountSettingsComponent implements OnInit {
+export class AccountSettingsComponent {
   /** Settings form. */
   settingsForm: FormGroup;
 
   /** Whether the account settings is loading. */
   isLoading = false;
-
-  /** Show section Stations lists. */
-  showProfilePhoto = false;
 
   // TODO: Re-enable when addressing notification settings
   // /** Notification settings model. */
@@ -41,19 +37,11 @@ export class AccountSettingsComponent implements OnInit {
     private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
-    private accountSettingsService: AccountSettingsService,
-    private splitService: SplitService
+    private accountSettingsService: AccountSettingsService
   ) {
     this.settingsForm = this.fb.group({
       userForm: this.fb.control(''),
     });
-  }
-
-  /**
-   * Initial Method.
-   */
-  ngOnInit(): void {
-    this.split();
   }
 
   /**
@@ -72,7 +60,6 @@ export class AccountSettingsComponent implements OnInit {
   private updateUserAccount(): void {
     const userFormData = this.settingsForm.get('userForm')?.value;
     const { firstName, lastName, confirmPassword } = userFormData;
-
     this.userService
       .updateUserAccount({ firstName, lastName, password: confirmPassword })
       .pipe(first())
@@ -137,21 +124,5 @@ export class AccountSettingsComponent implements OnInit {
         error
       );
     }
-  }
-
-  /**
-   * Split Service for show or hidden Account setting profile image .
-   */
-  private split(): void {
-    this.splitService.initSdk(this.userService.user.organization);
-    this.splitService.sdkReady$.pipe(first()).subscribe({
-      next: () => {
-        this.showProfilePhoto =
-          this.splitService.getAccountProfilePhotoTreatment() === 'on';
-      },
-      error: (error: unknown) => {
-        this.errorService.logError(error);
-      },
-    });
   }
 }
