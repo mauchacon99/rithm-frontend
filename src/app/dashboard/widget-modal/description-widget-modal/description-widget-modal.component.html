@@ -1,5 +1,8 @@
 <!--header-->
-<div class="pt-3" *ngIf="itemWidgetModalSelected.itemType !== 'preBuilt'">
+<div
+  class="pt-3"
+  *ngIf="itemWidgetModalSelected.itemType !== 'preBuilt'; else preBuiltTitle"
+>
   <h3 class="text-lg font-semibold">
     {{ dataTemplate[widgetType].title | titlecase }}
     Template
@@ -12,6 +15,18 @@
     }}</span>
   </p>
 </div>
+<ng-template #preBuiltTitle>
+  <div class="py-5">
+    <h3>
+      {{
+        widgetType === enumWidgetType.PreBuiltContainer
+          ? 'My Containers'
+          : 'My Stations'
+      }}
+    </h3>
+  </div>
+</ng-template>
+
 <div class="flex flex-col justify-between height-container">
   <div class="w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-3">
     <div class="w-full py-5 md:py-14">
@@ -110,6 +125,12 @@
           [editMode]="false"
         >
         </app-container-pre-built-widget>
+
+        <app-station-pre-built-widget
+          *ngIf="widgetType === enumWidgetType.PreBuiltStation"
+          class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
+        >
+        </app-station-pre-built-widget>
       </div>
     </div>
   </div>
