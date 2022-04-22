@@ -46,7 +46,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
               ]
             : [{ name: ColumnsDocumentInfo.Name }],
       });
-    } else {
+    } else if (this.itemWidgetModalSelected.itemType === 'preBuilt') {
       return JSON.stringify(
         this.widgetType === this.enumWidgetType.StationGroupTraffic
           ? {
@@ -59,6 +59,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
                 this.itemWidgetModalSelected?.itemList?.rithmId,
             }
       );
+    } else {
+      return '';
     }
   }
 
@@ -68,17 +70,8 @@ export class DescriptionWidgetModalComponent implements OnInit {
    * @returns Data of dashboardItem.
    */
   get widgetItem(): DashboardItem {
-    const minItemRows =
-      this.widgetType === this.enumWidgetType.PreBuiltContainer ||
-      this.widgetType === this.enumWidgetType.PreBuiltStation
-        ? 1
-        : this.minItemRowsWidget();
-
-    const minItemCols =
-      this.widgetType === this.enumWidgetType.PreBuiltContainer ||
-      this.widgetType === this.enumWidgetType.PreBuiltStation
-        ? 4
-        : 3;
+    const minItemRows = this.minItemRowsWidget();
+    const minItemCols = this.minItemColsWidget();
 
     const widgetType = this.widgetTypeWithoutDefault;
     const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
@@ -136,6 +129,18 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.StationMultilineBanner
       ? 2
       : 1;
+  }
+
+  /**
+   * Parse item cols for widget.
+   *
+   * @returns A number of minItemCols.
+   */
+  private minItemColsWidget(): number {
+    return this.widgetType === this.enumWidgetType.PreBuiltContainer ||
+      this.widgetType === this.enumWidgetType.PreBuiltStation
+      ? 4
+      : 3;
   }
 
   /** Save widget. */

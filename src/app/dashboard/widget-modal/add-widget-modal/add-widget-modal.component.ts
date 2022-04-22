@@ -108,11 +108,7 @@ export class AddWidgetModalComponent implements OnInit {
 
   /** Return to widget list when identifyShowElement is not tabs. */
   returnCustomLists(): void {
-    if (
-      this.previewWidgetTypeSelected ===
-        this.enumWidgetType.PreBuiltContainer ||
-      this.previewWidgetTypeSelected === this.enumWidgetType.PreBuiltStation
-    ) {
+    if (this.itemWidgetModalSelected.itemType === 'preBuilt') {
       this.previewWidgetTypeSelected = null;
       this.identifyShowElement = 'tabs';
     } else {
