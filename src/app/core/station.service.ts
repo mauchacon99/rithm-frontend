@@ -912,34 +912,13 @@ export class StationService {
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     stationGroupRithmId: string
   ): Observable<GroupTrafficData> {
-    const mockGetGroupTrafficData: GroupTrafficData = {
-      title: 'Group Eagle',
-      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: [
-        'station 1',
-        'station 2',
-        'station 3',
-        'station 4',
-        'station 5 with a long text for test view',
-        'station 6',
-        'station 7',
-      ],
-      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
-      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
-      averageDocumentFlowLabels: [
-        '2 days',
-        '7 weeks',
-        '1 hour',
-        '2 days',
-        '1 weeks',
-        '40 minutes',
-        '2 hour',
-      ],
-    };
-    return of(mockGetGroupTrafficData).pipe(delay(1000));
+    const params = new HttpParams().set('rithmId', stationGroupRithmId);
+    return this.http.get<GroupTrafficData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic`,
+      { params }
+    );
   }
 
   /**
