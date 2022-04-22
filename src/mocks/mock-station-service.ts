@@ -1577,7 +1577,7 @@ export class MockStationService {
         stationRithmId: 'qwe-321-ert-123',
         stationName: 'Mars station',
         totalContainers: 5,
-        stationGroup: '132-123-132',
+        stationGroup: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1596,6 +1596,13 @@ export class MockStationService {
             isWorker: true,
           },
         ],
+      },
+      {
+        stationRithmId: '123-456-789',
+        stationName: 'Grogu station',
+        totalContainers: 1,
+        stationGroup: '  ',
+        stationOwners: [],
       },
     ];
     return of(stationWidgetData).pipe(delay(1000));
