@@ -69,6 +69,7 @@
               [viewNewStation]="false"
             >
             </app-station-info-header>
+
             <app-document-info-header
               (sendNewUserAssigned)="setNewAssignedUser($event)"
               [isWidget]="isWidget"
@@ -76,6 +77,7 @@
               [documentInformation]="documentInformation"
               [viewNewStation]="false"
             ></app-document-info-header>
+
             <app-document-template
               class="flex flex-col"
               [ngClass]="{ 'pb-7': !isWidget }"
@@ -269,6 +271,48 @@
               [documentInformation]="documentInformation"
               [viewNewStation]="false"
             ></app-document-info-header>
+            <div
+              class="gridster-container pb-4 w-full h-full"
+              id="container-grid"
+            >
+              <gridster class="p-0 bg-transparent h-screen" [options]="options">
+                <gridster-item
+                  [item]="widgetItem"
+                  class="gridster-item"
+                  *ngFor="
+                    let widgetItem of inputFrameWidgetItems;
+                    let i = index
+                  "
+                >
+                  <div class="h-gridster">
+                    <ng-container [ngSwitch]="widgetItem.type">
+                      <app-headline-widget
+                        *ngSwitchCase="frameType.Headline"
+                      ></app-headline-widget>
+                      <app-title-widget
+                        *ngSwitchCase="frameType.Title"
+                      ></app-title-widget>
+                      <app-body-text-widget
+                        *ngSwitchCase="frameType.Body"
+                      ></app-body-text-widget>
+                      <app-banner-widget
+                        *ngSwitchCase="frameType.Image"
+                      ></app-banner-widget>
+                      <app-circle-image-widget
+                        *ngSwitchCase="frameType.CircleImage"
+                      ></app-circle-image-widget>
+                      <app-input-frame-widget
+                        *ngSwitchCase="frameType.Input"
+                        [fields]="widgetItem.questions"
+                        stationViewMode="preview"
+                        [stationRithmId]="stationRithmIdWidget"
+                        [id]="widgetItem.id"
+                      ></app-input-frame-widget>
+                    </ng-container>
+                  </div>
+                </gridster-item>
+              </gridster>
+            </div>
             <app-document-template
               *ngIf="isWidget"
               class="flex flex-col"
