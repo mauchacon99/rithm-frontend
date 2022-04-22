@@ -1246,7 +1246,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '',
+          data: '[]',
           questions: [],
           id: 0,
         },
@@ -1270,7 +1270,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Headline,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1293,7 +1293,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Body,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1316,7 +1316,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Title,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1339,7 +1339,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Image,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1362,7 +1362,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.CircleImage,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
