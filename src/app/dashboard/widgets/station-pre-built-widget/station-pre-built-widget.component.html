@@ -58,9 +58,13 @@
         mat-cell
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
-        (click)="openDocsModal(element)"
       >
-        <a>{{ element['totalContainers'] }} Containers</a>
+        <a *ngIf="!editMode" (click)="openDocsModal(element)"
+          >{{ element['totalContainers'] }} Containers</a
+        >
+        <span *ngIf="editMode"
+          >{{ element['totalContainers'] }} Containers</span
+        >
       </td>
     </ng-container>
 

@@ -17,9 +17,6 @@ import { StationService } from 'src/app/core/station.service';
 export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
-  /** The list of members on the roster. */
-  rosterMembers: StationRosterMember[] = [];
-
   /** Station ID. Needed for openRosterModal. */
   @Input() stationId!: string;
 
@@ -33,10 +30,13 @@ export class RosterComponent implements OnInit {
   @Input() fromDrawer = false;
 
   /** Roster Members previewed load. */
-  @Input() stationMembers: StationRosterMember[] = [];
+  @Input() stationMembers!: StationRosterMember[];
 
   /** Emit the roster member length to be displayed as text.*/
   @Output() rosterMemberLength = new EventEmitter<number>();
+
+  /** The list of members on the roster. */
+  rosterMembers: StationRosterMember[] = [];
 
   /** Whether the request is underway. */
   loadingRoster = false;
@@ -54,7 +54,7 @@ export class RosterComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (!this.stationMembers.length) {
+    if (!this.stationMembers) {
       this.getStationUsersRoster();
     } else {
       this.rosterMembers = this.stationMembers;

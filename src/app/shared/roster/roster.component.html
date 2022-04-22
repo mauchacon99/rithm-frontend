@@ -8,11 +8,11 @@
       [firstName]="member.firstName"
       [lastName]="member.lastName"
       [isDrawer]="fromDrawer"
-      [isSmall]="!!stationMembers.length"
+      [isSmall]="!!stationMembers"
     ></app-user-avatar>
   </div>
   <p
-    *ngIf="!editMode && rosterMembers.length === 0"
+    *ngIf="!rosterMembers.length"
     class="overline-font py-2 text-secondary-300"
   >
     No station {{ isWorker ? 'workers' : 'owners' }}

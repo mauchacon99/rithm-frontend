@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { WidgetType } from 'src/models';
-import { Chart, ChartConfiguration, registerables } from 'chart.js';
-Chart.register(...registerables);
+import { ChartConfiguration } from 'chart.js';
 
 /**
  * The component for templates widgets of the groups.
@@ -12,9 +11,7 @@ Chart.register(...registerables);
   templateUrl: './group-widget-template-modal.component.html',
   styleUrls: ['./group-widget-template-modal.component.scss'],
 })
-export class GroupWidgetTemplateModalComponent
-  implements OnDestroy, AfterViewInit
-{
+export class GroupWidgetTemplateModalComponent {
   /** Type of widget to show. */
   @Input() widgetType: WidgetType = WidgetType.StationGroupSearch;
 
@@ -24,12 +21,9 @@ export class GroupWidgetTemplateModalComponent
   /** Data static for each template by widgetType. */
   dataTemplate;
 
-  /** Chart to group traffic. */
-  chartGroupTraffic!: Chart;
-
   /** Data static to show chart only group-traffic. */
-  dataChart: ChartConfiguration = {
-    type: 'line',
+  configChart: ChartConfiguration = {
+    type: 'bar',
     data: {
       labels: [
         'Station 1',
@@ -43,48 +37,88 @@ export class GroupWidgetTemplateModalComponent
       datasets: [
         {
           // Documents
-          label: 'Documents',
-          data: [20, 50, 32, 45, 40, 51, 26],
-          borderColor: '#3B82F6',
+          label: 'Containers Count',
+          data: [5, 10, 7, 8, 15, 18, 12],
           backgroundColor: '#8DA1C3',
+          hoverBackgroundColor: '#8DA1C3',
           stack: 'combined',
           type: 'bar',
-          borderWidth: 0,
-          barThickness: 8,
+          yAxisID: 'y',
+          order: 2,
         },
         {
           // Documents Flow
-          label: 'Documents Flow',
-          data: [5, 20, 7, 5, 6, 8, 9],
+          type: 'line',
+          label: 'Avg. Container completion time',
+          data: [50, 20, 10, 60, 120, 40, 140],
           borderColor: '#294F8E',
           backgroundColor: '#8DA1C3',
+          hoverBackgroundColor: '#8DA1C3',
+          pointBorderColor: '#294F8E',
           stack: 'combined',
-          borderWidth: 1,
+          borderWidth: 1.5,
+          yAxisID: 'y2',
+          order: 1,
         },
       ],
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      datasets: {
+        bar: {
+          barThickness: 8,
+        },
+      },
       plugins: {
         legend: {
           display: false,
         },
         tooltip: {
+          displayColors: false,
           titleFont: {
             size: 8,
           },
           bodyFont: {
             size: 7,
           },
+          callbacks: {
+            title: (tooltipItem) => {
+              const { label, dataset } = tooltipItem[0];
+              const title =
+                dataset.type === 'line'
+                  ? 'Avg. Container completion time'
+                  : 'Container Count';
+              return [title, label];
+            },
+            label: (tooltipItem) => {
+              if (tooltipItem.dataset.type === 'line') {
+                return ['2 days'];
+              }
+              return `${tooltipItem.dataset.data[tooltipItem.dataIndex]} ${
+                tooltipItem.dataset.label
+              }`;
+            },
+          },
         },
       },
       scales: {
         y: {
           stacked: true,
+          position: 'left',
+          beginAtZero: true,
           ticks: {
             font: {
               size: 8,
             },
+          },
+        },
+        y2: {
+          stacked: true,
+          position: 'right',
+          beginAtZero: true,
+          grid: {
+            drawOnChartArea: false,
           },
         },
         x: {
@@ -100,19 +134,5 @@ export class GroupWidgetTemplateModalComponent
 
   constructor(private dashboardService: DashboardService) {
     this.dataTemplate = dashboardService.dataTemplatePreviewWidgetModal;
-  }
-
-  /** After view init. */
-  ngAfterViewInit(): void {
-    if (this.widgetType === this.enumWidgetType.StationGroupTraffic) {
-      this.chartGroupTraffic = new Chart('chartTrafficGroup', this.dataChart);
-    }
-  }
-
-  /** Destroy component. */
-  ngOnDestroy(): void {
-    if (this.widgetType === this.enumWidgetType.StationGroupTraffic) {
-      this.chartGroupTraffic.destroy();
-    }
   }
 }

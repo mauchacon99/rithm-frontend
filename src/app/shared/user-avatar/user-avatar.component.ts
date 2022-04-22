@@ -27,9 +27,6 @@ export class UserAvatarComponent {
   /** Whether the enabled switching badges on mouseover. */
   @Input() hoverEffect = false;
 
-  /** Whether the cursor is hover then change badge content if is enabled. */
-  badgeHover = false;
-
   /** Whether is displayed from the drawer. */
   @Input() isDrawer = false;
 
@@ -51,6 +48,9 @@ export class UserAvatarComponent {
 
     return firstInitial + lastInitial;
   }
+
+  /** Whether the cursor is hover then change badge content if is enabled. */
+  badgeHover = false;
 
   /**
    * Gets the unicode badge needed for each case.
