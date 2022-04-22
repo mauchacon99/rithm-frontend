@@ -348,7 +348,7 @@ export class MapStationGroupHelper {
         stationGroup.subStationGroups.includes(stationGroupId) &&
         !stationGroup.isReadOnlyRootStationGroup
       ) {
-        stationGroup.disabled = false;
+        stationGroup.disabled = true;
         this.updateParentStationGroup(stationGroup.rithmId);
       }
     });
