@@ -21,7 +21,7 @@
             [(ngModel)]="field.value"
             [maxlength]="field.questionType === 'shortText' ? 50 : null"
             autocomplete="off"
-            (blur)="deleteSpace()"
+            (blur)="deleteExtraSpaces()"
             (ngModelChange)="setQuestionTitle()"
           />
         </mat-form-field>

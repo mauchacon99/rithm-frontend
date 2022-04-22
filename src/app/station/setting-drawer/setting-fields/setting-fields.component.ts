@@ -10,7 +10,6 @@ import { Question } from 'src/models';
   styleUrls: ['./setting-fields.component.scss'],
 })
 export class SettingFieldsComponent implements OnInit {
-
   /** The field information for your setting. */
   @Input() field!: Question;
 
@@ -24,10 +23,21 @@ export class SettingFieldsComponent implements OnInit {
 
   /** Init method. */
   ngOnInit(): void {
-    if (!this.field.value || !this.field.value?.length){
-      this.field.value = 'Unnamed Field';
+    if (!this.field.value || !this.field.value?.length) {
+      this.field.value = this.inputTextTag;
       this.setQuestionTitle();
     }
+  }
+
+  /**
+   * Return a normalized label tag for the current question.
+   *
+   * @returns String.
+   */
+  get inputTextTag(): string {
+    const result = this.field.questionType.replace(/([A-Z])/g, ' $1');
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+    return finalResult;
   }
 
   /**
@@ -43,12 +53,12 @@ export class SettingFieldsComponent implements OnInit {
    * Delete space the text to be evaluated to remove excess space.
    *
    */
-   deleteSpace(): void {
-    if (this.field.value && this.field.value.length){
-      this.field.value.replace(/\s+/g, ' ').trim();
+  deleteExtraSpaces(): void {
+    if (this.field.value && this.field.value.length) {
+      this.field.value = this.field.value.replace(/\s+/g, ' ').trim();
     }
-    if (!this.field.value || !this.field.value?.length){
-      this.field.value = 'Unnamed Field';
+    if (!this.field.value || !this.field.value?.length) {
+      this.field.value = this.inputTextTag;
     }
     this.setQuestionTitle();
   }
