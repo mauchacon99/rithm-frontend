@@ -908,13 +908,17 @@ export class StationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
-    const params = new HttpParams().set('rithmId', stationGroupRithmId);
+    const params = new HttpParams()
+      .set('rithmId', stationGroupRithmId)
+      .set('forceRefresh', forceRefresh);
     return this.http.get<GroupTrafficData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic`,
       { params }

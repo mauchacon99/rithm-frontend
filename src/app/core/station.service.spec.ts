@@ -1616,14 +1616,15 @@ describe('StationService', () => {
         '2 hour',
       ],
     };
-    service.getGroupTrafficData(stationId).subscribe((response) => {
+    service.getGroupTrafficData(stationId, true).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic?rithmId=${stationId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic?rithmId=${stationId}&forceRefresh=true`
     );
     expect(req.request.params.get('rithmId')).toBe(stationId);
+    expect(req.request.params.get('forceRefresh')).toBe('true');
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
