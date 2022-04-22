@@ -7,7 +7,7 @@
 /// Used on Worker Roster, Documents, the Documents modal, and Notifications.
 /// 30px circle in our secondary color.
 .circle-30-secondary {
-  @apply rounded-full h-7 w-7 text-center text-xs font-semibold leading-7 text-white bg-secondary-500 hover:bg-secondary-700 border border-secondary-50;
+  @apply rounded-full h-7 w-7 text-center text-xs font-semibold leading-[26px] text-white bg-secondary-500 hover:bg-secondary-700 border border-secondary-50;
 }
 
 /// Used on Priority.
