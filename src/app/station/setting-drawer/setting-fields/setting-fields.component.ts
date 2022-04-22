@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
@@ -10,10 +9,7 @@ import { Question } from 'src/models';
   templateUrl: './setting-fields.component.html',
   styleUrls: ['./setting-fields.component.scss'],
 })
-export class SettingFieldsComponent {
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
+export class SettingFieldsComponent implements OnInit {
   /** The field information for your setting. */
   @Input() field!: Question;
 
@@ -25,6 +21,25 @@ export class SettingFieldsComponent {
     private popupService: PopupService
   ) {}
 
+  /** Init method. */
+  ngOnInit(): void {
+    if (!this.field.value || !this.field.value?.length) {
+      this.field.value = this.inputTextTag;
+      this.setQuestionTitle();
+    }
+  }
+
+  /**
+   * Return a normalized label tag for the current question.
+   *
+   * @returns String.
+   */
+  get inputTextTag(): string {
+    const result = this.field.questionType.replace(/([A-Z])/g, ' $1');
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+    return finalResult;
+  }
+
   /**
    * Whether the current field belongs to a previous field or not.
    *
@@ -32,6 +47,20 @@ export class SettingFieldsComponent {
    */
   get isPrevious(): boolean {
     return this.field.originalStationRithmId !== this.stationRithmId;
+  }
+
+  /**
+   * Delete space the text to be evaluated to remove excess space.
+   *
+   */
+  deleteExtraSpaces(): void {
+    if (this.field.value && this.field.value.length) {
+      this.field.value = this.field.value.replace(/\s+/g, ' ').trim();
+    }
+    if (!this.field.value || !this.field.value?.length) {
+      this.field.value = this.inputTextTag;
+    }
+    this.setQuestionTitle();
   }
 
   /**
@@ -57,8 +86,8 @@ export class SettingFieldsComponent {
    */
   async deleteQuestion(questions: Question): Promise<void> {
     const response = await this.popupService.confirm({
-      title: '',
-      message: 'Are you sure you want to delete this field?',
+      title: 'Are you sure?',
+      message: 'You are about to remove this field from the widget.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
       important: true,
