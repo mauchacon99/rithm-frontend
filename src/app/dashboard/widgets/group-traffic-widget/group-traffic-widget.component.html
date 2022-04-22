@@ -11,33 +11,78 @@
   (tryAgain)="getGroupTrafficData()"
 >
 </app-error-widget>
-<div *ngIf="!isLoading && !errorGroupTraffic">
-  <div class="w-full h-full p-2 flex flex-col" *ngIf="groupTrafficData">
-    <!-- Header widget -->
-    <div class="flex justify-between items-center">
-      <h3 class="font-semibold truncate">
-        {{ groupTrafficData.title + ' Traffic' || 'Untitled Group Traffic' }}
-      </h3>
-      <div class="select-show-data">
-        <mat-form-field appearance="outline" *ngIf="editMode">
-          <mat-label>Value</mat-label>
-          <mat-select
-            [disabled]="isMobileDevice"
-            (selectionChange)="updateDataWidget()"
-            data-testid="select-cant-data-traffic"
-            id="select-cant-data-traffic"
-            [(ngModel)]="valueShowGraffic"
+<div
+  class="w-full h-full p-2 flex flex-col"
+  *ngIf="groupTrafficData && !isLoading && !errorGroupTraffic"
+>
+  <!-- Header widget -->
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold truncate">
+      {{ groupTrafficData.title + ' Traffic' || 'Untitled Group Traffic' }}
+    </h3>
+    <div class="select-show-data">
+      <mat-form-field appearance="outline" *ngIf="editMode">
+        <mat-label>Value</mat-label>
+        <mat-select
+          [disabled]="isMobileDevice"
+          (selectionChange)="updateDataWidget()"
+          data-testid="select-cant-data-traffic"
+          id="select-cant-data-traffic"
+          [(ngModel)]="valueShowGraphic"
+        >
+          <mat-option
+            *ngFor="let valueChart of optionsShowTraffic"
+            [attr.data-testid]="'value-show-' + valueChart"
+            [id]="'value-show-' + valueChart"
+            [value]="valueChart"
+            >{{ valueChart }}</mat-option
           >
-            <mat-option
-              *ngFor="let valueChart of optionsShowTraffic"
-              [attr.data-testid]="'value-show-' + valueChart"
-              [id]="'value-show-' + valueChart"
-              [value]="valueChart"
-              >{{ valueChart }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
+        </mat-select>
+      </mat-form-field>
     </div>
+  </div>
+
+  <div
+    class="h-full w-full scrollbar overflow-auto"
+    *ngIf="groupTrafficData.labels.length"
+  >
+    <div class="h-[calc(100%-36px)]">
+      <canvas
+        baseChart
+        [datasets]="configChart.data.datasets"
+        [labels]="configChart.data.labels"
+        [options]="configChart.options"
+      >
+      </canvas>
+    </div>
+
+    <div class="flex justify-between pagination-button">
+      <button
+        mat-button
+        id="previous-paginate-button"
+        data-testid="previous-paginate-button"
+        class="text-secondary-500"
+        (click)="paginate('previous')"
+        [disabled]="!paginationChart || editMode"
+      >
+        <i class="fa-solid text-xl fa-circle-arrow-left"></i> Previous
+      </button>
+      <button
+        mat-button
+        id="next-paginate-button"
+        data-testid="next-paginate-button"
+        class="text-secondary-500"
+        [disabled]="
+          paginationChart >=
+            groupTrafficData.labels.length - valueShowGraphic || editMode
+        "
+        (click)="paginate('next')"
+      >
+        Next <i class="fa-solid text-xl fa-circle-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!groupTrafficData.labels.length" class="text-sm text-center p-4">
+    There are not stations to graph.
   </div>
 </div>

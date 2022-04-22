@@ -1182,6 +1182,36 @@ describe('StationComponent', () => {
     });
   });
 
+  describe('Loading indicators in a specific moment', () => {
+    it('should display a loading indicator when the saveStationWidgetsChanges', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+      ];
+      Object.defineProperty(component, 'viewNewStation', {
+        value: true,
+      });
+      spyOn(
+        TestBed.inject(StationService),
+        'saveStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.saveStationWidgetsChanges();
+      fixture.detectChanges();
+      const stationLoading =
+        fixture.debugElement.nativeElement.querySelector('#gridster-loading');
+      expect(stationLoading).toBeTruthy();
+    });
+  });
+
   describe('should call the method that gets the frame types of the current station', () => {
     it('should check properties when it is an input frame', () => {
       const frameStationWidget: StationFrameWidget[] = [
