@@ -259,7 +259,11 @@ describe('StationComponent', () => {
 
   it('should validate the form controls initial value', () => {
     const form = component.stationForm.controls;
-    const expectFormFirst = ['stationTemplateForm', 'generalInstructions', 'dataLink'];
+    const expectFormFirst = [
+      'stationTemplateForm',
+      'generalInstructions',
+      'dataLink',
+    ];
 
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
