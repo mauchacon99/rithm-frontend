@@ -759,45 +759,15 @@ export class StationService {
    * @param stationRithmId The current station id.
    * @returns The station widget data.
    */
-  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive  the number of container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const stationWidgets: StationFrameWidget[] = [
-        {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.Input,
-          data: '',
-          questions: [],
-          id: 0,
-        },
-        {
-          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 1,
-          x: 0,
-          y: 0,
-          type: FrameType.Headline,
-          data: '',
-          id: 1,
-        },
-      ];
-
-      return of(stationWidgets).pipe(delay(1000));
-    }
+  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[] | undefined> {
+    const params = new HttpParams().set(
+      'stationRithmId',
+      stationRithmId
+    );
+    return this.http.get<StationInformation>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info-frames`,
+      { params }
+    ).pipe(map((response) => response.frames));
   }
 
   /**

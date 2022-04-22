@@ -1287,7 +1287,9 @@ export class MockStationService {
    * @param stationRithmId The current station id.
    * @returns The station widget data.
    */
-  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
+  getStationWidgets(
+    stationRithmId: string
+  ): Observable<StationFrameWidget[] | undefined> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -1298,32 +1300,74 @@ export class MockStationService {
           })
       ).pipe(delay(1000));
     } else {
-      const stationWidgets: StationFrameWidget[] = [
-        {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.Input,
-          data: '',
-          questions: [],
-          id: 0,
-        },
-        {
-          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 1,
-          x: 0,
-          y: 0,
-          type: FrameType.Headline,
-          data: '',
-          id: 1,
-        },
-      ];
-      return of(stationWidgets).pipe(delay(1000));
+      const stationWidgets: StationInformation = {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'New Station Name',
+        instructions: '',
+        nextStations: [
+          {
+            rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+            name: 'Development',
+            totalDocuments: 5,
+            isGenerator: true,
+          },
+        ],
+        previousStations: [
+          {
+            rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+            name: 'Station-1',
+            totalDocuments: 2,
+            isGenerator: true,
+          },
+        ],
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isWorker: false,
+            isOwner: true,
+          },
+        ],
+        workers: [
+          {
+            rithmId: '',
+            firstName: 'Harry',
+            lastName: 'Potter',
+            email: 'harrypotter@inpivota.com',
+            isWorker: false,
+            isOwner: false,
+          },
+        ],
+        frames: [
+          {
+            rithmId: '9144-3f0d-e1f1',
+            stationRithmId: 'qwe-321-ert-123',
+            id: 0,
+            x: 6,
+            y: 1,
+            cols: 6,
+            rows: 4,
+            type: FrameType.Headline,
+            data: '',
+            questions: [],
+          },
+        ],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2,
+        allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
+        flowButton: 'Flow',
+        isChained: false,
+      };
+      const frames = stationWidgets?.frames;
+      return of(frames).pipe(delay(1000));
     }
   }
 
