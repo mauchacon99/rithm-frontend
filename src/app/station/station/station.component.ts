@@ -330,7 +330,6 @@ export class StationComponent
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
-
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -806,6 +805,7 @@ export class StationComponent
     /** Depending on the case, the mode is set. */
     switch (mode) {
       case 'preview':
+        this.editMode = false;
         this.layoutMode = false;
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
@@ -877,8 +877,7 @@ export class StationComponent
    * Save or update the changes make the station frame widgets.
    */
   saveStationWidgetsChanges(): void {
-    this.editMode = false;
-    this.setGridMode('preview');
+    this.stationLoading = true;
 
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
@@ -904,10 +903,14 @@ export class StationComponent
             this.saveInputFrameQuestions(
               inputFrames.filter((iframe) => iframe.type === FrameType.Input)
             );
+          } else {
+            this.stationLoading = false;
+            this.setGridMode('preview');
           }
           this.changedOptions();
         },
         error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -936,6 +939,9 @@ export class StationComponent
         }
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
+    } else {
+      this.stationLoading = false;
+      this.setGridMode('preview');
     }
   }
 
@@ -948,8 +954,13 @@ export class StationComponent
     forkJoin(requestRow)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
+        },
         error: (error: unknown) => {
           this.stationLoading = false;
+          this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
