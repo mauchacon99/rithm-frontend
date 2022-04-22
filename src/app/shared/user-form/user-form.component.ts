@@ -73,7 +73,7 @@ export class UserFormComponent
   confirmPasswordLabel = '';
 
   /** User image. */
-  userImage = '';
+  userImage !: ImageData;
 
   constructor(
     private fb: FormBuilder,
