@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
@@ -47,7 +47,6 @@ export class UserAvatarComponent {
     private userService: UserService,
     private errorService: ErrorService
   ) {}
-
 
   /**
    * The first + last initials for the user.

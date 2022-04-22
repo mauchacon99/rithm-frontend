@@ -1207,6 +1207,7 @@ describe('StationComponent', () => {
 
   describe('Loading indicators in a specific moment', () => {
     it('should display a loading indicator when the saveStationWidgetsChanges', () => {
+      component.stationRithmId = '132-123';
       const frameStationWidget: StationFrameWidget[] = [
         {
           rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
@@ -1216,10 +1217,11 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
+      component.inputFrameWidgetItems = frameStationWidget;
       Object.defineProperty(component, 'viewNewStation', {
         value: true,
       });
@@ -1246,7 +1248,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '',
+          data: '[]',
           questions: [],
           id: 0,
         },
@@ -1270,7 +1272,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Headline,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1293,7 +1295,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Body,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1316,7 +1318,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Title,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1339,7 +1341,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Image,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1362,7 +1364,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.CircleImage,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];

@@ -74,23 +74,19 @@ describe('UserAvatarComponent', () => {
 
   it('should call method getImageUser', () => {
     component.imageRithmId = '123-123132';
-    const methodGetImageUser = spyOn(
-      component,
-      'getImageUser'
-    ).and.callThrough();
     const methodGetImageUserService = spyOn(
       TestBed.inject(UserService),
       'getImageUser'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getImageUser']();
 
-    expect(methodGetImageUser).toHaveBeenCalled();
     expect(methodGetImageUserService).toHaveBeenCalledOnceWith(
       component.imageRithmId
     );
   });
 
   it('should catch an error if the request to get image data', () => {
+    component.imageRithmId = '123-123132';
     spyOn(TestBed.inject(UserService), 'getImageUser').and.returnValue(
       throwError(() => {
         throw new Error();
@@ -100,7 +96,7 @@ describe('UserAvatarComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getImageUser']();
     expect(spyError).toHaveBeenCalled();
   });
 });
