@@ -46,7 +46,7 @@ export class DescriptionWidgetModalComponent implements OnInit {
               ]
             : [{ name: ColumnsDocumentInfo.Name }],
       });
-    } else if (this.itemWidgetModalSelected.itemType === 'preBuilt') {
+    } else if (this.itemWidgetModalSelected.itemType === 'group') {
       return JSON.stringify(
         this.widgetType === this.enumWidgetType.StationGroupTraffic
           ? {
