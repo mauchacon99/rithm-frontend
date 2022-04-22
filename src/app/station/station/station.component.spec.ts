@@ -698,6 +698,63 @@ describe('StationComponent', () => {
     expect(component.editMode).toBeFalsy();
   });
 
+  it('should open confirmation popup for save, when has no questions in input frames', async () => {
+    const stationId = '3j4k-3h2j-hj4j';
+    const inputFramesWidgets: StationFrameWidget[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2j',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [],
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2Y',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 7,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [
+          {
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+            originalStationRithmId: '3j4k-3h2j-hj4j',
+          },
+        ],
+        type: FrameType.Input,
+        data: '',
+        id: 1,
+      },
+    ];
+    component.inputFrameWidgetItems = inputFramesWidgets;
+    component.stationRithmId = stationId;
+    fixture.detectChanges();
+    const spyWigets = spyOn(
+      TestBed.inject(StationService),
+      'saveStationWidgets'
+    ).and.callThrough();
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+    await component.saveStationWidgetChanges();
+    expect(spyWigets).toHaveBeenCalledOnceWith(stationId, inputFramesWidgets);
+  });
+
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Cancel?',
@@ -1145,6 +1202,36 @@ describe('StationComponent', () => {
       expect(component.inputFrameWidgetItems[0].id).not.toEqual(
         component.inputFrameWidgetItems[1].id
       );
+    });
+  });
+
+  describe('Loading indicators in a specific moment', () => {
+    it('should display a loading indicator when the saveStationWidgetsChanges', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 0,
+        },
+      ];
+      Object.defineProperty(component, 'viewNewStation', {
+        value: true,
+      });
+      spyOn(
+        TestBed.inject(StationService),
+        'saveStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component['saveStationWidgetsChanges']();
+      fixture.detectChanges();
+      const stationLoading =
+        fixture.debugElement.nativeElement.querySelector('#gridster-loading');
+      expect(stationLoading).toBeTruthy();
     });
   });
 
