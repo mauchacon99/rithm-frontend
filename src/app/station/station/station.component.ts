@@ -888,7 +888,7 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-          inputFrames.map((input, index) => {
+          inputFrames?.map((input, index) => {
             input.id = index;
             if (input.data && JSON.parse(input.data)?.length > 0) {
               input.questions = [];
@@ -927,7 +927,7 @@ export class StationComponent
     if (frames.length) {
       const frameQuestionRequest: Observable<Question[]>[] = [];
       frames.forEach((frame) => {
-        const fQuestions: Question[] = JSON.parse(frame.data);
+        const fQuestions: Question[] = (frame.data && JSON.parse(frame.data)) ? JSON.parse(frame.data) : [];
         if (fQuestions.length) {
           frameQuestionRequest.push(
             this.stationService.saveInputFrameQuestions(
