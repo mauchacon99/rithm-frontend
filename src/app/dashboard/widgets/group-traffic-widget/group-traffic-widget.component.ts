@@ -206,7 +206,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
     this.isLoading = true;
     this.errorGroupTraffic = false;
     this.stationService
-      .getGroupTrafficData(this.stationGroupRithmId, false)
+      .getGroupTrafficData(this.stationGroupRithmId, true)
       .pipe(first())
       .subscribe({
         next: (trafficData) => {
