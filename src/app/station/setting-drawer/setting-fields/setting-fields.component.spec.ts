@@ -125,7 +125,7 @@ describe('SettingFieldsComponent', () => {
     });
   });
 
-  it('should delete a station', () => {
+  it('should delete extra spaces in fields name', () => {
     component.field = {
       prompt: 'Fake question 1',
       rithmId: '3j4k-3h2j-hj4j',
@@ -155,5 +155,11 @@ describe('SettingFieldsComponent', () => {
     fixture.detectChanges();
     component.deleteExtraSpaces();
     expect(component.field.value).toEqual(component.inputTextTag);
+  });
+
+  it('should convert a camelCase string into Title Case', () => {
+    /** In this case the field is ShortTextType = shortText. */
+    const myFieldName = component.inputTextTag;
+    expect(myFieldName).toEqual('Short Text');
   });
 });
