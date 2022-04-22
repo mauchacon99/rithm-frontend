@@ -909,7 +909,7 @@ export class StationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId fot stationGroup
+   * @param stationGroupRithmId RithmId fot stationGroup.
    * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
