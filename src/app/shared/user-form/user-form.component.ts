@@ -17,7 +17,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormatImageValidate } from 'src/helpers';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
-import { User } from 'src/models';
+import { User, ImageData } from 'src/models';
 
 /**
  * Reusable form component that gets a user's first and last names, email, and password.
@@ -73,7 +73,7 @@ export class UserFormComponent
   confirmPasswordLabel = '';
 
   /** User image. */
-  userImage !: ImageData;
+  userImage!: ImageData;
 
   constructor(
     private fb: FormBuilder,

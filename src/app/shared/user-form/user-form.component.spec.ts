@@ -298,18 +298,25 @@ describe('UserFormComponent', () => {
         throw new Error();
       })
     );
-    const spyMethod = spyOn(component, 'uploadImageUser').and.callThrough();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const spyMethod = spyOn<any>(
+      component,
+      'uploadImageUser'
+    ).and.callThrough();
     const mockFile = new File([''], 'name', { type: 'image/png' });
-    component.uploadImageUser(mockFile);
+    component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
-    expect(component.userImage).toEqual('');
   });
 
-  it('should call upload imageUser fails', () => {
+  it('should call upload imageUser', () => {
     spyOn(TestBed.inject(UserService), 'uploadImageUser').and.callThrough();
-    const spyMethod = spyOn(component, 'uploadImageUser').and.callThrough();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const spyMethod = spyOn<any>(
+      component,
+      'uploadImageUser'
+    ).and.callThrough();
     const mockFile = new File([''], 'name', { type: 'image/png' });
-    component.uploadImageUser(mockFile);
+    component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
   });
 });

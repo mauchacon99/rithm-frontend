@@ -303,7 +303,9 @@ describe('UserService', () => {
 
   it('should upload image user', () => {
     const expectedResponse = {
-      data: 'ewf34tf-3ge343-g34g3e',
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image name',
     };
     const file = new File(new Array<Blob>(), 'image', {
       type: 'image/jpeg',
@@ -312,7 +314,7 @@ describe('UserService', () => {
     formData.append('image', file);
 
     service.uploadImageUser(file).subscribe((response) => {
-      expect(response).toEqual(expectedResponse.data);
+      expect(response).toEqual(expectedResponse);
     });
   });
 });

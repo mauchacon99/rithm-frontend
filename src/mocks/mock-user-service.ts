@@ -9,6 +9,7 @@ import {
   User,
   UserAccountInfo,
   StationInformation,
+  ImageData,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -304,7 +305,12 @@ export class MockUserService {
    * @param file File to upload.
    * @returns Id of image uploaded.
    */
-  uploadImageUser(file: File): Observable<string> {
-    return of('ewf34tf-3ge343-g34g3e').pipe(delay(1000));
+  uploadImageUser(file: File): Observable<ImageData> {
+    const response: ImageData = {
+      imageData:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
+      imageName: 'Image name',
+    };
+    return of(response).pipe(delay(1000));
   }
 }

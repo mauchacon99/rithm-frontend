@@ -1439,6 +1439,7 @@ describe('StationComponent', () => {
           y: 0,
           type: FrameType.Title,
           id: 0,
+          data: '[]',
         },
       ];
 
