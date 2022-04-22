@@ -216,6 +216,7 @@
       <span *ngSwitchCase="questionFieldType.URL">
         <div *ngIf="questions.answer?.value; else withOutLink">
           <a
+            title="{{ questions.answer?.value }}"
             [attr.href]="questions.answer?.value"
             [attr.target]="'_blank'"
             class="text-accent-500 underline"

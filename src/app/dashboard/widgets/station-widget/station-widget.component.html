@@ -244,7 +244,6 @@
           *matCellDef="let element"
           class="min-w-[150px] text-xs text-secondary-500"
         >
-          <!---***-->
           <ng-container
             *ngTemplateOutlet="
               columnQuestion;
@@ -349,32 +348,38 @@
         </span>
         <span *ngSwitchCase="questionFieldType.Email">
           <div *ngIf="questions.answer?.value; else withOutData">
-            <a
-              [href]="'mailto:' + questions.answer?.value"
-              target="_blank"
-              class="text-accent-500 underline"
-              [ngClass]="{
-                'text-secondary-500 pointer-events-none cursor-not-allowed':
-                  editMode
-              }"
-            >
-              {{ questions.answer?.value }}
-            </a>
+            <p class="truncate w-[150px]">
+              <a
+                title="{{ questions.answer?.value }}"
+                [href]="'mailto:' + questions.answer?.value"
+                target="_blank"
+                class="text-accent-500 underline"
+                [ngClass]="{
+                  'text-secondary-500 pointer-events-none cursor-not-allowed':
+                    editMode
+                }"
+              >
+                {{ questions.answer?.value }}
+              </a>
+            </p>
           </div>
         </span>
         <span *ngSwitchCase="questionFieldType.URL">
           <div *ngIf="questions.answer?.value; else withOutData">
-            <a
-              [attr.href]="questions.answer?.value"
-              [attr.target]="'_blank'"
-              class="text-accent-500 underline"
-              [ngClass]="{
-                'text-secondary-500 pointer-events-none cursor-not-allowed':
-                  editMode
-              }"
-            >
-              {{ questions.answer?.value }}</a
-            >
+            <p class="truncate w-[150px]">
+              <a
+                title="{{ questions.answer?.value }}"
+                [attr.href]="questions.answer?.value"
+                [attr.target]="'_blank'"
+                class="text-accent-500 underline truncate w-[150px]"
+                [ngClass]="{
+                  'text-secondary-500 pointer-events-none cursor-not-allowed':
+                    editMode
+                }"
+              >
+                {{ questions.answer?.value }}</a
+              >
+            </p>
           </div>
         </span>
         <span *ngSwitchCase="questionFieldType.CheckList">
