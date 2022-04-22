@@ -698,6 +698,63 @@ describe('StationComponent', () => {
     expect(component.editMode).toBeFalsy();
   });
 
+  it('should open confirmation popup for save, when has no questions in input frames', async () => {
+    const stationId = '3j4k-3h2j-hj4j';
+    const inputFramesWidgets: StationFrameWidget[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2j',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [],
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2Y',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 7,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [
+          {
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+            originalStationRithmId: '3j4k-3h2j-hj4j',
+          },
+        ],
+        type: FrameType.Input,
+        data: '',
+        id: 1,
+      },
+    ];
+    component.inputFrameWidgetItems = inputFramesWidgets;
+    component.stationRithmId = stationId;
+    fixture.detectChanges();
+    const spyWigets = spyOn(
+      TestBed.inject(StationService),
+      'saveStationWidgets'
+    ).and.callThrough();
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+    await component.saveStationWidgetChanges();
+    expect(spyWigets).toHaveBeenCalledOnceWith(stationId, inputFramesWidgets);
+  });
+
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Cancel?',
@@ -1204,7 +1261,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'saveStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.saveStationWidgetsChanges();
+      component['saveStationWidgetsChanges']();
       fixture.detectChanges();
       const stationLoading =
         fixture.debugElement.nativeElement.querySelector('#gridster-loading');
