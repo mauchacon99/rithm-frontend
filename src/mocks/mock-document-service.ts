@@ -1679,7 +1679,7 @@ export class MockDocumentService {
   getContainerWidgetPreBuilt(): Observable<ContainerWidgetPreBuilt[]> {
     const containers: ContainerWidgetPreBuilt[] = [
       {
-        flowedTimeUTC: '',
+        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
         nameContainer: 'Container name',
         containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
         stationName: 'Station name',
@@ -1688,10 +1688,24 @@ export class MockDocumentService {
           {
             rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
             firstName: 'Testy',
-            lastName: 'Testy',
+            lastName: 'Rithm',
+            email: 'Testy@Rithm.com',
+          },
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'Testy',
+            lastName: 'Last',
             email: 'Testy@Rithm.com',
           },
         ],
+      },
+      {
+        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
+        stationOwners: [],
       },
     ];
     return of(containers).pipe(delay(1000));
