@@ -7,7 +7,7 @@
   <p class="text-base">
     Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
     <span class="font-semibold">{{
-      itemWidgetModalSelected.itemList.name ||
+      itemWidgetModalSelected.itemList?.name ||
         'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
     }}</span>
   </p>
@@ -136,10 +136,11 @@
 <section *ngIf="itemWidgetModalSelected.itemType === 'preBuilt'">
   <!-- Pre built  -->
   <div class="py-6">
-    <p class="font-semibold">Title</p>
+    <p class="font-semibold ml-3">Title</p>
     <div class="grid grid-cols-1 px-2 md:grid-cols-2 gap-4 pt-5">
       <app-pre-built-widget-template-modal
         [widgetType]="enumWidgetType.PreBuiltContainer"
+        (click)="emitPreviewWidgetSelected(enumWidgetType.PreBuiltContainer)"
       ></app-pre-built-widget-template-modal>
     </div>
   </div>

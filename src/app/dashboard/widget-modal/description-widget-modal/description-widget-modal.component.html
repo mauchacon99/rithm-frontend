@@ -1,5 +1,5 @@
 <!--header-->
-<div class="pt-3">
+<div class="pt-3" *ngIf="itemWidgetModalSelected.itemType !== 'preBuilt'">
   <h3 class="text-lg font-semibold">
     {{ dataTemplate[widgetType].title | titlecase }}
     Template
@@ -7,14 +7,13 @@
   <p class="text-base">
     Selected {{ itemWidgetModalSelected.itemType | titlecase }}:
     <span class="font-semibold">{{
-      itemWidgetModalSelected.itemList.name ||
+      itemWidgetModalSelected.itemList?.name ||
         'Untitled ' + (itemWidgetModalSelected.itemType | titlecase)
     }}</span>
   </p>
 </div>
-
 <div class="flex flex-col justify-between height-container">
-  <div class="w-full grid sm:grid-cols-1 lg:grid-cols-2 items-center gap-3">
+  <div class="w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-3">
     <div class="w-full py-5 md:py-14">
       <span class="font-bold"
         >{{ dataTemplate[widgetTypeWithoutDefault].descriptionComponent.title }}
@@ -55,7 +54,7 @@
       </div>
     </div>
     <div class="w-full py-5">
-      <div class="flex justify-center rounded-md">
+      <div class="w-full flex justify-center rounded-md overflow-hidden">
         <app-document-widget
           *ngIf="
             widgetType === enumWidgetType.Document ||
@@ -104,6 +103,13 @@
           [isMobileDevice]="false"
         >
         </app-group-traffic-widget>
+
+        <app-container-pre-built-widget
+          *ngIf="widgetType === enumWidgetType.PreBuiltContainer"
+          class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
+          [editMode]="false"
+        >
+        </app-container-pre-built-widget>
       </div>
     </div>
   </div>

@@ -79,7 +79,7 @@ describe('DescriptionWidgetModalComponent', () => {
   describe('Parse data widget', () => {
     it('should get data for document', () => {
       const expectData = JSON.stringify({
-        documentRithmId: itemWidgetModalSelected.itemList.rithmId,
+        documentRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
@@ -92,7 +92,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for station', () => {
       component.widgetType = WidgetType.Station;
       const expectData = JSON.stringify({
-        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [{ name: 'name' }],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
@@ -104,7 +104,7 @@ describe('DescriptionWidgetModalComponent', () => {
 
     it('should get data for stationGroup', () => {
       const expectData = JSON.stringify({
-        stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationGroupRithmId: itemWidgetModalSelected.itemList?.rithmId,
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'group';
@@ -116,7 +116,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for StationGroupTraffic', () => {
       const expectData = JSON.stringify({
         valueShowGraphic: 5,
-        stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationGroupRithmId: itemWidgetModalSelected.itemList?.rithmId,
       });
       component.widgetType = WidgetType.StationGroupTraffic;
       component.itemWidgetModalSelected = itemWidgetModalSelected;
@@ -128,7 +128,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for StationMultiline', () => {
       component.widgetType = WidgetType.StationMultiline;
       const expectData = JSON.stringify({
-        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [
           { name: 'name' },
           { name: 'lastUpdatedUTC' },
@@ -144,7 +144,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for StationMultilineBanner', () => {
       component.widgetType = WidgetType.StationMultilineBanner;
       const expectData = JSON.stringify({
-        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [
           { name: 'name' },
           { name: 'lastUpdatedUTC' },

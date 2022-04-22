@@ -30,12 +30,12 @@ export class DescriptionWidgetModalComponent implements OnInit {
   get dataWidget(): string {
     if (this.itemWidgetModalSelected.itemType === 'document') {
       return JSON.stringify({
-        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        documentRithmId: this.itemWidgetModalSelected.itemList?.rithmId,
         columns: [],
       });
     } else if (this.itemWidgetModalSelected.itemType === 'station') {
       return JSON.stringify({
-        stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: this.itemWidgetModalSelected.itemList?.rithmId,
         columns:
           this.widgetType === WidgetType.StationMultiline ||
           this.widgetType === WidgetType.StationMultilineBanner
@@ -52,11 +52,11 @@ export class DescriptionWidgetModalComponent implements OnInit {
           ? {
               valueShowGraphic: 5,
               stationGroupRithmId:
-                this.itemWidgetModalSelected.itemList.rithmId,
+                this.itemWidgetModalSelected.itemList?.rithmId,
             }
           : {
               stationGroupRithmId:
-                this.itemWidgetModalSelected.itemList.rithmId,
+                this.itemWidgetModalSelected?.itemList?.rithmId,
             }
       );
     }
