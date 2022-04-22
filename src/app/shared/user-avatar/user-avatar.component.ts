@@ -48,12 +48,6 @@ export class UserAvatarComponent implements OnInit {
     private errorService: ErrorService
   ) {}
 
-  /**
-   * Initial method.
-   */
-  ngOnInit(): void {
-    this.getImageUser();
-  }
 
   /**
    * The first + last initials for the user.
