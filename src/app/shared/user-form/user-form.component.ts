@@ -73,7 +73,7 @@ export class UserFormComponent
   confirmPasswordLabel = '';
 
   /** User image. */
-  userImage = '';
+  userImage !: ImageData;
 
   constructor(
     private fb: FormBuilder,
@@ -289,7 +289,7 @@ export class UserFormComponent
    *
    * @param file File to upload.
    */
-  uploadImageUser(file: File): void {
+  private uploadImageUser(file: File): void {
     this.userService
       .uploadImageUser(file)
       .pipe(first())
