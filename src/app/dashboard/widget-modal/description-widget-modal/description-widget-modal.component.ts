@@ -68,19 +68,30 @@ export class DescriptionWidgetModalComponent implements OnInit {
    * @returns Data of dashboardItem.
    */
   get widgetItem(): DashboardItem {
-    const minItemRows = this.minItemRowsWidget();
+    const minItemRows =
+      this.widgetType === this.enumWidgetType.PreBuiltContainer ||
+      this.widgetType === this.enumWidgetType.PreBuiltStation
+        ? 1
+        : this.minItemRowsWidget();
+
+    const minItemCols =
+      this.widgetType === this.enumWidgetType.PreBuiltContainer ||
+      this.widgetType === this.enumWidgetType.PreBuiltStation
+        ? 4
+        : 3;
+
     const widgetType = this.widgetTypeWithoutDefault;
     const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
     return {
       rithmId,
-      cols: 3,
+      cols: minItemCols,
       rows: minItemRows,
       x: 0,
       y: 0,
       widgetType,
       data: this.dataWidget,
       minItemRows,
-      minItemCols: 3,
+      minItemCols: minItemCols,
     };
   }
 
