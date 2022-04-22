@@ -207,13 +207,14 @@ export class MockDashboardService {
       },
     },
     [WidgetType.PreBuiltStation]: {
-      title: '',
-      description: '',
+      title: 'My Stations',
+      description:
+        'Display all stations assigned to the logged in user, as well as the container count for each station.',
       descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
+        title: 'Table Widget',
+        type: 'Pre-Built',
+        customizable: 'None',
+        description: `Display all the containers assigned to whichever user is logged in.`,
       },
     },
   };
