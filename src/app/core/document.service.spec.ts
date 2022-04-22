@@ -1010,13 +1010,13 @@ describe('DocumentService', () => {
           {
             rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
             firstName: 'Testy',
-            lastName: 'Testy',
+            lastName: 'Rithm',
             email: 'Testy@Rithm.com',
           },
           {
             rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
             firstName: 'Testy',
-            lastName: 'Testy',
+            lastName: 'Last',
             email: 'Testy@Rithm.com',
           },
         ],
@@ -1027,20 +1027,7 @@ describe('DocumentService', () => {
         containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
         stationName: 'Station name',
         stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
-        stationOwners: [
-          {
-            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
-            firstName: 'Testy',
-            lastName: 'Testy',
-            email: 'Testy@Rithm.com',
-          },
-          {
-            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
-            firstName: 'Team',
-            lastName: 'Eagle',
-            email: 'Teameagle@Rithm.com',
-          },
-        ],
+        stationOwners: [],
       },
     ];
     service.getContainerWidgetPreBuilt().subscribe((response) => {

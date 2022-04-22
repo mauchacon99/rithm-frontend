@@ -330,7 +330,6 @@ export class StationComponent
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
-
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -806,6 +805,7 @@ export class StationComponent
     /** Depending on the case, the mode is set. */
     switch (mode) {
       case 'preview':
+        this.editMode = false;
         this.layoutMode = false;
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
@@ -876,10 +876,8 @@ export class StationComponent
   /**
    * Save or update the changes make the station frame widgets.
    */
-  saveStationWidgetsChanges(): void {
-    this.editMode = false;
-    this.setGridMode('preview');
-
+  private saveStationWidgetsChanges(): void {
+    this.stationLoading = true;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
         field.data = JSON.stringify(field.questions);
@@ -904,10 +902,14 @@ export class StationComponent
             this.saveInputFrameQuestions(
               inputFrames.filter((iframe) => iframe.type === FrameType.Input)
             );
+          } else {
+            this.stationLoading = false;
+            this.setGridMode('preview');
           }
           this.changedOptions();
         },
         error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -936,6 +938,9 @@ export class StationComponent
         }
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
+    } else {
+      this.stationLoading = false;
+      this.setGridMode('preview');
     }
   }
 
@@ -948,8 +953,13 @@ export class StationComponent
     forkJoin(requestRow)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
+        },
         error: (error: unknown) => {
           this.stationLoading = false;
+          this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1019,6 +1029,35 @@ export class StationComponent
           );
         },
       });
+  }
+
+  /**
+   * This save button clicked show confirm If no questions
+   * and Save or update the changes to the station frame widgets.
+   */
+  async saveStationWidgetChanges(): Promise<void> {
+    let hasQuestions = false;
+    this.inputFrameWidgetItems.map((field) => {
+      if (field.questions?.length === 0) {
+        hasQuestions = true;
+      }
+    });
+    if (hasQuestions) {
+      const confirm = await this.popupService.confirm({
+        title: ' ',
+        message:
+          '\nYou have empty input frames, would you like to save anyway?',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirm) {
+        this.saveStationWidgetsChanges();
+        hasQuestions = false;
+      }
+    } else {
+      this.saveStationWidgetsChanges();
+    }
   }
 
   /** This cancel button clicked show alert. */

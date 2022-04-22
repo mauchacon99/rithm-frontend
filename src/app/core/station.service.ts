@@ -25,6 +25,7 @@ import {
   FrameType,
   StandardNumberJSON,
   StationWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -953,7 +954,7 @@ export class StationService {
         stationRithmId: 'qwe-321-ert-123',
         stationName: 'Mars station',
         totalContainers: 5,
-        stationGroup: '132-123-132',
+        stationGroup: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -972,6 +973,13 @@ export class StationService {
             isWorker: true,
           },
         ],
+      },
+      {
+        stationRithmId: '123-456-789',
+        stationName: 'Grogu station',
+        totalContainers: 1,
+        stationGroup: '  ',
+        stationOwners: [],
       },
     ];
     return of(stationWidgetData).pipe(delay(1000));
@@ -992,5 +1000,35 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
       frameQuestions
     );
+  }
+
+  /**
+   * Get the current stations from containers.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The current stations.
+   */
+  getCurrentStations(
+    stationRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'retrieve a list of stations for this container',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const currentStationsResponse: DocumentCurrentStation[] = [
+        {
+          name: 'Testy',
+          rithmId: '123',
+          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+        },
+      ];
+      return of(currentStationsResponse).pipe(delay(1000));
+    }
   }
 }
