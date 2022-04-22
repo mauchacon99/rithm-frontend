@@ -31,11 +31,11 @@ export class UserAvatarComponent implements OnInit {
   /** Whether the enabled switching badges on mouseover. */
   @Input() hoverEffect = false;
 
-  /** Whether the cursor is hover then change badge content if is enabled. */
-  badgeHover = false;
-
   /** Whether is displayed from the drawer. */
   @Input() isDrawer = false;
+
+  /** If avatars are small. */
+  @Input() isSmall = false;
 
   /** Image Rithm Id. */
   imageRithmId!: string;
@@ -70,6 +70,9 @@ export class UserAvatarComponent implements OnInit {
 
     return firstInitial + lastInitial;
   }
+
+  /** Whether the cursor is hover then change badge content if is enabled. */
+  badgeHover = false;
 
   /**
    * Gets the unicode badge needed for each case.
