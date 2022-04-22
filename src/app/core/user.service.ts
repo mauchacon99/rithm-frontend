@@ -2,8 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {
+  firstValueFrom,
+  Observable,
+  of,
+  ReplaySubject,
+  throwError,
+} from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import {
@@ -336,6 +342,17 @@ export class UserService {
     return !!stationInformation.workers.find(
       (worker) => worker.rithmId === this.user.rithmId
     );
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  uploadImageUser(file: File): Observable<string> {
+    return of('ewf34tf-3ge343-g34g3e').pipe(delay(1000));
   }
 
   // TODO: Re-enable when addressing notification settings

@@ -300,4 +300,19 @@ describe('UserService', () => {
     req.flush(termsAndConditions);
     httpTestingController.verify();
   });
+
+  it('should upload image user', () => {
+    const expectedResponse = {
+      data: 'ewf34tf-3ge343-g34g3e',
+    };
+    const file = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    const formData = new FormData();
+    formData.append('image', file);
+
+    service.uploadImageUser(file).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
 });

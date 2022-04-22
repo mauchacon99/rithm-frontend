@@ -297,4 +297,14 @@ export class MockUserService {
   get isAdmin(): boolean {
     return this.user.role === 'admin';
   }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  uploadImageUser(file: File): Observable<string> {
+    return of('ewf34tf-3ge343-g34g3e').pipe(delay(1000));
+  }
 }

@@ -72,6 +72,9 @@ export class UserFormComponent
   /** The label text to be displayed for the confirm password field. */
   confirmPasswordLabel = '';
 
+  /** User image. */
+  userImage = '';
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -279,5 +282,24 @@ export class UserFormComponent
         });
       }
     }
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   */
+  uploadImageUser(file: File): void {
+    this.userService
+      .uploadImageUser(file)
+      .pipe(first())
+      .subscribe({
+        next: (userImage) => {
+          this.userImage = userImage;
+        },
+        error: (error: unknown) => {
+          this.errorService.logError(error);
+        },
+      });
   }
 }
