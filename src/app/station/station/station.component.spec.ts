@@ -1215,7 +1215,7 @@ describe('StationComponent', () => {
           rows: 4,
           x: 0,
           y: 0,
-          questions:[
+          questions: [
             {
               rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Label #1',
@@ -1228,7 +1228,7 @@ describe('StationComponent', () => {
             },
           ],
           type: FrameType.Input,
-          data: "",
+          data: '',
           id: 0,
         },
       ];
@@ -1259,7 +1259,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: "[]",
+          data: '[]',
           questions: [],
           id: 0,
         },

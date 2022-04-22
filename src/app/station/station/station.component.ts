@@ -927,7 +927,8 @@ export class StationComponent
     if (frames.length) {
       const frameQuestionRequest: Observable<Question[]>[] = [];
       frames.forEach((frame) => {
-        const fQuestions: Question[] = (frame.data && JSON.parse(frame.data)) ? JSON.parse(frame.data) : [];
+        const fQuestions: Question[] =
+          frame.data && JSON.parse(frame.data) ? JSON.parse(frame.data) : [];
         if (fQuestions.length) {
           frameQuestionRequest.push(
             this.stationService.saveInputFrameQuestions(

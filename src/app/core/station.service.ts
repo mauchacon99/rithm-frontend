@@ -760,15 +760,16 @@ export class StationService {
    * @param stationRithmId The current station id.
    * @returns The station widget data.
    */
-  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[] | undefined> {
-    const params = new HttpParams().set(
-      'stationRithmId',
-      stationRithmId
-    );
-    return this.http.get<StationInformation>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info-frames`,
-      { params }
-    ).pipe(map((response) => response.frames));
+  getStationWidgets(
+    stationRithmId: string
+  ): Observable<StationFrameWidget[] | undefined> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StationInformation>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info-frames`,
+        { params }
+      )
+      .pipe(map((response) => response.frames));
   }
 
   /**
