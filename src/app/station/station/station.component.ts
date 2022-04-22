@@ -336,7 +336,6 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
   }
 
@@ -397,7 +396,7 @@ export class StationComponent
           this.handleInvalidParams();
         } else {
           this.stationRithmId = params.stationId;
-          (this.viewNewStation)? this.getStationWidgets : this.getStationInfo(params.stationId);
+          this.getStationInfo(params.stationId);
         }
       },
       error: (error: unknown) => {
@@ -457,6 +456,7 @@ export class StationComponent
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
+          this.getStationWidgets();
           this.stationLoading = false;
         },
         error: (error: unknown) => {
