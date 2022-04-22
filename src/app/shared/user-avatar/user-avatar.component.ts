@@ -12,7 +12,7 @@ import { ImageData } from 'src/models/index';
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
 })
-export class UserAvatarComponent implements OnInit {
+export class UserAvatarComponent {
   /** The first name of the user. */
   @Input() firstName!: string;
 
