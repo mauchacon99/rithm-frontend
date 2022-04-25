@@ -23,6 +23,7 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1595,9 +1596,26 @@ describe('StationService', () => {
     const expectedData: GroupTrafficData = {
       title: 'Group Eagle',
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocumentCounts: [10, 5, 8, 10, 20],
-      averageDocumentFlow: [2, 4, 1, 8, 9],
+      labels: [
+        'station 1',
+        'station 2',
+        'station 3',
+        'station 4',
+        'station 5 with a long text for test view',
+        'station 6',
+        'station 7',
+      ],
+      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
+      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
+      averageDocumentFlowLabels: [
+        '2 days',
+        '7 weeks',
+        '1 hour',
+        '2 days',
+        '1 weeks',
+        '40 minutes',
+        '2 hour',
+      ],
     };
     service
       .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
@@ -1612,7 +1630,7 @@ describe('StationService', () => {
         stationRithmId: 'qwe-321-ert-123',
         stationName: 'Mars station',
         totalContainers: 5,
-        stationGroup: '132-123-132',
+        stationGroup: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1631,6 +1649,13 @@ describe('StationService', () => {
             isWorker: true,
           },
         ],
+      },
+      {
+        stationRithmId: '123-456-789',
+        stationName: 'Grogu station',
+        totalContainers: 1,
+        stationGroup: '  ',
+        stationOwners: [],
       },
     ];
     service.getStationWidgetPreBuiltData().subscribe((response) => {
@@ -1673,5 +1698,19 @@ describe('StationService', () => {
 
     req.flush(frameQuestions);
     httpTestingController.verify();
+  });
+
+  it('should get a current stations list for containers', () => {
+    const stationRithmId = '6375027-78345-73824-54244';
+    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+      {
+        name: 'Testy',
+        rithmId: '123',
+        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+      },
+    ];
+    service.getCurrentStations(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectCurrentStationsResponse);
+    });
   });
 });

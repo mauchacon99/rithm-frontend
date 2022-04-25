@@ -8,10 +8,31 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 
 import { ContainerPreBuiltWidgetComponent } from './container-pre-built-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { RosterModule } from 'src/app/shared/roster/roster.module';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
   let fixture: ComponentFixture<ContainerPreBuiltWidgetComponent>;
+  let errorService: ErrorService;
+  let documentService: DocumentService;
+
+  const containers = [
+    {
+      flowedTimeUTC: '2022-04-05T17:24:01.0115021',
+      nameContainer: 'Container name',
+      containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
+      stationName: 'Station name',
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      stationOwners: [
+        {
+          rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+          firstName: 'Testy',
+          lastName: 'Testy',
+          email: 'Testy@Rithm.com',
+        },
+      ],
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,6 +41,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
+      imports: [RosterModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
@@ -28,8 +50,11 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    errorService = TestBed.inject(ErrorService);
+    documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(ContainerPreBuiltWidgetComponent);
     component = fixture.componentInstance;
+    component.containers = containers;
     fixture.detectChanges();
   });
 
@@ -39,7 +64,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
 
   it('should call getContainerWidgetPreBuilt', () => {
     const spyGetContainerWidgetPreBuilt = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.callThrough();
 
@@ -55,7 +80,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
 
   it('should catch an error if the request getContainerWidgetPreBuilt fails', () => {
     const spyError = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.returnValue(
       throwError(() => {
@@ -88,20 +113,29 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     ).and.callThrough();
 
     const spyError = spyOn(
-      TestBed.inject(DocumentService),
+      documentService,
       'getContainerWidgetPreBuilt'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorComponent = fixture.nativeElement.querySelector(
       '#error-load-widget-container-pre-built'
     );
     expect(errorComponent).toBeTruthy();
+    expect(spyMethodError).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should return the time in a string', () => {
+    const time = component.getElapsedTime(
+      component.containers[0].flowedTimeUTC
+    );
+    expect(time).toBeTruthy();
   });
 });

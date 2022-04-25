@@ -27,6 +27,9 @@ import { Router } from '@angular/router';
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
   let fixture: ComponentFixture<GroupSearchWidgetComponent>;
+  let stationService: StationService;
+  let errorService: ErrorService;
+  let mapService: MapService;
   const dataWidget =
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
@@ -111,6 +114,9 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   beforeEach(() => {
+    stationService = TestBed.inject(StationService);
+    errorService = TestBed.inject(ErrorService);
+    mapService = TestBed.inject(MapService);
     fixture = TestBed.createComponent(GroupSearchWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
@@ -124,7 +130,7 @@ describe('GroupSearchWidgetComponent', () => {
 
   it('should call service that return station data', () => {
     const spyService = spyOn(
-      TestBed.inject(StationService),
+      stationService,
       'getStationGroups'
     ).and.callThrough();
     const expectData = JSON.parse(dataWidget).stationGroupRithmId;
@@ -133,15 +139,12 @@ describe('GroupSearchWidgetComponent', () => {
   });
 
   it('should show error message when request station document  data', () => {
-    spyOn(TestBed.inject(StationService), 'getStationGroups').and.returnValue(
+    spyOn(stationService, 'getStationGroups').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const spyService = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -309,7 +312,6 @@ describe('GroupSearchWidgetComponent', () => {
     const rithmid = '123123-12313-123312';
     component.stationGroupRithmId = rithmid;
     component.editMode = false;
-    const mapService = TestBed.inject(MapService);
     const routerNavigateSpy = spyOn(TestBed.inject(Router), 'navigate');
     component.goToStationGroupOnMap(rithmid);
     expect(routerNavigateSpy).toHaveBeenCalledWith([`/map`]);

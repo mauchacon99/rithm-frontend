@@ -1,127 +1,66 @@
-<app-sub-header
-  class="fixed z-10 w-full"
-  [itemInfo]="stationInformation"
-  [stationEditMode]="true"
-  [newInterfaceView]="viewNewStation"
-  (selectedTab)="tabItem($event)"
-></app-sub-header>
-<mat-drawer-container
-  [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft"
-  class="h-full info-drawer-station"
->
+<app-sub-header class="fixed z-10 w-full" [itemInfo]="stationInformation" [stationEditMode]="true"
+  [newInterfaceView]="viewNewStation" (selectedTab)="tabItem($event)"></app-sub-header>
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop && !isOpenDrawerLeft" class="h-full info-drawer-station">
   <!-- right match drawer -->
   <mat-drawer #rightDrawer mode="over" position="end" disableClose>
-    <app-detail-drawer
-      *ngIf="drawerContext === 'comments' || drawerContext === 'history'"
-    ></app-detail-drawer>
-    <app-info-drawer
-      *ngIf="
+    <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
+    <app-info-drawer *ngIf="
         drawerContext === 'stationInfo' ||
         drawerContext === 'documentInfo' ||
         drawerContext === 'fieldSetting'
-      "
-    ></app-info-drawer>
+      "></app-info-drawer>
   </mat-drawer>
   <!-- left match drawer -->
-  <mat-drawer
-    #leftDrawer
-    mode="over"
-    position="start"
-    [opened]="isOpenDrawerLeft"
-    disableClose
-  >
-    <app-build-drawer
-      *ngIf="!stationLoading"
-      [stationId]="stationInformation.rithmId"
-      (toggleDrawer)="toggleLeftDrawer()"
-      (addInputFrame)="addInputFrame($event)"
-      [inputFrameList]="inputFrameList"
-    ></app-build-drawer>
+  <mat-drawer #leftDrawer mode="over" position="start" [opened]="isOpenDrawerLeft" disableClose>
+    <app-build-drawer *ngIf="!stationLoading" [stationId]="stationInformation.rithmId"
+      (toggleDrawer)="toggleLeftDrawer()" (addInputFrame)="addInputFrame($event)" [inputFrameList]="inputFrameList">
+    </app-build-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
     <ng-container *ngIf="!viewNewStation; else newStation">
       <div class="textured-bg grid grid-cols-12 min-h-full">
         <!-- Left column -->
-        <app-connected-station-pane
-          [location]="'left'"
-          [stations]="previousStations"
-          class="hidden lg:inline-block col-span-2"
-        ></app-connected-station-pane>
+        <app-connected-station-pane [location]="'left'" [stations]="previousStations"
+          class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
         <!-- Center column -->
         <div class="col-span-12 lg:col-span-8 bg-white h-full px-5 py-12">
           <div class="loading" *ngIf="stationLoading">
-            <app-loading-indicator
-              id="component-station-loading"
-              class="flex-grow m-auto"
-            ></app-loading-indicator>
+            <app-loading-indicator id="component-station-loading" class="flex-grow m-auto"></app-loading-indicator>
           </div>
-          <form
-            *ngIf="!stationLoading"
-            [formGroup]="stationForm"
-            autocomplete="off"
-            class="station-base-form"
+          <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form"
             (ngSubmit)="
               !isFlowLogicTab ? saveStationInformation() : saveFlowLogicRules()
-            "
-          >
-            <app-station-info-header
-              [stationInformation]="stationInformation"
-              [stationEditMode]="true"
-              [viewNewStation]="viewNewStation"
-              #stationInfoHeader
-            ></app-station-info-header>
+            ">
+            <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
+              [viewNewStation]="viewNewStation" #stationInfoHeader></app-station-info-header>
             <!-- Tabs -->
-            <mat-tab-group
-              mat-align-tabs="center"
-              class="mt-2 w-full pb-8"
-              [selectedIndex]="stationTabsIndex"
-              (selectedTabChange)="tabSelectedChanged($event)"
-            >
+            <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8" [selectedIndex]="stationTabsIndex"
+              (selectedTabChange)="tabSelectedChanged($event)">
               <mat-tab>
                 <ng-template mat-tab-label>
                   <span data-testid="document-tab">Document</span>
                 </ng-template>
                 <ng-template matTabContent>
-                  <app-document-info-header
-                    #documentNameFields
-                    [documentInformation]="stationInformation"
-                    [viewNewStation]="viewNewStation"
-                    *ngIf="!stationLoading"
-                  ></app-document-info-header>
+                  <app-document-info-header #documentNameFields [documentInformation]="stationInformation"
+                    [viewNewStation]="viewNewStation" *ngIf="!stationLoading"></app-document-info-header>
                   <div class="mt-2">
-                    <mat-form-field
-                      class="w-full long-text"
-                      appearance="outline"
-                    >
+                    <mat-form-field class="w-full long-text" appearance="outline">
                       <mat-label>General Instructions</mat-label>
                       <div matPrefix class="icon">
                         <i class="fas fa-paragraph"></i>
                       </div>
-                      <textarea
-                        data-testid="general-instructions"
-                        matInput
-                        placeholder="General Instructions"
-                        rows="3"
-                        spellcheck="true"
-                        formControlName="generalInstructions"
-                      ></textarea>
+                      <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3"
+                        spellcheck="true" formControlName="generalInstructions"></textarea>
                     </mat-form-field>
                   </div>
-                  <app-station-template
-                    [stationRithmId]="stationRithmId"
-                    [fields]="stationInformation.questions"
-                    formControlName="stationTemplateForm"
-                  >
+                  <app-station-template [stationRithmId]="stationRithmId" [fields]="stationInformation.questions"
+                    formControlName="stationTemplateForm">
                   </app-station-template>
-                  <app-toolbar
-                    (fieldSelected)="addQuestion($event)"
-                  ></app-toolbar>
+                  <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                   <div class="py-5 px-px">
                     <mat-accordion>
-                      <mat-expansion-panel
-                        [(expanded)]="accordionFieldAllExpanded"
-                      >
+                      <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
                         <mat-expansion-panel-header class="text-base">
                           <mat-panel-title data-testid="all-fields">
                             All
@@ -133,20 +72,14 @@
                           </mat-panel-description>
                         </mat-expansion-panel-header>
                         <ng-template matExpansionPanelContent>
-                          <app-previous-fields
-                            [stationId]="stationInformation.rithmId"
-                            [isPrivate]="false"
-                            [isStation]="true"
-                            (movingQuestion)="
+                          <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"
+                            [isStation]="true" (movingQuestion)="
                               movePreviousFieldToTemplate($event)
-                            "
-                          >
+                            ">
                           </app-previous-fields>
                         </ng-template>
                       </mat-expansion-panel>
-                      <mat-expansion-panel
-                        [(expanded)]="accordionFieldPrivateExpanded"
-                      >
+                      <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
                         <mat-expansion-panel-header class="text-base">
                           <mat-panel-title data-testid="private-fields">
                             Private
@@ -158,14 +91,10 @@
                           </mat-panel-description>
                         </mat-expansion-panel-header>
                         <ng-template matExpansionPanelContent>
-                          <app-previous-fields
-                            [stationId]="stationInformation.rithmId"
-                            [isPrivate]="true"
-                            [isStation]="true"
-                            (movingQuestion)="
+                          <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true"
+                            [isStation]="true" (movingQuestion)="
                               movePreviousFieldToTemplate($event)
-                            "
-                          >
+                            ">
                           </app-previous-fields>
                         </ng-template>
                       </mat-expansion-panel>
@@ -178,40 +107,20 @@
                   <span data-testid="flow-logic-tab">Flow Logic</span>
                 </ng-template>
                 <ng-template matTabContent>
-                  <app-flow-logic
-                    [rithmId]="stationRithmId"
-                    [nextStations]="forwardStations"
-                    (modifiedFlowRules)="addFlowLogicRule($event)"
-                  ></app-flow-logic>
+                  <app-flow-logic [rithmId]="stationRithmId" [nextStations]="forwardStations"
+                    (modifiedFlowRules)="addFlowLogicRule($event)"></app-flow-logic>
                 </ng-template>
               </mat-tab>
             </mat-tab-group>
             <div class="w-full fixed z-10 bottom-0 left-0">
               <div class="grid grid-cols-12">
-                <div
-                  class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between"
-                >
-                  <span class="mr-3"
-                    ><button
-                      type="button"
-                      data-testid="station-cancel"
-                      id="station-cancel"
-                      mat-stroked-button
-                      color="accent"
-                      (click)="cancelStation()"
-                    >
+                <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
+                  <span class="mr-3"><button type="button" data-testid="station-cancel" id="station-cancel"
+                      mat-stroked-button color="accent" (click)="cancelStation()">
                       Cancel
-                    </button></span
-                  >
-                  <button
-                    data-testid="station-save"
-                    mat-raised-button
-                    color="accent"
-                    class="mx-2"
-                    id="station-save"
-                    type="submit"
-                    [disabled]="disableSaveButton"
-                  >
+                    </button></span>
+                  <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" id="station-save"
+                    type="submit" [disabled]="disableSaveButton">
                     {{ this.isFlowLogicTab ? 'Save Rules' : 'Save' }}
                   </button>
                 </div>
@@ -220,11 +129,8 @@
           </form>
         </div>
         <!-- Right column -->
-        <app-connected-station-pane
-          [location]="'right'"
-          [stations]="forwardStations"
-          class="hidden lg:inline-block col-span-2"
-        ></app-connected-station-pane>
+        <app-connected-station-pane [location]="'right'" [stations]="forwardStations"
+          class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       </div>
     </ng-container>
     <ng-template #newStation>
@@ -232,243 +138,140 @@
         <!-- left column -->
         <div class="hidden lg:inline-block col-span-2">left column</div>
         <!-- center column -->
-        <div
-          class="flex flex-col col-span-12 lg:col-span-8 bg-white h-full w-full"
-        >
-          <form
-            *ngIf="!stationLoading"
-            [formGroup]="stationForm"
-            autocomplete="off"
-            class="station-base-form"
-            (ngSubmit)="saveStationInformation()"
-          >
+        <div class="flex flex-col col-span-12 lg:col-span-8 bg-white h-full w-full">
+          <!-- Tabs -->
+          <form [formGroup]="stationForm" autocomplete="off" class="station-base-form"
+            (ngSubmit)="saveStationInformation()">
             <!-- Station Info Header -->
-            <app-station-info-header
-              [stationInformation]="stationInformation"
-              [stationEditMode]="true"
-              [viewNewStation]="viewNewStation"
-              #stationInfoHeader
-            ></app-station-info-header>
+            <app-station-info-header *ngIf="stationInformation" [stationInformation]="stationInformation"
+              [stationEditMode]="true" [viewNewStation]="viewNewStation" #stationInfoHeader></app-station-info-header>
             <!-- Tabs -->
 
             <div *ngIf="selectedTab === 'Container'">
               <!-- Document Tab -->
-                  <!-- Document info header -->
-                  <app-document-info-header
-                    #documentNameFields
-                    [documentInformation]="stationInformation"
-                    [viewNewStation]="viewNewStation"
-                    *ngIf="!stationLoading"
-                  ></app-document-info-header>
+              <!-- Document info header -->
+              <app-document-info-header *ngIf="stationInformation" #documentNameFields
+                [documentInformation]="stationInformation" [viewNewStation]="viewNewStation"></app-document-info-header>
 
-                  <!--  Toolbar Edit -->
-                  <div
-                    *ngIf="!editMode; else toolbarEditStation"
-                    class="w-full flex bg-secondary-50 justify-end items-center p-2"
-                  >
-                    <button
-                      mat-stroked-button
-                      type="button"
-                      color="accent"
-                      class="font-semibold text-sm"
-                      id="station-edit-mode-button"
-                      (click)="setEditMode()"
-                    >
-                      Edit
+              <!--  Toolbar Edit -->
+              <div *ngIf="!editMode; else toolbarEditStation"
+                class="w-full flex bg-secondary-50 justify-end items-center p-2">
+                <button mat-stroked-button type="button" color="accent" class="font-semibold text-sm"
+                  id="station-edit-mode-button" (click)="setEditMode()" [disabled]="stationLoading">
+                  Edit
+                </button>
+              </div>
+              <ng-template #toolbarEditStation>
+                <div class="w-full flex bg-secondary-50 items-center justify-between p-2">
+                  <div class="flex">
+                    <button type="button" id="button-toggle-left-drawer" data-testid="button-toggle-left-drawer"
+                      (click)="toggleLeftDrawer()" class="px-2 mr-2">
+                      <span class="fas fa-tools fa-lg text-secondary-500"
+                        [ngClass]="{ 'text-accent-600': isOpenDrawerLeft }"></span>
+                    </button>
+                    <mat-divider [vertical]="true"></mat-divider>
+                    <button mat-button type="button" id="button-mode-layout" data-testid="button-mode-layout"
+                      (click)="setGridMode('layout')" class="text-sm font-semibold text-accent-500 tracking-wide"
+                      [ngClass]="{ 'text-secondary-300': settingMode }">
+                      Layout
+                    </button>
+                    <button mat-button type="button" id="button-mode-setting" data-testid="button-mode-setting"
+                      (click)="setGridMode('setting')" class="text-sm font-semibold text-accent-500 tracking-wide"
+                      [ngClass]="{ 'text-secondary-300': layoutMode }">
+                      Setting
                     </button>
                   </div>
-                  <ng-template #toolbarEditStation>
-                    <div
-                      class="w-full flex bg-secondary-50 items-center justify-between p-2"
-                    >
-                      <div class="flex">
-                        <button
-                          type="button"
-                          id="button-toggle-left-drawer"
-                          data-testid="button-toggle-left-drawer"
-                          (click)="toggleLeftDrawer()"
-                          class="px-2 mr-2"
-                        >
-                          <span
-                            class="fas fa-tools fa-lg text-secondary-500"
-                            [ngClass]="{ 'text-accent-600': isOpenDrawerLeft }"
-                          ></span>
-                        </button>
-                        <mat-divider [vertical]="true"></mat-divider>
-                        <button
-                          mat-button
-                          type="button"
-                          id="button-mode-layout"
-                          data-testid="button-mode-layout"
-                          (click)="setGridMode('layout')"
-                          class="text-sm font-semibold text-accent-500 tracking-wide"
-                          [ngClass]="{ 'text-secondary-300': settingMode }"
-                        >
-                          Layout
-                        </button>
-                        <button
-                          mat-button
-                          type="button"
-                          id="button-mode-setting"
-                          data-testid="button-mode-setting"
-                          (click)="setGridMode('setting')"
-                          class="text-sm font-semibold text-accent-500 tracking-wide"
-                          [ngClass]="{ 'text-secondary-300': layoutMode }"
-                        >
-                          Setting
-                        </button>
-                      </div>
-                      <div class="flex">
-                        <button
-                          *ngIf="layoutMode"
-                          type="button"
-                          id="button-remove-widget"
-                          data-testid="button-remove-widget"
-                          class="px-2"
-                          [class]="{
+                  <div class="flex">
+                    <button *ngIf="layoutMode" type="button" id="button-remove-widget"
+                      data-testid="button-remove-widget" class="px-2" [class]="{
                             'hover:cursor-not-allowed': widgetFocused < 0
-                          }"
-                          (click)="removeWidgets()"
-                          [disabled]="widgetFocused < 0"
-                        >
-                          <span
-                            class="fas fa-trash text-secondary-500 fa-lg"
-                            [ngClass]="{ 'text-error-500': widgetFocused > -1 }"
-                          ></span>
-                        </button>
-                        <mat-divider [vertical]="true"></mat-divider>
-                        <button
-                          mat-button
-                          type="button"
-                          color="accent"
-                          id="cancel-station-changes"
-                          data-testid="cancel-station-changes"
-                          class="font-semibold text-sm"
-                          (click)="cancelStationChanges()"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          mat-raised-button
-                          type="button"
-                          color="accent"
-                          id="save-station-frames"
-                          data-testid="save-station-frames"
-                          class="font-semibold text-sm"
-                          (click)="
-                            layoutMode ? saveStationWidgetsChanges() : ''
-                          "
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  </ng-template>
-                  <div
-                    class="gridster-container pb-4 w-full"
-                    cdkDropList
-                    id="station-grid"
-                    [attr.cdkDropListConnectedTo]="[
-                      'input-frame-container',
-                      'custom-component-container'
-                    ]"
-                    (cdkDropListDropped)="addInputFrame($event)"
-                  >
-                    <gridster
-                      class="p-0 bg-transparent h-screen"
-                      [options]="options"
-                    >
-                      <gridster-item
-                        [item]="widgetItem"
-                        class="gridster-item"
-                        [ngClass]="{
-                          'widget-item-layout':
-                            layoutMode && widgetFocused !== i,
-                          'border-accent-300 border-2': widgetFocused === i
-                        }"
-                        (click)="settingMode || focusWidget(i)"
-                        *ngFor="
-                          let widgetItem of inputFrameWidgetItems;
-                          let i = index;
-                          trackBy: trackBy
-                        "
-                        (mouseenter)="widgetMoveButton = i"
-                        (mouseleave)="widgetMoveButton = -1"
-                      >
-                        <div class="h-gridster">
-                          <button
-                            mat-icon-button
-                            type="button"
-                            class="drag-handler"
-                            data-testid="button-drag-handler"
-                            *ngIf="widgetMoveButton === i && layoutMode"
-                          >
-                            <i class="fas fa-arrows fa-xl"></i>
-                          </button>
-                          <ng-container [ngSwitch]="widgetItem.type">
-                            <app-headline-widget
-                              *ngSwitchCase="frameType.Headline"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Headline)
-                              "
-                            ></app-headline-widget>
-                            <app-title-widget
-                              *ngSwitchCase="frameType.Title"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Title)
-                              "
-                            ></app-title-widget>
-                            <app-body-text-widget
-                              *ngSwitchCase="frameType.Body"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Body)
-                              "
-                            ></app-body-text-widget>
-                            <app-banner-widget
-                              *ngSwitchCase="frameType.Image"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Image)
-                              "
-                            ></app-banner-widget>
-                            <app-circle-image-widget
-                              *ngSwitchCase="frameType.CircleImage"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.CircleImage)
-                              "
-                            ></app-circle-image-widget>
-                            <app-input-frame-widget
-                              *ngSwitchDefault
-                              [fields]="widgetItem.questions"
-                              [stationViewMode]="editMode ? 'edit' : 'preview'"
-                              [stationRithmId]="stationRithmId"
-                              [id]="widgetItem.id"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
-                              (widgetRowAdjustment)="
-                                widgetRowAdjustment($event, widgetItem)
-                              "
-                              (openSettingDrawer)="
-                                openSettingDrawer($event, frameType.Input)
-                              "
-                            ></app-input-frame-widget>
-                          </ng-container>
-                        </div>
-                      </gridster-item>
-                    </gridster>
+                          }" (click)="removeWidgets()" [disabled]="widgetFocused < 0">
+                      <span class="fas fa-trash text-secondary-500 fa-lg"
+                        [ngClass]="{ 'text-error-500': widgetFocused > -1 }"></span>
+                    </button>
+                    <mat-divider [vertical]="true"></mat-divider>
+                    <button mat-button type="button" color="accent" id="cancel-station-changes"
+                      data-testid="cancel-station-changes" class="font-semibold text-sm"
+                      [disabled]="stationLoading && editMode" (click)="cancelStationChanges()">
+                      Cancel
+                    </button>
+                    <button mat-raised-button type="button" color="accent" id="save-station-frames"
+                      data-testid="save-station-frames" class="font-semibold text-sm"
+                      (click)="saveStationWidgetChanges()" [disabled]="stationLoading && editMode">
+                      Save
+                    </button>
                   </div>
-
                 </div>
-                <div *ngIf="selectedTab === 'Flow'">
+              </ng-template>
+              <ng-container *ngIf="!stationLoading; else gridsterLoading">
+                <div class="gridster-container pb-4 w-full" cdkDropList id="station-grid" [attr.cdkDropListConnectedTo]="[
+                        'input-frame-container',
+                        'custom-component-container'
+                      ]" (cdkDropListDropped)="addInputFrame($event)">
+                  <gridster class="p-0 bg-transparent h-screen" [options]="options">
+                    <gridster-item [item]="widgetItem" class="gridster-item" [ngClass]="{
+                            'widget-item-layout':
+                              layoutMode && widgetFocused !== i,
+                            'border-accent-300 border-2': widgetFocused === i
+                          }" (click)="settingMode || focusWidget(i)" *ngFor="
+                            let widgetItem of inputFrameWidgetItems;
+                            let i = index;
+                            trackBy: trackBy
+                          " (mouseenter)="widgetMoveButton = i" (mouseleave)="widgetMoveButton = -1">
+                      <div class="h-gridster">
+                        <button mat-icon-button type="button" class="drag-handler" data-testid="button-drag-handler"
+                          *ngIf="widgetMoveButton === i && layoutMode">
+                          <i class="fas fa-arrows fa-xl"></i>
+                        </button>
+                        <ng-container [ngSwitch]="widgetItem.type">
+                          <app-headline-widget *ngSwitchCase="frameType.Headline"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'" (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Headline)
+                                "></app-headline-widget>
+                          <app-title-widget *ngSwitchCase="frameType.Title"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'" (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Title)
+                                "></app-title-widget>
+                          <app-body-text-widget *ngSwitchCase="frameType.Body"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'" (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Body)
+                                "></app-body-text-widget>
+                          <app-banner-widget *ngSwitchCase="frameType.Image"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'" (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Image)
+                                "></app-banner-widget>
+                          <app-circle-image-widget *ngSwitchCase="frameType.CircleImage"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'" (openSettingDrawer)="
+                                  openSettingDrawer(
+                                    $event,
+                                    frameType.CircleImage
+                                  )
+                                "></app-circle-image-widget>
+                          <app-input-frame-widget *ngSwitchDefault [fields]="widgetItem.questions" [stationViewMode]="
+                                  editMode ? 'edit' : 'preview'
+                                " [stationRithmId]="stationRithmId" [id]="widgetItem.id"
+                            [widgetMode]="layoutMode ? 'layout' : 'setting'" (widgetRowAdjustment)="
+                                  widgetRowAdjustment($event, widgetItem)
+                                " (openSettingDrawer)="
+                                  openSettingDrawer($event, frameType.Input)
+                                "></app-input-frame-widget>
+                        </ng-container>
+                      </div>
+                    </gridster-item>
+                  </gridster>
+                </div>
+              </ng-container>
+              <ng-template #gridsterLoading>
+                <div id="gridster-loading"
+                  class="flex items-center justify-center w-full h-[calc(100vh-430px)] overflow-hidden">
+                  <app-loading-indicator></app-loading-indicator>
+                </div>
+              </ng-template>
+            </div>
+            <div *ngIf="selectedTab === 'Flow'">
               <!-- Flow Logic Tab -->
-                  <app-flow-logic
-                    [rithmId]="stationRithmId"
-                    [nextStations]="forwardStations"
-                  ></app-flow-logic>
-                  </div>
+              <app-flow-logic [rithmId]="stationRithmId" [nextStations]="forwardStations"></app-flow-logic>
+            </div>
           </form>
         </div>
         <!-- right column -->
