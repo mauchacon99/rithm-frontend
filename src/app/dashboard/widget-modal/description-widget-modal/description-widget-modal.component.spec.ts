@@ -10,6 +10,7 @@ import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widg
 import { MatDialogRef } from '@angular/material/dialog';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
+import { StationPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/station-pre-built-widget/station-pre-built-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
@@ -40,6 +41,7 @@ describe('DescriptionWidgetModalComponent', () => {
         MockComponent(StationWidgetComponent),
         MockComponent(GroupSearchWidgetComponent),
         MockComponent(GroupTrafficWidgetComponent),
+        MockComponent(StationPreBuiltWidgetComponent),
       ],
       providers: [
         { provide: MatDialogRef, useValue: { close } },
@@ -235,6 +237,13 @@ describe('DescriptionWidgetModalComponent', () => {
       expect(spyMath).toHaveBeenCalled();
       expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
     });
+
+    it('should add widget when widgetType is preBuilt', () => {
+      component.itemWidgetModalSelected.itemType = 'preBuilt';
+      fixture.detectChanges();
+      const dataWidget = component.dataWidget;
+      expect(dataWidget).toBe('');
+    });
   });
 
   it('should return 2 minItemRows when widget type are banners image', () => {
@@ -254,5 +263,12 @@ describe('DescriptionWidgetModalComponent', () => {
     component.widgetTypeWithoutDefault = WidgetType.ContainerProfileBanner;
     const responseData = component['minItemRowsWidget']();
     expect(responseData).toEqual(2);
+  });
+
+  it('should return 4 minItemColsWidget when widget type for preBuilt', () => {
+    component.widgetType = WidgetType.PreBuiltStation;
+    fixture.detectChanges();
+    const responseData = component['minItemColsWidget']();
+    expect(responseData).toEqual(4);
   });
 });
