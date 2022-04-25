@@ -18,8 +18,8 @@ import {
   User,
   UserAccountInfo,
   StationInformation,
+  ImageData,
 } from 'src/models';
-import { ImageData } from 'src/models/index';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -343,6 +343,18 @@ export class UserService {
     return !!stationInformation.workers.find(
       (worker) => worker.rithmId === this.user.rithmId
     );
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  uploadImageUser(file: File): Observable<string> {
+    const expectedResponse = 'ewf34tf-3ge343-g34g3e';
+    return of(expectedResponse).pipe(delay(1000));
   }
 
   // TODO: Re-enable when addressing notification settings
