@@ -28,20 +28,23 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
  * Component for Station widget drawer.
  */
 @Component({
-  selector: 'app-document-widget-drawer[showProfileImageBanner]',
+  selector: 'app-document-widget-drawer[showProfileImageBanner][dataDrawer]',
   templateUrl: './document-widget-drawer.component.html',
   styleUrls: ['./document-widget-drawer.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
+export class DocumentWidgetDrawerComponent implements OnInit {
+  /** Data Drawer document. */
+  @Input() dataDrawer!: EditDataWidget;
+
   /** Image to banner. */
   @Input() set image(value: DocumentImage) {
     if (
-      this.dataDrawerDocument?.widgetItem &&
-      this.dataDrawerDocument?.widgetItem.imageId !== value.imageId
+      this.dataDrawer?.widgetItem &&
+      this.dataDrawer?.widgetItem.imageId !== value.imageId
     ) {
-      this.dataDrawerDocument.widgetItem.imageId = value.imageId;
-      this.dataDrawerDocument.widgetItem.imageName = value.imageName;
+      this.dataDrawer.widgetItem.imageId = value.imageId;
+      this.dataDrawer.widgetItem.imageName = value.imageName;
       this.emitUpdateWidget();
     }
   }
@@ -53,7 +56,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
   @Input() set showProfileImageBanner(value: boolean) {
     this._showProfileImageBanner = value;
     if (
-      this.dataDrawerDocument?.widgetItem?.widgetType ===
+      this.dataDrawer?.widgetItem?.widgetType ===
         WidgetType.ContainerProfileBanner &&
       this._showProfileImageBanner
     ) {
@@ -70,12 +73,6 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
     return this._showProfileImageBanner;
   }
 
-  /** Emit widgetIndex to widget-drawer. */
-  @Output() setWidgetIndex = new EventEmitter<number>();
-
-  /** WidgetType of item. */
-  @Output() getWidgetItem = new EventEmitter<DashboardItem>();
-
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -90,9 +87,6 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Document RithmId. */
   documentRithmId!: string;
-
-  /** Data drawer document. */
-  dataDrawerDocument!: EditDataWidget;
 
   /** Value used to compare the widgets. */
   enumWidgetType = WidgetType;
@@ -132,30 +126,11 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.subscribeDrawerData$();
-  }
-
-  /** Get data the sidenavDrawerService. */
-  private subscribeDrawerData$(): void {
-    this.sidenavDrawerService.drawerData$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        const dataDrawer = data as EditDataWidget;
-        if (dataDrawer) {
-          this.dataDrawerDocument = dataDrawer;
-          const dataWidget = JSON.parse(
-            this.dataDrawerDocument.widgetItem.data
-          );
-          this.documentColumns = dataWidget.columns || [];
-          this.documentRithmId = dataWidget.documentRithmId;
-          this.setWidgetIndex.emit(this.dataDrawerDocument.widgetIndex);
-          this.getWidgetItem.emit(this.dataDrawerDocument.widgetItem);
-          this.formProfileImageId.setValue(
-            this.dataDrawerDocument.widgetItem.profileImageId
-          );
-          this.getDocumentWidget();
-        }
-      });
+    const dataWidget = JSON.parse(this.dataDrawer.widgetItem.data);
+    this.documentColumns = dataWidget.columns || [];
+    this.documentRithmId = dataWidget.documentRithmId;
+    this.formProfileImageId.setValue(this.dataDrawer.widgetItem.profileImageId);
+    this.getDocumentWidget();
   }
 
   /** Get document widget. */
@@ -221,7 +196,7 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
         questionId,
       });
     });
-    this.dataDrawerDocument.widgetItem.data = JSON.stringify({
+    this.dataDrawer.widgetItem.data = JSON.stringify({
       documentRithmId: this.documentRithmId,
       columns: this.documentColumns,
     });
@@ -258,25 +233,16 @@ export class DocumentWidgetDrawerComponent implements OnInit, OnDestroy {
 
   /** Update profile image. */
   updateProfileImageWidget(): void {
-    this.dataDrawerDocument.widgetItem.profileImageId =
-      this.formProfileImageId.value;
+    this.dataDrawer.widgetItem.profileImageId = this.formProfileImageId.value;
     this.emitUpdateWidget();
   }
 
   /** Emit update widget. */
   private emitUpdateWidget(): void {
     this.dashboardService.updateDashboardWidgets({
-      widgetItem: this.dataDrawerDocument.widgetItem,
-      widgetIndex: this.dataDrawerDocument.widgetIndex,
-      quantityElementsWidget: this.dataDrawerDocument.quantityElementsWidget,
+      widgetItem: this.dataDrawer.widgetItem,
+      widgetIndex: this.dataDrawer.widgetIndex,
+      quantityElementsWidget: this.dataDrawer.quantityElementsWidget,
     });
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }
