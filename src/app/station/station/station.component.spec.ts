@@ -1370,7 +1370,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '[]',
+          data: '',
           questions: [],
           id: 0,
         },
