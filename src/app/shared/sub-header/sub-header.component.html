@@ -2,6 +2,35 @@
   class="grid grid-cols-3 py-1"
   [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
 >
+  <div *ngIf="newInterfaceView">
+    <mat-tab-group
+      mat-align-tabs="start"
+      [selectedIndex]="0"
+      animationDuration="0ms"
+      class="new-station-tabs"
+      (selectedTabChange)="tabSelectedChanged($event)"
+    >
+      <mat-tab label="Container" aria-label="Container">
+        <ng-template mat-tab-label>
+          <span data-testid="Container-tab" class="font-bold text-sm"
+            >Container</span
+          >
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Rules" aria-label="Rules">
+        <ng-template mat-tab-label>
+          <span data-testid="Rules-tab" class="font-bold text-sm">Rules</span>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Settings" aria-label="Settings">
+        <ng-template mat-tab-label>
+          <span data-testid="Settings-tab" class="font-bold text-sm"
+            >Settings</span
+          >
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
   <div
     [ngClass]="{
       'col-start-2 text-center': title,
