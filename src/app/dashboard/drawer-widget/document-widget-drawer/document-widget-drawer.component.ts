@@ -1,8 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
   ColumnFieldsWidget,
   DocumentImage,
@@ -64,9 +62,6 @@ export class DocumentWidgetDrawerComponent implements OnInit {
     return this._showProfileImageBanner;
   }
 
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
   /** Form to multiselect columns to document. */
   formColumns = new FormControl();
 
@@ -107,7 +102,6 @@ export class DocumentWidgetDrawerComponent implements OnInit {
   enumQuestionFieldType = QuestionFieldType;
 
   constructor(
-    private sidenavDrawerService: SidenavDrawerService,
     private documentService: DocumentService,
     private errorService: ErrorService,
     private dashboardService: DashboardService

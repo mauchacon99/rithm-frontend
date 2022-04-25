@@ -13,7 +13,6 @@ import {
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
   WidgetType,
   EditDataWidget,
@@ -27,7 +26,6 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 describe('DocumentWidgetDrawerComponent', () => {
   let component: DocumentWidgetDrawerComponent;
   let fixture: ComponentFixture<DocumentWidgetDrawerComponent>;
-  let sideNavService: SidenavDrawerService;
   const dataEditWidget: EditDataWidget = {
     widgetItem: {
       rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
@@ -60,7 +58,6 @@ describe('DocumentWidgetDrawerComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
-        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: DocumentService, useClass: MockDocumentService },
@@ -71,7 +68,6 @@ describe('DocumentWidgetDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentWidgetDrawerComponent);
     component = fixture.componentInstance;
-    sideNavService = TestBed.inject(SidenavDrawerService);
     component.showProfileImageBanner = false;
     component.dataDrawer = {
       widgetItem: {
@@ -96,20 +92,6 @@ describe('DocumentWidgetDrawerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('Should subscribe to SidenavDrawerService.drawerData$', () => {
-    const dataWidget = JSON.parse(dataEditWidget.widgetItem.data);
-    sideNavService.drawerData$.next(dataEditWidget);
-    expect(component.dataDrawer.widgetIndex).toEqual(
-      dataEditWidget.widgetIndex
-    );
-    expect(component.dataDrawer.widgetItem).toEqual(dataEditWidget.widgetItem);
-    expect(component.dataDrawer.quantityElementsWidget).toEqual(
-      dataEditWidget.quantityElementsWidget
-    );
-    expect(component.documentColumns).toEqual(dataWidget.columns);
-    expect(component.documentRithmId).toEqual(dataWidget.documentRithmId);
   });
 
   it('should show loading indicator', () => {
