@@ -217,8 +217,8 @@
         <div *ngIf="questions.answer?.value; else withOutLink">
           <a
             title="{{ questions.answer?.value }}"
-            [attr.href]="questions.answer?.value"
-            [attr.target]="'_blank'"
+            [href]="questions.answer?.value"
+            target="_blank"
             class="text-accent-500 underline"
             [ngClass]="{
               'text-secondary-500 pointer-events-none cursor-not-allowed':

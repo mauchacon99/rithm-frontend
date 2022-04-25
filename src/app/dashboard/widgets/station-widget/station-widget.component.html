@@ -333,17 +333,19 @@
       <ng-container [ngSwitch]="questions.questionType">
         <span *ngSwitchCase="questionFieldType.Phone">
           <div *ngIf="questions.answer?.value; else withOutData">
-            <a
-              [href]="'tel:+' + questions.answer?.value"
-              target="_blank"
-              class="text-accent-500 underline"
-              [ngClass]="{
-                'text-secondary-500 pointer-events-none cursor-not-allowed':
-                  editMode
-              }"
-            >
-              {{ questions.answer?.value }}
-            </a>
+            <p class="truncate w-[150px]">
+              <a
+                [href]="'tel:+' + questions.answer?.value"
+                target="_blank"
+                class="text-accent-500 underline"
+                [ngClass]="{
+                  'text-secondary-500 pointer-events-none cursor-not-allowed':
+                    editMode
+                }"
+              >
+                {{ questions.answer?.value }}
+              </a>
+            </p>
           </div>
         </span>
         <span *ngSwitchCase="questionFieldType.Email">
@@ -369,8 +371,8 @@
             <p class="truncate w-[150px]">
               <a
                 title="{{ questions.answer?.value }}"
-                [attr.href]="questions.answer?.value"
-                [attr.target]="'_blank'"
+                [href]="questions.answer?.value"
+                target="_blank"
                 class="text-accent-500 underline truncate w-[150px]"
                 [ngClass]="{
                   'text-secondary-500 pointer-events-none cursor-not-allowed':
