@@ -117,6 +117,7 @@
                       [field]="savedDataLinkArrayQuestions[i]"
                       formArrayName="dataLink"
                       [data]="data"
+                      [stationLoading]="stationDataLoading"
                     ></app-data-link-field>
                   </ng-container>
                   <app-station-template
@@ -255,6 +256,7 @@
           >
             <!-- Station Info Header -->
             <app-station-info-header
+              *ngIf="stationInformation"
               [stationInformation]="stationInformation"
               [stationEditMode]="true"
               [viewNewStation]="viewNewStation"
@@ -274,6 +276,7 @@
                 <ng-template matTabContent>
                   <!-- Document info header -->
                   <app-document-info-header
+                    *ngIf="stationInformation"
                     #documentNameFields
                     [documentInformation]="stationInformation"
                     [viewNewStation]="viewNewStation"
@@ -291,6 +294,7 @@
                       class="font-semibold text-sm"
                       id="station-edit-mode-button"
                       (click)="setEditMode()"
+                      [disabled]="stationLoading"
                     >
                       Edit
                     </button>
@@ -374,7 +378,7 @@
                           id="save-station-frames"
                           data-testid="save-station-frames"
                           class="font-semibold text-sm"
-                          (click)="saveStationWidgetsChanges()"
+                          (click)="saveStationWidgetChanges()"
                           [disabled]="stationLoading && editMode"
                         >
                           Save

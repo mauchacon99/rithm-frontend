@@ -177,6 +177,9 @@ export class StationComponent
   /** Saved station data link widgets. */
   savedDataLinkArrayQuestions: Question[] = [];
 
+  /** Loading until all stations are returned. */
+  stationDataLoading = false;
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -881,102 +884,6 @@ export class StationComponent
   }
 
   /**
-   * Save or update the changes make the station frame widgets.
-   */
-  saveStationWidgetsChanges(): void {
-    this.stationLoading = true;
-
-    this.inputFrameWidgetItems.map((field) => {
-      if (field.questions) {
-        field.data = JSON.stringify(field.questions);
-      }
-    });
-    this.stationService
-      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
-      .pipe(first())
-      .subscribe({
-        next: (inputFrames) => {
-          inputFrames.map((input, index) => {
-            input.id = index;
-            if (input.data && JSON.parse(input.data)?.length > 0) {
-              input.questions = [];
-              input.questions = JSON.parse(input.data);
-            } else if (input.type === FrameType.Input) {
-              input.questions = [];
-            }
-          });
-          this.inputFrameWidgetItems = inputFrames;
-          if (inputFrames.length) {
-            this.saveInputFrameQuestions(
-              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
-            );
-          } else {
-            this.stationLoading = false;
-            this.setGridMode('preview');
-          }
-          this.changedOptions();
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Save input frame widgets.
-   *
-   * @param frames An array of input frameWidgets.
-   */
-  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
-    if (frames.length) {
-      const frameQuestionRequest: Observable<Question[]>[] = [];
-      frames.forEach((frame) => {
-        const fQuestions: Question[] = JSON.parse(frame.data);
-        if (fQuestions.length) {
-          frameQuestionRequest.push(
-            this.stationService.saveInputFrameQuestions(
-              frame.rithmId,
-              fQuestions
-            )
-          );
-        }
-      });
-      this.forkJoinFrameQuestions(frameQuestionRequest);
-    } else {
-      this.stationLoading = false;
-      this.setGridMode('preview');
-    }
-  }
-
-  /**
-   * Execute a fork join to save input frame questions.
-   *
-   * @param requestRow Request row to be executed.
-   */
-  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
-    forkJoin(requestRow)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.stationLoading = false;
-          this.setGridMode('preview');
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.setGridMode('preview');
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
    * Get the station frame widgets.
    */
   private getStationWidgets(): void {
@@ -1031,6 +938,132 @@ export class StationComponent
           });
         },
         error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * This save button clicked show confirm If no questions
+   * and Save or update the changes to the station frame widgets.
+   */
+  async saveStationWidgetChanges(): Promise<void> {
+    let hasQuestions = false;
+    this.inputFrameWidgetItems.map((field) => {
+      if (field.questions?.length === 0) {
+        hasQuestions = true;
+      }
+    });
+    if (hasQuestions) {
+      const confirm = await this.popupService.confirm({
+        title: ' ',
+        message:
+          '\nYou have empty input frames, would you like to save anyway?',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirm) {
+        this.saveStationWidgetsChanges();
+        hasQuestions = false;
+      }
+    } else {
+      this.saveStationWidgetsChanges();
+    }
+  }
+
+  /**
+   * Save or update the changes make the station frame widgets.
+   */
+  private saveStationWidgetsChanges(): void {
+    this.stationLoading = true;
+    this.inputFrameWidgetItems.map((field) => {
+      if (field.questions) {
+        field.data = JSON.stringify(field.questions);
+      }
+    });
+    this.stationService
+      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          inputFrames.forEach((input, index) => {
+            input.id = index;
+            if (input.data && JSON.parse(input.data)?.length > 0) {
+              input.questions = [];
+              input.questions = JSON.parse(input.data);
+            } else if (input.type === FrameType.Input) {
+              input.questions = [];
+            }
+          });
+          this.inputFrameWidgetItems = inputFrames;
+          if (inputFrames.length) {
+            this.saveInputFrameQuestions(
+              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+            );
+          } else {
+            this.stationLoading = false;
+            this.setGridMode('preview');
+          }
+          this.changedOptions();
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save input frame widgets.
+   *
+   * @param frames An array of input frameWidgets.
+   */
+  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
+    if (frames.length) {
+      const frameQuestionRequest: Observable<Question[]>[] = [];
+      frames.forEach((frame) => {
+        if (frame.data !== '') {
+          const fQuestions: Question[] = JSON.parse(frame.data);
+          if (fQuestions.length) {
+            frameQuestionRequest.push(
+              this.stationService.saveInputFrameQuestions(
+                frame.rithmId,
+                fQuestions
+              )
+            );
+          }
+        }
+      });
+      this.forkJoinFrameQuestions(frameQuestionRequest);
+    } else {
+      this.stationLoading = false;
+      this.setGridMode('preview');
+    }
+  }
+
+  /**
+   * Execute a fork join to save input frame questions.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
+    forkJoin(requestRow)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1293,5 +1326,32 @@ export class StationComponent
       frameRithmId: '',
     };
     this.savedDataLinkArray.push(obj);
+    if (this.stationService.allStations$.value.length === 0) {
+      this.getAllStations();
+    }
+  }
+
+  /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.stationDataLoading = true;
+    this.stationService
+      .getAllStations()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stationService.allStations$.next(stations);
+          this.stationDataLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationDataLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
   }
 }

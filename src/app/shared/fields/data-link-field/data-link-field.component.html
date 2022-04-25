@@ -38,6 +38,9 @@
         <p *ngIf="option.name">{{ option.name }}</p>
       </mat-option>
     </mat-autocomplete>
+    <mat-icon matSuffix *ngIf="stationLoading">
+      <app-loading-indicator [diameter]="24"></app-loading-indicator>
+    </mat-icon>
   </mat-form-field>
   <!-- Matching Value -->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">

@@ -23,7 +23,7 @@ import {
  * Reusable component for every field data-link.
  */
 @Component({
-  selector: 'app-data-link-field',
+  selector: 'app-data-link-field[stationLoading]',
   templateUrl: './data-link-field.component.html',
   styleUrls: ['./data-link-field.component.scss'],
   providers: [
@@ -69,7 +69,11 @@ export class DataLinkFieldComponent
   @Input() isStation = true;
 
   /** The list of all stations. */
-  stations: Station[] = [];
+  @Input() stations: Station[] = [];
+
+  /** Loading/Errors block. */
+  /* Loading in input auto-complete the list of all stations. */
+  @Input() stationLoading = false;
 
   /** The list of selected station questions for the select matching value.*/
   questions: Question[] = [];
@@ -82,10 +86,6 @@ export class DataLinkFieldComponent
 
   /* The name for display fields  label  */
   displayFieldsLabel = 'Display Fields';
-
-  /** Loading/Errors block. */
-  /* Loading in input auto-complete the list of all stations. */
-  stationLoading = false;
 
   /* Loading in input  the station questions selected . */
   questionLoading = false;
@@ -134,34 +134,15 @@ export class DataLinkFieldComponent
     this.dataLinkFieldForm.controls.targetStation.markAllAsTouched();
     this.dataLinkFieldForm.controls.selectBaseValue.markAllAsTouched();
     this.subscribeCurrentStationQuestions();
-    this.getAllStations();
-  }
 
-  /**
-   * Get the list of all stations.
-   */
-  private getAllStations(): void {
-    this.stationLoading = true;
-    this.stationService
-      .getAllStations()
-      .pipe(first())
-      .subscribe({
-        next: (stations) => {
-          this.stations = stations;
-          this.filterStations();
-          this.stationLoading = false;
-          if (this.data) {
-            this.bindSavedDataLinkToForm('targetStation');
-          }
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Failed to get all stations for this data link field.',
-            error,
-            false
-          );
-        },
+    this.stationService.allStations$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stations) => {
+        this.stations = stations;
+        this.filterStations();
+        if (this.data) {
+          this.bindSavedDataLinkToForm('targetStation');
+        }
       });
   }
 
