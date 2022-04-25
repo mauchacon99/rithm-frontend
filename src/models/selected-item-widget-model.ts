@@ -8,5 +8,5 @@ export interface SelectedItemWidgetModel {
   itemType: 'station' | 'document' | 'group' | 'preBuilt';
 
   /** Element specific. */
-  itemList: ItemListWidgetModal;
+  itemList?: ItemListWidgetModal;
 }

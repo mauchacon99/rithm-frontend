@@ -50,6 +50,7 @@
           [showContainerProfileBanner]="showContainerProfileBanner"
           [showStationLists]="showStationLists"
           [showGroupTrafficTemplate]="showGroupTrafficTemplate"
+          (previewWidgetSelected)="selectTypeElementPreBuilt($event)"
         ></app-list-widget-modal>
       </div>
       <ng-template #permissionDenied>
