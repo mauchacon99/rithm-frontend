@@ -1289,7 +1289,7 @@ export class StationComponent
    *
    * @param item The widget changed.
    */
-  public resizeCircleRowCols(item: GridsterItem) : void {
+  public resizeCircleRowCols(item: GridsterItem): void {
     if (item.type === FrameType.CircleImage) {
       if (this.circlesWidget) {
         this.inputFrameWidgetItems.map((element) => {
