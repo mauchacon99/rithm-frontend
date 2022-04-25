@@ -324,7 +324,7 @@
   </ng-container>
 </ng-template>
 <ng-template #withOutData>
-  <span class="cursor-default" title="Without Link">N/A</span>
+  <p class="cursor-default text-xs" title="Without Link">N/A</p>
 </ng-template>
 <!--Template for show questions columns of the document-->
 <ng-template #columnQuestion let-column="column" let-document="document">
@@ -333,7 +333,14 @@
       <ng-container [ngSwitch]="questions.questionType">
         <span *ngSwitchCase="questionFieldType.Phone">
           <div *ngIf="questions.answer?.value; else withOutData">
-            <p class="truncate w-[150px]">
+            <p
+              class="text-xs"
+              [ngClass]="{
+                'truncate w-[150px] ':
+                  widgetType !== enumWidgetType.StationMultiline &&
+                  widgetType !== enumWidgetType.StationMultilineBanner
+              }"
+            >
               <a
                 [href]="'tel:+' + questions.answer?.value"
                 target="_blank"
@@ -350,7 +357,14 @@
         </span>
         <span *ngSwitchCase="questionFieldType.Email">
           <div *ngIf="questions.answer?.value; else withOutData">
-            <p class="truncate w-[150px]">
+            <p
+              class="text-xs"
+              [ngClass]="{
+                'truncate w-[150px]':
+                  widgetType !== enumWidgetType.StationMultiline &&
+                  widgetType !== enumWidgetType.StationMultilineBanner
+              }"
+            >
               <a
                 title="{{ questions.answer?.value }}"
                 [href]="'mailto:' + questions.answer?.value"
@@ -368,7 +382,14 @@
         </span>
         <ng-container *ngSwitchCase="questionFieldType.URL">
           <ng-container *ngIf="questions.answer?.value; else withOutData">
-            <p class="truncate w-[150px]">
+            <p
+              class="text-xs"
+              [ngClass]="{
+                'truncate w-[150px]':
+                  widgetType !== enumWidgetType.StationMultiline &&
+                  widgetType !== enumWidgetType.StationMultilineBanner
+              }"
+            >
               <a
                 title="{{ questions.answer?.value }}"
                 [href]="questions.answer?.value"
@@ -431,7 +452,12 @@
         <p
           title="{{ questions.answer?.value || 'N/A' }}"
           *ngSwitchDefault
-          class="text-xs truncate w-[150px]"
+          class="text-xs"
+          [ngClass]="{
+            'truncate w-[150px]':
+              widgetType !== enumWidgetType.StationMultiline &&
+              widgetType !== enumWidgetType.StationMultilineBanner
+          }"
         >
           {{ questions.answer?.value || 'N/A' }}
         </p>

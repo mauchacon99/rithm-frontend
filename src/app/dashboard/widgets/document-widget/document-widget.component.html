@@ -188,7 +188,7 @@
           <a
             [href]="'tel:+' + questions.answer?.value"
             target="_blank"
-            class="text-accent-500 underline"
+            class="text-accent-500 underline text-xs"
             [ngClass]="{
               'text-secondary-500 pointer-events-none cursor-not-allowed':
                 editMode
@@ -203,7 +203,7 @@
           <a
             [href]="'mailto:' + questions.answer?.value"
             target="_blank"
-            class="text-accent-500 underline"
+            class="text-accent-500 underline text-xs"
             [ngClass]="{
               'text-secondary-500 pointer-events-none cursor-not-allowed':
                 editMode
@@ -219,7 +219,7 @@
             title="{{ questions.answer?.value }}"
             [href]="questions.answer?.value"
             target="_blank"
-            class="text-accent-500 underline"
+            class="text-accent-500 underline text-xs"
             [ngClass]="{
               'text-secondary-500 pointer-events-none cursor-not-allowed':
                 editMode
