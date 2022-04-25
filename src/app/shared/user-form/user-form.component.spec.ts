@@ -27,6 +27,7 @@ describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
   let loader: HarnessLoader;
+  let errorService: ErrorService;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -54,6 +55,7 @@ describe('UserFormComponent', () => {
     component = fixture.componentInstance;
     component.accountCreate = true;
     loader = TestbedHarnessEnvironment.loader(fixture);
+    errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
   });
 
@@ -256,14 +258,14 @@ describe('UserFormComponent', () => {
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       splitService.sdkReady$.error('error');
-      const errorService = spyOn(
+      const spyErrorService = spyOn(
         TestBed.inject(ErrorService),
         'logError'
       ).and.callThrough();
       component.ngOnInit();
 
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
+      expect(spyErrorService).toHaveBeenCalled();
       expect(component.showProfilePhoto).toBeFalse();
     });
   });
@@ -298,6 +300,9 @@ describe('UserFormComponent', () => {
         throw new Error();
       })
     );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+
+      expect(spyError).toHaveBeenCalled();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const spyMethod = spyOn<any>(
       component,
