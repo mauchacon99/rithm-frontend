@@ -749,10 +749,10 @@ export class DocumentService {
    * @param documentId The document id of which details are required.
    * @returns A DataLinkObject.
    */
-  getDocumentDetails(documentId: string): Observable<ImageData> {
-    const params = new HttpParams().set('vaultFileRithmId', documentId);
-    return this.http.get<ImageData>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultjson`,
+  getUploadedFileInfo(documentId: string): Observable<string> {
+    const params = new HttpParams().set('vaultId', documentId);
+    return this.http.get<string>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultfile`,
       {
         params,
       }

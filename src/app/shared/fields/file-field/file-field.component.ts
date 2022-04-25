@@ -92,6 +92,9 @@ export class FileFieldComponent
     this.fileFieldForm.get('fileType')?.markAsTouched();
     this.fileFieldForm.get('fileType')?.updateValueAndValidity();
     this.getParams();
+    if (this.field.answer?.value) {
+      this.getDocumentDetails();
+    }
   }
 
   /**
@@ -206,6 +209,28 @@ export class FileFieldComponent
       'The link you followed is invalid. Please double check the URL and try again.',
       new Error('Invalid params for document')
     );
+  }
+
+  /**
+   * Navigates the user back to dashboard and displays a message about the invalid params.
+   */
+  private getDocumentDetails(): void {
+    this.documentService
+      .getUploadedFileInfo(<string>this.field.answer?.value)
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          this.fileName = res;
+          this.isFileUploaded = true;
+        },
+        error: (error: unknown) => {
+          this.isFileUploaded = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
