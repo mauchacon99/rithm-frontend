@@ -305,7 +305,7 @@ export class MockUserService {
    * @param file File to upload.
    * @returns Id of image uploaded.
    */
-  uploadImageUser(file: File): Observable<ImageData> {
+  uploadImageUser(file: File): Observable<string> {
     const response: ImageData = {
       imageData:
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
