@@ -1371,7 +1371,7 @@ describe('StationComponent', () => {
               originalStationRithmId: '3j4k-3h2j-hj4j',
             },
           ],
-          data: "",
+          data: '',
           id: 0,
         },
       ];
