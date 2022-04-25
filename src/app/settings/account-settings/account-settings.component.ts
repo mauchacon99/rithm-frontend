@@ -60,7 +60,6 @@ export class AccountSettingsComponent {
   private updateUserAccount(): void {
     const userFormData = this.settingsForm.get('userForm')?.value;
     const { firstName, lastName, confirmPassword } = userFormData;
-
     this.userService
       .updateUserAccount({ firstName, lastName, password: confirmPassword })
       .pipe(first())

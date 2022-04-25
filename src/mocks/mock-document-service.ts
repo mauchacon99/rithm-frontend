@@ -25,6 +25,9 @@ import {
   DocumentImage,
   ImageData,
   DataLinkObject,
+  FrameType,
+  StationFrameWidget,
+  ContainerWidgetPreBuilt,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1626,5 +1629,85 @@ export class MockDocumentService {
       };
       return of(dataLink).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get frames by type.
+   *
+   * @param stationRithmId The current station id.
+   * @param documentRithmId The Specific ID of document.
+   * @param frameType The frame type.
+   * @returns A StationFrameWidget.
+   */
+  getDataLinkFrames(
+    stationRithmId: string,
+    documentRithmId: string,
+    frameType: FrameType
+  ): Observable<StationFrameWidget[]> {
+    if (!stationRithmId || !documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get the frames by type.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const frameByType: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.DataLink,
+          data: '',
+          id: 0,
+        },
+      ];
+      return of(frameByType).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get containers.
+   *
+   * @returns Data containers.
+   */
+  getContainerWidgetPreBuilt(): Observable<ContainerWidgetPreBuilt[]> {
+    const containers: ContainerWidgetPreBuilt[] = [
+      {
+        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationOwners: [
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'Testy',
+            lastName: 'Rithm',
+            email: 'Testy@Rithm.com',
+          },
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'Testy',
+            lastName: 'Last',
+            email: 'Testy@Rithm.com',
+          },
+        ],
+      },
+      {
+        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
+        stationOwners: [],
+      },
+    ];
+    return of(containers).pipe(delay(1000));
   }
 }

@@ -20,34 +20,14 @@ import { StationInfoHeaderComponent } from 'src/app/shared/station-info-header/s
 import { BuildDrawerComponent } from 'src/app/station/build-drawer/build-drawer.component';
 import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import {
-  MockDocumentService,
-  MockErrorService,
-  MockStationService,
-  MockSplitService,
-} from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import {
-  FlowLogicRule,
-  FrameType,
-  OperandType,
-  OperatorType,
-  Question,
-  QuestionFieldType,
-  RuleType,
-  DataLinkObject,
-  StationFrameWidget,
-  SettingDrawerData,
-} from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockPopupService } from 'src/mocks/mock-popup-service';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -62,6 +42,26 @@ import { SplitService } from 'src/app/core/split.service';
 import { TitleWidgetComponent } from 'src/app/shared/station-document-widgets/title-widget/title-widget.component';
 import { BannerWidgetComponent } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.component';
 import { CircleImageWidgetComponent } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.component';
+import {
+  FlowLogicRule,
+  FrameType,
+  OperandType,
+  OperatorType,
+  Question,
+  QuestionFieldType,
+  RuleType,
+  DataLinkObject,
+  StationFrameWidget,
+  SettingDrawerData,
+} from 'src/models';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockStationService,
+  MockSplitService,
+  MockUserService,
+  MockPopupService,
+} from 'src/mocks';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -698,6 +698,172 @@ describe('StationComponent', () => {
     expect(component.editMode).toBeFalsy();
   });
 
+  it('should open confirmation popup for save when has no questions in input frames', () => {
+    const stationId = '3j4k-3h2j-hj4j';
+    component.inputFrameWidgetItems = [
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2j',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [],
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+    ];
+    component.stationRithmId = stationId;
+    fixture.detectChanges();
+    const confirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    component.saveStationWidgetChanges();
+    expect(confirmSpy).toHaveBeenCalled();
+  });
+
+  it('should call saveStationWidgets when confirm save with input frames without questions', async () => {
+    const stationId = '3j4k-3h2j-hj4j';
+    const inputFramesWidgets: StationFrameWidget[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2j',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [],
+        type: FrameType.Input,
+        data: '',
+        id: 0,
+      },
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2Y',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 7,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [
+          {
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+            originalStationRithmId: '3j4k-3h2j-hj4j',
+          },
+        ],
+        type: FrameType.Input,
+        data: '',
+        id: 1,
+      },
+    ];
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+    const spySaveFrames = spyOn(
+      TestBed.inject(StationService),
+      'saveStationWidgets'
+    ).and.callThrough();
+    component.inputFrameWidgetItems = inputFramesWidgets;
+    component.stationRithmId = stationId;
+    fixture.detectChanges();
+    await component.saveStationWidgetChanges();
+    expect(spySaveFrames).toHaveBeenCalledOnceWith(
+      stationId,
+      inputFramesWidgets
+    );
+  });
+
+  it('should call saveInputFrameQuestions after saving inputFrames', async () => {
+    const stationId = '3j4k-3h2j-hj4j';
+    const inputFramesWidgets: StationFrameWidget[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2Y',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 7,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [
+          {
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+            originalStationRithmId: '3j4k-3h2j-hj4j',
+          },
+        ],
+        type: FrameType.Input,
+        // eslint-disable-next-line max-len
+        data: '[{"rithmId":"3j4k-3h2j-hj4j","prompt":"Short Text","questionType":"shortText","isReadOnly":false,"isRequired":false,"isPrivate":false,"children":[],"originalStationRithmId":"3j4k-3h2j-hj4j-3h2Y","possibleAnswers":[]}]',
+        id: 1,
+      },
+      {
+        rithmId: '3j4k-3h2j-hj4j-3h2Y',
+        stationRithmId: stationId,
+        cols: 6,
+        rows: 4,
+        x: 7,
+        y: 0,
+        minItemRows: 4,
+        minItemCols: 6,
+        questions: [
+          {
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+            originalStationRithmId: '3j4k-3h2j-hj4j',
+          },
+        ],
+        type: FrameType.Input,
+        // eslint-disable-next-line max-len
+        data: '[{"rithmId":"3j4k-3h2j-hj4j","prompt":"Short Text","questionType":"shortText","isReadOnly":false,"isRequired":false,"isPrivate":false,"children":[],"originalStationRithmId":"3j4k-3h2j-hj4j-3h2Y","possibleAnswers":[]}]',
+        id: 2,
+      },
+    ];
+    spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+      Promise.resolve(true)
+    );
+    const spySaveFrames = spyOn(
+      TestBed.inject(StationService),
+      'saveStationWidgets'
+    ).and.returnValue(of(inputFramesWidgets));
+    const saveInputFrameQuestions = spyOn(
+      TestBed.inject(StationService),
+      'saveInputFrameQuestions'
+    ).and.callThrough();
+    component.inputFrameWidgetItems = inputFramesWidgets;
+    component.stationRithmId = stationId;
+    fixture.detectChanges();
+    await component.saveStationWidgetChanges();
+    expect(spySaveFrames).toHaveBeenCalledOnceWith(
+      stationId,
+      inputFramesWidgets
+    );
+    expect(saveInputFrameQuestions).toHaveBeenCalledTimes(2);
+  });
+
   it('should open confirmation popup when canceling button', async () => {
     const dataToConfirmPopup = {
       title: 'Cancel?',
@@ -956,7 +1122,7 @@ describe('StationComponent', () => {
     expect(saveDataLinkSpy).toHaveBeenCalled();
   });
 
-  it('should request saveStationWidgets service if there are dataLinkObjects added', () => {
+  it('should request saveDataLinkFrames service if there are dataLinkObjects added', () => {
     component.dataLinkArray = [
       {
         rithmId: '07e1-30b5-f21e',
@@ -968,15 +1134,15 @@ describe('StationComponent', () => {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       },
     ];
-    const saveStationWidgetSpy = spyOn(
+    const saveDataLinkFramespy = spyOn(
       TestBed.inject(StationService),
-      'saveStationWidgets'
+      'saveDataLinkFrames'
     ).and.callThrough();
     component.saveStationInformation();
-    expect(saveStationWidgetSpy).toHaveBeenCalled();
+    expect(saveDataLinkFramespy).toHaveBeenCalled();
   });
 
-  it('should request saveDataLink if saveStationWidgets succeed', () => {
+  it('should request saveDataLink if saveDataLinkFrames succeed', () => {
     component.dataLinkArray = [
       {
         rithmId: '07e1-30b5-f21e',
@@ -1001,7 +1167,7 @@ describe('StationComponent', () => {
         id: 0,
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       of(frameStationWidget)
     );
     const dataLinkSpy = spyOn(
@@ -1024,7 +1190,7 @@ describe('StationComponent', () => {
         displayFields: ['ee6e866a-4d54-4d97-92d2-84a07028a401'],
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -1062,7 +1228,7 @@ describe('StationComponent', () => {
         id: 0,
       },
     ];
-    spyOn(TestBed.inject(StationService), 'saveStationWidgets').and.returnValue(
+    spyOn(TestBed.inject(StationService), 'saveDataLinkFrames').and.returnValue(
       of(frameStationWidget)
     );
     spyOn(TestBed.inject(DocumentService), 'saveDataLink').and.returnValue(
@@ -1076,6 +1242,29 @@ describe('StationComponent', () => {
     ).and.callThrough();
     component.saveStationInformation();
     expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should call getStationWidgets', () => {
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'getStationWidgets'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return get station widgets fails', () => {
+    spyOn(TestBed.inject(StationService), 'getStationWidgets').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 
   describe('should add value to the array of input frames', () => {
@@ -1125,26 +1314,187 @@ describe('StationComponent', () => {
     });
   });
 
-  it('should call getStationWidgets', () => {
-    const spyService = spyOn(
-      TestBed.inject(StationService),
-      'getStationWidgets'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
+  describe('Loading indicators in a specific moment', () => {
+    it('should display a loading indicator when the saveStationWidgetsChanges', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          questions: [
+            {
+              rithmId: '3j4k-3h2j-hj4j',
+              prompt: 'Label #1',
+              questionType: QuestionFieldType.ShortText,
+              isReadOnly: false,
+              isRequired: false,
+              isPrivate: false,
+              children: [],
+              originalStationRithmId: '3j4k-3h2j-hj4j',
+            },
+          ],
+          // eslint-disable-next-line max-len
+          data: "[{'rithmId':'3j4k-3h2j-hj4j','prompt':'Label #1','questionType':'QuestionFieldType.ShortText','isReadOnly':false,'isRequired':false,'isPrivate':false,'children':[],'originalStationRithmId':'3j4k-3h2j-hj4j'}]",
+          id: 0,
+        },
+      ];
+      Object.defineProperty(component, 'viewNewStation', {
+        value: true,
+      });
+      spyOn(
+        TestBed.inject(StationService),
+        'saveStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component['saveStationWidgetsChanges']();
+      fixture.detectChanges();
+      const stationLoading =
+        fixture.debugElement.nativeElement.querySelector('#gridster-loading');
+      expect(stationLoading).toBeTruthy();
+    });
   });
 
-  it('should catch error if petition to return get station widgets fails', () => {
-    spyOn(TestBed.inject(StationService), 'getStationWidgets').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyError).toHaveBeenCalled();
+  describe('should call the method that gets the frame types of the current station', () => {
+    it('should check properties when it is an input frame', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          questions: [],
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an headline', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 1,
+          x: 0,
+          y: 0,
+          type: FrameType.Headline,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an body', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 4,
+          rows: 2,
+          x: 0,
+          y: 0,
+          type: FrameType.Body,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an title', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 24,
+          rows: 1,
+          x: 0,
+          y: 0,
+          type: FrameType.Title,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an image', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 4,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Image,
+          data: '[]',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
+
+    it('should check properties when it is an circle-image', () => {
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 4,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.CircleImage,
+          data: '',
+          id: 0,
+        },
+      ];
+
+      const spyService = spyOn(
+        TestBed.inject(StationService),
+        'getStationWidgets'
+      ).and.returnValue(of(frameStationWidget));
+      component.ngOnInit();
+      expect(spyService).toHaveBeenCalled();
+    });
   });
 });

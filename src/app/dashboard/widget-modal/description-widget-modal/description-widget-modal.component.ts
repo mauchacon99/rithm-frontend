@@ -30,12 +30,12 @@ export class DescriptionWidgetModalComponent implements OnInit {
   get dataWidget(): string {
     if (this.itemWidgetModalSelected.itemType === 'document') {
       return JSON.stringify({
-        documentRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        documentRithmId: this.itemWidgetModalSelected.itemList?.rithmId,
         columns: [],
       });
     } else if (this.itemWidgetModalSelected.itemType === 'station') {
       return JSON.stringify({
-        stationRithmId: this.itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: this.itemWidgetModalSelected.itemList?.rithmId,
         columns:
           this.widgetType === WidgetType.StationMultiline ||
           this.widgetType === WidgetType.StationMultilineBanner
@@ -46,19 +46,21 @@ export class DescriptionWidgetModalComponent implements OnInit {
               ]
             : [{ name: ColumnsDocumentInfo.Name }],
       });
-    } else {
+    } else if (this.itemWidgetModalSelected.itemType === 'group') {
       return JSON.stringify(
         this.widgetType === this.enumWidgetType.StationGroupTraffic
           ? {
-              valueShowGraffic: 5,
+              valueShowGraphic: 5,
               stationGroupRithmId:
-                this.itemWidgetModalSelected.itemList.rithmId,
+                this.itemWidgetModalSelected.itemList?.rithmId,
             }
           : {
               stationGroupRithmId:
-                this.itemWidgetModalSelected.itemList.rithmId,
+                this.itemWidgetModalSelected?.itemList?.rithmId,
             }
       );
+    } else {
+      return '';
     }
   }
 
@@ -69,18 +71,20 @@ export class DescriptionWidgetModalComponent implements OnInit {
    */
   get widgetItem(): DashboardItem {
     const minItemRows = this.minItemRowsWidget();
+    const minItemCols = this.minItemColsWidget();
+
     const widgetType = this.widgetTypeWithoutDefault;
     const rithmId = `TEMPID-${Math.random().toString(36).slice(2)}`;
     return {
       rithmId,
-      cols: 3,
+      cols: minItemCols,
       rows: minItemRows,
       x: 0,
       y: 0,
       widgetType,
       data: this.dataWidget,
       minItemRows,
-      minItemCols: 3,
+      minItemCols: minItemCols,
     };
   }
 
@@ -122,10 +126,21 @@ export class DescriptionWidgetModalComponent implements OnInit {
         this.enumWidgetType.ContainerProfileBanner ||
       this.widgetTypeWithoutDefault === this.enumWidgetType.StationMultiline ||
       this.widgetTypeWithoutDefault ===
-        this.enumWidgetType.StationMultilineBanner ||
-      this.widgetTypeWithoutDefault === this.enumWidgetType.StationGroupTraffic
+        this.enumWidgetType.StationMultilineBanner
       ? 2
       : 1;
+  }
+
+  /**
+   * Parse item cols for widget.
+   *
+   * @returns A number of minItemCols.
+   */
+  private minItemColsWidget(): number {
+    return this.widgetType === this.enumWidgetType.PreBuiltContainer ||
+      this.widgetType === this.enumWidgetType.PreBuiltStation
+      ? 4
+      : 3;
   }
 
   /** Save widget. */

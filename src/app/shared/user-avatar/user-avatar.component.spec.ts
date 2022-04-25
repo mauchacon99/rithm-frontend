@@ -3,6 +3,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { By } from '@angular/platform-browser';
 import { UserAvatarComponent } from './user-avatar.component';
+import { MockErrorService, MockUserService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
+import { throwError } from 'rxjs';
 
 describe('UserAvatarComponent', () => {
   let component: UserAvatarComponent;
@@ -12,6 +16,10 @@ describe('UserAvatarComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [UserAvatarComponent],
       imports: [MatTooltipModule, MatBadgeModule],
+      providers: [
+        { provide: UserService, useClass: MockUserService },
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
     }).compileComponents();
   });
 
@@ -62,5 +70,33 @@ describe('UserAvatarComponent', () => {
     component.badgeHover = true;
     const badgeValue = component.getBadge();
     expect(badgeValue).toEqual('\u2212');
+  });
+
+  it('should call method getImageUser', () => {
+    component.imageRithmId = '123-123132';
+    const methodGetImageUserService = spyOn(
+      TestBed.inject(UserService),
+      'getImageUser'
+    ).and.callThrough();
+    component['getImageUser']();
+
+    expect(methodGetImageUserService).toHaveBeenCalledOnceWith(
+      component.imageRithmId
+    );
+  });
+
+  it('should catch an error if the request to get image data', () => {
+    component.imageRithmId = '123-123132';
+    spyOn(TestBed.inject(UserService), 'getImageUser').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getImageUser']();
+    expect(spyError).toHaveBeenCalled();
   });
 });

@@ -22,6 +22,8 @@ import {
   StandardNumberJSON,
   DocumentEvent,
   GroupTrafficData,
+  StationWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1316,6 +1318,35 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should save/update the array of stationDataLinkFrames', () => {
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.DataLink,
+        data: '',
+        id: 0,
+      },
+    ];
+
+    service
+      .saveDataLinkFrames(stationId, frameStationWidget)
+      .subscribe((response) => {
+        expect(response).toEqual(frameStationWidget);
+      });
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-links-frames?stationRithmId=${stationId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(frameStationWidget);
+
+    req.flush(frameStationWidget);
+    httpTestingController.verify();
+  });
+
   it('should remove a member the owner from the roster for group specific', () => {
     const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
     const expectedResponse: StationRosterMember[] = [
@@ -1403,7 +1434,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should history station', () => {
+  it('should get station events history', () => {
     const stationRithmId = '6375027-78345-73824-54244';
     const expectHistoryResponse: DocumentEvent[] = [
       {
@@ -1425,6 +1456,15 @@ describe('StationService', () => {
     service.getStationHistory(stationRithmId).subscribe((response) => {
       expect(response).toEqual(expectHistoryResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history?rithmId=${stationRithmId}`
+    );
+    req.flush(expectHistoryResponse);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBeTruthy();
+    expect(req.request.params.get('rithmId')).toEqual(stationRithmId);
+    httpTestingController.verify();
   });
 
   it('should get getStationGroupOwnerRoster', () => {
@@ -1531,18 +1571,19 @@ describe('StationService', () => {
         y: 0,
         type: FrameType.Input,
         data: '',
+        questions: [],
         id: 0,
       },
       {
         rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
         stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         cols: 6,
-        rows: 4,
+        rows: 1,
         x: 0,
         y: 0,
-        type: FrameType.Input,
+        type: FrameType.Headline,
         data: '',
-        id: 0,
+        id: 1,
       },
     ];
 
@@ -1555,14 +1596,121 @@ describe('StationService', () => {
     const expectedData: GroupTrafficData = {
       title: 'Group Eagle',
       stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: ['station 1', 'station 2', 'station 3', 'station 4', 'station 5'],
-      stationDocumentCounts: [10, 5, 8, 10, 20],
-      averageDocumentFlow: [2, 4, 1, 8, 9],
+      labels: [
+        'station 1',
+        'station 2',
+        'station 3',
+        'station 4',
+        'station 5 with a long text for test view',
+        'station 6',
+        'station 7',
+      ],
+      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
+      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
+      averageDocumentFlowLabels: [
+        '2 days',
+        '7 weeks',
+        '1 hour',
+        '2 days',
+        '1 weeks',
+        '40 minutes',
+        '2 hour',
+      ],
     };
     service
       .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
       .subscribe((response) => {
         expect(response).toEqual(expectedData);
       });
+  });
+
+  it('should call getUserStationData', () => {
+    const expectedData: StationWidgetPreBuilt[] = [
+      {
+        stationRithmId: 'qwe-321-ert-123',
+        stationName: 'Mars station',
+        totalContainers: 5,
+        stationGroup: 'Eagle',
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: false,
+            isWorker: true,
+          },
+        ],
+      },
+      {
+        stationRithmId: '123-456-789',
+        stationName: 'Grogu station',
+        totalContainers: 1,
+        stationGroup: '  ',
+        stationOwners: [],
+      },
+    ];
+    service.getStationWidgetPreBuiltData().subscribe((response) => {
+      expect(response).toEqual(expectedData);
+    });
+  });
+
+  it('should call saveInputFrameQuestions', () => {
+    const frameRithmId = '3j4k-3h2j-hj4j-3j4k';
+    const frameQuestions: Question[] = [
+      {
+        prompt: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    service
+      .saveInputFrameQuestions(frameRithmId, frameQuestions)
+      .subscribe((response) => {
+        expect(response).toEqual(frameQuestions);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`
+    );
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(frameQuestions);
+    httpTestingController.verify();
+  });
+
+  it('should get a current stations list for containers', () => {
+    const stationRithmId = '6375027-78345-73824-54244';
+    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+      {
+        name: 'Testy',
+        rithmId: '123',
+        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+      },
+    ];
+    service.getCurrentStations(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectCurrentStationsResponse);
+    });
   });
 });

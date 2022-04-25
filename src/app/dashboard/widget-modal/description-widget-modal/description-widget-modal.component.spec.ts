@@ -10,6 +10,7 @@ import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widg
 import { MatDialogRef } from '@angular/material/dialog';
 import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
+import { StationPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/station-pre-built-widget/station-pre-built-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
@@ -40,6 +41,7 @@ describe('DescriptionWidgetModalComponent', () => {
         MockComponent(StationWidgetComponent),
         MockComponent(GroupSearchWidgetComponent),
         MockComponent(GroupTrafficWidgetComponent),
+        MockComponent(StationPreBuiltWidgetComponent),
       ],
       providers: [
         { provide: MatDialogRef, useValue: { close } },
@@ -79,7 +81,7 @@ describe('DescriptionWidgetModalComponent', () => {
   describe('Parse data widget', () => {
     it('should get data for document', () => {
       const expectData = JSON.stringify({
-        documentRithmId: itemWidgetModalSelected.itemList.rithmId,
+        documentRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
@@ -92,7 +94,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for station', () => {
       component.widgetType = WidgetType.Station;
       const expectData = JSON.stringify({
-        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [{ name: 'name' }],
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
@@ -104,7 +106,7 @@ describe('DescriptionWidgetModalComponent', () => {
 
     it('should get data for stationGroup', () => {
       const expectData = JSON.stringify({
-        stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationGroupRithmId: itemWidgetModalSelected.itemList?.rithmId,
       });
       component.itemWidgetModalSelected = itemWidgetModalSelected;
       component.itemWidgetModalSelected.itemType = 'group';
@@ -115,8 +117,8 @@ describe('DescriptionWidgetModalComponent', () => {
 
     it('should get data for StationGroupTraffic', () => {
       const expectData = JSON.stringify({
-        valueShowGraffic: 5,
-        stationGroupRithmId: itemWidgetModalSelected.itemList.rithmId,
+        valueShowGraphic: 5,
+        stationGroupRithmId: itemWidgetModalSelected.itemList?.rithmId,
       });
       component.widgetType = WidgetType.StationGroupTraffic;
       component.itemWidgetModalSelected = itemWidgetModalSelected;
@@ -128,7 +130,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for StationMultiline', () => {
       component.widgetType = WidgetType.StationMultiline;
       const expectData = JSON.stringify({
-        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [
           { name: 'name' },
           { name: 'lastUpdatedUTC' },
@@ -144,7 +146,7 @@ describe('DescriptionWidgetModalComponent', () => {
     it('should get data for StationMultilineBanner', () => {
       component.widgetType = WidgetType.StationMultilineBanner;
       const expectData = JSON.stringify({
-        stationRithmId: itemWidgetModalSelected.itemList.rithmId,
+        stationRithmId: itemWidgetModalSelected.itemList?.rithmId,
         columns: [
           { name: 'name' },
           { name: 'lastUpdatedUTC' },
@@ -235,6 +237,13 @@ describe('DescriptionWidgetModalComponent', () => {
       expect(spyMath).toHaveBeenCalled();
       expect(spyMatDialogRef).toHaveBeenCalledOnceWith(expectData);
     });
+
+    it('should add widget when widgetType is preBuilt', () => {
+      component.itemWidgetModalSelected.itemType = 'preBuilt';
+      fixture.detectChanges();
+      const dataWidget = component.dataWidget;
+      expect(dataWidget).toBe('');
+    });
   });
 
   it('should return 2 minItemRows when widget type are banners image', () => {
@@ -254,5 +263,12 @@ describe('DescriptionWidgetModalComponent', () => {
     component.widgetTypeWithoutDefault = WidgetType.ContainerProfileBanner;
     const responseData = component['minItemRowsWidget']();
     expect(responseData).toEqual(2);
+  });
+
+  it('should return 4 minItemColsWidget when widget type for preBuilt', () => {
+    component.widgetType = WidgetType.PreBuiltStation;
+    fixture.detectChanges();
+    const responseData = component['minItemColsWidget']();
+    expect(responseData).toEqual(4);
   });
 });
