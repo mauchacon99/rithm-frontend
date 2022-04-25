@@ -301,8 +301,6 @@ describe('UserFormComponent', () => {
       })
     );
     const spyError = spyOn(errorService, 'displayError').and.callThrough();
-
-    expect(spyError).toHaveBeenCalled();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const spyMethod = spyOn<any>(
       component,
@@ -311,6 +309,7 @@ describe('UserFormComponent', () => {
     const mockFile = new File([''], 'name', { type: 'image/png' });
     component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call upload imageUser', () => {
