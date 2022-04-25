@@ -179,7 +179,12 @@
 </ng-template>
 
 <!--logic for show column static or column with questionId-->
-<ng-template #setSpecificListType let-column="column" let-document="document">
+<ng-template
+  #setSpecificListType
+  let-column="column"
+  let-document="document"
+  let-header="header"
+>
   <ng-container *ngIf="!column.questionId">
     <ng-container
       *ngTemplateOutlet="
@@ -192,7 +197,7 @@
     <ng-container
       *ngTemplateOutlet="
         columnQuestion;
-        context: { column: column, document: document }
+        context: { column: column, document: document, header: header }
       "
     ></ng-container>
   </ng-container>
@@ -327,7 +332,11 @@
 </ng-template>
 
 <!--Template for show questions columns of the document-->
-<ng-template #columnQuestion let-column="column" let-document="document">
+<ng-template
+  #columnQuestion
+  let-column="column"
+  let-document="document"
+>
   <ng-container *ngFor="let questions of document.questions[0].questions">
     <ng-container *ngIf="questions.rithmId === column.questionId">
       <ng-container [ngSwitch]="questions.questionType">

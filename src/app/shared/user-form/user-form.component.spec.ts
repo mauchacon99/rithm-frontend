@@ -21,11 +21,13 @@ import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
+import { throwError } from 'rxjs';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
   let loader: HarnessLoader;
+  let errorService: ErrorService;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -53,6 +55,7 @@ describe('UserFormComponent', () => {
     component = fixture.componentInstance;
     component.accountCreate = true;
     loader = TestbedHarnessEnvironment.loader(fixture);
+    errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
   });
 
@@ -255,14 +258,14 @@ describe('UserFormComponent', () => {
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       splitService.sdkReady$.error('error');
-      const errorService = spyOn(
+      const spyErrorService = spyOn(
         TestBed.inject(ErrorService),
         'logError'
       ).and.callThrough();
       component.ngOnInit();
 
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
+      expect(spyErrorService).toHaveBeenCalled();
       expect(component.showProfilePhoto).toBeFalse();
     });
   });
@@ -289,5 +292,31 @@ describe('UserFormComponent', () => {
     const mockEvt = { target: { files: [mockFile] } };
     component.uploadImage(mockEvt as unknown as Event);
     expect(spyAlert).toHaveBeenCalledOnceWith(paramExpected);
+  });
+
+  it('should catch error if petition upload imageUser fails', () => {
+    const serviceMethod = spyOn(
+      TestBed.inject(UserService),
+      'uploadImageUser'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    component['uploadImageUser'](mockFile);
+    expect(serviceMethod).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call upload imageUser', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(UserService),
+      'uploadImageUser'
+    ).and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    component['uploadImageUser'](mockFile);
+    expect(spyMethod).toHaveBeenCalledWith(mockFile);
   });
 });
