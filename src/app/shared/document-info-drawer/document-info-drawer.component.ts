@@ -14,6 +14,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
+import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
 
 /**
  * Component for document drawer.
@@ -538,6 +539,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.dialog.open(ConnectedStationsModalComponent, {
       data: {
         documentRithmId: this.documentRithmId,
+        stationRithmId: this.stationRithmId,
+      },
+    });
+  }
+
+  /**
+   * Open a modal to move location.
+   */
+  openModalLocation(): void {
+    this.dialog.open(LocationModalComponent, {
+      minWidth: '350px',
+      width: '70%',
+      data: {
         stationRithmId: this.stationRithmId,
       },
     });
