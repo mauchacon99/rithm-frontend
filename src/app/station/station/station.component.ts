@@ -1289,35 +1289,35 @@ export class StationComponent
    *
    * @param item The widget changed.
    */
-  // public resizeCircleRowCols(item: GridsterItem) : void {
-  //   if (item.type === FrameType.CircleImage) {
-  //     if (this.circlesWidget) {
-  //       this.inputFrameWidgetItems.map((element) => {
-  //         if (element.id === item.id) {
-  //           const circleOld = JSON.parse(this.circlesWidget);
-  //           if (item.rows < circleOld.rows || item.cols < circleOld.cols) {
-  //             element.cols =
-  //               item.rows < circleOld.rows ? item.rows : element.cols;
-  //             element.rows =
-  //               item.cols < circleOld.cols ? item.cols : element.rows;
-  //             this.changedOptions();
-  //           }
+  public resizeCircleRowCols(item: GridsterItem) : void {
+    if (item.type === FrameType.CircleImage) {
+      if (this.circlesWidget) {
+        this.inputFrameWidgetItems.map((element) => {
+          if (element.id === item.id) {
+            const circleOld = JSON.parse(this.circlesWidget);
+            if (item.rows < circleOld.rows || item.cols < circleOld.cols) {
+              element.cols =
+                item.rows < circleOld.rows ? item.rows : element.cols;
+              element.rows =
+                item.cols < circleOld.cols ? item.cols : element.rows;
+              this.changedOptions();
+            }
 
-  //           if (item.rows > circleOld.rows || item.cols > circleOld.cols) {
-  //             element.cols =
-  //               item.rows > circleOld.rows ? item.rows : element.cols;
-  //             element.rows =
-  //               item.cols > circleOld.cols ? item.cols : element.rows;
-  //             this.changedOptions();
-  //           }
-  //           this.circlesWidget = JSON.stringify(item);
-  //         }
-  //       });
-  //     } else {
-  //       this.circlesWidget = JSON.stringify(item);
-  //     }
-  //   }
-  // }
+            if (item.rows > circleOld.rows || item.cols > circleOld.cols) {
+              element.cols =
+                item.rows > circleOld.rows ? item.rows : element.cols;
+              element.rows =
+                item.cols > circleOld.cols ? item.cols : element.rows;
+              this.changedOptions();
+            }
+            this.circlesWidget = JSON.stringify(item);
+          }
+        });
+      } else {
+        this.circlesWidget = JSON.stringify(item);
+      }
+    }
+  }
 
   /**
    * Completes all subscriptions.
