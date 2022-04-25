@@ -1371,8 +1371,7 @@ describe('StationComponent', () => {
               originalStationRithmId: '3j4k-3h2j-hj4j',
             },
           ],
-          // eslint-disable-next-line max-len
-          data: "[{'rithmId':'3j4k-3h2j-hj4j','prompt':'Label #1','questionType':'QuestionFieldType.ShortText','isReadOnly':false,'isRequired':false,'isPrivate':false,'children':[],'originalStationRithmId':'3j4k-3h2j-hj4j'}]",
+          data: "",
           id: 0,
         },
       ];
@@ -1384,6 +1383,7 @@ describe('StationComponent', () => {
         'saveStationWidgets'
       ).and.returnValue(of(frameStationWidget));
       component['saveStationWidgetsChanges']();
+      component.stationLoading = true;
       fixture.detectChanges();
       const stationLoading =
         fixture.debugElement.nativeElement.querySelector('#gridster-loading');
