@@ -28,7 +28,12 @@
 </div>
 
 <ng-template #tableContainers>
-  <table mat-table [dataSource]="dataSourceTable" class="w-full">
+  <table
+  mat-table
+  [dataSource]="dataSourceTable"
+   class="w-full mat-elevation-z8"
+   matSort
+   (matSortChange)="sortTable($event)">
     <!-- Name Container -->
     <ng-container matColumnDef="nameContainer">
       <th
@@ -52,6 +57,8 @@
       <th
         mat-header-cell
         *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by time in station"
         class="font-semibold truncate pr-2 max-w-[150px] text-xs"
       >
         TIME IN STATION
