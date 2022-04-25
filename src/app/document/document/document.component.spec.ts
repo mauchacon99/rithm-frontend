@@ -865,29 +865,27 @@ describe('DocumentComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  describe('should call the method that gets the frame types of the current container', () => {
-    it('should check properties when it is an input frame', () => {
-      const frameStationWidget: StationFrameWidget[] = [
-        {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.Input,
-          data: '',
-          questions: [],
-          id: 0,
-        },
-      ];
+  it('should call the method that get the frame types of the current container', () => {
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        questions: [],
+        id: 0,
+      },
+    ];
 
-      const spyService = spyOn(
-        TestBed.inject(DocumentService),
-        'getContainerWidgets'
-      ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
-      expect(spyService).toHaveBeenCalled();
-    });
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.returnValue(of(frameStationWidget));
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
   });
 });
