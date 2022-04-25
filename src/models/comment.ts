@@ -31,4 +31,7 @@ export interface Comment {
 
   /** Last name of user the that made the comment. */
   readonly userLastName?: string;
+
+  /** User Image or Photo. */
+  readonly userImageId?: string;
 }
