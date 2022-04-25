@@ -1220,7 +1220,7 @@ export class MockStationService {
   saveStationWidgets(
     stationRithmId: string,
     stationFrames: StationFrameWidget[]
-  ): Observable<StationFrameWidget> {
+  ): Observable<StationFrameWidget[]> {
     if (!stationRithmId || !stationFrames) {
       return throwError(
         () =>
@@ -1231,17 +1231,41 @@ export class MockStationService {
           })
       ).pipe(delay(1000));
     } else {
-      const frameStationWidget: StationFrameWidget = {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: '',
-        id: 0,
-      };
+      const frameStationWidget: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Headline,
+          data: '',
+          id: 1,
+        },
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          id: 2,
+          questions: [
+            {
+              prompt: 'Example question#1',
+              rithmId: '3j4k-3h2j-hj4j',
+              questionType: QuestionFieldType.Number,
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+            },
+          ],
+        },
+      ];
       return of(frameStationWidget).pipe(delay(1000));
     }
   }
@@ -1577,7 +1601,7 @@ export class MockStationService {
         stationRithmId: 'qwe-321-ert-123',
         stationName: 'Mars station',
         totalContainers: 5,
-        stationGroup: '132-123-132',
+        stationGroup: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1596,6 +1620,13 @@ export class MockStationService {
             isWorker: true,
           },
         ],
+      },
+      {
+        stationRithmId: '123-456-789',
+        stationName: 'Grogu station',
+        totalContainers: 1,
+        stationGroup: '  ',
+        stationOwners: [],
       },
     ];
     return of(stationWidgetData).pipe(delay(1000));
