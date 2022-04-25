@@ -239,18 +239,16 @@
           </div>
         </th>
         <!--        Value of column-->
-        <td
-          mat-cell
-          *matCellDef="let element"
-          class="min-w-[150px] text-xs text-secondary-500"
-        >
-          <ng-container
-            *ngTemplateOutlet="
-              columnQuestion;
-              context: { column: column, document: element }
-            "
-          >
-          </ng-container>
+        <td mat-cell *matCellDef="let element">
+          <p class="max-w-[150px] text-xs truncate text-secondary-500">
+            <ng-container
+              *ngTemplateOutlet="
+                columnQuestion;
+                context: { column: column, document: element }
+              "
+            >
+            </ng-container>
+          </p>
         </td>
       </ng-container>
     </ng-container>
@@ -323,86 +321,44 @@
     </ng-container>
   </ng-container>
 </ng-template>
+
 <ng-template #withOutData>
   <p class="cursor-default text-xs" title="Without Link">N/A</p>
 </ng-template>
+
 <!--Template for show questions columns of the document-->
 <ng-template #columnQuestion let-column="column" let-document="document">
   <ng-container *ngFor="let questions of document.questions[0].questions">
     <ng-container *ngIf="questions.rithmId === column.questionId">
       <ng-container [ngSwitch]="questions.questionType">
-        <span *ngSwitchCase="questionFieldType.Phone">
-          <div *ngIf="questions.answer?.value; else withOutData">
-            <p
-              class="text-xs"
-              [ngClass]="{
-                'truncate w-[150px] ':
-                  widgetType !== enumWidgetType.StationMultiline &&
-                  widgetType !== enumWidgetType.StationMultilineBanner
-              }"
-            >
-              <a
-                [href]="'tel:+' + questions.answer?.value"
-                target="_blank"
-                class="text-accent-500 underline"
-                [ngClass]="{
-                  'text-secondary-500 pointer-events-none cursor-not-allowed':
-                    editMode
-                }"
-              >
-                {{ questions.answer?.value }}
-              </a>
-            </p>
-          </div>
-        </span>
-        <span *ngSwitchCase="questionFieldType.Email">
-          <div *ngIf="questions.answer?.value; else withOutData">
-            <p
-              class="text-xs"
-              [ngClass]="{
-                'truncate w-[150px]':
-                  widgetType !== enumWidgetType.StationMultiline &&
-                  widgetType !== enumWidgetType.StationMultilineBanner
-              }"
-            >
-              <a
-                title="{{ questions.answer?.value }}"
-                [href]="'mailto:' + questions.answer?.value"
-                target="_blank"
-                class="text-accent-500 underline"
-                [ngClass]="{
-                  'text-secondary-500 pointer-events-none cursor-not-allowed':
-                    editMode
-                }"
-              >
-                {{ questions.answer?.value }}
-              </a>
-            </p>
-          </div>
-        </span>
+        <ng-container *ngSwitchCase="questionFieldType.Phone">
+          <ng-container *ngIf="questions.answer?.value; else withOutData">
+            <ng-container
+              *ngTemplateOutlet="
+                tagDefaultA;
+                context: { type: 'tel:+', value: questions.answer?.value }
+              "
+            ></ng-container>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="questionFieldType.Email">
+          <ng-container *ngIf="questions.answer?.value; else withOutData">
+            <ng-container
+              *ngTemplateOutlet="
+                tagDefaultA;
+                context: { type: 'mailto:', value: questions.answer?.value }
+              "
+            ></ng-container>
+          </ng-container>
+        </ng-container>
         <ng-container *ngSwitchCase="questionFieldType.URL">
           <ng-container *ngIf="questions.answer?.value; else withOutData">
-            <p
-              class="text-xs"
-              [ngClass]="{
-                'truncate w-[150px]':
-                  widgetType !== enumWidgetType.StationMultiline &&
-                  widgetType !== enumWidgetType.StationMultilineBanner
-              }"
-            >
-              <a
-                title="{{ questions.answer?.value }}"
-                [href]="questions.answer?.value"
-                target="_blank"
-                class="text-accent-500 underline truncate w-[150px]"
-                [ngClass]="{
-                  'text-secondary-500 pointer-events-none cursor-not-allowed':
-                    editMode
-                }"
-              >
-                {{ questions.answer?.value }}</a
-              >
-            </p>
+            <ng-container
+              *ngTemplateOutlet="
+                tagDefaultA;
+                context: { type: '', value: questions.answer?.value }
+              "
+            ></ng-container>
           </ng-container>
         </ng-container>
         <ng-container *ngSwitchCase="questionFieldType.CheckList">
@@ -449,21 +405,27 @@
         <ng-container *ngSwitchCase="'instructions'">
           {{ questions.prompt }}
         </ng-container>
-        <p
-          title="{{ questions.answer?.value || 'N/A' }}"
-          *ngSwitchDefault
-          class="text-xs"
-          [ngClass]="{
-            'truncate w-[150px]':
-              widgetType !== enumWidgetType.StationMultiline &&
-              widgetType !== enumWidgetType.StationMultilineBanner
-          }"
-        >
+        <span [title]="questions.answer?.value || 'N/A'" *ngSwitchDefault>
           {{ questions.answer?.value || 'N/A' }}
-        </p>
+        </span>
       </ng-container>
     </ng-container>
   </ng-container>
+</ng-template>
+
+<!-- template to tags <a [href]="type + value"> empty type if its a basic url -->
+<ng-template let-type="type" let-value="value" #tagDefaultA>
+  <a
+    [title]="value"
+    [href]="type + value"
+    target="_blank"
+    class="text-accent-500 underline"
+    [ngClass]="{
+      'text-secondary-500 pointer-events-none cursor-not-allowed': editMode
+    }"
+  >
+    {{ value }}</a
+  >
 </ng-template>
 
 <!--Document detail-->
