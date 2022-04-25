@@ -1301,6 +1301,7 @@ export class StationComponent
                 item.rows < circleOld.rows ? item.rows : element.cols;
               element.rows =
                 item.cols < circleOld.cols ? item.cols : element.rows;
+              this.changedOptions();
             }
 
             if (item.rows > circleOld.rows || item.cols > circleOld.cols) {
@@ -1308,9 +1309,9 @@ export class StationComponent
                 item.rows > circleOld.rows ? item.rows : element.cols;
               element.rows =
                 item.cols > circleOld.cols ? item.cols : element.rows;
+              this.changedOptions();
             }
             this.circlesWidget = JSON.stringify(item);
-            this.changedOptions();
           }
         });
       } else {
