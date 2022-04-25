@@ -1461,7 +1461,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Image,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
