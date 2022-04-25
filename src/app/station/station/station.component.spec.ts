@@ -1316,7 +1316,6 @@ describe('StationComponent', () => {
 
   describe('Loading indicators in a specific moment', () => {
     it('should display a loading indicator when the saveStationWidgetsChanges', () => {
-      component.stationRithmId = '132-123';
       const frameStationWidget: StationFrameWidget[] = [
         {
           rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
