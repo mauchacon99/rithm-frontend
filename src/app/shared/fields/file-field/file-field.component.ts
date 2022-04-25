@@ -215,8 +215,11 @@ export class FileFieldComponent
    * Navigates the user back to dashboard and displays a message about the invalid params.
    */
   private getDocumentDetails(): void {
+    if (!this.field.answer?.value) {
+      throw new Error('The document Id is undefined.');
+    }
     this.documentService
-      .getUploadedFileInfo(<string>(this.field.answer?.value))
+      .getUploadedFileInfo(this.field.answer?.value)
       .pipe(first())
       .subscribe({
         next: (res) => {
