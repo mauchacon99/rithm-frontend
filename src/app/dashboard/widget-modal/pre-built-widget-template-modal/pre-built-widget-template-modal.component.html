@@ -1,0 +1,102 @@
+<!-- Toggle template by widgetType -->
+<ng-container
+  *ngTemplateOutlet="cardOfWidget; context: dataTemplate[widgetType]"
+></ng-container>
+
+<!-- Card of the container widget -->
+<ng-template let-description="description" let-title="title" #cardOfWidget>
+  <div
+    class="h-[300px] w-full rounded border border-secondary-100 cursor-pointer"
+    matRipple
+  >
+    <div
+      class="py-3 px-5 bg-secondary-50 rounded-t h-4/6 border-b border-b-secondary-100"
+      [ngSwitch]="widgetType"
+    >
+      <!-- Type PreBuiltStation -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.PreBuiltStation"
+        [ngTemplateOutlet]="previewStations"
+      ></ng-container>
+
+      <!-- Type PreBuiltContainer -->
+      <ng-container
+        *ngSwitchCase="enumWidgetType.PreBuiltContainer"
+        [ngTemplateOutlet]="previewMyContainers"
+      ></ng-container>
+    </div>
+    <!-- Info of card. -->
+    <div class="p-2 overflow-auto h-2/6 scrollbar">
+      <p class="text-sm font-semibold">{{ title }}</p>
+      <p class="text-xs">{{ description }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Preview widget type PreBuiltStation -->
+<ng-template #previewStations>
+  <div class="h-full w-full rounded overflow-hidden">
+    <div class="w-full bg-white h-full py-1 rounded shadow">
+      <div class="px-2 py-2 leading-3">
+        <span class="text-sm font-semibold">My Stations</span> <br />
+      </div>
+      <div class="w-full px-1">
+        <div class="w-full flex py-1">
+          <span
+            class="w-[25%] text-xs ml-2 truncate"
+            *ngFor="
+              let title of ['STATION', 'CONTAINERS', 'GROUP', 'STATION OWNERS']
+            "
+            >{{ title }}</span
+          >
+        </div>
+        <div
+          class="flex gap-x-2 py-1 animate-pulse border-b border-b-secondary-50"
+          *ngFor="let i of [0, 0, 0, 0]"
+        >
+          <div
+            class="w-[25%] h-2 bg-secondary-50 rounded m-[5px]"
+            *ngFor="let i of [0, 0, 0, 0]"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Preview widget type PreBuiltContainer -->
+<ng-template #previewMyContainers>
+  <div class="h-full w-full rounded overflow-hidden">
+    <div class="w-full bg-white h-full py-1 rounded shadow">
+      <div class="px-2 py-2 leading-3">
+        <span class="text-sm font-semibold">My Containers</span> <br />
+      </div>
+      <div class="w-full px-1">
+        <div class="w-full flex py-1">
+          <span
+            class="w-[20%] text-xs ml-2 truncate"
+            *ngFor="
+              let title of [
+                'STATION',
+                'TIME IN STATION',
+                'STATION',
+                'STATION OWNERS',
+                ''
+              ]
+            "
+            >{{ title }}</span
+          >
+        </div>
+        <div
+          class="flex gap-x-2 py-1 animate-pulse border-b border-b-secondary-50"
+          *ngFor="let i of [0, 0, 0, 0]"
+        >
+          <div
+            class="w-[25%] h-2 bg-secondary-50 rounded m-[5px]"
+            *ngFor="let i of [0, 0, 0, 0, 0]"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
