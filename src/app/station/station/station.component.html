@@ -243,16 +243,16 @@
             class="station-base-form"
             (ngSubmit)="saveStationInformation()"
           >
-            <!-- Station Info Header -->
-            <app-station-info-header
-              *ngIf="stationInformation"
-              [stationInformation]="stationInformation"
-              [stationEditMode]="true"
-              [viewNewStation]="viewNewStation"
-              #stationInfoHeader
-            ></app-station-info-header>
             <!-- Document Tab -->
             <div *ngIf="selectedTab === 'Container'">
+              <!-- Station Info Header -->
+              <app-station-info-header
+                *ngIf="stationInformation"
+                [stationInformation]="stationInformation"
+                [stationEditMode]="true"
+                [viewNewStation]="viewNewStation"
+                #stationInfoHeader
+              ></app-station-info-header>
               <!-- Document info header -->
               <app-document-info-header
                 *ngIf="stationInformation"
