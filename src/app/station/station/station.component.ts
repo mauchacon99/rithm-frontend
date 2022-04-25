@@ -132,6 +132,9 @@ export class StationComponent
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
+  /** The selected tab index/init. */
+  selectedTab = 'Container';
+
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
@@ -352,6 +355,15 @@ export class StationComponent
       },
     });
   }
+
+  /**
+   * Click for tab selected item inside sub-header.
+   *
+   * @param clickInside To catch event that verify click tab selected item.
+   */
+   tabItem(clickInside: string): void {
+      this.selectedTab = clickInside;
+    }
 
   /**
    * Whether to show the backdrop for the comment and history drawers.
