@@ -306,7 +306,7 @@ export class MockUserService {
    * @returns Id of image uploaded.
    */
   uploadImageUser(file: File): Observable<string> {
-    const response ='ewf34tf-3ge343-g34g3e';
+    const response = 'ewf34tf-3ge343-g34g3e';
     return of(response).pipe(delay(1000));
   }
 

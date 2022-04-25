@@ -20,7 +20,6 @@ import {
   StationInformation,
   ImageData,
 } from 'src/models';
-import { ImageData } from 'src/models/index';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -354,12 +353,8 @@ export class UserService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   uploadImageUser(file: File): Observable<string> {
-    const response = {
-      imageData:
-        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
-      imageName: 'Image name',
-    };
-    return of(response).pipe(delay(1000));
+    const expectedResponse = 'ewf34tf-3ge343-g34g3e';
+    return of(expectedResponse).pipe(delay(1000));
   }
 
   // TODO: Re-enable when addressing notification settings

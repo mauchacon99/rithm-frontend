@@ -303,7 +303,7 @@ describe('UserService', () => {
   });
 
   it('should upload image user', () => {
-    const expectedResponse ='ewf34tf-3ge343-g34g3e';
+    const expectedResponse = 'ewf34tf-3ge343-g34g3e';
     const file = new File(new Array<Blob>(), 'image', {
       type: 'image/jpeg',
     });

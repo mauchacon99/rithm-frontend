@@ -17,7 +17,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormatImageValidate } from 'src/helpers';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
-import { User, ImageData } from 'src/models';
+import { User } from 'src/models';
 
 /**
  * Reusable form component that gets a user's first and last names, email, and password.
@@ -73,7 +73,7 @@ export class UserFormComponent
   confirmPasswordLabel = '';
 
   /** User image. */
-  userImage!: ImageData;
+  userImageId!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -295,10 +295,11 @@ export class UserFormComponent
       .pipe(first())
       .subscribe({
         next: (userImage) => {
-          this.userImage = userImage;
+          this.userImageId = userImage;
         },
         error: (error: unknown) => {
-          this.errorService.displayError(error);
+          this.errorService.displayError("Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error);
         },
       });
   }
