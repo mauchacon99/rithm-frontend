@@ -1,16 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { first, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { first } from 'rxjs/operators';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  DashboardItem,
   Question,
   ColumnFieldsWidget,
   EditDataWidget,
@@ -23,17 +14,19 @@ import {
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for Station widget drawer.
  */
 @Component({
-  selector: 'app-station-widget-drawer',
+  selector: 'app-station-widget-drawer[dataDrawer]',
   templateUrl: './station-widget-drawer.component.html',
   styleUrls: ['./station-widget-drawer.component.scss'],
 })
-export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
+export class StationWidgetDrawerComponent implements OnInit {
+  /** Data Drawer Station. */
+  @Input() dataDrawer!: EditDataWidget;
+
   /** Form for fields the select. */
   formColumns: FormGroup = new FormGroup({
     columns: new FormArray([]),
@@ -42,20 +35,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Image to banner. */
   @Input() set image(value: DocumentImage) {
     if (
-      this.dataDrawerStation?.widgetItem &&
-      this.dataDrawerStation.widgetItem.imageId !== value.imageId
+      this.dataDrawer?.widgetItem &&
+      this.dataDrawer.widgetItem.imageId !== value.imageId
     ) {
-      this.dataDrawerStation.widgetItem.imageId = value.imageId;
-      this.dataDrawerStation.widgetItem.imageName = value.imageName;
+      this.dataDrawer.widgetItem.imageId = value.imageId;
+      this.dataDrawer.widgetItem.imageName = value.imageName;
       this.updateWidget();
     }
   }
-
-  /** Emit widgetIndex to widget-drawer. */
-  @Output() getWidgetIndex = new EventEmitter<number>();
-
-  /** WidgetType of item. */
-  @Output() getWidgetItem = new EventEmitter<DashboardItem>();
 
   /**
    * Disable button new column.
@@ -79,17 +66,11 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
     return this.formColumns.get('columns') as FormArray;
   }
 
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
   /** Station columns. */
   stationColumns!: ColumnFieldsWidget[];
 
   /** Questions the station. */
   questions!: Question[];
-
-  /** Data drawer station. */
-  dataDrawerStation!: EditDataWidget;
 
   /** Static columns. */
   documentInfo: OptionsSelectWidgetDrawer[] = [];
@@ -125,15 +106,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    */
   get isStationMultiline(): boolean {
     return (
-      this.dataDrawerStation.widgetItem.widgetType ===
+      this.dataDrawer.widgetItem.widgetType ===
         this.enumWidgetType.StationMultiline ||
-      this.dataDrawerStation.widgetItem.widgetType ===
+      this.dataDrawer.widgetItem.widgetType ===
         this.enumWidgetType.StationMultilineBanner
     );
   }
 
   constructor(
-    private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService,
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -143,25 +123,10 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
-    this.subscribeDrawerData$();
-  }
-
-  /** Get data the sidenavDrawerService. */
-  private subscribeDrawerData$(): void {
-    this.sidenavDrawerService.drawerData$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        const dataDrawer = data as EditDataWidget;
-        if (dataDrawer) {
-          this.dataDrawerStation = dataDrawer;
-          const dataWidget = JSON.parse(this.dataDrawerStation.widgetItem.data);
-          this.stationColumns = dataWidget.columns || [];
-          this.stationRithmId = dataWidget.stationRithmId;
-          this.getWidgetIndex.emit(this.dataDrawerStation.widgetIndex);
-          this.getWidgetItem.emit(this.dataDrawerStation.widgetItem);
-          this.getDocumentFields();
-        }
-      });
+    const dataWidget = JSON.parse(this.dataDrawer.widgetItem.data);
+    this.stationColumns = dataWidget.columns || [];
+    this.stationRithmId = dataWidget.stationRithmId;
+    this.getDocumentFields();
   }
 
   /** Set document info static. */
@@ -382,14 +347,14 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
   /** Update widget. */
   private updateWidget(): void {
     this.loadColumnsSelect();
-    this.dataDrawerStation.widgetItem.data = JSON.stringify({
+    this.dataDrawer.widgetItem.data = JSON.stringify({
       stationRithmId: this.stationRithmId,
       columns: this.stationColumns,
     });
     this.dashboardService.updateDashboardWidgets({
-      widgetItem: this.dataDrawerStation.widgetItem,
-      widgetIndex: this.dataDrawerStation.widgetIndex,
-      quantityElementsWidget: this.dataDrawerStation.quantityElementsWidget,
+      widgetItem: this.dataDrawer.widgetItem,
+      widgetIndex: this.dataDrawer.widgetIndex,
+      quantityElementsWidget: this.dataDrawer.quantityElementsWidget,
     });
   }
 
@@ -402,13 +367,5 @@ export class StationWidgetDrawerComponent implements OnInit, OnDestroy {
         { name: this.enumColumnsDocumentInfo.AssignedUser },
       ];
     }
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }
