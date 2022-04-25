@@ -366,8 +366,8 @@
             </p>
           </div>
         </span>
-        <span *ngSwitchCase="questionFieldType.URL">
-          <div *ngIf="questions.answer?.value; else withOutData">
+        <ng-container *ngSwitchCase="questionFieldType.URL">
+          <ng-container *ngIf="questions.answer?.value; else withOutData">
             <p class="truncate w-[150px]">
               <a
                 title="{{ questions.answer?.value }}"
@@ -382,10 +382,10 @@
                 {{ questions.answer?.value }}</a
               >
             </p>
-          </div>
-        </span>
-        <span *ngSwitchCase="questionFieldType.CheckList">
-          <span *ngFor="let answer of questions.answer?.asArray">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="questionFieldType.CheckList">
+          <ng-container *ngFor="let answer of questions.answer?.asArray">
             <i
               class="fas"
               [ngClass]="
@@ -395,10 +395,10 @@
               "
             ></i>
             - {{ answer.value }}<br />
-          </span>
-        </span>
-        <span *ngSwitchCase="questionFieldType.MultiSelect">
-          <span *ngFor="let answer of questions.answer?.asArray">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="questionFieldType.MultiSelect">
+          <ng-container *ngFor="let answer of questions.answer?.asArray">
             <i
               class="fas"
               [ngClass]="
@@ -410,10 +410,10 @@
             -
             {{ answer.value }}
             <br />
-          </span>
-        </span>
-        <span *ngSwitchCase="questionFieldType.Select">
-          <span *ngFor="let answer of questions.answer?.asArray">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="questionFieldType.Select">
+          <ng-container *ngFor="let answer of questions.answer?.asArray">
             <i
               class="fas"
               [ngClass]="
@@ -423,11 +423,11 @@
               "
             ></i>
             - {{ answer.value }} <br />
-          </span>
-        </span>
-        <span *ngSwitchCase="'instructions'">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'instructions'">
           {{ questions.prompt }}
-        </span>
+        </ng-container>
         <p
           title="{{ questions.answer?.value || 'N/A' }}"
           *ngSwitchDefault
