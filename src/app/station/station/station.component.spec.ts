@@ -1394,7 +1394,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Headline,
-          data: '[]',
+          data: '',
           id: 0,
         },
       ];
