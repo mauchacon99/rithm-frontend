@@ -352,7 +352,7 @@ export class UserService {
    * @returns Id of image uploaded.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  uploadImageUser(file: File): Observable<ImageData> {
+  uploadImageUser(file: File): Observable<string> {
     const response = {
       imageData:
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD…JIgucbAfJP1Jx4A0IHkGTD0hZDtJBSO0v7dYw9I16p/l//9k=',
