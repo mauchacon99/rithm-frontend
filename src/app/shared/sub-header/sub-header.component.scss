@@ -5,13 +5,13 @@
 }
 
 .new-station-tabs {
-    ::ng-deep .mat-tab-label {
-      height: 40px;
-      padding: 0 15px;
-      min-width: 125px !important;
-    }
+  ::ng-deep .mat-tab-label {
+    height: 40px;
+    padding: 0 15px;
+    min-width: 125px !important;
+  }
 
-    ::ng-deep .mat-tab-header {
-      border-bottom: none;
-    }
+  ::ng-deep .mat-tab-header {
+    border-bottom: none;
+  }
 }

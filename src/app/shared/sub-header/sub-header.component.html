@@ -1,38 +1,68 @@
-<div class="grid grid-cols-3 py-1" [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '">
+<div
+  class="grid grid-cols-3 py-1"
+  [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
+>
   <div *ngIf="newInterfaceView">
-    <mat-tab-group mat-align-tabs="start" [selectedIndex]="0"  animationDuration="0ms" class="new-station-tabs"
-    (selectedTabChange)="tabSelectedChanged($event)">
+    <mat-tab-group
+      mat-align-tabs="start"
+      [selectedIndex]="0"
+      animationDuration="0ms"
+      class="new-station-tabs"
+      (selectedTabChange)="tabSelectedChanged($event)"
+    >
       <mat-tab label="Container" aria-label="Container">
         <ng-template mat-tab-label>
-          <span data-testid="Container-tab" class="font-bold text-sm ">Container</span>
+          <span data-testid="Container-tab" class="font-bold text-sm"
+            >Container</span
+          >
         </ng-template>
       </mat-tab>
       <mat-tab label="Flow" aria-label="Flow">
         <ng-template mat-tab-label>
-          <span data-testid="Flow-tab" class="font-bold text-sm">Flow Logic</span>
+          <span data-testid="Flow-tab" class="font-bold text-sm"
+            >Flow Logic</span
+          >
         </ng-template>
       </mat-tab>
       <mat-tab label="Settings" aria-label="Settings">
         <ng-template mat-tab-label>
-          <span data-testid="Settings-tab" class="font-bold text-sm">Settings</span>
+          <span data-testid="Settings-tab" class="font-bold text-sm"
+            >Settings</span
+          >
         </ng-template>
       </mat-tab>
     </mat-tab-group>
   </div>
-  <div [ngClass]="{
+  <div
+    [ngClass]="{
       'col-start-2 text-center': title,
       'h-10 ': !title,
       'text-white': !newInterfaceView
-    }">
+    }"
+  >
     <h6 class="leading-10">{{ newInterfaceView ? stationName : title }}</h6>
   </div>
   <div class="justify-self-end px-3 md:px-5" *ngIf="newInterfaceView">
-    <button class="group" type="button" [ngClass]="{ active: activeItem === 'stationInfo' }"
-      data-testid="station-info-button" id="station-info-button" mat-icon-button (click)="toggleDrawer('stationInfo')">
+    <button
+      class="group"
+      type="button"
+      [ngClass]="{ active: activeItem === 'stationInfo' }"
+      data-testid="station-info-button"
+      id="station-info-button"
+      mat-icon-button
+      (click)="toggleDrawer('stationInfo')"
+    >
       <i class="fas fa-info-circle group-hover:text-accent-100 text-lg"></i>
     </button>
-    <button class="group" type="button" [ngClass]="{ active: activeItem === 'comments' }" data-testid="comment-button"
-      id="comment-button" mat-icon-button (click)="toggleDrawer('comments')">
+    <button
+      class="group"
+      type="button"
+      [ngClass]="{ active: activeItem === 'comments' }"
+      data-testid="comment-button"
+      id="comment-button"
+      mat-icon-button
+      (click)="toggleDrawer('comments')"
+    >
       <i class="far fa-comment-alt group-hover:text-accent-100 text-lg"></i>
     </button>
   </div>

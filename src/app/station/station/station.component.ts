@@ -370,9 +370,9 @@ export class StationComponent
    *
    * @param clickInside To catch event that verify click tab selected item.
    */
-   tabItem(clickInside: string): void {
-      this.selectedTab = clickInside;
-    }
+  tabItem(clickInside: string): void {
+    this.selectedTab = clickInside;
+  }
 
   /**
    * Whether to show the backdrop for the comment and history drawers.
