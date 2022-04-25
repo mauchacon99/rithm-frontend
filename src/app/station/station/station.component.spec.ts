@@ -1343,7 +1343,6 @@ describe('StationComponent', () => {
           id: 0,
         },
       ];
-      component.inputFrameWidgetItems = frameStationWidget;
       Object.defineProperty(component, 'viewNewStation', {
         value: true,
       });
