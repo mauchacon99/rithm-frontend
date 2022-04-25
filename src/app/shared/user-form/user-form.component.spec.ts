@@ -302,7 +302,7 @@ describe('UserFormComponent', () => {
     );
     const spyError = spyOn(errorService, 'displayError').and.callThrough();
 
-      expect(spyError).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const spyMethod = spyOn<any>(
       component,

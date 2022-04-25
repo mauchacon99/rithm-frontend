@@ -298,8 +298,10 @@ export class UserFormComponent
           this.userImageId = userImage;
         },
         error: (error: unknown) => {
-          this.errorService.displayError("Something went wrong on our end and we're looking into it. Please try again in a little while.",
-          error);
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
         },
       });
   }
