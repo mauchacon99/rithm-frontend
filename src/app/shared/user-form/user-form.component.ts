@@ -10,8 +10,14 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { FormatImageValidate } from 'src/helpers';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
+import { User } from 'src/models';
 
 /**
  * Reusable form component that gets a user's first and last names, email, and password.
@@ -42,11 +48,17 @@ export class UserFormComponent
   /** The form for the user info. */
   userForm!: FormGroup;
 
+  /** Current user logged in for user-avatar. */
+  currentUser!: User;
+
   /** Whether the password requirements are visible. */
   passwordRequirementsVisible = false;
 
   /** Show passwords match validation in child component. */
   showMatch = false;
+
+  /** Show section Stations lists. */
+  showProfilePhoto = false;
 
   /** What errors to get from validator. */
   errorsToGet = '';
@@ -60,12 +72,26 @@ export class UserFormComponent
   /** The label text to be displayed for the confirm password field. */
   confirmPasswordLabel = '';
 
-  constructor(private fb: FormBuilder, private userService: UserService) {}
+  /** User image. */
+  userImageId!: string;
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private popupService: PopupService,
+    private splitService: SplitService,
+    private errorService: ErrorService
+  ) {}
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
+    if (!this.accountCreate) {
+      this.split();
+      this.currentUser = this.userService.user;
+    }
+
     this.passwordLabel = this.getPasswordLabel();
     this.confirmPasswordLabel = this.getPasswordLabel(true);
     this.userForm = this.fb.group({
@@ -132,6 +158,22 @@ export class UserFormComponent
         },
       ]);
     }
+  }
+
+  /**
+   * Split Service for show or hidden Account setting profile image .
+   */
+  private split(): void {
+    this.splitService.initSdk(this.userService.user.organization);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        this.showProfilePhoto =
+          this.splitService.getAccountProfilePhotoTreatment() === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /**
@@ -218,5 +260,49 @@ export class UserFormComponent
             message: 'User form is invalid',
           },
         };
+  }
+
+  /**
+   * Select image.
+   *
+   * @param event Event of select image.
+   */
+  uploadImage(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = (target.files as FileList)[0];
+    if (file) {
+      const extension = file.type.split('/')[1];
+      if (FormatImageValidate.isValidFormatImage(extension)) {
+        //here will go the process with the image
+      } else {
+        this.popupService.alert({
+          title: 'Image format is not valid.',
+          message: 'Please select a file with extension jpeg, jpg, png.',
+          important: true,
+        });
+      }
+    }
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   */
+  private uploadImageUser(file: File): void {
+    this.userService
+      .uploadImageUser(file)
+      .pipe(first())
+      .subscribe({
+        next: (userImage) => {
+          this.userImageId = userImage;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

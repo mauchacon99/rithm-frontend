@@ -7,20 +7,32 @@ import { MatInputModule } from '@angular/material/input';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
-import { MockUserService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockPopupService,
+  MockSplitService,
+  MockUserService,
+} from 'src/mocks';
 import { PasswordRequirementsModule } from 'src/app/shared/password-requirements/password-requirements.module';
 
 import { UserFormComponent } from './user-form.component';
+import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { SplitService } from 'src/app/core/split.service';
+import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
+import { throwError } from 'rxjs';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
   let loader: HarnessLoader;
+  let errorService: ErrorService;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserFormComponent],
+      declarations: [UserFormComponent, MockComponent(UserAvatarComponent)],
       imports: [
         NoopAnimationsModule,
         MatFormFieldModule,
@@ -31,6 +43,9 @@ describe('UserFormComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: SplitService, useClass: MockSplitService },
       ],
     }).compileComponents();
   });
@@ -40,6 +55,7 @@ describe('UserFormComponent', () => {
     component = fixture.componentInstance;
     component.accountCreate = true;
     loader = TestbedHarnessEnvironment.loader(fixture);
+    errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
   });
 
@@ -197,5 +213,110 @@ describe('UserFormComponent', () => {
     component.ngOnInit();
 
     expect(component.userForm.valid).toBeTrue();
+  });
+
+  describe('Testing split.io', () => {
+    let splitService: SplitService;
+    let userService: UserService;
+    beforeEach(() => {
+      splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
+      component.accountCreate = false;
+      fixture.detectChanges();
+    });
+
+    it('should call split and treatments.', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+      const methodShowProfilePhoto = spyOn(
+        splitService,
+        'getAccountProfilePhotoTreatment'
+      ).and.returnValue('on');
+      component.ngOnInit();
+      splitService.sdkReady$.next();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(methodShowProfilePhoto).toHaveBeenCalled();
+      expect(component.showProfilePhoto).toBeTrue();
+    });
+
+    it('should not show treatments when permission does not exits.', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+      const methodShowProfilePhoto = spyOn(
+        splitService,
+        'getAccountProfilePhotoTreatment'
+      ).and.returnValue('off');
+      component.ngOnInit();
+      splitService.sdkReady$.next();
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(methodShowProfilePhoto).toHaveBeenCalled();
+      expect(component.showProfilePhoto).toBeFalse();
+    });
+
+    it('should catch split error ', () => {
+      const dataOrganization = userService.user.organization;
+      const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
+
+      splitService.sdkReady$.error('error');
+      const spyErrorService = spyOn(
+        TestBed.inject(ErrorService),
+        'logError'
+      ).and.callThrough();
+      component.ngOnInit();
+
+      expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
+      expect(spyErrorService).toHaveBeenCalled();
+      expect(component.showProfilePhoto).toBeFalse();
+    });
+  });
+
+  it('should call uploadImage', () => {
+    const spyMethod = spyOn(component, 'uploadImage').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should call alert invalid extension when upload file with extension invalid', () => {
+    const paramExpected = {
+      title: 'Image format is not valid.',
+      message: 'Please select a file with extension jpeg, jpg, png.',
+      important: true,
+    };
+    const spyAlert = spyOn(
+      TestBed.inject(PopupService),
+      'alert'
+    ).and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'document/pdf' });
+    const mockEvt = { target: { files: [mockFile] } };
+    component.uploadImage(mockEvt as unknown as Event);
+    expect(spyAlert).toHaveBeenCalledOnceWith(paramExpected);
+  });
+
+  it('should catch error if petition upload imageUser fails', () => {
+    const serviceMethod = spyOn(
+      TestBed.inject(UserService),
+      'uploadImageUser'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    component['uploadImageUser'](mockFile);
+    expect(serviceMethod).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call upload imageUser', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(UserService),
+      'uploadImageUser'
+    ).and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    component['uploadImageUser'](mockFile);
+    expect(spyMethod).toHaveBeenCalledWith(mockFile);
   });
 });

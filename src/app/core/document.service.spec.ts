@@ -27,6 +27,8 @@ import {
   DocumentWidget,
   DocumentImage,
   DataLinkObject,
+  StationFrameWidget,
+  FrameType,
   ContainerWidgetPreBuilt,
 } from 'src/models';
 import { DocumentService } from './document.service';
@@ -999,7 +1001,7 @@ describe('DocumentService', () => {
   it('should return data of method getContainerWidgetPreBuilt', () => {
     const containers: ContainerWidgetPreBuilt[] = [
       {
-        flowedTimeUTC: '',
+        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
         nameContainer: 'Container name',
         containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
         stationName: 'Station name',
@@ -1008,14 +1010,48 @@ describe('DocumentService', () => {
           {
             rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
             firstName: 'Testy',
-            lastName: 'Testy',
+            lastName: 'Rithm',
+            email: 'Testy@Rithm.com',
+          },
+          {
+            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
+            firstName: 'Testy',
+            lastName: 'Last',
             email: 'Testy@Rithm.com',
           },
         ],
+      },
+      {
+        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
+        nameContainer: 'Container name',
+        containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
+        stationName: 'Station name',
+        stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
+        stationOwners: [],
       },
     ];
     service.getContainerWidgetPreBuilt().subscribe((response) => {
       expect(response).toEqual(containers);
     });
+  });
+  it('should get a frame by type', () => {
+    const frameByType: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.DataLink,
+        data: '',
+        id: 0,
+      },
+    ];
+    service
+      .getDataLinkFrames(stationId, documentId, FrameType.DataLink)
+      .subscribe((response) => {
+        expect(response).toEqual(frameByType);
+      });
   });
 });

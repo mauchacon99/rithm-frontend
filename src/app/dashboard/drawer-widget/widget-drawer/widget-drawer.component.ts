@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import { DashboardItem, DocumentImage, WidgetType } from 'src/models';
+import { DocumentImage, EditDataWidget, WidgetType } from 'src/models';
 import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
@@ -47,6 +47,9 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Widget type of opened widget-drawer.*/
   widgetType!: WidgetType;
 
+  /** Data drawer. */
+  dataDrawer!: EditDataWidget;
+
   /** Show section image banner. */
   showProfileImageBanner = false;
 
@@ -75,7 +78,26 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.split();
     this.subscribeDrawerContext$();
+    this.subscribeDrawerData$();
     this.changeDetector.detectChanges();
+  }
+
+  /** Get data the sidenavDrawerService. */
+  private subscribeDrawerData$(): void {
+    this.sidenavDrawerService.drawerData$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        const dataDrawer = data as EditDataWidget;
+        if (dataDrawer) {
+          this.dataDrawer = dataDrawer;
+          this.widgetIndex = dataDrawer.widgetIndex;
+          this.widgetType = dataDrawer.widgetItem.widgetType;
+          this.imageUploaded = {
+            imageId: dataDrawer.widgetItem.imageId || null,
+            imageName: dataDrawer.widgetItem.imageName || null,
+          };
+        }
+      });
   }
 
   /**
@@ -160,8 +182,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   uploadImage(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
-    const extension = file.type.split('/')[1];
     if (file) {
+      const extension = file.type.split('/')[1];
       if (FormatImageValidate.isValidFormatImage(extension)) {
         // Loading banner image while upload image.
         this.sidenavDrawerService.setDisableCloseDrawerOutside(true);
@@ -212,28 +234,6 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     this.imageUploaded = {
       imageId: null,
       imageName: null,
-    };
-  }
-
-  /**
-   * Event emit widgetIndex to dashboard.
-   *
-   * @param widgetIndex Widget index from station-widget-drawer.
-   */
-  setWidgetIndex(widgetIndex: number): void {
-    this.widgetIndex = widgetIndex;
-  }
-
-  /**
-   * Get widget Item to assign widget type and reassign image in widget-drawer.
-   *
-   * @param widgetItem DashboardItem of widget.
-   */
-  setWidgetItem(widgetItem: DashboardItem): void {
-    this.widgetType = widgetItem.widgetType;
-    this.imageUploaded = {
-      imageId: widgetItem.imageId || null,
-      imageName: widgetItem.imageName || null,
     };
   }
 
