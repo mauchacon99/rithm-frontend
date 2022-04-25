@@ -1,19 +1,10 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  ViewEncapsulation,
-  OnInit,
-  Output,
-  Input,
-} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
   ColumnFieldsWidget,
-  DashboardItem,
   DocumentImage,
   EditDataWidget,
   QuestionFieldType,

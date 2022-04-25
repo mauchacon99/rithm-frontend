@@ -12,12 +12,7 @@ import { Subject } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, takeUntil } from 'rxjs/operators';
 import { PopupService } from 'src/app/core/popup.service';
-import {
-  DashboardItem,
-  DocumentImage,
-  EditDataWidget,
-  WidgetType,
-} from 'src/models';
+import { DocumentImage, EditDataWidget, WidgetType } from 'src/models';
 import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
