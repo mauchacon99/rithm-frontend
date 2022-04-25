@@ -216,7 +216,7 @@ export class FileFieldComponent
    */
   private getDocumentDetails(): void {
     this.documentService
-      .getUploadedFileInfo(<string>this.field.answer?.value)
+      .getUploadedFileInfo(<string> this.field.answer?.value)
       .pipe(first())
       .subscribe({
         next: (res) => {
