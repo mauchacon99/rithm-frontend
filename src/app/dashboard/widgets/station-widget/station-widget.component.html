@@ -331,8 +331,8 @@
   <ng-container *ngFor="let questions of document.questions[0].questions">
     <ng-container *ngIf="questions.rithmId === column.questionId">
       <ng-container [ngSwitch]="questions.questionType">
-        <span *ngSwitchCase="questionFieldType.Phone">
-          <div *ngIf="questions.answer?.value; else withOutData">
+        <ng-container *ngSwitchCase="questionFieldType.Phone">
+          <ng-container *ngIf="questions.answer?.value; else withOutData">
             <p
               class="text-xs"
               [ngClass]="{
@@ -353,10 +353,10 @@
                 {{ questions.answer?.value }}
               </a>
             </p>
-          </div>
-        </span>
-        <span *ngSwitchCase="questionFieldType.Email">
-          <div *ngIf="questions.answer?.value; else withOutData">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="questionFieldType.Email">
+          <ng-container *ngIf="questions.answer?.value; else withOutData">
             <p
               class="text-xs"
               [ngClass]="{
@@ -378,8 +378,8 @@
                 {{ questions.answer?.value }}
               </a>
             </p>
-          </div>
-        </span>
+          </ng-container>
+        </ng-container>
         <ng-container *ngSwitchCase="questionFieldType.URL">
           <ng-container *ngIf="questions.answer?.value; else withOutData">
             <p
