@@ -9,8 +9,8 @@ import {
   User,
   UserAccountInfo,
   StationInformation,
+  ImageData,
 } from 'src/models';
-import { ImageData } from 'src/models/index';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -297,6 +297,17 @@ export class MockUserService {
    */
   get isAdmin(): boolean {
     return this.user.role === 'admin';
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  uploadImageUser(file: File): Observable<string> {
+    const response = 'ewf34tf-3ge343-g34g3e';
+    return of(response).pipe(delay(1000));
   }
 
   /**
