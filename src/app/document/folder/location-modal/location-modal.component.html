@@ -1,3 +1,20 @@
-<h4>
-  {{ locationValue }}
-</h4>
+<div class="modal-container">
+  <section class="flex flex-col">
+    <h4 class="text-center">
+      {{ locationValue }}
+    </h4>
+    <div class="overflow-y-auto h-[350px] pt-2">
+      <p>content</p>
+    </div>
+    <div mat-dialog-actions class="flex justify-end self-end">
+      <button
+        mat-button
+        mat-dialog-close
+        data-testid="close-modal-btn"
+        id="close-modal-btn"
+      >
+        Close
+      </button>
+    </div>
+  </section>
+</div>

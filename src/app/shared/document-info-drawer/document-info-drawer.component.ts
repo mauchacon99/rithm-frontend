@@ -549,8 +549,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   openModalLocation(): void {
     this.dialog.open(LocationModalComponent, {
-      minWidth: '350px',
-      width: '70%',
+      minWidth: '550px',
+      minHeight: '450px',
       data: {
         stationRithmId: this.stationRithmId,
       },

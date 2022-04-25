@@ -388,8 +388,8 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should to call the modal the location', () => {
     component.stationRithmId = stationId;
     const expectDataModal = {
-      minWidth: '350px',
-      width: '70%',
+      minWidth: '550px',
+      minHeight: '450px',
       data: {
         stationRithmId: stationId,
       },
