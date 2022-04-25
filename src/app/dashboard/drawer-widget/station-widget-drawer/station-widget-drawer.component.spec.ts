@@ -23,7 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-fdescribe('StationWidgetDrawerComponent', () => {
+describe('StationWidgetDrawerComponent', () => {
   let component: StationWidgetDrawerComponent;
   let fixture: ComponentFixture<StationWidgetDrawerComponent>;
   const dataEditWidget = {
@@ -161,6 +161,7 @@ fdescribe('StationWidgetDrawerComponent', () => {
   describe('Functionality of the columns', () => {
     beforeEach(() => {
       component.isLoading = false;
+      component.failedLoadDrawer = false;
       component.stationRithmId = dataWidget.stationRithmId;
       component.stationColumns = [
         {
@@ -260,8 +261,8 @@ fdescribe('StationWidgetDrawerComponent', () => {
       expect(spyMethod).toHaveBeenCalledTimes(1);
     });
 
-    fit('should add new column', () => {
-      //component.dataDrawer.quantityElementsWidget = 1;
+    it('should add new column', () => {
+      component.dataDrawer.quantityElementsWidget = 1;
       fixture.detectChanges();
       const spyMethod = spyOn(component, 'addNewColumn').and.callThrough();
       const btnNewColumn =

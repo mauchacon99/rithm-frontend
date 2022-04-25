@@ -39,6 +39,7 @@ describe('DocumentWidgetDrawerComponent', () => {
       minItemRows: 0,
       rows: 2,
       widgetType: WidgetType.Document,
+      profileImageId: '123132',
       x: 0,
       y: 0,
     },
@@ -103,9 +104,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     expect(component.dataDrawer.widgetIndex).toEqual(
       dataEditWidget.widgetIndex
     );
-    expect(component.dataDrawer.widgetItem).toEqual(
-      dataEditWidget.widgetItem
-    );
+    expect(component.dataDrawer.widgetItem).toEqual(dataEditWidget.widgetItem);
     expect(component.dataDrawer.quantityElementsWidget).toEqual(
       dataEditWidget.quantityElementsWidget
     );
@@ -243,8 +242,7 @@ describe('DocumentWidgetDrawerComponent', () => {
     const expectData = {
       widgetItem: component.dataDrawer.widgetItem,
       widgetIndex: component.dataDrawer.widgetIndex,
-      quantityElementsWidget:
-        component.dataDrawer.quantityElementsWidget,
+      quantityElementsWidget: component.dataDrawer.quantityElementsWidget,
     };
     const expectDocumentColumns = [
       {
@@ -352,12 +350,8 @@ describe('DocumentWidgetDrawerComponent', () => {
     component.image = image;
 
     expect(spyService).toHaveBeenCalled();
-    expect(component.dataDrawer.widgetItem.imageId).toEqual(
-      image.imageId
-    );
-    expect(component.dataDrawer.widgetItem.imageName).toEqual(
-      image.imageName
-    );
+    expect(component.dataDrawer.widgetItem.imageId).toEqual(image.imageId);
+    expect(component.dataDrawer.widgetItem.imageName).toEqual(image.imageName);
   });
 
   it('should call updateDashboardWidgets when use emitUpdateWidget', () => {
