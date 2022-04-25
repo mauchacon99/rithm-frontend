@@ -332,11 +332,7 @@
 </ng-template>
 
 <!--Template for show questions columns of the document-->
-<ng-template
-  #columnQuestion
-  let-column="column"
-  let-document="document"
->
+<ng-template #columnQuestion let-column="column" let-document="document">
   <ng-container *ngFor="let questions of document.questions[0].questions">
     <ng-container *ngIf="questions.rithmId === column.questionId">
       <ng-container [ngSwitch]="questions.questionType">
