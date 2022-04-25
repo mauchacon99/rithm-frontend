@@ -298,7 +298,7 @@ export class UserFormComponent
           this.userImage = userImage;
         },
         error: (error: unknown) => {
-          this.errorService.logError(error);
+          this.errorService.displayError(error);
         },
       });
   }
