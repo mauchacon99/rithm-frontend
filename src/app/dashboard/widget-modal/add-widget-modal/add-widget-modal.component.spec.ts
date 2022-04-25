@@ -10,7 +10,7 @@ import { MockComponent } from 'ng-mocks';
 import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SelectedItemWidgetModel } from 'src/models';
+import { SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
 import { DescriptionWidgetModalComponent } from 'src/app/dashboard/widget-modal/description-widget-modal/description-widget-modal.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -123,6 +123,21 @@ describe('AddWidgetModalComponent', () => {
     expect(btnReturnCustom).toBeNull();
   });
 
+  it('should return button to preBuilt', () => {
+    component.itemWidgetModalSelected = { itemType: 'preBuilt' };
+    component.identifyShowElement = 'preBuilt';
+    fixture.detectChanges();
+    const spyMethod = spyOn(component, 'returnCustomLists').and.callThrough();
+    const btnReturnCustom = fixture.nativeElement.querySelector(
+      '#return-custom-lists'
+    );
+    expect(btnReturnCustom).toBeTruthy();
+    +btnReturnCustom.click();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.previewWidgetTypeSelected).toBeNull();
+    expect(component.identifyShowElement).toBe('tabs');
+  });
+
   it('should return to app-list-widget-modal', () => {
     component.identifyShowElement = 'document';
     component.previewWidgetTypeSelected = 'defaultDocument';
@@ -134,6 +149,14 @@ describe('AddWidgetModalComponent', () => {
     btnReturnCustom.click();
     expect(component.previewWidgetTypeSelected).toBeNull();
     expect(component.identifyShowElement).toEqual('document');
+  });
+
+  it('should set selected item for preBuilt in method selectTypeElementPreBuilt', () => {
+    const item = WidgetType.PreBuiltStation;
+    component.selectTypeElementPreBuilt(item);
+    expect(component.itemWidgetModalSelected).toEqual({ itemType: 'preBuilt' });
+    expect(component.identifyShowElement).toBe('preBuilt');
+    expect(component.previewWidgetTypeSelected).toBe(item);
   });
 
   describe('Testing split.io', () => {
