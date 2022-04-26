@@ -176,8 +176,59 @@
           : questions.prompt
       }}
     </p>
+    <ng-template #withOutLink>
+      <span class="cursor-default" title="Without Link"
+        >This question doesn't have an answer.</span
+      >
+    </ng-template>
 
     <div [ngSwitch]="questions.questionType">
+      <ng-container *ngSwitchCase="questionFieldType.Phone">
+        <ng-container *ngIf="questions.answer?.value; else withOutLink">
+          <a
+            [href]="'tel:+' + questions.answer?.value"
+            target="_blank"
+            class="text-accent-500 underline text-xs"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
+          >
+            {{ questions.answer?.value }}
+          </a>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="questionFieldType.Email">
+        <ng-container *ngIf="questions.answer?.value; else withOutLink">
+          <a
+            [href]="'mailto:' + questions.answer?.value"
+            target="_blank"
+            class="text-accent-500 underline text-xs"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
+          >
+            {{ questions.answer?.value }}
+          </a>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="questionFieldType.URL">
+        <ng-container *ngIf="questions.answer?.value; else withOutLink">
+          <a
+            title="{{ questions.answer?.value }}"
+            [href]="questions.answer?.value"
+            target="_blank"
+            class="text-accent-500 underline text-xs"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
+          >
+            {{ questions.answer?.value }}</a
+          >
+        </ng-container>
+      </ng-container>
       <p *ngSwitchCase="questionFieldType.CheckList" class="pt-3 text-sm">
         <span *ngFor="let answer of questions.answer?.asArray">
           <i
@@ -192,7 +243,7 @@
         </span>
       </p>
       <p *ngSwitchCase="questionFieldType.MultiSelect" class="pt-3 text-sm">
-        <span *ngFor="let answer of questions.answer?.asArray">
+        <ng-container *ngFor="let answer of questions.answer?.asArray">
           <i
             class="fas"
             [ngClass]="
@@ -204,10 +255,10 @@
           -
           {{ answer.value }}
           <br />
-        </span>
+        </ng-container>
       </p>
       <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
-        <span *ngFor="let answer of questions.answer?.asArray">
+        <ng-container *ngFor="let answer of questions.answer?.asArray">
           <i
             class="fas"
             [ngClass]="
@@ -217,7 +268,7 @@
             "
           ></i>
           - {{ answer.value }} <br />
-        </span>
+        </ng-container>
       </p>
       <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
         {{ questions.prompt }}

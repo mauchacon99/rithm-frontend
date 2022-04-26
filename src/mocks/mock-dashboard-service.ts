@@ -184,16 +184,6 @@ export class MockDashboardService {
         name and the field that matches your search.`,
       },
     },
-    [WidgetType.StationGroup]: {
-      title: '',
-      description: '',
-      descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
-      },
-    },
     //Pre built section container.
     [WidgetType.PreBuiltContainer]: {
       title: 'My Containers',
