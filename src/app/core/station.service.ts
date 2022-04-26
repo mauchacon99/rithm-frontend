@@ -970,5 +970,4 @@ export class StationService {
       frameQuestions
     );
   }
-
 }
