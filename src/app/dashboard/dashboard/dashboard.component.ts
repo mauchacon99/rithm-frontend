@@ -252,7 +252,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
-   * @param context Context for drawer widget.
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    * @param quantityElementsWidget Number of items to be displayed in the widget.
