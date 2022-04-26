@@ -88,15 +88,6 @@ export class SignInComponent implements OnInit {
   }
 
   /**
-   * For real viewing eye icon display in the password.
-   *
-   * @returns Display the eye icon for view password, hides it else.
-   */
-  get iconVisible(): boolean {
-    return this.signInForm.get('password')?.value;
-  }
-
-  /**
    * Displays a message to the user that the link was invalid.
    *
    * @param error The error that was encountered (this is not displayed to the user).

@@ -56,11 +56,12 @@
                 autocomplete="current-password"
               />
               <mat-icon
-                *ngIf="iconVisible"
                 matSuffix
-                class="text-secondary-200 cursor-pointer text-2xl"
-                (mouseover)="viewPassword = true"
-                (mouseout)="viewPassword = false"
+                class="cursor-pointer text-2xl hover:text-accent-300"
+                [ngClass]="
+                  viewPassword ? 'text-accent-500' : 'text-secondary-200'
+                "
+                (click)="viewPassword = !viewPassword"
               >
                 <i class="fas fa-eye"></i>
               </mat-icon>
