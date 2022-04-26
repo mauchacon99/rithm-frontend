@@ -15,6 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
+import { MatSortModule } from '@angular/material/sort';
 import { NgChartsModule } from 'ng2-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -108,6 +109,7 @@ import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-
     MatExpansionModule,
     MatListModule,
     MatButtonToggleModule,
+    MatSortModule,
     ComingSoonMessageModule,
     NgChartsModule,
   ],

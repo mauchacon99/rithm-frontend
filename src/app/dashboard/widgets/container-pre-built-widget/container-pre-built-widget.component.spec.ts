@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
+import { MatSortModule } from '@angular/material/sort';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDocumentService } from 'src/mocks';
@@ -41,7 +42,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
-      imports: [RosterModule],
+      imports: [RosterModule, MatSortModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },

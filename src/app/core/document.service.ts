@@ -672,9 +672,9 @@ export class DocumentService {
     const containers: ContainerWidgetPreBuilt[] = [
       {
         flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        nameContainer: 'Container name 2',
         containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 2',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationOwners: [
           {
@@ -692,10 +692,10 @@ export class DocumentService {
         ],
       },
       {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        flowedTimeUTC: '2022-04-10T17:24:01.0115021',
+        nameContainer: 'Container name 1',
         containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 1',
         stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
         stationOwners: [],
       },
