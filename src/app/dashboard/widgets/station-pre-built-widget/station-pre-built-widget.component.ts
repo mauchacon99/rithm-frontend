@@ -1,8 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  OnDestroy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationWidgetPreBuilt } from 'src/models';
@@ -10,13 +18,25 @@ import { StationWidgetPreBuilt } from 'src/models';
  * Component for station prebuilt.
  */
 @Component({
-  selector: 'app-station-pre-built-widget',
+  selector: 'app-station-pre-built-widget[showButtonSetting][editMode]',
   templateUrl: './station-pre-built-widget.component.html',
   styleUrls: ['./station-pre-built-widget.component.scss'],
 })
-export class StationPreBuiltWidgetComponent implements OnInit {
+export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
+
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Type of drawer opened. */
+  drawerContext!: string;
 
   /* User station data. */
   stationWidgetData: StationWidgetPreBuilt[] = [];
@@ -41,12 +61,32 @@ export class StationPreBuiltWidgetComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /** Init method. */
   ngOnInit(): void {
+    this.subscribeDrawerContext$();
     this.getStationWidgetPreBuiltData();
+  }
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /** Get context drawer. */
+  private subscribeDrawerContext$(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
   }
 
   /** Get stations data. */
@@ -86,5 +126,16 @@ export class StationPreBuiltWidgetComponent implements OnInit {
         },
       });
     }
+  }
+
+  /** Toggle drawer when click on edit group search widget. */
+  toggleEditStation(): void {
+    this.toggleDrawer.emit(+this.stationWidgetData.length);
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

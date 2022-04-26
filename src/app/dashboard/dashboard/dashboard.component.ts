@@ -112,8 +112,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showButtonSetting = false;
 
   /** Show the dashboard menu. */
-  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' | 'groupSearchWidget' =
-    'menuDashboard';
+  drawerContext:
+    | 'menuDashboard'
+    | 'stationWidget'
+    | 'documentWidget'
+    | 'groupSearchWidget'
+    | 'groupTrafficWidget'
+    | 'stationPreBuiltWidget'
+    | 'containerPreBuiltWidget' = 'menuDashboard';
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -235,7 +241,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget' | 'groupSearchWidget',
+    drawerItem:
+      | 'menuDashboard'
+      | 'stationWidget'
+      | 'documentWidget'
+      | 'groupSearchWidget'
+      | 'groupTrafficWidget'
+      | 'stationPreBuiltWidget'
+      | 'containerPreBuiltWidget',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -267,7 +280,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (
       context === 'stationWidget' ||
       context === 'documentWidget' ||
-      context === 'groupSearchWidget'
+      context === 'groupSearchWidget' ||
+      context === 'groupTrafficWidget' ||
+      context === 'stationPreBuiltWidget' ||
+      context === 'containerPreBuiltWidget'
     ) {
       this.toggleDrawer(context, {
         widgetItem,

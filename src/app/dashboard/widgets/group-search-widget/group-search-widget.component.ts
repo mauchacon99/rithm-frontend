@@ -133,7 +133,10 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
 
   /** Toggle drawer when click on edit group search widget. */
   toggleEditStation(): void {
-    this.toggleDrawer.emit(+this.dataStationGroup.subStationGroups.length);
+    this.toggleDrawer.emit(
+      +Object.keys(this.dataStationGroup.subStationGroups).length +
+        Object.keys(this.dataStationGroup).length
+    );
   }
 
   /** Search similitude stations by name and substations .*/

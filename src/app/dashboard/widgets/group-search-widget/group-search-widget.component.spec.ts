@@ -111,6 +111,7 @@ describe('GroupSearchWidgetComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: MapService, useClass: MockMapService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });

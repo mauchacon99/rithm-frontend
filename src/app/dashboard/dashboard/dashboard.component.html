@@ -16,8 +16,11 @@
     <app-widget-drawer
       *ngIf="
         (drawerContext === 'stationWidget' ||
-          drawerContext === 'documentWidget'
-          || drawerContext === 'groupSearchWidget') &&
+          drawerContext === 'documentWidget' ||
+          drawerContext === 'groupSearchWidget' ||
+          drawerContext === 'groupTrafficWidget' ||
+          drawerContext === 'stationPreBuiltWidget' ||
+          drawerContext === 'containerPreBuiltWidget') &&
         isDrawerOpen
       "
       (deleteWidget)="removeWidgetIndex($event)"
@@ -217,15 +220,31 @@
               [widgetItem]="item"
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
+              (toggleDrawer)="
+                toggleWidgetDrawer('groupTrafficWidget', item, index, $event)
+              "
             ></app-group-traffic-widget>
             <app-station-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
               [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer('stationPreBuiltWidget', item, index, $event)
+              "
             ></app-station-pre-built-widget>
 
             <app-container-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltContainer"
               [editMode]="editMode"
+              [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer(
+                  'containerPreBuiltWidget',
+                  item,
+                  index,
+                  $event
+                )
+              "
             >
             </app-container-pre-built-widget>
           </gridster-item>

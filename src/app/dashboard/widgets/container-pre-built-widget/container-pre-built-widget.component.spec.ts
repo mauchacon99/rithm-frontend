@@ -9,13 +9,14 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ContainerPreBuiltWidgetComponent } from './container-pre-built-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
   let fixture: ComponentFixture<ContainerPreBuiltWidgetComponent>;
   let errorService: ErrorService;
   let documentService: DocumentService;
-
+  let sidenavDrawerService: SidenavDrawerService;
   const containers = [
     {
       flowedTimeUTC: '2022-04-05T17:24:01.0115021',
@@ -45,6 +46,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -52,6 +54,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   beforeEach(() => {
     errorService = TestBed.inject(ErrorService);
     documentService = TestBed.inject(DocumentService);
+    sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(ContainerPreBuiltWidgetComponent);
     component = fixture.componentInstance;
     component.containers = containers;
@@ -137,5 +140,39 @@ describe('ContainerPreBuiltWidgetComponent', () => {
       component.containers[0].flowedTimeUTC
     );
     expect(time).toBeTruthy();
+  });
+
+  it('should call and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.failedGetContainers = false;
+    component.editMode = true;
+    component.showButtonSetting = true;
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+    component.toggleEditStation();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
+
+  it('should call drawer context and compare this context', () => {
+    const drawerContext = 'containerPreBuiltWidget';
+    const spySidenavDrawer = spyOn(
+      sidenavDrawerService.drawerContext$,
+      'next'
+    ).and.callThrough();
+    sidenavDrawerService.drawerContext$.next(drawerContext);
+    component.ngOnInit();
+    expect(component.drawerContext).toBe(drawerContext);
+    expect(spySidenavDrawer).toHaveBeenCalled();
+  });
+
+  it('should obtain value in isDrawerOpen in sidenavDrawerService', () => {
+    const spyMethod = spyOnProperty(
+      sidenavDrawerService,
+      'isDrawerOpen'
+    ).and.returnValue(true);
+    component.isDrawerOpen;
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.isDrawerOpen).toBeTrue();
   });
 });
