@@ -57,7 +57,7 @@ import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link
     StationTemplateComponent,
     RuleModalComponent,
     BuildDrawerComponent,
-    DataLinkModalComponent
+    DataLinkModalComponent,
   ],
   imports: [
     CommonModule,

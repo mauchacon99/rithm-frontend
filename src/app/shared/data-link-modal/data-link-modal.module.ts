@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [DataLinkModalModule],
-  imports: [CommonModule, MatDialogModule,MatButtonModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule],
   exports: [DataLinkModalModule],
 })
 export class DataLinkModalModule {}
