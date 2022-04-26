@@ -390,11 +390,12 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      !this.stationForm.valid ||
-      !(
-        this.stationForm.dirty ||
-        this.stationForm.controls.stationTemplateForm.touched
-      ) ||
+      (!this.isFlowLogicTab &&
+        (!this.stationForm.valid ||
+          !(
+            this.stationForm.dirty ||
+            this.stationForm.controls.stationTemplateForm.touched
+          ))) ||
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
