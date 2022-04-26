@@ -109,7 +109,10 @@
   </ng-template>
 </div>
 
-<div *ngIf="!isLoading && totalNumDocs > 0" class="flex justify-center">
+<div
+  *ngIf="!isLoading && totalNumDocs > 0 && !showContainerModal"
+  class="flex justify-center"
+>
   <app-pagination
     (currentPageNum)="getDocuments($event)"
     [numItems]="totalNumDocs"
