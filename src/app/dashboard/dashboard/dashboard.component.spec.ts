@@ -628,7 +628,7 @@ describe('DashboardComponent', () => {
           rows: 2,
           x: 8,
           y: 0,
-          widgetType: WidgetType.StationGroup,
+          widgetType: WidgetType.StationGroupSearch,
           data: '{"documentRithmId":"07ce2489-b07e-48e2-a378-99e7f487aa0f"}',
           minItemRows: 1,
           maxItemRows: 1,

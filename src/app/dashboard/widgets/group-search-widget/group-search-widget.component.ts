@@ -28,7 +28,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 })
 export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** To load dom by WidgetType. */
-  @Input() widgetType: WidgetType = WidgetType.StationGroup;
+  @Input() widgetType: WidgetType = WidgetType.StationGroupSearch;
 
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
