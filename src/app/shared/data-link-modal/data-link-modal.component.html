@@ -1,0 +1,26 @@
+<div class="info-help-data-link">
+  <h3 class="text-center">Data Link</h3>
+  <div class="help-content pt-2 text-justify">
+    <p class="pb-2 mb-2">
+      Data links allow you to pull data from a specific container in your
+      selected station. Simply select a unique field with a value that matches
+      on both your selected station and current station.
+    </p>
+    <p class="pb-2">
+      When a match is found, your selected fields will be displayed in the new
+      container.
+    </p>
+  </div>
+  <div mat-dialog-actions class="flex justify-end">
+    <!-- Close -->
+    <button
+      mat-button
+      color="accent"
+      (click)="closeHelpModal()"
+      data-testid="close-help-modal"
+      id="close-help-modal"
+    >
+      Dismiss
+    </button>
+  </div>
+</div>

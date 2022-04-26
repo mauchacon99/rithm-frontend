@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -25,9 +26,12 @@ export class LocationModalComponent implements OnInit {
   eventsLoading = false;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) private data: LocationModalComponent,
     private stationService: StationService,
     private errorService: ErrorService
-  ) {}
+  ) {
+    this.stationRithmId = data.stationRithmId;
+  }
 
   /**
    * Initial Method.
