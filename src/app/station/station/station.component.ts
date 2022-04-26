@@ -390,12 +390,14 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
+      // If current tab is document and form field values are not changed.
       (!this.isFlowLogicTab &&
         (!this.stationForm.valid ||
           !(
             this.stationForm.dirty ||
             this.stationForm.controls.stationTemplateForm.touched
           ))) ||
+      // If current tab is flow and there are no pending flow rules to be updated.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
