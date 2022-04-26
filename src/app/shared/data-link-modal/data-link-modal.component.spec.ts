@@ -8,9 +8,8 @@ describe('DataLinkModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DataLinkModalComponent ]
-    })
-    .compileComponents();
+      declarations: [DataLinkModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

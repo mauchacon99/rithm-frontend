@@ -2,13 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 
-
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    MatDialogModule,
-  ],
-  exports:[DataLinkModalModule]
+  imports: [CommonModule, MatDialogModule],
+  exports: [DataLinkModalModule],
 })
-export class DataLinkModalModule { }
+export class DataLinkModalModule {}

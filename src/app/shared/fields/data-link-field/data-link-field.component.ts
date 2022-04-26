@@ -326,7 +326,7 @@ export class DataLinkFieldComponent
   /**
    * Open modal the link help of data link.
    */
-   openModalHelp(): void {
+  openModalHelp(): void {
     this.dialog.open(DataLinkModalComponent, {
       width: '600px',
     });
