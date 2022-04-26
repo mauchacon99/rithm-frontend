@@ -1055,7 +1055,7 @@ describe('DocumentService', () => {
       });
   });
 
-  it('should get container widgets', () => {
+  xit('should get container widgets', () => {
     const expectedResponse: StationFrameWidget[] = [
       {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
@@ -1085,5 +1085,15 @@ describe('DocumentService', () => {
     service.getContainerWidgets(stationId, documentId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type?documentRithmId=${documentId}&stationRithmId=${stationId}`
+    );
+
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
