@@ -15,7 +15,7 @@
   *ngIf="!isLoading && !errorStationPrebuilt && stationWidgetData"
   class="h-full w-full p-2"
 >
-  <h3 class="font-semibold truncate mb-2">My Stations</h3>
+  <h3 class="font-semibold truncate truncate mb-2">My Stations</h3>
 
   <div class="flex-grow overflow-auto scrollbar h-[calc(100%-40px)]">
     <ng-container
@@ -29,6 +29,7 @@
   <table
     mat-table
     [dataSource]="dataSourceTable"
+    [matSortDisabled]="editMode"
     matSort
     class="w-full table-sort"
   >
@@ -45,7 +46,7 @@
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">STATION</p>
+        <p class="font-semibold truncate text-xs text-secondary-300">STATION</p>
         <ng-container
           *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
         >
@@ -73,7 +74,9 @@
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">CONTAINERS</p>
+        <p class="font-semibold truncate text-xs text-secondary-300">
+          CONTAINERS
+        </p>
         <ng-container
           *ngTemplateOutlet="
             buttonSort;
@@ -109,7 +112,7 @@
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">GROUP</p>
+        <p class="font-semibold truncate text-xs text-secondary-300">GROUP</p>
         <ng-container
           *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationGroup' }"
         >
@@ -133,13 +136,18 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'stationName' ||
+            dataSourceTable.sort?.active !== 'stationOwners' ||
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">STATION OWNERS</p>
+        <p class="font-semibold truncate text-xs text-secondary-300">
+          STATION OWNERS
+        </p>
         <ng-container
-          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationGroup' }"
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'stationOwners' }
+          "
         >
         </ng-container>
       </th>
@@ -172,6 +180,7 @@
 
 <ng-template #buttonSort let-type>
   <i
+    *ngIf="!editMode"
     class="fas text-base ml-3"
     [ngClass]="{
       'text-accent-500':

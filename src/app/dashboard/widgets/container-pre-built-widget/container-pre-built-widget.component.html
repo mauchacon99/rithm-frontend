@@ -31,6 +31,7 @@
     mat-table
     [dataSource]="dataSourceTable"
     class="w-full table-sort"
+    [matSortDisabled]="editMode"
     matSort
   >
     <!-- Name Container -->
@@ -46,7 +47,9 @@
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">CONTAINER</p>
+        <p class="font-semibold text-xs truncate text-secondary-300">
+          CONTAINER
+        </p>
         <ng-container
           *ngTemplateOutlet="
             buttonSort;
@@ -77,7 +80,9 @@
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">TIME IN STATION</p>
+        <p class="font-semibold text-xs truncate text-secondary-300">
+          TIME IN STATION
+        </p>
         <ng-container
           *ngTemplateOutlet="
             buttonSort;
@@ -108,7 +113,7 @@
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">STATION</p>
+        <p class="font-semibold text-xs truncate text-secondary-300">STATION</p>
         <ng-container
           *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
         >
@@ -132,13 +137,18 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'stationName' ||
+            dataSourceTable.sort?.active !== 'stationOwners' ||
             !dataSourceTable.sort?.direction
         }"
       >
-        <p class="font-semibold text-xs text-secondary-300">STATION OWNERS</p>
+        <p class="font-semibold text-xs truncate text-secondary-300">
+          STATION OWNERS
+        </p>
         <ng-container
-          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'stationOwners' }
+          "
         >
         </ng-container>
       </th>
@@ -191,6 +201,7 @@
 
 <ng-template #buttonSort let-type>
   <i
+    *ngIf="!editMode"
     class="fas text-base ml-3"
     [ngClass]="{
       'text-accent-500':
