@@ -7,6 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import {
   DocumentStationInformation,
   StationInfoDrawerData,
@@ -34,6 +35,9 @@ export class SubHeaderComponent {
 
   /** Is displayed in a new interface? */
   @Input() newInterfaceView = false;
+
+  /** The selected tab index/init. */
+  @Output() selectedTab: EventEmitter<string> = new EventEmitter();
 
   /** Current active icon. */
   activeItem = 'none';
@@ -120,5 +124,15 @@ export class SubHeaderComponent {
   onPageClick(targetElement: ElementRef): void {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
     this.checkClickSubHeader.emit(clickedInside);
+  }
+
+  /**
+   * Detect tabs changed.
+   *
+   * @param tabChangeEvent Receives the detail from tab selected.
+   */
+  tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
+    const selectedItem = tabChangeEvent.tab.textLabel;
+    this.selectedTab.emit(selectedItem);
   }
 }

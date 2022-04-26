@@ -20,19 +20,17 @@
     <!--      Station drawer-->
     <app-station-widget-drawer
       *ngIf="drawerMode === 'stationWidget'"
-      (getWidgetIndex)="setWidgetIndex($event)"
-      (getWidgetItem)="setWidgetItem($event)"
       [image]="imageUploaded"
+      [dataDrawer]="dataDrawer"
     >
     </app-station-widget-drawer>
 
     <!-- Document drawer-->
     <app-document-widget-drawer
       *ngIf="drawerMode === 'documentWidget'"
-      (setWidgetIndex)="setWidgetIndex($event)"
-      (getWidgetItem)="setWidgetItem($event)"
       [image]="imageUploaded"
       [showProfileImageBanner]="showProfileImageBanner"
+      [dataDrawer]="dataDrawer"
     >
     </app-document-widget-drawer>
     <!-- Upload image-->
