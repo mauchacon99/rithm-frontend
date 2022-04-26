@@ -4,7 +4,7 @@
   (click)="handleOpenSettingDrawer(bodyTextValue)"
 >
   <p class="text-xs text-primary-200">
-    {{ bodyTextValue }}
+    {{ bodyTextValue.length ? bodyTextValue : 'Write something descriptive' }}
   </p>
 </div>
 <div *ngIf="widgetMode === 'setting'" class="">

@@ -3,7 +3,7 @@
   class="font-semibold text-xl"
   (click)="openFieldSettingDrawer(titleTextValue)"
 >
-  {{ titleTextValue }}
+  {{ titleTextValue.length ? titleTextValue : 'Form Title' }}
 </h2>
 <div
   *ngIf="widgetMode === 'setting'"
@@ -13,5 +13,6 @@
     type="text"
     [(ngModel)]="titleTextValue"
     class="w-full font-semibold text-xl border-transparent focus:outline-none"
+    placeholder="Form Title"
   />
 </div>

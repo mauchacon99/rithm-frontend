@@ -36,8 +36,11 @@ export class SubHeaderComponent {
   /** Is displayed in a new interface? */
   @Input() newInterfaceView = false;
 
+  /** Whether the subheader is rendered in stationSection or containerSection. */
+  @Input() isStation = false;
+
   /** The selected tab index/init. */
-  @Output() selectedTab: EventEmitter<string> = new EventEmitter();
+  @Output() headerSelectedTab = new EventEmitter<number>();
 
   /** Current active icon. */
   activeItem = 'none';
@@ -132,7 +135,6 @@ export class SubHeaderComponent {
    * @param tabChangeEvent Receives the detail from tab selected.
    */
   tabSelectedChanged(tabChangeEvent: MatTabChangeEvent): void {
-    const selectedItem = tabChangeEvent.tab.textLabel;
-    this.selectedTab.emit(selectedItem);
+    this.headerSelectedTab.emit(tabChangeEvent.index);
   }
 }
