@@ -15,7 +15,7 @@ tr.mat-header-row {
   height: 30px !important;
 }
 
-table ::ng-deep {
+.table-sort ::ng-deep {
   .mat-sort-header-ste,
   .mat-sort-header-arrow {
     display: none !important;
