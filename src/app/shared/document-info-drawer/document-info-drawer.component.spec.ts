@@ -38,6 +38,7 @@ import { throwError } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -382,5 +383,41 @@ describe('DocumentInfoDrawerComponent', () => {
       ConnectedStationsModalComponent,
       expectDataModal
     );
+  });
+
+  it('should to call the modal the location', () => {
+    component.stationRithmId = stationId;
+    const expectDataModal = {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: stationId,
+      },
+    };
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
+    component.openModalLocation();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      LocationModalComponent,
+      expectDataModal
+    );
+  });
+
+  it('should to call method openModalLocation after clicked in arrow location section', () => {
+    component.isStation = false;
+    component.isUserAdminOrOwner = true;
+    fixture.detectChanges();
+    const openModalLocationSpy = spyOn(
+      component,
+      'openModalLocation'
+    ).and.callThrough();
+    const ArrowLocationSection = fixture.nativeElement.querySelector(
+      '#open-modal-Location'
+    );
+    expect(ArrowLocationSection).toBeTruthy();
+    ArrowLocationSection.click();
+    expect(openModalLocationSpy).toHaveBeenCalled();
   });
 });

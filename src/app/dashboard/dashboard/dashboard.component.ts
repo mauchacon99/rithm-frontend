@@ -112,8 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showButtonSetting = false;
 
   /** Show the dashboard menu. */
-  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
-    'menuDashboard';
+  drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -196,7 +195,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((drawerContext) => {
         if (
           drawerContext === 'menuDashboard' ||
-          drawerContext === 'stationWidget'
+          drawerContext === 'widgetDashboard'
         ) {
           this.drawerContext = drawerContext;
         }
@@ -235,7 +234,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget',
+    drawerItem: 'menuDashboard' | 'widgetDashboard',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -253,24 +252,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Toggle drawer of the station widget.
    *
-   * @param context Context for drawer widget.
    * @param widgetItem String of the data station.
    * @param widgetIndex Number of the position the widget.
    * @param quantityElementsWidget Number of items to be displayed in the widget.
    */
   toggleWidgetDrawer(
-    context: string,
     widgetItem: DashboardItem,
     widgetIndex: number,
     quantityElementsWidget: number
   ): void {
-    if (context === 'stationWidget' || context === 'documentWidget') {
-      this.toggleDrawer(context, {
-        widgetItem,
-        widgetIndex,
-        quantityElementsWidget,
-      });
-    }
+    const contextDrawerWidget = 'widgetDashboard';
+    this.toggleDrawer(contextDrawerWidget, {
+      widgetItem,
+      widgetIndex,
+      quantityElementsWidget,
+    });
   }
 
   /**

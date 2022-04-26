@@ -14,6 +14,7 @@ import { MockComponent } from 'ng-mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardItem, GroupTrafficData, WidgetType } from 'src/models';
 import { NgChartsModule } from 'ng2-charts';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
@@ -21,6 +22,7 @@ describe('GroupTrafficWidgetComponent', () => {
   let stationService: StationService;
   let dashboardService: DashboardService;
   let errorService: ErrorService;
+  let sidenavDrawerService: SidenavDrawerService;
   const dataWidget =
     '{"stationGroupRithmId":"7f0611fe-dfd2-42ec-9e06-9f4e4e0b24bb", "valueShowGraphic":"5"}';
   const widgetItem: DashboardItem = {
@@ -66,6 +68,7 @@ describe('GroupTrafficWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
         { provide: DashboardService, useClass: MockDashboardService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -74,6 +77,7 @@ describe('GroupTrafficWidgetComponent', () => {
     stationService = TestBed.inject(StationService);
     dashboardService = TestBed.inject(DashboardService);
     errorService = TestBed.inject(ErrorService);
+    sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(GroupTrafficWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
@@ -204,5 +208,39 @@ describe('GroupTrafficWidgetComponent', () => {
       expect(component.paginationChart).toEqual(0);
       expect(spyPaginateMethod).toHaveBeenCalledOnceWith('previous');
     });
+  });
+
+  it('should call and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.errorGroupTraffic = false;
+    component.editMode = true;
+    component.showButtonSetting = true;
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+    component.toggleEditStation();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
+
+  it('should call drawer context and compare this context', () => {
+    const drawerContext = 'widgetDashboard';
+    const spySidenavDrawer = spyOn(
+      sidenavDrawerService.drawerContext$,
+      'next'
+    ).and.callThrough();
+    sidenavDrawerService.drawerContext$.next(drawerContext);
+    component.ngOnInit();
+    expect(component.drawerContext).toBe(drawerContext);
+    expect(spySidenavDrawer).toHaveBeenCalled();
+  });
+
+  it('should obtain value in isDrawerOpen in sidenavDrawerService', () => {
+    const spyMethod = spyOnProperty(
+      sidenavDrawerService,
+      'isDrawerOpen'
+    ).and.returnValue(true);
+    component.isDrawerOpen;
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.isDrawerOpen).toBeTrue();
   });
 });
