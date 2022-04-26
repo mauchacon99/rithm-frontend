@@ -1,0 +1,9 @@
+.select-condition ::ng-deep {
+  .mat-form-field-infix {
+    @apply py-1.5;
+  }
+
+  .mat-form-field-wrapper {
+    @apply pb-0;
+  }
+}
