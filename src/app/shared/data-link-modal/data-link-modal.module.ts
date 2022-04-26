@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [],
+  declarations: [DataLinkModalModule],
   imports: [CommonModule, MatDialogModule],
   exports: [DataLinkModalModule],
 })

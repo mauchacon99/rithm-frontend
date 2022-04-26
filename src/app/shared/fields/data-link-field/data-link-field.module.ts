@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [DataLinkFieldComponent],
@@ -24,6 +25,7 @@ import { MatDividerModule } from '@angular/material/divider';
     LoadingIndicatorModule,
     MatDividerModule,
     MatSelectModule,
+    MatDialogModule
   ],
   exports: [DataLinkFieldComponent],
 })

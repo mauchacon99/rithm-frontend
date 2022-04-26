@@ -3,8 +3,11 @@
     <span class="text-primary-500">DATA LINK</span>
     <mat-divider [vertical]="true"></mat-divider>
     <button
-      (click)="openModalHelp()"
-      class="underline cursor-pointer text-accent-500"
+    type="button"
+    class="underline cursor-pointer text-accent-500"
+    (click)="openModalHelp()"
+    id="data-help-modal"
+    data-testid="data-help-modal"
     >
       Help
     </button>

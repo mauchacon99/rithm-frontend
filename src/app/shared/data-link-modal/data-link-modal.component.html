@@ -15,10 +15,11 @@
     <!-- Close -->
     <button
       mat-button
-      mat-dialog-close
+      type="button"
+      (click)="closeModalHelp()"
       color="accent"
       data-testid="help-modal-close"
-      class="text-accent-500 tracking-tight"
+      class="text-accent-500 tracking-widest font-semibold"
       id="help-modal-close"
     >
       Dismiss
