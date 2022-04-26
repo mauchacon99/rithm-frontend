@@ -28,6 +28,7 @@ import {
   FrameType,
   StationFrameWidget,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1709,5 +1710,35 @@ export class MockDocumentService {
       },
     ];
     return of(containers).pipe(delay(1000));
+  }
+
+  /**
+   * Get the current stations from containers.
+   *
+   * @param documentRithmId The current document id.
+   * @returns The current stations.
+   */
+  getCurrentStations(
+    documentRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    if (!documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Retrieve a list of stations for this container.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const currentStationsResponse: DocumentCurrentStation[] = [
+        {
+          name: 'Testy',
+          rithmId: '123',
+          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+        },
+      ];
+      return of(currentStationsResponse).pipe(delay(1000));
+    }
   }
 }

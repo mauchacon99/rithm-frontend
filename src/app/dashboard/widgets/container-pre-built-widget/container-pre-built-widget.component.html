@@ -18,7 +18,21 @@
   class="h-full w-full p-2"
   id="show-containers"
 >
-  <h3 class="font-semibold truncate mb-2">My Containers</h3>
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold truncate mb-2">My Containers</h3>
+    <div *ngIf="editMode && showButtonSetting">
+      <button
+        mat-icon-button
+        [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
+        (click)="toggleEditStation()"
+        id="toggle-edit-container-pre-built"
+        data-testid="toggle-edit-container-pre-built"
+        class="text-secondary-500"
+      >
+        <i class="fas fa-cog text-base"></i>
+      </button>
+    </div>
+  </div>
   <div class="flex-grow overflow-auto scrollbar h-[calc(100%-40px)]">
     <ng-container
       *ngIf="containers.length; then tableContainers; else emptyContainers"

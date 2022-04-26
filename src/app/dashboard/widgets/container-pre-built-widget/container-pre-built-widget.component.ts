@@ -2,27 +2,29 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { ContainerWidgetPreBuilt } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 
 /** Container preview build. */
 @Component({
-  selector: 'app-container-pre-built-widget[editMode]',
+  selector: 'app-container-pre-built-widget[editMode][showButtonSetting]',
   templateUrl: './container-pre-built-widget.component.html',
   styleUrls: ['./container-pre-built-widget.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class ContainerPreBuiltWidgetComponent implements OnInit {
+export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Reference to sort table. */
   @ViewChild(MatSort) set tableSort(value: MatSort) {
     if (value) {
@@ -56,6 +58,27 @@ export class ContainerPreBuiltWidgetComponent implements OnInit {
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** Show setting button widget. */
+  @Input() showButtonSetting = false;
+
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Type of drawer opened. */
+  drawerContext!: string;
 
   /** Containers widget pre built. */
   containers: ContainerWidgetPreBuilt[] = [];
@@ -96,12 +119,23 @@ export class ContainerPreBuiltWidgetComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /** Init method. */
   ngOnInit(): void {
+    this.subscribeDrawerContext$();
     this.getContainerWidgetPreBuilt();
+  }
+
+  /** Get context drawer. */
+  private subscribeDrawerContext$(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
   }
 
   /**
@@ -195,5 +229,16 @@ export class ContainerPreBuiltWidgetComponent implements OnInit {
   toggleExpandWidget(): void {
     this.isExpandWidget = !this.isExpandWidget;
     this.expandWidget.emit(this.isExpandWidget);
+  }
+
+  /** Toggle drawer when click on edit group search widget. */
+  toggleEditStation(): void {
+    this.toggleDrawer.emit(+this.containers.length);
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -392,6 +392,7 @@ describe('DocumentInfoDrawerComponent', () => {
       minHeight: '450px',
       data: {
         stationRithmId: stationId,
+        documentRithmId: documentId,
       },
     };
     const dialogSpy = spyOn(
