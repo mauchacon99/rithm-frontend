@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { ContainerWidgetPreBuilt } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { MatSort } from '@angular/material/sort';
 
 /** Container preview build. */
 @Component({
@@ -14,6 +15,13 @@ import { UtcTimeConversion } from 'src/helpers';
   providers: [UtcTimeConversion],
 })
 export class ContainerPreBuiltWidgetComponent implements OnInit {
+  /** Reference to sort table. */
+  @ViewChild(MatSort) set tableSort(value: MatSort) {
+    if (value) {
+      this.dataSourceTable.sort = value;
+    }
+  }
+
   /** Edit mode dashboard. */
   @Input() editMode!: boolean;
 
