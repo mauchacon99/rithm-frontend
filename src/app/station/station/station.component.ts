@@ -142,7 +142,7 @@ export class StationComponent
   drawerContext = 'comments';
 
   /** The selected tab index/init. */
-  selectedTab = 'Container';
+  headerTabIndex = 0;
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -339,7 +339,6 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
   }
 
@@ -368,10 +367,10 @@ export class StationComponent
   /**
    * Click for tab selected item inside sub-header.
    *
-   * @param clickInside To catch event that verify click tab selected item.
+   * @param headerTabIndex To catch event that verify click tab selected item.
    */
-  tabItem(clickInside: string): void {
-    this.selectedTab = clickInside;
+  headerSelectedTab(headerTabIndex: number): void {
+    this.headerTabIndex = headerTabIndex;
   }
 
   /**
@@ -469,6 +468,7 @@ export class StationComponent
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
+          this.getStationWidgets();
           this.stationLoading = false;
         },
         error: (error: unknown) => {
@@ -895,7 +895,8 @@ export class StationComponent
       .subscribe({
         next: (inputFrames) => {
           /**Add individual properties for every Type. */
-          inputFrames.forEach((frame, index) => {
+          inputFrames?.forEach((frame, index) => {
+            frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
                 frame.minItemRows = 4;
@@ -903,7 +904,7 @@ export class StationComponent
                 frame.questions =
                   frame.questions && frame.questions?.length > 0
                     ? frame.questions
-                    : [];
+                    : JSON.parse(frame.data);
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:
