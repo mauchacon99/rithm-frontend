@@ -1,12 +1,11 @@
 <div
-  class="grid grid-cols-3 py-1"
+  class="grid grid-cols-3 py-0"
   [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
 >
-  <div *ngIf="newInterfaceView">
+  <div *ngIf="newInterfaceView && isStation">
     <mat-tab-group
       mat-align-tabs="start"
       [selectedIndex]="0"
-      animationDuration="0ms"
       class="new-station-tabs"
       (selectedTabChange)="tabSelectedChanged($event)"
     >
@@ -40,7 +39,10 @@
   >
     <h6 class="leading-10">{{ newInterfaceView ? stationName : title }}</h6>
   </div>
-  <div class="justify-self-end px-3 md:px-5" *ngIf="newInterfaceView">
+  <div
+    class="justify-self-end px-3 md:px-5"
+    *ngIf="newInterfaceView && !isStation"
+  >
     <button
       class="group"
       type="button"
