@@ -27,6 +27,7 @@ export class SidenavDrawerService {
     | 'stationWidget'
     | 'documentWidget'
     | 'fieldSetting'
+    | 'groupSearchWidget'
     | ''
   > = new ReplaySubject(1);
 
@@ -133,7 +134,8 @@ export class SidenavDrawerService {
       | 'menuDashboard'
       | 'stationWidget'
       | 'documentWidget'
-      | 'fieldSetting',
+      | 'fieldSetting'
+      | 'groupSearchWidget',
     data?: unknown
   ): void {
     if (!this.drawerComponent) {
@@ -176,7 +178,8 @@ export class SidenavDrawerService {
       | 'menuDashboard'
       | 'stationWidget'
       | 'documentWidget'
-      | 'fieldSetting',
+      | 'fieldSetting'
+      | 'groupSearchWidget',
     data?: unknown
   ): void {
     if (!this.drawerComponent) {

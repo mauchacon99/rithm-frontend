@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showButtonSetting = false;
 
   /** Show the dashboard menu. */
-  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' =
+  drawerContext: 'menuDashboard' | 'stationWidget' | 'documentWidget' | 'groupSearchWidget' =
     'menuDashboard';
 
   /** Config grid. */
@@ -235,7 +235,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget',
+    drawerItem: 'menuDashboard' | 'stationWidget' | 'documentWidget' | 'groupSearchWidget',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -264,7 +264,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     widgetIndex: number,
     quantityElementsWidget: number
   ): void {
-    if (context === 'stationWidget' || context === 'documentWidget') {
+    if (
+      context === 'stationWidget' ||
+      context === 'documentWidget' ||
+      context === 'groupSearchWidget'
+    ) {
       this.toggleDrawer(context, {
         widgetItem,
         widgetIndex,

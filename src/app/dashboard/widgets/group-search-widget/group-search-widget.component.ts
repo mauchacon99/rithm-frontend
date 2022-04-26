@@ -1,13 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  OnDestroy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MapService } from 'src/app/map/map.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationListGroup, WidgetType } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
+import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
 
 /**
  * Component for list field the groups how widget.
@@ -18,7 +26,7 @@ import { StationGroupData } from 'src/models/station-group-data';
   templateUrl: './group-search-widget.component.html',
   styleUrls: ['./group-search-widget.component.scss'],
 })
-export class GroupSearchWidgetComponent implements OnInit {
+export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** To load dom by WidgetType. */
   @Input() widgetType: WidgetType = WidgetType.StationGroup;
 
@@ -31,6 +39,12 @@ export class GroupSearchWidgetComponent implements OnInit {
   /** Set data for group widget. */
   @Input() dataWidget!: string;
 
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Data to station group widget. */
   dataStationGroup!: StationGroupData;
 
@@ -39,6 +53,9 @@ export class GroupSearchWidgetComponent implements OnInit {
 
   /** Data subStationGroupData for show filtered results. */
   subStationGroupData!: StationGroupData[];
+
+  /** Type of drawer opened. */
+  drawerContext!: string;
 
   /** StationGroupRithmId for station widget. */
   stationGroupRithmId = '';
@@ -57,7 +74,8 @@ export class GroupSearchWidgetComponent implements OnInit {
     private errorService: ErrorService,
     private dialog: MatDialog,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /**
@@ -66,7 +84,26 @@ export class GroupSearchWidgetComponent implements OnInit {
   ngOnInit(): void {
     const dataWidget = JSON.parse(this.dataWidget);
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
+    this.subscribeDrawerContext$();
     this.getStationGroups();
+  }
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /** Get context drawer. */
+  private subscribeDrawerContext$(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
   }
 
   /**
@@ -83,7 +120,6 @@ export class GroupSearchWidgetComponent implements OnInit {
           this.dataStationGroup = dataStationGroup;
           this.isLoading = false;
           this.errorStationGroup = false;
-          this.dataStationGroup = dataStationGroup;
           this.stations = this.dataStationGroup.stations;
           this.subStationGroupData = this.dataStationGroup.subStationGroups;
         },
@@ -93,6 +129,11 @@ export class GroupSearchWidgetComponent implements OnInit {
           this.errorService.logError(error);
         },
       });
+  }
+
+  /** Toggle drawer when click on edit group search widget. */
+  toggleEditStation(): void {
+    this.toggleDrawer.emit(+this.dataStationGroup.subStationGroups.length);
   }
 
   /** Search similitude stations by name and substations .*/
@@ -135,5 +176,11 @@ export class GroupSearchWidgetComponent implements OnInit {
     );
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

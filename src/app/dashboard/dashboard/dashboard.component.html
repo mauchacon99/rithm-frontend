@@ -16,7 +16,8 @@
     <app-widget-drawer
       *ngIf="
         (drawerContext === 'stationWidget' ||
-          drawerContext === 'documentWidget') &&
+          drawerContext === 'documentWidget'
+          || drawerContext === 'groupSearchWidget') &&
         isDrawerOpen
       "
       (deleteWidget)="removeWidgetIndex($event)"
@@ -203,6 +204,9 @@
               [widgetType]="item.widgetType"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              (toggleDrawer)="
+                toggleWidgetDrawer('groupSearchWidget', item, index, $event)
+              "
             >
             </app-group-search-widget>
             <app-group-traffic-widget
