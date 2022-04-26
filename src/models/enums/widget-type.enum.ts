@@ -23,8 +23,6 @@ export enum WidgetType {
   // Group enum.
   /** Widget type station-group-search-widget. */
   StationGroupSearch = 'station-group-search-widget',
-  /** Widget type station-group. */
-  StationGroup = 'station-group',
   /** Widget type group-traffic. */
   StationGroupTraffic = 'group-traffic',
 
