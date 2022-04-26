@@ -745,7 +745,7 @@ describe('StationComponent', () => {
         minItemCols: 6,
         questions: [],
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
       {
@@ -770,7 +770,7 @@ describe('StationComponent', () => {
           },
         ],
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 1,
       },
     ];
@@ -1168,7 +1168,7 @@ describe('StationComponent', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
     ];
@@ -1229,7 +1229,7 @@ describe('StationComponent', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
     ];
@@ -1254,7 +1254,7 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'getStationWidgets'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getStationWidgets']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -1268,7 +1268,7 @@ describe('StationComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getStationWidgets']();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -1355,6 +1355,7 @@ describe('StationComponent', () => {
         'saveStationWidgets'
       ).and.returnValue(of(frameStationWidget));
       component['saveStationWidgetsChanges']();
+      component.stationLoading = true;
       fixture.detectChanges();
       const stationLoading =
         fixture.debugElement.nativeElement.querySelector('#gridster-loading');
@@ -1373,7 +1374,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '',
+          data: '[]',
           questions: [],
           id: 0,
         },
@@ -1383,7 +1384,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1406,7 +1407,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1429,7 +1430,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1452,7 +1453,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1475,7 +1476,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1498,7 +1499,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
   });
