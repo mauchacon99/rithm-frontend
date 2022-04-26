@@ -28,6 +28,7 @@ import {
   FrameType,
   StationFrameWidget,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1680,9 +1681,9 @@ export class MockDocumentService {
     const containers: ContainerWidgetPreBuilt[] = [
       {
         flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        nameContainer: 'Container name 2',
         containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 2',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationOwners: [
           {
@@ -1700,14 +1701,44 @@ export class MockDocumentService {
         ],
       },
       {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        flowedTimeUTC: '2022-04-10T17:24:01.0115021',
+        nameContainer: 'Container name 1',
         containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 1',
         stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
         stationOwners: [],
       },
     ];
     return of(containers).pipe(delay(1000));
+  }
+
+  /**
+   * Get the current stations from containers.
+   *
+   * @param documentRithmId The current document id.
+   * @returns The current stations.
+   */
+  getCurrentStations(
+    documentRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    if (!documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Retrieve a list of stations for this container.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const currentStationsResponse: DocumentCurrentStation[] = [
+        {
+          name: 'Testy',
+          rithmId: '123',
+          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+        },
+      ];
+      return of(currentStationsResponse).pipe(delay(1000));
+    }
   }
 }
