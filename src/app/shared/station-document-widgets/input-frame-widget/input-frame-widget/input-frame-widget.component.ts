@@ -26,6 +26,9 @@ import { RandomIdGenerator } from 'src/helpers';
   styleUrls: ['./input-frame-widget.component.scss'],
 })
 export class InputFrameWidgetComponent implements OnInit, OnDestroy {
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Questions to be displayed inside the widget. */
   @Input() fields: Question[] | undefined = [];
 
@@ -41,17 +44,8 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
-  /** The list of questionFieldTypes. */
-  fieldTypes = QuestionFieldType;
-
   /** Emit an event to adjust its heigth when its number of children overpass its number of rows. */
   @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
-
-  /** The list of questionFieldTypes. */
-  tempTitle = '';
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question> =
@@ -59,6 +53,12 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
 
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
+
+  /** The list of questionFieldTypes. */
+  fieldTypes = QuestionFieldType;
+
+  /** The list of questionFieldTypes. */
+  tempTitle = '';
 
   constructor(
     private stationService: StationService,
@@ -99,11 +99,15 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
           const questionIndex = this.fields?.findIndex(
             (e) => e.rithmId === questionTitle.rithmId
           );
-          if (!this.tempTitle) {
-            this.tempTitle = this.fields[questionIndex].prompt.slice();
+          /** Verify that the index exists.*/
+          if (questionIndex >= 0) {
+            if (!this.tempTitle) {
+              this.tempTitle = this.fields[questionIndex].prompt.slice();
+            }
+
+            this.fields[questionIndex].prompt =
+              questionTitle.value || this.tempTitle;
           }
-          this.fields[questionIndex].prompt =
-            questionTitle.value || this.tempTitle;
         }
       });
   }

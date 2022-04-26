@@ -95,11 +95,27 @@ export class AddWidgetModalComponent implements OnInit {
     this.identifyShowElement = element.itemType;
   }
 
+  /**
+   * Widget selected preBuilt in list-widget.
+   *
+   * @param item The type of element.
+   */
+  selectTypeElementPreBuilt(item: WidgetType | 'defaultDocument'): void {
+    this.itemWidgetModalSelected = { itemType: 'preBuilt' };
+    this.identifyShowElement = 'preBuilt';
+    this.previewWidgetTypeSelected = item;
+  }
+
   /** Return to widget list when identifyShowElement is not tabs. */
   returnCustomLists(): void {
-    this.previewWidgetTypeSelected
-      ? (this.previewWidgetTypeSelected = null)
-      : (this.identifyShowElement = 'tabs');
+    if (this.itemWidgetModalSelected.itemType === 'preBuilt') {
+      this.previewWidgetTypeSelected = null;
+      this.identifyShowElement = 'tabs';
+    } else {
+      this.previewWidgetTypeSelected
+        ? (this.previewWidgetTypeSelected = null)
+        : (this.identifyShowElement = 'tabs');
+    }
   }
 
   /**

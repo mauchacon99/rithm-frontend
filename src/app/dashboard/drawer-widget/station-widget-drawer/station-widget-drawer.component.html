@@ -13,7 +13,7 @@
 </div>
 <div *ngIf="!isLoading && !failedLoadDrawer" id="content-drawer-station-widget">
   <div
-    *ngIf="!dataDrawerStation?.quantityElementsWidget; else selectDrawer"
+    *ngIf="!dataDrawer?.quantityElementsWidget; else selectDrawer"
     id="message-not-documents-assigned-to-station"
   >
     <p class="text-sm">

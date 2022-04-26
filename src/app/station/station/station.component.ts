@@ -29,7 +29,12 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
+import {
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponent,
+  GridsterPush,
+} from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -56,6 +61,10 @@ export class StationComponent
   /** Indicate error when saving flow rule. */
   @ViewChild(FlowLogicComponent, { static: false })
   childFlowLogic!: FlowLogicComponent;
+
+  /** Indicate item of Gridster to modify. */
+  @ViewChild(GridsterItemComponent, { static: false })
+  gridItem!: GridsterItemComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -132,12 +141,16 @@ export class StationComponent
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
+  /** The selected tab index/init. */
+  headerTabIndex = 0;
+
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
     fixedRowHeight: 50,
     displayGrid: 'always',
     pushItems: true,
+    pushResizeItems: true,
     draggable: {
       enabled: true,
       ignoreContent: true,
@@ -320,7 +333,6 @@ export class StationComponent
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
-
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -351,6 +363,15 @@ export class StationComponent
         this.errorService.logError(error);
       },
     });
+  }
+
+  /**
+   * Click for tab selected item inside sub-header.
+   *
+   * @param headerTabIndex To catch event that verify click tab selected item.
+   */
+  headerSelectedTab(headerTabIndex: number): void {
+    this.headerTabIndex = headerTabIndex;
   }
 
   /**
@@ -796,6 +817,7 @@ export class StationComponent
     /** Depending on the case, the mode is set. */
     switch (mode) {
       case 'preview':
+        this.editMode = false;
         this.layoutMode = false;
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
@@ -864,91 +886,6 @@ export class StationComponent
   }
 
   /**
-   * Save or update the changes make the station frame widgets.
-   */
-  saveStationWidgetsChanges(): void {
-    this.editMode = false;
-    this.setGridMode('preview');
-
-    this.inputFrameWidgetItems.map((field) => {
-      if (field.questions) {
-        field.data = JSON.stringify(field.questions);
-      }
-    });
-    this.stationService
-      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
-      .pipe(first())
-      .subscribe({
-        next: (inputFrames) => {
-          inputFrames.map((input, index) => {
-            input.id = index;
-            if (input.data && JSON.parse(input.data)?.length > 0) {
-              input.questions = [];
-              input.questions = JSON.parse(input.data);
-            } else if (input.type === FrameType.Input) {
-              input.questions = [];
-            }
-          });
-          this.inputFrameWidgetItems = inputFrames;
-          if (inputFrames.length) {
-            this.saveInputFrameQuestions(
-              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
-            );
-          }
-          this.changedOptions();
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Save input frame widgets.
-   *
-   * @param frames An array of input frameWidgets.
-   */
-  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
-    if (frames.length) {
-      const frameQuestionRequest: Observable<Question[]>[] = [];
-      frames.forEach((frame) => {
-        const fQuestions: Question[] = JSON.parse(frame.data);
-        if (fQuestions.length) {
-          frameQuestionRequest.push(
-            this.stationService.saveInputFrameQuestions(
-              frame.rithmId,
-              fQuestions
-            )
-          );
-        }
-      });
-      this.forkJoinFrameQuestions(frameQuestionRequest);
-    }
-  }
-
-  /**
-   * Execute a fork join to save input frame questions.
-   *
-   * @param requestRow Request row to be executed.
-   */
-  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
-    forkJoin(requestRow)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
    * Get the station frame widgets.
    */
   private getStationWidgets(): void {
@@ -1002,6 +939,132 @@ export class StationComponent
           });
         },
         error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * This save button clicked show confirm If no questions
+   * and Save or update the changes to the station frame widgets.
+   */
+  async saveStationWidgetChanges(): Promise<void> {
+    let hasQuestions = false;
+    this.inputFrameWidgetItems.map((field) => {
+      if (field.questions?.length === 0) {
+        hasQuestions = true;
+      }
+    });
+    if (hasQuestions) {
+      const confirm = await this.popupService.confirm({
+        title: ' ',
+        message:
+          '\nYou have empty input frames, would you like to save anyway?',
+        okButtonText: 'Yes',
+        cancelButtonText: 'No',
+        important: true,
+      });
+      if (confirm) {
+        this.saveStationWidgetsChanges();
+        hasQuestions = false;
+      }
+    } else {
+      this.saveStationWidgetsChanges();
+    }
+  }
+
+  /**
+   * Save or update the changes make the station frame widgets.
+   */
+  private saveStationWidgetsChanges(): void {
+    this.stationLoading = true;
+    this.inputFrameWidgetItems.map((field) => {
+      if (field.questions) {
+        field.data = JSON.stringify(field.questions);
+      }
+    });
+    this.stationService
+      .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          inputFrames.forEach((input, index) => {
+            input.id = index;
+            if (input.data && JSON.parse(input.data)?.length > 0) {
+              input.questions = [];
+              input.questions = JSON.parse(input.data);
+            } else if (input.type === FrameType.Input) {
+              input.questions = [];
+            }
+          });
+          this.inputFrameWidgetItems = inputFrames;
+          if (inputFrames.length) {
+            this.saveInputFrameQuestions(
+              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+            );
+          } else {
+            this.stationLoading = false;
+            this.setGridMode('preview');
+          }
+          this.changedOptions();
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save input frame widgets.
+   *
+   * @param frames An array of input frameWidgets.
+   */
+  private saveInputFrameQuestions(frames: StationFrameWidget[]): void {
+    if (frames.length) {
+      const frameQuestionRequest: Observable<Question[]>[] = [];
+      frames.forEach((frame) => {
+        if (frame.data !== '') {
+          const fQuestions: Question[] = JSON.parse(frame.data);
+          if (fQuestions.length) {
+            frameQuestionRequest.push(
+              this.stationService.saveInputFrameQuestions(
+                frame.rithmId,
+                fQuestions
+              )
+            );
+          }
+        }
+      });
+      this.forkJoinFrameQuestions(frameQuestionRequest);
+    } else {
+      this.stationLoading = false;
+      this.setGridMode('preview');
+    }
+  }
+
+  /**
+   * Execute a fork join to save input frame questions.
+   *
+   * @param requestRow Request row to be executed.
+   */
+  private forkJoinFrameQuestions(requestRow: Observable<Question[]>[]): void {
+    forkJoin(requestRow)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1195,6 +1258,24 @@ export class StationComponent
     if (height > widget.rows) {
       widget.rows = height;
       widget.minItemRows = height;
+
+      /**Set in gridster properties to avoid overlapping widgets. */
+      const itemResized = new GridsterPush(
+        this.gridItem.gridster.grid[widget.id]
+      );
+      this.gridItem.gridster.grid[widget.id].$item.rows = height;
+
+      if (itemResized.pushItems(itemResized.fromNorth)) {
+        // push items from a direction
+        itemResized.checkPushBack(); // check for items can restore to original position
+        itemResized.setPushedItems(); // save the items pushed
+        this.gridItem.gridster.grid[widget.id].setSize();
+        this.gridItem.gridster.grid[widget.id].checkItemChanges(
+          this.gridItem.gridster.grid[widget.id].$item,
+          this.gridItem.gridster.grid[widget.id].item
+        );
+      }
+      itemResized.destroy();
     }
     this.changedOptions();
   }
