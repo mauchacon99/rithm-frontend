@@ -1,8 +1,8 @@
-<div
-  class="h-full w-full"
-  *ngIf="nextStations.length; else notConnectedStations"
->
-  <ng-container *ngIf="!flowLogicView; else newView">
+<ng-container *ngIf="!flowLogicView; else newView">
+  <div
+    class="h-full w-full"
+    *ngIf="nextStations.length; else notConnectedStations"
+  >
     <div *ngIf="ruleError">
       <p class="text-center text-error-500" id="rules-error">
         Error: Unable to retrieve the flow rules.
@@ -229,23 +229,123 @@
         </div>
       </div>
     </section>
-  </ng-container>
-  <ng-template #newView>
-    <div>
-      <p>Flow logic rule: new view.</p>
+  </div>
+  <ng-template #flowLogicRuleLoading>
+    <div class="flex justify-left" id="flow-logic-loading-rules">
+      <app-loading-indicator
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
     </div>
   </ng-template>
-</div>
-<ng-template #flowLogicRuleLoading>
-  <div class="flex justify-left" id="flow-logic-loading-rules">
-    <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
-  </div>
-</ng-template>
-<ng-template #notConnectedStations>
-  <div class="w-100 mt-10">
-    <p class="text-center text-error-500">
-      There are not any forward connections, please make a connection in order
-      to add flow logic.
-    </p>
+  <ng-template #notConnectedStations>
+    <div class="w-100 mt-10">
+      <p class="text-center text-error-500">
+        There are not any forward connections, please make a connection in order
+        to add flow logic.
+      </p>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #newView>
+  <div class="flex h-full">
+    <aside class="rules-left-side p-4 min-w-[266px]">
+      <ul class="rules-left-side-menu border-b border-secondary-100">
+        <li
+          class="py-2 cursor-pointer"
+          [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'triggers' }"
+          (click)="ruleSelectedMenu = 'triggers'"
+        >
+          <i class="fa-regular fa-clock"></i> Station Triggers
+        </li>
+        <li
+          class="py-2 cursor-pointer"
+          [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
+          (click)="ruleSelectedMenu = 'rules'"
+        >
+          <i class="fa-regular fa-square-plus"></i> New Rule
+        </li>
+      </ul>
+      <ul class="rules-left-side-added-rules"></ul>
+    </aside>
+    <div class="rules-right-side w-full border-l border-secondary-100">
+      <section class="rules-right-side-title w-full">
+        <div class="py-6 pr-6 pl-8 flex justify-between items-center">
+          <p
+            class="tracking-tight text-xl font-semibold"
+            *ngIf="ruleSelectedMenu === 'rules'"
+          >
+            Untitled Rule
+            <i class="fa-solid fa-pencil text-xl ml-1 cursor-pointer"></i>
+          </p>
+          <p
+            class="tracking-tight text-xl font-semibold"
+            *ngIf="ruleSelectedMenu === 'triggers'"
+          >
+            Station Triggers
+          </p>
+          <button mat-icon-button>
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+        </div>
+      </section>
+      <section class="rules-right-side-triggers w-full">
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            {{ ruleSelectedMenu === 'triggers' ? 'STANDARD ' : '' }}TRIGGERS
+          </p>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Manually Flow
+            <i
+              class="fa-solid fa-circle-question text-secondary-200 text-xl ml-1"
+              [matTooltip]="manuallyTooltip"
+              [matTooltipPosition]="'right'"
+            ></i>
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Check container
+            {{ ruleSelectedMenu === 'triggers' ? 'only on ' : 'on' }} arrival
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Check all containers on
+            {{ ruleSelectedMenu === 'triggers' ? 'new ' : '' }} container
+            arrival
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Check all
+            {{ ruleSelectedMenu === 'triggers' ? 'on ' : '' }} containers on
+            container departure
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title flex items-center border-b border-secondary-50 pl-8 pr-6 pt-8 pb-10"
+          *ngIf="ruleSelectedMenu === 'triggers'"
+        >
+          <button mat-stroked-button color="accent">Add Trigger</button>
+        </div>
+      </section>
+    </div>
   </div>
 </ng-template>

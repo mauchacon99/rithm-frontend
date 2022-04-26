@@ -46,6 +46,13 @@ export class FlowLogicComponent implements OnInit {
   /** Contains the new flow logic rule for saved . */
   newFlowLogic!: FlowLogicRule;
 
+  /** Determine what menu is currently selected. */
+  ruleSelectedMenu: 'triggers' | 'rules' = 'triggers';
+
+  /** Tooltip. */
+  manuallyTooltip =
+    'Uppon pressing the flow button, containers will be checked and flowed to their destination';
+
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
