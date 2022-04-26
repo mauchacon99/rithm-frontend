@@ -222,6 +222,7 @@
             <app-container-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltContainer"
               [editMode]="editMode"
+              (expandWidget)="toggleExpandWidget(index, $event)"
             >
             </app-container-pre-built-widget>
           </gridster-item>
