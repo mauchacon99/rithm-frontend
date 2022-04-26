@@ -46,6 +46,8 @@ import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/he
 import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
 import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
 import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 @NgModule({
   declarations: [
     StationComponent,
@@ -97,6 +99,8 @@ import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets
     TitleWidgetModule,
     BannerWidgetModule,
     CircleImageWidgetModule,
+    MatSlideToggleModule,
+    ComingSoonMessageModule,
   ],
 })
 export class StationModule {}
