@@ -553,6 +553,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       minHeight: '450px',
       data: {
         stationRithmId: this.stationRithmId,
+        documentRithmId: this.documentRithmId,
       },
     });
   }
