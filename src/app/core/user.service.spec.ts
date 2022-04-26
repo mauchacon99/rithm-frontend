@@ -302,6 +302,19 @@ describe('UserService', () => {
     httpTestingController.verify();
   });
 
+  it('should upload image user', () => {
+    const expectedResponse = 'ewf34tf-3ge343-g34g3e';
+    const file = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    const formData = new FormData();
+    formData.append('image', file);
+
+    service.uploadImageUser(file).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
   it('should call getImageUser', () => {
     const expectedData: ImageData = {
       imageData:
