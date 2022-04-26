@@ -78,11 +78,11 @@ export class UserFormComponent
   /** Value to identify when is changing user photo. */
   isChangingPhoto = false;
 
- /** Load indicator upload image. */
- isLoadingUploadImageUser = false;
+  /** Load indicator upload image. */
+  isLoadingUploadImageUser = false;
 
- /** Show error if upload image fail. */
- errorUploadImageUser = false;
+  /** Show error if upload image fail. */
+  errorUploadImageUser = false;
 
   constructor(
     private fb: FormBuilder,

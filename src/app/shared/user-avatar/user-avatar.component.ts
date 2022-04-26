@@ -41,11 +41,10 @@ export class UserAvatarComponent {
   @Input() isLarge = false;
 
   /** Profile image Rithm Id. */
-  @Input() set profileImageRithmId( profileImageRithmId: string){
-    if (profileImageRithmId){
+  @Input() set profileImageRithmId(profileImageRithmId: string) {
+    if (profileImageRithmId) {
       this.getImageUser(profileImageRithmId);
     }
-
   }
 
   /** Image data. */
@@ -60,7 +59,6 @@ export class UserAvatarComponent {
     private userService: UserService,
     private errorService: ErrorService
   ) {}
-
 
   /**
    * The first + last initials for the user.
@@ -103,7 +101,7 @@ export class UserAvatarComponent {
    *
    * @param profileImageRithmId Profile Image Id.
    */
-  private getImageUser(profileImageRithmId:string): void {
+  private getImageUser(profileImageRithmId: string): void {
     this.userService
       .getImageUser(profileImageRithmId)
       .pipe(first())

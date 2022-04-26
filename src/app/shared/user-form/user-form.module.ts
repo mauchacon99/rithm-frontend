@@ -19,7 +19,7 @@ import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.m
     MatInputModule,
     MatButtonModule,
     UserAvatarModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
   ],
   exports: [UserFormComponent],
 })

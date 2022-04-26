@@ -13,8 +13,10 @@
   (mouseenter)="hoverEffect ? (badgeHover = true) : (badgeHover = false)"
   (mouseleave)="badgeHover = false"
 >
-<img *ngIf="classProfileImage" [src]="classProfileImage" alt="star">
-  <button *ngIf="badge === 'none' && !classProfileImage" type="button">{{ initials }}</button>
+  <img *ngIf="classProfileImage" [src]="classProfileImage" alt="star" />
+  <button *ngIf="badge === 'none' && !classProfileImage" type="button">
+    {{ initials }}
+  </button>
   <button
     *ngIf="badge !== 'none' && !classProfileImage"
     [matBadge]="getBadge()"

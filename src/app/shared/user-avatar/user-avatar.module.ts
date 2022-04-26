@@ -7,7 +7,12 @@ import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.m
 
 @NgModule({
   declarations: [UserAvatarComponent],
-  imports: [CommonModule, MatTooltipModule, MatBadgeModule, LoadingIndicatorModule],
+  imports: [
+    CommonModule,
+    MatTooltipModule,
+    MatBadgeModule,
+    LoadingIndicatorModule,
+  ],
   exports: [UserAvatarComponent],
 })
 export class UserAvatarModule {}

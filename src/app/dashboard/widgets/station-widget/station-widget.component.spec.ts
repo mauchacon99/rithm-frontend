@@ -49,7 +49,7 @@ describe('StationWidgetComponent', () => {
         MockComponent(ErrorWidgetComponent),
         MockComponent(BannerImageWidgetComponent),
       ],
-      imports: [MatTableModule, RouterTestingModule,UserAvatarModule],
+      imports: [MatTableModule, RouterTestingModule, UserAvatarModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
