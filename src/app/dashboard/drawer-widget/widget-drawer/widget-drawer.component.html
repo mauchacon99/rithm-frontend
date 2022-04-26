@@ -19,7 +19,12 @@
 
     <!--      Station drawer-->
     <app-station-widget-drawer
-      *ngIf="drawerMode === 'stationWidget'"
+      *ngIf="
+        widgetType === enumWidgetType.Station ||
+        widgetType === enumWidgetType.StationMultiline ||
+        widgetType === enumWidgetType.StationMultilineBanner ||
+        widgetType === enumWidgetType.StationTableBanner
+      "
       [image]="imageUploaded"
       [dataDrawer]="dataDrawer"
     >
@@ -27,7 +32,11 @@
 
     <!-- Document drawer-->
     <app-document-widget-drawer
-      *ngIf="drawerMode === 'documentWidget'"
+      *ngIf="
+        widgetType === enumWidgetType.Document ||
+        widgetType === enumWidgetType.DocumentListBanner ||
+        widgetType === enumWidgetType.ContainerProfileBanner
+      "
       [image]="imageUploaded"
       [showProfileImageBanner]="showProfileImageBanner"
       [dataDrawer]="dataDrawer"

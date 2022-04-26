@@ -23,6 +23,7 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { StationComponent } from 'src/app/station/station/station.component';
 import { MapService } from 'src/app/map/map.service';
 import { Router } from '@angular/router';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -30,6 +31,7 @@ describe('GroupSearchWidgetComponent', () => {
   let stationService: StationService;
   let errorService: ErrorService;
   let mapService: MapService;
+  let sidenavDrawerService: SidenavDrawerService;
   const dataWidget =
     '{"stationGroupRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168"}';
 
@@ -109,6 +111,7 @@ describe('GroupSearchWidgetComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: MapService, useClass: MockMapService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -117,6 +120,7 @@ describe('GroupSearchWidgetComponent', () => {
     stationService = TestBed.inject(StationService);
     errorService = TestBed.inject(ErrorService);
     mapService = TestBed.inject(MapService);
+    sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(GroupSearchWidgetComponent);
     component = fixture.componentInstance;
     component.dataWidget = dataWidget;
@@ -342,5 +346,39 @@ describe('GroupSearchWidgetComponent', () => {
     expect(btn).toBeTruthy();
     btn.click();
     expect(spyDialog).toHaveBeenCalled();
+  });
+
+  it('should call and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.errorStationGroup = false;
+    component.editMode = true;
+    component.showButtonSetting = true;
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+    component.toggleEditStation();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
+
+  it('should call drawer context and compare this context', () => {
+    const drawerContext = 'widgetDashboard';
+    const spySidenavDrawer = spyOn(
+      sidenavDrawerService.drawerContext$,
+      'next'
+    ).and.callThrough();
+    sidenavDrawerService.drawerContext$.next(drawerContext);
+    component.ngOnInit();
+    expect(component.drawerContext).toBe(drawerContext);
+    expect(spySidenavDrawer).toHaveBeenCalled();
+  });
+
+  it('should obtain value in isDrawerOpen in sidenavDrawerService', () => {
+    const spyMethod = spyOnProperty(
+      sidenavDrawerService,
+      'isDrawerOpen'
+    ).and.returnValue(true);
+    component.isDrawerOpen;
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.isDrawerOpen).toBeTrue();
   });
 });
