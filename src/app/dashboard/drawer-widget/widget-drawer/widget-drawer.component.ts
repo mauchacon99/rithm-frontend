@@ -65,7 +65,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     | 'documentWidget'
     | 'groupSearchWidget'
     | 'groupTrafficWidget'
-    | 'stationPreBuiltWidget' = 'stationWidget';
+    | 'stationPreBuiltWidget'
+    | 'containerPreBuiltWidget' = 'stationWidget';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -131,7 +132,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
           data === 'documentWidget' ||
           data === 'groupSearchWidget' ||
           data === 'groupTrafficWidget' ||
-          data === 'stationPreBuiltWidget'
+          data === 'stationPreBuiltWidget' ||
+          data === 'containerPreBuiltWidget'
         ) {
           this.drawerMode = data;
         }
@@ -148,7 +150,8 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
       this.drawerMode === 'documentWidget' ||
       this.drawerMode === 'groupSearchWidget' ||
       this.drawerMode === 'groupTrafficWidget' ||
-      this.drawerMode === 'stationPreBuiltWidget'
+      this.drawerMode === 'stationPreBuiltWidget' ||
+      this.drawerMode === 'containerPreBuiltWidget'
     ) {
       this.sidenavDrawerService.toggleDrawer(this.drawerMode);
     }
