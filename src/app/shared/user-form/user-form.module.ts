@@ -7,6 +7,7 @@ import { PasswordRequirementsModule } from '../password-requirements/password-re
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserAvatarModule } from '../user-avatar/user-avatar.module';
+import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [UserFormComponent],
@@ -18,6 +19,7 @@ import { UserAvatarModule } from '../user-avatar/user-avatar.module';
     MatInputModule,
     MatButtonModule,
     UserAvatarModule,
+    LoadingIndicatorModule
   ],
   exports: [UserFormComponent],
 })

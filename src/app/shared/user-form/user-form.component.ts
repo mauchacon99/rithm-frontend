@@ -73,7 +73,16 @@ export class UserFormComponent
   confirmPasswordLabel = '';
 
   /** User image. */
-  userImageId!: string;
+  profileImageRithmId!: string;
+
+  /** Value to identify when is changing user photo. */
+  isChangingPhoto = false;
+
+ /** Load indicator upload image. */
+ isLoadingUploadImageUser = false;
+
+ /** Show error if upload image fail. */
+ errorUploadImageUser = false;
 
   constructor(
     private fb: FormBuilder,
@@ -273,7 +282,7 @@ export class UserFormComponent
     if (file) {
       const extension = file.type.split('/')[1];
       if (FormatImageValidate.isValidFormatImage(extension)) {
-        //here will go the process with the image
+        this.uploadImageUser(file);
       } else {
         this.popupService.alert({
           title: 'Image format is not valid.',
@@ -290,14 +299,23 @@ export class UserFormComponent
    * @param file File to upload.
    */
   private uploadImageUser(file: File): void {
+    this.isLoadingUploadImageUser = true;
+    this.errorUploadImageUser = false;
+    this.isChangingPhoto = true;
     this.userService
       .uploadImageUser(file)
       .pipe(first())
       .subscribe({
-        next: (userImage) => {
-          this.userImageId = userImage;
+        next: (profileImageRithmId) => {
+          this.isLoadingUploadImageUser = false;
+          this.errorUploadImageUser = false;
+          this.isChangingPhoto = false;
+          this.profileImageRithmId = profileImageRithmId;
         },
         error: (error: unknown) => {
+          this.isLoadingUploadImageUser = false;
+          this.errorUploadImageUser = true;
+          this.isChangingPhoto = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

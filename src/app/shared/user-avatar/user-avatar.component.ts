@@ -8,7 +8,7 @@ import { ImageData } from 'src/models/index';
  * Reusable component for displaying a user's avatar.
  */
 @Component({
-  selector: 'app-user-avatar[firstName][lastName]',
+  selector: 'app-user-avatar[firstName][lastName][profileImageRithmId]',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
 })
@@ -37,16 +37,30 @@ export class UserAvatarComponent {
   /** If avatars are small. */
   @Input() isSmall = false;
 
-  /** Image Rithm Id. */
-  imageRithmId!: string;
+  /** If avatars are large. */
+  @Input() isLarge = false;
+
+  /** Profile image Rithm Id. */
+  @Input() set profileImageRithmId( profileImageRithmId: string){
+    if (profileImageRithmId){
+      this.getImageUser(profileImageRithmId);
+    }
+
+  }
 
   /** Image data. */
-  imageData!: ImageData;
+  set imageData(image: ImageData) {
+    this.classProfileImage = image.imageData;
+  }
+
+  /** Class to render profile image. */
+  classProfileImage = '';
 
   constructor(
     private userService: UserService,
     private errorService: ErrorService
   ) {}
+
 
   /**
    * The first + last initials for the user.
@@ -86,10 +100,12 @@ export class UserAvatarComponent {
 
   /**
    * Get Image user.
+   *
+   * @param profileImageRithmId Profile Image Id.
    */
-  private getImageUser(): void {
+  private getImageUser(profileImageRithmId:string): void {
     this.userService
-      .getImageUser(this.imageRithmId)
+      .getImageUser(profileImageRithmId)
       .pipe(first())
       .subscribe({
         next: (imageData) => {

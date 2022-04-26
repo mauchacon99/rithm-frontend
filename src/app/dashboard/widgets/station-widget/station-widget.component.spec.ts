@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -48,7 +49,7 @@ describe('StationWidgetComponent', () => {
         MockComponent(ErrorWidgetComponent),
         MockComponent(BannerImageWidgetComponent),
       ],
-      imports: [MatTableModule, RouterTestingModule],
+      imports: [MatTableModule, RouterTestingModule,UserAvatarModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
