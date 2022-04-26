@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { first } from 'rxjs';
@@ -6,6 +6,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationWidgetPreBuilt } from 'src/models';
+import { MatSort } from '@angular/material/sort';
 /**
  * Component for station prebuilt.
  */
@@ -15,6 +16,13 @@ import { StationWidgetPreBuilt } from 'src/models';
   styleUrls: ['./station-pre-built-widget.component.scss'],
 })
 export class StationPreBuiltWidgetComponent implements OnInit {
+  /** Reference to sort table. */
+  @ViewChild(MatSort) set tableSort(value: MatSort) {
+    if (value) {
+      this.dataSourceTable.sort = value;
+    }
+  }
+
   /** Edit mode toggle from dashboard. */
   @Input() editMode = false;
 
