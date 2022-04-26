@@ -223,7 +223,7 @@ describe('GroupTrafficWidgetComponent', () => {
   });
 
   it('should call drawer context and compare this context', () => {
-    const drawerContext = 'groupTrafficWidget';
+    const drawerContext = 'widgetDashboard';
     const spySidenavDrawer = spyOn(
       sidenavDrawerService.drawerContext$,
       'next'

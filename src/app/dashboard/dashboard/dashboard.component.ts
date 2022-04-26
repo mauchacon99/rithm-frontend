@@ -112,14 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showButtonSetting = false;
 
   /** Show the dashboard menu. */
-  drawerContext:
-    | 'menuDashboard'
-    | 'stationWidget'
-    | 'documentWidget'
-    | 'groupSearchWidget'
-    | 'groupTrafficWidget'
-    | 'stationPreBuiltWidget'
-    | 'containerPreBuiltWidget' = 'menuDashboard';
+  drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -202,7 +195,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((drawerContext) => {
         if (
           drawerContext === 'menuDashboard' ||
-          drawerContext === 'stationWidget'
+          drawerContext === 'widgetDashboard'
         ) {
           this.drawerContext = drawerContext;
         }
@@ -241,14 +234,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param drawerData Data optional of the drawer.
    */
   toggleDrawer(
-    drawerItem:
-      | 'menuDashboard'
-      | 'stationWidget'
-      | 'documentWidget'
-      | 'groupSearchWidget'
-      | 'groupTrafficWidget'
-      | 'stationPreBuiltWidget'
-      | 'containerPreBuiltWidget',
+    drawerItem: 'menuDashboard' | 'widgetDashboard',
     drawerData?: EditDataWidget
   ): void {
     if (this.isDrawerOpen) {
@@ -272,25 +258,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param quantityElementsWidget Number of items to be displayed in the widget.
    */
   toggleWidgetDrawer(
-    context: string,
     widgetItem: DashboardItem,
     widgetIndex: number,
     quantityElementsWidget: number
   ): void {
-    if (
-      context === 'stationWidget' ||
-      context === 'documentWidget' ||
-      context === 'groupSearchWidget' ||
-      context === 'groupTrafficWidget' ||
-      context === 'stationPreBuiltWidget' ||
-      context === 'containerPreBuiltWidget'
-    ) {
-      this.toggleDrawer(context, {
-        widgetItem,
-        widgetIndex,
-        quantityElementsWidget,
-      });
-    }
+    const contextDrawerWidget = 'widgetDashboard';
+    this.toggleDrawer(contextDrawerWidget, {
+      widgetItem,
+      widgetIndex,
+      quantityElementsWidget,
+    });
   }
 
   /**

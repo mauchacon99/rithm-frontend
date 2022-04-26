@@ -441,12 +441,11 @@ describe('DashboardComponent', () => {
       const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
       component.toggleWidgetDrawer(
-        'stationWidget',
         widgetItem,
         widgetIndex,
         quantityElementsWidget
       );
-      expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
+      expect(spyMethod).toHaveBeenCalledOnceWith('widgetDashboard', {
         widgetItem,
         widgetIndex,
         quantityElementsWidget,
@@ -454,7 +453,7 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggle drawer for close drawer the widgets how dashboard change a editMode false', async () => {
-      const drawerContext = 'stationWidget';
+      const drawerContext = 'widgetDashboard';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
       component.dashboardDataCopy = dataDashboard;
@@ -463,11 +462,11 @@ describe('DashboardComponent', () => {
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       await component.toggleEditMode(false);
       expect(spyMethod).toHaveBeenCalledWith();
-      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+      expect(spyDrawer).toHaveBeenCalledWith('widgetDashboard');
     });
 
     it('should toggle drawer if drawer open is different a menuDashboard when update dashboard', () => {
-      component.drawerContext = 'stationWidget';
+      component.drawerContext = 'widgetDashboard';
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       component.updateDashboard();

@@ -14,15 +14,7 @@
       *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
     ></app-menu>
     <app-widget-drawer
-      *ngIf="
-        (drawerContext === 'stationWidget' ||
-          drawerContext === 'documentWidget' ||
-          drawerContext === 'groupSearchWidget' ||
-          drawerContext === 'groupTrafficWidget' ||
-          drawerContext === 'stationPreBuiltWidget' ||
-          drawerContext === 'containerPreBuiltWidget') &&
-        isDrawerOpen
-      "
+      *ngIf="drawerContext === 'widgetDashboard' && isDrawerOpen"
       (deleteWidget)="removeWidgetIndex($event)"
     ></app-widget-drawer>
   </mat-drawer>
@@ -181,9 +173,7 @@
               }"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
-              (toggleDrawer)="
-                toggleWidgetDrawer('stationWidget', item, index, $event)
-              "
+              (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
             >
             </app-station-widget>
             <app-document-widget
@@ -196,9 +186,7 @@
               [widgetItem]="item"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
-              (toggleDrawer)="
-                toggleWidgetDrawer('documentWidget', item, index, $event)
-              "
+              (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
             >
             </app-document-widget>
             <app-group-search-widget
@@ -207,9 +195,7 @@
               [widgetType]="item.widgetType"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
-              (toggleDrawer)="
-                toggleWidgetDrawer('groupSearchWidget', item, index, $event)
-              "
+              (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
             >
             </app-group-search-widget>
             <app-group-traffic-widget
@@ -220,31 +206,20 @@
               [widgetItem]="item"
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
-              (toggleDrawer)="
-                toggleWidgetDrawer('groupTrafficWidget', item, index, $event)
-              "
+              (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
             ></app-group-traffic-widget>
             <app-station-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
-              (toggleDrawer)="
-                toggleWidgetDrawer('stationPreBuiltWidget', item, index, $event)
-              "
+              (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
             ></app-station-pre-built-widget>
 
             <app-container-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltContainer"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
-              (toggleDrawer)="
-                toggleWidgetDrawer(
-                  'containerPreBuiltWidget',
-                  item,
-                  index,
-                  $event
-                )
-              "
+              (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
             >
             </app-container-pre-built-widget>
           </gridster-item>

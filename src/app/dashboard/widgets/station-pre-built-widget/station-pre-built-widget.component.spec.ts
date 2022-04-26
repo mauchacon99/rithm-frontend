@@ -183,7 +183,7 @@ describe('StationPreBuiltWidgetComponent', () => {
   });
 
   it('should call drawer context and compare this context', () => {
-    const drawerContext = 'stationPreBuiltWidget';
+    const drawerContext = 'widgetDashboard';
     const spySidenavDrawer = spyOn(
       sidenavDrawerService.drawerContext$,
       'next'

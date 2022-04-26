@@ -24,13 +24,8 @@ export class SidenavDrawerService {
     | 'connectionInfo'
     | 'stationGroupInfo'
     | 'menuDashboard'
-    | 'stationWidget'
-    | 'documentWidget'
+    | 'widgetDashboard'
     | 'fieldSetting'
-    | 'groupSearchWidget'
-    | 'groupTrafficWidget'
-    | 'stationPreBuiltWidget'
-    | 'containerPreBuiltWidget'
     | ''
   > = new ReplaySubject(1);
 
@@ -135,13 +130,8 @@ export class SidenavDrawerService {
       | 'connectionInfo'
       | 'stationGroupInfo'
       | 'menuDashboard'
-      | 'stationWidget'
-      | 'documentWidget'
-      | 'fieldSetting'
-      | 'groupSearchWidget'
-      | 'groupTrafficWidget'
-      | 'stationPreBuiltWidget'
-      | 'containerPreBuiltWidget',
+      | 'widgetDashboard'
+      | 'fieldSetting',
     data?: unknown
   ): void {
     if (!this.drawerComponent) {
@@ -182,13 +172,8 @@ export class SidenavDrawerService {
       | 'connectionInfo'
       | 'stationGroupInfo'
       | 'menuDashboard'
-      | 'stationWidget'
-      | 'documentWidget'
-      | 'fieldSetting'
-      | 'groupSearchWidget'
-      | 'groupTrafficWidget'
-      | 'stationPreBuiltWidget'
-      | 'containerPreBuiltWidget',
+      | 'widgetDashboard'
+      | 'fieldSetting',
     data?: unknown
   ): void {
     if (!this.drawerComponent) {

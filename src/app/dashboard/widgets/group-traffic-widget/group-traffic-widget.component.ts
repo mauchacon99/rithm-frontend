@@ -74,6 +74,15 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
   /** Parameter private for save if is mobile device. */
   private _isMobileDevice!: boolean;
 
@@ -210,15 +219,6 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
     this.setDataWidget();
     this.subscribeDrawerContext$();
     this.getGroupTrafficData();
-  }
-
-  /**
-   * Whether the drawer is open.
-   *
-   * @returns True if the drawer is open, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /** Get context drawer. */

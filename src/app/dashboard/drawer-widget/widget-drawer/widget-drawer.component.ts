@@ -60,13 +60,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   widgetIndex!: number;
 
   /** Whether the called widget-drawer. */
-  drawerMode:
-    | 'stationWidget'
-    | 'documentWidget'
-    | 'groupSearchWidget'
-    | 'groupTrafficWidget'
-    | 'stationPreBuiltWidget'
-    | 'containerPreBuiltWidget' = 'stationWidget';
+  drawerMode: 'widgetDashboard' = 'widgetDashboard';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -127,14 +121,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        if (
-          data === 'stationWidget' ||
-          data === 'documentWidget' ||
-          data === 'groupSearchWidget' ||
-          data === 'groupTrafficWidget' ||
-          data === 'stationPreBuiltWidget' ||
-          data === 'containerPreBuiltWidget'
-        ) {
+        if (data === 'widgetDashboard') {
           this.drawerMode = data;
         }
       });
@@ -145,14 +132,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
    *
    */
   toggleDrawer(): void {
-    if (
-      this.drawerMode === 'stationWidget' ||
-      this.drawerMode === 'documentWidget' ||
-      this.drawerMode === 'groupSearchWidget' ||
-      this.drawerMode === 'groupTrafficWidget' ||
-      this.drawerMode === 'stationPreBuiltWidget' ||
-      this.drawerMode === 'containerPreBuiltWidget'
-    ) {
+    if (this.drawerMode === 'widgetDashboard') {
       this.sidenavDrawerService.toggleDrawer(this.drawerMode);
     }
   }

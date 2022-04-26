@@ -42,6 +42,15 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -86,15 +95,6 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
     this.stationGroupRithmId = dataWidget.stationGroupRithmId;
     this.subscribeDrawerContext$();
     this.getStationGroups();
-  }
-
-  /**
-   * Whether the drawer is open.
-   *
-   * @returns True if the drawer is open, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /** Get context drawer. */
