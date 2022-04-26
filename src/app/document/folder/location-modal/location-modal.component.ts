@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -18,6 +19,9 @@ export class LocationModalComponent implements OnInit {
   /** Document Id passed from parent. */
   documentRithmId = '';
 
+  /** Station Id passed from parent. */
+  stationRithmId = '';
+
   /** Use for station events history. */
   currentStations: DocumentCurrentStation[] = [];
 
@@ -26,8 +30,12 @@ export class LocationModalComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
+    @Inject(MAT_DIALOG_DATA) private data: LocationModalComponent,
     private errorService: ErrorService
-  ) {}
+  ) {
+    this.stationRithmId = data.stationRithmId;
+    this.documentRithmId = data.documentRithmId;
+  }
 
   /**
    * Initial Method.
