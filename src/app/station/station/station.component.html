@@ -278,7 +278,7 @@
                     class="font-semibold text-sm"
                     id="station-edit-mode-button"
                     (click)="setEditMode()"
-                    [disabled]="stationLoading"
+                    [disabled]="stationLoading || widgetLoading"
                   >
                     Edit
                   </button>
@@ -380,6 +380,7 @@
                       'custom-component-container'
                     ]"
                     (cdkDropListDropped)="addInputFrame($event)"
+                    *ngIf="!widgetLoading; else widgetLoader"
                   >
                     <gridster
                       class="p-0 bg-transparent h-screen"
@@ -467,6 +468,14 @@
                       </gridster-item>
                     </gridster>
                   </div>
+                  <ng-template #widgetLoader>
+                    <div
+                      id="widget-loading"
+                      class="flex items-center justify-center w-full h-[calc(100vh-430px)] overflow-hidden"
+                    >
+                      <app-loading-indicator></app-loading-indicator>
+                    </div>
+                  </ng-template>
                 </ng-container>
                 <ng-template #gridsterLoading>
                   <div

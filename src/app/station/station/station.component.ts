@@ -168,6 +168,9 @@ export class StationComponent
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
 
+  /** Whether the request to get the widgets is currently underway. */
+  widgetLoading = false;
+
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
@@ -465,10 +468,10 @@ export class StationComponent
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
             );
+            this.getStationWidgets();
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
-          this.getStationWidgets();
           this.stationLoading = false;
         },
         error: (error: unknown) => {
@@ -889,6 +892,7 @@ export class StationComponent
    * Get the station frame widgets.
    */
   private getStationWidgets(): void {
+    this.widgetLoading = true;
     this.stationService
       .getStationWidgets(this.stationRithmId)
       .pipe(first())
@@ -939,8 +943,10 @@ export class StationComponent
             this.inputFrameWidgetItems.push(frame);
             this.changedOptions();
           });
+          this.widgetLoading = false;
         },
         error: (error: unknown) => {
+          this.widgetLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
