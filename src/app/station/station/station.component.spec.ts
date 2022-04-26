@@ -62,6 +62,8 @@ import {
   MockUserService,
   MockPopupService,
 } from 'src/mocks';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -96,6 +98,7 @@ describe('StationComponent', () => {
         MockComponent(BannerWidgetComponent),
         MockComponent(BuildDrawerComponent),
         MockComponent(CircleImageWidgetComponent),
+        MockComponent(FlowLogicComponent),
       ],
       imports: [
         NoopAnimationsModule,
@@ -110,6 +113,8 @@ describe('StationComponent', () => {
         MatExpansionModule,
         MatDividerModule,
         GridsterModule,
+        MatSlideToggleModule,
+        ComingSoonMessageModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

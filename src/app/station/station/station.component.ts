@@ -142,7 +142,7 @@ export class StationComponent
   drawerContext = 'comments';
 
   /** The selected tab index/init. */
-  selectedTab = 'Container';
+  headerTabIndex = 0;
 
   /** Grid initial values. */
   options: GridsterConfig = {
@@ -367,10 +367,10 @@ export class StationComponent
   /**
    * Click for tab selected item inside sub-header.
    *
-   * @param clickInside To catch event that verify click tab selected item.
+   * @param headerTabIndex To catch event that verify click tab selected item.
    */
-  tabItem(clickInside: string): void {
-    this.selectedTab = clickInside;
+  headerSelectedTab(headerTabIndex: number): void {
+    this.headerTabIndex = headerTabIndex;
   }
 
   /**
