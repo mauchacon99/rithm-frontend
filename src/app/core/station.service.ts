@@ -24,7 +24,6 @@ import {
   GroupTrafficData,
   StandardNumberJSON,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -970,35 +969,5 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
       frameQuestions
     );
-  }
-
-  /**
-   * Get the current stations from containers.
-   *
-   * @param stationRithmId The current station id.
-   * @returns The current stations.
-   */
-  getCurrentStations(
-    stationRithmId: string
-  ): Observable<DocumentCurrentStation[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'retrieve a list of stations for this container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const currentStationsResponse: DocumentCurrentStation[] = [
-        {
-          name: 'Testy',
-          rithmId: '123',
-          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
-        },
-      ];
-      return of(currentStationsResponse).pipe(delay(1000));
-    }
   }
 }
