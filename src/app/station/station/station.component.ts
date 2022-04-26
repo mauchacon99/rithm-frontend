@@ -397,7 +397,7 @@ export class StationComponent
             this.stationForm.dirty ||
             this.stationForm.controls.stationTemplateForm.touched
           ))) ||
-      // If current tab is flow and there are no pending flow rules to be updated.
+      // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
