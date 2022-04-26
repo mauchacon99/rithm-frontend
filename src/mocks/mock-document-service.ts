@@ -1715,13 +1715,13 @@ export class MockDocumentService {
   /**
    * Get the current stations from containers.
    *
-   * @param stationRithmId The current station id.
+   * @param documentRithmId The current document id.
    * @returns The current stations.
    */
   getCurrentStations(
-    stationRithmId: string
+    documentRithmId: string
   ): Observable<DocumentCurrentStation[]> {
-    if (!stationRithmId) {
+    if (!documentRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
