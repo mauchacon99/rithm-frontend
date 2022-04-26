@@ -11,12 +11,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./data-link-modal.component.scss'],
 })
 export class DataLinkModalComponent {
-  constructor(
-    public dialogRef: MatDialogRef<DataLinkModalComponent>
-  ) {}
+  constructor(public dialogRef: MatDialogRef<DataLinkModalComponent>) {}
 
   /** Close modal. */
-  closeModalHelp() :void {
+  closeModalHelp(): void {
     this.dialogRef.close();
   }
 }

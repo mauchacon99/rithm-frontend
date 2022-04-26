@@ -25,7 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     LoadingIndicatorModule,
     MatDividerModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   exports: [DataLinkFieldComponent],
 })

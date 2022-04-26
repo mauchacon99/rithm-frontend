@@ -14,7 +14,11 @@ import { Question, QuestionFieldType, Station } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DataLinkFieldComponent } from './data-link-field.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('DataLinkFieldComponent', () => {
@@ -62,7 +66,7 @@ describe('DataLinkFieldComponent', () => {
         MatDividerModule,
         MatSelectModule,
         MatDialogModule,
-        MatSnackBarModule
+        MatSnackBarModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -192,9 +196,8 @@ describe('DataLinkFieldComponent', () => {
       component,
       'openModalHelp'
     ).and.callThrough();
-    const btnDataLinkHelp = fixture.nativeElement.querySelector(
-      '#data-help-modal'
-    );
+    const btnDataLinkHelp =
+      fixture.nativeElement.querySelector('#data-help-modal');
     expect(btnDataLinkHelp).toBeTruthy();
     btnDataLinkHelp.click();
     expect(openModalHelpSpy).toHaveBeenCalled();
