@@ -128,3 +128,15 @@ textarea {
     @apply border-none bg-transparent;
   }
 }
+
+.station-container-tabs ::ng-deep {
+  .mat-tab-labels {
+    display: none;
+  }
+
+  .container-tab,
+  .rules-tab,
+  .setting-tab {
+    min-height: calc(100vh - 112px);
+  }
+}
