@@ -391,7 +391,7 @@
                         [ngClass]="{
                           'widget-item-layout':
                             layoutMode && widgetFocused !== i,
-                            'circle-border':
+                          'circle-border':
                             widgetItem.type === frameType.CircleImage,
                           'border-accent-300 border-2': widgetFocused === i
                         }"
@@ -404,11 +404,13 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster"
-                        [ngClass]="{
-                          'circle-image-container':
-                            widgetItem.type === frameType.CircleImage
-                        }">
+                        <div
+                          class="h-gridster"
+                          [ngClass]="{
+                            'circle-image-container':
+                              widgetItem.type === frameType.CircleImage
+                          }"
+                        >
                           <button
                             mat-icon-button
                             type="button"
