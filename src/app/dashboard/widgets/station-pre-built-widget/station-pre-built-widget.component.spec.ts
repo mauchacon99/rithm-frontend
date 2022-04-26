@@ -4,6 +4,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSortModule } from '@angular/material/sort';
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
@@ -47,7 +48,7 @@ describe('StationPreBuiltWidgetComponent', () => {
         MockComponent(ErrorWidgetComponent),
         MockComponent(StationDocumentsModalComponent),
       ],
-      imports: [RosterModule, MatDialogModule],
+      imports: [RosterModule, MatDialogModule, MatSortModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },

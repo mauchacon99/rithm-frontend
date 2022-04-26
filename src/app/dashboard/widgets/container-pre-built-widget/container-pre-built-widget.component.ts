@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -13,6 +14,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { ContainerWidgetPreBuilt } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { MatSort } from '@angular/material/sort';
 
 /** Container preview build. */
 @Component({
@@ -22,6 +24,13 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   providers: [UtcTimeConversion],
 })
 export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
+  /** Reference to sort table. */
+  @ViewChild(MatSort) set tableSort(value: MatSort) {
+    if (value) {
+      this.dataSourceTable.sort = value;
+    }
+  }
+
   /** Edit mode dashboard. */
   @Input() editMode!: boolean;
 
