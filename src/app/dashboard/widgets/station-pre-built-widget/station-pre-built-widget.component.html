@@ -26,7 +26,12 @@
 </div>
 
 <ng-template #tableStations>
-  <table mat-table [dataSource]="dataSourceTable" matSort class="w-full table-sort">
+  <table
+    mat-table
+    [dataSource]="dataSourceTable"
+    matSort
+    class="w-full table-sort"
+  >
     <!-- Name Station -->
     <ng-container matColumnDef="stationName">
       <th
@@ -124,9 +129,19 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationName' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        STATION OWNERS
+        <p class="font-semibold text-xs text-secondary-300">STATION OWNERS</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationGroup' }"
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
