@@ -9,8 +9,10 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { first, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import {
   Question,
@@ -18,6 +20,7 @@ import {
   DataLinkObject,
   QuestionFieldType,
 } from 'src/models';
+import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link-modal.component';
 
 /**
  * Reusable component for every field data-link.
@@ -93,7 +96,9 @@ export class DataLinkFieldComponent
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private popupService: PopupService,
+    private dialog: MatDialog
   ) {}
 
   /**
@@ -316,6 +321,15 @@ export class DataLinkFieldComponent
         startWith(''),
         map((value) => this._filter(value))
       );
+  }
+
+  /**
+   * Open modal the link help of data link.
+   */
+  openModalHelp(): void {
+    this.dialog.open(DataLinkModalComponent, {
+      width: '600px',
+    });
   }
 
   /**
