@@ -15,7 +15,21 @@
   *ngIf="!isLoading && !errorStationPrebuilt && stationWidgetData"
   class="h-full w-full p-2"
 >
-  <h3 class="font-semibold truncate mb-2">My Stations</h3>
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold truncate mb-2">My Stations</h3>
+    <div *ngIf="editMode && showButtonSetting">
+      <button
+        mat-icon-button
+        [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
+        (click)="toggleEditStation()"
+        id="toggle-edit-station-pre-built"
+        data-testid="toggle-edit-station-pre-built"
+        class="text-secondary-500"
+      >
+        <i class="fas fa-cog text-base"></i>
+      </button>
+    </div>
+  </div>
 
   <div class="flex-grow overflow-auto scrollbar h-[calc(100%-40px)]">
     <ng-container
@@ -26,15 +40,31 @@
 </div>
 
 <ng-template #tableStations>
-  <table mat-table [dataSource]="dataSourceTable" class="w-full">
+  <table
+    mat-table
+    [dataSource]="dataSourceTable"
+    [matSortDisabled]="editMode"
+    matSort
+    class="w-full table-sort"
+  >
     <!-- Name Station -->
     <ng-container matColumnDef="stationName">
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationName' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        STATION
+        <p class="font-semibold truncate text-xs text-secondary-300">STATION</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -50,9 +80,24 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'totalContainers' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        CONTAINERS
+        <p class="font-semibold truncate text-xs text-secondary-300">
+          CONTAINERS
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'totalContainers' }
+          "
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -73,9 +118,19 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationGroup' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        GROUP
+        <p class="font-semibold truncate text-xs text-secondary-300">GROUP</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationGroup' }"
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -91,9 +146,24 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationOwners' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        STATION OWNERS
+        <p class="font-semibold truncate text-xs text-secondary-300">
+          STATION OWNERS
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'stationOwners' }
+          "
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -120,4 +190,24 @@
 
 <ng-template #emptyStations>
   <div class="text-center my-4 text-sm">There are not stations.</div>
+</ng-template>
+
+<ng-template #buttonSort let-type>
+  <i
+    *ngIf="!editMode"
+    class="fas text-base ml-3"
+    [ngClass]="{
+      'text-accent-500':
+        dataSourceTable.sort?.active === type &&
+        dataSourceTable.sort?.direction,
+      'fa-caret-down':
+        dataSourceTable.sort?.direction === 'desc' &&
+        dataSourceTable.sort?.active === type,
+      'fa-caret-up':
+        (dataSourceTable.sort?.direction === 'asc' &&
+          dataSourceTable.sort?.active === type) ||
+        dataSourceTable.sort?.active !== type ||
+        !dataSourceTable.sort?.direction
+    }"
+  ></i>
 </ng-template>

@@ -14,6 +14,12 @@ import { Question, QuestionFieldType, Station } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DataLinkFieldComponent } from './data-link-field.component';
 import { MatDividerModule } from '@angular/material/divider';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('DataLinkFieldComponent', () => {
   let component: DataLinkFieldComponent;
@@ -59,11 +65,15 @@ describe('DataLinkFieldComponent', () => {
         MatAutocompleteModule,
         MatDividerModule,
         MatSelectModule,
+        MatDialogModule,
+        MatSnackBarModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
       ],
     }).compileComponents();
   });
@@ -179,5 +189,17 @@ describe('DataLinkFieldComponent', () => {
     component.getStationQuestions('Fake data link');
     expect(component.displayFieldsLabel).toEqual('No Questions Found');
     expect(component.questionLoading).toBeFalsy();
+  });
+
+  it('should to call method openModalHelp after clicked in button', () => {
+    const openModalHelpSpy = spyOn(
+      component,
+      'openModalHelp'
+    ).and.callThrough();
+    const btnDataLinkHelp =
+      fixture.nativeElement.querySelector('#data-help-modal');
+    expect(btnDataLinkHelp).toBeTruthy();
+    btnDataLinkHelp.click();
+    expect(openModalHelpSpy).toHaveBeenCalled();
   });
 });
