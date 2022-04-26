@@ -18,7 +18,6 @@
   class="h-full w-full p-2"
 >
   <h3 class="font-semibold truncate mb-2">My Containers</h3>
-
   <div class="flex-grow overflow-auto scrollbar h-[calc(100%-40px)]">
     <ng-container
       *ngIf="containers.length; then tableContainers; else emptyContainers"
@@ -28,20 +27,41 @@
 </div>
 
 <ng-template #tableContainers>
-  <table mat-table [dataSource]="dataSourceTable" class="w-full">
+  <table
+    mat-table
+    [dataSource]="dataSourceTable"
+    class="w-full table-sort"
+    [matSortDisabled]="editMode"
+    matSort
+  >
     <!-- Name Container -->
     <ng-container matColumnDef="nameContainer">
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'nameContainer' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        CONTAINER
+        <p class="font-semibold text-xs truncate text-secondary-300">
+          CONTAINER
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'nameContainer' }
+          "
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
         *matCellDef="let element"
-        class="min-w-[150px] px-2 text-xs text-secondary-500"
+        class="w-[150px] truncate px-2 text-xs text-secondary-500"
       >
         {{ element['nameContainer']?.trim() || 'N/A' }}
       </td>
@@ -52,9 +72,24 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'flowedTimeUTC' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        TIME IN STATION
+        <p class="font-semibold text-xs truncate text-secondary-300">
+          TIME IN STATION
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'flowedTimeUTC' }
+          "
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -70,9 +105,19 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationName' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        STATION
+        <p class="font-semibold text-xs truncate text-secondary-300">STATION</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -88,9 +133,24 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationOwners' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        STATION OWNERS
+        <p class="font-semibold text-xs truncate text-secondary-300">
+          STATION OWNERS
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'stationOwners' }
+          "
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -137,4 +197,24 @@
 
 <ng-template #emptyContainers>
   <div class="text-center my-4 text-sm">There are not containers.</div>
+</ng-template>
+
+<ng-template #buttonSort let-type>
+  <i
+    *ngIf="!editMode"
+    class="fas text-base ml-3"
+    [ngClass]="{
+      'text-accent-500':
+        dataSourceTable.sort?.active === type &&
+        dataSourceTable.sort?.direction,
+      'fa-caret-down':
+        dataSourceTable.sort?.direction === 'desc' &&
+        dataSourceTable.sort?.active === type,
+      'fa-caret-up':
+        (dataSourceTable.sort?.direction === 'asc' &&
+          dataSourceTable.sort?.active === type) ||
+        dataSourceTable.sort?.active !== type ||
+        !dataSourceTable.sort?.direction
+    }"
+  ></i>
 </ng-template>
