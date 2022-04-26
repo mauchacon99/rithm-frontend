@@ -1057,7 +1057,6 @@ describe('DocumentService', () => {
   });
 
   it('should get a current stations list for containers', () => {
-    const stationRithmId = '6375027-78345-73824-54244';
     const expectCurrentStationsResponse: DocumentCurrentStation[] = [
       {
         name: 'Testy',
@@ -1065,8 +1064,16 @@ describe('DocumentService', () => {
         flowedTimeUTC: '2022-04-18T20:34:24.118Z',
       },
     ];
-    service.getCurrentStations(stationRithmId).subscribe((response) => {
+    service.getCurrentStations(documentId).subscribe((response) => {
       expect(response).toEqual(expectCurrentStationsResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations?documentRithmId=${documentId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
+    req.flush(expectCurrentStationsResponse);
+    httpTestingController.verify();
   });
 });
