@@ -1726,7 +1726,7 @@ export class MockDocumentService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'retrieve a list of stations for this container',
+              error: 'Retrieve a list of stations for this container.',
             },
           })
       ).pipe(delay(1000));
