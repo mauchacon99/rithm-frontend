@@ -15,7 +15,7 @@ import { MapService } from 'src/app/map/map.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationListGroup, WidgetType } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
-import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for list field the groups how widget.
