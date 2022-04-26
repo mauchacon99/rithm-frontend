@@ -14,7 +14,7 @@ export class DataLinkModalComponent {
   constructor(public dialogRef: MatDialogRef<DataLinkModalComponent>) {}
 
   /** Close modal. */
-  closeModalHelp(): void {
+  closeHelpModal(): void {
     this.dialogRef.close();
   }
 }

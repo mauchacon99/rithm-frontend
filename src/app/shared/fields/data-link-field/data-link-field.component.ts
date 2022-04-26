@@ -20,7 +20,7 @@ import {
   DataLinkObject,
   QuestionFieldType,
 } from 'src/models';
-import { DataLinkModalComponent } from '../../data-link-modal/data-link-modal.component';
+import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link-modal.component';
 
 /**
  * Reusable component for every field data-link.
