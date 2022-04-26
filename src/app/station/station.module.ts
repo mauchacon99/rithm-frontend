@@ -46,6 +46,7 @@ import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/he
 import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
 import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
 import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
+import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link-modal.component';
 @NgModule({
   declarations: [
     StationComponent,
@@ -56,6 +57,7 @@ import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets
     StationTemplateComponent,
     RuleModalComponent,
     BuildDrawerComponent,
+    DataLinkModalComponent
   ],
   imports: [
     CommonModule,
