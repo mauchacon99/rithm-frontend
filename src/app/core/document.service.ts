@@ -38,6 +38,7 @@ import {
   StationFrameWidget,
   FrameType,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -741,5 +742,21 @@ export class DocumentService {
       ];
       return of(frameByType).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get the current stations from containers.
+   *
+   * @param documentRithmId The current document id.
+   * @returns The current stations.
+   */
+  getCurrentStations(
+    documentRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentCurrentStation[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations`,
+      { params }
+    );
   }
 }

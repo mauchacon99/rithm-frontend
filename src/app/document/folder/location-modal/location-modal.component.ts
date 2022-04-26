@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationService } from 'src/app/core/station.service';
 import { DocumentCurrentStation } from 'src/models';
 /**
  * Reusable component to display a modal with the list of locations.
@@ -12,11 +12,11 @@ import { DocumentCurrentStation } from 'src/models';
   styleUrls: ['./location-modal.component.scss'],
 })
 export class LocationModalComponent implements OnInit {
-  /** Location Text of the modal for the title.. */
+  /** Location Text of the modal for the title. */
   public locationValue = 'Location Modal';
 
-  /** Station Id passed from parent. */
-  stationRithmId = '';
+  /** Document Id passed from parent. */
+  documentRithmId = '';
 
   /** Use for station events history. */
   currentStations: DocumentCurrentStation[] = [];
@@ -25,7 +25,7 @@ export class LocationModalComponent implements OnInit {
   eventsLoading = false;
 
   constructor(
-    private stationService: StationService,
+    private documentService: DocumentService,
     private errorService: ErrorService
   ) {}
 
@@ -41,8 +41,8 @@ export class LocationModalComponent implements OnInit {
    */
   private getCurrentStations(): void {
     this.eventsLoading = true;
-    this.stationService
-      .getCurrentStations(this.stationRithmId)
+    this.documentService
+      .getCurrentStations(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (history) => {

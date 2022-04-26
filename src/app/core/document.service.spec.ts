@@ -30,6 +30,7 @@ import {
   StationFrameWidget,
   FrameType,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -1053,5 +1054,19 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toEqual(frameByType);
       });
+  });
+
+  it('should get a current stations list for containers', () => {
+    const stationRithmId = '6375027-78345-73824-54244';
+    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+      {
+        name: 'Testy',
+        rithmId: '123',
+        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+      },
+    ];
+    service.getCurrentStations(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectCurrentStationsResponse);
+    });
   });
 });

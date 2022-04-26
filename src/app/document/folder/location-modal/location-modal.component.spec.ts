@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 
 import { LocationModalComponent } from './location-modal.component';
 
@@ -15,7 +15,7 @@ describe('LocationModalComponent', () => {
       declarations: [LocationModalComponent],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: StationService, useClass: MockStationService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -32,17 +32,17 @@ describe('LocationModalComponent', () => {
 
   it('should call the service to get the current Stations', () => {
     const spyMethod = spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getCurrentStations'
     ).and.callThrough();
 
     component.ngOnInit();
-    expect(spyMethod).toHaveBeenCalledOnceWith(component.stationRithmId);
+    expect(spyMethod).toHaveBeenCalledOnceWith(component.documentRithmId);
   });
 
   it('should call the errorService if the request getCurrentStations fails', () => {
     const currentStationsEventSpy = spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getCurrentStations'
     ).and.returnValue(
       throwError(() => {
@@ -56,7 +56,7 @@ describe('LocationModalComponent', () => {
     component.ngOnInit();
 
     expect(currentStationsEventSpy).toHaveBeenCalledWith(
-      component.stationRithmId
+      component.documentRithmId
     );
     expect(spyError).toHaveBeenCalled();
   });
