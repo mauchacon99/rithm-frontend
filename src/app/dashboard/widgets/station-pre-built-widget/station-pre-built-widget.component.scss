@@ -14,3 +14,10 @@ th.mat-header-cell:first-of-type {
 tr.mat-header-row {
   height: 30px !important;
 }
+
+table ::ng-deep {
+  .mat-sort-header-ste,
+  .mat-sort-header-arrow {
+    display: none !important;
+  }
+}

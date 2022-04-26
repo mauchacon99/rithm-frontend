@@ -26,15 +26,25 @@
 </div>
 
 <ng-template #tableStations>
-  <table mat-table [dataSource]="dataSourceTable" class="w-full">
+  <table mat-table [dataSource]="dataSourceTable" matSort class="w-full">
     <!-- Name Station -->
     <ng-container matColumnDef="stationName">
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationName' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        STATION
+        <p class="font-semibold text-xs text-secondary-300">STATION</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -50,9 +60,22 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'totalContainers' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        CONTAINERS
+        <p class="font-semibold text-xs text-secondary-300">CONTAINERS</p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'totalContainers' }
+          "
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -73,9 +96,19 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        class="font-semibold truncate pr-2 max-w-[150px] text-xs"
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationGroup' ||
+            !dataSourceTable.sort?.direction
+        }"
       >
-        GROUP
+        <p class="font-semibold text-xs text-secondary-300">GROUP</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationGroup' }"
+        >
+        </ng-container>
       </th>
       <td
         mat-cell
@@ -120,4 +153,23 @@
 
 <ng-template #emptyStations>
   <div class="text-center my-4 text-sm">There are not stations.</div>
+</ng-template>
+
+<ng-template #buttonSort let-type>
+  <i
+    class="fas text-base ml-3"
+    [ngClass]="{
+      'text-accent-500':
+        dataSourceTable.sort?.active === type &&
+        dataSourceTable.sort?.direction,
+      'fa-caret-down':
+        dataSourceTable.sort?.direction === 'desc' &&
+        dataSourceTable.sort?.active === type,
+      'fa-caret-up':
+        (dataSourceTable.sort?.direction === 'asc' &&
+          dataSourceTable.sort?.active === type) ||
+        dataSourceTable.sort?.active !== type ||
+        !dataSourceTable.sort?.direction
+    }"
+  ></i>
 </ng-template>
