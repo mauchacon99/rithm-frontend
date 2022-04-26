@@ -24,8 +24,7 @@ export class SidenavDrawerService {
     | 'connectionInfo'
     | 'stationGroupInfo'
     | 'menuDashboard'
-    | 'stationWidget'
-    | 'documentWidget'
+    | 'widgetDashboard'
     | 'fieldSetting'
     | ''
   > = new ReplaySubject(1);
@@ -131,8 +130,7 @@ export class SidenavDrawerService {
       | 'connectionInfo'
       | 'stationGroupInfo'
       | 'menuDashboard'
-      | 'stationWidget'
-      | 'documentWidget'
+      | 'widgetDashboard'
       | 'fieldSetting',
     data?: unknown
   ): void {
@@ -174,8 +172,7 @@ export class SidenavDrawerService {
       | 'connectionInfo'
       | 'stationGroupInfo'
       | 'menuDashboard'
-      | 'stationWidget'
-      | 'documentWidget'
+      | 'widgetDashboard'
       | 'fieldSetting',
     data?: unknown
   ): void {

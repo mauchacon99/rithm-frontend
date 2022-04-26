@@ -1,9 +1,10 @@
 <div
   id="avatar"
   [ngClass]="{
-    'circle-40-secondary': navProfile && !isDrawer,
-    'circle-30-secondary': (!navProfile && !isDrawer) || isSmall,
-    'circle-36-secondary': isDrawer && !isSmall,
+    'circle-40-secondary': navProfile && !isDrawer && !isLarge,
+    'circle-30-secondary': ((!navProfile && !isDrawer) || isSmall) && !isLarge,
+    'circle-36-secondary': isDrawer && !isSmall && !isLarge,
+    'circle-90-accent': isLarge,
     '-ml-2.5': isDrawer
   }"
   matTooltip="{{ firstName + ' ' + lastName }}"
