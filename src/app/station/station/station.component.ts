@@ -33,6 +33,7 @@ import {
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
+  GridsterItemComponentInterface,
   GridsterPush,
 } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
@@ -158,6 +159,7 @@ export class StationComponent
     resizable: {
       enabled: true,
     },
+    itemResizeCallback: StationComponent.itemResize,
     margin: 12,
     minCols: 24,
     maxCols: 24,
@@ -176,6 +178,9 @@ export class StationComponent
 
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
+
+  /** Circles in the gridster. */
+  circlesWidget!: string;
 
   constructor(
     private stationService: StationService,
@@ -343,6 +348,30 @@ export class StationComponent
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
     if (!this.editMode) this.setGridMode('preview');
+  }
+
+  /**
+   * Gridster resize item event.
+   *
+   * @param item Current resized item.
+   * @param itemComponent Item Interface.
+   */
+  static itemResize(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface
+  ): void {
+    if (item.type === FrameType.CircleImage) {
+      const itemTo: GridsterItem = itemComponent.$item;
+      if (itemTo.rows < item.rows || itemTo.cols < item.cols) {
+        itemTo.cols = itemTo.rows < item.rows ? itemTo.rows : itemTo.cols;
+        itemTo.rows = itemTo.cols < item.cols ? itemTo.cols : itemTo.rows;
+      }
+
+      if (itemTo.rows > item.rows || itemTo.cols > item.cols) {
+        itemTo.cols = itemTo.rows > item.rows ? itemTo.rows : itemTo.cols;
+        itemTo.rows = itemTo.cols > item.cols ? itemTo.cols : itemTo.rows;
+      }
+    }
   }
 
   /** Comment. */
