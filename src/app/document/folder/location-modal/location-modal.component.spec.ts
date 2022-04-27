@@ -46,6 +46,7 @@ describe('LocationModalComponent', () => {
     ).and.callThrough();
 
     component.ngOnInit();
+    expect(component.eventDocumentsError).toBeTrue();
     expect(spyMethod).toHaveBeenCalledOnceWith(component.documentRithmId);
   });
 
@@ -64,10 +65,14 @@ describe('LocationModalComponent', () => {
       'displayError'
     ).and.callThrough();
     component.ngOnInit();
-
     expect(currentStationsEventSpy).toHaveBeenCalledWith(
       component.documentRithmId
     );
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should indicate how long it has been located at that station', () => {
+    const timeEntered = component.getElapsedTime('2022-04-19T21:32:41.2150164');
+    expect(timeEntered).toEqual('7 days');
   });
 });
