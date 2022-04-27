@@ -54,15 +54,7 @@ export class StationWidgetDrawerComponent implements OnInit {
     const isDisabled = !allSelects.find((option) => !option.disabled);
     const isAllInputs =
       allSelects.length === this.getFormColumns.controls.length;
-    const limitedReached =
-      this.getFormColumns.controls.length + 1 <= this.MAXIMUM_COLUMNS_ALLOWED;
-    this.disabledAddColumn = !limitedReached;
-    return (
-      isDisabled ||
-      isAllInputs ||
-      this.getFormColumns.invalid ||
-      !limitedReached
-    );
+    return isDisabled || isAllInputs || this.getFormColumns.invalid;
   }
 
   /**
