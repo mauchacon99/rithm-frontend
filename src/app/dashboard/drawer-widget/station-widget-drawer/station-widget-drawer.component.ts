@@ -99,9 +99,6 @@ export class StationWidgetDrawerComponent implements OnInit {
   /** Enum ColumnsDocumentInfo. */
   enumColumnsDocumentInfo = ColumnsDocumentInfo;
 
-  /**Disabled button when maximum number columns reached. */
-  disabledAddColumn = false;
-
   /** Maximum number columns allowed for station. */
   readonly MAXIMUM_COLUMNS_ALLOWED = 20;
 
