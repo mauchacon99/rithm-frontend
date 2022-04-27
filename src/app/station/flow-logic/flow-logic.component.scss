@@ -3,13 +3,12 @@
 .action-buttons {
   ::ng-deep .mat-button-toggle-group,
   .mat-button-toggle {
-    width: 100%;
+    @apply w-full;
   }
 
   .button-group {
     ::ng-deep .mat-button-toggle-checked {
-      @apply bg-accent-500;
-      @apply text-white;
+      @apply bg-accent-500 text-white;
     }
   }
 }
