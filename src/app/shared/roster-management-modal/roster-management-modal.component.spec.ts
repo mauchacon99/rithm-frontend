@@ -226,4 +226,32 @@ describe('RosterManagementModalComponent', () => {
     );
     expect(loadingComponent).toBeTruthy();
   });
+
+  it('should add a worker user to stationGroup roster', async () => {
+    component.rosterType = 'workers';
+    fixture.detectChanges();
+    const addUserStationGroupToRosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'addUserStationGroupWorkersRoster'
+    ).and.callThrough();
+    await component.addUserStationGroupToRoster(userList[0]);
+    expect(addUserStationGroupToRosterSpy).toHaveBeenCalledOnceWith(
+      stationRithmId,
+      userList
+    );
+  });
+
+  it('should add a worker user to stationGroup owners', async () => {
+    component.rosterType = 'owners';
+    fixture.detectChanges();
+    const addUserStationGroupToOwnersRosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'addUserStationGroupToOwnersRoster'
+    ).and.callThrough();
+    await component.addUserStationGroupToRoster(userList[0]);
+    expect(addUserStationGroupToOwnersRosterSpy).toHaveBeenCalledOnceWith(
+      stationRithmId,
+      userList
+    );
+  });
 });

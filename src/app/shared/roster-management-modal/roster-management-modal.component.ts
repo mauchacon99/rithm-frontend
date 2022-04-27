@@ -5,6 +5,16 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
+/** Interface data modal. */
+interface ModalData {
+  /** The station rithmId. */
+  stationId: string;
+  /** The type of roster which will be showed.  */
+  type: 'workers' | 'owners';
+  /** Is group. */
+  isGroup: boolean;
+}
+
 /**
  * Component for roster management.
  */
@@ -21,7 +31,7 @@ export class RosterManagementModalComponent implements OnInit {
   pageNumUsersOrganization = 1;
 
   /** The station rithmId. */
-  stationRithmId = '';
+  stationOrGroupRithmId = '';
 
   /** Id the organization.  */
   organizationId = '';
@@ -53,30 +63,31 @@ export class RosterManagementModalComponent implements OnInit {
   /** Is the list of organization members loading.  */
   listLoading = true;
 
+  /** Is group. */
+  isGroup = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
     @Inject(MAT_DIALOG_DATA)
-    public modalData: {
-      /** The station rithmId. */
-      stationId: string;
-      /** The type of roster which will be showed.  */
-      type: 'workers' | 'owners';
-    }
+    public modalData: ModalData
   ) {
-    this.stationRithmId = this.modalData.stationId;
+    this.stationOrGroupRithmId = this.modalData.stationId;
     this.rosterType = this.modalData.type;
+    this.isGroup = this.modalData.isGroup;
   }
 
   /**
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    this.getPotentialStationRosterMembers(
-      this.stationRithmId,
-      this.pageNumUsersOrganization
-    );
-    this.getStationUsersRoster(this.stationRithmId);
+    if (!this.isGroup) {
+      this.getPotentialStationRosterMembers(
+        this.stationOrGroupRithmId,
+        this.pageNumUsersOrganization
+      );
+      this.getStationUsersRoster(this.stationOrGroupRithmId);
+    }
   }
 
   /**
@@ -161,7 +172,11 @@ export class RosterManagementModalComponent implements OnInit {
         this.removeMemberFromRoster(rithmId);
       } else {
         /** If data.isWorker is true is because the user is being add. */
-        this.addUserToRoster(rithmId);
+        if (this.isGroup) {
+          this.addUserStationGroupToRoster(rithmId);
+        } else {
+          this.addUserToRoster(rithmId);
+        }
       }
     }
   }
@@ -176,14 +191,52 @@ export class RosterManagementModalComponent implements OnInit {
     this.addRemoveRosterError = false;
     const addUserToRosterMethod$ =
       this.rosterType === 'workers'
-        ? this.stationService.addUsersToWorkerRoster(this.stationRithmId, [
-            userIds,
-          ])
-        : this.stationService.addUsersToOwnersRoster(this.stationRithmId, [
-            userIds,
-          ]);
+        ? this.stationService.addUsersToWorkerRoster(
+            this.stationOrGroupRithmId,
+            [userIds]
+          )
+        : this.stationService.addUsersToOwnersRoster(
+            this.stationOrGroupRithmId,
+            [userIds]
+          );
 
     addUserToRosterMethod$.pipe(first()).subscribe({
+      next: (data) => {
+        this.loadingMembers = false;
+        if (data) {
+          this.rosterMembers = data;
+        }
+      },
+      error: (error: unknown) => {
+        this.addRemoveRosterError = true;
+        this.loadingMembers = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Adds users to the worker roster group.
+   *
+   * @param userIds The users ids for assign in station.
+   */
+  addUserStationGroupToRoster(userIds: string): void {
+    this.loadingMembers = true;
+    this.addRemoveRosterError = false;
+    const addUserGroupToRosterMethod$ =
+      this.rosterType === 'workers'
+        ? this.stationService.addUserStationGroupWorkersRoster(
+            this.stationOrGroupRithmId,
+            [userIds]
+          )
+        : this.stationService.addUserStationGroupToOwnersRoster(
+            this.stationOrGroupRithmId,
+            [userIds]
+          );
+    addUserGroupToRosterMethod$.pipe(first()).subscribe({
       next: (data) => {
         this.loadingMembers = false;
         if (data) {
@@ -218,12 +271,14 @@ export class RosterManagementModalComponent implements OnInit {
     this.loadingMembers = true;
     const removeUserMemberRoster$ =
       this.rosterType === 'workers'
-        ? this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [
-            usersId,
-          ])
-        : this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [
-            usersId,
-          ]);
+        ? this.stationService.removeUsersFromWorkerRoster(
+            this.stationOrGroupRithmId,
+            [usersId]
+          )
+        : this.stationService.removeUsersFromOwnerRoster(
+            this.stationOrGroupRithmId,
+            [usersId]
+          );
 
     removeUserMemberRoster$.pipe(first()).subscribe({
       next: (data) => {
