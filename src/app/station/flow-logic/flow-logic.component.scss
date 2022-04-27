@@ -1,0 +1,17 @@
+.select-condition ::ng-deep {
+  .mat-form-field-infix {
+    @apply py-0.5 h-11 w-36;
+  }
+
+  .mat-form-field-wrapper {
+    @apply pb-0;
+  }
+
+  .mat-select-value-text {
+    @apply text-secondary-300 text-xs;
+  }
+
+  .mat-select-trigger {
+    @apply items-end;
+  }
+}
