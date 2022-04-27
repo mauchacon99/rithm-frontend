@@ -35,7 +35,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { of, throwError } from 'rxjs';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { GridsterItem, GridsterModule } from 'angular-gridster2';
+import { GridsterModule } from 'angular-gridster2';
 import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 import { InputFrameWidgetComponent } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget/input-frame-widget.component';
 import { SplitService } from 'src/app/core/split.service';
@@ -1270,40 +1270,6 @@ describe('StationComponent', () => {
     ).and.callThrough();
     component['getStationWidgets']();
     expect(spyError).toHaveBeenCalled();
-  });
-
-  xit('should call the method that resize the circle when modified', () => {
-    const circleItem: GridsterItem = {
-      x: 0,
-      y: 0,
-      cols: 5,
-      rows: 4,
-      type: FrameType.CircleImage,
-      data: '',
-      id: 0,
-    };
-    component.inputFrameWidgetItems = [
-      {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 4,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.CircleImage,
-        data: '',
-        id: 0,
-      },
-    ];
-    const spyResizeCircle = spyOn(
-      component,
-      'resizeCircleRowCols'
-    ).and.callThrough();
-    component.resizeCircleRowCols(circleItem);
-    fixture.detectChanges();
-    expect(circleItem.type).toEqual(FrameType.CircleImage);
-    expect(component.inputFrameWidgetItems[0].cols).toEqual(circleItem.rows);
-    expect(spyResizeCircle).toHaveBeenCalledOnceWith(circleItem);
   });
 
   describe('should add value to the array of input frames', () => {
