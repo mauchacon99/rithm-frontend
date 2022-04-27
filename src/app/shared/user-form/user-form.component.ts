@@ -121,6 +121,7 @@ export class UserFormComponent
       ],
       password: ['', []],
       confirmPassword: ['', []],
+      isLoadingImage: [true, Validators.requiredTrue],
     });
 
     const passwordValidators: ValidatorFn[] = [
@@ -300,6 +301,9 @@ export class UserFormComponent
    */
   private uploadImageUser(file: File): void {
     this.isLoadingUploadImageUser = true;
+    this.userForm.controls['isLoadingImage'].setValue(
+      !this.isLoadingUploadImageUser
+    );
     this.errorUploadImageUser = false;
     this.isChangingPhoto = true;
     this.userService
@@ -311,11 +315,17 @@ export class UserFormComponent
           this.errorUploadImageUser = false;
           this.isChangingPhoto = false;
           this.profileImageRithmId = profileImageRithmId;
+          this.userForm.controls['isLoadingImage'].setValue(
+            !this.isLoadingUploadImageUser
+          );
         },
         error: (error: unknown) => {
           this.isLoadingUploadImageUser = false;
           this.errorUploadImageUser = true;
           this.isChangingPhoto = false;
+          this.userForm.controls['isLoadingImage'].setValue(
+            !this.isLoadingUploadImageUser
+          );
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

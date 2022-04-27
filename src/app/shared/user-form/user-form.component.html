@@ -10,43 +10,56 @@
         [profileImageRithmId]="profileImageRithmId || ''"
         [isLarge]="true"
       ></app-user-avatar>
-      <ng-container *ngIf="profileImageRithmId">
-        <button
-          mat-stroked-button
-          color="accent"
-          mat-button
-          id="change-image-button"
-          data-testid="change-image-button"
-          type="button"
-          (click)="fileInput.click()"
-        >
-          <p class="text-semibold">CHANGE</p>
-        </button>
 
-        <button
-          mat-button
-          color="warn"
-          mat-button
-          id="delete-image-button"
-          data-testid="delete-image-button"
-          type="button"
+      <div>
+        <ng-container *ngIf="!profileImageRithmId && !isLoadingUploadImageUser">
+          <button
+            mat-stroked-button
+            color="accent"
+            mat-button
+            id="upload-image-button"
+            data-testid="upload-image-button"
+            type="button"
+            (click)="fileInput.click()"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            Upload image
+          </button>
+        </ng-container>
+        <ng-container *ngIf="profileImageRithmId && !isLoadingUploadImageUser">
+          <button
+            mat-stroked-button
+            color="accent"
+            mat-button
+            id="change-image-button"
+            data-testid="change-image-button"
+            type="button"
+            (click)="fileInput.click()"
+          >
+            <p class="text-semibold">CHANGE</p>
+          </button>
+
+          <button
+            mat-button
+            color="warn"
+            mat-button
+            id="delete-image-button"
+            data-testid="delete-image-button"
+            type="button"
+          >
+            <p class="text-semibold">DELETE</p>
+          </button>
+        </ng-container>
+        <!--Show error-->
+        <div
+          class="text-error-500 text-center my-4"
+          id="error-loading-upload-photo"
+          *ngIf="errorUploadImageUser"
         >
-          <p class="text-semibold">DELETE</p>
-        </button>
-      </ng-container>
-      <button
-        *ngIf="!profileImageRithmId && !isLoadingUploadImageUser"
-        mat-stroked-button
-        color="accent"
-        mat-button
-        id="upload-image-button"
-        data-testid="upload-image-button"
-        type="button"
-        (click)="fileInput.click()"
-      >
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-        Upload photo
-      </button>
+          Error to upload image.
+        </div>
+      </div>
+
       <input
         #fileInput
         type="file"
@@ -60,15 +73,6 @@
         <app-loading-indicator
           [inlineText]="'Uploading...'"
         ></app-loading-indicator>
-      </div>
-
-      <!--Show error-->
-      <div
-        class="text-error-500 text-center my-4"
-        id="error-loading-upload-photo"
-        *ngIf="errorUploadImageUser"
-      >
-        Error to upload photo.
       </div>
     </div>
   </div>
@@ -160,4 +164,5 @@
     [passReq]="userForm.get(errorsToGet)?.errors"
     [match]="showMatch"
   ></app-password-requirements>
+  <input type="hidden" name="isLoadingImage" formControlName="isLoadingImage" />
 </ng-container>
