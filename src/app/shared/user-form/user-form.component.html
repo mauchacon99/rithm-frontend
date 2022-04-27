@@ -2,7 +2,7 @@
   <div *ngIf="!accountCreate && showProfilePhoto">
     <div
       class="w-full flex space-x-3 py-5 items-center"
-      [ngClass]="{ 'animate-pulse': isChangingPhoto }"
+      [ngClass]="{ 'animate-pulse': isLoadingUploadImageUser }"
     >
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"

@@ -43,7 +43,7 @@ export class UserAvatarComponent {
   /** Profile image Rithm Id. */
   @Input() set profileImageRithmId(profileImageRithmId: string) {
     if (profileImageRithmId) {
-      this.getImageUser(profileImageRithmId);
+      this.getImageUser();
     }
   }
 
@@ -54,6 +54,9 @@ export class UserAvatarComponent {
 
   /** Class to render profile image. */
   classProfileImage = '';
+
+  /** Load indicator getting image. */
+  isLoading = false;
 
   constructor(
     private userService: UserService,
@@ -99,17 +102,19 @@ export class UserAvatarComponent {
   /**
    * Get Image user.
    *
-   * @param profileImageRithmId Profile Image Id.
    */
-  private getImageUser(profileImageRithmId: string): void {
+  private getImageUser(): void {
+    this.isLoading = true;
     this.userService
-      .getImageUser(profileImageRithmId)
+      .getImageUser(this.profileImageRithmId)
       .pipe(first())
       .subscribe({
         next: (imageData) => {
+          this.isLoading = false;
           this.imageData = imageData;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

@@ -78,7 +78,7 @@ describe('UserAvatarComponent', () => {
       TestBed.inject(UserService),
       'getImageUser'
     ).and.callThrough();
-    component['getImageUser'](component.profileImageRithmId);
+    component['getImageUser']();
 
     expect(methodGetImageUserService).toHaveBeenCalledOnceWith(
       component.profileImageRithmId
@@ -96,7 +96,7 @@ describe('UserAvatarComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component['getImageUser'](component.profileImageRithmId);
+    component['getImageUser']();
     expect(spyError).toHaveBeenCalled();
   });
 });

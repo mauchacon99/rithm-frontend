@@ -75,9 +75,6 @@ export class UserFormComponent
   /** User image. */
   profileImageRithmId!: string;
 
-  /** Value to identify when is changing user photo. */
-  isChangingPhoto = false;
-
   /** Load indicator upload image. */
   isLoadingUploadImageUser = false;
 
@@ -305,7 +302,6 @@ export class UserFormComponent
       !this.isLoadingUploadImageUser
     );
     this.errorUploadImageUser = false;
-    this.isChangingPhoto = true;
     this.userService
       .uploadImageUser(file)
       .pipe(first())
@@ -313,7 +309,6 @@ export class UserFormComponent
         next: (profileImageRithmId) => {
           this.isLoadingUploadImageUser = false;
           this.errorUploadImageUser = false;
-          this.isChangingPhoto = false;
           this.profileImageRithmId = profileImageRithmId;
           this.userForm.controls['isLoadingImage'].setValue(
             !this.isLoadingUploadImageUser
@@ -322,7 +317,6 @@ export class UserFormComponent
         error: (error: unknown) => {
           this.isLoadingUploadImageUser = false;
           this.errorUploadImageUser = true;
-          this.isChangingPhoto = false;
           this.userForm.controls['isLoadingImage'].setValue(
             !this.isLoadingUploadImageUser
           );

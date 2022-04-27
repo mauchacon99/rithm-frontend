@@ -3,16 +3,10 @@ import { CommonModule } from '@angular/common';
 import { UserAvatarComponent } from './user-avatar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
-import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [UserAvatarComponent],
-  imports: [
-    CommonModule,
-    MatTooltipModule,
-    MatBadgeModule,
-    LoadingIndicatorModule,
-  ],
+  imports: [CommonModule, MatTooltipModule, MatBadgeModule],
   exports: [UserAvatarComponent],
 })
 export class UserAvatarModule {}

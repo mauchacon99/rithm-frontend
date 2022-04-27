@@ -5,7 +5,8 @@
     'circle-30-secondary': ((!navProfile && !isDrawer) || isSmall) && !isLarge,
     'circle-36-secondary': isDrawer && !isSmall && !isLarge,
     'circle-90-accent': isLarge,
-    '-ml-2.5': isDrawer
+    '-ml-2.5': isDrawer,
+    'animate-pulse': isLoading
   }"
   matTooltip="{{ firstName + ' ' + lastName }}"
   [matTooltipDisabled]="hideToolTip"
