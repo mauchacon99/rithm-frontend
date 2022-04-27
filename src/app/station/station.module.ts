@@ -46,6 +46,7 @@ import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/he
 import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
 import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
 import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
+import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link-modal.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 @NgModule({
@@ -58,6 +59,7 @@ import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/comi
     StationTemplateComponent,
     RuleModalComponent,
     BuildDrawerComponent,
+    DataLinkModalComponent,
   ],
   imports: [
     CommonModule,
