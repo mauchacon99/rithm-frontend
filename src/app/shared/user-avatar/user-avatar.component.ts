@@ -52,11 +52,11 @@ export class UserAvatarComponent {
     this.classProfileImage = image.imageData;
   }
 
-  /** Class to render profile image. */
-  classProfileImage = '';
-
   /** Load indicator getting image. */
   isLoading = false;
+
+  /** Class to render profile image. */
+  classProfileImage = '';
 
   constructor(
     private userService: UserService,
