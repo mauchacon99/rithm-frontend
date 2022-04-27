@@ -921,8 +921,7 @@ export class StationComponent
                 frame.type = FrameType.Body;
                 break;
               case FrameType.Title:
-                frame.minItemCols = 24;
-                frame.minItemRows = 1;
+                frame.minItemCols = 6;
                 frame.maxItemRows = 1;
                 frame.type = FrameType.Title;
                 break;
@@ -1163,8 +1162,7 @@ export class StationComponent
       case FrameType.Title:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
         break;
