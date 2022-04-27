@@ -130,8 +130,8 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
       this.dialog.open(StationDocumentsModalComponent, {
         minWidth: '370px',
         data: {
-          stationName: station.stationName,
-          stationId: station.stationRithmId,
+          stationName: station.name,
+          stationId: station.rithmId,
         },
       });
     }
