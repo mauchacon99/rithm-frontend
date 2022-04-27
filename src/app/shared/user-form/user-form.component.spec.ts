@@ -23,7 +23,7 @@ import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { throwError } from 'rxjs';
 import { User } from 'src/models';
-import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
