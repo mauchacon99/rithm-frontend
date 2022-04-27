@@ -54,7 +54,15 @@ export class StationWidgetDrawerComponent implements OnInit {
     const isDisabled = !allSelects.find((option) => !option.disabled);
     const isAllInputs =
       allSelects.length === this.getFormColumns.controls.length;
-    return isDisabled || isAllInputs || this.getFormColumns.invalid;
+    const limitedReached =
+      this.getFormColumns.controls.length + 1 <= this.MAXIMUM_COLUMNS_ALLOWED;
+    this.disabledAddColumn = !limitedReached;
+    return (
+      isDisabled ||
+      isAllInputs ||
+      this.getFormColumns.invalid ||
+      !limitedReached
+    );
   }
 
   /**
@@ -98,6 +106,12 @@ export class StationWidgetDrawerComponent implements OnInit {
 
   /** Enum ColumnsDocumentInfo. */
   enumColumnsDocumentInfo = ColumnsDocumentInfo;
+
+  /**Disabled button when maximum number columns reached. */
+  disabledAddColumn = false;
+
+  /** Maximum number columns allowed for station. */
+  readonly MAXIMUM_COLUMNS_ALLOWED = 20;
 
   /**
    * Check if station is multiline.

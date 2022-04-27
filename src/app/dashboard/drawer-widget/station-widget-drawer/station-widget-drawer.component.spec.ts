@@ -330,6 +330,21 @@ describe('StationWidgetDrawerComponent', () => {
       expect(component.disabledNewColumn).toBeFalse();
     });
 
+    it('should disable add new column', () => {
+      spyOnProperty(component, 'isStationMultiline').and.returnValue(false);
+      component.dataDrawer.quantityElementsWidget = 1;
+      for (
+        let index = 0;
+        index <= component.MAXIMUM_COLUMNS_ALLOWED + 1;
+        index++
+      ) {
+        component.addNewColumn();
+      }
+      fixture.detectChanges();
+      const message = fixture.nativeElement.querySelector('#message-limited');
+      expect(message).toBeTruthy();
+    });
+
     it('should delete a column', () => {
       const spyMethod = spyOn(component, 'deleteColumn').and.callThrough();
       component['loadColumnsSelect']();
