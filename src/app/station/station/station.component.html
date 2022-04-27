@@ -278,7 +278,7 @@
                     class="font-semibold text-sm"
                     id="station-edit-mode-button"
                     (click)="setEditMode()"
-                    [disabled]="stationLoading"
+                    [disabled]="stationLoading || widgetLoading"
                   >
                     Edit
                   </button>
@@ -380,6 +380,7 @@
                       'custom-component-container'
                     ]"
                     (cdkDropListDropped)="addInputFrame($event)"
+                    *ngIf="!widgetLoading; else gridsterLoading"
                   >
                     <gridster
                       class="p-0 bg-transparent h-screen"

@@ -97,6 +97,10 @@
             [attr.data-testid]="'show-documents-' + station.rithmId"
             class="whitespace-normal truncate text-xs font-normal"
             (click)="openDocsModal(station)"
+            [ngClass]="{
+              'text-secondary-500 pointer-events-none cursor-not-allowed':
+                editMode
+            }"
             ><a>{{ station.totalDocuments }} Documents</a></span
           >
         </span>
