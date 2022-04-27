@@ -178,8 +178,8 @@ export class StationComponent
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-   /** Helper class for random id generator. */
-   private randomIdGenerator: RandomIdGenerator;
+  /** Helper class for random id generator. */
+  private randomIdGenerator: RandomIdGenerator;
 
   /** Circles in the gridster. */
   circlesWidget!: string;

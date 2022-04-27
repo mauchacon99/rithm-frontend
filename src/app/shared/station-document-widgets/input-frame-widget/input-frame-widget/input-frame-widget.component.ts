@@ -60,8 +60,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService
-  ) {
-  }
+  ) {}
 
   /**
    * Listen the deleteStationQuestions Service.
