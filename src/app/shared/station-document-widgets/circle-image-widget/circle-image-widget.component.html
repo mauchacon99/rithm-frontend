@@ -1,5 +1,5 @@
 <div
-  (click)="handleOpenSettingDrawer()"
+  (click)="widgetMode === 'setting' ? handleOpenSettingDrawer() : ''"
   class="circle-image-widget flex justify-center items-center"
   [ngClass]="{
     'circle-image-layout': widgetMode === 'layout',
