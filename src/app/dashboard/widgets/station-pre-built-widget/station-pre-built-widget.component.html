@@ -71,7 +71,7 @@
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
       >
-        {{ element['stationName']?.trim() || 'N/A' }}
+        {{ element['name']?.trim() || 'N/A' }}
       </td>
     </ng-container>
 
@@ -137,7 +137,7 @@
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
       >
-        {{ element['stationGroup']?.trim() || 'N/A' }}
+        {{ element['groupName']?.trim() || 'N/A' }}
       </td>
     </ng-container>
 
@@ -172,7 +172,7 @@
       >
         <div class="ml-2.5">
           <app-roster
-            [stationId]="element['stationRithmId'] || ''"
+            [stationId]="element['rithmId'] || ''"
             [isWorker]="false"
             [editMode]="!editMode"
             [stationMembers]="element['stationOwners']"
