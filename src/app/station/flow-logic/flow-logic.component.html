@@ -346,6 +346,63 @@
           <button mat-stroked-button color="accent">Add Trigger</button>
         </div>
       </section>
+      <section
+        class="rules-right-side-triggers w-full"
+        *ngIf="ruleSelectedMenu === 'rules'"
+      >
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">Actions</p>
+        </div>
+        <div
+          class="action-buttons title flex items-center border-b border-secondary-50 pl-8 pr-6 pt-8 pb-10"
+        >
+          <mat-button-toggle-group
+            name="actionButtons"
+            aria-label="Action buttons"
+            value="0"
+            class="button-group"
+          >
+            <mat-button-toggle
+              value="0"
+              data-testid="toggle-button-flow"
+              id="toggle-button-flow"
+              >Flow</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="1"
+              data-testid="toggle-button-container"
+              id="toggle-button-container"
+              >Container</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="2"
+              data-testid="toggle-button-user"
+              id="toggle-button-user"
+              >User</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="3"
+              data-testid="toggle-button-notifications"
+              id="toggle-button-notifications"
+              >Notifications</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="4"
+              data-testid="toggle-button-integrations"
+              id="toggle-button-integrations"
+              >Integrations</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="5"
+              data-testid="toggle-button-advanced"
+              id="toggle-button-advanced"
+              >Advanced</mat-button-toggle
+            >
+          </mat-button-toggle-group>
+        </div>
+      </section>
     </div>
   </div>
 </ng-template>
