@@ -4,12 +4,14 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSortModule } from '@angular/material/sort';
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
@@ -17,6 +19,7 @@ describe('StationPreBuiltWidgetComponent', () => {
   let stationService: StationService;
   let errorService: ErrorService;
   let matDialog: MatDialog;
+  let sidenavDrawerService: SidenavDrawerService;
 
   const stationWidgetData = [
     {
@@ -45,10 +48,11 @@ describe('StationPreBuiltWidgetComponent', () => {
         MockComponent(ErrorWidgetComponent),
         MockComponent(StationDocumentsModalComponent),
       ],
-      imports: [RosterModule, MatDialogModule],
+      imports: [RosterModule, MatDialogModule, MatSortModule],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -59,6 +63,7 @@ describe('StationPreBuiltWidgetComponent', () => {
     stationService = TestBed.inject(StationService);
     errorService = TestBed.inject(ErrorService);
     matDialog = TestBed.inject(MatDialog);
+    sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     component.stationWidgetData = stationWidgetData;
     fixture.detectChanges();
   });
@@ -163,5 +168,39 @@ describe('StationPreBuiltWidgetComponent', () => {
       StationDocumentsModalComponent,
       expectData
     );
+  });
+
+  it('should call and emit toggleDrawer', () => {
+    component.isLoading = false;
+    component.errorStationPrebuilt = false;
+    component.editMode = true;
+    component.showButtonSetting = true;
+    spyOn(component.toggleDrawer, 'emit');
+    spyOn(component, 'toggleEditStation').and.callThrough();
+    component.toggleEditStation();
+    expect(component.toggleEditStation).toHaveBeenCalled();
+    expect(component.toggleDrawer.emit).toHaveBeenCalled();
+  });
+
+  it('should call drawer context and compare this context', () => {
+    const drawerContext = 'widgetDashboard';
+    const spySidenavDrawer = spyOn(
+      sidenavDrawerService.drawerContext$,
+      'next'
+    ).and.callThrough();
+    sidenavDrawerService.drawerContext$.next(drawerContext);
+    component.ngOnInit();
+    expect(component.drawerContext).toBe(drawerContext);
+    expect(spySidenavDrawer).toHaveBeenCalled();
+  });
+
+  it('should obtain value in isDrawerOpen in sidenavDrawerService', () => {
+    const spyMethod = spyOnProperty(
+      sidenavDrawerService,
+      'isDrawerOpen'
+    ).and.returnValue(true);
+    component.isDrawerOpen;
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.isDrawerOpen).toBeTrue();
   });
 });

@@ -17,7 +17,7 @@ export class TitleWidgetComponent {
   @Input() widgetMode!: 'layout' | 'setting';
 
   /**Title text value */
-  titleTextValue = 'Form Title';
+  titleTextValue = '';
 
   /**
    * Open setting drawer.

@@ -30,6 +30,7 @@ import {
   StationFrameWidget,
   FrameType,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -1002,9 +1003,9 @@ describe('DocumentService', () => {
     const containers: ContainerWidgetPreBuilt[] = [
       {
         flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        nameContainer: 'Container name 2',
         containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 2',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationOwners: [
           {
@@ -1022,10 +1023,10 @@ describe('DocumentService', () => {
         ],
       },
       {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        flowedTimeUTC: '2022-04-10T17:24:01.0115021',
+        nameContainer: 'Container name 1',
         containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 1',
         stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
         stationOwners: [],
       },
@@ -1053,5 +1054,26 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toEqual(frameByType);
       });
+  });
+
+  it('should get a current stations list for containers', () => {
+    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+      {
+        name: 'Testy',
+        rithmId: '123',
+        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+      },
+    ];
+    service.getCurrentStations(documentId).subscribe((response) => {
+      expect(response).toEqual(expectCurrentStationsResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations?documentRithmId=${documentId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
+    req.flush(expectCurrentStationsResponse);
+    httpTestingController.verify();
   });
 });
