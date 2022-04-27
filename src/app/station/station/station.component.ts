@@ -990,7 +990,7 @@ export class StationComponent
    * Save or update the changes make the station frame widgets.
    */
   private saveStationWidgetsChanges(): void {
-    this.stationLoading = true;
+    this.widgetLoading = true;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
         field.data = JSON.stringify(field.questions);
@@ -1016,13 +1016,13 @@ export class StationComponent
               inputFrames.filter((iframe) => iframe.type === FrameType.Input)
             );
           } else {
-            this.stationLoading = false;
+            this.widgetLoading = false;
             this.setGridMode('preview');
           }
           this.changedOptions();
         },
         error: (error: unknown) => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1054,7 +1054,7 @@ export class StationComponent
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
     } else {
-      this.stationLoading = false;
+      this.widgetLoading = false;
       this.setGridMode('preview');
     }
   }
@@ -1069,11 +1069,11 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: () => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.setGridMode('preview');
         },
         error: (error: unknown) => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
