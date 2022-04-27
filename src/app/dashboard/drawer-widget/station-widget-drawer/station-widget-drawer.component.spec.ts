@@ -330,7 +330,7 @@ describe('StationWidgetDrawerComponent', () => {
       expect(component.disabledNewColumn).toBeFalse();
     });
 
-    it('should disable add new column', () => {
+    it('should disable add new column when maximum limit of columns is reached', () => {
       spyOnProperty(component, 'isStationMultiline').and.returnValue(false);
       component.dataDrawer.quantityElementsWidget = 1;
       for (
