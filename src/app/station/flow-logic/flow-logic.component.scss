@@ -1,14 +1,17 @@
 @import './variables';
 
 .action-buttons {
-  ::ng-deep .mat-button-toggle-group,
-  .mat-button-toggle {
+  ::ng-deep .mat-button-toggle-group {
     @apply w-full;
+    border-radius: 5px !important;
   }
 
   .button-group {
     ::ng-deep .mat-button-toggle-checked {
       @apply bg-accent-500 text-white;
+    }
+    ::ng-deep .mat-button-toggle {
+      @apply w-full;
     }
   }
 }
