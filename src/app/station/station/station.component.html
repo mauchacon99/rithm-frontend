@@ -392,6 +392,8 @@
                         [ngClass]="{
                           'widget-item-layout':
                             layoutMode && widgetFocused !== i,
+                          'circle-border':
+                            widgetItem.type === frameType.CircleImage,
                           'border-accent-300 border-2': widgetFocused === i
                         }"
                         (click)="settingMode || focusWidget(i)"
@@ -403,7 +405,13 @@
                         (mouseenter)="widgetMoveButton = i"
                         (mouseleave)="widgetMoveButton = -1"
                       >
-                        <div class="h-gridster">
+                        <div
+                          class="h-gridster"
+                          [ngClass]="{
+                            'circle-image-container':
+                              widgetItem.type === frameType.CircleImage
+                          }"
+                        >
                           <button
                             mat-icon-button
                             type="button"
@@ -444,7 +452,9 @@
                             ></app-banner-widget>
                             <app-circle-image-widget
                               *ngSwitchCase="frameType.CircleImage"
+                              class="app-circle-image-widget"
                               [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [circleFocused]="widgetFocused === i"
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.CircleImage)
                               "
