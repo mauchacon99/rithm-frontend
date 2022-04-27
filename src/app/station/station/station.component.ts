@@ -392,11 +392,14 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      !this.stationForm.valid ||
-      !(
-        this.stationForm.dirty ||
-        this.stationForm.controls.stationTemplateForm.touched
-      ) ||
+      // If current tab is document and form field values are not changed.
+      (!this.isFlowLogicTab &&
+        (!this.stationForm.valid ||
+          !(
+            this.stationForm.dirty ||
+            this.stationForm.controls.stationTemplateForm.touched
+          ))) ||
+      // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
@@ -922,8 +925,7 @@ export class StationComponent
                 frame.type = FrameType.Body;
                 break;
               case FrameType.Title:
-                frame.minItemCols = 24;
-                frame.minItemRows = 1;
+                frame.minItemCols = 6;
                 frame.maxItemRows = 1;
                 frame.type = FrameType.Title;
                 break;
@@ -1166,8 +1168,7 @@ export class StationComponent
       case FrameType.Title:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
         break;
