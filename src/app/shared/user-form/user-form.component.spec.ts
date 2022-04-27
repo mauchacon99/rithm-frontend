@@ -22,6 +22,8 @@ import { SplitService } from 'src/app/core/split.service';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { throwError } from 'rxjs';
+import { User } from 'src/models';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
@@ -29,10 +31,25 @@ describe('UserFormComponent', () => {
   let loader: HarnessLoader;
   let errorService: ErrorService;
   const formBuilder = new FormBuilder();
+  const user: User = {
+    rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A',
+    firstName: 'Admin',
+    lastName: 'User',
+    email: 'rithmadmin@inpivota.com',
+    role: 'admin',
+    createdDate: '2021-08-23T15:35:42.2234693',
+    isEmailVerified: true,
+    notificationSettings: null,
+    organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserFormComponent, MockComponent(UserAvatarComponent)],
+      declarations: [
+        UserFormComponent,
+        MockComponent(UserAvatarComponent),
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [
         NoopAnimationsModule,
         MatFormFieldModule,
@@ -54,6 +71,7 @@ describe('UserFormComponent', () => {
     fixture = TestBed.createComponent(UserFormComponent);
     component = fixture.componentInstance;
     component.accountCreate = true;
+    component.currentUser = user;
     loader = TestbedHarnessEnvironment.loader(fixture);
     errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
@@ -318,5 +336,67 @@ describe('UserFormComponent', () => {
     const mockFile = new File([''], 'name', { type: 'image/png' });
     component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
+  });
+
+  it('should show change and delete button when user image is true', () => {
+    component.profileImageRithmId = '12313212323';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    fixture.detectChanges();
+    const changeButton = fixture.debugElement.nativeElement.querySelector(
+      '#change-image-button'
+    );
+    const deleteButton = fixture.debugElement.nativeElement.querySelector(
+      '#delete-image-button'
+    );
+    const uploadButton = fixture.debugElement.nativeElement.querySelector(
+      '#upload-image-button'
+    );
+    expect(changeButton).toBeTruthy();
+    expect(deleteButton).toBeTruthy();
+    expect(uploadButton).toBeNull();
+  });
+
+  it('should show upload button when user image is true', () => {
+    component.profileImageRithmId = '';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    fixture.detectChanges();
+    const changeButton = fixture.debugElement.nativeElement.querySelector(
+      '#change-image-button'
+    );
+    const deleteButton = fixture.debugElement.nativeElement.querySelector(
+      '#delete-image-button'
+    );
+    const uploadButton = fixture.debugElement.nativeElement.querySelector(
+      '#upload-image-button'
+    );
+    expect(changeButton).toBeNull();
+    expect(deleteButton).toBeNull();
+    expect(uploadButton).toBeTruthy();
+  });
+
+  it('should show loading  when user image is uploading', () => {
+    component.profileImageRithmId = '';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    component.isLoadingUploadImageUser = true;
+    fixture.detectChanges();
+    const isLoading = fixture.debugElement.nativeElement.querySelector(
+      '#loading-upload-photo'
+    );
+    expect(isLoading).toBeTruthy();
+  });
+
+  it('should show error  when user image is uploading', () => {
+    component.profileImageRithmId = '';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    component.errorUploadImageUser = true;
+    fixture.detectChanges();
+    const error = fixture.debugElement.nativeElement.querySelector(
+      '#error-loading-upload-photo'
+    );
+    expect(error).toBeTruthy();
   });
 });

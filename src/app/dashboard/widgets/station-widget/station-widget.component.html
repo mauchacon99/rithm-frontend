@@ -303,7 +303,9 @@
           <app-user-avatar
             [firstName]="document.assignedUser?.firstName"
             [lastName]="document.assignedUser?.lastName"
-            [profileImageRithmId]="''"
+            [profileImageRithmId]="
+              document.assignedUser?.profileImageRithmId || ''
+            "
           >
           </app-user-avatar>
         </div>

@@ -7,6 +7,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockUserService,
 } from 'src/mocks';
 import {
   ColumnsDocumentInfo,
@@ -17,7 +18,6 @@ import {
 } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
-import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
+import { UserService } from 'src/app/core/user.service';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -44,7 +45,6 @@ describe('StationWidgetComponent', () => {
       declarations: [
         StationWidgetComponent,
         MockComponent(LoadingWidgetComponent),
-        MockComponent(UserAvatarComponent),
         MockComponent(DocumentComponent),
         MockComponent(ErrorWidgetComponent),
         MockComponent(BannerImageWidgetComponent),
@@ -55,6 +55,7 @@ describe('StationWidgetComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });

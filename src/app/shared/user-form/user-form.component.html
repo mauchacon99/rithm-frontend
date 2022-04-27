@@ -7,7 +7,7 @@
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"
         [lastName]="accountCreate ? lastName.value : currentUser.lastName"
-        [profileImageRithmId]="profileImageRithmId"
+        [profileImageRithmId]="profileImageRithmId || ''"
         [isLarge]="true"
       ></app-user-avatar>
       <ng-container *ngIf="profileImageRithmId">
@@ -16,7 +16,7 @@
           color="accent"
           mat-button
           id="change-image-button"
-          data-testid="upload-image-button"
+          data-testid="change-image-button"
           type="button"
           (click)="fileInput.click()"
         >
@@ -28,7 +28,7 @@
           color="warn"
           mat-button
           id="delete-image-button"
-          data-testid="upload-image-button"
+          data-testid="delete-image-button"
           type="button"
         >
           <p class="text-semibold">DELETE</p>
