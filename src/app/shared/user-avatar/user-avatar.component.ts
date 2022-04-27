@@ -37,6 +37,9 @@ export class UserAvatarComponent {
   /** If avatars are small. */
   @Input() isSmall = false;
 
+  /** If avatar are large. */
+  @Input() isLarge = false;
+
   /** Image Rithm Id. */
   imageRithmId!: string;
 
