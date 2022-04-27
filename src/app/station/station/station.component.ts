@@ -33,6 +33,7 @@ import {
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
+  GridsterItemComponentInterface,
   GridsterPush,
 } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
@@ -158,6 +159,7 @@ export class StationComponent
     resizable: {
       enabled: true,
     },
+    itemResizeCallback: StationComponent.itemResize,
     margin: 12,
     minCols: 24,
     maxCols: 24,
@@ -168,11 +170,17 @@ export class StationComponent
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
 
+  /** Whether the request to get the widgets is currently underway. */
+  widgetLoading = false;
+
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
   /** Helper class for random id generator. */
   private randomIdGenerator: RandomIdGenerator;
+
+  /** Circles in the gridster. */
+  circlesWidget!: string;
 
   constructor(
     private stationService: StationService,
@@ -342,6 +350,30 @@ export class StationComponent
     if (!this.editMode) this.setGridMode('preview');
   }
 
+  /**
+   * Gridster resize item event.
+   *
+   * @param item Current resized item.
+   * @param itemComponent Item Interface.
+   */
+  static itemResize(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface
+  ): void {
+    if (item.type === FrameType.CircleImage) {
+      const itemTo: GridsterItem = itemComponent.$item;
+      if (itemTo.rows < item.rows || itemTo.cols < item.cols) {
+        itemTo.cols = itemTo.rows < item.rows ? itemTo.rows : itemTo.cols;
+        itemTo.rows = itemTo.cols < item.cols ? itemTo.cols : itemTo.rows;
+      }
+
+      if (itemTo.rows > item.rows || itemTo.cols > item.cols) {
+        itemTo.cols = itemTo.rows > item.rows ? itemTo.rows : itemTo.cols;
+        itemTo.rows = itemTo.cols > item.cols ? itemTo.cols : itemTo.rows;
+      }
+    }
+  }
+
   /** Comment. */
   ngAfterContentChecked(): void {
     this.ref.detectChanges();
@@ -389,11 +421,14 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      !this.stationForm.valid ||
-      !(
-        this.stationForm.dirty ||
-        this.stationForm.controls.stationTemplateForm.touched
-      ) ||
+      // If current tab is document and form field values are not changed.
+      (!this.isFlowLogicTab &&
+        (!this.stationForm.valid ||
+          !(
+            this.stationForm.dirty ||
+            this.stationForm.controls.stationTemplateForm.touched
+          ))) ||
+      // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
@@ -465,10 +500,10 @@ export class StationComponent
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
             );
+            this.getStationWidgets();
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
-          this.getStationWidgets();
           this.stationLoading = false;
         },
         error: (error: unknown) => {
@@ -889,6 +924,7 @@ export class StationComponent
    * Get the station frame widgets.
    */
   private getStationWidgets(): void {
+    this.widgetLoading = true;
     this.stationService
       .getStationWidgets(this.stationRithmId)
       .pipe(first())
@@ -918,8 +954,7 @@ export class StationComponent
                 frame.type = FrameType.Body;
                 break;
               case FrameType.Title:
-                frame.minItemCols = 24;
-                frame.minItemRows = 1;
+                frame.minItemCols = 6;
                 frame.maxItemRows = 1;
                 frame.type = FrameType.Title;
                 break;
@@ -939,8 +974,10 @@ export class StationComponent
             this.inputFrameWidgetItems.push(frame);
             this.changedOptions();
           });
+          this.widgetLoading = false;
         },
         error: (error: unknown) => {
+          this.widgetLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -982,7 +1019,7 @@ export class StationComponent
    * Save or update the changes make the station frame widgets.
    */
   private saveStationWidgetsChanges(): void {
-    this.stationLoading = true;
+    this.widgetLoading = true;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
         field.data = JSON.stringify(field.questions);
@@ -1008,13 +1045,13 @@ export class StationComponent
               inputFrames.filter((iframe) => iframe.type === FrameType.Input)
             );
           } else {
-            this.stationLoading = false;
+            this.widgetLoading = false;
             this.setGridMode('preview');
           }
           this.changedOptions();
         },
         error: (error: unknown) => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1046,7 +1083,7 @@ export class StationComponent
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
     } else {
-      this.stationLoading = false;
+      this.widgetLoading = false;
       this.setGridMode('preview');
     }
   }
@@ -1061,11 +1098,11 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: () => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.setGridMode('preview');
         },
         error: (error: unknown) => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -1160,8 +1197,7 @@ export class StationComponent
       case FrameType.Title:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
         break;
