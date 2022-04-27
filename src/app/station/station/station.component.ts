@@ -43,6 +43,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { RandomIdGenerator } from 'src/helpers';
+import { v4 as uuidv4 } from 'uuid';
+
 /**
  * Main component for viewing a station.
  */
@@ -171,8 +173,8 @@ export class StationComponent
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** Helper class for random id generator. */
-  private randomIdGenerator: RandomIdGenerator;
+   /** Helper class for random id generator. */
+   private randomIdGenerator: RandomIdGenerator;
 
   constructor(
     private stationService: StationService,
@@ -492,7 +494,7 @@ export class StationComponent
    */
   addQuestion(fieldType: QuestionFieldType): void {
     const newQuestion: Question = {
-      rithmId: this.randomIdGenerator.getRandRithmId(4),
+      rithmId: uuidv4(),
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
@@ -776,7 +778,7 @@ export class StationComponent
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randomIdGenerator.getRandRithmId(4),
+        rithmId: uuidv4(),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
@@ -1118,7 +1120,7 @@ export class StationComponent
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
     const inputFrame: StationFrameWidget = {
-      rithmId: this.randomIdGenerator.getRandRithmId(4),
+      rithmId: uuidv4(),
       stationRithmId: this.stationRithmId,
       cols: 1,
       rows: 1,
