@@ -30,6 +30,8 @@ describe('UserFormComponent', () => {
   let fixture: ComponentFixture<UserFormComponent>;
   let loader: HarnessLoader;
   let errorService: ErrorService;
+  let popupService: PopupService;
+  let userService: UserService;
   const formBuilder = new FormBuilder();
   const user: User = {
     rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A',
@@ -74,6 +76,8 @@ describe('UserFormComponent', () => {
     component.currentUser = user;
     loader = TestbedHarnessEnvironment.loader(fixture);
     errorService = TestBed.inject(ErrorService);
+    popupService = TestBed.inject(PopupService);
+    userService = TestBed.inject(UserService);
     fixture.detectChanges();
   });
 
@@ -235,7 +239,6 @@ describe('UserFormComponent', () => {
 
   describe('Testing split.io', () => {
     let splitService: SplitService;
-    let userService: UserService;
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
       userService = TestBed.inject(UserService);
@@ -302,10 +305,7 @@ describe('UserFormComponent', () => {
       message: 'Please select a file with extension jpeg, jpg, png.',
       important: true,
     };
-    const spyAlert = spyOn(
-      TestBed.inject(PopupService),
-      'alert'
-    ).and.callThrough();
+    const spyAlert = spyOn(popupService, 'alert').and.callThrough();
     const mockFile = new File([''], 'name', { type: 'document/pdf' });
     const mockEvt = { target: { files: [mockFile] } };
     component.uploadImage(mockEvt as unknown as Event);
@@ -313,10 +313,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should catch error if petition upload imageUser fails', () => {
-    const serviceMethod = spyOn(
-      TestBed.inject(UserService),
-      'uploadImageUser'
-    ).and.returnValue(
+    const serviceMethod = spyOn(userService, 'uploadImageUser').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -329,10 +326,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should call upload imageUser', () => {
-    const spyMethod = spyOn(
-      TestBed.inject(UserService),
-      'uploadImageUser'
-    ).and.callThrough();
+    const spyMethod = spyOn(userService, 'uploadImageUser').and.callThrough();
     const mockFile = new File([''], 'name', { type: 'image/png' });
     component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
@@ -398,5 +392,21 @@ describe('UserFormComponent', () => {
       '#error-loading-upload-photo'
     );
     expect(error).toBeTruthy();
+  });
+
+  it('should display a confirmation pop up', async () => {
+    const confirmationData = {
+      title: 'Delete image user?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+
+    const popUpConfirmSpy = spyOn(popupService, 'confirm').and.callThrough();
+
+    await component.confirmRemoveUserImage();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+    expect(component.profileImageRithmId).toEqual('');
   });
 });
