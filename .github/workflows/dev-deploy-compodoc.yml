@@ -5,15 +5,13 @@
 name: Dev Deployments Compodoc
 on:
   push:
-    branches: [master]
+    branches: [dev]
   repository_dispatch:
     types: [dev_just_pushed]
 
 jobs:
   test-coverage:
     runs-on: [self-hosted, devrunner]
-    needs: web-app
-    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v2
