@@ -268,9 +268,7 @@
       </ul>
       <ul class="rules-left-side-added-rules"></ul>
     </aside>
-    <div
-      class="rules-right-side w-full border-l border-secondary-100 min-h-screen"
-    >
+    <div class="rules-right-side w-full border-l border-secondary-100">
       <section class="rules-right-side-title w-full">
         <div class="py-6 pr-6 pl-8 flex justify-between items-center">
           <p
@@ -349,7 +347,7 @@
         </div>
       </section>
       <section
-        class="rules-right-side-triggers w-full"
+        class="rules-right-side-schedule w-full"
         *ngIf="ruleSelectedMenu === 'triggers'"
       >
         <div
@@ -359,14 +357,14 @@
         </div>
         <div class="flex justify-center items-center flex-col text-center">
           <i class="far fa-clock text-4xl text-accent-500 mt-6"></i>
-          <p class="py-4 w-2/4 text-sm">
+          <p class="py-4 w-5/6 md:w-2/4 text-sm">
             Schedule triggers can be configured to check conditions and flow
             documents automatically
           </p>
           <button mat-stroked-button color="accent">Add Trigger</button>
         </div>
       </section>
-     <section
+      <section
         *ngIf="ruleSelectedMenu === 'rules'"
         class="rules-right-side-conditions w-full"
       >
