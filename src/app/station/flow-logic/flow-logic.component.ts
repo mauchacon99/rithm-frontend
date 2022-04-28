@@ -53,6 +53,9 @@ export class FlowLogicComponent implements OnInit {
   manuallyTooltip =
     'Upon pressing the flow button, containers will be checked and flowed to their destination';
 
+  /** Selected value condition type for rules. */
+  selectedConditionType = 'all';
+
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
