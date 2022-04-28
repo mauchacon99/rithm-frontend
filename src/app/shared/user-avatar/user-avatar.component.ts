@@ -8,7 +8,7 @@ import { ImageData } from 'src/models/index';
  * Reusable component for displaying a user's avatar.
  */
 @Component({
-  selector: 'app-user-avatar[firstName][lastName]',
+  selector: 'app-user-avatar[firstName][lastName][profileImageRithmId]',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
 })
@@ -37,14 +37,39 @@ export class UserAvatarComponent {
   /** If avatars are small. */
   @Input() isSmall = false;
 
-  /** If avatar are large. */
+  /** If avatars are large. */
   @Input() isLarge = false;
 
-  /** Image Rithm Id. */
-  imageRithmId!: string;
+  /** Profile image Rithm Id. */
+  private _profileImageRithmId = '';
+
+  /** Set profile image Rithm Id. */
+  @Input() set profileImageRithmId(profileImageRithmId: string) {
+    this._profileImageRithmId = profileImageRithmId;
+    if (profileImageRithmId) {
+      this.getImageUser();
+    }
+  }
+
+  /**
+   * Get profile image id.
+   *
+   * @returns Profile image idt.
+   */
+  get profileImageRithmId(): string {
+    return this._profileImageRithmId;
+  }
 
   /** Image data. */
-  imageData!: ImageData;
+  set imageData(image: ImageData) {
+    this.classProfileImage = image.imageData;
+  }
+
+  /** Load indicator getting image. */
+  isLoading = false;
+
+  /** Class to render profile image. */
+  classProfileImage = '';
 
   constructor(
     private userService: UserService,
@@ -89,16 +114,20 @@ export class UserAvatarComponent {
 
   /**
    * Get Image user.
+   *
    */
   private getImageUser(): void {
+    this.isLoading = true;
     this.userService
-      .getImageUser(this.imageRithmId)
+      .getImageUser(this.profileImageRithmId)
       .pipe(first())
       .subscribe({
         next: (imageData) => {
+          this.isLoading = false;
           this.imageData = imageData;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

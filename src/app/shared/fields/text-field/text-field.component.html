@@ -8,7 +8,12 @@
       widgetItem: widgetItem
     }"
   >
-    <mat-label>{{ labelTag }}</mat-label>
+    <ng-container *ngIf="widgetItem; else oldView">
+      <mat-label *ngIf="!isStation">{{ labelTag }}</mat-label>
+    </ng-container>
+    <ng-template #oldView>
+      <mat-label>{{ labelTag }}</mat-label>
+    </ng-template>
     <div matPrefix class="icon">
       <!-- Text Icons -->
       <i
@@ -108,6 +113,9 @@
         autocomplete="off"
         (change)="updateFieldPrompt()"
         [readonly]="widgetItem"
+        [placeholder]="
+          widgetItem ? (labelTag.length ? labelTag : field.prompt) : ''
+        "
       />
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && isInput"
@@ -122,6 +130,9 @@
         autocomplete="off"
         (keyup)="updateFieldAnswer()"
         [readonly]="widgetItem"
+        [placeholder]="
+          widgetItem ? (labelTag.length ? labelTag : field.prompt) : ''
+        "
       />
       <textarea
         *ngIf="field.questionType === fieldTypeEnum.Instructions && !isInput"
@@ -133,6 +144,9 @@
         "
         [formControlName]="field.questionType"
         (change)="updateFieldPrompt()"
+        [placeholder]="
+          widgetItem ? (labelTag.length ? labelTag : field.prompt) : ''
+        "
       >
       </textarea>
     </div>

@@ -14,10 +14,10 @@ export class HeadlineWidgetComponent {
     new EventEmitter<Question | string>();
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** Headline text for the widget. */
-  public headlineTextValue = 'Headline';
+  public headlineTextValue = '';
 
   /**
    * Open setting drawer.
