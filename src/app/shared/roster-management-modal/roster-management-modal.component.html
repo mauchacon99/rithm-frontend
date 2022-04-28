@@ -26,6 +26,7 @@
             [badge]="'check'"
             (click)="removeMemberFromRoster(member.rithmId)"
             [hoverEffect]="true"
+            [profileImageRithmId]="member.profileImageRithmId || ''"
           ></app-user-avatar>
         </div>
       </ng-container>
@@ -83,6 +84,7 @@
                 [lastName]="user.lastName"
                 [hideToolTip]="true"
                 [badge]="getCurrentBadge(user)"
+                [profileImageRithmId]="user.profileImageRithmId || ''"
               >
               </app-user-avatar>
             </div>

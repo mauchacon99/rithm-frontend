@@ -3,11 +3,10 @@
     <app-loading-indicator class="flex-grow"></app-loading-indicator>
   </div>
   <mat-card
-    class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto"
+    class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 sm:h-auto"
     *ngIf="!isLoading"
   >
     <h3 class="mb-4 text-accent-500">Account Settings</h3>
-
     <form
       (ngSubmit)="updateSettings()"
       class="relative"
