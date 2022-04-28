@@ -33,10 +33,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   @Input() fields: Question[] | undefined = [];
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
-
-  /** Whether the station is in editMode or previewMode. */
-  @Input() stationViewMode!: 'edit' | 'preview';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** Id of the current Gridster item. */
   @Input() id!: number;
@@ -99,11 +96,15 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
           const questionIndex = this.fields?.findIndex(
             (e) => e.rithmId === questionTitle.rithmId
           );
-          if (!this.tempTitle) {
-            this.tempTitle = this.fields[questionIndex].prompt.slice();
+          /** Verify that the index exists.*/
+          if (questionIndex >= 0) {
+            if (!this.tempTitle) {
+              this.tempTitle = this.fields[questionIndex].prompt.slice();
+            }
+
+            this.fields[questionIndex].prompt =
+              questionTitle.value || this.tempTitle;
           }
-          this.fields[questionIndex].prompt =
-            questionTitle.value || this.tempTitle;
         }
       });
   }

@@ -441,12 +441,11 @@ describe('DashboardComponent', () => {
       const widgetIndex = 1;
       const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
       component.toggleWidgetDrawer(
-        'stationWidget',
         widgetItem,
         widgetIndex,
         quantityElementsWidget
       );
-      expect(spyMethod).toHaveBeenCalledOnceWith('stationWidget', {
+      expect(spyMethod).toHaveBeenCalledOnceWith('widgetDashboard', {
         widgetItem,
         widgetIndex,
         quantityElementsWidget,
@@ -454,7 +453,7 @@ describe('DashboardComponent', () => {
     });
 
     it('should call toggle drawer for close drawer the widgets how dashboard change a editMode false', async () => {
-      const drawerContext = 'stationWidget';
+      const drawerContext = 'widgetDashboard';
       sidenavDrawer.drawerContext$.next(drawerContext);
       expect(component.drawerContext).toBe(drawerContext);
       component.dashboardDataCopy = dataDashboard;
@@ -463,11 +462,11 @@ describe('DashboardComponent', () => {
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       await component.toggleEditMode(false);
       expect(spyMethod).toHaveBeenCalledWith();
-      expect(spyDrawer).toHaveBeenCalledWith('stationWidget');
+      expect(spyDrawer).toHaveBeenCalledWith('widgetDashboard');
     });
 
     it('should toggle drawer if drawer open is different a menuDashboard when update dashboard', () => {
-      component.drawerContext = 'stationWidget';
+      component.drawerContext = 'widgetDashboard';
       spyOnProperty(component, 'isDrawerOpen').and.returnValue(true);
       const spyDrawer = spyOn(sidenavDrawer, 'toggleDrawer');
       component.updateDashboard();
@@ -629,7 +628,7 @@ describe('DashboardComponent', () => {
           rows: 2,
           x: 8,
           y: 0,
-          widgetType: WidgetType.StationGroup,
+          widgetType: WidgetType.StationGroupSearch,
           data: '{"documentRithmId":"07ce2489-b07e-48e2-a378-99e7f487aa0f"}',
           minItemRows: 1,
           maxItemRows: 1,

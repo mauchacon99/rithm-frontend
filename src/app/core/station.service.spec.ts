@@ -23,7 +23,6 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1561,35 +1560,85 @@ describe('StationService', () => {
   });
 
   it('should get getStationWidgets', () => {
-    const expectedResponse: StationFrameWidget[] = [
-      {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: '',
-        questions: [],
-        id: 0,
-      },
-      {
-        rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 1,
-        x: 0,
-        y: 0,
-        type: FrameType.Headline,
-        data: '',
-        id: 1,
-      },
-    ];
+    const expectedResponse: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+          name: 'Development',
+          totalDocuments: 5,
+          isGenerator: true,
+        },
+      ],
+      previousStations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+          name: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true,
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false,
+        },
+      ],
+      frames: [
+        {
+          rithmId: '9144-3f0d-e1f1',
+          stationRithmId: 'qwe-321-ert-123',
+          id: 0,
+          x: 6,
+          y: 1,
+          cols: 6,
+          rows: 4,
+          type: FrameType.Headline,
+          data: '',
+          questions: [],
+        },
+      ],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2,
+      allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
+      flowButton: 'Flow',
+      isChained: false,
+    };
 
     service.getStationWidgets(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
+      expect(response).toEqual(expectedResponse.frames);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info-frames?stationRithmId=${stationId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should call getGroupTrafficData', () => {
@@ -1700,17 +1749,77 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should get a current stations list for containers', () => {
-    const stationRithmId = '6375027-78345-73824-54244';
-    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+  it('should add a new member to station group owners roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
       {
-        name: 'Testy',
-        rithmId: '123',
-        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
       },
     ];
-    service.getCurrentStations(stationRithmId).subscribe((response) => {
-      expect(response).toEqual(expectCurrentStationsResponse);
-    });
+
+    service
+      .addUserStationGroupToOwnersRoster(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should add a new member to station group workers roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .addUserStationGroupWorkersRoster(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
