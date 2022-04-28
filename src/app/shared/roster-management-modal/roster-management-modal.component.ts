@@ -5,16 +5,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
-/** Interface data modal. */
-interface ModalData {
-  /** The station rithmId. */
-  stationId: string;
-  /** The type of roster which will be showed.  */
-  type: 'workers' | 'owners';
-  /** Is group. */
-  isGroup: boolean;
-}
-
 /**
  * Component for roster management.
  */
@@ -70,7 +60,14 @@ export class RosterManagementModalComponent implements OnInit {
     private stationService: StationService,
     private errorService: ErrorService,
     @Inject(MAT_DIALOG_DATA)
-    public modalData: ModalData
+    public modalData: {
+      /** The station rithmId. */
+      stationId: string;
+      /** The type of roster which will be showed.  */
+      type: 'workers' | 'owners';
+      /** Is group. */
+      isGroup: boolean;
+    }
   ) {
     this.stationOrGroupRithmId = this.modalData.stationId;
     this.rosterType = this.modalData.type;

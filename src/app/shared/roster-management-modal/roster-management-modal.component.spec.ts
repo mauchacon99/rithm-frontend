@@ -267,8 +267,14 @@ describe('RosterManagementModalComponent', () => {
         throw new Error();
       })
     );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
     component.addUserStationGroupToRoster(userList[0]);
     expect(errorSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call errorService if request in addUserStationGroupToRoster for worker fail', () => {
@@ -282,8 +288,14 @@ describe('RosterManagementModalComponent', () => {
         throw new Error();
       })
     );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
     component.addUserStationGroupToRoster(userList[0]);
     expect(errorSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call getPotentialStationRosterMembers if not isGroup', () => {
