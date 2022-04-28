@@ -9,6 +9,7 @@ import {
   EditDataWidget,
   ColumnsDocumentInfo,
   ItemListWidgetModal,
+  ColumnFieldsWidget,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -38,7 +39,7 @@ export class MockDashboardService {
     key: string;
   }[] = [
     {
-      name: 'Document',
+      name: 'Container',
       key: ColumnsDocumentInfo.Name,
     },
     {
@@ -208,6 +209,30 @@ export class MockDashboardService {
       },
     },
   };
+
+  /**
+   * Group columns of station widget.
+   *
+   * @param columns Columns to group.
+   * @returns Columns grouped.
+   */
+  groupColumnsStationWidget(
+    columns: ColumnFieldsWidget[]
+  ): ColumnFieldsWidget[] {
+    const columnsGrouped: ColumnFieldsWidget[] = [];
+    columns.map((column) => {
+      if (
+        !columnsGrouped.some((value) => {
+          return (
+            value.name === column.name || value.questionId === column.questionId
+          );
+        })
+      ) {
+        columnsGrouped.push(column);
+      }
+    });
+    return columnsGrouped;
+  }
 
   /**
    * Update data of the widget since drawer station.

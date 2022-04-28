@@ -395,11 +395,25 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     this.columnsSpecificOfWidget = [];
     const dataTemp: DataTableValues[] = [];
 
+    // set data default if columns widget are empty
+    if (!this.columnsAllField.length) {
+      this.columnsAllField.push({
+        name: this.columnsDocumentInfo.Name,
+      });
+    }
+
     // Set data table
     this.columnsAllField.map((column) => {
       // set data type question
       if (column?.questionId) {
         const question = this.getColumnQuestion(column.questionId);
+        this.columnsToDisplayTable.push(question?.rithmId || column.questionId);
+        this.columnsSpecificOfWidget.push({
+          headerTitle: question?.prompt || column.name,
+          keyReference: question?.rithmId || column.questionId,
+          type: 'question',
+          typeQuestion: question?.questionType,
+        });
         this.dataStationWidget.documents.map((document, index) => {
           const key = question?.rithmId || (column.questionId as string);
           dataTemp[index] = {
@@ -408,17 +422,15 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
             [key]: this.getValueQuestion(key, document),
           };
         });
-        this.columnsToDisplayTable.push(question?.rithmId || column.questionId);
-        this.columnsSpecificOfWidget.push({
-          headerTitle: question?.prompt || column.name,
-          keyReference: question?.rithmId || column.questionId,
-          type: 'question',
-          typeQuestion: question?.questionType,
-        });
       } else {
         // set data type column basic
         const nameColumn = column.name as ColumnsDocumentInfo;
         this.columnsToDisplayTable.push(nameColumn);
+        this.columnsSpecificOfWidget.push({
+          headerTitle: this.getColumnBasicName(nameColumn),
+          keyReference: nameColumn,
+          type: 'basic',
+        });
         this.dataStationWidget.documents.map((document, index) => {
           dataTemp[index] = {
             ...dataTemp[index],
@@ -426,23 +438,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
             [nameColumn]: document[nameColumn],
           };
         });
-        this.columnsSpecificOfWidget.push({
-          headerTitle: this.getColumnBasicName(nameColumn),
-          keyReference: nameColumn,
-          type: 'basic',
-        });
       }
     });
-
-    // set data default if columns widget are empty
-    if (!this.columnsAllField.length) {
-      this.columnsSpecificOfWidget.push({
-        headerTitle: this.getColumnBasicName(this.columnsDocumentInfo.Name),
-        keyReference: this.columnsDocumentInfo.Name,
-        type: 'basic',
-      });
-      this.columnsToDisplayTable.push(this.columnsDocumentInfo.Name);
-    }
 
     // push data to dataSourceTable
     this.columnsToDisplayTable.push('viewDocument');
@@ -481,6 +478,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           });
           return values.join('<br>') || null;
         }
+        return null;
       }
       if (question.questionType === this.questionFieldType.Instructions) {
         return question.prompt || null;

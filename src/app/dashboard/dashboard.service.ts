@@ -39,7 +39,7 @@ export class DashboardService {
   /** Data static of info about document. */
   columnsDocumentInfo: ColumnsLogicWidget[] = [
     {
-      name: 'Document',
+      name: 'Container',
       key: ColumnsDocumentInfo.Name,
     },
     {
@@ -213,9 +213,9 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Group columns of station widget
+   * Group columns of station widget.
    *
-   * @param columns Columns to group
+   * @param columns Columns to group.
    * @returns Columns grouped.
    */
   groupColumnsStationWidget(

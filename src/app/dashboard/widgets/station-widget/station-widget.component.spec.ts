@@ -9,10 +9,14 @@ import {
   MockPopupService,
 } from 'src/mocks';
 import {
+  ColumnFieldsWidget,
   ColumnsDocumentInfo,
   DocumentGenerationStatus,
+  Question,
   QuestionFieldType,
+  StationRosterMember,
   StationWidgetData,
+  WidgetDocument,
   WidgetType,
 } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
@@ -23,10 +27,32 @@ import { PopupService } from 'src/app/core/popup.service';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
+import { MatSortModule } from '@angular/material/sort';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+/** Represents data of columns. */
+interface DataTableValues {
+  /** RithmId of the document. */
+  rithmId: string;
+  /** Key reference of field column basic or questionRithmId. */
+  [key: string]: string | number | StationRosterMember | null;
+}
+
+/** Represents data of columns. */
+interface ColumnsSpecificOfWidget {
+  /** Key reference of field column basic or questionRithmId. */
+  keyReference: string;
+  /** Header title. */
+  headerTitle: string;
+  /** Type of value. */
+  type: 'basic' | 'question';
+  /** Enum of questions types. */
+  typeQuestion?: QuestionFieldType;
+}
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -38,6 +64,62 @@ describe('StationWidgetComponent', () => {
     // eslint-disable-next-line max-len
     '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": [{"name": "name"}, {"name":"Test QuestionId","questionId":"37534-453543-453453"}]}';
 
+  const documents: WidgetDocument[] = [
+    {
+      rithmId: '123-123-',
+      name: 'Document Name',
+      priority: 0,
+      lastUpdatedUTC: '2022-01-17T15:03:26.371Z',
+      flowedTimeUTC: '2022-01-17T15:03:26.371Z',
+      assignedUser: {
+        rithmId: 'string',
+        firstName: 'string',
+        lastName: 'string',
+        email: 'string',
+        isAssigned: true,
+      },
+      questions: [
+        {
+          questions: [
+            {
+              answer: {
+                questionRithmId: '',
+                referAttribute: '',
+                value: 'Value 1',
+              },
+              children: [],
+              isEncrypted: false,
+              isPrivate: false,
+              isReadOnly: false,
+              isRequired: false,
+              possibleAnswers: [],
+              prompt: 'value instruccions dev 1',
+              questionType: QuestionFieldType.Instructions,
+              rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
+            },
+            {
+              answer: {
+                questionRithmId: '',
+                referAttribute: '',
+                value: 'Value 2',
+              },
+              children: [],
+              isEncrypted: false,
+              isPrivate: false,
+              isReadOnly: false,
+              isRequired: false,
+              possibleAnswers: [],
+              prompt: 'value instruccions dev 1',
+              questionType: QuestionFieldType.Number,
+              rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28186',
+            },
+          ],
+          stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+        },
+      ],
+    },
+  ];
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -48,7 +130,12 @@ describe('StationWidgetComponent', () => {
         MockComponent(ErrorWidgetComponent),
         MockComponent(BannerImageWidgetComponent),
       ],
-      imports: [MatTableModule, RouterTestingModule],
+      imports: [
+        MatTableModule,
+        RouterTestingModule,
+        MatSortModule,
+        BrowserAnimationsModule,
+      ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -68,53 +155,7 @@ describe('StationWidgetComponent', () => {
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      documents: [
-        {
-          rithmId: '123-123-',
-          name: 'Document Name',
-          priority: 0,
-          lastUpdatedUTC: '2022-01-17T15:03:26.371Z',
-          flowedTimeUTC: '2022-01-17T15:03:26.371Z',
-          assignedUser: {
-            rithmId: 'string',
-            firstName: 'string',
-            lastName: 'string',
-            email: 'string',
-            isAssigned: true,
-          },
-          questions: [
-            {
-              questions: [
-                {
-                  answer: undefined,
-                  children: [],
-                  isEncrypted: false,
-                  isPrivate: false,
-                  isReadOnly: false,
-                  isRequired: false,
-                  possibleAnswers: [],
-                  prompt: 'value instruccions dev 1',
-                  questionType: QuestionFieldType.Instructions,
-                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28184',
-                },
-                {
-                  answer: undefined,
-                  children: [],
-                  isEncrypted: false,
-                  isPrivate: false,
-                  isReadOnly: false,
-                  isRequired: false,
-                  possibleAnswers: [],
-                  prompt: 'value instruccions dev 1',
-                  questionType: QuestionFieldType.Number,
-                  rithmId: '5f652ab1-6870-4b78-8e81-b5e4a6e28186',
-                },
-              ],
-              stationRithmId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
-            },
-          ],
-        },
-      ],
+      documents,
     };
     fixture.detectChanges();
   });
@@ -503,67 +544,33 @@ describe('StationWidgetComponent', () => {
     expect(component.toggleDrawer.emit).toHaveBeenCalled();
   });
 
-  it('should get name of the column', () => {
-    expect(component.getColumnBasicName(ColumnsDocumentInfo.Name)).toEqual(
-      'Document'
-    );
-  });
-
   it('should be parse data of the columns widget', () => {
+    component.columnsAllField = [];
     spyOnProperty(component, 'dataWidget').and.returnValue(dataWidget);
     const expectColumnsWidget = JSON.parse(dataWidget)?.columns;
+    const spyGroupColumns = spyOn(
+      TestBed.inject(DashboardService),
+      'groupColumnsStationWidget'
+    ).and.callThrough();
+
     component.parseDataColumnsWidget();
+
     expect(component.columnsAllField).toEqual(expectColumnsWidget);
     expect(component.columnsFieldPetition).toEqual([
       expectColumnsWidget[1]?.questionId,
     ]);
-    expect(component.columnsToDisplayTable).toEqual([
-      expectColumnsWidget[0]?.name,
-      expectColumnsWidget[1]?.questionId,
-      'viewDocument',
-    ]);
+    expect(spyGroupColumns).toHaveBeenCalled();
   });
 
   it('should be parse data of the columns widget when columns is empty', () => {
+    component.columnsFieldPetition = [];
+    component.columnsAllField = [];
     const jsonStringData =
       '{"stationRithmId":"4fb462ec-0772-49dc-8cfb-3849d70ad168", "columns": []}';
     spyOnProperty(component, 'dataWidget').and.returnValue(jsonStringData);
     component.parseDataColumnsWidget();
     expect(component.columnsFieldPetition.length).toEqual(0);
     expect(component.columnsAllField.length).toEqual(0);
-    expect(component.columnsToDisplayTable).toEqual(['name', 'viewDocument']);
-  });
-
-  it('should get name of question to table column when questionType id instructions', () => {
-    const expectDataValue = 'Instruction';
-    const expectDataReturn = component.getColumnQuestionPrompt({
-      name: 'Value Test',
-      questionId:
-        component.dataStationWidget.documents[0].questions[0].questions[0]
-          .rithmId,
-    });
-    expect(expectDataReturn).toEqual(expectDataValue);
-  });
-
-  it('should get name of question to table column when not found questionId', () => {
-    const expectDataValue = 'Value Test';
-    const expectDataReturn = component.getColumnQuestionPrompt({
-      name: expectDataValue,
-      questionId: '5f652ab1-6870-4b78-881-b5e4a6e2818',
-    });
-    expect(expectDataReturn).toEqual(expectDataValue);
-  });
-
-  it('should get name of question to table column when found questionId and its different to instructions', () => {
-    const expectDataValue =
-      component.dataStationWidget.documents[0].questions[0].questions[1].prompt;
-    const expectDataReturn = component.getColumnQuestionPrompt({
-      name: expectDataValue,
-      questionId:
-        component.dataStationWidget.documents[0].questions[0].questions[1]
-          .rithmId,
-    });
-    expect(expectDataReturn).toEqual(expectDataValue);
   });
 
   it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
@@ -582,6 +589,12 @@ describe('StationWidgetComponent', () => {
     component.isLoading = false;
     component.failedLoadWidget = false;
     component.widgetType = WidgetType.StationMultilineBanner;
+    component.dataSourceTable = new MatTableDataSource([
+      {
+        rithmId: component.dataStationWidget.documents[0].rithmId,
+        name: 'test',
+      },
+    ] as DataTableValues[]);
     fixture.detectChanges();
     const button = fixture.debugElement.nativeElement.querySelector(
       '#link-document-button-' +
@@ -604,5 +617,263 @@ describe('StationWidgetComponent', () => {
         },
       }
     );
+  });
+
+  describe('Structure to set data on dataTableSource', () => {
+    const columnsQuestion: ColumnFieldsWidget[] = [
+      {
+        name: documents[0].questions[0].questions[0].prompt,
+        questionId: documents[0].questions[0].questions[0].rithmId,
+      },
+    ];
+    const columnsBasic: ColumnFieldsWidget[] = [
+      {
+        name: ColumnsDocumentInfo.Name,
+      },
+    ];
+
+    beforeEach(() => {
+      component.dataStationWidget.documents = documents;
+    });
+
+    it('should get column basic name', () => {
+      expect(component['getColumnBasicName'](ColumnsDocumentInfo.Name)).toEqual(
+        'Container'
+      );
+    });
+
+    describe('generateDataTable', () => {
+      beforeEach(() => {
+        component.dataStationWidget.documents = documents;
+      });
+
+      it('should generate data table when column have questionId', () => {
+        component.columnsAllField = columnsQuestion;
+
+        const spyMapColumnsAllField = spyOn(
+          component.columnsAllField,
+          'map'
+        ).and.callThrough();
+        const spyMapDataStationWidgetDocuments = spyOn(
+          component.dataStationWidget.documents,
+          'map'
+        ).and.callThrough();
+
+        const expectColumnsSpecificOfWidget: ColumnsSpecificOfWidget[] = [
+          {
+            headerTitle:
+              documents[0].questions[0].questions[0].prompt ||
+              columnsQuestion[0].name,
+            keyReference:
+              documents[0].questions[0].questions[0].rithmId ||
+              (columnsQuestion[0].questionId as string),
+            type: 'question',
+            typeQuestion: documents[0].questions[0].questions[0].questionType,
+          },
+        ];
+        const expectColumnsToDisplayTable = [
+          documents[0].questions[0].questions[0].rithmId ||
+            (columnsQuestion[0].questionId as string),
+          'viewDocument',
+        ];
+
+        component['generateDataTable']();
+
+        expect(spyMapColumnsAllField).toHaveBeenCalled();
+        expect(spyMapDataStationWidgetDocuments).toHaveBeenCalled();
+        expect(component.columnsSpecificOfWidget).toEqual(
+          expectColumnsSpecificOfWidget
+        );
+        expect(component.columnsToDisplayTable).toEqual(
+          expectColumnsToDisplayTable
+        );
+      });
+
+      it('should generate data table when column dont have questionId', () => {
+        component.columnsAllField = columnsBasic;
+
+        const spyMapColumnsAllField = spyOn(
+          component.columnsAllField,
+          'map'
+        ).and.callThrough();
+        const spyMapDataStationWidgetDocuments = spyOn(
+          component.dataStationWidget.documents,
+          'map'
+        ).and.callThrough();
+
+        const expectColumnsSpecificOfWidget: ColumnsSpecificOfWidget[] = [
+          {
+            headerTitle: component['getColumnBasicName'](
+              ColumnsDocumentInfo.Name
+            ),
+            keyReference: ColumnsDocumentInfo.Name,
+            type: 'basic',
+          },
+        ];
+        const expectColumnsToDisplayTable = [
+          ColumnsDocumentInfo.Name,
+          'viewDocument',
+        ];
+
+        component['generateDataTable']();
+
+        expect(spyMapColumnsAllField).toHaveBeenCalled();
+        expect(spyMapDataStationWidgetDocuments).toHaveBeenCalled();
+        expect(component.columnsSpecificOfWidget).toEqual(
+          expectColumnsSpecificOfWidget
+        );
+        expect(component.columnsToDisplayTable).toEqual(
+          expectColumnsToDisplayTable
+        );
+      });
+
+      it('should generate data table when columnsAllField is empty', () => {
+        component.columnsAllField = [];
+
+        component['generateDataTable']();
+
+        expect(component.columnsAllField).toEqual([
+          {
+            name: ColumnsDocumentInfo.Name,
+          },
+        ]);
+      });
+    });
+
+    describe('getValueQuestion', () => {
+      beforeEach(() => {
+        component.dataStationWidget.documents = documents;
+      });
+
+      it('should return null if question dont exist', () => {
+        expect(
+          component['getValueQuestion']('23423423', documents[0])
+        ).toBeNull();
+      });
+
+      it('should return value of answer', () => {
+        const question = documents[0].questions[0].questions[1];
+        expect(
+          component['getValueQuestion'](question.rithmId, documents[0])
+        ).toEqual(question.answer?.value || null);
+      });
+
+      it('should return value of prompt when questionType is instruction', () => {
+        const question = documents[0].questions[0].questions[1];
+        expect(
+          component['getValueQuestion'](question.rithmId, documents[0])
+        ).toEqual(question.answer?.value || null);
+      });
+
+      it('should return value of prompt when questionType is instruction', () => {
+        const question = documents[0].questions[0].questions[0];
+        expect(
+          component['getValueQuestion'](question.rithmId, documents[0])
+        ).toEqual(question.prompt || null);
+      });
+
+      it('should return null when questionType is check or select and dont have answers', () => {
+        const question: Question = {
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: 'Value 2',
+          },
+          children: [],
+          isEncrypted: false,
+          isPrivate: false,
+          isReadOnly: false,
+          isRequired: false,
+          possibleAnswers: [],
+          prompt: 'question select',
+          questionType: QuestionFieldType.Select,
+          rithmId: '5f652ab1-6870-4b78-8e81-questionselect',
+        };
+
+        component.dataStationWidget.documents[0].questions[0].questions = [
+          ...component.dataStationWidget.documents[0].questions[0].questions,
+          question,
+        ];
+        expect(
+          component['getValueQuestion'](question.rithmId, documents[0])
+        ).toBeNull();
+      });
+
+      it('should return values of questionType check or select', () => {
+        const question: Question = {
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: 'Value 2',
+            asArray: [
+              {
+                value: 'value 1',
+                isChecked: true,
+              },
+            ],
+          },
+          children: [],
+          isEncrypted: false,
+          isPrivate: false,
+          isReadOnly: false,
+          isRequired: false,
+          possibleAnswers: [],
+          prompt: 'question check',
+          questionType: QuestionFieldType.CheckList,
+          rithmId: '5f652ab1-6870-4b78-8e81-questioncheck',
+        };
+
+        component.dataStationWidget.documents[0].questions[0].questions = [
+          ...component.dataStationWidget.documents[0].questions[0].questions,
+          question,
+        ];
+
+        expect(
+          component['getValueQuestion'](question.rithmId, documents[0])
+        ).toEqual('value 1');
+      });
+
+      it("should return '---' when questionType is check or select and dont have checked value", () => {
+        const question: Question = {
+          answer: {
+            questionRithmId: '',
+            referAttribute: '',
+            value: 'Value 2',
+            asArray: [
+              {
+                value: 'value 1',
+                isChecked: false,
+              },
+            ],
+          },
+          children: [],
+          isEncrypted: false,
+          isPrivate: false,
+          isReadOnly: false,
+          isRequired: false,
+          possibleAnswers: [],
+          prompt: 'question check',
+          questionType: QuestionFieldType.MultiSelect,
+          rithmId: '5f652ab1-6870-4b78-8e81-questionmultiselect',
+        };
+
+        component.dataStationWidget.documents[0].questions[0].questions = [
+          ...component.dataStationWidget.documents[0].questions[0].questions,
+          question,
+        ];
+
+        expect(
+          component['getValueQuestion'](question.rithmId, documents[0])
+        ).toEqual('---');
+      });
+    });
+
+    it('should get question when call getColumnQuestion', () => {
+      const question: Question = documents[0].questions[0].questions[0];
+
+      expect(component['getColumnQuestion'](question.rithmId)).toEqual(
+        question
+      );
+    });
   });
 });

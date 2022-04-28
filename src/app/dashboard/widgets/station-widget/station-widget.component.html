@@ -88,13 +88,13 @@
     <div class="flex-grow overflow-auto scrollbar">
       <div *ngIf="dataStationWidget">
         <div
-          *ngIf="!dataStationWidget.documents.length"
+          *ngIf="!dataSourceTable?.data?.length"
           class="text-center my-4 text-sm"
           id="no-docs-message"
         >
           No documents found in station.
         </div>
-        <ng-container *ngIf="dataStationWidget.documents.length">
+        <ng-container *ngIf="dataSourceTable?.data?.length">
           <ng-container
             *ngIf="
               widgetType === enumWidgetType.StationMultilineBanner ||
@@ -221,7 +221,7 @@
       </th>
       <!--        Value of column-->
       <td mat-cell *matCellDef="let element">
-        <p class="max-w-[150px] pr-2 truncate text-xs text-secondary-500">
+        <p class="min-w-[130px] pr-2 truncate text-xs text-secondary-500">
           <ng-container
             *ngTemplateOutlet="
               setSpecificColumnType;
@@ -237,8 +237,8 @@
 
     <!-- Button to view document -->
     <ng-container [matColumnDef]="'viewDocument'" stickyEnd>
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
+      <th class="button-right" mat-header-cell *matHeaderCellDef></th>
+      <td class="button-right" mat-cell *matCellDef="let element">
         <div class="text-right">
           <button
             (click)="viewDocument(element.rithmId)"
