@@ -96,18 +96,12 @@
           color="accent"
           data-testid="add-new-column"
           id="add-new-column"
-          [disabled]="
-            disabledNewColumn ||
-            getFormColumns.controls.length >= MAXIMUM_COLUMNS_ALLOWED
-          "
+          [disabled]="disabledNewColumn"
           (click)="addNewColumn()"
         >
           Add Column
         </button>
-        <div
-          *ngIf="getFormColumns.controls.length >= MAXIMUM_COLUMNS_ALLOWED"
-          id="message-limited"
-        >
+        <div *ngIf="limitedColumnsReached" id="message-limited">
           <span class="text-error-500 text-xs"
             >Maximum number of columns allowed
             {{ MAXIMUM_COLUMNS_ALLOWED }}</span
