@@ -58,12 +58,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2.5mb"
+                  "maximumError": "3.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5kb",
+                  "maximumError": "8kb"
                 }
               ]
             },
@@ -82,12 +82,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2.5mb"
+                  "maximumError": "3.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5kb",
+                  "maximumError": "8kb"
                 }
               ]
             },
@@ -102,12 +102,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2.5mb"
+                  "maximumError": "3.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5kb",
+                  "maximumError": "8kb"
                 }
               ]
             }
