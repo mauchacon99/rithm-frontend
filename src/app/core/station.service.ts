@@ -4,8 +4,15 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  throwError,
+  of,
+  from,
+} from 'rxjs';
+import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
   DocumentGenerationStatus,
@@ -551,10 +558,16 @@ export class StationService {
     const params = new HttpParams()
       .set('stationRithmId', stationRithmId)
       .set('includePreviousQuestions', includePreviousQuestions);
-    return this.http.get<Question[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
-      { params }
-    );
+    return this.http
+      .get<Question[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+        { params }
+      )
+      .pipe(
+        concatMap(from),
+        distinct((question) => question.rithmId),
+        toArray()
+      );
   }
 
   /**

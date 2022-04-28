@@ -125,6 +125,9 @@ export class StationWidgetDrawerComponent implements OnInit {
   ngOnInit(): void {
     const dataWidget = JSON.parse(this.dataDrawer.widgetItem.data);
     this.stationColumns = dataWidget.columns || [];
+    this.stationColumns = this.dashboardService.groupColumnsStationWidget(
+      this.stationColumns
+    );
     this.stationRithmId = dataWidget.stationRithmId;
     this.getDocumentFields();
   }
