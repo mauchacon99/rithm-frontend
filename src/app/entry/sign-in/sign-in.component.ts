@@ -27,6 +27,9 @@ export class SignInComponent implements OnInit {
   /** Is it loading. */
   isLoading = false;
 
+  /** On hover For password visible. */
+  viewPassword = false;
+
   constructor(
     public fb: FormBuilder,
     private popupService: PopupService,
