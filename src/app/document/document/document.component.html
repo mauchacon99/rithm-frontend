@@ -169,13 +169,14 @@
                   </button>
                   <button
                     mat-raised-button
+                    type="submit"
                     color="accent"
                     data-testid="document-flow"
                     id="document-flow"
                     [disabled]="
                       !documentForm.valid || (isWidget && !isUserAdminOrOwner)
                     "
-                    (click)="saveAnswersFlowDocument()"
+                    (click)="shouldFlowContainer = true"
                   >
                     {{ flowButtonName }}
                   </button>
@@ -379,6 +380,7 @@
                     Previous Station
                   </button>
                   <button
+                    type="submit"
                     mat-raised-button
                     color="accent"
                     data-testid="document-flow"
@@ -386,7 +388,7 @@
                     [disabled]="
                       !documentForm.valid || (isWidget && !isUserAdminOrOwner)
                     "
-                    (click)="saveAnswersFlowDocument()"
+                    (click)="shouldFlowContainer = true"
                   >
                     {{ flowButtonName }}
                   </button>
