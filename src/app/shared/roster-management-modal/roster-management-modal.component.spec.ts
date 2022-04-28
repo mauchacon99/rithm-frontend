@@ -9,6 +9,7 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { MockComponent } from 'ng-mocks';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
+import { throwError } from 'rxjs';
 
 const DIALOG_TEST_DATA: { /** The station rithmId. */ stationId: string } = {
   stationId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
@@ -227,31 +228,113 @@ describe('RosterManagementModalComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should add a worker user to stationGroup roster', async () => {
+  it('should add a worker user to stationGroup roster', () => {
     component.rosterType = 'workers';
     fixture.detectChanges();
     const addUserStationGroupToRosterSpy = spyOn(
       TestBed.inject(StationService),
       'addUserStationGroupWorkersRoster'
     ).and.callThrough();
-    await component.addUserStationGroupToRoster(userList[0]);
+    component.addUserStationGroupToRoster(userList[0]);
     expect(addUserStationGroupToRosterSpy).toHaveBeenCalledOnceWith(
       stationRithmId,
       userList
     );
   });
 
-  it('should add a worker user to stationGroup owners', async () => {
+  it('should add a worker user to stationGroup owners', () => {
     component.rosterType = 'owners';
     fixture.detectChanges();
     const addUserStationGroupToOwnersRosterSpy = spyOn(
       TestBed.inject(StationService),
       'addUserStationGroupToOwnersRoster'
     ).and.callThrough();
-    await component.addUserStationGroupToRoster(userList[0]);
+    component.addUserStationGroupToRoster(userList[0]);
     expect(addUserStationGroupToOwnersRosterSpy).toHaveBeenCalledOnceWith(
       stationRithmId,
       userList
     );
+  });
+
+  it('should call errorService if request in addUserStationGroupToRoster for owner fail', () => {
+    component.rosterType = 'owners';
+    fixture.detectChanges();
+    const errorSpy = spyOn(
+      TestBed.inject(StationService),
+      'addUserStationGroupToOwnersRoster'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.addUserStationGroupToRoster(userList[0]);
+    expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should call errorService if request in addUserStationGroupToRoster for worker fail', () => {
+    component.rosterType = 'workers';
+    fixture.detectChanges();
+    const errorSpy = spyOn(
+      TestBed.inject(StationService),
+      'addUserStationGroupWorkersRoster'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.addUserStationGroupToRoster(userList[0]);
+    expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should call getPotentialStationRosterMembers if not isGroup', () => {
+    component.isGroup = false;
+    fixture.detectChanges();
+    const spyMethod = spyOn(
+      component,
+      'getPotentialStationRosterMembers'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should call addUserStationGroupToRoster in toggleSelectedUser if isGroup', () => {
+    component.users = [
+      {
+        rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isOwner: true,
+      },
+    ];
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.isGroup = true;
+    component.rosterType = 'workers';
+    fixture.detectChanges();
+    const spyMethod = spyOn(
+      component,
+      'addUserStationGroupToRoster'
+    ).and.callThrough();
+    component.toggleSelectedUser(userRithmId);
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should call addUserToRoster in toggleSelectedUser if not isGroup', () => {
+    component.users = [
+      {
+        rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isOwner: true,
+      },
+    ];
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.isGroup = false;
+    component.rosterType = 'workers';
+    fixture.detectChanges();
+    const spyMethod = spyOn(component, 'addUserToRoster').and.callThrough();
+    component.toggleSelectedUser(userRithmId);
+    expect(spyMethod).toHaveBeenCalled();
   });
 });

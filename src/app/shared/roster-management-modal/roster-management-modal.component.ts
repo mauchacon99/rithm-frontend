@@ -43,7 +43,7 @@ export class RosterManagementModalComponent implements OnInit {
   rosterMembers: StationRosterMember[] = [];
 
   /** Loading current members from roster. */
-  loadingMembers = true;
+  loadingMembers = false;
 
   /** The roster type received from modal data. */
   rosterType: 'workers' | 'owners' = 'owners';
@@ -61,7 +61,7 @@ export class RosterManagementModalComponent implements OnInit {
   activeNum = 1;
 
   /** Is the list of organization members loading.  */
-  listLoading = true;
+  listLoading = false;
 
   /** Is group. */
   isGroup = false;
