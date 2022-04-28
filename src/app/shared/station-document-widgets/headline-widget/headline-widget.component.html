@@ -1,8 +1,4 @@
-<h1
-  *ngIf="widgetMode === 'layout'"
-  class="text-2xl"
-  (click)="openFieldSettingDrawer(headlineTextValue)"
->
+<h1 *ngIf="widgetMode !== 'setting'" class="text-2xl cursor-default">
   {{ headlineTextValue.length ? headlineTextValue : 'Headline' }}
 </h1>
 <div
