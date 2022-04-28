@@ -41,10 +41,23 @@ export class UserAvatarComponent {
   @Input() isLarge = false;
 
   /** Profile image Rithm Id. */
+  private _profileImageRithmId = '';
+
+  /** Set profile image Rithm Id. */
   @Input() set profileImageRithmId(profileImageRithmId: string) {
+    this._profileImageRithmId = profileImageRithmId;
     if (profileImageRithmId) {
       this.getImageUser();
     }
+  }
+
+  /**
+   * Get profile image id.
+   *
+   * @returns Profile image idt.
+   */
+  get profileImageRithmId(): string {
+    return this._profileImageRithmId;
   }
 
   /** Image data. */
