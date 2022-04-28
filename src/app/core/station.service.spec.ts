@@ -1748,4 +1748,78 @@ describe('StationService', () => {
     req.flush(frameQuestions);
     httpTestingController.verify();
   });
+
+  it('should add a new member to station group owners roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .addUserStationGroupToOwnersRoster(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should add a new member to station group workers roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .addUserStationGroupWorkersRoster(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
 });
