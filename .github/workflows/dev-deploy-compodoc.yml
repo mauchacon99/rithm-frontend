@@ -22,8 +22,8 @@ jobs:
       - name: Installing dependencies
         run: npm ci --no-audit
 
-      - name: Generating test coverage
-        run: npm run test-ci
+      - name: Compiling documentation
+        run: npm run compile-docs
 
       - name: Deploying documentation site
-        run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
+        run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
