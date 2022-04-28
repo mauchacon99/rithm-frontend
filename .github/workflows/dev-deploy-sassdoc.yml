@@ -5,7 +5,7 @@
 name: Dev Deployments SassDoc
 on:
   push:
-    branches: [master]
+    branches: [dev]
   repository_dispatch:
     types: [dev_just_pushed]
 
