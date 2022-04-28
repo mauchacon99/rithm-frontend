@@ -17,7 +17,7 @@ export class BodyTextWidgetComponent {
     new EventEmitter<Question | string>();
 
   /** Text value to show on body text widget. */
-  bodyTextValue = 'Write something descriptive';
+  bodyTextValue = '';
 
   /**
    * Open setting drawer.
