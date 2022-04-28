@@ -33,10 +33,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   @Input() fields: Question[] | undefined = [];
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
-
-  /** Whether the station is in editMode or previewMode. */
-  @Input() stationViewMode!: 'edit' | 'preview';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** Id of the current Gridster item. */
   @Input() id!: number;
