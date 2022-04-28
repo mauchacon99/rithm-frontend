@@ -1720,4 +1720,68 @@ export class MockStationService {
       return of(frameQuestions).pipe(delay(1000));
     }
   }
+
+  /**
+   * Adds worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @param workers List of RithmIds of the users to add.
+   * @returns A rosterMember array.
+   */
+  addUserStationGroupWorkersRoster(
+    stationGroupRithmId: string,
+    workers: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockUserGroupAdmin: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Adds users to the owners roster group.
+   *
+   * @param stationGroupRithmId The Specific id of station.
+   * @param owners The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+  addUserStationGroupToOwnersRoster(
+    stationGroupRithmId: string,
+    owners: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockUserGroupAdmin: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
 }

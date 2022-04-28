@@ -126,23 +126,26 @@ export class ExpansionMemberGroupAdminComponent implements OnInit {
    */
   openManagementRosterModal(event: Event): void {
     event.stopPropagation();
-    if (!this.isGroup) {
-      const dialog = this.dialog.open(RosterManagementModalComponent, {
-        panelClass: ['w-5/6', 'sm:w-4/5'],
-        maxWidth: '1024px',
-        disableClose: true,
-        data: {
-          stationId: this.stationOrGroupSelected.rithmId,
-          type: this.isAdmin ? 'owners' : 'workers',
-        },
-      });
-      dialog
-        .afterClosed()
-        .pipe(first())
-        .subscribe(() => {
+    const dialog = this.dialog.open(RosterManagementModalComponent, {
+      panelClass: ['w-5/6', 'sm:w-4/5'],
+      maxWidth: '1024px',
+      disableClose: true,
+      data: {
+        stationId: this.stationOrGroupSelected.rithmId,
+        type: this.isAdmin ? 'owners' : 'workers',
+        isGroup: this.isGroup,
+      },
+    });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        if (this.isGroup) {
+          this.getStationsGroupMembers();
+        } else {
           this.getStationsMembers();
-        });
-    }
+        }
+      });
   }
 
   /**

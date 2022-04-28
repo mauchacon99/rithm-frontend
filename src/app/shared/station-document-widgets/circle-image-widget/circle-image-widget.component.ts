@@ -21,7 +21,7 @@ export class CircleImageWidgetComponent implements AfterViewChecked {
   @Output() openSettingDrawer = new EventEmitter<ImageWidgetObject>();
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** The object  image widget. */
   imageWidgetObject: ImageWidgetObject = {
