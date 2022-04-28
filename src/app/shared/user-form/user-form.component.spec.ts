@@ -409,4 +409,10 @@ describe('UserFormComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
     expect(component.profileImageRithmId).toEqual('');
   });
+
+  it('should delete image user', () => {
+    component.profileImageRithmId = '13213211315';
+    component['deleteImageUser']();
+    expect(component.profileImageRithmId).toEqual('');
+  });
 });
