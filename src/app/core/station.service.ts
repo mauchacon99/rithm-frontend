@@ -383,6 +383,23 @@ export class StationService {
   }
 
   /**
+   * Adds users to the owners roster group.
+   *
+   * @param stationGroupRithmId The Specific id of station.
+   * @param owners The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+  addUserStationGroupToOwnersRoster(
+    stationGroupRithmId: string,
+    owners: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.put<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`,
+      owners
+    );
+  }
+
+  /**
    * Remove owner from the station's roster.
    *
    * @param stationId The Specific id of station.
@@ -786,6 +803,23 @@ export class StationService {
     return this.http.get<StationRosterMember[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster`,
       { params }
+    );
+  }
+
+  /**
+   * Adds worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @param workers List of RithmIds of the users to add.
+   * @returns A rosterMember array.
+   */
+  addUserStationGroupWorkersRoster(
+    stationGroupRithmId: string,
+    workers: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.put<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
+      workers
     );
   }
 

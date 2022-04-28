@@ -15,3 +15,21 @@
     @apply items-end;
   }
 }
+
+.action-buttons-container {
+  .button-group {
+    @apply mx-8;
+
+    ::ng-deep .mat-button-toggle {
+      width: 120px;
+
+      .mat-button-toggle-button {
+        @apply h-10 flex justify-center items-center text-xs;
+      }
+    }
+
+    ::ng-deep .mat-button-toggle-checked {
+      @apply bg-accent-500 text-white;
+    }
+  }
+}
