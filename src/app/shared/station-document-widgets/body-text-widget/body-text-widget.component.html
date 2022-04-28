@@ -1,7 +1,6 @@
 <div
-  *ngIf="widgetMode === 'layout'"
-  class="body-text-widget h-full w-full p-2"
-  (click)="handleOpenSettingDrawer(bodyTextValue)"
+  *ngIf="widgetMode !== 'setting'"
+  class="body-text-widget h-full w-full p-2 cursor-default"
 >
   <p class="text-xs text-primary-200">
     {{ bodyTextValue.length ? bodyTextValue : 'Write something descriptive' }}
