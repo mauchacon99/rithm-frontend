@@ -5,7 +5,8 @@
 name: Dev Deployments Compodoc
 on:
   push:
-    branches: [dev]
+    branches-ignore:
+      - '**'    
   repository_dispatch:
     types: [dev_just_pushed]
 
