@@ -594,54 +594,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Save document answers (isolate request).
-   */
-  // private saveDocumentAnswer(): void {
-  //   this.documentService
-  //     .saveDocumentAnswer(
-  //       this.documentInformation.documentRithmId,
-  //       this.documentAnswer
-  //     )
-  //     .pipe(first())
-  //     .subscribe({
-  //       next: () => {
-  //         this.updateDocumentName();
-  //       },
-  //       error: (error: unknown) => {
-  //         this.documentLoading = false;
-  //         this.errorService.displayError(
-  //           "Something went wrong on our end saving answers and we're looking into it. Please try again in a little while.",
-  //           error
-  //         );
-  //       },
-  //     });
-  // }
-
-  /**
-   * Update document name (isolate request).
-   */
-  // private updateDocumentName(): void {
-  //   this.documentService
-  //     .updateDocumentName(
-  //       this.documentInformation.documentRithmId,
-  //       this.documentName
-  //     )
-  //     .pipe(first())
-  //     .subscribe({
-  //       next: () => {
-  //         this.autoFlowContainer();
-  //       },
-  //       error: (error: unknown) => {
-  //         this.documentLoading = false;
-  //         this.errorService.displayError(
-  //           "Something went wrong on our end updating container's name and we're looking into it. Please try again in a little while.",
-  //           error
-  //         );
-  //       },
-  //     });
-  // }
-
-  /**
    * AutoFlow Container (isolated request).
    */
   private autoFlowContainer(): void {
