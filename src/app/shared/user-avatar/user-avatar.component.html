@@ -5,17 +5,21 @@
     'circle-30-secondary': ((!navProfile && !isDrawer) || isSmall) && !isLarge,
     'circle-36-secondary': isDrawer && !isSmall && !isLarge,
     'circle-90-accent': isLarge,
-    '-ml-2.5': isDrawer
+    '-ml-2.5': isDrawer,
+    'animate-pulse': isLoading
   }"
   matTooltip="{{ firstName + ' ' + lastName }}"
   [matTooltipDisabled]="hideToolTip"
-  class="cursor-pointer"
+  class="cursor-pointer flex justify-center items-center"
   (mouseenter)="hoverEffect ? (badgeHover = true) : (badgeHover = false)"
   (mouseleave)="badgeHover = false"
 >
-  <button *ngIf="badge === 'none'" type="button">{{ initials }}</button>
+  <img *ngIf="classProfileImage" [src]="classProfileImage" alt="star" />
+  <button *ngIf="badge === 'none' && !classProfileImage" type="button">
+    {{ initials }}
+  </button>
   <button
-    *ngIf="badge !== 'none'"
+    *ngIf="badge !== 'none' && !classProfileImage"
     [matBadge]="getBadge()"
     matBadgeSize="small"
     matBadgePosition="below after"

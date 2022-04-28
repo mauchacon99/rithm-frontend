@@ -164,6 +164,9 @@
         <app-user-avatar
           [firstName]="currentAssignedUserDocument.firstName"
           [lastName]="currentAssignedUserDocument.lastName"
+          [profileImageRithmId]="
+            currentAssignedUserDocument.profileImageRithmId || ''
+          "
         >
         </app-user-avatar>
       </div>
