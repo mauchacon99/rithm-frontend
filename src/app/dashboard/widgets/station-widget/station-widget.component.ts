@@ -425,8 +425,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           type: 'question',
           typeQuestion: question?.questionType,
         });
+        const key = question?.rithmId || (column.questionId as string);
         this.dataStationWidget.documents.map((document, index) => {
-          const key = question?.rithmId || (column.questionId as string);
           dataTemp[index] = {
             ...dataTemp[index],
             rithmId: document.rithmId,
