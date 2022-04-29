@@ -16,7 +16,7 @@ export class BannerWidgetComponent {
   >();
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** The object  image widget. */
   imageWidgetObject: ImageWidgetObject = {
@@ -29,11 +29,10 @@ export class BannerWidgetComponent {
   /**
    * Open setting drawer.
    *
-   * @param field The field for the setting drawer.
    */
-  handleOpenSettingDrawer(field?: Question | ImageWidgetObject | string): void {
+  handleOpenSettingDrawer(): void {
     if (this.widgetMode === 'setting') {
-      this.openSettingDrawer.emit(field);
+      this.openSettingDrawer.emit(this.imageWidgetObject);
     }
   }
 }

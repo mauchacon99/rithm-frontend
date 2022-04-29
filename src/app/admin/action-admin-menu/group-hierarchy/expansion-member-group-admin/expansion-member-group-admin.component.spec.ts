@@ -433,6 +433,7 @@ describe('ExpansionMemberGroupAdminComponent', () => {
       data: {
         stationId: stations.rithmId,
         type: 'owners',
+        isGroup: false,
       },
     };
 
