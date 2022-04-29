@@ -492,7 +492,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
               values.push(answer.value);
             }
           });
-          return values.join('<br>') || null;
+          return values.join('<br>aaa<br>aaa<br>aaa<br>aa<br>') || null;
         }
         return null;
       }
