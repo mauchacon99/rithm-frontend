@@ -500,28 +500,52 @@
                           <ng-container [ngSwitch]="widgetItem.type">
                             <app-headline-widget
                               *ngSwitchCase="frameType.Headline"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [widgetMode]="
+                                editMode
+                                  ? layoutMode
+                                    ? 'layout'
+                                    : 'setting'
+                                  : 'preview'
+                              "
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.Headline)
                               "
                             ></app-headline-widget>
                             <app-title-widget
                               *ngSwitchCase="frameType.Title"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [widgetMode]="
+                                editMode
+                                  ? layoutMode
+                                    ? 'layout'
+                                    : 'setting'
+                                  : 'preview'
+                              "
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.Title)
                               "
                             ></app-title-widget>
                             <app-body-text-widget
                               *ngSwitchCase="frameType.Body"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [widgetMode]="
+                                editMode
+                                  ? layoutMode
+                                    ? 'layout'
+                                    : 'setting'
+                                  : 'preview'
+                              "
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.Body)
                               "
                             ></app-body-text-widget>
                             <app-banner-widget
                               *ngSwitchCase="frameType.Image"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [widgetMode]="
+                                editMode
+                                  ? layoutMode
+                                    ? 'layout'
+                                    : 'setting'
+                                  : 'preview'
+                              "
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.Image)
                               "
@@ -529,7 +553,13 @@
                             <app-circle-image-widget
                               *ngSwitchCase="frameType.CircleImage"
                               class="app-circle-image-widget"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [widgetMode]="
+                                editMode
+                                  ? layoutMode
+                                    ? 'layout'
+                                    : 'setting'
+                                  : 'preview'
+                              "
                               [circleFocused]="widgetFocused === i"
                               (openSettingDrawer)="
                                 openSettingDrawer($event, frameType.CircleImage)
@@ -538,10 +568,15 @@
                             <app-input-frame-widget
                               *ngSwitchDefault
                               [fields]="widgetItem.questions"
-                              [stationViewMode]="editMode ? 'edit' : 'preview'"
                               [stationRithmId]="stationRithmId"
                               [id]="widgetItem.id"
-                              [widgetMode]="layoutMode ? 'layout' : 'setting'"
+                              [widgetMode]="
+                                editMode
+                                  ? layoutMode
+                                    ? 'layout'
+                                    : 'setting'
+                                  : 'preview'
+                              "
                               (widgetRowAdjustment)="
                                 widgetRowAdjustment($event, widgetItem)
                               "
