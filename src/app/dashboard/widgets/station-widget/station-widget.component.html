@@ -213,9 +213,9 @@
       <!--        Value of column-->
       <td mat-cell *matCellDef="let element">
         <p
-          class="min-w-[130px] max-w-[250px] pr-2 text-xs text-secondary-500"
+          class="min-w-[130px] max-w-[250px] pr-2 text-xs text-secondary-500 overflow-hidden"
           [ngClass]="{
-            'text-ellipsis line-clamp-custom overflow-hidden':
+            'text-ellipsis line-clamp-custom':
               column.typeQuestion !== questionFieldType.Select &&
               column.typeQuestion !== questionFieldType.MultiSelect &&
               column.typeQuestion !== questionFieldType.CheckList
