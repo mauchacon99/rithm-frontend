@@ -223,9 +223,10 @@ export class MockDashboardService {
     columns.map((column) => {
       if (
         !columnsGrouped.some((value) => {
-          return (
-            value.name === column.name || value.questionId === column.questionId
-          );
+          if (column.questionId) {
+            return value.questionId === column.questionId;
+          }
+          return value.name === column.name;
         })
       ) {
         columnsGrouped.push(column);
