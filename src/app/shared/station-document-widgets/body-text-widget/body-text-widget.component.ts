@@ -10,7 +10,7 @@ import { Question } from 'src/models';
 })
 export class BodyTextWidgetComponent {
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** Event Emitter will open a field setting drawer on the right side of the station. */
   @Output() openSettingDrawer: EventEmitter<Question | string> =
