@@ -49,6 +49,7 @@ import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets
 import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link-modal.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 @NgModule({
   declarations: [
     StationComponent,
@@ -103,6 +104,7 @@ import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/comi
     CircleImageWidgetModule,
     MatSlideToggleModule,
     ComingSoonMessageModule,
+    MatButtonToggleModule,
   ],
 })
 export class StationModule {}
