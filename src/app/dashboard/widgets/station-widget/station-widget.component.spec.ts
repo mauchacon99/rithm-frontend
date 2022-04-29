@@ -798,13 +798,6 @@ describe('StationWidgetComponent', () => {
       });
 
       it('should return value of prompt when questionType is instruction', () => {
-        const question = documents[0].questions[0].questions[1];
-        expect(
-          component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual(question.answer?.value || null);
-      });
-
-      it('should return value of prompt when questionType is instruction', () => {
         const question = documents[0].questions[0].questions[0];
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
