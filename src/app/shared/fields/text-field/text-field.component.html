@@ -8,12 +8,8 @@
       widgetItem: widgetItem
     }"
   >
-    <ng-container *ngIf="widgetItem; else oldView">
-      <mat-label *ngIf="!isStation">{{ labelTag }}</mat-label>
-    </ng-container>
-    <ng-template #oldView>
-      <mat-label>{{ labelTag }}</mat-label>
-    </ng-template>
+    <mat-label *ngIf="widgetItem && !isStation">{{ labelTag }}</mat-label>
+    <mat-label *ngIf="!widgetItem && isStation">{{ labelTag }}</mat-label>
     <div matPrefix class="icon">
       <!-- Text Icons -->
       <i
