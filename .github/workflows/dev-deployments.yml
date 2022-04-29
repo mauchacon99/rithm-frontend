@@ -40,7 +40,7 @@ jobs:
       - name: Removing app offline file
         run: Remove-Item C:/inetpub/devapp.rithm.tech/app_offline.htm
 
-# Dispatch an event to run the Document Builds
+  # Dispatch an event to run the Document Builds
   dispatch:
     needs: web-app
     strategy:
@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
-# https://github.com/peter-evans/repository-dispatch#example
+        # https://github.com/peter-evans/repository-dispatch#example
         with:
           token: ${{ secrets.RITHM_FRONT_END_DEV_KICKOFF }}
           repository: ${{ matrix.repo }}
