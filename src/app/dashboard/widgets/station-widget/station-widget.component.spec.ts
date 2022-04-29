@@ -694,10 +694,9 @@ describe('StationWidgetComponent', () => {
         const expectColumnsToDisplayTable = [
           documents[0].questions[0].questions[0].rithmId ||
             (columnsQuestion[0].questionId as string),
-          'viewDocument',
         ];
 
-        component['generateDataTable']();
+        component['returnDataTableParsed']();
 
         expect(spyMapColumnsAllField).toHaveBeenCalled();
         expect(spyMapDataStationWidgetDocuments).toHaveBeenCalled();
@@ -728,14 +727,12 @@ describe('StationWidgetComponent', () => {
             ),
             keyReference: ColumnsDocumentInfo.Name,
             type: 'basic',
+            typeQuestion: undefined,
           },
         ];
-        const expectColumnsToDisplayTable = [
-          ColumnsDocumentInfo.Name,
-          'viewDocument',
-        ];
+        const expectColumnsToDisplayTable = [ColumnsDocumentInfo.Name];
 
-        component['generateDataTable']();
+        component['returnDataTableParsed']();
 
         expect(spyMapColumnsAllField).toHaveBeenCalled();
         expect(spyMapDataStationWidgetDocuments).toHaveBeenCalled();

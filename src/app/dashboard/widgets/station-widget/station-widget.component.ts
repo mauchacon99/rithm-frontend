@@ -393,7 +393,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     // Clear data
     this.columnsToDisplayTable = [];
     this.columnsSpecificOfWidget = [];
-    const dataTemp: DataTableValues[] = [];
 
     // set data default if columns widget are empty
     if (!this.columnsAllField.length) {
@@ -412,49 +411,55 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         });
       }
     }
+    this.dataSourceTable = new MatTableDataSource(this.returnDataTableParsed());
+    this.columnsToDisplayTable.push('viewDocument');
+  }
 
-    // Set data table
+  /**
+   * Return data table parsed.
+   *
+   * @returns Return array of objects DataTableValues.
+   */
+  private returnDataTableParsed(): DataTableValues[] {
+    const dataTemp: DataTableValues[] = [];
+
+    // Map each column
     this.columnsAllField.map((column) => {
+      let key: string | ColumnsDocumentInfo;
+      let headerTitle: string;
+      let typeQuestion: QuestionFieldType | undefined;
+
       // set data type question
       if (column?.questionId) {
         const question = this.getColumnQuestion(column.questionId);
-        const key = question?.rithmId || (column.questionId as string);
-        this.columnsToDisplayTable.push(key);
-        this.columnsSpecificOfWidget.push({
-          headerTitle: question?.prompt || column.name,
-          keyReference: key,
-          type: 'question',
-          typeQuestion: question?.questionType,
-        });
-        this.dataStationWidget.documents.map((document, index) => {
-          dataTemp[index] = {
-            ...dataTemp[index],
-            rithmId: document.rithmId,
-            [key]: this.getValueQuestion(key, document),
-          };
-        });
+        key = question?.rithmId || (column.questionId as string);
+        headerTitle = question?.prompt || column.name;
+        typeQuestion = question?.questionType;
       } else {
-        // set data type column basic
-        const nameColumn = column.name as ColumnsDocumentInfo;
-        this.columnsToDisplayTable.push(nameColumn);
-        this.columnsSpecificOfWidget.push({
-          headerTitle: this.getColumnBasicName(nameColumn),
-          keyReference: nameColumn,
-          type: 'basic',
-        });
-        this.dataStationWidget.documents.map((document, index) => {
-          dataTemp[index] = {
-            ...dataTemp[index],
-            rithmId: document.rithmId,
-            [nameColumn]: document[nameColumn],
-          };
-        });
+        //set data type basic
+        key = column.name as ColumnsDocumentInfo;
+        headerTitle = this.getColumnBasicName(key);
       }
-    });
 
-    // push data to dataSourceTable
-    this.columnsToDisplayTable.push('viewDocument');
-    this.dataSourceTable = new MatTableDataSource(dataTemp);
+      this.columnsToDisplayTable.push(key);
+      this.columnsSpecificOfWidget.push({
+        headerTitle,
+        keyReference: key,
+        type: column?.questionId ? 'question' : 'basic',
+        typeQuestion,
+      });
+
+      this.dataStationWidget.documents.map((document, index) => {
+        dataTemp[index] = {
+          ...dataTemp[index],
+          rithmId: document.rithmId,
+          [key]: column?.questionId
+            ? this.getValueQuestion(key, document)
+            : document[key as ColumnsDocumentInfo],
+        };
+      });
+    });
+    return dataTemp;
   }
 
   /**
