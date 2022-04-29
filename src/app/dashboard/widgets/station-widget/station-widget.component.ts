@@ -418,14 +418,14 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       // set data type question
       if (column?.questionId) {
         const question = this.getColumnQuestion(column.questionId);
-        this.columnsToDisplayTable.push(question?.rithmId || column.questionId);
+        const key = question?.rithmId || (column.questionId as string);
+        this.columnsToDisplayTable.push(key);
         this.columnsSpecificOfWidget.push({
           headerTitle: question?.prompt || column.name,
-          keyReference: question?.rithmId || column.questionId,
+          keyReference: key,
           type: 'question',
           typeQuestion: question?.questionType,
         });
-        const key = question?.rithmId || (column.questionId as string);
         this.dataStationWidget.documents.map((document, index) => {
           dataTemp[index] = {
             ...dataTemp[index],
