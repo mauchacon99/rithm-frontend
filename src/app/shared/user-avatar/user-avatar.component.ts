@@ -48,6 +48,8 @@ export class UserAvatarComponent {
     this._profileImageRithmId = profileImageRithmId;
     if (profileImageRithmId) {
       this.getImageUser();
+    } else {
+      this.classProfileImage = '';
     }
   }
 
