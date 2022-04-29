@@ -325,6 +325,82 @@
                       </button>
                     </div>
                     <div class="flex">
+                      <div class="flex" *ngIf="settingMode">
+                        <button
+                          type="button"
+                          id="button-leftAlign-text"
+                          data-testid="button-leftAlign-text"
+                          class="px-2"
+                        >
+                          <span
+                            class="fa fa-align-left text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <button
+                          type="button"
+                          id="button-centerAlign-text"
+                          data-testid="button-centerAlign-text"
+                          class="px-2"
+                        >
+                          <span
+                            class="fas fa-align-center text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <button
+                          type="button"
+                          id="button-rightAlign-text"
+                          data-testid="button-rightAlign-text"
+                          class="px-2 pr-4"
+                        >
+                          <span
+                            class="fas fa-align-right text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                        <button
+                          type="button"
+                          id="button-middleAlign-text"
+                          data-testid="button-middleAlign-text"
+                          class="px-2"
+                        >
+                          <span
+                            class="fa-solid fa-distribute-spacing-vertical text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <button
+                          type="button"
+                          id="button-topAlign-text"
+                          data-testid="button-topAlign-text"
+                          class="px-2"
+                        >
+                          <span
+                            class="fa-solid fa-objects-align-top text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <button
+                          type="button"
+                          id="button-bottomAlign-text"
+                          data-testid="button-bottomAlign-text"
+                          class="px-2"
+                        >
+                          <span
+                            class="fa-solid fa-objects-align-bottom text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                        <button
+                          type="button"
+                          id="button-remove-text"
+                          data-testid="button-remove-text"
+                          class="px-2"
+                        >
+                          <span
+                            class="fas fa-trash text-secondary-500 fa-lg"
+                          ></span>
+                        </button>
+                        <mat-divider [vertical]="true"></mat-divider>
+                      </div>
+
                       <button
                         *ngIf="layoutMode"
                         type="button"
