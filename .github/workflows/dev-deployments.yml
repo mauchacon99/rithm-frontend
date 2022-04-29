@@ -41,18 +41,18 @@ jobs:
         run: Remove-Item C:/inetpub/devapp.rithm.tech/app_offline.htm
 
 # Dispatch an event to run the Document Builds
-   dispatch:
-     needs: web-app
-     strategy:
-       matrix:
-         repo: ['strut-software/rithm-front-end']
-     runs-on: [self-hosted, devvm]
-     steps:
-       - name: Repository Dispatch
-         uses: peter-evans/repository-dispatch@v1
- # https://github.com/peter-evans/repository-dispatch#example
-         with:
-           token: ${{ secrets.RITHM_FRONT_END_DEV_KICKOFF }}
-           repository: ${{ matrix.repo }}
-           event-type: dev_just_pushed
-           client-payload: '{ "nop": "nothing to see here" }'
+  dispatch:
+    needs: web-app
+    strategy:
+      matrix:
+        repo: ['strut-software/rithm-front-end']
+    runs-on: [self-hosted, devvm]
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+# https://github.com/peter-evans/repository-dispatch#example
+        with:
+          token: ${{ secrets.RITHM_FRONT_END_DEV_KICKOFF }}
+          repository: ${{ matrix.repo }}
+          event-type: dev_just_pushed
+          client-payload: '{ "nop": "nothing to see here" }'
