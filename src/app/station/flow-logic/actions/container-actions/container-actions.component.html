@@ -1,0 +1,69 @@
+<div class="Container-tab-actions px-8">
+  <button
+    *ngIf="!addingAction"
+    mat-stroked-button
+    color="accent"
+    (click)="addingAction = true"
+  >
+    New Action
+  </button>
+  <div class="container-action-form" *ngIf="addingAction">
+    <section class="container-action-type">
+      <mat-form-field appearance="outline">
+        <mat-label>Action Type</mat-label>
+        <mat-select>
+          <mat-option value="option1">Container Creation</mat-option>
+          <mat-option value="option2">Archive Container</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <section class="container-action-autocomplete">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Available Stations</mat-label>
+        <input
+          type="text"
+          placeholder="Pick one"
+          aria-label="Stations"
+          matInput
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let station of stations" [value]="station">
+            {{ station }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div class="selected-stations-chips">
+        <mat-chip-list>
+          <mat-chip> Station I </mat-chip>
+          <mat-chip> Station II </mat-chip>
+          <mat-chip> Station III </mat-chip>
+        </mat-chip-list>
+      </div>
+    </section>
+
+    <section class="container-action-shared-values">
+      <mat-form-field appearance="outline">
+        <mat-label>Toppings</mat-label>
+        <mat-select multiple>
+          <mat-option
+            *ngFor="let field of currentStationFields"
+            [value]="field"
+            >{{ field }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <section class="container-action-control-buttons space-x-4 py-4">
+      <button mat-button color="accent" (click)="addingAction = false">
+        Cancel
+      </button>
+      <button mat-stroked-button color="accent" (click)="addingAction = false">
+        Save
+      </button>
+    </section>
+  </div>
+</div>

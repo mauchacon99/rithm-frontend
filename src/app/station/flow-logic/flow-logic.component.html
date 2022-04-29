@@ -425,16 +425,17 @@
         <div
           class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
         >
-          <p class="tracking-tight text-sm">Actions</p>
+          <p class="tracking-tight text-sm">ACTIONS</p>
         </div>
         <div
-          class="action-buttons-container border-b border-secondary-50 pt-8 pb-10 overflow-x-auto"
+          class="action-buttons-container border-b border-secondary-50 pt-8 overflow-x-auto"
         >
           <mat-button-toggle-group
             name="actionButtons"
             aria-label="Action buttons"
             value="0"
             class="button-group"
+            #groupTabsFlow="matButtonToggleGroup"
           >
             <mat-button-toggle
               value="0"
@@ -473,6 +474,52 @@
               >Advanced</mat-button-toggle
             >
           </mat-button-toggle-group>
+        </div>
+        <div class="action-tabs-content w-full">
+          <mat-tab-group
+            class="tabs-flow-rules"
+            [selectedIndex]="groupTabsFlow.value"
+          >
+            <!-- Tab Flow -->
+            <mat-tab label="tab-flow" aria-label="tab-flow">
+              <section></section>
+            </mat-tab>
+
+            <!-- Tab Container -->
+            <mat-tab label="tab-container" aria-label="tab-container">
+              <section class="pt-6 pb-10">
+                <app-container-actions></app-container-actions>
+              </section>
+            </mat-tab>
+
+            <!-- Tab User -->
+            <mat-tab label="tab-user" aria-label="tab-user">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Notification -->
+            <mat-tab label="tab-notification" aria-label="tab-notification">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Integrations -->
+            <mat-tab label="tab-integrations" aria-label="tab-integrations">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Advanced -->
+            <mat-tab label="tab-advanced" aria-label="tab-advanced">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </section>
     </div>
