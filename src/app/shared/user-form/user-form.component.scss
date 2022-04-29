@@ -1,3 +1,11 @@
 app-password-requirements {
   @apply absolute w-full z-50 bg-white py-5;
 }
+
+.padding-button {
+  .mat-stroked-button,
+  .mat-button-base {
+    @apply py-1;
+    @apply px-3;
+  }
+}
