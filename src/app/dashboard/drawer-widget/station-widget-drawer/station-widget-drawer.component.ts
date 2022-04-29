@@ -55,11 +55,13 @@ export class StationWidgetDrawerComponent implements OnInit {
     const isAllInputs =
       allSelects.length === this.getFormColumns.controls.length;
 
-    const limitedReached =
+    this.limitedColumnsReached =
       this.getFormColumns.controls.length >= this.MAXIMUM_COLUMNS_ALLOWED;
-    this.limitedColumnsReached = limitedReached;
     return (
-      isDisabled || isAllInputs || this.getFormColumns.invalid || limitedReached
+      isDisabled ||
+      isAllInputs ||
+      this.getFormColumns.invalid ||
+      this.limitedColumnsReached
     );
   }
 

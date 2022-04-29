@@ -343,6 +343,8 @@ describe('StationWidgetDrawerComponent', () => {
       fixture.detectChanges();
       const message = fixture.nativeElement.querySelector('#message-limited');
       expect(message).toBeTruthy();
+      expect(component.limitedColumnsReached).toBeTrue();
+      expect(component.disabledNewColumn).toBeTrue();
     });
 
     it('should delete a column', () => {
