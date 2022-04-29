@@ -269,6 +269,38 @@ export class StationService {
   }
 
   /**
+   * Get organization users for a specific stationGroup.
+   *
+   * @param stationGroupRithmId The Specific id of stationGroup.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationGroupRosterMembers(
+    stationGroupRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
+    if (!pageNum) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Invalid page number.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const params = new HttpParams()
+        .set('stationGroupRithmId', stationGroupRithmId)
+        .set('pageNum', pageNum)
+        .set('pageSize', 20);
+      return this.http.get<StationPotentialRostersUsers>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users`,
+        { params }
+      );
+    }
+  }
+
+  /**
    * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
