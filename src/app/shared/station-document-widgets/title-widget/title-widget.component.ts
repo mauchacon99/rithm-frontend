@@ -14,10 +14,10 @@ export class TitleWidgetComponent {
     new EventEmitter<Question | string>();
 
   /** The mode to display fields inside the widget. */
-  @Input() widgetMode!: 'layout' | 'setting';
+  @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /**Title text value */
-  titleTextValue = 'Form Title';
+  titleTextValue = '';
 
   /**
    * Open setting drawer.

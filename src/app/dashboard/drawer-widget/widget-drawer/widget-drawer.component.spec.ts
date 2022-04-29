@@ -74,9 +74,9 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should subscribe to sidenavDrawerService.drawerContext$ and set drawer mode', () => {
-    TestBed.inject(SidenavDrawerService).drawerContext$.next('stationWidget');
+    TestBed.inject(SidenavDrawerService).drawerContext$.next('widgetDashboard');
 
-    expect(component.drawerMode).toEqual('stationWidget');
+    expect(component.drawerMode).toEqual('widgetDashboard');
   });
 
   it('Should call toggle drawer when click in done', () => {
@@ -85,7 +85,7 @@ describe('WidgetDrawerComponent', () => {
       'toggleDrawer'
     );
     const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-    component.drawerMode = 'stationWidget';
+    component.drawerMode = 'widgetDashboard';
 
     const btnDone = fixture.nativeElement.querySelector('#done-btn');
     expect(btnDone).toBeTruthy();
@@ -95,7 +95,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should show/hide the station widget  drawer', () => {
-    component.drawerMode = 'stationWidget';
+    component.drawerMode = 'widgetDashboard';
     const infoDrawerSpy = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -138,7 +138,7 @@ describe('WidgetDrawerComponent', () => {
   it('should emit event deleteWidget', async () => {
     const widgetIndex = 1;
     component.widgetIndex = widgetIndex;
-    component.drawerMode = 'stationWidget';
+    component.drawerMode = 'widgetDashboard';
 
     const popUpConfirmSpy = spyOn(
       TestBed.inject(PopupService),

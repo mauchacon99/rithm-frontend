@@ -38,6 +38,7 @@ import {
   StationFrameWidget,
   FrameType,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -671,9 +672,9 @@ export class DocumentService {
     const containers: ContainerWidgetPreBuilt[] = [
       {
         flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        nameContainer: 'Container name 2',
         containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 2',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationOwners: [
           {
@@ -691,10 +692,10 @@ export class DocumentService {
         ],
       },
       {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
+        flowedTimeUTC: '2022-04-10T17:24:01.0115021',
+        nameContainer: 'Container name 1',
         containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name',
+        stationName: 'Station name 1',
         stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
         stationOwners: [],
       },
@@ -774,5 +775,21 @@ export class DocumentService {
         }
       );
     }
+  }
+
+  /**
+   * Get the current stations from containers.
+   *
+   * @param documentRithmId The current document id.
+   * @returns The current stations.
+   */
+  getCurrentStations(
+    documentRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentCurrentStation[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations`,
+      { params }
+    );
   }
 }

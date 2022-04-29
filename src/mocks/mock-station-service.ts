@@ -1312,7 +1312,9 @@ export class MockStationService {
    * @param stationRithmId The current station id.
    * @returns The station widget data.
    */
-  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
+  getStationWidgets(
+    stationRithmId: string
+  ): Observable<StationFrameWidget[] | undefined> {
     if (!stationRithmId) {
       return throwError(
         () =>
@@ -1323,32 +1325,74 @@ export class MockStationService {
           })
       ).pipe(delay(1000));
     } else {
-      const stationWidgets: StationFrameWidget[] = [
-        {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.Input,
-          data: '',
-          questions: [],
-          id: 0,
-        },
-        {
-          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 1,
-          x: 0,
-          y: 0,
-          type: FrameType.Headline,
-          data: '',
-          id: 1,
-        },
-      ];
-      return of(stationWidgets).pipe(delay(1000));
+      const stationWidgets: StationInformation = {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'New Station Name',
+        instructions: '',
+        nextStations: [
+          {
+            rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+            name: 'Development',
+            totalDocuments: 5,
+            isGenerator: true,
+          },
+        ],
+        previousStations: [
+          {
+            rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+            name: 'Station-1',
+            totalDocuments: 2,
+            isGenerator: true,
+          },
+        ],
+        stationOwners: [
+          {
+            rithmId: '',
+            firstName: 'Marry',
+            lastName: 'Poppins',
+            email: 'marrypoppins@inpivota.com',
+            isWorker: false,
+            isOwner: true,
+          },
+        ],
+        workers: [
+          {
+            rithmId: '',
+            firstName: 'Harry',
+            lastName: 'Potter',
+            email: 'harrypotter@inpivota.com',
+            isWorker: false,
+            isOwner: false,
+          },
+        ],
+        frames: [
+          {
+            rithmId: '9144-3f0d-e1f1',
+            stationRithmId: 'qwe-321-ert-123',
+            id: 0,
+            x: 6,
+            y: 1,
+            cols: 6,
+            rows: 4,
+            type: FrameType.Headline,
+            data: '',
+            questions: [],
+          },
+        ],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2,
+        allowPreviousButton: false,
+        allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
+        flowButton: 'Flow',
+        isChained: false,
+      };
+      const frames = stationWidgets?.frames;
+      return of(frames).pipe(delay(1000));
     }
   }
 
@@ -1678,32 +1722,66 @@ export class MockStationService {
   }
 
   /**
-   * Get the current stations from containers.
+   * Adds worker roster for a given station group.
    *
-   * @param stationRithmId The current station id.
-   * @returns The current stations.
+   * @param stationGroupRithmId The id of the given station group.
+   * @param workers List of RithmIds of the users to add.
+   * @returns A rosterMember array.
    */
-  getCurrentStations(
-    stationRithmId: string
-  ): Observable<DocumentCurrentStation[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'retrieve a list of stations for this container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const currentStationsResponse: DocumentCurrentStation[] = [
-        {
-          name: 'Testy',
-          rithmId: '123',
-          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
-        },
-      ];
-      return of(currentStationsResponse).pipe(delay(1000));
-    }
+  addUserStationGroupWorkersRoster(
+    stationGroupRithmId: string,
+    workers: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockUserGroupAdmin: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Adds users to the owners roster group.
+   *
+   * @param stationGroupRithmId The Specific id of station.
+   * @param owners The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+  addUserStationGroupToOwnersRoster(
+    stationGroupRithmId: string,
+    owners: string[]
+  ): Observable<StationRosterMember[]> {
+    const mockUserGroupAdmin: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    return of(mockUserGroupAdmin).pipe(delay(1000));
   }
 }
