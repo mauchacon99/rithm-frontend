@@ -588,25 +588,42 @@ describe('StationWidgetComponent', () => {
   it('should redirect to document page', () => {
     component.isLoading = false;
     component.failedLoadWidget = false;
+    component.columnsSpecificOfWidget = [
+      {
+        keyReference: ColumnsDocumentInfo.Name,
+        type: 'basic',
+        headerTitle: ColumnsDocumentInfo.Name,
+      },
+      {
+        keyReference: ColumnsDocumentInfo.LastUpdated,
+        type: 'basic',
+        headerTitle: ColumnsDocumentInfo.LastUpdated,
+      },
+      {
+        keyReference: ColumnsDocumentInfo.AssignedUser,
+        type: 'basic',
+        headerTitle: ColumnsDocumentInfo.AssignedUser,
+      },
+    ];
     component.widgetType = WidgetType.StationMultilineBanner;
     component.dataSourceTable = new MatTableDataSource([
       {
         rithmId: component.dataStationWidget.documents[0].rithmId,
-        name: 'test',
+        name: component.dataStationWidget.documents[0].name,
       },
     ] as DataTableValues[]);
-    fixture.detectChanges();
-    const button = fixture.debugElement.nativeElement.querySelector(
-      '#link-document-button-' +
-        component.dataStationWidget.documents[0].rithmId
-    );
     const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
     const spyRoute = spyOn(
       TestBed.inject(Router),
       'navigate'
     ).and.callThrough();
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#link-document-button-' +
+        component.dataStationWidget.documents[0].rithmId
+    );
     expect(button).toBeTruthy();
-    button.click(component.dataStationWidget.documents[0].rithmId);
+    button.click();
     expect(navigateSpy).toHaveBeenCalled();
     expect(spyRoute).toHaveBeenCalledOnceWith(
       ['/', 'document', component.dataStationWidget.documents[0].rithmId],
@@ -735,6 +752,25 @@ describe('StationWidgetComponent', () => {
         expect(component.columnsAllField).toEqual([
           {
             name: ColumnsDocumentInfo.Name,
+          },
+        ]);
+      });
+
+      it('should generate data table when columnsAllField is empty and widgetType is multiline', () => {
+        component.columnsAllField = [];
+        component.widgetType = WidgetType.StationMultiline;
+
+        component['generateDataTable']();
+
+        expect(component.columnsAllField).toEqual([
+          {
+            name: ColumnsDocumentInfo.Name,
+          },
+          {
+            name: ColumnsDocumentInfo.LastUpdated,
+          },
+          {
+            name: ColumnsDocumentInfo.AssignedUser,
           },
         ]);
       });

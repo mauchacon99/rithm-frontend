@@ -124,10 +124,7 @@
             *ngTemplateOutlet="
               setSpecificColumnType;
               context: {
-                column: columnsSpecificOfWidget[0] || {
-                  keyReference: columnsDocumentInfo.Name,
-                  type: 'basic'
-                },
+                column: columnsSpecificOfWidget[0],
                 document: document
               }
             "
@@ -139,10 +136,7 @@
             *ngTemplateOutlet="
               setSpecificColumnType;
               context: {
-                column: columnsSpecificOfWidget[1] || {
-                  keyReference: columnsDocumentInfo.LastUpdated,
-                  type: 'basic'
-                },
+                column: columnsSpecificOfWidget[1],
                 document: document
               }
             "
@@ -169,10 +163,7 @@
         *ngTemplateOutlet="
           setSpecificColumnType;
           context: {
-            column: columnsSpecificOfWidget[2] || {
-              keyReference: columnsDocumentInfo.AssignedUser,
-              type: 'basic'
-            },
+            column: columnsSpecificOfWidget[2],
             document: document
           }
         "
@@ -293,7 +284,7 @@
 </ng-template>
 
 <ng-template #withOutData>
-  <p class="cursor-default text-xs" title="Without Link">N/A</p>
+  <span class="cursor-default" title="Without Value">N/A</span>
 </ng-template>
 
 <!--Template for show questions columns of the document-->

@@ -400,6 +400,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       this.columnsAllField.push({
         name: this.columnsDocumentInfo.Name,
       });
+      if (
+        this.widgetType === this.enumWidgetType.StationMultilineBanner ||
+        this.widgetType === this.enumWidgetType.StationMultiline
+      ) {
+        this.columnsAllField.push({
+          name: this.columnsDocumentInfo.LastUpdated,
+        });
+        this.columnsAllField.push({
+          name: this.columnsDocumentInfo.AssignedUser,
+        });
+      }
     }
 
     // Set data table
@@ -516,7 +527,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   goToDocument(documentId: string): void {
     this.router.navigate(['/', 'document', documentId], {
       queryParams: {
-        documentId: documentId,
+        documentId,
         stationId: this.stationRithmId,
       },
     });
