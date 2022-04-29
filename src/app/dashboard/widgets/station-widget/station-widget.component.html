@@ -262,6 +262,9 @@
           <app-user-avatar
             [firstName]="document.assignedUser?.firstName"
             [lastName]="document.assignedUser?.lastName"
+            [profileImageRithmId]="
+              document.assignedUser?.profileImageRithmId || ''
+            "
           >
           </app-user-avatar>
         </div>

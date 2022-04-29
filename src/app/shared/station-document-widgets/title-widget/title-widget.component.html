@@ -1,7 +1,6 @@
 <h2
-  *ngIf="widgetMode === 'layout'"
-  class="font-semibold text-xl"
-  (click)="openFieldSettingDrawer(titleTextValue)"
+  *ngIf="widgetMode !== 'setting'"
+  class="font-semibold text-xl cursor-default"
 >
   {{ titleTextValue.length ? titleTextValue : 'Form Title' }}
 </h2>
