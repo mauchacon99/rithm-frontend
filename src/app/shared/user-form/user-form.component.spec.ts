@@ -404,7 +404,6 @@ describe('UserFormComponent', () => {
     };
 
     const popUpConfirmSpy = spyOn(popupService, 'confirm').and.callThrough();
-
     await component.confirmRemoveUserImage();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
     expect(component.profileImageRithmId).toEqual('');
