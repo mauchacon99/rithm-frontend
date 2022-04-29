@@ -1,16 +1,16 @@
 import { StationRosterMember } from './station-roster-member';
 /** Represents the data for containers in widget prebuilt. */
 export interface ContainerWidgetPreBuilt {
-  /** Time flowed. */
-  flowedTimeUTC: string;
-  /** Container name. */
-  nameContainer: string;
-  /** Container rithmId. */
-  containerRithmId: string;
-  /** Station name. */
-  stationName: string;
+  /**Document rithm id. */
+  documentRithmId: string;
+  /** Document name. */
+  documentName: string;
   /** Station rithmId. */
   stationRithmId: string;
+  /** Station name. */
+  stationName: string;
+  /** Time in station. */
+  timeInStation: number;
   /** Station with owners.  */
   stationOwners: StationRosterMember[];
 }
