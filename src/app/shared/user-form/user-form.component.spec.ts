@@ -395,6 +395,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should display a confirmation pop up', async () => {
+    component.profileImageRithmId = '12312313212';
     const confirmationData = {
       title: 'Delete image user?',
       message: 'This cannot be undone!',
