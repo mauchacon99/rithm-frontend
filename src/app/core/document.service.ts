@@ -726,11 +726,10 @@ export class DocumentService {
           })
       ).pipe(delay(1000));
     } else {
-     
       const params = new HttpParams()
         .set('stationRithmId', stationRithmId)
         .set('documentRithmId', documentRithmId);
- 
+
       return this.http.get<StationFrameWidget[]>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
         {
