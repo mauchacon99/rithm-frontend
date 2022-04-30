@@ -15,7 +15,7 @@ import { QuestionFieldType, Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { RandomIdGenerator } from 'src/helpers';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Reusable component for displaying an input-frame-widget in station grid.
@@ -48,9 +48,6 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   @Output() openSettingDrawer: EventEmitter<Question> =
     new EventEmitter<Question>();
 
-  /** Helper class for random id generator. */
-  private randomIdGenerator: RandomIdGenerator;
-
   /** The list of questionFieldTypes. */
   fieldTypes = QuestionFieldType;
 
@@ -60,9 +57,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService
-  ) {
-    this.randomIdGenerator = new RandomIdGenerator();
-  }
+  ) {}
 
   /**
    * Listen the deleteStationQuestions Service.
@@ -136,7 +131,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
     const newQuestion: Question = questionInfo.rithmId
       ? questionInfo
       : {
-          rithmId: this.randomIdGenerator.getRandRithmId(4),
+          rithmId: uuidv4(),
           prompt: questionInfo.prompt,
           questionType: questionInfo.questionType,
           isReadOnly: false,
@@ -188,7 +183,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randomIdGenerator.getRandRithmId(4),
+        rithmId: uuidv4(),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
