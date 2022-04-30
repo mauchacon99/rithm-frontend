@@ -16,9 +16,11 @@ import {
   ColumnsDocumentInfo,
   QuestionFieldType,
   ColumnsLogicWidget,
-  WidgetDocument,
   WidgetType,
   DocumentImage,
+  StationRosterMember,
+  Question,
+  WidgetDocument,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -28,6 +30,27 @@ import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { MatSort } from '@angular/material/sort';
+
+/** Represents data of columns. */
+interface DataTableValues {
+  /** RithmId of the document. */
+  rithmId: string;
+  /** Key reference of field column basic or questionRithmId. */
+  [key: string]: string | number | StationRosterMember | null;
+}
+
+/** Represents data of columns. */
+interface ColumnsSpecificOfWidget {
+  /** Key reference of field column basic or questionRithmId. */
+  keyReference: string;
+  /** Header title. */
+  headerTitle: string;
+  /** Type of value. */
+  type: 'basic' | 'question';
+  /** Enum of questions types. */
+  typeQuestion?: QuestionFieldType;
+}
 
 /**
  * Component for Station widget.
@@ -40,6 +63,13 @@ import { Router } from '@angular/router';
   providers: [UtcTimeConversion],
 })
 export class StationWidgetComponent implements OnInit, OnDestroy {
+  /** Reference to sort table. */
+  @ViewChild(MatSort) set tableSort(value: MatSort) {
+    if (value) {
+      this.dataSourceTable.sort = value;
+    }
+  }
+
   /** The component for the document info header. */
   @ViewChild(DocumentComponent, { static: false })
   documentComponent!: DocumentComponent;
@@ -100,14 +130,26 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
 
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /** Interface for list data in widget. */
-  dataSourceTable!: MatTableDataSource<WidgetDocument>;
+  dataSourceTable!: MatTableDataSource<DataTableValues>;
 
   /** Columns for list the widget. */
   columnsAllField: ColumnFieldsWidget[] = [];
+
+  /** Columns specific of station widget. */
+  columnsSpecificOfWidget: ColumnsSpecificOfWidget[] = [];
 
   /** Enum with types widget station. */
   enumWidgetType = WidgetType;
@@ -187,19 +229,19 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   parseDataColumnsWidget(): void {
     this.columnsToDisplayTable = [];
     this.columnsFieldPetition = [];
-    this.columnsAllField = JSON.parse(this.dataWidget)?.columns;
-    this.columnsAllField.filter((data: ColumnFieldsWidget) => {
+    this.columnsAllField = [];
+    const columns = JSON.parse(this.dataWidget)
+      ?.columns as ColumnFieldsWidget[];
+
+    // Group columns
+    this.columnsAllField =
+      this.dashboardService.groupColumnsStationWidget(columns);
+
+    this.columnsAllField.map((data: ColumnFieldsWidget) => {
       if (data.questionId) {
         this.columnsFieldPetition.push(data.questionId);
-        this.columnsToDisplayTable.push(data.questionId);
-      } else {
-        this.columnsToDisplayTable.push(data.name);
       }
     });
-    if (!this.columnsAllField.length) {
-      this.columnsToDisplayTable.push('name');
-    }
-    this.columnsToDisplayTable.push('viewDocument');
   }
 
   /**
@@ -216,9 +258,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
-          this.dataSourceTable = new MatTableDataSource(
-            this.dataStationWidget.documents
-          );
+          this.generateDataTable();
         },
         error: (error: unknown) => {
           this.failedLoadWidget = true;
@@ -336,47 +376,152 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Whether the drawer is open.
-   *
-   * @returns True if the drawer is open, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
-  }
-
-  /**
    * Get specific name of column document when is not have questionId.
    *
    * @param name String, name of the column to search specific value.
    * @returns String to show name of the document in dom.
    */
-  getColumnBasicName(name: string): string {
+  private getColumnBasicName(name: string): string {
     const nameDom = this.dashboardService.columnsDocumentInfo.find(
       (column) => column.key === name
     ) as ColumnsLogicWidget;
     return nameDom.name;
   }
 
+  /** Parse documents to generate unique data specific. */
+  private generateDataTable(): void {
+    // Clear data
+    this.columnsToDisplayTable = [];
+    this.columnsSpecificOfWidget = [];
+
+    // set data default if columns widget are empty
+    if (!this.columnsAllField.length) {
+      this.columnsAllField.push({
+        name: this.columnsDocumentInfo.Name,
+      });
+      if (
+        this.widgetType === this.enumWidgetType.StationMultilineBanner ||
+        this.widgetType === this.enumWidgetType.StationMultiline
+      ) {
+        this.columnsAllField.push({
+          name: this.columnsDocumentInfo.LastUpdated,
+        });
+        this.columnsAllField.push({
+          name: this.columnsDocumentInfo.AssignedUser,
+        });
+      }
+    }
+    this.dataSourceTable = new MatTableDataSource(this.returnDataTableParsed());
+    this.columnsToDisplayTable.push('viewDocument');
+  }
+
+  /**
+   * Return data table parsed.
+   *
+   * @returns Return array of objects DataTableValues.
+   */
+  private returnDataTableParsed(): DataTableValues[] {
+    const dataTemp: DataTableValues[] = [];
+
+    // Map each column
+    this.columnsAllField.map((column) => {
+      let key: string | ColumnsDocumentInfo;
+      let headerTitle: string;
+      let typeQuestion: QuestionFieldType | undefined;
+
+      // set data type question
+      if (column?.questionId) {
+        const question = this.getColumnQuestion(column.questionId);
+        key = question?.rithmId || (column.questionId as string);
+        headerTitle = question?.prompt || column.name;
+        typeQuestion = question?.questionType;
+      } else {
+        //set data type basic
+        key = column.name as ColumnsDocumentInfo;
+        headerTitle = this.getColumnBasicName(key);
+      }
+
+      this.columnsToDisplayTable.push(key);
+      this.columnsSpecificOfWidget.push({
+        headerTitle,
+        keyReference: key,
+        type: column?.questionId ? 'question' : 'basic',
+        typeQuestion,
+      });
+
+      this.dataStationWidget.documents.map((document, index) => {
+        dataTemp[index] = {
+          ...dataTemp[index],
+          rithmId: document.rithmId,
+          [key]: column?.questionId
+            ? this.getValueQuestion(key, document)
+            : document[key as ColumnsDocumentInfo],
+        };
+      });
+    });
+    return dataTemp;
+  }
+
+  /**
+   * Get question value by type.
+   *
+   * @param questionRithmId Question rithmId.
+   * @param document Document to search question.
+   * @returns A string with value or a QuestionAnswer with multiple values.
+   */
+  private getValueQuestion(
+    questionRithmId: string,
+    document: WidgetDocument
+  ): string | null {
+    const question = document.questions[0]?.questions?.find(
+      (questionDocument) => questionDocument.rithmId === questionRithmId
+    );
+    if (question) {
+      if (
+        question.questionType === this.questionFieldType.CheckList ||
+        question.questionType === this.questionFieldType.MultiSelect ||
+        question.questionType === this.questionFieldType.Select
+      ) {
+        if (question?.answer?.asArray?.length) {
+          if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
+            return '---';
+          }
+          const values: string[] = [];
+          question?.answer?.asArray?.map((answer) => {
+            if (answer.isChecked) {
+              values.push(answer.value);
+            }
+          });
+          return values.join('<br>') || null;
+        }
+        return null;
+      }
+      if (question.questionType === this.questionFieldType.Instructions) {
+        return question.prompt || null;
+      }
+      return question?.answer?.value || null;
+    }
+    return null;
+  }
+
   /**
    * Get specific name of column document when have questionId.
    *
-   * @param columnFieldsWidget Data for column.
-   * @returns String to show name of the document in dom.
+   * @param questionRithmId Data for column questionRithmId.
+   * @returns Found question or null fin not exist.
    */
-  getColumnQuestionPrompt(columnFieldsWidget: ColumnFieldsWidget): string {
+  private getColumnQuestion(questionRithmId: string): Question | null {
     for (let i = 0; i < this.dataStationWidget.documents.length; i++) {
       const questionData = this.dataStationWidget.documents[
         i
       ].questions[0]?.questions?.find(
-        (question) => question.rithmId === columnFieldsWidget.questionId
+        (question) => question.rithmId === questionRithmId
       );
       if (questionData) {
-        return questionData.questionType === 'instructions'
-          ? 'Instruction'
-          : questionData.prompt;
+        return questionData;
       }
     }
-    return columnFieldsWidget.name;
+    return null;
   }
 
   /**
@@ -387,7 +532,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   goToDocument(documentId: string): void {
     this.router.navigate(['/', 'document', documentId], {
       queryParams: {
-        documentId: documentId,
+        documentId,
         stationId: this.stationRithmId,
       },
     });
