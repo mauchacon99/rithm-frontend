@@ -1867,7 +1867,9 @@ describe('StationService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users?stationGroupRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`
     );
     expect(req.request.method).toEqual('GET');
-
+    expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
+    expect(req.request.params.get('pageNum')).toBe(pageNum.toString());
+    expect(req.request.params.get('pageSize')).toBe(pageSize.toString());
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
