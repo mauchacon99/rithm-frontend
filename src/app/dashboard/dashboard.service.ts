@@ -13,6 +13,7 @@ import {
   ColumnsLogicWidget,
   ItemListWidgetModal,
   WidgetType,
+  ColumnFieldsWidget,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -38,7 +39,7 @@ export class DashboardService {
   /** Data static of info about document. */
   columnsDocumentInfo: ColumnsLogicWidget[] = [
     {
-      name: 'Document',
+      name: 'Container',
       key: ColumnsDocumentInfo.Name,
     },
     {
@@ -210,6 +211,31 @@ export class DashboardService {
   };
 
   constructor(private http: HttpClient) {}
+
+  /**
+   * Group columns of station widget.
+   *
+   * @param columns Columns to group.
+   * @returns Columns grouped.
+   */
+  groupColumnsStationWidget(
+    columns: ColumnFieldsWidget[]
+  ): ColumnFieldsWidget[] {
+    const columnsGrouped: ColumnFieldsWidget[] = [];
+    columns.map((column) => {
+      if (
+        !columnsGrouped.some((value) => {
+          if (column.questionId) {
+            return value.questionId === column.questionId;
+          }
+          return value.name === column.name;
+        })
+      ) {
+        columnsGrouped.push(column);
+      }
+    });
+    return columnsGrouped;
+  }
 
   /**
    * Gets info needed for dashboard header.

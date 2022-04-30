@@ -11,6 +11,7 @@ import {
   RoleDashboardMenu,
   EditDataWidget,
   ItemListWidgetModal,
+  ColumnFieldsWidget,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -706,5 +707,40 @@ describe('DashboardService', () => {
     expect(req.request.params.get('name')).toEqual(nameToSearch);
     req.flush(expectDataResponse);
     httpTestingController.verify();
+  });
+
+  it('should clear columns repeat in data columns widget station', () => {
+    const columns: ColumnFieldsWidget[] = [
+      {
+        name: 'name',
+      },
+      {
+        name: 'some name',
+        questionId: '123-456-789',
+      },
+      {
+        name: 'some name',
+        questionId: '123-456-789',
+      },
+      {
+        name: 'some name 3',
+        questionId: '987-654-321',
+      },
+    ];
+    const expectedColumns: ColumnFieldsWidget[] = [
+      {
+        name: 'name',
+      },
+      {
+        name: 'some name',
+        questionId: '123-456-789',
+      },
+      {
+        name: 'some name 3',
+        questionId: '987-654-321',
+      },
+    ];
+
+    expect(service.groupColumnsStationWidget(columns)).toEqual(expectedColumns);
   });
 });

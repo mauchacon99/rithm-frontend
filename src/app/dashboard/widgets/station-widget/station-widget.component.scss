@@ -24,3 +24,14 @@ tr.mat-header-row {
 .mat-icon-button {
   margin-top: -10px !important;
 }
+
+.table-sort ::ng-deep {
+  .mat-sort-header-ste,
+  .mat-sort-header-arrow {
+    display: none !important;
+  }
+}
+
+.button-right {
+  right: -1px !important;
+}
