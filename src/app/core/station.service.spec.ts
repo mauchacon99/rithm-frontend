@@ -935,7 +935,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -965,7 +965,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,

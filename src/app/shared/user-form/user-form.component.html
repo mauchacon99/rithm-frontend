@@ -27,28 +27,34 @@
           </button>
         </ng-container>
         <ng-container *ngIf="profileImageRithmId && !isLoadingUploadImageUser">
-          <button
-            mat-stroked-button
-            color="accent"
-            mat-button
-            id="change-image-button"
-            data-testid="change-image-button"
-            type="button"
-            (click)="fileInput.click()"
-          >
-            <p class="text-semibold">CHANGE</p>
-          </button>
-
-          <button
-            mat-button
-            color="warn"
-            mat-button
-            id="delete-image-button"
-            data-testid="delete-image-button"
-            type="button"
-          >
-            <p class="text-semibold">DELETE</p>
-          </button>
+          <div class="grid gap-4 grid-cols-2 padding-button">
+            <div>
+              <button
+                mat-stroked-button
+                color="accent"
+                mat-button
+                id="change-image-button"
+                data-testid="change-image-button"
+                type="button"
+                (click)="fileInput.click()"
+              >
+                <p class="text-semibold">CHANGE</p>
+              </button>
+            </div>
+            <div>
+              <button
+                mat-button
+                color="warn"
+                mat-button
+                id="delete-image-button"
+                data-testid="delete-image-button"
+                type="button"
+                (click)="confirmRemoveUserImage()"
+              >
+                <p class="text-semibold">DELETE</p>
+              </button>
+            </div>
+          </div>
         </ng-container>
         <!--Show error-->
         <div

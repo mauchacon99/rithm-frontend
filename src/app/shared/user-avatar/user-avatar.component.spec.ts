@@ -99,4 +99,9 @@ describe('UserAvatarComponent', () => {
     component['getImageUser']();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should delete render image when image id is empty', () => {
+    component.profileImageRithmId = '';
+    expect(component.classProfileImage).toEqual('');
+  });
 });
