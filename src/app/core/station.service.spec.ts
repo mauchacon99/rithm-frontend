@@ -935,7 +935,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -965,7 +965,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -1826,6 +1826,57 @@ describe('StationService', () => {
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(userIdList);
 
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the potential roster members of the stationGroup', () => {
+    const pageNum = 1;
+    const pageSize = 20;
+    const expectedResponse: StationPotentialRostersUsers = {
+      users: [
+        {
+          rithmId: '12dasd1-asd12asdasd-asdas',
+          firstName: 'Cesar',
+          lastName: 'Quijada',
+          email: 'strut@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-ffff1',
+          firstName: 'Maria',
+          lastName: 'Quintero',
+          email: 'Maquin@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-a231',
+          firstName: 'Pedro',
+          lastName: 'Perez',
+          email: 'pperez@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+      ],
+      totalUsers: 3,
+    };
+
+    service
+      .getPotentialStationGroupRosterMembers(stationId, pageNum)
+      .subscribe((users) => {
+        expect(users).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users?stationGroupRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
+    expect(req.request.params.get('pageNum')).toBe(pageNum.toString());
+    expect(req.request.params.get('pageSize')).toBe(pageSize.toString());
     req.flush(expectedResponse);
     httpTestingController.verify();
   });

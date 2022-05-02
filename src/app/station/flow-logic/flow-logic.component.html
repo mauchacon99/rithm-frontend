@@ -349,6 +349,30 @@
         </div>
       </section>
       <section
+        class="rules-right-side-schedule w-full"
+        *ngIf="ruleSelectedMenu === 'triggers'"
+      >
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6 mt-5"
+        >
+          <p class="tracking-tight text-sm">SCHEDULED TRIGGERS</p>
+        </div>
+        <div class="flex justify-center items-center flex-col text-center mb-6">
+          <i class="far fa-clock text-4xl text-accent-500 mt-6"></i>
+          <p class="py-4 w-5/6 md:w-2/4 text-sm">
+            Schedule triggers can be configured to check conditions and flow
+            documents automatically
+          </p>
+          <button
+            mat-stroked-button
+            data-testid="button-addTrigger-schedule"
+            color="accent"
+          >
+            Add Trigger
+          </button>
+        </div>
+      </section>
+      <section
         *ngIf="ruleSelectedMenu === 'rules'"
         class="rules-right-side-conditions w-full"
       >
@@ -411,44 +435,91 @@
             aria-label="Action buttons"
             value="0"
             class="button-group"
+            #groupTabsFlow="matButtonToggleGroup"
           >
             <mat-button-toggle
               value="0"
               data-testid="toggle-button-flow"
               id="toggle-button-flow"
-              >Flow</mat-button-toggle
-            >
+              >Flow
+            </mat-button-toggle>
             <mat-button-toggle
               value="1"
               data-testid="toggle-button-container"
               id="toggle-button-container"
-              >Container</mat-button-toggle
-            >
+              >Container
+            </mat-button-toggle>
             <mat-button-toggle
               value="2"
               data-testid="toggle-button-user"
               id="toggle-button-user"
-              >User</mat-button-toggle
-            >
+              >User
+            </mat-button-toggle>
             <mat-button-toggle
               value="3"
               data-testid="toggle-button-notifications"
               id="toggle-button-notifications"
-              >Notifications</mat-button-toggle
+            >
+              Notifications</mat-button-toggle
             >
             <mat-button-toggle
               value="4"
               data-testid="toggle-button-integrations"
               id="toggle-button-integrations"
-              >Integrations</mat-button-toggle
+            >
+              Integrations</mat-button-toggle
             >
             <mat-button-toggle
               value="5"
               data-testid="toggle-button-advanced"
               id="toggle-button-advanced"
-              >Advanced</mat-button-toggle
-            >
+              >Advanced
+            </mat-button-toggle>
           </mat-button-toggle-group>
+        </div>
+        <div class="tabs-flow-container">
+          <mat-tab-group
+            class="tabs-flow-rules"
+            [selectedIndex]="groupTabsFlow.value"
+          >
+            <!-- Tab Flow -->
+            <mat-tab label="tab-flow" aria-label="tab-flow">
+              <section></section>
+            </mat-tab>
+
+            <!-- Tab Container -->
+            <mat-tab label="tab-container" aria-label="tab-container">
+              <section></section>
+            </mat-tab>
+
+            <!-- Tab User -->
+            <mat-tab label="tab-user" aria-label="tab-user">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Notification -->
+            <mat-tab label="tab-notification" aria-label="tab-notification">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Integrations -->
+            <mat-tab label="tab-integrations" aria-label="tab-integrations">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Advanced -->
+            <mat-tab label="tab-advanced" aria-label="tab-advanced">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </section>
     </div>
