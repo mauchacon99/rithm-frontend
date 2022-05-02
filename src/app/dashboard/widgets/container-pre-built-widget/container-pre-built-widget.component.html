@@ -82,7 +82,7 @@
     </ng-container>
 
     <!-- Flowed Time UTC -->
-    <ng-container matColumnDef="flowedTimeUTC">
+    <ng-container matColumnDef="timeInStation">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -90,7 +90,7 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'flowedTimeUTC' ||
+            dataSourceTable.sort?.active !== 'timeInStation' ||
             !dataSourceTable.sort?.direction
         }"
       >
@@ -100,7 +100,7 @@
         <ng-container
           *ngTemplateOutlet="
             buttonSort;
-            context: { $implicit: 'flowedTimeUTC' }
+            context: { $implicit: 'timeInStation' }
           "
         >
         </ng-container>

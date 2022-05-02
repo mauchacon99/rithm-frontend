@@ -10,7 +10,7 @@ export interface ContainerWidgetPreBuilt {
   /** Station name. */
   stationName: string;
   /** Time in station. */
-  timeInStation: number;
+  timeInStation: string;
   /** Station with owners.  */
   stationOwners: StationRosterMember[];
 }

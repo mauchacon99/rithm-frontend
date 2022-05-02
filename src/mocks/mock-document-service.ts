@@ -1684,7 +1684,7 @@ export class MockDocumentService {
         documentName: 'Document name 1',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationName: 'Station name 1',
-        timeInStation: 110201,
+        timeInStation: '2022-05-02T23:38:03.183Z',
         stationOwners: [
           {
             rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
@@ -1705,7 +1705,7 @@ export class MockDocumentService {
         documentName: 'Document name 2',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         stationName: 'Station name 2',
-        timeInStation: 410201,
+        timeInStation: '2022-05-02T23:38:03.183Z',
         stationOwners: [],
       },
     ];
