@@ -46,6 +46,7 @@ describe('LocationModalComponent', () => {
     ).and.callThrough();
 
     component.ngOnInit();
+    expect(component.eventDocumentsError).toBeTrue();
     expect(spyMethod).toHaveBeenCalledOnceWith(component.documentRithmId);
   });
 
@@ -64,7 +65,6 @@ describe('LocationModalComponent', () => {
       'displayError'
     ).and.callThrough();
     component.ngOnInit();
-
     expect(currentStationsEventSpy).toHaveBeenCalledWith(
       component.documentRithmId
     );
