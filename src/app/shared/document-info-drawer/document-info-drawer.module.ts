@@ -30,7 +30,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatTabsModule,
     HistoryDrawerModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   exports: [DocumentInfoDrawerComponent],
 })
