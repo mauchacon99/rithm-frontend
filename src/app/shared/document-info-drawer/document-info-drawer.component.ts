@@ -110,6 +110,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** Use for station events history. */
+  currentStationsLength = 0;
+
+  /** Whether the station events history is underway. */
+  eventsLengthCurrent = true;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -177,6 +183,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+    this.getCurrentStations();
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -556,5 +563,28 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         documentRithmId: this.documentRithmId,
       },
     });
+  }
+
+  /**
+   * Get the current stations from containers.
+   */
+  private getCurrentStations(): void {
+    this.eventsLengthCurrent = true;
+    this.documentService
+      .getCurrentStations(this.documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          this.currentStationsLength = data.length;
+          this.eventsLengthCurrent = false;
+        },
+        error: (error: unknown) => {
+          this.eventsLengthCurrent = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
