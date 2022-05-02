@@ -116,6 +116,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station events history is underway. */
   eventsLengthCurrent = true;
 
+  /** Identifies the button hover to assign a user. */
+  assignedNewUser = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,

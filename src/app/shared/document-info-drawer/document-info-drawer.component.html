@@ -154,7 +154,27 @@
                   </button>
                 </div>
                 <ng-template #noAssignedUser>
-                  <div class="col-span-full">No assigned user</div>
+                  <div class="not-assigned">
+                    <div class="w-1/6">
+                      <button
+                        class="mat-mini-fab"
+                        (mouseenter)="assignedNewUser = true"
+                        (mouseleave)="assignedNewUser = false"
+                        matTooltip="Assigned User"
+                        matTooltipPosition="above"
+                      >
+                        <i
+                          class="fas text-lg"
+                          [ngClass]="
+                            assignedNewUser ? 'fa-user-plus' : 'fa-user-minus'
+                          "
+                        ></i>
+                      </button>
+                    </div>
+                    <div class="w-9/12">
+                      <p>Not assigned</p>
+                    </div>
+                  </div>
                 </ng-template>
               </ng-container>
             </ng-template>
