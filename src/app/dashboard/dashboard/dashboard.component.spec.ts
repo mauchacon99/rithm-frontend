@@ -762,6 +762,10 @@ describe('DashboardComponent', () => {
         splitService,
         'getDashboardLibraryTreatment'
       ).and.callThrough();
+      const spyGetDefaultDashboardTreatment = spyOn(
+        splitService,
+        'getDefaultDashboardTreatment'
+      ).and.callThrough();
 
       splitService.sdkReady$.next();
       component.ngOnInit();
@@ -769,6 +773,7 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
+      expect(spyGetDefaultDashboardTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
     });

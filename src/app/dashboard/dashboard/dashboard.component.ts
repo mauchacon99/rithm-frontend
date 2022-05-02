@@ -111,6 +111,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   showButtonSetting = false;
 
+  /** Show or hidden default dashboard. */
+  showDefaultDashboard = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -220,6 +223,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
+        this.showDefaultDashboard =
+          this.splitService.getDefaultDashboardTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

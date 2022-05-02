@@ -43,12 +43,14 @@ describe('MenuComponent', () => {
 
   describe('Testing split.io', () => {
     let splitService: SplitService;
+    let userService: UserService;
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
+      userService = TestBed.inject(UserService);
     });
 
     it('should get splits for the menu', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
       const spyGetManageUserTreatment = spyOn(
         splitService,
@@ -62,7 +64,7 @@ describe('MenuComponent', () => {
     });
 
     it('should catch error the splits for the menu', () => {
-      const dataOrganization = TestBed.inject(UserService).user.organization;
+      const dataOrganization = userService.user.organization;
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
       splitService.sdkReady$.error('error');
       const errorService = spyOn(
