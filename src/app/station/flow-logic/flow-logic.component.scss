@@ -36,18 +36,20 @@
 
     .mat-form-field-infix {
       @apply py-3 h-14;
+
       width: calc(320px - 60px) !important;
     }
 
     .mat-stroked-button ::ng-deep {
       @apply w-14;
+
       height: 53px;
       min-width: auto !important;
     }
   }
 
-  .condition-buttons-action ::ng-deep {
-    .mat-button-wrapper {
+  .condition-buttons-action {
+    ::ng-deep .mat-button-wrapper {
       @apply font-semibold text-sm;
     }
   }

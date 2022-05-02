@@ -451,8 +451,8 @@
               >
                 <mat-label> Previous Fields </mat-label>
                 <mat-select>
-                  <mat-option value="1">File option</mat-option>
-                  <mat-option value="2">File option</mat-option>
+                  <mat-option value="1">File option </mat-option>
+                  <mat-option value="2">File option </mat-option>
                 </mat-select>
               </mat-form-field>
               <ng-template #fieldCustomValue>
@@ -472,11 +472,11 @@
                   <i
                     class="fa-solid text-accent-500 fa-xl"
                     [class]="[
-                      isTypeSelectPreviousFields
-                        ? 'fa-keyboard'
+                    switchConditionPreviousFields
+                        ? 'fa-distribute-spacing-vertical'
                         : 'fa-angle-down'
                     ]"
-                  ></i>
+                  ></i> 
                 </button>
               </div>
             </div>
