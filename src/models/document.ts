@@ -1,3 +1,5 @@
+import { StationRosterMember } from './station-roster-member';
+
 /**
  * Represents all info about a document as shown in a list.
  */
@@ -32,6 +34,6 @@ export interface Document {
   /** Last updated timestamp in UTC. */
   updatedTimeUTC: string;
 
-  /** The full name of the user assigned to the document. */
-  userAssigned: string;
+  /** The assigned user to the document. */
+  userAssigned: StationRosterMember;
 }

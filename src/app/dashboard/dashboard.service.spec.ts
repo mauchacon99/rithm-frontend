@@ -19,6 +19,14 @@ import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
+const user: StationRosterMember = {
+  rithmId: '123132132',
+  firstName: 'Demo',
+  lastName: 'User',
+  email: 'demo@demo.com',
+  isWorker: true,
+  isOwner: false,
+};
 
 describe('DashboardService', () => {
   let service: DashboardService;
@@ -205,7 +213,7 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: '',
+        userAssigned: user,
       },
     ];
 
@@ -233,7 +241,7 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: '',
+        userAssigned: user,
       },
     ];
 
