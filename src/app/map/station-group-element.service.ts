@@ -1144,7 +1144,7 @@ export class StationGroupElementService {
       ctx.fillText(
         title,
         STATION_GROUP_DISPLACEMENT,
-        ctx.measureText(title).fontBoundingBoxDescent
+        ctx.measureText(title).actualBoundingBoxDescent
       );
       // If end of title, draw any group icons.
       if (endOfTitle) {
@@ -1240,7 +1240,7 @@ export class StationGroupElementService {
             : GROUP_CHARACTER_SIZE) *
             this.mapScale,
         // This dynamically sets the hight of the rectangle based on the hight of the text.
-        ctx.measureText(title).fontBoundingBoxDescent +
+        ctx.measureText(title).actualBoundingBoxDescent +
           STATION_GROUP_NAME_PADDING
       );
     }
@@ -1343,7 +1343,7 @@ export class StationGroupElementService {
       ctx.fillText(
         icon,
         displacedMap ? newPoint.x - pointStart.x : newPoint.x,
-        ctx.measureText(icon).fontBoundingBoxDescent
+        ctx.measureText(icon).actualBoundingBoxDescent
       );
       const path = new Path2D();
       // Create a circle over the icon button for hovering.
