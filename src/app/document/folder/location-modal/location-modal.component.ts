@@ -17,7 +17,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   styleUrls: ['./location-modal.component.scss'],
   providers: [UtcTimeConversion],
 })
-export class LocationModalComponent implements OnInit{
+export class LocationModalComponent implements OnInit {
   /** Location Text of the modal for the title. */
   public locationValue = 'Container Locations';
 
@@ -44,7 +44,6 @@ export class LocationModalComponent implements OnInit{
     private utcTimeConversion: UtcTimeConversion,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService
-
   ) {
     this.stationRithmId = data.stationRithmId;
     this.documentRithmId = data.documentRithmId;
