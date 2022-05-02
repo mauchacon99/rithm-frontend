@@ -16,6 +16,43 @@
   }
 }
 
+.add-condition-form ::ng-deep {
+  .mat-form-field-infix {
+    @apply py-3 h-14 w-80;
+  }
+
+  .mat-form-field-wrapper {
+    @apply pb-0;
+  }
+
+  .mat-select-trigger {
+    @apply items-end;
+  }
+
+  .condition-select-previous-field-type ::ng-deep {
+    .mat-form-field {
+      @apply mr-1;
+    }
+
+    .mat-form-field-infix {
+      @apply py-3 h-14;
+      width: calc(320px - 60px) !important;
+    }
+
+    .mat-stroked-button ::ng-deep {
+      @apply w-14;
+      height: 53px;
+      min-width: auto !important;
+    }
+  }
+
+  .condition-buttons-action ::ng-deep {
+    .mat-button-wrapper {
+      @apply font-semibold text-sm;
+    }
+  }
+}
+
 .action-buttons-container {
   .button-group {
     @apply mx-8;

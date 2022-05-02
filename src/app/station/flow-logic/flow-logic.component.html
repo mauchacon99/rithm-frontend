@@ -390,20 +390,23 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="w-full py-6">
-          <ng-container *ngIf="!flowLogicRules.length">
-            <div class="flex justify-center">
+        <section
+          class="condition w-full py-6"
+          *ngIf="!openFormCondition; else displayFormCondition"
+        >
+          <div class="condition-view-preview" *ngIf="!flowLogicRules.length">
+            <div class="condition-view-preview-icon flex justify-center">
               <i class="fa-solid fa-clipboard-list text-accent-500 fa-3x"></i>
             </div>
-            <div class="flex justify-center">
+            <div class="condition-view-preview-description flex justify-center">
               <p class="w-1/2 text-center text-sm py-4">
                 Conditions check the value saved on the container the trigger
                 actions
               </p>
             </div>
-          </ng-container>
+          </div>
           <div
-            class="flex"
+            class="button-add-condition flex"
             [ngClass]="[
               flowLogicRules.length ? 'justify-start pl-8' : 'justify-center'
             ]"
@@ -412,11 +415,77 @@
               mat-stroked-button
               data-testid="add-condition"
               color="accent"
+              (click)="openFormCondition = true"
             >
               Add Condition
             </button>
           </div>
-        </div>
+        </section>
+        <ng-template #displayFormCondition>
+          <section class="add-condition-form flex-col pl-8 py-6">
+            <div class="condition-select-field-name flex mb-6">
+              <mat-form-field appearance="outline">
+                <mat-label> Field Name </mat-label>
+                <mat-select>
+                  <mat-option value="1"> File option </mat-option>
+                  <mat-option value="2"> File option </mat-option>
+                  <mat-option value="3"> File option </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="condition-select-comparison-type flex mb-6">
+              <mat-form-field appearance="outline">
+                <mat-label> Comparison Type </mat-label>
+                <mat-select>
+                  <mat-option value="not"> Is not </mat-option>
+                  <mat-option value="is"> Is </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div
+              class="condition-select-previous-field-type condition-button-icon-custom flex items-center mb-6"
+            >
+              <mat-form-field
+                appearance="outline"
+                *ngIf="switchConditionPreviousFields; else fieldCustomValue"
+              >
+                <mat-label> Previous Fields </mat-label>
+                <mat-select>
+                  <mat-option value="1">File option</mat-option>
+                  <mat-option value="2">File option</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <ng-template #fieldCustomValue>
+                <mat-form-field appearance="outline">
+                  <mat-label> Custom Value </mat-label>
+                  <input matInput />
+                </mat-form-field>
+              </ng-template>
+              <div class="condition-switch-button">
+                <button
+                  mat-stroked-button
+                  (click)="
+                    switchConditionPreviousFields =
+                      !switchConditionPreviousFields
+                  "
+                >
+                  <i
+                    class="fa-solid text-accent-500 fa-xl"
+                    [class]="[
+                      isTypeSelectPreviousFields
+                        ? 'fa-keyboard'
+                        : 'fa-angle-down'
+                    ]"
+                  ></i>
+                </button>
+              </div>
+            </div>
+            <div class="condition-buttons-action mb-6 space-x-2">
+              <button mat-button>Cancel</button>
+              <button mat-button color="accent">Save</button>
+            </div>
+          </section>
+        </ng-template>
       </section>
       <section
         class="rules-right-side-actions w-full"

@@ -37,6 +37,9 @@ export class FlowLogicComponent implements OnInit {
   /** Allow switch between new/old interface. */
   flowLogicView = false;
 
+  /** Determine what fields are currently in the form condition the previous fields. */
+  switchConditionPreviousFields = true;
+
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
 
@@ -68,6 +71,9 @@ export class FlowLogicComponent implements OnInit {
 
   /** The error if rules fails . */
   flowRuleError = false;
+
+  /** The error if rules fails . */
+  openFormCondition = false;
 
   constructor(
     public dialog: MatDialog,
