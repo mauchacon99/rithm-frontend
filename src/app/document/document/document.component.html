@@ -273,6 +273,7 @@
               [viewNewStation]="false"
             ></app-document-info-header>
             <div
+              *ngIf="!isWidget"
               class="gridster-container pb-4 w-full h-full"
               id="container-grid"
             >
