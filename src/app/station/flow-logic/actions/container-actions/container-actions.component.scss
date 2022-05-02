@@ -1,0 +1,13 @@
+.container-tab-actions{
+  .container-action-form{
+    ::ng-deep .mat-form-field{
+      min-width: 266px;
+    }
+  }
+
+  .container-action-autocomplete{
+    ::ng-deep .mat-form-field-wrapper{
+      padding-bottom: .4rem;
+    }
+  }
+}

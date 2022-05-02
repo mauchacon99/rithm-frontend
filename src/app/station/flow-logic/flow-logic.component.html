@@ -428,7 +428,7 @@
           <p class="tracking-tight text-sm">ACTIONS</p>
         </div>
         <div
-          class="action-buttons-container border-b border-secondary-50 pt-8 overflow-x-auto"
+          class="action-buttons-container flex flex-wrap items-center pt-8 overflow-x-auto"
         >
           <mat-button-toggle-group
             name="actionButtons"
@@ -475,9 +475,10 @@
             >
           </mat-button-toggle-group>
         </div>
-        <div class="action-tabs-content w-full">
+        <div class="action-tabs-section w-full min-h-[350px]">
           <mat-tab-group
-            class="tabs-flow-rules"
+            class="action-tabs"
+
             [selectedIndex]="groupTabsFlow.value"
           >
             <!-- Tab Flow -->

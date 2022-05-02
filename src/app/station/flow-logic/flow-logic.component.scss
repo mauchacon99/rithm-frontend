@@ -16,20 +16,28 @@
   }
 }
 
-.action-buttons-container {
-  .button-group {
-    @apply mx-8;
+.rules-right-side-actions{
 
-    ::ng-deep .mat-button-toggle {
-      width: 120px;
+  .action-buttons-container {
+    .button-group {
+      @apply mx-8;
 
-      .mat-button-toggle-button {
-        @apply h-10 flex justify-center items-center text-xs;
+      ::ng-deep .mat-button-toggle {
+        width: 120px;
+
+        .mat-button-toggle-button {
+          @apply h-10 flex justify-center items-center text-xs;
+        }
+      }
+
+      ::ng-deep .mat-button-toggle-checked {
+        @apply bg-accent-500 text-white;
       }
     }
-
-    ::ng-deep .mat-button-toggle-checked {
-      @apply bg-accent-500 text-white;
-    }
+  }
+  .action-tabs-section {
+      ::ng-deep .mat-tab-header{
+        display: none !important;
+      }
   }
 }
