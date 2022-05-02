@@ -19,6 +19,7 @@ describe('RosterManagementModalComponent', () => {
   let component: RosterManagementModalComponent;
   let fixture: ComponentFixture<RosterManagementModalComponent>;
   const stationRithmId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+  const stationOrGroupRithmId = '3d147261-1333-2f2f-10bd-159eb1a7243g';
   const userList = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
 
   beforeEach(async () => {
@@ -348,5 +349,40 @@ describe('RosterManagementModalComponent', () => {
     const spyMethod = spyOn(component, 'addUserToRoster').and.callThrough();
     component.toggleSelectedUser(userRithmId);
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should get potential user for stationGroup', () => {
+    component.isGroup = true;
+    fixture.detectChanges();
+    const getPotentialStationGroupRosterMemberSpy = spyOn(
+      TestBed.inject(StationService),
+      'getPotentialStationGroupRosterMembers'
+    ).and.callThrough();
+    component.getPotentialStationRosterMembers(stationOrGroupRithmId, 1);
+    expect(getPotentialStationGroupRosterMemberSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId,
+      1
+    );
+  });
+
+  it('should call errorService if request getPotentialStationGroupRosterMembers fail', () => {
+    component.isGroup = true;
+    fixture.detectChanges();
+    const errorSpy = spyOn(
+      TestBed.inject(StationService),
+      'getPotentialStationGroupRosterMembers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.getPotentialStationRosterMembers(stationOrGroupRithmId, 1);
+    expect(errorSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 });
