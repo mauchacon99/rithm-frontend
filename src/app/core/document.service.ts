@@ -754,27 +754,16 @@ export class DocumentService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type?: FrameType
   ): Observable<StationFrameWidget[]> {
-    if (!stationRithmId || !documentRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive  the number of container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const params = new HttpParams()
-        .set('documentRithmId', documentRithmId)
-        .set('stationRithmId', stationRithmId);
+    const params = new HttpParams()
+      .set('documentRithmId', documentRithmId)
+      .set('stationRithmId', stationRithmId);
 
-      return this.http.get<StationFrameWidget[]>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
-        {
-          params,
-        }
-      );
-    }
+    return this.http.get<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
+      {
+        params,
+      }
+    );
   }
 
   /**
