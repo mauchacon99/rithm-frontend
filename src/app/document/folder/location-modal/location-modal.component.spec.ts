@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatDialogModule,
   MatDialogRef,
@@ -23,7 +23,6 @@ describe('LocationModalComponent', () => {
   let component: LocationModalComponent;
   let fixture: ComponentFixture<LocationModalComponent>;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-  const documentId = 'E204F369-386F-4E41';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -104,21 +103,23 @@ describe('LocationModalComponent', () => {
 
     const navigateSpy = spyOn(component, 'goToContainer').and.callThrough();
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
-    spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'closeDrawer'
-    );
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     spyOn(TestBed.inject(MatDialogRef), 'close');
 
     btnContainer.click(component.currentStations[0].rithmId);
     component.goToContainer(component.currentStations[0].rithmId);
 
-    expect(navigateSpy).toHaveBeenCalledWith(component.currentStations[0].rithmId);
-    expect(routerSpy).toHaveBeenCalledWith([`/document/${component.documentRithmId}`], {
-      queryParams: {
-        documentId: component.documentRithmId,
-        stationId: component.currentStations[0].rithmId,
-      },
-    });
+    expect(navigateSpy).toHaveBeenCalledWith(
+      component.currentStations[0].rithmId
+    );
+    expect(routerSpy).toHaveBeenCalledWith(
+      [`/document/${component.documentRithmId}`],
+      {
+        queryParams: {
+          documentId: component.documentRithmId,
+          stationId: component.currentStations[0].rithmId,
+        },
+      }
+    );
   });
 });
