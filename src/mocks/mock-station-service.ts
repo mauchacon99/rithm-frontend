@@ -439,6 +439,60 @@ export class MockStationService {
   }
 
   /**
+   * Get organization users for a specific stationGroup.
+   *
+   * @param stationGroupRithmId The Specific id of stationGroup.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationGroupRosterMembers(
+    stationGroupRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
+    if (!stationGroupRithmId || !pageNum) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const orgUsers: StationPotentialRostersUsers = {
+        users: [
+          {
+            rithmId: '12dasd1-asd12asdasd-asdas',
+            firstName: 'Cesar',
+            lastName: 'Quijada',
+            email: 'strut@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+          {
+            rithmId: '12dasd1-asd12asdasd-ffff1',
+            firstName: 'Maria',
+            lastName: 'Quintero',
+            email: 'Maquin@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+          {
+            rithmId: '12dasd1-asd12asdasd-a231',
+            firstName: 'Pedro',
+            lastName: 'Perez',
+            email: 'pperez@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+        ],
+        totalUsers: 3,
+      };
+      return of(orgUsers).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
@@ -891,7 +945,7 @@ export class MockStationService {
         },
         {
           prompt: 'Fake question 2',
-          rithmId: '3j4k-3h2j-hj4j',
+          rithmId: '3j4k-3h2j-hj5j',
           questionType: QuestionFieldType.Number,
           isReadOnly: false,
           isRequired: true,

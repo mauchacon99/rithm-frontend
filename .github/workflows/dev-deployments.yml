@@ -40,65 +40,19 @@ jobs:
       - name: Removing app offline file
         run: Remove-Item C:/inetpub/devapp.rithm.tech/app_offline.htm
 
-  # Deploys the Karma test coverage site
-  test-coverage:
-    runs-on: [self-hosted, devvm]
+  # Dispatch an event to run the Document Builds
+  dispatch:
     needs: web-app
-    timeout-minutes: 30
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Installing dependencies
-        run: npm ci --no-audit
-
-      - name: Generating test coverage
-        run: npm run test-ci
-
-      - name: Deploying documentation site
-        run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
-
-  # Deploys the Compodoc documentation site
-  compodoc:
+    strategy:
+      matrix:
+        repo: ['strut-software/rithm-front-end']
     runs-on: [self-hosted, devvm]
-    needs: web-app
-    timeout-minutes: 30
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        # https://github.com/peter-evans/repository-dispatch#example
         with:
-          node-version: '16'
-
-      - name: Installing dependencies
-        run: npm ci --no-audit
-
-      - name: Compiling documentation
-        run: npm run compile-docs
-
-      - name: Deploying documentation site
-        run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
-
-  # Deploys the SassDoc documentation site
-  sassdoc:
-    runs-on: [self-hosted, devvm]
-    needs: web-app
-    timeout-minutes: 30
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Installing dependencies
-        run: npm ci --no-audit
-
-      - name: Compiling documentation
-        run: npm run compile-style-docs
-
-      - name: Deploying documentation site
-        run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
+          token: ${{ secrets.RITHM_FRONT_END_DEV_KICKOFF }}
+          repository: ${{ matrix.repo }}
+          event-type: dev_just_pushed
+          client-payload: '{ "nop": "nothing to see here" }'

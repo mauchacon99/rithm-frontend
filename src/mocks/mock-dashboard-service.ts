@@ -9,6 +9,7 @@ import {
   EditDataWidget,
   ColumnsDocumentInfo,
   ItemListWidgetModal,
+  ColumnFieldsWidget,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -38,7 +39,7 @@ export class MockDashboardService {
     key: string;
   }[] = [
     {
-      name: 'Document',
+      name: 'Container',
       key: ColumnsDocumentInfo.Name,
     },
     {
@@ -210,6 +211,31 @@ export class MockDashboardService {
   };
 
   /**
+   * Group columns of station widget.
+   *
+   * @param columns Columns to group.
+   * @returns Columns grouped.
+   */
+  groupColumnsStationWidget(
+    columns: ColumnFieldsWidget[]
+  ): ColumnFieldsWidget[] {
+    const columnsGrouped: ColumnFieldsWidget[] = [];
+    columns.map((column) => {
+      if (
+        !columnsGrouped.some((value) => {
+          if (column.questionId) {
+            return value.questionId === column.questionId;
+          }
+          return value.name === column.name;
+        })
+      ) {
+        columnsGrouped.push(column);
+      }
+    });
+    return columnsGrouped;
+  }
+
+  /**
    * Update data of the widget since drawer station.
    *
    * @param editDataWidget Data to edit widget.
@@ -373,7 +399,14 @@ export class MockDashboardService {
         stationName: 'Step 4',
         priority: 18,
         flowedTimeUTC: '0001-01-01T00:00:00',
-        userAssigned: '',
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
         updatedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         isEscalated: false,
       },
@@ -392,7 +425,14 @@ export class MockDashboardService {
         documentName: 'Really long document name',
         stationName: 'really long Station name',
         priority: 1,
-        userAssigned: '',
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
         isEscalated: false,
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
@@ -403,7 +443,14 @@ export class MockDashboardService {
         documentName: 'New Doc 2',
         stationName: 'Station name',
         priority: 2,
-        userAssigned: '',
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
         isEscalated: false,
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',

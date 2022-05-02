@@ -78,11 +78,11 @@ export class RosterManagementModalComponent implements OnInit {
    * Life cycle init the component.
    */
   ngOnInit(): void {
+    this.getPotentialStationRosterMembers(
+      this.stationOrGroupRithmId,
+      this.pageNumUsersOrganization
+    );
     if (!this.isGroup) {
-      this.getPotentialStationRosterMembers(
-        this.stationOrGroupRithmId,
-        this.pageNumUsersOrganization
-      );
       this.getStationUsersRoster(this.stationOrGroupRithmId);
     }
   }
@@ -130,26 +130,33 @@ export class RosterManagementModalComponent implements OnInit {
     this.listLoading = true;
     this.addRemoveRosterError = false;
     this.lastUserIdClicked = '';
-    this.stationService
-      .getPotentialStationRosterMembers(stationRithmId, pageNum)
-      .pipe(first())
-      .subscribe({
-        next: (potentialUsers) => {
-          if (potentialUsers) {
-            this.users = potentialUsers.users;
-            this.totalPotentialUsers = potentialUsers.totalUsers;
-          }
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-        complete: () => {
-          this.listLoading = false;
-        },
-      });
+    const getPotentialStationRosterMembers$ = this.isGroup
+      ? this.stationService.getPotentialStationGroupRosterMembers(
+          stationRithmId,
+          pageNum
+        )
+      : this.stationService.getPotentialStationRosterMembers(
+          stationRithmId,
+          pageNum
+        );
+
+    getPotentialStationRosterMembers$.pipe(first()).subscribe({
+      next: (potentialUsers) => {
+        if (potentialUsers) {
+          this.users = potentialUsers.users;
+          this.totalPotentialUsers = potentialUsers.totalUsers;
+        }
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+      complete: () => {
+        this.listLoading = false;
+      },
+    });
   }
 
   /**
