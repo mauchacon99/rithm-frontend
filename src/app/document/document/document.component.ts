@@ -374,7 +374,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.queryParams.pipe(first()).subscribe({
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         if (!params.stationId || !params.documentId) {
           this.handleInvalidParams();

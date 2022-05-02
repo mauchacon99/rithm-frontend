@@ -21,7 +21,8 @@
               [attr.data-testid]="'view-station-' + index"
               [id]="'view-station-' + index"
               class="text-accent-500"
-            >
+              (click)="goToContainer(current.rithmId)"
+              >
               View
             </button>
           </div>
