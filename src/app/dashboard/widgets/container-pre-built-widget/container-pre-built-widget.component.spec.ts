@@ -129,12 +129,12 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
   });
 
-  /*  it('should return the time in a string', () => {
+  it('should return the time in a string', () => {
     const time = component.getElapsedTime(
       component.containers[0].timeInStation
     );
     expect(time).toBeTruthy();
-  }); */
+  });
 
   it('should call and emit toggleDrawer', () => {
     component.isLoading = false;
