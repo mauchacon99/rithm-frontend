@@ -4,8 +4,15 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  throwError,
+  of,
+  from,
+} from 'rxjs';
+import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
   DocumentGenerationStatus,
@@ -263,6 +270,38 @@ export class StationService {
       // eslint-disable-next-line max-len
       return this.http.get<StationPotentialRostersUsers>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`,
+        { params }
+      );
+    }
+  }
+
+  /**
+   * Get organization users for a specific stationGroup.
+   *
+   * @param stationGroupRithmId The Specific id of stationGroup.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationGroupRosterMembers(
+    stationGroupRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
+    if (!pageNum) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Invalid page number.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const params = new HttpParams()
+        .set('stationGroupRithmId', stationGroupRithmId)
+        .set('pageNum', pageNum)
+        .set('pageSize', 20);
+      return this.http.get<StationPotentialRostersUsers>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users`,
         { params }
       );
     }
@@ -568,10 +607,16 @@ export class StationService {
     const params = new HttpParams()
       .set('stationRithmId', stationRithmId)
       .set('includePreviousQuestions', includePreviousQuestions);
-    return this.http.get<Question[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
-      { params }
-    );
+    return this.http
+      .get<Question[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+        { params }
+      )
+      .pipe(
+        concatMap(from),
+        distinct((question) => question.rithmId),
+        toArray()
+      );
   }
 
   /**
