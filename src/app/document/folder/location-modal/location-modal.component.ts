@@ -1,10 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentCurrentStation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { Router } from '@angular/router';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+
 /**
  * Reusable component to display a modal with the list of locations.
  */
@@ -36,11 +39,15 @@ export class LocationModalComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     @Inject(MAT_DIALOG_DATA) private data: LocationModalComponent,
+    private dialogRef: MatDialogRef<LocationModalComponent>,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private router: Router,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.stationRithmId = data.stationRithmId;
     this.documentRithmId = data.documentRithmId;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   /**
@@ -85,5 +92,21 @@ export class LocationModalComponent implements OnInit {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
+  }
+
+  /**
+   * Navigate the user to the container page in other station.
+   *
+   * @param rithmId The Id of the station selected.
+   */
+  goToContainer(rithmId: string): void {
+    this.sidenavDrawerService.closeDrawer();
+    this.router.navigate(['/', 'document', this.documentRithmId], {
+      queryParams: {
+        documentId: this.documentRithmId,
+        stationId: rithmId,
+      },
+    });
+    this.dialogRef.close();
   }
 }
