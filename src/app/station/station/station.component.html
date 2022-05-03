@@ -326,73 +326,87 @@
                     </div>
                     <div class="flex">
                       <div class="flex" *ngIf="settingMode">
-                        <button
-                          type="button"
-                          id="button-leftAlign-text"
-                          data-testid="button-leftAlign-text"
-                          class="px-2"
+                        <mat-button-toggle-group
+                          name="alignHorizontalButtons"
+                          aria-label="Align Horizontal buttons"
+                          value="0"
+                          class="button-group"
                         >
-                          <span
-                            class="fa fa-align-left text-secondary-500 fa-lg"
-                          ></span>
-                        </button>
-                        <button
-                          type="button"
-                          id="button-centerAlign-text"
-                          data-testid="button-centerAlign-text"
-                          class="px-2"
+                          <mat-button-toggle
+                            value="left"
+                            aria-label="Text align left"
+                            data-testid="leftAlign-button-text"
+                            id="leftAlign-button-text"
+                            ><span
+                              class="fa fa-align-left text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="center"
+                            aria-label="Text align center"
+                            data-testid="centerAlign-button-text"
+                            id="centerAlign-button-text"
+                            ><span
+                              class="fa fa-align-center text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="right"
+                            aria-label="Text align right"
+                            data-testid="rightAlign-button-text"
+                            id="rightAlign-button-text"
+                            ><span
+                              class="fa fa-align-right text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-divider
+                            class="px-1"
+                            [vertical]="true"
+                          ></mat-divider>
+                        </mat-button-toggle-group>
+                        <mat-button-toggle-group
+                          name="alignVerticalButtons"
+                          aria-label="Align Vertical buttons"
+                          value="1"
+                          class="button-group ml-3"
                         >
-                          <span
-                            class="fas fa-align-center text-secondary-500 fa-lg"
-                          ></span>
-                        </button>
-                        <button
-                          type="button"
-                          id="button-rightAlign-text"
-                          data-testid="button-rightAlign-text"
-                          class="px-2 pr-4"
-                        >
-                          <span
-                            class="fas fa-align-right text-secondary-500 fa-lg"
-                          ></span>
-                        </button>
-                        <mat-divider [vertical]="true"></mat-divider>
-                        <button
-                          type="button"
-                          id="button-middleAlign-text"
-                          data-testid="button-middleAlign-text"
-                          class="px-2"
-                        >
-                          <span
-                            class="fa-solid fa-distribute-spacing-vertical text-secondary-500 fa-lg"
-                          ></span>
-                        </button>
-                        <button
-                          type="button"
-                          id="button-topAlign-text"
-                          data-testid="button-topAlign-text"
-                          class="px-2"
-                        >
-                          <span
-                            class="fa-solid fa-objects-align-top text-secondary-500 fa-lg"
-                          ></span>
-                        </button>
-                        <button
-                          type="button"
-                          id="button-bottomAlign-text"
-                          data-testid="button-bottomAlign-text"
-                          class="px-2"
-                        >
-                          <span
-                            class="fa-solid fa-objects-align-bottom text-secondary-500 fa-lg"
-                          ></span>
-                        </button>
-                        <mat-divider [vertical]="true"></mat-divider>
+                          <mat-button-toggle
+                            value="middle"
+                            aria-label="Text align middle"
+                            data-testid="middleAlign-button-text"
+                            id="middleAlign-button-text"
+                            ><span
+                              class="fa-solid fa-distribute-spacing-vertical text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="top"
+                            aria-label="Text align top"
+                            data-testid="topAlign-button-text"
+                            id="topAlign-button-text"
+                            ><span
+                              class="fa-solid fa-objects-align-top text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="bottom"
+                            aria-label="Text align bottom"
+                            data-testid="bottomAlign-button-text"
+                            id="bottomAlign-button-text"
+                            ><span
+                              class="fa-solid fa-objects-align-bottom text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-divider
+                            class="px-1"
+                            [vertical]="true"
+                          ></mat-divider>
+                        </mat-button-toggle-group>
                         <button
                           type="button"
                           id="button-remove-text"
                           data-testid="button-remove-text"
-                          class="px-2"
+                          class="px-3"
                         >
                           <span
                             class="fas fa-trash text-secondary-500 fa-lg"

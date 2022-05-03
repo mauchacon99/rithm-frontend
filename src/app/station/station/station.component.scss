@@ -140,3 +140,13 @@ textarea {
     min-height: calc(100vh - 112px);
   }
 }
+
+.mat-button-toggle-group-appearance-standard {
+  border-radius: 0;
+  border: none;
+
+  .mat-button-toggle {
+    background-color: transparent;
+    border: none;
+  }
+}
