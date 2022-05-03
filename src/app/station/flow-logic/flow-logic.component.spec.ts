@@ -33,7 +33,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { DocumentService } from 'src/app/core/document.service';
@@ -48,6 +48,8 @@ import { UserService } from 'src/app/core/user.service';
 
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
+
+const formBuilder = new FormBuilder();
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -138,6 +140,8 @@ describe('FlowLogicComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         { provide: SplitService, useClass: MockSplitService },
         { provide: UserService, useClass: MockUserService },
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
       ],
     }).compileComponents();
   });
@@ -1051,5 +1055,29 @@ describe('FlowLogicComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.flowLogicView).toBeFalse();
     });
+  });
+
+  it('should call the method that returns all stations.', () => {
+    const getAllStations = spyOn(
+      TestBed.inject(StationService),
+      'getAllStations'
+    ).and.callThrough();
+
+    component.getAllStations();
+    expect(getAllStations).toHaveBeenCalled();
+  });
+
+  it('should show error message when request for get all stations fails', () => {
+    spyOn(TestBed.inject(StationService), 'getAllStations').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getAllStations();
+    expect(spyError).toHaveBeenCalled();
   });
 });

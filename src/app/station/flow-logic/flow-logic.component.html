@@ -261,7 +261,7 @@
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
-          (click)="ruleSelectedMenu = 'rules'"
+          (click)="ruleSelectedMenu = 'rules'; getAllStations()"
         >
           <i class="fa-regular fa-square-plus"></i> New Rule
         </li>
@@ -477,14 +477,33 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-        <div class="tabs-flow-container">
+        <div
+          class="tabs-flow-container justify-between items-center pl-8 pr-6 overflow-x-auto"
+        >
           <mat-tab-group
             class="tabs-flow-rules"
             [selectedIndex]="groupTabsFlow.value"
           >
             <!-- Tab Flow -->
             <mat-tab label="tab-flow" aria-label="tab-flow">
-              <section></section>
+              <section [formGroup]="flowFieldForm">
+                <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+                  <mat-label> Available Stations </mat-label>
+                  <mat-select formControlName="stations" multiple>
+                    <mat-option
+                      *ngFor="let option of filteredStations$ | async"
+                      [value]="option.rithmId"
+                    >
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix *ngIf="stationLoading">
+                    <app-loading-indicator
+                      [diameter]="24"
+                    ></app-loading-indicator>
+                  </mat-icon>
+                </mat-form-field>
+              </section>
             </mat-tab>
 
             <!-- Tab Container -->

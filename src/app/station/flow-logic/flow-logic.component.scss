@@ -33,3 +33,9 @@
     }
   }
 }
+
+.tabs-flow-container {
+  ::ng-deep .mat-tab-header {
+    border-bottom: 0px;
+  }
+}

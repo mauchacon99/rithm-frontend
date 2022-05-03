@@ -5,16 +5,19 @@ import {
   Rule,
   RuleEquation,
   RuleType,
+  Station,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { first } from 'rxjs';
+import { first, map, Observable, startWith } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -69,13 +72,28 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /**Filtered form station List. */
+  filteredStations$: Observable<Station[]> | undefined;
+
+  /** The form to add this field in the template. */
+  flowFieldForm!: FormGroup;
+
+  /** The list of all stations. */
+  stations: Station[] = [];
+
+  /** Loading/Errors block. */
+  /* Loading in input auto-complete the list of all stations. */
+  stationLoading = false;
+
   constructor(
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
-    private splitService: SplitService
+    private splitService: SplitService,
+    private fb: FormBuilder,
+    private stationService: StationService
   ) {}
 
   /**
@@ -84,6 +102,10 @@ export class FlowLogicComponent implements OnInit {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
+
+    this.flowFieldForm = this.fb.group({
+      stations: [''],
+    });
   }
 
   /**
@@ -349,5 +371,55 @@ export class FlowLogicComponent implements OnInit {
         break;
     }
     return operatorTranslated;
+  }
+
+  /**
+   * Get the list of all stations.
+   */
+  getAllStations(): void {
+    this.stationLoading = true;
+    this.stationService
+      .getAllStations()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = stations;
+          this.filterStations();
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
+   * Filter the list of all stations.
+   */
+  private filterStations(): void {
+    /** Set the filter List for auto searching. */
+    this.filteredStations$ =
+      this.flowFieldForm.controls.stations.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value))
+      );
+  }
+
+  /**
+   * Filtered Values.
+   *
+   * @param value Current String in Field Forms.
+   * @returns Filtered value.
+   */
+  private _filter(value: string): Station[] {
+    const filterValue = value?.toLowerCase();
+    return this.stations.filter((option) =>
+      option.name.toLowerCase().includes(filterValue)
+    );
   }
 }
