@@ -327,4 +327,29 @@ export class UserFormComponent
         },
       });
   }
+
+  /**
+   * Delete image user.
+   */
+  private deleteImageUser(): void {
+    this.profileImageRithmId = '';
+  }
+
+  /**
+   * Confirm remove image user .
+   *
+   */
+  async confirmRemoveUserImage(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Delete image user?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+
+    if (response) {
+      this.deleteImageUser();
+    }
+  }
 }

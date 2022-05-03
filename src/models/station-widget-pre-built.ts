@@ -6,13 +6,13 @@ import { StationRosterMember } from './station-roster-member';
  */
 export interface StationWidgetPreBuilt {
   /** The id of the specific station. */
-  stationRithmId: string;
+  rithmId: string;
   /** Name Station. */
-  stationName: string;
+  name: string;
   /** Number total container. */
   totalContainers: number;
   /** Station group. */
-  stationGroup: string;
+  groupName: string;
   /** List station owners. */
   stationOwners: StationRosterMember[];
 }
