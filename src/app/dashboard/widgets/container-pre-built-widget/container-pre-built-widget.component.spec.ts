@@ -10,7 +10,11 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ContainerPreBuiltWidgetComponent } from './container-pre-built-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
+import { DocumentComponent } from 'src/app/document/document/document.component';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { ContainerWidgetPreBuilt } from 'src/models';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
@@ -18,7 +22,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   let errorService: ErrorService;
   let documentService: DocumentService;
   let sidenavDrawerService: SidenavDrawerService;
-  const containers = [
+  const containers: ContainerWidgetPreBuilt[] = [
     {
       documentRithmId: '3265442c-82d6-4035-893w-86ga9de5a7e3',
       documentName: 'Document name 2',
@@ -35,8 +39,14 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         ContainerPreBuiltWidgetComponent,
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
+        MockComponent(DocumentComponent),
       ],
-      imports: [RosterModule, MatSortModule],
+      imports: [
+        RosterModule,
+        MatSortModule,
+        MatTableModule,
+        BrowserAnimationsModule,
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
@@ -52,6 +62,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     fixture = TestBed.createComponent(ContainerPreBuiltWidgetComponent);
     component = fixture.componentInstance;
     component.containers = containers;
+    component.dataSourceTable = new MatTableDataSource(containers);
     fixture.detectChanges();
   });
 
@@ -134,6 +145,90 @@ describe('ContainerPreBuiltWidgetComponent', () => {
       component.containers[0].timeInStation
     );
     expect(time).toBeTruthy();
+  });
+
+  describe('Display detail of the document', () => {
+    it('should expand widget', () => {
+      component.isExpandWidget = false;
+      component.failedGetContainers = false;
+      component.isDocument = true;
+      component.isLoading = false;
+      fixture.detectChanges();
+      component.expandWidget.subscribe((isExpandWidget) => {
+        expect(isExpandWidget).toBeTrue();
+      });
+
+      const btnExpandWidget =
+        fixture.debugElement.nativeElement.querySelector('#expand-document');
+      expect(btnExpandWidget).toBeTruthy();
+      btnExpandWidget.click();
+    });
+
+    it('should show detail of the document', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isLoading = false;
+      component.viewDocument(component.containers[0]);
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeTruthy();
+      expect(showDocs).toBeNull();
+      expect(component.documentSelected).toBe(component.containers[0]);
+      expect(spyMethod).toHaveBeenCalledWith(component.containers[0]);
+    });
+
+    it('should return of list the documents', () => {
+      const spyMethodViewDocument = spyOn(
+        component,
+        'viewDocument'
+      ).and.callThrough();
+      const spyMethodToggleExpandWidget = spyOn(
+        component,
+        'toggleExpandWidget'
+      ).and.callThrough();
+      component.failedGetContainers = false;
+      component.isDocument = true;
+      component.isLoading = false;
+      component.isExpandWidget = true;
+      fixture.detectChanges();
+
+      const btnReturnDocuments =
+        fixture.debugElement.nativeElement.querySelector(
+          '#return-list-documents'
+        );
+      btnReturnDocuments.disabled = false;
+      btnReturnDocuments.click();
+
+      component.failedGetContainers = false;
+      component.isLoading = false;
+      fixture.detectChanges();
+
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-containers');
+
+      expect(documentDetail).toBeNull();
+      expect(showDocs).toBeTruthy();
+      expect(component.documentSelected).toBe(null);
+      expect(spyMethodViewDocument).toHaveBeenCalledOnceWith(null);
+      expect(spyMethodToggleExpandWidget).toHaveBeenCalled();
+    });
+  });
+
+  it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
+    component.widgetReloadListDocuments(false, true);
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should return list of documents and reload list', () => {
+    const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+    component.widgetReloadListDocuments(true, false);
+    expect(component.reloadDocumentList).toBeFalse();
+    expect(spyMethod).toHaveBeenCalledOnceWith(null, true);
   });
 
   it('should call and emit toggleDrawer', () => {
