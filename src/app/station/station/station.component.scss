@@ -145,6 +145,9 @@ textarea {
   border-radius: 0;
   border: none;
 
+  .mat-button-toggle-checked span.fa-lg {
+    @apply text-accent-500;
+  }
   .mat-button-toggle {
     background-color: transparent;
     border: none;
