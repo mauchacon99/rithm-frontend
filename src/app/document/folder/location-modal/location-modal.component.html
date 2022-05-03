@@ -22,8 +22,9 @@
               [id]="'view-station-' + index"
               class="text-accent-500"
               (click)="goToContainer(current.rithmId)"
+              [disabled]="current.rithmId === stationRithmId"
             >
-              View
+              {{ current.rithmId === stationRithmId ? 'Current' : 'View'}}
             </button>
           </div>
         </div>

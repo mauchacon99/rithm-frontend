@@ -47,6 +47,7 @@ export class LocationModalComponent implements OnInit {
   ) {
     this.stationRithmId = data.stationRithmId;
     this.documentRithmId = data.documentRithmId;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   /**
@@ -100,7 +101,7 @@ export class LocationModalComponent implements OnInit {
    */
   goToContainer(rithmId: string): void {
     this.sidenavDrawerService.closeDrawer();
-    this.router.navigate([`/document/${this.documentRithmId}`], {
+    this.router.navigate(['/', 'document', this.documentRithmId], {
       queryParams: {
         documentId: this.documentRithmId,
         stationId: rithmId,
