@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HistoryDrawerModule } from 'src/app/shared/history-drawer/history-drawer.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [DocumentInfoDrawerComponent],
@@ -29,6 +30,7 @@ import { HistoryDrawerModule } from 'src/app/shared/history-drawer/history-drawe
     MatButtonModule,
     MatTabsModule,
     HistoryDrawerModule,
+    MatTooltipModule,
   ],
   exports: [DocumentInfoDrawerComponent],
 })
