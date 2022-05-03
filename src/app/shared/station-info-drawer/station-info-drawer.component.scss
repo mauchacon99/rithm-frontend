@@ -56,7 +56,7 @@
   }
 }
 
-.button-setting-section {
+.button-setting-section, .setting-name-section{
   ::ng-deep .mat-form-field-wrapper {
     @apply text-xs;
   }

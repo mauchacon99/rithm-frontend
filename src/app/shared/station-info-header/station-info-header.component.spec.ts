@@ -194,11 +194,11 @@ describe('StationInfoHeaderComponent', () => {
   });
 
   it('should disable info-drawer-button once the info-drawer is opened', () => {
+    component.viewNewStation = true;
     spyOnProperty(
       TestBed.inject(SidenavDrawerService),
       'isDrawerOpen'
     ).and.returnValue(true);
-    component.stationEditMode = true;
     fixture.detectChanges();
     expect(component.isDrawerOpen).toBeTrue();
     const infoButton = fixture.debugElement.nativeElement.querySelector(
@@ -208,11 +208,11 @@ describe('StationInfoHeaderComponent', () => {
   });
 
   it('should enable info-drawer-button once the info-drawer is closed', () => {
+    component.viewNewStation = true;
     spyOnProperty(
       TestBed.inject(SidenavDrawerService),
       'isDrawerOpen'
     ).and.returnValue(false);
-    component.stationEditMode = true;
     fixture.detectChanges();
     expect(component.isDrawerOpen).toBeFalse();
     const infoButton = fixture.debugElement.nativeElement.querySelector(
