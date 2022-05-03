@@ -21,7 +21,6 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
-import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -55,7 +54,6 @@ describe('OptionsMenuComponent', () => {
         OptionsMenuComponent,
         MockComponent(MenuComponent),
         MockComponent(ManagementMemberDashboardModalComponent),
-        MockComponent(MemberDashboardListModalComponent),
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
@@ -384,10 +382,7 @@ describe('OptionsMenuComponent', () => {
       'openDialogManagementMembers'
     ).and.callThrough();
 
-    const matDialogSpy = spyOn(
-      TestBed.inject(MatDialog),
-      'open'
-    ).and.callThrough();
+    const matDialogSpy = spyOn(TestBed.inject(MatDialog), 'open');
 
     component.openDialogManagementMembers();
 
