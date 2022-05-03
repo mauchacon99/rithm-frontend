@@ -1,7 +1,53 @@
-<div class="modal-container">
-  <h4 class="text-center">{{ modalData.stationName }}</h4>
-  <div *ngIf="showContainerModal; else oldContainer">new container</div>
-  <ng-template #oldContainer>
+<ng-container
+  *ngIf="showContainerModal; then newTemplate; else oldTemplate"
+></ng-container>
+
+<!-- New template -->
+<ng-template #newTemplate>
+  <!-- header -->
+  <div class="input-search">
+    <div class="flex justify-between items-center">
+      <h3 class="font-semibold">
+        {{ modalData.stationName }}
+      </h3>
+      <button
+        data-testid="close-station-document-modal"
+        id="close-station-document-modal"
+        mat-icon-button
+        class="text-secondary-500"
+        (click)="closeModal()"
+      >
+        <i class="fas fa-times text-lg"></i>
+      </button>
+    </div>
+    <mat-form-field appearance="outline" class="mt-3">
+      <input
+        [(ngModel)]="search"
+        type="text"
+        matInput
+        placeholder="Search containers"
+        id="search-documents"
+        data-testid="search-documents"
+        maxlength="55"
+        autocomplete="off"
+      />
+      <span matPrefix><i class="fas fa-search text-secondary-300"></i></span>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="!isLoading && documents"></div>
+
+  <!-- Loading -->
+  <app-loading-indicator
+    class="h-full flex justify-center items-center"
+    *ngIf="isLoading"
+  ></app-loading-indicator>
+</ng-template>
+
+<!-- Old template -->
+<ng-template #oldTemplate>
+  <div class="modal-container">
+    <h4 class="text-center">{{ modalData.stationName }}</h4>
     <div class="h-5/6 overflow-auto cursor-default pt-5">
       <span *ngIf="!isLoading && totalNumDocs === 0">
         <div class="flex justify-around items-center h-full">
@@ -110,26 +156,23 @@
         *ngIf="isLoading"
       ></app-loading-indicator>
     </div>
-  </ng-template>
-</div>
+  </div>
 
-<div
-  *ngIf="!isLoading && totalNumDocs > 0 && !showContainerModal"
-  class="flex justify-center"
->
-  <app-pagination
-    (currentPageNum)="getDocuments($event)"
-    [numItems]="totalNumDocs"
-    [numPerPage]="10"
-    [activeNum]="activeNum"
-  >
-  </app-pagination>
-</div>
+  <div *ngIf="!isLoading && totalNumDocs > 0" class="flex justify-center">
+    <app-pagination
+      (currentPageNum)="getDocuments($event)"
+      [numItems]="totalNumDocs"
+      [numPerPage]="10"
+      [activeNum]="activeNum"
+    >
+    </app-pagination>
+  </div>
 
-<!-- Buttons -->
-<div mat-dialog-actions class="flex justify-end">
-  <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
-  <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
-    Close
-  </button>
-</div>
+  <!-- Buttons -->
+  <div mat-dialog-actions class="flex justify-end">
+    <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
+    <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
+      Close
+    </button>
+  </div>
+</ng-template>

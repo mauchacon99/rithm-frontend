@@ -31,6 +31,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** The station rithmId. */
   private stationRithmId = '';
 
+  /* Value of search input. */
+  search = '';
+
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
@@ -96,7 +99,7 @@ export class StationDocumentsModalComponent implements OnInit {
         },
         error: (error: unknown) => {
           this.isLoading = false;
-          this.dialogRef.close();
+          this.closeModal();
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -116,7 +119,7 @@ export class StationDocumentsModalComponent implements OnInit {
       this.router.navigate([`/document/${rithmId}`], {
         queryParams: { documentId: rithmId, stationId: this.stationRithmId },
       });
-      this.dialogRef.close();
+      this.closeModal();
     }
   }
 
@@ -140,12 +143,19 @@ export class StationDocumentsModalComponent implements OnInit {
     this.splitService.initSdk(this.userService.user.organization);
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
-        this.showContainerModal =
-          this.splitService.getStationContainersModalTreatment() === 'on';
+        this.showContainerModal = true;
+        // this.splitService.getStationContainersModalTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
       },
     });
+  }
+
+  /**
+   * The closeModal() function closes the modal.
+   */
+  closeModal(): void {
+    this.dialogRef.close();
   }
 }
