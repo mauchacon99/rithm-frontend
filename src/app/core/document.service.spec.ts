@@ -96,7 +96,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 2,
-          userAssigned: '',
+          userAssigned: user,
           isEscalated: true,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -107,7 +107,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 7,
-          userAssigned: 'John Doe',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -118,7 +118,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 3,
-          userAssigned: '',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -129,7 +129,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 7,
-          userAssigned: '',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -140,7 +140,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 9,
-          userAssigned: 'John Doe',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -151,7 +151,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 1,
-          userAssigned: 'John Doe',
+          userAssigned: user,
           isEscalated: true,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -162,7 +162,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 2,
-          userAssigned: 'John Doe',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -173,7 +173,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 1,
-          userAssigned: '',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -184,7 +184,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '',
           priority: 2,
-          userAssigned: '',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -195,7 +195,7 @@ describe('DocumentService', () => {
           stationName: 'Dry Goods & Liquids',
           flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           priority: 3,
-          userAssigned: 'John Doe',
+          userAssigned: user,
           isEscalated: false,
           updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
           documentRithmId: '',
@@ -1000,13 +1000,13 @@ describe('DocumentService', () => {
   });
 
   it('should return data of method getContainerWidgetPreBuilt', () => {
-    const containers: ContainerWidgetPreBuilt[] = [
+    const responseExpected: ContainerWidgetPreBuilt[] = [
       {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name 2',
-        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name 2',
+        documentRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
+        documentName: 'Document name 1',
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationName: 'Station name 1',
+        timeInStation: '2022-05-02T23:38:03.183Z',
         stationOwners: [
           {
             rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
@@ -1023,18 +1023,27 @@ describe('DocumentService', () => {
         ],
       },
       {
-        flowedTimeUTC: '2022-04-10T17:24:01.0115021',
-        nameContainer: 'Container name 1',
-        containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name 1',
-        stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
+        documentRithmId: '3265442c-82d6-4035-893w-86ga9de5a7e3',
+        documentName: 'Document name 2',
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationName: 'Station name 2',
+        timeInStation: '2022-05-02T23:38:03.183Z',
         stationOwners: [],
       },
     ];
+
     service.getContainerWidgetPreBuilt().subscribe((response) => {
-      expect(response).toEqual(containers);
+      expect(response).toEqual(responseExpected);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-to-me`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(responseExpected);
+    httpTestingController.verify();
   });
+
   it('should get a frame by type', () => {
     const frameByType: StationFrameWidget[] = [
       {

@@ -421,4 +421,35 @@ describe('DocumentInfoDrawerComponent', () => {
     ArrowLocationSection.click();
     expect(openModalLocationSpy).toHaveBeenCalled();
   });
+
+  it('should call the service to get the current Stations', () => {
+    component.stationRithmId = stationId;
+    const spyMethod = spyOn(
+      TestBed.inject(DocumentService),
+      'getCurrentStations'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyMethod).toHaveBeenCalledOnceWith(component.documentRithmId);
+  });
+
+  it('should call the errorService if the request getCurrentStations fails', () => {
+    component.stationRithmId = stationId;
+    const currentStationsEventSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getCurrentStations'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(currentStationsEventSpy).toHaveBeenCalledWith(
+      component.documentRithmId
+    );
+    expect(spyError).toHaveBeenCalled();
+  });
 });

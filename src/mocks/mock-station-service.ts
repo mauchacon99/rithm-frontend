@@ -439,6 +439,60 @@ export class MockStationService {
   }
 
   /**
+   * Get organization users for a specific stationGroup.
+   *
+   * @param stationGroupRithmId The Specific id of stationGroup.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationGroupRosterMembers(
+    stationGroupRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
+    if (!stationGroupRithmId || !pageNum) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const orgUsers: StationPotentialRostersUsers = {
+        users: [
+          {
+            rithmId: '12dasd1-asd12asdasd-asdas',
+            firstName: 'Cesar',
+            lastName: 'Quijada',
+            email: 'strut@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+          {
+            rithmId: '12dasd1-asd12asdasd-ffff1',
+            firstName: 'Maria',
+            lastName: 'Quintero',
+            email: 'Maquin@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+          {
+            rithmId: '12dasd1-asd12asdasd-a231',
+            firstName: 'Pedro',
+            lastName: 'Perez',
+            email: 'pperez@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+        ],
+        totalUsers: 3,
+      };
+      return of(orgUsers).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
@@ -891,7 +945,7 @@ export class MockStationService {
         },
         {
           prompt: 'Fake question 2',
-          rithmId: '3j4k-3h2j-hj4j',
+          rithmId: '3j4k-3h2j-hj5j',
           questionType: QuestionFieldType.Number,
           isReadOnly: false,
           isRequired: true,
@@ -1601,11 +1655,13 @@ export class MockStationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup.
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
     const mockGetGroupTrafficData: GroupTrafficData = {
       title: 'Group Eagle',
@@ -1642,10 +1698,10 @@ export class MockStationService {
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
     const stationWidgetData: StationWidgetPreBuilt[] = [
       {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
+        rithmId: 'qwe-321-ert-123',
+        name: 'Mars station',
         totalContainers: 5,
-        stationGroup: 'Eagle',
+        groupName: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1666,10 +1722,10 @@ export class MockStationService {
         ],
       },
       {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
+        rithmId: '123-456-789',
+        name: 'Grogu station',
         totalContainers: 1,
-        stationGroup: '  ',
+        groupName: '  ',
         stationOwners: [],
       },
     ];

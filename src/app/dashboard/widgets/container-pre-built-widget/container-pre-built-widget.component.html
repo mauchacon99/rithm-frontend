@@ -50,7 +50,7 @@
     matSort
   >
     <!-- Name Container -->
-    <ng-container matColumnDef="nameContainer">
+    <ng-container matColumnDef="documentName">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -58,7 +58,7 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'nameContainer' ||
+            dataSourceTable.sort?.active !== 'documentName' ||
             !dataSourceTable.sort?.direction
         }"
       >
@@ -66,10 +66,7 @@
           CONTAINER
         </p>
         <ng-container
-          *ngTemplateOutlet="
-            buttonSort;
-            context: { $implicit: 'nameContainer' }
-          "
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'documentName' }"
         >
         </ng-container>
       </th>
@@ -78,12 +75,12 @@
         *matCellDef="let element"
         class="w-[150px] truncate px-2 text-xs text-secondary-500"
       >
-        {{ element['nameContainer']?.trim() || 'N/A' }}
+        {{ element['documentName']?.trim() || 'N/A' }}
       </td>
     </ng-container>
 
     <!-- Flowed Time UTC -->
-    <ng-container matColumnDef="flowedTimeUTC">
+    <ng-container matColumnDef="timeInStation">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -91,7 +88,7 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'flowedTimeUTC' ||
+            dataSourceTable.sort?.active !== 'timeInStation' ||
             !dataSourceTable.sort?.direction
         }"
       >
@@ -101,7 +98,7 @@
         <ng-container
           *ngTemplateOutlet="
             buttonSort;
-            context: { $implicit: 'flowedTimeUTC' }
+            context: { $implicit: 'timeInStation' }
           "
         >
         </ng-container>
@@ -111,7 +108,7 @@
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
       >
-        {{ getElapsedTime(element['flowedTimeUTC']) }}
+        {{ getElapsedTime(element['timeInStation']) }}
       </td>
     </ng-container>
 
