@@ -175,7 +175,7 @@
             [stationId]="element['rithmId'] || ''"
             [isWorker]="false"
             [editMode]="!editMode"
-            [stationMembers]="element['stationOwners']"
+            [stationMembers]="element['stationOwners'] || []"
             [fromDrawer]="true"
           >
           </app-roster>
