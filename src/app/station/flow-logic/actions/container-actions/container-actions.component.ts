@@ -119,7 +119,6 @@ export class ContainerActionsComponent implements OnInit {
    * @param typeSelected The current type selected.
    */
   public clearForm(typeSelected: MatSelectChange): void {
-    console.log(typeSelected);
     this.conditionForm.controls.conditionType.setValue(typeSelected.value);
     this.conditionForm.controls.conditionStations.setValue([]);
     this.conditionForm.controls.conditionSharedValues.setValue([]);

@@ -1,21 +1,34 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
+import {
+  AbstractControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatSelectHarness } from '@angular/material/select/testing';
 import { QuestionFieldType } from 'src/models';
+import { MatSelectModule } from '@angular/material/select';
 
 import { ContainerActionsComponent } from './container-actions.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-fdescribe('ContainerComponent', () => {
+describe('ContainerComponent', () => {
   let component: ContainerActionsComponent;
   let fixture: ComponentFixture<ContainerActionsComponent>;
   let formGroup: FormGroup;
-  let conditionType: AbstractControl;
   let stationsControl: AbstractControl;
-  let conditionSharedValues: AbstractControl;
+  let loader: HarnessLoader;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatSelectModule,
+        BrowserAnimationsModule,
+      ],
       declarations: [ContainerActionsComponent],
     }).compileComponents();
   });
@@ -23,6 +36,8 @@ fdescribe('ContainerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContainerActionsComponent);
     component = fixture.componentInstance;
+    component.addingAction = true;
+    loader = TestbedHarnessEnvironment.loader(fixture);
     component.stations = [
       {
         rithmId: '1',
@@ -52,12 +67,8 @@ fdescribe('ContainerComponent', () => {
       },
     ];
     formGroup = component.conditionForm;
-    // typeControl = formGroup.controls['conditionType'];
-    // typeControl.setValue('create');
     stationsControl = formGroup.controls['conditionStations'];
     stationsControl.setValue(component.stations);
-    // sharedValuesControl = formGroup.controls['conditionSharedValues'];
-    // sharedValuesControl.setValue([]);
     fixture.detectChanges();
   });
 
@@ -69,15 +80,18 @@ fdescribe('ContainerComponent', () => {
     expect(stationsControl.value).toHaveSize(3);
     component.removeStation('2');
     expect(stationsControl.value).toHaveSize(2);
-    }
-  );
+  });
 
-  // it('should clear the form when calling removeStation', () => {
-  //   const option: MatSelectChange = {
-  //     value: 'archive',
-  //   }
-  //   component.clearForm('archive');
-  //   }
-  // );
-
+  it('should clear the form when calling removeStation', async () => {
+    const clearFormSpy = spyOn(component, 'clearForm').and.callThrough();
+    const select = await loader.getHarness(MatSelectHarness);
+    await select.open();
+    const options = await select.getOptions();
+    await options[1].click();
+    expect(await select.getValueText()).toBe('Archive Container');
+    expect(clearFormSpy).toHaveBeenCalled();
+    expect(formGroup.controls.conditionType.value).toBe('archive');
+    expect(formGroup.controls.conditionStations.value).toEqual([]);
+    expect(formGroup.controls.conditionSharedValues.value).toEqual([]);
+  });
 });
