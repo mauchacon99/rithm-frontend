@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
  * Expansion menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-expansion-menu[dashboardRole][isManageMember]',
+  selector:
+    'app-expansion-menu[dashboardRole][isManageMember][showDefaultDashboard]',
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })

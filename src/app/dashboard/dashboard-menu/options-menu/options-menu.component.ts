@@ -12,7 +12,8 @@ import { PopupService } from 'src/app/core/popup.service';
  * Options menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-options-menu[dashboardRole][isManageMember]',
+  selector:
+    'app-options-menu[dashboardRole][isManageMember][showDefaultDashboard]',
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
