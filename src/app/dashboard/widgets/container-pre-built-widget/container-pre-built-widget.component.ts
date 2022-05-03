@@ -63,8 +63,8 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   /** Columns staticts to show on table. */
   displayedColumns = [
-    'nameContainer',
-    'flowedTimeUTC',
+    'documentName',
+    'timeInStation',
     'stationName',
     'stationOwners',
     'viewDocument',
