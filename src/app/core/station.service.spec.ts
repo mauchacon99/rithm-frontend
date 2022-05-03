@@ -1642,9 +1642,9 @@ describe('StationService', () => {
   });
 
   it('should call getGroupTrafficData', () => {
-    const expectedData: GroupTrafficData = {
+    const expectedResponse: GroupTrafficData = {
       title: 'Group Eagle',
-      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      stationGroupRithmId: stationId,
       labels: [
         'station 1',
         'station 2',
@@ -1666,11 +1666,19 @@ describe('StationService', () => {
         '2 hour',
       ],
     };
-    service
-      .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
-      .subscribe((response) => {
-        expect(response).toEqual(expectedData);
-      });
+    service.getGroupTrafficData(stationId, true).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic?rithmId=${stationId}&forceRefresh=true`
+    );
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    expect(req.request.params.get('forceRefresh')).toBe('true');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should call getStationWidgetPreBuiltData', () => {

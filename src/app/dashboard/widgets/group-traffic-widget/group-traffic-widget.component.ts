@@ -248,7 +248,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorGroupTraffic = false;
     this.stationService
-      .getGroupTrafficData(this.stationGroupRithmId)
+      .getGroupTrafficData(this.stationGroupRithmId, true)
       .pipe(first())
       .subscribe({
         next: (trafficData) => {
