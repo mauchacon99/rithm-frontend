@@ -28,6 +28,7 @@
         [isManageMember]="isManageMember"
         [dashboardRole]="dashboardRole"
         [isDashboardListOptions]="true"
+        [showDefaultDashboard]="showDefaultDashboard"
       ></app-options-menu>
     </mat-panel-title>
   </mat-expansion-panel-header>
@@ -78,6 +79,7 @@
               [dashboardRole]="dashboardRole"
               [isDashboardListOptions]="false"
               [rithmId]="dashboard.rithmId"
+              [showDefaultDashboard]="showDefaultDashboard"
               [index]="i"
             ></app-options-menu>
           </div>
