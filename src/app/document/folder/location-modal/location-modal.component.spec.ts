@@ -113,12 +113,11 @@ describe('LocationModalComponent', () => {
       component.currentStations[0].rithmId
     );
     expect(routerSpy).toHaveBeenCalledWith(
-      ['/','document',component.documentRithmId],
+      ['/', 'document', component.documentRithmId],
       {
         queryParams: {
           documentId: component.documentRithmId,
           stationId: component.currentStations[0].rithmId,
-
         },
       }
     );
