@@ -154,26 +154,32 @@
                   </button>
                 </div>
                 <ng-template #noAssignedUser>
-                  <div class="not-assigned">
-                    <div class="w-1/6">
-                      <button
-                        class="mat-mini-fab"
-                        (mouseenter)="assignedNewUser = true"
-                        (mouseleave)="assignedNewUser = false"
-                        matTooltip="Assigned User"
-                        matTooltipPosition="above"
-                      >
+                  <div class="unassigned-user-section flex items-center py-2">
+                    <button
+                      class="shadow-none"
+                      (mouseenter)="assignedNewUser = true"
+                      (mouseleave)="assignedNewUser = false"
+                      matTooltip="Assigned User"
+                      matTooltipPosition="above"
+                    >
+                      <span class="fa-stack fa-lg">
                         <i
-                          class="fas text-lg"
+                          class="fa-solid fa-circle fa-stack-2x"
+                          [ngClass]="
+                            assignedNewUser
+                              ? 'text-accent-500'
+                              : 'text-secondary-500'
+                          "
+                        ></i>
+                        <i
+                          class="fa-solid fa-stack-1x text-white"
                           [ngClass]="
                             assignedNewUser ? 'fa-user-plus' : 'fa-user-minus'
                           "
                         ></i>
-                      </button>
-                    </div>
-                    <div class="w-9/12">
-                      <p>Not assigned</p>
-                    </div>
+                      </span>
+                    </button>
+                    <p class="text-secondary-500">Not assigned</p>
                   </div>
                 </ng-template>
               </ng-container>

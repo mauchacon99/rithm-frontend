@@ -21,11 +21,3 @@
     @apply opacity-100 bg-accent-500;
   }
 }
-
-.not-assigned {
-  @apply flex items-center mt-2 mb-4;
-
-  .mat-mini-fab {
-    @apply flex justify-center items-center w-8 h-8 bg-secondary-500 text-white hover:bg-accent-500 shadow-none;
-  }
-}
