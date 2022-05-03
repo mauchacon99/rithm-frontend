@@ -1698,10 +1698,10 @@ export class MockStationService {
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
     const stationWidgetData: StationWidgetPreBuilt[] = [
       {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
+        rithmId: 'qwe-321-ert-123',
+        name: 'Mars station',
         totalContainers: 5,
-        stationGroup: 'Eagle',
+        groupName: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1722,10 +1722,10 @@ export class MockStationService {
         ],
       },
       {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
+        rithmId: '123-456-789',
+        name: 'Grogu station',
         totalContainers: 1,
-        stationGroup: '  ',
+        groupName: '  ',
         stationOwners: [],
       },
     ];
