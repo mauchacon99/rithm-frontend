@@ -4,14 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  throwError,
-  of,
-  from,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, from } from 'rxjs';
 import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -975,45 +968,14 @@ export class StationService {
   }
 
   /**
-   * Get user stations.
+   * Get user prebuilt stations.
    *
-   * @returns User Stations.
+   * @returns User prebuilt Stations.
    */
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
-    const stationWidgetData: StationWidgetPreBuilt[] = [
-      {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
-        totalContainers: 5,
-        stationGroup: 'Eagle',
-        stationOwners: [
-          {
-            rithmId: '',
-            firstName: 'Marry',
-            lastName: 'Poppins',
-            email: 'marrypoppins@inpivota.com',
-            isOwner: false,
-            isWorker: true,
-          },
-          {
-            rithmId: '',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: false,
-            isWorker: true,
-          },
-        ],
-      },
-      {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
-        totalContainers: 1,
-        stationGroup: '  ',
-        stationOwners: [],
-      },
-    ];
-    return of(stationWidgetData).pipe(delay(1000));
+    return this.http.get<StationWidgetPreBuilt[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/member-station`
+    );
   }
 
   /**

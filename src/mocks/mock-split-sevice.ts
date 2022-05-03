@@ -155,4 +155,13 @@ export class MockSplitService {
   public getPreBuiltWidgetTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the section Default Dashboard.
+   *
+   * @returns Split treatment.
+   */
+  public getDefaultDashboardTreatment(): string {
+    return 'on';
+  }
 }
