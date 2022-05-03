@@ -1,25 +1,40 @@
 <div class="container-tab-actions px-8">
-  <button *ngIf="!addingAction" mat-stroked-button color="accent" (click)="addingAction = true">
+  <button
+    *ngIf="!addingAction"
+    mat-stroked-button
+    color="accent"
+    (click)="addingAction = true"
+  >
     New Action
   </button>
   <div class="container-action-form" *ngIf="addingAction">
     <form [formGroup]="conditionForm">
-      <section class="container-action-type">
+      <section class="container-action-type mb-4">
         <mat-form-field appearance="outline">
           <mat-label>Action Type</mat-label>
-          <mat-select formControlName="conditionType">
+          <mat-select
+            formControlName="conditionType"
+            (selectionChange)="clearForm($event)"
+          >
             <mat-option value="creation">Container Creation</mat-option>
             <mat-option value="archive">Archive Container</mat-option>
           </mat-select>
         </mat-form-field>
       </section>
 
-      <section class="container-action-shared-values">
+      <section
+        class="container-action-stations relative mb-2"
+        *ngIf="conditionForm.controls.conditionType.value === 'creation'"
+      >
         <div class="static-input-container">
-          <div class="screen-box" data-testid="open-multiselect-search" (click)="multiSelect.open()"></div>
-          <mat-form-field class="example-form-field" appearance="outline">
+          <div
+            class="screen-box"
+            data-testid="open-multiselect-search"
+            (click)="multiSelect.open()"
+          ></div>
+          <mat-form-field class="overlap-form-field" appearance="outline">
             <mat-label>Available Stations</mat-label>
-            <input matInput disabled>
+            <input matInput disabled />
             <button matPrefix mat-icon-button>
               <i class="fa-solid fa-search"></i>
             </button>
@@ -29,22 +44,41 @@
         <div class="multiselect-section">
           <mat-form-field appearance="outline">
             <mat-label>Available Stations</mat-label>
-            <mat-select [formControl]="websiteMultiCtrl" placeholder="Website" [multiple]="true"  #multiSelect>
+            <mat-select
+              formControlName="conditionStations"
+              placeholder="Stations"
+              [multiple]="true"
+              #multiSelect
+            >
               <mat-option class="bg-brightBlue">
-                <ngx-mat-select-search placeholderLabel="Find bank..." [formControl]="websiteMultiFilterCtrl"></ngx-mat-select-search>
+                <ngx-mat-select-search
+                  placeholderLabel="Search..."
+                  formControlName="conditionStationsFilter"
+                ></ngx-mat-select-search>
               </mat-option>
-              <mat-option *ngFor="let stations of filteredOptionsAutocomplete$ | async" [value]="stations">
-                {{stations.name}}
+              <mat-option
+                *ngFor="let stations of filteredOptionsAutocomplete$ | async"
+                [value]="stations"
+              >
+                {{ stations.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
-        <div class="selected-stations-chips">
+        <div class="selected-stations-chips flex py-2">
           <mat-chip-list>
-            <mat-chip *ngFor="let station of websiteMultiCtrl.value">
-              {{station.name}}
-              <button class="pl-2" type="button">
+            <mat-chip
+              *ngFor="
+                let station of conditionForm.controls.conditionStations.value
+              "
+            >
+              {{ station.name }}
+              <button
+                class="pl-2"
+                type="button"
+                (click)="removeStation(station.rithmId)"
+              >
                 <i class="fas fa-times-circle text-lg text-primary-200"></i>
               </button>
             </mat-chip>
@@ -52,21 +86,32 @@
         </div>
       </section>
 
-
-      <section class="container-action-shared-values">
+      <section
+        class="container-action-shared-values mb-4"
+        *ngIf="conditionForm.controls.conditionStations.value.length"
+      >
         <mat-form-field appearance="outline">
           <mat-label>Shared Values</mat-label>
           <mat-select formControlName="conditionSharedValues" multiple>
-            <mat-option *ngFor="let field of currentStationFields" [value]="field">{{ field.prompt }}</mat-option>
+            <mat-option
+              *ngFor="let field of currentStationFields"
+              [value]="field"
+              >{{ field.prompt }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
       </section>
 
-      <section class="container-action-control-buttons space-x-4 py-4">
+      <section class="container-action-control-buttons space-x-4">
         <button mat-button color="accent" (click)="addingAction = false">
           Cancel
         </button>
-        <button mat-stroked-button color="accent" (click)="addingAction = false">
+        <button
+          mat-stroked-button
+          color="accent"
+          (click)="addingAction = false"
+          [disabled]="!conditionForm.valid"
+        >
           Save
         </button>
       </section>

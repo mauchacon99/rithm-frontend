@@ -1,13 +1,31 @@
-.container-tab-actions{
-  .container-action-form{
-    ::ng-deep .mat-form-field{
+.container-tab-actions {
+  .screen-box {
+    @apply absolute left-0 top-0 w-full h-full z-[2];
+  }
+
+  .container-action-form {
+    ::ng-deep .mat-form-field {
       min-width: 266px;
+      ::ng-deep .mat-form-field-wrapper {
+        padding-bottom: 0;
+        margin: 0;
+      }
+    }
+
+    .static-input-container {
+      @apply absolute z-[1];
+
+      ::ng-deep .overlap-form-field ::ng-deep {
+        .mat-form-field-wrapper {
+          @apply bg-white;
+        }
+      }
     }
   }
 
-  .container-action-autocomplete{
-    ::ng-deep .mat-form-field-wrapper{
-      padding-bottom: .4rem;
-    }
-  }
+  // .container-action-autocomplete{
+  //   ::ng-deep .mat-form-field-wrapper{
+  //     padding-bottom: .4rem;
+  //   }
+  // }
 }

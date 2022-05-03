@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { map, Observable, startWith, Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
 import { Question, QuestionFieldType, Station } from 'src/models';
-import { MatSelect } from '@angular/material/select';
-
-interface Website {
-  /***/id: string;
-  /***/name: string;
-}
+import { MatSelectChange } from '@angular/material/select';
 
 /** Container action tab. */
 @Component({
@@ -17,24 +12,32 @@ interface Website {
   styleUrls: ['./container-actions.component.scss'],
 })
 export class ContainerActionsComponent implements OnInit {
+  /** Data filtered to show autocomplete. */
+  filteredOptionsAutocomplete$!: Observable<Station[]>;
+
   /** Whether the user is adding a new container action. */
   addingAction = false;
 
-  /** Autocomplete stations. */
+  /** List of stations to display with the autocomplete. */
   stations: Station[] = [
     {
-      rithmId: '1234',
+      rithmId: '1',
       name: 'myStation I',
-      instructions: ''
+      instructions: '',
     },
     {
-      rithmId: '12345',
+      rithmId: '2',
       name: 'myStation II',
-      instructions: ''
+      instructions: '',
+    },
+    {
+      rithmId: '3',
+      name: 'myStation III',
+      instructions: '',
     },
   ];
 
-  /** Autocomplete stations. */
+  /** Current station questions deployed in shared values. */
   currentStationFields: Question[] = [
     {
       prompt: 'Fake question 1',
@@ -45,69 +48,35 @@ export class ContainerActionsComponent implements OnInit {
       isPrivate: false,
       children: [],
     },
-    {
-      prompt: 'Fake question 2',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: QuestionFieldType.Number,
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [],
-    },
   ];
 
+  /** Component form. */
   conditionForm: FormGroup;
 
-  /** MultiSelect Example. */
-
-  protected websites: Website[] = [
-    {id: '1', name: 'ItSolutionStuff.com'},
-    {id: '2', name: 'HDTuto.com'},
-    {id: '3', name: 'Nicesnippets.com'},
-    {id: '4', name: 'Google.com'},
-    {id: '5', name: 'laravel.com'},
-    {id: '6', name: 'npmjs.com'},
-    {id: '7', name: 'Google2.com'},
-  ];
-
-  /** Data filtered to show autocomplete. */
-  filteredOptionsAutocomplete$!: Observable<Station[]>;
-
-  public websiteMultiCtrl: FormControl = new FormControl();
-
-  public websiteMultiFilterCtrl: FormControl = new FormControl();
-
-
-  @ViewChild('multiSelect', { static: true }) multiSelect!: MatSelect;
-
-  protected _onDestroy$ = new Subject();
-
-  constructor(
-    private fb: FormBuilder
-  ){
+  constructor(private fb: FormBuilder) {
     this.conditionForm = this.fb.group({
-      conditionType: ['', []],
-      conditionStations: ['', []],
+      conditionType: ['', Validators.required],
+      conditionStations: [[], Validators.required],
       conditionStationsFilter: ['', []],
-      conditionSharedValues: [[], []],
+      conditionSharedValues: [[], Validators.required],
     });
   }
 
   /**
-   * Write code on Method.
-   *
+   * Init Method.
    */
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.listenAutocomplete$();
   }
 
   /** Listen changes in autocomplete. */
   private listenAutocomplete$(): void {
-    this.filteredOptionsAutocomplete$ = this.websiteMultiFilterCtrl.valueChanges.pipe(
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
-      map((value) => this.filterAutocomplete(value))
-    );
+    this.filteredOptionsAutocomplete$ =
+      this.conditionForm.controls.conditionStationsFilter.valueChanges.pipe(
+        startWith(''),
+        map((value) => (typeof value === 'string' ? value : value.name)),
+        map((value) => this.filterAutocomplete(value))
+      );
   }
 
   /**
@@ -116,9 +85,7 @@ export class ContainerActionsComponent implements OnInit {
    * @param value String to filter.
    * @returns Data filtered.
    */
-   private filterAutocomplete(
-    value: string
-  ): Station[] {
+  private filterAutocomplete(value: string): Station[] {
     const filterValue = value.toLowerCase();
     const dataFiltered = [] as Station[];
     this.stations.map((station) => {
@@ -127,5 +94,34 @@ export class ContainerActionsComponent implements OnInit {
       }
     });
     return dataFiltered;
+  }
+
+  /**
+   * Remove the selected station form the array of stations selected.
+   *
+   * @param stationId The id of the station to remove.
+   */
+  public removeStation(stationId: string): void {
+    const stations: Station[] =
+      this.conditionForm.controls.conditionStations.value;
+    const targetStation = stations.find(
+      (station) => station.rithmId === stationId
+    );
+    if (targetStation) {
+      stations.splice(stations.indexOf(targetStation), 1);
+      this.conditionForm.controls.conditionStations.setValue(stations);
+    }
+  }
+
+  /**
+   * Clear the form when selecting a type for this condition.
+   *
+   * @param typeSelected The current type selected.
+   */
+  public clearForm(typeSelected: MatSelectChange): void {
+    console.log(typeSelected);
+    this.conditionForm.controls.conditionType.setValue(typeSelected.value);
+    this.conditionForm.controls.conditionStations.setValue([]);
+    this.conditionForm.controls.conditionSharedValues.setValue([]);
   }
 }

@@ -16,8 +16,7 @@
   }
 }
 
-.rules-right-side-actions{
-
+.rules-right-side-actions {
   .action-buttons-container {
     .button-group {
       @apply mx-8;
@@ -36,8 +35,8 @@
     }
   }
   .action-tabs-section {
-      ::ng-deep .mat-tab-header{
-        display: none !important;
-      }
+    ::ng-deep .mat-tab-header {
+      display: none !important;
+    }
   }
 }
