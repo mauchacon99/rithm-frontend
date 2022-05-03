@@ -1,9 +1,9 @@
 /** Interface to graph document traffic by station. */
 export interface GroupTrafficData {
-  /** Title the station group. */
-  title: string;
   /** RithmId group station. */
   stationGroupRithmId: string;
+  /** Title the station group. */
+  title: string;
   /** Station names. */
   labels: string[];
   /** Represents the number of documents per station. */

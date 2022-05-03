@@ -4,14 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  throwError,
-  of,
-  from,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, from } from 'rxjs';
 import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -957,80 +950,32 @@ export class StationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup.
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
-    const mockGetGroupTrafficData: GroupTrafficData = {
-      title: 'Group Eagle',
-      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: [
-        'station 1',
-        'station 2',
-        'station 3',
-        'station 4',
-        'station 5 with a long text for test view',
-        'station 6',
-        'station 7',
-      ],
-      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
-      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
-      averageDocumentFlowLabels: [
-        '2 days',
-        '7 weeks',
-        '1 hour',
-        '2 days',
-        '1 weeks',
-        '40 minutes',
-        '2 hour',
-      ],
-    };
-    return of(mockGetGroupTrafficData).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('rithmId', stationGroupRithmId)
+      .set('forceRefresh', forceRefresh);
+    return this.http.get<GroupTrafficData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic`,
+      { params }
+    );
   }
 
   /**
-   * Get user stations.
+   * Get user prebuilt stations.
    *
-   * @returns User Stations.
+   * @returns User prebuilt Stations.
    */
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
-    const stationWidgetData: StationWidgetPreBuilt[] = [
-      {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
-        totalContainers: 5,
-        stationGroup: 'Eagle',
-        stationOwners: [
-          {
-            rithmId: '',
-            firstName: 'Marry',
-            lastName: 'Poppins',
-            email: 'marrypoppins@inpivota.com',
-            isOwner: false,
-            isWorker: true,
-          },
-          {
-            rithmId: '',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: false,
-            isWorker: true,
-          },
-        ],
-      },
-      {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
-        totalContainers: 1,
-        stationGroup: '  ',
-        stationOwners: [],
-      },
-    ];
-    return of(stationWidgetData).pipe(delay(1000));
+    return this.http.get<StationWidgetPreBuilt[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/member-station`
+    );
   }
 
   /**
