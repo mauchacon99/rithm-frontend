@@ -935,7 +935,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -965,7 +965,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -1642,9 +1642,9 @@ describe('StationService', () => {
   });
 
   it('should call getGroupTrafficData', () => {
-    const expectedData: GroupTrafficData = {
+    const expectedResponse: GroupTrafficData = {
       title: 'Group Eagle',
-      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      stationGroupRithmId: stationId,
       labels: [
         'station 1',
         'station 2',
@@ -1666,20 +1666,28 @@ describe('StationService', () => {
         '2 hour',
       ],
     };
-    service
-      .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
-      .subscribe((response) => {
-        expect(response).toEqual(expectedData);
-      });
+    service.getGroupTrafficData(stationId, true).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic?rithmId=${stationId}&forceRefresh=true`
+    );
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    expect(req.request.params.get('forceRefresh')).toBe('true');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
-  it('should call getUserStationData', () => {
+  it('should call getStationWidgetPreBuiltData', () => {
     const expectedData: StationWidgetPreBuilt[] = [
       {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
+        rithmId: 'qwe-321-ert-123',
+        name: 'Mars station',
         totalContainers: 5,
-        stationGroup: 'Eagle',
+        groupName: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1700,16 +1708,23 @@ describe('StationService', () => {
         ],
       },
       {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
+        rithmId: '123-456-789',
+        name: 'Grogu station',
         totalContainers: 1,
-        stationGroup: '  ',
+        groupName: '  ',
         stationOwners: [],
       },
     ];
     service.getStationWidgetPreBuiltData().subscribe((response) => {
       expect(response).toEqual(expectedData);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/member-station`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedData);
+    httpTestingController.verify();
   });
 
   it('should call saveInputFrameQuestions', () => {
@@ -1819,6 +1834,57 @@ describe('StationService', () => {
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(userIdList);
 
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the potential roster members of the stationGroup', () => {
+    const pageNum = 1;
+    const pageSize = 20;
+    const expectedResponse: StationPotentialRostersUsers = {
+      users: [
+        {
+          rithmId: '12dasd1-asd12asdasd-asdas',
+          firstName: 'Cesar',
+          lastName: 'Quijada',
+          email: 'strut@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-ffff1',
+          firstName: 'Maria',
+          lastName: 'Quintero',
+          email: 'Maquin@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-a231',
+          firstName: 'Pedro',
+          lastName: 'Perez',
+          email: 'pperez@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+      ],
+      totalUsers: 3,
+    };
+
+    service
+      .getPotentialStationGroupRosterMembers(stationId, pageNum)
+      .subscribe((users) => {
+        expect(users).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users?stationGroupRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
+    expect(req.request.params.get('pageNum')).toBe(pageNum.toString());
+    expect(req.request.params.get('pageSize')).toBe(pageSize.toString());
     req.flush(expectedResponse);
     httpTestingController.verify();
   });

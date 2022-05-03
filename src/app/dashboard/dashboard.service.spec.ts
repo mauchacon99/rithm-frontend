@@ -11,6 +11,7 @@ import {
   RoleDashboardMenu,
   EditDataWidget,
   ItemListWidgetModal,
+  ColumnFieldsWidget,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -18,6 +19,14 @@ import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
+const user: StationRosterMember = {
+  rithmId: '123132132',
+  firstName: 'Demo',
+  lastName: 'User',
+  email: 'demo@demo.com',
+  isWorker: true,
+  isOwner: false,
+};
 
 describe('DashboardService', () => {
   let service: DashboardService;
@@ -204,7 +213,7 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: '',
+        userAssigned: user,
       },
     ];
 
@@ -232,7 +241,7 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: '',
+        userAssigned: user,
       },
     ];
 
@@ -706,5 +715,40 @@ describe('DashboardService', () => {
     expect(req.request.params.get('name')).toEqual(nameToSearch);
     req.flush(expectDataResponse);
     httpTestingController.verify();
+  });
+
+  it('should clear columns repeat in data columns widget station', () => {
+    const columns: ColumnFieldsWidget[] = [
+      {
+        name: 'name',
+      },
+      {
+        name: 'some name',
+        questionId: '123-456-789',
+      },
+      {
+        name: 'some name',
+        questionId: '123-456-789',
+      },
+      {
+        name: 'some name 3',
+        questionId: '987-654-321',
+      },
+    ];
+    const expectedColumns: ColumnFieldsWidget[] = [
+      {
+        name: 'name',
+      },
+      {
+        name: 'some name',
+        questionId: '123-456-789',
+      },
+      {
+        name: 'some name 3',
+        questionId: '987-654-321',
+      },
+    ];
+
+    expect(service.groupColumnsStationWidget(columns)).toEqual(expectedColumns);
   });
 });
