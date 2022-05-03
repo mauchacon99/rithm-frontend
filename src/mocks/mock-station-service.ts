@@ -1655,11 +1655,13 @@ export class MockStationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup.
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
     const mockGetGroupTrafficData: GroupTrafficData = {
       title: 'Group Eagle',
