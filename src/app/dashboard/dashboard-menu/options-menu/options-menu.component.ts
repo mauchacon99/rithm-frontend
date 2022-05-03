@@ -28,6 +28,11 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    */
   @Input() dashboardRole!: RoleDashboardMenu;
 
+  /**
+   * Show default dashboard.
+   */
+  @Input() showDefaultDashboard = false;
+
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 

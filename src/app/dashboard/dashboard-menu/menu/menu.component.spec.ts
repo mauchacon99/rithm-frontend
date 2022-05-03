@@ -56,10 +56,15 @@ describe('MenuComponent', () => {
         splitService,
         'getManageUserTreatment'
       ).and.callThrough();
+      const spyGetDefaultDashboardTreatment = spyOn(
+        splitService,
+        'getDefaultDashboardTreatment'
+      ).and.callThrough();
       splitService.sdkReady$.next();
       component.ngOnInit();
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetManageUserTreatment).toHaveBeenCalled();
+      expect(spyGetDefaultDashboardTreatment).toHaveBeenCalled();
       expect(component.isManageMember).toBeTrue();
     });
 

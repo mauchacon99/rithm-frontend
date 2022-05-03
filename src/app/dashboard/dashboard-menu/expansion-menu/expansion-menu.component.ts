@@ -22,6 +22,11 @@ export class ExpansionMenuComponent implements OnInit {
   /** Type dashboard. */
   @Input() dashboardRole!: RoleDashboardMenu;
 
+  /**
+   * Show default dashboard.
+   */
+  @Input() showDefaultDashboard = false;
+
   /** Status expanded, this save the state the panel for show icon expanded. */
   panelOpenState = true;
 
