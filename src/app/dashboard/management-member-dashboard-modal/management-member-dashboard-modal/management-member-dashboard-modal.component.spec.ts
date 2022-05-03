@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MockComponent } from 'ng-mocks';
 import { RoleDashboardMenu } from 'src/models';
+import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
 
@@ -20,7 +22,10 @@ describe('ManagementMemberDashboardModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ManagementMemberDashboardModalComponent],
+      declarations: [
+        ManagementMemberDashboardModalComponent,
+        MockComponent(MemberDashboardListModalComponent),
+      ],
       imports: [MatDialogModule],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }],
     }).compileComponents();

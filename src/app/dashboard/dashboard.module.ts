@@ -54,6 +54,7 @@ import { StationPreBuiltWidgetComponent } from './widgets/station-pre-built-widg
 import { PreBuiltWidgetTemplateModalComponent } from './widget-modal/pre-built-widget-template-modal/pre-built-widget-template-modal.component';
 import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-widget/container-pre-built-widget.component';
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { MemberDashboardListModalComponent } from './management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { ManagementMemberDashboardModalComponent } from './management-member-das
     PreBuiltWidgetTemplateModalComponent,
     ContainerPreBuiltWidgetComponent,
     ManagementMemberDashboardModalComponent,
+    MemberDashboardListModalComponent,
   ],
   imports: [
     CommonModule,
