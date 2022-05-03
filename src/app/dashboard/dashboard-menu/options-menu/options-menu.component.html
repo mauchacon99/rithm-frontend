@@ -13,7 +13,7 @@
   <div *ngIf="showDefaultDashboard">Default Dashboard</div>
   <button
     mat-menu-item
-    *ngIf="dashboardRole === roleDashboardMenu.Company && isManageMember"
+    *ngIf="dashboardRole !== roleDashboardMenu.Company && isManageMember"
   >
     <i class="fas fa-users"></i>
     <span class="p-4">Manage Members</span>
@@ -25,7 +25,10 @@
 </mat-menu>
 
 <mat-menu #menuDashboard="matMenu">
-  <button mat-menu-item *ngIf="isManageMember">
+  <button
+    mat-menu-item
+    *ngIf="dashboardRole !== roleDashboardMenu.Company && isManageMember"
+  >
     <i class="fas fa-users"></i>
     <span class="p-4">Manage Members</span>
   </button>
