@@ -168,16 +168,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.getDocumentTimeInStation();
         }
       });
-
-    /** Get Document Appended Fields from Behaviour Subject. */
-    this.stationService.documentStationNameFields$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((appendedFields) => {
-        this.options = appendedFields.filter((field) => field.questionRithmId);
-        if (this.questions.length > 0) {
-          this.filterFieldsAndQuestions();
-        }
-      });
   }
 
   /**
@@ -186,7 +176,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
-    this.getCurrentStations();
+    if (!this.isStation) {
+      this.getCurrentStations();
+    }
+    this.subscribeDocumentName();
+    this.subscribeDocumentStationNameFields();
+  }
+
+  /**
+   * Subscribe the subject documentName.
+   */
+  private subscribeDocumentName(): void {
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -199,6 +199,20 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             error
           );
         },
+      });
+  }
+
+  /**
+   * Get Document Appended Fields from Behaviour Subject.
+   */
+  private subscribeDocumentStationNameFields(): void {
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appendedFields) => {
+        this.options = appendedFields.filter((field) => field.questionRithmId);
+        if (this.questions.length > 0) {
+          this.filterFieldsAndQuestions();
+        }
       });
   }
 
