@@ -15,6 +15,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for the flow logic tab on a station.
@@ -25,6 +26,9 @@ import { UserService } from 'src/app/core/user.service';
   styleUrls: ['./flow-logic.component.scss'],
 })
 export class FlowLogicComponent implements OnInit {
+  /** Schedule trigger type form. */
+  ScheduleTriggerField: FormGroup;
+
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
@@ -69,14 +73,25 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** Schedule trigger type list view if true. */
+  ScheduleTrigger = false;
+
+  /** The different options for the schedule trigger type. */
+  ScheduleTriggerOptions = ['Container Check', 'Date Interval'];
+
   constructor(
+    private fb: FormBuilder,
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
     private splitService: SplitService
-  ) {}
+  ) {
+    this.ScheduleTriggerField = this.fb.group({
+      scheduleTriggerType: '',
+    });
+  }
 
   /**
    * Life cycle init the component.
