@@ -385,4 +385,281 @@ describe('RosterManagementModalComponent', () => {
     expect(errorSpy).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should call getStationGroupUsersRoster when is group and is worker', () => {
+    component.isGroup = true;
+    component.rosterType = 'workers';
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+    const getStationGroupUsersRosterSpy = spyOn(
+      component,
+      'getStationGroupUsersRoster'
+    ).and.callThrough();
+
+    const getStationGroupWorkerRosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroupWorkerRoster'
+    ).and.callThrough();
+
+    component.ngOnInit();
+    expect(getStationGroupUsersRosterSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId
+    );
+    expect(getStationGroupWorkerRosterSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId
+    );
+  });
+
+  it('should call getStationGroupUsersRoster when is group and is owner', () => {
+    component.isGroup = true;
+    component.rosterType = 'owners';
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+    const getStationGroupUsersRosterSpy = spyOn(
+      component,
+      'getStationGroupUsersRoster'
+    ).and.callThrough();
+
+    const getStationGroupOwnerRosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroupOwnerRoster'
+    ).and.callThrough();
+
+    component.ngOnInit();
+    expect(getStationGroupUsersRosterSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId
+    );
+    expect(getStationGroupOwnerRosterSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId
+    );
+  });
+
+  it('should call getStationGroupUsersRoster when is not group', () => {
+    component.isGroup = false;
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+    const getStationUsersRosterSpy = spyOn(
+      component,
+      'getStationUsersRoster'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(getStationUsersRosterSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId
+    );
+  });
+
+  it('should call removeMemberFromRosterGroup if isGroup and is owners', () => {
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.users = [
+      {
+        rithmId: userRithmId,
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isOwner: true,
+      },
+    ];
+    component.rosterType = 'owners';
+    component.isGroup = true;
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const removeMemberFromRosterGroupSpy = spyOn(
+      component,
+      'removeMemberFromRosterGroup'
+    ).and.callThrough();
+
+    const removeUsersFromOwnerRosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'removeUsersFromOwnerRosterGroup'
+    ).and.callThrough();
+
+    component.toggleSelectedUser(userRithmId);
+    expect(removeMemberFromRosterGroupSpy).toHaveBeenCalledOnceWith(
+      userRithmId
+    );
+    expect(removeUsersFromOwnerRosterSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId,
+      [userRithmId]
+    );
+  });
+
+  it('should call removeMemberFromRosterGroup if isGroup and is workers', () => {
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.users = [
+      {
+        rithmId: userRithmId,
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isWorker: true,
+      },
+    ];
+    component.rosterType = 'workers';
+    component.isGroup = true;
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const removeMemberFromRosterGroupSpy = spyOn(
+      component,
+      'removeMemberFromRosterGroup'
+    ).and.callThrough();
+
+    const removeUsersFromWorkerRosterGroupSpy = spyOn(
+      TestBed.inject(StationService),
+      'removeUsersFromWorkerRosterGroup'
+    ).and.callThrough();
+
+    component.toggleSelectedUser(userRithmId);
+    expect(removeMemberFromRosterGroupSpy).toHaveBeenCalledOnceWith(
+      userRithmId
+    );
+    expect(removeUsersFromWorkerRosterGroupSpy).toHaveBeenCalledOnceWith(
+      stationOrGroupRithmId,
+      [userRithmId]
+    );
+  });
+
+  it('should call removeMemberFromRoster if station', () => {
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.users = [
+      {
+        rithmId: userRithmId,
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isWorker: true,
+      },
+    ];
+    component.rosterType = 'workers';
+    component.isGroup = false;
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const removeMemberFromRosterGroupSpy = spyOn(
+      component,
+      'removeMemberFromRoster'
+    ).and.callThrough();
+
+    component.toggleSelectedUser(userRithmId);
+    expect(removeMemberFromRosterGroupSpy).toHaveBeenCalledOnceWith(
+      userRithmId
+    );
+  });
+
+  it('should call errorService if request getStationGroupOwnerRoster fail', () => {
+    component.rosterType = 'owners';
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const errorServiceSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroupOwnerRoster'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.getStationGroupUsersRoster(stationOrGroupRithmId);
+    expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call errorService if request getStationGroupWorkerRoster fail', () => {
+    component.rosterType = 'workers';
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const errorServiceSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationGroupWorkerRoster'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.getStationGroupUsersRoster(stationOrGroupRithmId);
+    expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call errorService if request removeUsersFromWorkerRosterGroup fail', () => {
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.users = [
+      {
+        rithmId: userRithmId,
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isWorker: true,
+      },
+    ];
+    component.rosterType = 'workers';
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const errorServiceSpy = spyOn(
+      TestBed.inject(StationService),
+      'removeUsersFromWorkerRosterGroup'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.removeMemberFromRosterGroup(stationOrGroupRithmId);
+    expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call errorService if request removeUsersFromOwnerRosterGroup fail', () => {
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    component.users = [
+      {
+        rithmId: userRithmId,
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isOwner: true,
+      },
+    ];
+    component.rosterType = 'owners';
+    component.stationOrGroupRithmId = stationOrGroupRithmId;
+    fixture.detectChanges();
+
+    const errorServiceSpy = spyOn(
+      TestBed.inject(StationService),
+      'removeUsersFromOwnerRosterGroup'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.removeMemberFromRosterGroup(stationOrGroupRithmId);
+    expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
