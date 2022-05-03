@@ -14,6 +14,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { ContainerWidgetPreBuilt } from 'src/models';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
@@ -21,7 +22,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   let errorService: ErrorService;
   let documentService: DocumentService;
   let sidenavDrawerService: SidenavDrawerService;
-  const containers = [
+  const containers: ContainerWidgetPreBuilt[] = [
     {
       documentRithmId: '3265442c-82d6-4035-893w-86ga9de5a7e3',
       documentName: 'Document name 2',

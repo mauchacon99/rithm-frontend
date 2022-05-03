@@ -192,9 +192,9 @@
             (click)="viewDocument(element)"
             class="text-secondary-500"
             [attr.data-testid]="
-              'show-document-widget-' + element['containerRithmId']
+              'show-document-widget-' + element['documentRithmId']
             "
-            [id]="'show-document-widget-' + element['containerRithmId']"
+            [id]="'show-document-widget-' + element['documentRithmId']"
             [disabled]="editMode"
           >
             <i class="fas text-lg fa-angle-double-right"></i>
@@ -286,7 +286,7 @@
           $event.isReloadListDocuments
         )
       "
-      [documentRithmIdWidget]="documentSelected?.containerRithmId || ''"
+      [documentRithmIdWidget]="documentSelected?.documentRithmId || ''"
       [stationRithmIdWidget]="documentSelected?.stationRithmId || ''"
     ></app-document>
   </div>
