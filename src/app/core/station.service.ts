@@ -4,14 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  throwError,
-  of,
-  from,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, from } from 'rxjs';
 import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
