@@ -27,7 +27,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FlowLogicComponent implements OnInit {
   /** Schedule trigger type form. */
-  ScheduleTriggerField: FormGroup;
+  scheduleTriggerField: FormGroup;
 
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
@@ -74,10 +74,10 @@ export class FlowLogicComponent implements OnInit {
   flowRuleError = false;
 
   /** Schedule trigger type list view if true. */
-  ScheduleTrigger = false;
+  scheduleTrigger = false;
 
   /** The different options for the schedule trigger type. */
-  ScheduleTriggerOptions = ['Container Check', 'Date Interval'];
+  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
 
   constructor(
     private fb: FormBuilder,
@@ -88,7 +88,7 @@ export class FlowLogicComponent implements OnInit {
     private userService: UserService,
     private splitService: SplitService
   ) {
-    this.ScheduleTriggerField = this.fb.group({
+    this.scheduleTriggerField = this.fb.group({
       scheduleTriggerType: '',
     });
   }

@@ -359,7 +359,7 @@
         </div>
         <div
           class="flex justify-center items-center flex-col text-center mb-6"
-          *ngIf="!ScheduleTrigger"
+          *ngIf="!scheduleTrigger"
         >
           <i class="far fa-clock text-4xl text-accent-500 mt-6"></i>
           <p class="py-4 w-5/6 md:w-2/4 text-sm">
@@ -370,20 +370,20 @@
             mat-stroked-button
             data-testid="button-addTrigger-schedule"
             color="accent"
-            (click)="ScheduleTrigger = !ScheduleTrigger"
+            (click)="scheduleTrigger = !scheduleTrigger"
           >
             Add Trigger
           </button>
         </div>
         <div
           class="flex items-start flex-col px-8 py-5"
-          *ngIf="ScheduleTrigger"
+          *ngIf="scheduleTrigger"
         >
           <mat-form-field class="md:w-2/4 w-full" appearance="outline">
             <mat-label>Trigger Type</mat-label>
             <mat-select formControlName="scheduleTriggerType">
               <mat-option
-                *ngFor="let option of ScheduleTriggerOptions | keyvalue"
+                *ngFor="let option of scheduleTriggerOptions | keyvalue"
                 [value]="option.value"
               >
                 {{ option.value }}
@@ -394,7 +394,7 @@
             <button
               mat-flat-button
               data-testid="button-schedule-cancel"
-              (click)="ScheduleTrigger = !ScheduleTrigger"
+              (click)="scheduleTrigger = !scheduleTrigger"
             >
               Cancel
             </button>
