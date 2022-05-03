@@ -560,8 +560,15 @@ describe('RosterManagementModalComponent', () => {
         throw new Error();
       })
     );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
     component.getStationGroupUsersRoster(stationOrGroupRithmId);
     expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call errorService if request getStationGroupWorkerRoster fail', () => {
@@ -577,8 +584,15 @@ describe('RosterManagementModalComponent', () => {
         throw new Error();
       })
     );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
     component.getStationGroupUsersRoster(stationOrGroupRithmId);
     expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call errorService if request removeUsersFromWorkerRosterGroup fail', () => {
@@ -604,8 +618,15 @@ describe('RosterManagementModalComponent', () => {
         throw new Error();
       })
     );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
     component.removeMemberFromRosterGroup(stationOrGroupRithmId);
     expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call errorService if request removeUsersFromOwnerRosterGroup fail', () => {
@@ -631,7 +652,14 @@ describe('RosterManagementModalComponent', () => {
         throw new Error();
       })
     );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
     component.removeMemberFromRosterGroup(stationOrGroupRithmId);
     expect(errorServiceSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 });
