@@ -127,6 +127,9 @@
                         [firstName]="documentAssignedUser[0].firstName"
                         [lastName]="documentAssignedUser[0].lastName"
                         [hideToolTip]="true"
+                        [profileImageRithmId]="
+                          documentAssignedUser[0].profileImageRithmId || ''
+                        "
                       >
                       </app-user-avatar>
                     </div>
@@ -210,10 +213,16 @@
             >
               <div class="flex w-full flex-col justify-center">
                 <h6>Locations</h6>
-                <p class="overline-font">3 Stations</p>
+                <p class="overline-font">
+                  {{ currentStationsLength }} Stations
+                </p>
               </div>
               <div class="pr-2 cursor-pointer">
-                <i class="fas fa-chevron-right text-accent-800 fa-lg"></i>
+                <i
+                  class="fas fa-chevron-right text-accent-800 fa-lg"
+                  (click)="openModalLocation()"
+                  id="open-modal-Location"
+                ></i>
               </div>
             </div>
 
@@ -243,7 +252,11 @@
       </div>
     </ng-template>
   </mat-tab>
-  <mat-tab label="tab-history-info" aria-label="tab-history-info">
+  <mat-tab
+    *ngIf="!isStation"
+    label="tab-history-info"
+    aria-label="tab-history-info"
+  >
     <ng-template mat-tab-label>
       <i class="fas fa-history fa-lg"></i>
     </ng-template>

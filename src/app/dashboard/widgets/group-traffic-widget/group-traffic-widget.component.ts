@@ -1,10 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { first } from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  OnDestroy,
+} from '@angular/core';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardItem, GroupTrafficData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ChartConfiguration, LegendItem } from 'chart.js';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for station group traffic.
@@ -15,7 +23,7 @@ import { ChartConfiguration, LegendItem } from 'chart.js';
   templateUrl: './group-traffic-widget.component.html',
   styleUrls: ['./group-traffic-widget.component.scss'],
 })
-export class GroupTrafficWidgetComponent implements OnInit {
+export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   /** Detect if is mobile device. */
   @Input() set isMobileDevice(value: boolean) {
     this._isMobileDevice = value;
@@ -63,6 +71,18 @@ export class GroupTrafficWidgetComponent implements OnInit {
   /** Index Widget. */
   @Input() indexWidget!: number;
 
+  /** Open drawer. */
+  @Output() toggleDrawer = new EventEmitter<number>();
+
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
   /** Parameter private for save if is mobile device. */
   private _isMobileDevice!: boolean;
 
@@ -71,6 +91,12 @@ export class GroupTrafficWidgetComponent implements OnInit {
 
   /** Data for traffic in group. */
   groupTrafficData!: GroupTrafficData;
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Type of drawer opened. */
+  drawerContext!: string;
 
   /** Options for show traffic in chart. */
   optionsShowTraffic: number[] = [5, 10, 20, 30, 40, 50];
@@ -182,7 +208,8 @@ export class GroupTrafficWidgetComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /**
@@ -190,7 +217,22 @@ export class GroupTrafficWidgetComponent implements OnInit {
    */
   ngOnInit(): void {
     this.setDataWidget();
+    this.subscribeDrawerContext$();
     this.getGroupTrafficData();
+  }
+
+  /** Get context drawer. */
+  private subscribeDrawerContext$(): void {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
+  }
+
+  /** Toggle drawer when click on edit group search widget. */
+  toggleEditStation(): void {
+    this.toggleDrawer.emit(+this.groupTrafficData.labels.length);
   }
 
   /** Set data in widget. */
@@ -206,7 +248,7 @@ export class GroupTrafficWidgetComponent implements OnInit {
     this.isLoading = true;
     this.errorGroupTraffic = false;
     this.stationService
-      .getGroupTrafficData(this.stationGroupRithmId)
+      .getGroupTrafficData(this.stationGroupRithmId, true)
       .pipe(first())
       .subscribe({
         next: (trafficData) => {
@@ -333,5 +375,11 @@ export class GroupTrafficWidgetComponent implements OnInit {
         : this.paginationChart - this.valueShowGraphic;
 
     this.setConfigChart();
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

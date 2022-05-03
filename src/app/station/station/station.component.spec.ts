@@ -62,6 +62,8 @@ import {
   MockUserService,
   MockPopupService,
 } from 'src/mocks';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -96,6 +98,7 @@ describe('StationComponent', () => {
         MockComponent(BannerWidgetComponent),
         MockComponent(BuildDrawerComponent),
         MockComponent(CircleImageWidgetComponent),
+        MockComponent(FlowLogicComponent),
       ],
       imports: [
         NoopAnimationsModule,
@@ -110,6 +113,8 @@ describe('StationComponent', () => {
         MatExpansionModule,
         MatDividerModule,
         GridsterModule,
+        MatSlideToggleModule,
+        ComingSoonMessageModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -745,7 +750,7 @@ describe('StationComponent', () => {
         minItemCols: 6,
         questions: [],
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
       {
@@ -770,7 +775,7 @@ describe('StationComponent', () => {
           },
         ],
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 1,
       },
     ];
@@ -1168,7 +1173,7 @@ describe('StationComponent', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
     ];
@@ -1229,7 +1234,7 @@ describe('StationComponent', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
     ];
@@ -1254,7 +1259,7 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'getStationWidgets'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getStationWidgets']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -1268,7 +1273,7 @@ describe('StationComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getStationWidgets']();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -1343,7 +1348,7 @@ describe('StationComponent', () => {
             },
           ],
           // eslint-disable-next-line max-len
-          data: "[{'rithmId':'3j4k-3h2j-hj4j','prompt':'Label #1','questionType':'QuestionFieldType.ShortText','isReadOnly':false,'isRequired':false,'isPrivate':false,'children':[],'originalStationRithmId':'3j4k-3h2j-hj4j'}]",
+          data: `[{"rithmId":"3j4k-3h2j-hj4j","prompt":"Label #1","questionType":"QuestionFieldType.ShortText","isReadOnly":false,"isRequired":false,"isPrivate":false,"children":[],"originalStationRithmId":"3j4k-3h2j-hj4j"}]`,
           id: 0,
         },
       ];
@@ -1355,6 +1360,7 @@ describe('StationComponent', () => {
         'saveStationWidgets'
       ).and.returnValue(of(frameStationWidget));
       component['saveStationWidgetsChanges']();
+      component.stationLoading = true;
       fixture.detectChanges();
       const stationLoading =
         fixture.debugElement.nativeElement.querySelector('#gridster-loading');
@@ -1373,7 +1379,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '',
+          data: '[]',
           questions: [],
           id: 0,
         },
@@ -1383,7 +1389,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1397,7 +1403,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Headline,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1406,7 +1412,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1420,7 +1426,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Body,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1429,7 +1435,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1443,8 +1449,8 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Title,
-          data: '',
           id: 0,
+          data: '',
         },
       ];
 
@@ -1452,7 +1458,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1466,7 +1472,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Image,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1475,7 +1481,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1489,7 +1495,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.CircleImage,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1498,7 +1504,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
   });

@@ -13,7 +13,7 @@
 </div>
 <div *ngIf="!isLoading && !failedLoadDrawer" id="content-drawer-station-widget">
   <div
-    *ngIf="!dataDrawerStation?.quantityElementsWidget; else selectDrawer"
+    *ngIf="!dataDrawer?.quantityElementsWidget; else selectDrawer"
     id="message-not-documents-assigned-to-station"
   >
     <p class="text-sm">
@@ -101,6 +101,12 @@
         >
           Add Column
         </button>
+        <div *ngIf="limitedColumnsReached" id="message-limited">
+          <span class="text-error-500 text-xs"
+            >Maximum number of columns allowed
+            {{ MAXIMUM_COLUMNS_ALLOWED }}</span
+          >
+        </div>
       </div>
     </div>
   </ng-template>

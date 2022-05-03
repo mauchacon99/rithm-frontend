@@ -24,6 +24,25 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 describe('WidgetDrawerComponent', () => {
   let component: WidgetDrawerComponent;
   let fixture: ComponentFixture<WidgetDrawerComponent>;
+  const dataEditWidget = {
+    widgetItem: {
+      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      cols: 4,
+      // eslint-disable-next-line max-len
+      data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
+      maxItemCols: 0,
+      maxItemRows: 0,
+      minItemCols: 0,
+      minItemRows: 0,
+      rows: 2,
+      widgetType: WidgetType.Station,
+      x: 0,
+      y: 0,
+      profileImageId: '123132',
+    },
+    widgetIndex: 0,
+    isCloseDrawer: false,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -55,9 +74,9 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should subscribe to sidenavDrawerService.drawerContext$ and set drawer mode', () => {
-    TestBed.inject(SidenavDrawerService).drawerContext$.next('stationWidget');
+    TestBed.inject(SidenavDrawerService).drawerContext$.next('widgetDashboard');
 
-    expect(component.drawerMode).toEqual('stationWidget');
+    expect(component.drawerMode).toEqual('widgetDashboard');
   });
 
   it('Should call toggle drawer when click in done', () => {
@@ -66,7 +85,7 @@ describe('WidgetDrawerComponent', () => {
       'toggleDrawer'
     );
     const spyMethod = spyOn(component, 'toggleDrawer').and.callThrough();
-    component.drawerMode = 'stationWidget';
+    component.drawerMode = 'widgetDashboard';
 
     const btnDone = fixture.nativeElement.querySelector('#done-btn');
     expect(btnDone).toBeTruthy();
@@ -76,7 +95,7 @@ describe('WidgetDrawerComponent', () => {
   });
 
   it('should show/hide the station widget  drawer', () => {
-    component.drawerMode = 'stationWidget';
+    component.drawerMode = 'widgetDashboard';
     const infoDrawerSpy = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -119,7 +138,7 @@ describe('WidgetDrawerComponent', () => {
   it('should emit event deleteWidget', async () => {
     const widgetIndex = 1;
     component.widgetIndex = widgetIndex;
-    component.drawerMode = 'stationWidget';
+    component.drawerMode = 'widgetDashboard';
 
     const popUpConfirmSpy = spyOn(
       TestBed.inject(PopupService),
@@ -137,19 +156,6 @@ describe('WidgetDrawerComponent', () => {
     expect(infoDrawerSpy).toHaveBeenCalled();
     expect(popUpConfirmSpy).toHaveBeenCalled();
     expect(spyDeleteWidget).toHaveBeenCalledOnceWith(widgetIndex);
-  });
-
-  it('should call setWidgetIndex', () => {
-    const widgetIndex = 1;
-
-    const spySetWidgetIndex = spyOn(
-      component,
-      'setWidgetIndex'
-    ).and.callThrough();
-
-    component.setWidgetIndex(widgetIndex);
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(widgetIndex);
-    expect(component.widgetIndex).toBe(widgetIndex);
   });
 
   it('should show section upload image and defined input in button', () => {
@@ -343,29 +349,21 @@ describe('WidgetDrawerComponent', () => {
     expect(loadingIndicator).toBeTruthy();
   });
 
-  it('should set widgetType and imageUploaded', () => {
+  it('Should subscribe to SidenavDrawerService.drawerData$', () => {
     const expectedImage = {
-      imageId: '123-456-789',
-      imageName: 'Image name',
+      imageId: null,
+      imageName: null,
     };
-    const widgetItem = {
-      rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
-      cols: 4,
-      // eslint-disable-next-line max-len
-      data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1","columns": [{"name": "name"}, {"name": "name", "questionId": "d17f6f7a-9642-45e0-8221-e48045d3c97e"}]}',
-      maxItemCols: 0,
-      maxItemRows: 0,
-      minItemCols: 0,
-      minItemRows: 0,
-      rows: 2,
-      widgetType: WidgetType.Station,
-      x: 0,
-      y: 0,
-      imageId: expectedImage.imageId,
-      imageName: expectedImage.imageName,
-    };
-    component.setWidgetItem(widgetItem);
-
+    const spyServideSidenav = spyOn(
+      TestBed.inject(SidenavDrawerService).drawerData$,
+      'next'
+    ).and.callThrough();
+    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
+    expect(component.dataDrawer.widgetIndex).toEqual(
+      dataEditWidget.widgetIndex
+    );
+    expect(spyServideSidenav).toHaveBeenCalled();
+    expect(component.dataDrawer.widgetItem).toEqual(dataEditWidget.widgetItem);
     expect(component.widgetType).toEqual(WidgetType.Station);
     expect(component.imageUploaded).toEqual(expectedImage);
   });

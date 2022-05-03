@@ -133,19 +133,6 @@ export class StationDocumentsModalComponent implements OnInit {
     );
   }
 
-  // TODO: get first and last names separately from API to avoid necessitating the following:
-  /**
-   * Gets a specified portion of a full name.
-   *
-   * @param fullName The full name of the assigned user.
-   * @param firstLastIndex The index of the desired name portion (0 for first, 1 for last).
-   * @returns The desired name.
-   */
-  getNamePortion(fullName: string, firstLastIndex: 0 | 1): string {
-    const names = fullName.split(' ');
-    return names[firstLastIndex];
-  }
-
   /**
    * Split Service for show or hidden section Admin Portal.
    */

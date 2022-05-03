@@ -21,16 +21,37 @@ import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
+import { throwError } from 'rxjs';
+import { User } from 'src/models';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
   let loader: HarnessLoader;
+  let errorService: ErrorService;
+  let popupService: PopupService;
+  let userService: UserService;
   const formBuilder = new FormBuilder();
+  const user: User = {
+    rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A',
+    firstName: 'Admin',
+    lastName: 'User',
+    email: 'rithmadmin@inpivota.com',
+    role: 'admin',
+    createdDate: '2021-08-23T15:35:42.2234693',
+    isEmailVerified: true,
+    notificationSettings: null,
+    organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserFormComponent, MockComponent(UserAvatarComponent)],
+      declarations: [
+        UserFormComponent,
+        MockComponent(UserAvatarComponent),
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [
         NoopAnimationsModule,
         MatFormFieldModule,
@@ -52,7 +73,11 @@ describe('UserFormComponent', () => {
     fixture = TestBed.createComponent(UserFormComponent);
     component = fixture.componentInstance;
     component.accountCreate = true;
+    component.currentUser = user;
     loader = TestbedHarnessEnvironment.loader(fixture);
+    errorService = TestBed.inject(ErrorService);
+    popupService = TestBed.inject(PopupService);
+    userService = TestBed.inject(UserService);
     fixture.detectChanges();
   });
 
@@ -214,7 +239,6 @@ describe('UserFormComponent', () => {
 
   describe('Testing split.io', () => {
     let splitService: SplitService;
-    let userService: UserService;
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
       userService = TestBed.inject(UserService);
@@ -255,14 +279,14 @@ describe('UserFormComponent', () => {
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       splitService.sdkReady$.error('error');
-      const errorService = spyOn(
+      const spyErrorService = spyOn(
         TestBed.inject(ErrorService),
         'logError'
       ).and.callThrough();
       component.ngOnInit();
 
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
-      expect(errorService).toHaveBeenCalled();
+      expect(spyErrorService).toHaveBeenCalled();
       expect(component.showProfilePhoto).toBeFalse();
     });
   });
@@ -281,13 +305,114 @@ describe('UserFormComponent', () => {
       message: 'Please select a file with extension jpeg, jpg, png.',
       important: true,
     };
-    const spyAlert = spyOn(
-      TestBed.inject(PopupService),
-      'alert'
-    ).and.callThrough();
+    const spyAlert = spyOn(popupService, 'alert').and.callThrough();
     const mockFile = new File([''], 'name', { type: 'document/pdf' });
     const mockEvt = { target: { files: [mockFile] } };
     component.uploadImage(mockEvt as unknown as Event);
     expect(spyAlert).toHaveBeenCalledOnceWith(paramExpected);
+  });
+
+  it('should catch error if petition upload imageUser fails', () => {
+    const serviceMethod = spyOn(userService, 'uploadImageUser').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    component['uploadImageUser'](mockFile);
+    expect(serviceMethod).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call upload imageUser', () => {
+    const spyMethod = spyOn(userService, 'uploadImageUser').and.callThrough();
+    const mockFile = new File([''], 'name', { type: 'image/png' });
+    component['uploadImageUser'](mockFile);
+    expect(spyMethod).toHaveBeenCalledWith(mockFile);
+  });
+
+  it('should show change and delete button when user image is true', () => {
+    component.profileImageRithmId = '12313212323';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    fixture.detectChanges();
+    const changeButton = fixture.debugElement.nativeElement.querySelector(
+      '#change-image-button'
+    );
+    const deleteButton = fixture.debugElement.nativeElement.querySelector(
+      '#delete-image-button'
+    );
+    const uploadButton = fixture.debugElement.nativeElement.querySelector(
+      '#upload-image-button'
+    );
+    expect(changeButton).toBeTruthy();
+    expect(deleteButton).toBeTruthy();
+    expect(uploadButton).toBeNull();
+  });
+
+  it('should show upload button when user image is true', () => {
+    component.profileImageRithmId = '';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    fixture.detectChanges();
+    const changeButton = fixture.debugElement.nativeElement.querySelector(
+      '#change-image-button'
+    );
+    const deleteButton = fixture.debugElement.nativeElement.querySelector(
+      '#delete-image-button'
+    );
+    const uploadButton = fixture.debugElement.nativeElement.querySelector(
+      '#upload-image-button'
+    );
+    expect(changeButton).toBeNull();
+    expect(deleteButton).toBeNull();
+    expect(uploadButton).toBeTruthy();
+  });
+
+  it('should show loading  when user image is uploading', () => {
+    component.profileImageRithmId = '';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    component.isLoadingUploadImageUser = true;
+    fixture.detectChanges();
+    const isLoading = fixture.debugElement.nativeElement.querySelector(
+      '#loading-upload-photo'
+    );
+    expect(isLoading).toBeTruthy();
+  });
+
+  it('should show error  when user image is uploading', () => {
+    component.profileImageRithmId = '';
+    component.accountCreate = false;
+    component.showProfilePhoto = true;
+    component.errorUploadImageUser = true;
+    fixture.detectChanges();
+    const error = fixture.debugElement.nativeElement.querySelector(
+      '#error-loading-upload-photo'
+    );
+    expect(error).toBeTruthy();
+  });
+
+  it('should display a confirmation pop up', async () => {
+    component.profileImageRithmId = '12312313212';
+    const confirmationData = {
+      title: 'Delete image user?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    };
+
+    const popUpConfirmSpy = spyOn(popupService, 'confirm').and.callThrough();
+    await component.confirmRemoveUserImage();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
+    expect(component.profileImageRithmId).toEqual('');
+  });
+
+  it('should delete image user', () => {
+    component.profileImageRithmId = '13213211315';
+    component['deleteImageUser']();
+    expect(component.profileImageRithmId).toEqual('');
   });
 });

@@ -1,12 +1,17 @@
 <div [formGroup]="dataLinkFieldForm" class="flex flex-col">
   <div class="flex flex-row justify-start text-xs space-x-2 mb-2">
     <span class="text-primary-500">DATA LINK</span>
-    <mat-divider [vertical]="true"></mat-divider>
-    <a
-      href="javascript: void(0)"
+    <mat-divider *ngIf="!hideHelp" [vertical]="true"></mat-divider>
+    <button
+      type="button"
       class="underline cursor-pointer text-accent-500"
-      >Help</a
+      (click)="openModalHelp()"
+      id="data-help-modal"
+      data-testid="data-help-modal"
+      *ngIf="!hideHelp"
     >
+      Help
+    </button>
   </div>
   <!-- Available Stations  -->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">

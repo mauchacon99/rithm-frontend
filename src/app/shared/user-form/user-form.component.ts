@@ -72,6 +72,15 @@ export class UserFormComponent
   /** The label text to be displayed for the confirm password field. */
   confirmPasswordLabel = '';
 
+  /** User image. */
+  profileImageRithmId!: string;
+
+  /** Load indicator upload image. */
+  isLoadingUploadImageUser = false;
+
+  /** Show error if upload image fail. */
+  errorUploadImageUser = false;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -109,6 +118,7 @@ export class UserFormComponent
       ],
       password: ['', []],
       confirmPassword: ['', []],
+      isLoadingImage: [true, Validators.requiredTrue],
     });
 
     const passwordValidators: ValidatorFn[] = [
@@ -270,7 +280,7 @@ export class UserFormComponent
     if (file) {
       const extension = file.type.split('/')[1];
       if (FormatImageValidate.isValidFormatImage(extension)) {
-        //here will go the process with the image
+        this.uploadImageUser(file);
       } else {
         this.popupService.alert({
           title: 'Image format is not valid.',
@@ -278,6 +288,68 @@ export class UserFormComponent
           important: true,
         });
       }
+    }
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   */
+  private uploadImageUser(file: File): void {
+    this.isLoadingUploadImageUser = true;
+    this.userForm.controls['isLoadingImage'].setValue(
+      !this.isLoadingUploadImageUser
+    );
+    this.errorUploadImageUser = false;
+    this.userService
+      .uploadImageUser(file)
+      .pipe(first())
+      .subscribe({
+        next: (profileImageRithmId) => {
+          this.isLoadingUploadImageUser = false;
+          this.errorUploadImageUser = false;
+          this.profileImageRithmId = profileImageRithmId;
+          this.userForm.controls['isLoadingImage'].setValue(
+            !this.isLoadingUploadImageUser
+          );
+        },
+        error: (error: unknown) => {
+          this.isLoadingUploadImageUser = false;
+          this.errorUploadImageUser = true;
+          this.userForm.controls['isLoadingImage'].setValue(
+            !this.isLoadingUploadImageUser
+          );
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Delete image user.
+   */
+  private deleteImageUser(): void {
+    this.profileImageRithmId = '';
+  }
+
+  /**
+   * Confirm remove image user .
+   *
+   */
+  async confirmRemoveUserImage(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Delete image user?',
+      message: 'This cannot be undone!',
+      okButtonText: 'Yes',
+      cancelButtonText: 'No',
+      important: true,
+    });
+
+    if (response) {
+      this.deleteImageUser();
     }
   }
 }
