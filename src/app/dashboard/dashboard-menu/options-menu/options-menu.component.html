@@ -25,7 +25,11 @@
 </mat-menu>
 
 <mat-menu #menuDashboard="matMenu">
-  <button mat-menu-item *ngIf="isManageMember">
+  <button
+    mat-menu-item
+    (click)="openDialogManagementMembers()"
+    *ngIf="isManageMember"
+  >
     <i class="fas fa-users"></i>
     <span class="p-4">Manage Members</span>
   </button>
