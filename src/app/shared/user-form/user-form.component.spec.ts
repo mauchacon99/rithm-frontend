@@ -22,7 +22,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { throwError } from 'rxjs';
-import { User } from 'src/models';
+import { RoleDashboardMenu, User } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('UserFormComponent', () => {
@@ -43,6 +43,8 @@ describe('UserFormComponent', () => {
     isEmailVerified: true,
     notificationSettings: null,
     organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+    dashboardType: RoleDashboardMenu.Personal,
+    dashboardRithmId: '147cf568-27a4-4968-5628-046ddfee24fd',
   };
 
   beforeEach(async () => {

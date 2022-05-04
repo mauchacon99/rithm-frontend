@@ -1,3 +1,5 @@
+import { RoleDashboardMenu } from './enums/role-dashboard-menu.enum';
+
 /**
  * Represents all information about a Rithm user.
  */
@@ -34,4 +36,10 @@ export interface User {
 
   /** User Image or Photo. */
   readonly userImageId?: string;
+
+  /** Dashboard type default dashboard for this user. */
+  dashboardType: RoleDashboardMenu;
+
+  /**Dashboard rithmId  default dashboard for this user. */
+  dashboardRithmId: string;
 }

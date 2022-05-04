@@ -10,6 +10,7 @@ import {
   UserAccountInfo,
   StationInformation,
   ImageData,
+  RoleDashboardMenu,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -31,6 +32,8 @@ export class MockUserService {
     createdDate: '1/2/34',
     role: null,
     organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+    dashboardType: RoleDashboardMenu.Personal,
+    dashboardRithmId: '747cf568-27a4-4968-5628-046ccfee24fd',
   };
 
   /**

@@ -8,6 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import {
+  RoleDashboardMenu,
   SignInResponse,
   TokenResponse,
   User,
@@ -29,6 +30,8 @@ const testUser: User = {
   notificationSettings: null,
   role: null,
   organization: '',
+  dashboardType: RoleDashboardMenu.Personal,
+  dashboardRithmId: '907cf568-27a4-4968-5628-046ccfee24fd',
 };
 
 describe('UserService', () => {
