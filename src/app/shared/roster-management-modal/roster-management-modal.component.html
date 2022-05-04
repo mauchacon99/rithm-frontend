@@ -24,7 +24,11 @@
             [lastName]="member.lastName"
             [navProfile]="true"
             [badge]="'check'"
-            (click)="removeMemberFromRoster(member.rithmId)"
+            (click)="
+              isGroup
+                ? removeMemberFromRosterGroup(member.rithmId)
+                : removeMemberFromRoster(member.rithmId)
+            "
             [hoverEffect]="true"
             [profileImageRithmId]="member.profileImageRithmId || ''"
           ></app-user-avatar>

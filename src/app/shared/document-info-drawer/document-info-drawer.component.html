@@ -154,7 +154,33 @@
                   </button>
                 </div>
                 <ng-template #noAssignedUser>
-                  <div class="col-span-full">No assigned user</div>
+                  <div class="unassigned-user-section flex items-center py-2">
+                    <button
+                      class="shadow-none"
+                      (mouseenter)="assignedNewUser = true"
+                      (mouseleave)="assignedNewUser = false"
+                      matTooltip="Assigned User"
+                      matTooltipPosition="above"
+                    >
+                      <span class="fa-stack fa-lg">
+                        <i
+                          class="fa-solid fa-circle fa-stack-2x"
+                          [ngClass]="
+                            assignedNewUser
+                              ? 'text-accent-500'
+                              : 'text-secondary-500'
+                          "
+                        ></i>
+                        <i
+                          class="fa-solid fa-stack-1x text-white"
+                          [ngClass]="
+                            assignedNewUser ? 'fa-user-plus' : 'fa-user-minus'
+                          "
+                        ></i>
+                      </span>
+                    </button>
+                    <p class="text-secondary-500">Not assigned</p>
+                  </div>
                 </ng-template>
               </ng-container>
             </ng-template>
@@ -252,7 +278,11 @@
       </div>
     </ng-template>
   </mat-tab>
-  <mat-tab label="tab-history-info" aria-label="tab-history-info">
+  <mat-tab
+    *ngIf="!isStation"
+    label="tab-history-info"
+    aria-label="tab-history-info"
+  >
     <ng-template mat-tab-label>
       <i class="fas fa-history fa-lg"></i>
     </ng-template>
