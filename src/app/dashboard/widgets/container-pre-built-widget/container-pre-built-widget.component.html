@@ -14,8 +14,9 @@
 </app-error-widget>
 
 <div
-  *ngIf="!isLoading && !failedGetContainers && containers"
+  *ngIf="!isLoading && !failedGetContainers && containers && !isDocument"
   class="h-full w-full p-2"
+  id="show-containers"
 >
   <div class="flex justify-between items-center">
     <h3 class="font-semibold truncate mb-2">My Containers</h3>
@@ -188,11 +189,12 @@
         <div class="text-right">
           <button
             mat-icon-button
+            (click)="viewDocument(element)"
             class="text-secondary-500"
             [attr.data-testid]="
-              'show-document-widget-' + element['containerRithmId']
+              'show-document-widget-' + element['documentRithmId']
             "
-            [id]="'show-document-widget-' + element['containerRithmId']"
+            [id]="'show-document-widget-' + element['documentRithmId']"
             [disabled]="editMode"
           >
             <i class="fas text-lg fa-angle-double-right"></i>
@@ -229,3 +231,63 @@
     }"
   ></i>
 </ng-template>
+
+<!--Document detail-->
+<div
+  class="h-full p-2 overflow-auto"
+  *ngIf="isDocument && !isLoading"
+  id="document-detail"
+>
+  <!--  Header -->
+  <div class="flex pt-2 justify-between items-center">
+    <button
+      [disabled]="
+        documentComponent
+          ? documentComponent.documentLoading === undefined
+            ? true
+            : documentComponent.documentLoading
+          : true
+      "
+      mat-icon-button
+      (click)="viewDocument(null)"
+      id="return-list-documents"
+      data-testid="return-list-documents"
+    >
+      <i
+        [ngClass]="{
+          'text-secondary-300': documentComponent
+            ? documentComponent.documentLoading === undefined
+              ? true
+              : documentComponent.documentLoading
+            : true
+        }"
+        class="fas text-secondary-500 fa-arrow-left text-lg"
+      ></i>
+    </button>
+    <button
+      mat-icon-button
+      (click)="toggleExpandWidget()"
+      id="expand-document"
+      data-testid="expand-document"
+    >
+      <i
+        [ngClass]="isExpandWidget ? 'fa-compress-alt' : 'fa-expand-alt'"
+        class="fas text-secondary-500 text-base"
+      ></i>
+    </button>
+  </div>
+  <!--  Document component -->
+  <div class="h-[calc(100%-40px)]">
+    <app-document
+      [isWidget]="true"
+      (returnDocumentsWidget)="
+        widgetReloadListDocuments(
+          $event.isReturnListDocuments,
+          $event.isReloadListDocuments
+        )
+      "
+      [documentRithmIdWidget]="documentSelected?.documentRithmId || ''"
+      [stationRithmIdWidget]="documentSelected?.stationRithmId || ''"
+    ></app-document>
+  </div>
+</div>

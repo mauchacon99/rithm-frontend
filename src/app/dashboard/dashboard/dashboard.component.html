@@ -220,6 +220,7 @@
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (expandWidget)="toggleExpandWidget(index, $event)"
             >
             </app-container-pre-built-widget>
           </gridster-item>
