@@ -21,6 +21,7 @@
 
   .rules-left-side {
     @apply bg-white h-full min-w-[266px] absolute sm:static border-secondary-500 border-r sm:border-none w-full sm:w-auto;
+
     transition: left ease-out 0.4s;
     left: -100vw;
 
