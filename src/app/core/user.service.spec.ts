@@ -30,8 +30,8 @@ const testUser: User = {
   notificationSettings: null,
   role: null,
   organization: '',
-  dashboardType: RoleDashboardMenu.Personal,
-  dashboardRithmId: '907cf568-27a4-4968-5628-046ccfee24fd',
+  defaultDashboardType: RoleDashboardMenu.Personal,
+  defaultDashboardId: '907cf568-27a4-4968-5628-046ccfee24fd',
 };
 
 describe('UserService', () => {

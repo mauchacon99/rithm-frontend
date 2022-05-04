@@ -32,8 +32,8 @@ export class MockUserService {
     createdDate: '1/2/34',
     role: null,
     organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-    dashboardType: RoleDashboardMenu.Personal,
-    dashboardRithmId: '747cf568-27a4-4968-5628-046ccfee24fd',
+    defaultDashboardType: RoleDashboardMenu.Personal,
+    defaultDashboardId: '747cf568-27a4-4968-5628-046ccfee24fd',
   };
 
   /**

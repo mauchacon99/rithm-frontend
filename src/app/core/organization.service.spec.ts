@@ -48,8 +48,8 @@ describe('OrganizationService', () => {
           createdDate: '1/2/20',
           role: null,
           organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          dashboardType: RoleDashboardMenu.Personal,
-          dashboardRithmId: '117cf568-27a4-4968-5628-046ccfee24fd',
+          defaultDashboardType: RoleDashboardMenu.Personal,
+          defaultDashboardId: '117cf568-27a4-4968-5628-046ccfee24fd',
         },
         {
           rithmId: '1234',
@@ -61,8 +61,8 @@ describe('OrganizationService', () => {
           createdDate: '7/4/21',
           role: null,
           organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          dashboardType: RoleDashboardMenu.Personal,
-          dashboardRithmId: '997cf568-27a4-4968-5628-046ccfee24fd',
+          defaultDashboardType: RoleDashboardMenu.Personal,
+          defaultDashboardId: '997cf568-27a4-4968-5628-046ccfee24fd',
         },
         {
           rithmId: '7812',
@@ -74,8 +74,8 @@ describe('OrganizationService', () => {
           createdDate: '5/9/21',
           role: 'admin',
           organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          dashboardType: RoleDashboardMenu.Company,
-          dashboardRithmId: '437cf568-27a4-4968-5628-046ccfee24fd',
+          defaultDashboardType: RoleDashboardMenu.Company,
+          defaultDashboardId: '437cf568-27a4-4968-5628-046ccfee24fd',
         },
       ],
     };

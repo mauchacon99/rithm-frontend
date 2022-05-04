@@ -38,8 +38,8 @@ export interface User {
   readonly userImageId?: string;
 
   /** Dashboard type default dashboard for this user. */
-  dashboardType: RoleDashboardMenu;
+  defaultDashboardType: RoleDashboardMenu;
 
-  /**Dashboard rithmId  default dashboard for this user. */
-  dashboardRithmId: string;
+  /** Dashboard rithmId  default dashboard for this user. */
+  defaultDashboardId: string;
 }
