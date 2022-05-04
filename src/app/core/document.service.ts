@@ -43,6 +43,7 @@ import {
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
+const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
 
 /**
  * Service for all document behavior and business logic.
@@ -728,6 +729,41 @@ export class DocumentService {
     return this.http.get<DocumentCurrentStation[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations`,
       { params }
+    );
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  uploadImageUser(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http
+      .post<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+        formData
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get Image user.
+   *
+   * @param imageRithmId Image Rithm Id.
+   * @returns Image Data.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getImageUser(imageRithmId: string): Observable<ImageData> {
+    const params = new HttpParams().set('vaultFileRithmId', imageRithmId);
+    return this.http.get<ImageData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+      {
+        params,
+      }
     );
   }
 }
