@@ -609,13 +609,13 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Open a modal to move assign Container.
    */
-     openModalUserListModal(): void {
-      this.dialog.open(UserListModalComponent, {
-        minWidth: '550px',
-        minHeight: '450px',
-        data: {
-          stationRithmId: this.stationRithmId,
-        },
-      });
-    }
+  openModalUserListModal(): void {
+    this.dialog.open(UserListModalComponent, {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: this.stationRithmId,
+      },
+    });
+  }
 }

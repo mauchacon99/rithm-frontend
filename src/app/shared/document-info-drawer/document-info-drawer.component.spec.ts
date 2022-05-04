@@ -39,6 +39,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
+import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
