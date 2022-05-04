@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 /**
  * Reusable component to display a modal with the list of user.
  */
@@ -10,4 +11,13 @@ import { Component } from '@angular/core';
 export class UserListModalComponent {
   /** Location Text of the modal for the title. */
   public UserListModalValue = 'Assign Container';
+
+  constructor(public dialogRef: MatDialogRef<UserListModalComponent>) {}
+
+  /**
+   * Close rule Modal.
+   */
+  closeModal(): void {
+    this.dialogRef.close();
+  }
 }
