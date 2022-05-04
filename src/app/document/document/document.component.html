@@ -28,7 +28,7 @@
     <ng-container *ngIf="!viewNewContainer; else newContainer">
       <div
         class="textured-bg grid grid-cols-12 min-h-full"
-        [ngClass]="{ 'mt-12': !isWidget }"
+        [ngClass]="{ 'mt-10': !isWidget }"
       >
         <!-- Left column -->
         <app-connected-station-pane
@@ -223,7 +223,7 @@
     <ng-template #newContainer>
       <div
         class="textured-bg grid grid-cols-12 min-h-full"
-        [ngClass]="{ 'mt-12': !isWidget }"
+        [ngClass]="{ 'mt-10': !isWidget }"
       >
         <!-- Left column -->
         <app-connected-station-pane
