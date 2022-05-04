@@ -425,7 +425,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Get the container frame widgets.
+   * Get all types of frameWidgets of the container.
    */
   private getContainerWidgets(): void {
     this.documentService
