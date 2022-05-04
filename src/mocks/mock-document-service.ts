@@ -2040,7 +2040,7 @@ export class MockDocumentService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'Cannot retrieve station widgets',
+              error: 'Cannot retrieve frame widgets',
             },
           })
       ).pipe(delay(1000));
