@@ -69,12 +69,7 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   errorStationPrebuilt = false;
 
   /** Columns static to show on table. */
-  displayedColumns = [
-    'stationName',
-    'totalContainers',
-    'stationGroup',
-    'stationOwners',
-  ];
+  displayedColumns = ['name', 'totalContainers', 'groupName', 'stationOwners'];
 
   constructor(
     private stationService: StationService,
@@ -128,10 +123,11 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   openDocsModal(station: StationWidgetPreBuilt): void {
     if (!this.editMode) {
       this.dialog.open(StationDocumentsModalComponent, {
+        panelClass: ['w-11/12', 'sm:w-8/12', 'h-[95%]', 'sm:h-5/6'],
         minWidth: '370px',
         data: {
-          stationName: station.stationName,
-          stationId: station.stationRithmId,
+          stationName: station.name,
+          stationId: station.rithmId,
         },
       });
     }

@@ -58,6 +58,7 @@ export class RosterComponent implements OnInit {
       this.getStationUsersRoster();
     } else {
       this.rosterMembers = this.stationMembers;
+      this.validateRostersLength(this.rosterMembers);
     }
   }
 
@@ -84,19 +85,8 @@ export class RosterComponent implements OnInit {
 
     stationUserRoster$.pipe(first()).subscribe({
       next: (data) => {
-        if (data) {
-          this.rosterMembers = data;
-          this.slices =
-            this.rosterMembers.length > 3 && !this.fromDrawer
-              ? 2
-              : this.rosterMembers.length > 3 && this.fromDrawer
-              ? 3
-              : this.rosterMembers.length;
-        }
         this.loadingRoster = false;
-        if (this.fromDrawer) {
-          this.rosterMemberLength.emit(this.rosterMembers.length);
-        }
+        this.validateRostersLength(data);
       },
       error: (error: unknown) => {
         this.loadingRoster = false;
@@ -106,5 +96,28 @@ export class RosterComponent implements OnInit {
         );
       },
     });
+  }
+
+  /**
+   * If the data is not null, set the rosterMembers to the data, and if the rosterMembers length is.
+   * Greater than 3 and the fromDrawer is false, set the slices to 2, else if the rosterMembers length.
+   * Is greater than 3 and the fromDrawer is true, set the slices to 3, else set the slices to the.
+   * RosterMembers length.
+   *
+   * @param members Members - The data that is passed in from the parent component.
+   */
+  validateRostersLength(members: StationRosterMember[]): void {
+    if (members) {
+      this.rosterMembers = members;
+      this.slices =
+        this.rosterMembers.length > 3 && !this.fromDrawer
+          ? 2
+          : this.rosterMembers.length > 3 && this.fromDrawer
+          ? 3
+          : this.rosterMembers.length;
+    }
+    if (this.fromDrawer) {
+      this.rosterMemberLength.emit(this.rosterMembers.length);
+    }
   }
 }

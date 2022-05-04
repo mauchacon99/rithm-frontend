@@ -48,7 +48,7 @@
     class="w-full table-sort"
   >
     <!-- Name Station -->
-    <ng-container matColumnDef="stationName">
+    <ng-container matColumnDef="name">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -56,13 +56,13 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'stationName' ||
+            dataSourceTable.sort?.active !== 'name' ||
             !dataSourceTable.sort?.direction
         }"
       >
         <p class="font-semibold truncate text-xs text-secondary-300">STATION</p>
         <ng-container
-          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationName' }"
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'name' }"
         >
         </ng-container>
       </th>
@@ -71,7 +71,7 @@
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
       >
-        {{ element['stationName']?.trim() || 'N/A' }}
+        {{ element['name']?.trim() || 'N/A' }}
       </td>
     </ng-container>
 
@@ -114,7 +114,7 @@
     </ng-container>
 
     <!-- Station Group -->
-    <ng-container matColumnDef="stationGroup">
+    <ng-container matColumnDef="groupName">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -122,13 +122,13 @@
         class="pr-2 max-w-[150px]"
         [ngClass]="{
           'text-transparent hover:text-primary-300':
-            dataSourceTable.sort?.active !== 'stationGroup' ||
+            dataSourceTable.sort?.active !== 'groupName' ||
             !dataSourceTable.sort?.direction
         }"
       >
         <p class="font-semibold truncate text-xs text-secondary-300">GROUP</p>
         <ng-container
-          *ngTemplateOutlet="buttonSort; context: { $implicit: 'stationGroup' }"
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'groupName' }"
         >
         </ng-container>
       </th>
@@ -137,7 +137,7 @@
         *matCellDef="let element"
         class="min-w-[150px] px-2 text-xs text-secondary-500"
       >
-        {{ element['stationGroup']?.trim() || 'N/A' }}
+        {{ element['groupName']?.trim() || 'N/A' }}
       </td>
     </ng-container>
 
@@ -172,10 +172,10 @@
       >
         <div class="ml-2.5">
           <app-roster
-            [stationId]="element['stationRithmId'] || ''"
+            [stationId]="element['rithmId'] || ''"
             [isWorker]="false"
             [editMode]="!editMode"
-            [stationMembers]="element['stationOwners']"
+            [stationMembers]="element['stationOwners'] || []"
             [fromDrawer]="true"
           >
           </app-roster>

@@ -1655,11 +1655,13 @@ export class MockStationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup.
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
     const mockGetGroupTrafficData: GroupTrafficData = {
       title: 'Group Eagle',
@@ -1696,10 +1698,10 @@ export class MockStationService {
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
     const stationWidgetData: StationWidgetPreBuilt[] = [
       {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
+        rithmId: 'qwe-321-ert-123',
+        name: 'Mars station',
         totalContainers: 5,
-        stationGroup: 'Eagle',
+        groupName: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1720,10 +1722,10 @@ export class MockStationService {
         ],
       },
       {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
+        rithmId: '123-456-789',
+        name: 'Grogu station',
         totalContainers: 1,
-        stationGroup: '  ',
+        groupName: '  ',
         stationOwners: [],
       },
     ];

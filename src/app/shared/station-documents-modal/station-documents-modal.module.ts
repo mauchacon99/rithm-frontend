@@ -10,6 +10,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatRippleModule } from '@angular/material/core';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [StationDocumentsModalComponent],
@@ -24,6 +27,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatSortModule,
     FormsModule,
     MatButtonModule,
+    InfiniteScrollModule,
+    MatTableModule,
+    MatRippleModule,
   ],
   exports: [StationDocumentsModalComponent],
 })
