@@ -31,6 +31,7 @@ import {
   FrameType,
   ContainerWidgetPreBuilt,
   DocumentCurrentStation,
+  RoleDashboardMenu,
   ImageData,
 } from 'src/models';
 import { DocumentService } from './document.service';
@@ -769,6 +770,8 @@ describe('DocumentService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          defaultDashboardType: RoleDashboardMenu.Personal,
+          defaultDashboardId: '777cf568-27a4-4968-5628-046ccfee24fd',
         },
       },
     ];
@@ -793,6 +796,8 @@ describe('DocumentService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          defaultDashboardType: RoleDashboardMenu.Company,
+          defaultDashboardId: '197cf568-27a4-4968-5628-046ccfee24fd',
         },
       },
     ];

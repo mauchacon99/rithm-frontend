@@ -29,6 +29,7 @@ import {
   StationFrameWidget,
   ContainerWidgetPreBuilt,
   DocumentCurrentStation,
+  RoleDashboardMenu,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1665,6 +1666,8 @@ export class MockDocumentService {
             createdDate: '1/2/34',
             role: null,
             organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+            defaultDashboardType: RoleDashboardMenu.Personal,
+            defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
           },
         },
       ];
