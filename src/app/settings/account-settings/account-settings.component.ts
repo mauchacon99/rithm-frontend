@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserService } from '../../core/user.service';
+import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { AccountSettingsService } from 'src/app/core/account-settings.service';
