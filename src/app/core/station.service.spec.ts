@@ -531,6 +531,14 @@ describe('StationService', () => {
     service.getStationWorkerRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should returns the owner roster for a given station', () => {
@@ -556,6 +564,14 @@ describe('StationService', () => {
     service.getStationOwnerRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should add a new member to the owner roster', () => {
@@ -1885,6 +1901,38 @@ describe('StationService', () => {
     expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
     expect(req.request.params.get('pageNum')).toBe(pageNum.toString());
     expect(req.request.params.get('pageSize')).toBe(pageSize.toString());
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the users roster to the station.', () => {
+    const expectedResponse: StationRosterMember[] =  [
+      {
+          rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+        {
+          rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+    ];
+    service.getStationAllRoster(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBe(stationId);
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
