@@ -452,4 +452,39 @@ describe('DocumentInfoDrawerComponent', () => {
     );
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should to call method openModalUserListModal after clicked in on the assignUserSection', () => {
+    component.isStation = false;
+    fixture.detectChanges();
+    const openModalUserListModalSpy = spyOn(
+      component,
+      'openModalUserListModal'
+    ).and.callThrough();
+    const AssignUserSection = fixture.nativeElement.querySelector(
+      '#open-modal-user-list'
+    );
+    expect(AssignUserSection).toBeTruthy();
+    AssignUserSection.click();
+    expect(openModalUserListModalSpy).toHaveBeenCalled();
+  });
+
+  it('should to call the modal the user list', () => {
+    component.stationRithmId = stationId;
+    const expectDataModal = {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: stationId,
+      },
+    };
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
+    component.openModalUserListModal();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      UserListModalComponent,
+      expectDataModal
+    );
+  });
 });
