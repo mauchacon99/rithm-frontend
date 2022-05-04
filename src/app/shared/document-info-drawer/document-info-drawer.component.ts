@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
+import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
 
 /**
  * Component for document drawer.
@@ -603,5 +604,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Open a modal to move assign Container.
+   */
+  openModalUserListModal(): void {
+    this.dialog.open(UserListModalComponent, {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: this.stationRithmId,
+      },
+    });
   }
 }
