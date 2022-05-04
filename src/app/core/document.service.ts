@@ -38,6 +38,7 @@ import {
   StationFrameWidget,
   FrameType,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -200,9 +201,13 @@ export class DocumentService {
       if (element.type === QuestionFieldType.File) {
         if (element.file) {
           formData.append(`answers[${index}].file`, element.file);
+        } else {
+          formData.append(`answers[${index}].file`, '');
         }
         if (element.filename) {
           formData.append(`answers[${index}].filename`, element.filename);
+        } else {
+          formData.append(`answers[${index}].filename`, '');
         }
       }
       formData.append(`answers[${index}].questionUpdated`, 'true');
@@ -663,43 +668,14 @@ export class DocumentService {
   }
 
   /**
-   * Get containers.
+   * Get containers assigned to me.
    *
    * @returns Data containers.
    */
   getContainerWidgetPreBuilt(): Observable<ContainerWidgetPreBuilt[]> {
-    const containers: ContainerWidgetPreBuilt[] = [
-      {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
-        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name',
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationOwners: [
-          {
-            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
-            firstName: 'Testy',
-            lastName: 'Rithm',
-            email: 'Testy@Rithm.com',
-          },
-          {
-            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
-            firstName: 'Testy',
-            lastName: 'Last',
-            email: 'Testy@Rithm.com',
-          },
-        ],
-      },
-      {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
-        containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name',
-        stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
-        stationOwners: [],
-      },
-    ];
-    return of(containers).pipe(delay(1000));
+    return this.http.get<ContainerWidgetPreBuilt[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-to-me`
+    );
   }
 
   /**
@@ -744,18 +720,18 @@ export class DocumentService {
   }
 
   /**
-   * Gets uploaded document details.
+   * Get the current stations from containers.
    *
-   * @param documentId The document id of which details are required.
-   * @returns A DataLinkObject.
+   * @param documentRithmId The current document id.
+   * @returns The current stations.
    */
-  getUploadedFileInfo(documentId: string): Observable<string> {
-    const params = new HttpParams().set('vaultId', documentId);
-    return this.http.get<string>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/vaultfile`,
-      {
-        params,
-      }
+  getCurrentStations(
+    documentRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentCurrentStation[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations`,
+      { params }
     );
   }
 }

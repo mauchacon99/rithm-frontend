@@ -79,6 +79,16 @@ textarea {
         border-top: 0.15em solid transparent;
       }
     }
+
+    &.circle-border {
+      &.gridster-item-moving {
+        box-shadow: none !important;
+      }
+
+      &.gridster-item-resizing {
+        box-shadow: none !important;
+      }
+    }
   }
 
   //Widget item in layout mode
@@ -90,15 +100,43 @@ textarea {
     &:hover {
       outline: 2px solid rgb(27 67 135);
     }
+
+    &.circle-border {
+      outline: none;
+    }
   }
 
   .h-gridster {
     @apply h-full;
+
+    &.circle-image-container {
+      @apply flex items-center;
+
+      .app-circle-image-widget {
+        @apply block w-full;
+      }
+    }
   }
 
   .drag-handler {
     @apply text-accent-500 bg-white hover:bg-accent-300 hover:text-white hover:cursor-move absolute top-0 right-0 z-10 rounded-full shadow-xl border-secondary-100;
 
     position: absolute !important;
+  }
+
+  .circle-border {
+    @apply border-none bg-transparent;
+  }
+}
+
+.station-container-tabs ::ng-deep {
+  .mat-tab-labels {
+    display: none;
+  }
+
+  .container-tab,
+  .rules-tab,
+  .setting-tab {
+    min-height: calc(100vh - 112px);
   }
 }

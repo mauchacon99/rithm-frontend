@@ -92,7 +92,7 @@ export class FileFieldComponent
     this.fileFieldForm.get('fileType')?.markAsTouched();
     this.fileFieldForm.get('fileType')?.updateValueAndValidity();
     this.getParams();
-    if (this.field.answer?.value) {
+    if (this.field.answer?.value && this.field.answer?.fileName) {
       this.getDocumentDetails();
     }
   }
@@ -215,25 +215,13 @@ export class FileFieldComponent
    * Navigates the user back to dashboard and displays a message about the invalid params.
    */
   private getDocumentDetails(): void {
-    if (!this.field.answer?.value) {
-      throw new Error('The document Id is undefined.');
-    }
-    this.documentService
-      .getUploadedFileInfo(this.field.answer?.value)
-      .pipe(first())
-      .subscribe({
-        next: (res) => {
-          this.fileName = res;
-          this.isFileUploaded = true;
-        },
-        error: (error: unknown) => {
-          this.isFileUploaded = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+    this.fileName = this.field.answer?.fileName
+      ? this.field.answer?.fileName
+      : '';
+    this.fileSize = this.field.answer?.fileSize
+      ? this.field.answer?.fileSize
+      : 0;
+    this.isFileUploaded = true;
   }
 
   /**

@@ -1,7 +1,9 @@
 <div class="modal-container">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
-    <h4 class="text-center">Manage Station {{ rosterType | titlecase }}</h4>
+    <h4 class="text-center">
+      Manage {{ isGroup ? 'Group' : 'Station' }} {{ rosterType | titlecase }}
+    </h4>
   </div>
   <!-- Current roster members -->
   <div class="pt-2 flex justify-center items-center h-full">
@@ -22,8 +24,13 @@
             [lastName]="member.lastName"
             [navProfile]="true"
             [badge]="'check'"
-            (click)="removeMemberFromRoster(member.rithmId)"
+            (click)="
+              isGroup
+                ? removeMemberFromRosterGroup(member.rithmId)
+                : removeMemberFromRoster(member.rithmId)
+            "
             [hoverEffect]="true"
+            [profileImageRithmId]="member.profileImageRithmId || ''"
           ></app-user-avatar>
         </div>
       </ng-container>
@@ -81,6 +88,7 @@
                 [lastName]="user.lastName"
                 [hideToolTip]="true"
                 [badge]="getCurrentBadge(user)"
+                [profileImageRithmId]="user.profileImageRithmId || ''"
               >
               </app-user-avatar>
             </div>
@@ -121,7 +129,7 @@
   >
     <app-pagination
       (currentPageNum)="
-        getPotentialStationRosterMembers(stationRithmId, $event)
+        getPotentialStationRosterMembers(stationOrGroupRithmId, $event)
       "
       [numItems]="totalPotentialUsers"
       [numPerPage]="20"

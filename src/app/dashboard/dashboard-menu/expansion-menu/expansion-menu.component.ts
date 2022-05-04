@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
  * Expansion menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-expansion-menu[dashboardRole][isManageMember]',
+  selector:
+    'app-expansion-menu[dashboardRole][isManageMember][showDefaultDashboard]',
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })
@@ -21,6 +22,11 @@ export class ExpansionMenuComponent implements OnInit {
 
   /** Type dashboard. */
   @Input() dashboardRole!: RoleDashboardMenu;
+
+  /**
+   * Show default dashboard.
+   */
+  @Input() showDefaultDashboard = false;
 
   /** Status expanded, this save the state the panel for show icon expanded. */
   panelOpenState = true;

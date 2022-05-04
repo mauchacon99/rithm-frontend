@@ -18,7 +18,7 @@
   class="mt-3"
 >
   <div
-    *ngIf="!dataDrawerDocument?.quantityElementsWidget; else selectDrawer"
+    *ngIf="!dataDrawer?.quantityElementsWidget; else selectDrawer"
     id="message-not-question-assigned-to-document"
   >
     <p class="text-sm px-3 pb-4">
@@ -61,7 +61,7 @@
 
 <div
   *ngIf="
-    dataDrawerDocument?.widgetItem?.widgetType ===
+    dataDrawer?.widgetItem?.widgetType ===
       enumWidgetType.ContainerProfileBanner && showProfileImageBanner
   "
   id="profile-image-section-drawer"

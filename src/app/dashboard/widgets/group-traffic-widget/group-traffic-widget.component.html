@@ -20,7 +20,7 @@
     <h3 class="font-semibold truncate">
       {{ groupTrafficData.title + ' Traffic' || 'Untitled Group Traffic' }}
     </h3>
-    <div class="select-show-data">
+    <div class="select-show-data" *ngIf="groupTrafficData.labels.length">
       <mat-form-field appearance="outline" *ngIf="editMode">
         <mat-label>Value</mat-label>
         <mat-select
@@ -39,6 +39,18 @@
           >
         </mat-select>
       </mat-form-field>
+    </div>
+    <div *ngIf="editMode && showButtonSetting">
+      <button
+        mat-icon-button
+        [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
+        (click)="toggleEditStation()"
+        id="toggle-edit-group-traffic"
+        data-testid="toggle-edit-group-traffic"
+        class="text-secondary-500"
+      >
+        <i class="fas fa-cog text-base"></i>
+      </button>
     </div>
   </div>
 

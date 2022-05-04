@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { StationRoutingModule } from './station-routing.module';
 import { StationComponent } from './station/station.component';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
-import { PowersComponent } from './powers/powers.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -46,16 +45,20 @@ import { HeadlineWidgetModule } from 'src/app/shared/station-document-widgets/he
 import { TitleWidgetModule } from 'src/app/shared/station-document-widgets/title-widget/title-widget.module';
 import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/banner-widget/banner-widget.module';
 import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
+import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link-modal.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 @NgModule({
   declarations: [
     StationComponent,
     FlowLogicComponent,
-    PowersComponent,
     ToolbarComponent,
     StationFieldComponent,
     StationTemplateComponent,
     RuleModalComponent,
     BuildDrawerComponent,
+    DataLinkModalComponent,
   ],
   imports: [
     CommonModule,
@@ -97,6 +100,9 @@ import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets
     TitleWidgetModule,
     BannerWidgetModule,
     CircleImageWidgetModule,
+    MatSlideToggleModule,
+    ComingSoonMessageModule,
+    MatButtonToggleModule,
   ],
 })
 export class StationModule {}

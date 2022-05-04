@@ -1,7 +1,35 @@
 <div
-  class="grid grid-cols-3 py-1"
+  class="grid grid-cols-3 py-0"
   [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
 >
+  <div *ngIf="newInterfaceView && isStation">
+    <mat-tab-group
+      mat-align-tabs="start"
+      [selectedIndex]="0"
+      class="new-station-tabs"
+      (selectedTabChange)="tabSelectedChanged($event)"
+    >
+      <mat-tab label="Container" aria-label="Container">
+        <ng-template mat-tab-label>
+          <span data-testid="Container-tab" class="font-bold text-sm"
+            >Container</span
+          >
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Rules" aria-label="Rules">
+        <ng-template mat-tab-label>
+          <span data-testid="Rules-tab" class="font-bold text-sm">Rules</span>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Settings" aria-label="Settings">
+        <ng-template mat-tab-label>
+          <span data-testid="Settings-tab" class="font-bold text-sm"
+            >Settings</span
+          >
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
   <div
     [ngClass]="{
       'col-start-2 text-center': title,
@@ -11,7 +39,10 @@
   >
     <h6 class="leading-10">{{ newInterfaceView ? stationName : title }}</h6>
   </div>
-  <div class="justify-self-end px-3 md:px-5" *ngIf="newInterfaceView">
+  <div
+    class="justify-self-end px-3 md:px-5"
+    *ngIf="newInterfaceView && !isStation"
+  >
     <button
       class="group"
       type="button"

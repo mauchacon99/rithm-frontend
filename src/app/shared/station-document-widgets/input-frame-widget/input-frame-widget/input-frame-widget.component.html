@@ -1,4 +1,4 @@
-<ng-container *ngIf="stationViewMode === 'edit'; else previewMode">
+<ng-container *ngIf="widgetMode !== 'preview'; else previewMode">
   <div
     *ngIf="fields"
     [ngClass]="{
@@ -33,7 +33,8 @@
   </div>
 </ng-container>
 <ng-template #previewMode>
-  <div *ngFor="let field of fields" class="min-h-[48.5px]">
+  <div *ngFor="let field of fields" class="min-h-[48.5px]" class="relative">
+    <div class="screen-box h-[56px]"></div>
     <app-text-field
       [field]="field"
       [isStation]="true"
