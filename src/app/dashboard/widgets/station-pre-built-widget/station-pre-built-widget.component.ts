@@ -123,7 +123,7 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   openDocsModal(station: StationWidgetPreBuilt): void {
     if (!this.editMode) {
       this.dialog.open(StationDocumentsModalComponent, {
-        minWidth: '370px',
+        minWidth: '300px',
         data: {
           stationName: station.name,
           stationId: station.rithmId,

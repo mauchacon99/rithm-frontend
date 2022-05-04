@@ -8,6 +8,7 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import {
+  MockDocumentService,
   MockErrorService,
   MockPopupService,
   MockSplitService,
@@ -24,6 +25,7 @@ import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.comp
 import { throwError } from 'rxjs';
 import { RoleDashboardMenu, User } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
@@ -32,6 +34,8 @@ describe('UserFormComponent', () => {
   let errorService: ErrorService;
   let popupService: PopupService;
   let userService: UserService;
+  let documentService: DocumentService;
+
   const formBuilder = new FormBuilder();
   const user: User = {
     rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A',
@@ -67,6 +71,7 @@ describe('UserFormComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SplitService, useClass: MockSplitService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -80,6 +85,7 @@ describe('UserFormComponent', () => {
     errorService = TestBed.inject(ErrorService);
     popupService = TestBed.inject(PopupService);
     userService = TestBed.inject(UserService);
+    documentService = TestBed.inject(DocumentService);
     fixture.detectChanges();
   });
 
@@ -315,7 +321,10 @@ describe('UserFormComponent', () => {
   });
 
   it('should catch error if petition upload imageUser fails', () => {
-    const serviceMethod = spyOn(userService, 'uploadImageUser').and.returnValue(
+    const serviceMethod = spyOn(
+      documentService,
+      'uploadImageUser'
+    ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -328,7 +337,10 @@ describe('UserFormComponent', () => {
   });
 
   it('should call upload imageUser', () => {
-    const spyMethod = spyOn(userService, 'uploadImageUser').and.callThrough();
+    const spyMethod = spyOn(
+      documentService,
+      'uploadImageUser'
+    ).and.callThrough();
     const mockFile = new File([''], 'name', { type: 'image/png' });
     component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
