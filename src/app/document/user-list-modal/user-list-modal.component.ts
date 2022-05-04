@@ -9,9 +9,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./user-list-modal.component.scss'],
 })
 export class UserListModalComponent {
-  /** Location Text of the modal for the title. */
-  public UserListModalValue = 'Assign Container';
-
   constructor(public dialogRef: MatDialogRef<UserListModalComponent>) {}
 
   /**

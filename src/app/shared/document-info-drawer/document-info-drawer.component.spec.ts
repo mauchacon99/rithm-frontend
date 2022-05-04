@@ -461,11 +461,11 @@ describe('DocumentInfoDrawerComponent', () => {
       component,
       'openModalUserListModal'
     ).and.callThrough();
-    const AssignUserSection = fixture.nativeElement.querySelector(
+    const assignUserSection = fixture.nativeElement.querySelector(
       '#open-modal-user-list'
     );
-    expect(AssignUserSection).toBeTruthy();
-    AssignUserSection.click();
+    expect(assignUserSection).toBeTruthy();
+    assignUserSection.click();
     expect(openModalUserListModalSpy).toHaveBeenCalled();
   });
 
