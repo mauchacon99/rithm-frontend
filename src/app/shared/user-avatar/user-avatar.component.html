@@ -14,7 +14,7 @@
   (mouseenter)="hoverEffect ? (badgeHover = true) : (badgeHover = false)"
   (mouseleave)="badgeHover = false"
 >
-  <img *ngIf="classProfileImage" [src]="classProfileImage" alt="star" />
+  <img *ngIf="classProfileImage" [src]="classProfileImage" [alt]="imageData?.imageName || 'imageUser'" class="w-full h-full object-cover rounded-full" />
   <button *ngIf="badge === 'none' && !classProfileImage" type="button">
     {{ initials }}
   </button>
