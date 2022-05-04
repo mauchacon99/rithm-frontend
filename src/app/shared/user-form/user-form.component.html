@@ -4,6 +4,12 @@
       class="w-full flex space-x-3 py-5 items-center"
       [ngClass]="{ 'animate-pulse': isLoadingUploadImageUser }"
     >
+      <input
+        type="hidden"
+        name="isLoadingImage"
+        formControlName="isLoadingImage"
+      />
+      <input type="hidden" name="vaultRithmId" formControlName="vaultRithmId" />
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"
         [lastName]="accountCreate ? lastName.value : currentUser.lastName"
@@ -170,5 +176,4 @@
     [passReq]="userForm.get(errorsToGet)?.errors"
     [match]="showMatch"
   ></app-password-requirements>
-  <input type="hidden" name="isLoadingImage" formControlName="isLoadingImage" />
 </ng-container>
