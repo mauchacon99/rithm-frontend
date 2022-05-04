@@ -37,6 +37,9 @@ export class FlowLogicComponent implements OnInit {
   /** Allow switch between new/old interface. */
   flowLogicView = false;
 
+  /** Allow switch between new/old interface. */
+  showRulesList = true;
+
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
 
@@ -349,5 +352,24 @@ export class FlowLogicComponent implements OnInit {
         break;
     }
     return operatorTranslated;
+  }
+
+  /**
+   * Toggle the responsive view to hide/show rules list.
+   *
+   * @param menuSelected Rules menu selected.
+   */
+  displayRuleContent(menuSelected: 'triggers' | 'rules'): void {
+    this.ruleSelectedMenu = menuSelected;
+    if (this.showRulesList) {
+      this.showRulesList = false;
+    }
+  }
+
+  /**
+   * Toggle the responsive view to hide/show rules list.
+   */
+  showRules(): void {
+    this.showRulesList = !this.showRulesList;
   }
 }
