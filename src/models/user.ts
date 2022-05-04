@@ -33,5 +33,5 @@ export interface User {
   readonly organization: string;
 
   /** User Image or Photo. */
-  readonly userImageId?: string;
+  profileImageId?: string;
 }

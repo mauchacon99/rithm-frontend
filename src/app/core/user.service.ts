@@ -2,7 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
+import {
+  firstValueFrom,
+  Observable,
+  ReplaySubject,
+  Subject,
+  throwError,
+} from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -253,16 +259,20 @@ export class UserService {
         changedAccountInfo
       )
       .pipe(
-        map(() => {
+        map((data) => {
+          const dataUser = data as unknown as User;
           const user = this.user;
           if (!this.user) {
             throw new Error('There is no existing user to update');
           }
-          if (changedAccountInfo.firstName) {
-            user.firstName = changedAccountInfo.firstName;
+          if (dataUser.firstName !== undefined) {
+            user.firstName = dataUser.firstName;
           }
-          if (changedAccountInfo.lastName) {
-            user.lastName = changedAccountInfo.lastName;
+          if (dataUser.lastName !== undefined) {
+            user.lastName = dataUser.lastName;
+          }
+          if (dataUser.profileImageId !== undefined) {
+            user.profileImageId = dataUser.profileImageId;
           }
           localStorage.setItem('user', JSON.stringify(user));
         })
@@ -288,6 +298,10 @@ export class UserService {
 
     if (accountInfo.password) {
       changedAccountInfo.password = accountInfo.password;
+    }
+
+    if (accountInfo.vaultRithmId !== this.user?.profileImageId) {
+      changedAccountInfo.vaultRithmId = accountInfo.vaultRithmId;
     }
 
     return changedAccountInfo;

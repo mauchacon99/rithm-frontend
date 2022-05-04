@@ -3,7 +3,6 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from '../../core/user.service';
-import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { AccountSettingsService } from 'src/app/core/account-settings.service';
@@ -36,7 +35,6 @@ export class AccountSettingsComponent {
     private errorService: ErrorService,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private dialog: MatDialog,
     private accountSettingsService: AccountSettingsService
   ) {
     this.settingsForm = this.fb.group({
@@ -59,16 +57,26 @@ export class AccountSettingsComponent {
    */
   private updateUserAccount(): void {
     const userFormData = this.settingsForm.get('userForm')?.value;
-    const { firstName, lastName, confirmPassword } = userFormData;
+    const { firstName, lastName, confirmPassword, vaultRithmId } = userFormData;
+    console.log(userFormData);
     this.userService
-      .updateUserAccount({ firstName, lastName, password: confirmPassword })
+      .updateUserAccount({
+        firstName,
+        lastName,
+        password: confirmPassword,
+        vaultRithmId,
+      })
       .pipe(first())
       .subscribe({
         next: () => {
           this.isLoading = false;
           this.settingsForm.reset();
           this.popupService.notify('Your account settings are updated.');
-          this.accountSettingsService.setUser({ firstName, lastName });
+          this.accountSettingsService.setUser({
+            firstName,
+            lastName,
+            profileImageId: vaultRithmId,
+          });
         },
         error: (error: unknown) => {
           this.isLoading = false;

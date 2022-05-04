@@ -96,7 +96,7 @@ describe('UserAvatarComponent', () => {
     );
     const spyError = spyOn(
       TestBed.inject(ErrorService),
-      'displayError'
+      'logError'
     ).and.callThrough();
     component['getImageUser']();
     expect(spyError).toHaveBeenCalled();

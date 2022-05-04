@@ -95,9 +95,12 @@ export class UserFormComponent
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
+    console.log('cargo');
     if (!this.accountCreate) {
       this.split();
       this.currentUser = this.userService.user;
+      this.profileImageRithmId = this.currentUser?.profileImageId || '';
+      console.log(this.profileImageRithmId);
     }
 
     this.passwordLabel = this.getPasswordLabel();
@@ -120,6 +123,7 @@ export class UserFormComponent
       ],
       password: ['', []],
       confirmPassword: ['', []],
+      vaultRithmId: [''],
       isLoadingImage: [true, Validators.requiredTrue],
     });
 
@@ -303,6 +307,8 @@ export class UserFormComponent
     this.userForm.controls['isLoadingImage'].setValue(
       !this.isLoadingUploadImageUser
     );
+    this.userForm.touched.valueOf();
+    this.userForm.valid.valueOf();
     this.errorUploadImageUser = false;
     this.documentService
       .uploadImageUser(file)
@@ -312,6 +318,9 @@ export class UserFormComponent
           this.isLoadingUploadImageUser = false;
           this.errorUploadImageUser = false;
           this.profileImageRithmId = profileImageRithmId;
+          this.userForm.controls['vaultRithmId'].setValue(
+            this.profileImageRithmId
+          );
           this.userForm.controls['isLoadingImage'].setValue(
             !this.isLoadingUploadImageUser
           );
@@ -335,6 +344,7 @@ export class UserFormComponent
    */
   private deleteImageUser(): void {
     this.profileImageRithmId = '';
+    this.userForm.controls['vaultRithmId']?.setValue(this.profileImageRithmId);
   }
 
   /**
