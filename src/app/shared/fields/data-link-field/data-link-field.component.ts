@@ -381,13 +381,13 @@ export class DataLinkFieldComponent
           .get('targetStation')
           ?.setValue(
             this.stations.find(
-              (e) => e.rithmId === this.data.sourceStationRithmId
+              (e) => e.rithmId === this.data.targetStationRithmId
             )?.name
           );
         this.getStationQuestions(
           <string>(
             this.stations.find(
-              (e) => e.rithmId === this.data.sourceStationRithmId
+              (e) => e.rithmId === this.data.targetStationRithmId
             )?.name
           )
         );
