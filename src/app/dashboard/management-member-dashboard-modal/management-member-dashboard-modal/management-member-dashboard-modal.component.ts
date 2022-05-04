@@ -1,5 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+/**Interface data modal. */
+interface ModalData {
+  /** Selected dashboardRithmId. */
+  dashboardRithmId: string;
+  /** Selected dashboardType. */
+  dashboardType: string;
+}
+
 /** Manage members modal. */
 @Component({
   selector: 'app-management-member-dashboard-modal',
@@ -15,12 +24,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public modalData: {
-      /** Selected dashboardRithmId. */
-      dashboardRithmId: string;
-      /** Selected dashboardType. */
-      dashboardType: string;
-    }
+    public modalData: ModalData
   ) {}
 
   /** Init method. */
