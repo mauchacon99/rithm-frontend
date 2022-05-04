@@ -25,6 +25,7 @@
         <input
           [(ngModel)]="search"
           type="text"
+          [disabled]="!dataSourceTable?.data?.length"
           matInput
           placeholder="Search containers"
           id="search-documents"
