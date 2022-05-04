@@ -58,7 +58,6 @@ export class AccountSettingsComponent {
   private updateUserAccount(): void {
     const userFormData = this.settingsForm.get('userForm')?.value;
     const { firstName, lastName, confirmPassword, vaultRithmId } = userFormData;
-    console.log(userFormData);
     this.userService
       .updateUserAccount({
         firstName,

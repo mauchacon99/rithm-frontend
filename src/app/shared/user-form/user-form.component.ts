@@ -95,12 +95,10 @@ export class UserFormComponent
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    console.log('cargo');
     if (!this.accountCreate) {
       this.split();
       this.currentUser = this.userService.user;
       this.profileImageRithmId = this.currentUser?.profileImageId || '';
-      console.log(this.profileImageRithmId);
     }
 
     this.passwordLabel = this.getPasswordLabel();

@@ -6,7 +6,6 @@ import {
   firstValueFrom,
   Observable,
   ReplaySubject,
-  Subject,
   throwError,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
