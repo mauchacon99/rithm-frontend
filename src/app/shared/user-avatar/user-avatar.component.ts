@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { UserService } from 'src/app/core/user.service';
 import { ImageData } from 'src/models/index';
 
 /**
@@ -74,7 +74,7 @@ export class UserAvatarComponent {
   classProfileImage = '';
 
   constructor(
-    private userService: UserService,
+    private documentService: DocumentService,
     private errorService: ErrorService
   ) {}
 
@@ -120,7 +120,7 @@ export class UserAvatarComponent {
    */
   private getImageUser(): void {
     this.isLoading = true;
-    this.userService
+    this.documentService
       .getImageUser(this.profileImageRithmId)
       .pipe(first())
       .subscribe({

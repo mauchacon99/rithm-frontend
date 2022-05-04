@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -86,7 +87,8 @@ export class UserFormComponent
     private userService: UserService,
     private popupService: PopupService,
     private splitService: SplitService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -302,7 +304,7 @@ export class UserFormComponent
       !this.isLoadingUploadImageUser
     );
     this.errorUploadImageUser = false;
-    this.userService
+    this.documentService
       .uploadImageUser(file)
       .pipe(first())
       .subscribe({
