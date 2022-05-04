@@ -15,4 +15,3 @@ export interface PowerActions {
   /** Header Action. */
   header: string;
 }
-

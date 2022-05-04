@@ -1,5 +1,5 @@
-import { PowerActions } from "./power-actions";
-import { PowerTrigger } from "./power-trigger";
+import { PowerActions } from './power-actions';
+import { PowerTrigger } from './power-trigger';
 
 /**
  * Represents the powers of a station.

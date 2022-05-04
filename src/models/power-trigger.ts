@@ -1,4 +1,4 @@
-import { TriggerType } from "./enums/trigger-type.enum";
+import { TriggerType } from './enums/trigger-type.enum';
 
 /**
  * Represents the triggers in the powers of a station.
