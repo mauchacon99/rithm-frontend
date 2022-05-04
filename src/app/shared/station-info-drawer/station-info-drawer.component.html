@@ -64,10 +64,11 @@
                 >
                   <i
                     class="fa-solid fa-xl"
-                    [ngClass]="{
-                      'fa-floppy-disk fa-beat-fade': !savingNameStation,
-                      'fa-spinner fa-spin': savingNameStation
-                    }"
+                    [ngClass]="
+                      savingNameStation
+                        ? 'fa-spinner fa-spin'
+                        : 'fa-floppy-disk fa-beat-fade'
+                    "
                   ></i>
                 </button>
               </mat-form-field>
@@ -269,10 +270,11 @@
               >
                 <i
                   class="fa-solid fa-xl"
-                  [ngClass]="{
-                    'fa-floppy-disk fa-beat-fade': !savingButtonText,
-                    'fa-spinner fa-spin': savingButtonText
-                  }"
+                  [ngClass]="
+                    savingButtonText
+                      ? 'fa-spinner fa-spin'
+                      : 'fa-floppy-disk fa-beat-fade'
+                  "
                 ></i>
               </button>
             </mat-form-field>
