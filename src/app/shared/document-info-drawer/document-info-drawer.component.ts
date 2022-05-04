@@ -613,9 +613,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.dialog.open(UserListModalComponent, {
       minWidth: '550px',
       minHeight: '450px',
-      data: {
-        stationRithmId: this.stationRithmId,
-      },
+      data: this.stationRithmId,
     });
   }
 }
