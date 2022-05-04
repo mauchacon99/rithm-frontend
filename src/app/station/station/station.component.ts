@@ -561,8 +561,10 @@ export class StationComponent
     const framesForDatalink: StationFrameWidget[] = [];
     /** Build a frame for each existing datalink. */
     this.dataLinkArray.forEach((dl) => {
+      const elementRithmId = uuidv4();
+      dl.frameRithmId = elementRithmId;
       const frameTemplate = {
-        rithmId: uuidv4(),
+        rithmId: elementRithmId,
         stationRithmId: this.stationRithmId,
         cols: 24,
         rows: 4,
@@ -582,8 +584,7 @@ export class StationComponent
           if (frames && frames.length) {
             const requestRow: Observable<DataLinkObject>[] = [];
             Promise.all(
-              this.dataLinkArray.map(async (dl, ind) => {
-                dl.frameRithmId = frames[ind].rithmId;
+              this.dataLinkArray.map(async (dl) => {
                 requestRow.push(
                   this.documentService.saveDataLink(this.stationRithmId, dl)
                 );
