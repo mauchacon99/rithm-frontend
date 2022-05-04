@@ -139,7 +139,7 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should executed modal for render documents the specific station', () => {
     const expectData = {
-      minWidth: '370px',
+      minWidth: '300px',
       data: {
         stationName: stationWidgetData[0].name,
         stationId: stationWidgetData[0].rithmId,

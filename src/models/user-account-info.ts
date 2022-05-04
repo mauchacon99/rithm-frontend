@@ -12,5 +12,5 @@ export interface UserAccountInfo {
   password?: string;
 
   /** User Image or Photo. */
-  userImageId?: string;
+  vaultRithmId?: string;
 }

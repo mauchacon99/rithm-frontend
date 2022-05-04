@@ -156,9 +156,12 @@
                 <ng-template #noAssignedUser>
                   <div class="unassigned-user-section flex items-center py-2">
                     <button
+                      id="open-modal-user-list"
+                      data-testid="open-modal-user-list"
                       class="shadow-none"
                       (mouseenter)="assignedNewUser = true"
                       (mouseleave)="assignedNewUser = false"
+                      (click)="openModalUserListModal()"
                       matTooltip="Assigned User"
                       matTooltipPosition="above"
                     >

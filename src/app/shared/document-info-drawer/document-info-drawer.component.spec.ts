@@ -39,6 +39,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
+import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -451,5 +452,40 @@ describe('DocumentInfoDrawerComponent', () => {
       component.documentRithmId
     );
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should to call method openModalUserListModal after clicked in on the assignUserSection', () => {
+    component.isStation = false;
+    fixture.detectChanges();
+    const openModalUserListModalSpy = spyOn(
+      component,
+      'openModalUserListModal'
+    ).and.callThrough();
+    const assignUserSection = fixture.nativeElement.querySelector(
+      '#open-modal-user-list'
+    );
+    expect(assignUserSection).toBeTruthy();
+    assignUserSection.click();
+    expect(openModalUserListModalSpy).toHaveBeenCalled();
+  });
+
+  it('should to call the modal the user list', () => {
+    component.stationRithmId = stationId;
+    const expectDataModal = {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: stationId,
+      },
+    };
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
+    component.openModalUserListModal();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      UserListModalComponent,
+      expectDataModal
+    );
   });
 });
