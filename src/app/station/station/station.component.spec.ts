@@ -1508,4 +1508,39 @@ describe('StationComponent', () => {
       expect(spyService).toHaveBeenCalled();
     });
   });
+
+  it('should call the method that return saved data-links.', () => {
+    const dataLinks: DataLinkObject[] = [
+      {
+        rithmId: '2130AA93-6629-41C2-A668-D6B25D12878C',
+        sourceStationRithmId: '0040c5bd-4d53-4267-9bda-6975b6f0123f',
+        targetStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        baseQuestionRithmId: 'd76c63ec-0258-494d-9748-6c3aef0e6c10',
+        matchingQuestionRithmId: 'a306752a-2d6e-4190-a0ef-fbc8e5e0f6e9',
+        displayFields: ['a306752a-2d6e-4190-a0ef-fbc8e5e0f6e9'],
+        frameRithmId: '',
+      },
+    ];
+
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'getDataLinks'
+    ).and.returnValue(of(dataLinks));
+    component['displayDataLinks']();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should show error message when request to get data-links fails', () => {
+    spyOn(TestBed.inject(StationService), 'getDataLinks').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['displayDataLinks']();
+    expect(spyError).toHaveBeenCalled();
+  });
 });

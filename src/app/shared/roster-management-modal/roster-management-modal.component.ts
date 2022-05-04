@@ -82,7 +82,10 @@ export class RosterManagementModalComponent implements OnInit {
       this.stationOrGroupRithmId,
       this.pageNumUsersOrganization
     );
-    if (!this.isGroup) {
+
+    if (this.isGroup) {
+      this.getStationGroupUsersRoster(this.stationOrGroupRithmId);
+    } else {
       this.getStationUsersRoster(this.stationOrGroupRithmId);
     }
   }
@@ -100,6 +103,35 @@ export class RosterManagementModalComponent implements OnInit {
         : this.stationService.getStationOwnerRoster(stationId);
 
     stationUserRoster$.pipe(first()).subscribe({
+      next: (data) => {
+        this.loadingMembers = false;
+        if (data) {
+          this.rosterMembers = data;
+        }
+      },
+      error: (error: unknown) => {
+        this.loadingMembers = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Get Users Roster or admins for a given StationGroup.
+   *
+   * @param stationGroupRithmId The id of the given stationGroup.
+   */
+  getStationGroupUsersRoster(stationGroupRithmId: string): void {
+    this.loadingMembers = true;
+    const stationGroupUserRoster$ =
+      this.rosterType === 'workers'
+        ? this.stationService.getStationGroupWorkerRoster(stationGroupRithmId)
+        : this.stationService.getStationGroupOwnerRoster(stationGroupRithmId);
+
+    stationGroupUserRoster$.pipe(first()).subscribe({
       next: (data) => {
         this.loadingMembers = false;
         if (data) {
@@ -173,7 +205,11 @@ export class RosterManagementModalComponent implements OnInit {
       selectedUser[rosterUserType] = !selectedUser[rosterUserType];
       if (!selectedUser[rosterUserType]) {
         /** If data.isWorker is false is because the user is being removed. */
-        this.removeMemberFromRoster(rithmId);
+        if (this.isGroup) {
+          this.removeMemberFromRosterGroup(rithmId);
+        } else {
+          this.removeMemberFromRoster(rithmId);
+        }
       } else {
         /** If data.isWorker is true is because the user is being add. */
         if (this.isGroup) {
@@ -280,6 +316,50 @@ export class RosterManagementModalComponent implements OnInit {
             [usersId]
           )
         : this.stationService.removeUsersFromOwnerRoster(
+            this.stationOrGroupRithmId,
+            [usersId]
+          );
+
+    removeUserMemberRoster$.pipe(first()).subscribe({
+      next: (data) => {
+        this.loadingMembers = false;
+        if (data) {
+          this.rosterMembers = data;
+        }
+      },
+      error: (error: unknown) => {
+        this.addRemoveRosterError = true;
+        this.loadingMembers = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Remove users from the stationGroup roster.
+   *
+   * @param usersId The selected user id to remove.
+   */
+  removeMemberFromRosterGroup(usersId: string): void {
+    const rosterUserType =
+      this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
+    this.users.find((user) => {
+      if (user.rithmId === usersId) {
+        user[rosterUserType] = false;
+      }
+    });
+    this.addRemoveRosterError = false;
+    this.loadingMembers = true;
+    const removeUserMemberRoster$ =
+      this.rosterType === 'workers'
+        ? this.stationService.removeUsersFromWorkerRosterGroup(
+            this.stationOrGroupRithmId,
+            [usersId]
+          )
+        : this.stationService.removeUsersFromOwnerRosterGroup(
             this.stationOrGroupRithmId,
             [usersId]
           );

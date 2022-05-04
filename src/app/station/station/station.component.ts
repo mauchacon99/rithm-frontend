@@ -1348,7 +1348,7 @@ export class StationComponent
   /**
    * Display the saved data links.
    */
-  displayDataLinks(): void {
+  private displayDataLinks(): void {
     this.stationService
       .getDataLinks(this.stationRithmId)
       .pipe(first())
