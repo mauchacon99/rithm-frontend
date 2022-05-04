@@ -30,7 +30,7 @@ const testUser: User = {
   role: null,
   organization: '',
   defaultDashboardType: RoleDashboardMenu.Personal,
-  defaultDashboardId: '907cf568-27a4-4968-5628-046ccfee24fd',
+  defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd'
 };
 
 describe('UserService', () => {

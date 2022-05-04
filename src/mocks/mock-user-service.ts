@@ -9,7 +9,6 @@ import {
   User,
   UserAccountInfo,
   StationInformation,
-  ImageData,
   RoleDashboardMenu,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
