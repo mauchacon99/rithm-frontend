@@ -37,6 +37,7 @@ import { BannerWidgetModule } from 'src/app/shared/station-document-widgets/bann
 import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets/circle-image-widget/circle-image-widget.module';
 import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget.module';
 import { LocationModalComponent } from './folder/location-modal/location-modal.component';
+import { UserListModalComponent } from './user-list-modal/user-list-modal.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { LocationModalComponent } from './folder/location-modal/location-modal.c
     DocumentTemplateComponent,
     ConnectedStationsModalComponent,
     LocationModalComponent,
+    UserListModalComponent,
   ],
   imports: [
     CommonModule,
