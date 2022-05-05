@@ -88,6 +88,9 @@ export class FlowLogicComponent implements OnInit {
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
+  /** The list of selected stations in flow section. */
+  flowStations: Station[] = [];
+
   constructor(
     public dialog: MatDialog,
     private popupService: PopupService,
@@ -443,5 +446,19 @@ export class FlowLogicComponent implements OnInit {
    */
   showRules(): void {
     this.showRulesList = !this.showRulesList;
+  }
+
+  /**
+   * Update's the selected station array data which is displayed as chips.
+   *
+   */
+  flowStationSelect(): void {
+    this.flowStations = [];
+    this.flowFieldForm.controls.stations.value.map((stationId: string) => {
+      const station = this.stations.find((e) => e.rithmId === stationId);
+      if (station) {
+        this.flowStations.push(station);
+      }
+    });
   }
 }

@@ -503,7 +503,11 @@
               >
                 <mat-form-field class="md:w-2/5 w-full" appearance="outline">
                   <mat-label> Available Stations </mat-label>
-                  <mat-select formControlName="stations" multiple>
+                  <mat-select
+                    formControlName="stations"
+                    multiple
+                    (selectionChange)="flowStationSelect()"
+                  >
                     <mat-option
                       *ngFor="let option of filteredStations$ | async"
                       [value]="option.rithmId"
@@ -518,6 +522,13 @@
                   ></app-loading-indicator>
                 </div>
               </section>
+              <mat-form-field class="station-chip-list">
+                <mat-chip-list #chipList aria-label="station selection">
+                  <mat-chip *ngFor="let station of flowStations">
+                    {{ station.name }}
+                  </mat-chip>
+                </mat-chip-list>
+              </mat-form-field>
             </mat-tab>
 
             <!-- Tab Container -->

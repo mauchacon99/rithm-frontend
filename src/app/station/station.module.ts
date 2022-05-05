@@ -49,7 +49,7 @@ import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 @NgModule({
   declarations: [
     StationComponent,
@@ -104,7 +104,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSlideToggleModule,
     ComingSoonMessageModule,
     MatButtonToggleModule,
-    MatAutocompleteModule,
+    MatChipsModule,
   ],
 })
 export class StationModule {}
