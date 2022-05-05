@@ -72,6 +72,9 @@ export class FlowLogicComponent implements OnInit {
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
 
+  /* Loading the powers on the station*/
+  powersLoading = false;
+
   /** The error if rules fails . */
   ruleError = false;
 
@@ -399,14 +402,17 @@ export class FlowLogicComponent implements OnInit {
    * Get the powers (triggers, actions, flow) of current station.
    */
   private getStationPowers(): void {
+    this.powersLoading = true;
     this.stationService
       .getStationPowers(this.rithmId)
       .pipe(first())
       .subscribe({
         next: (powers) => {
           this.stationPowers = powers;
+          this.powersLoading = false;
         },
         error: (error: unknown) => {
+          this.powersLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

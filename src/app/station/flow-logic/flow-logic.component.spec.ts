@@ -1033,6 +1033,17 @@ describe('FlowLogicComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should activate the loading in the powers of station', () => {
+    component.flowLogicView = true;
+    component.powersLoading = true;
+    fixture.detectChanges();
+    const powersLoading = fixture.debugElement.nativeElement.querySelector(
+      '#component-power-loading'
+    );
+    expect(component.powersLoading).toBeTrue();
+    expect(powersLoading).toBeTruthy();
+  });
+
   describe('Testing split.io', () => {
     let splitService: SplitService;
     let userService: UserService;
