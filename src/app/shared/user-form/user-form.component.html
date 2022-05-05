@@ -13,12 +13,12 @@
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"
         [lastName]="accountCreate ? lastName.value : currentUser.lastName"
-        [profileImageId]="profileImageId || ''"
+        [profileImageRithmId]="profileImageRithmId || ''"
         [isLarge]="true"
       ></app-user-avatar>
 
       <div>
-        <ng-container *ngIf="!profileImageId && !isLoadingUploadImageUser">
+        <ng-container *ngIf="!profileImageRithmId && !isLoadingUploadImageUser">
           <button
             mat-stroked-button
             color="accent"
@@ -32,7 +32,7 @@
             Upload image
           </button>
         </ng-container>
-        <ng-container *ngIf="profileImageId && !isLoadingUploadImageUser">
+        <ng-container *ngIf="profileImageRithmId && !isLoadingUploadImageUser">
           <div class="grid gap-4 grid-cols-2 padding-button">
             <div>
               <button
