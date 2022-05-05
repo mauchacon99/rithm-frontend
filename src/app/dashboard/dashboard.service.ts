@@ -14,8 +14,6 @@ import {
   ItemListWidgetModal,
   WidgetType,
   ColumnFieldsWidget,
-  RoleDashboardMenu,
-  User,
   MemberDashboard,
 } from 'src/models';
 
@@ -500,46 +498,53 @@ export class DashboardService {
   /**
    * Add members to dashboard.
    *
-   * @param dashboardRithmId Dashboard rithm id.
    * @param users Users to add to dashboard.
-   * @returns The user list added to dashboard.
+   * @returns List users added.
    */
   addDashboardMembers(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dashboardRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    users: User[]
-  ): Observable<User[]> {
-    const addedUsers: User[] = [
+    users: MemberDashboard[]
+  ): Observable<MemberDashboard[]> {
+    const responseMembers: MemberDashboard[] = [
       {
-        rithmId: '1234',
-        firstName: 'Testy',
-        lastName: 'Test',
-        email: 'test@test.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '1/2/34',
-        role: null,
-        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-        defaultDashboardType: RoleDashboardMenu.Company,
-        defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
       },
       {
-        rithmId: '123',
-        firstName: 'Testy',
-        lastName: 'Test',
-        email: 'test@test.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '1/2/34',
-        role: 'admin',
-        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-        defaultDashboardType: RoleDashboardMenu.Personal,
-        defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
       },
     ];
 
-    return of(addedUsers).pipe(delay(1000));
+    return of(responseMembers).pipe(delay(1000));
   }
 
   /**

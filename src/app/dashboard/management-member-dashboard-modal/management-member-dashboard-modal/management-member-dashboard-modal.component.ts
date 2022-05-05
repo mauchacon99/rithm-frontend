@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { User } from 'src/models';
 import { MemberDashboard, RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
@@ -34,10 +33,10 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   enumRoleDashboardMenu = RoleDashboardMenu;
 
   /** Users to add to dashboard. */
-  usersAdd!: User[];
+  usersAdd!: MemberDashboard[];
 
   /** Current users to add to dashboard. */
-  currentUsers!: User[];
+  currentUsers!: MemberDashboard[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -79,7 +78,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    */
   addDashboardMembers(): void {
     this.dashboardService
-      .addDashboardMembers(this.dashboardRithmId, this.usersAdd)
+      .addDashboardMembers(this.usersAdd)
       .pipe(first())
       .subscribe({
         next: (currentUsers) => {

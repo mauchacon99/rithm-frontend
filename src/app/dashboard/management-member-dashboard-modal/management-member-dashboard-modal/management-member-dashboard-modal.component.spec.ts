@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
-import { RoleDashboardMenu, User } from 'src/models';
+import { MemberDashboard, RoleDashboardMenu } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
@@ -24,32 +24,42 @@ describe('ManagementMemberDashboardModalComponent', () => {
     dashboardType: RoleDashboardMenu.Personal,
   };
 
-  const TEST_USERS: User[] = [
+  const TEST_USERS: MemberDashboard[] = [
     {
-      rithmId: '1234',
-      firstName: 'Testy',
-      lastName: 'Test',
-      email: 'test@test.com',
-      isEmailVerified: true,
-      notificationSettings: null,
-      createdDate: '1/2/34',
-      role: null,
-      organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-      defaultDashboardType: RoleDashboardMenu.Company,
-      defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      rithmId: '123-456-789',
+      profileImageRithmId: '123-456-789',
+      firstName: 'Test 1',
+      lastName: 'Eagle 1',
+      email: 'test1@email.com',
+      canView: true,
+      isEditable: true,
     },
     {
-      rithmId: '123',
-      firstName: 'Testy',
-      lastName: 'Test',
-      email: 'test@test.com',
-      isEmailVerified: true,
-      notificationSettings: null,
-      createdDate: '1/2/34',
-      role: 'admin',
-      organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-      defaultDashboardType: RoleDashboardMenu.Personal,
-      defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
+      rithmId: '987-654-321',
+      profileImageRithmId: '987-654-321',
+      firstName: 'Test 2',
+      lastName: 'Eagle 2',
+      email: 'test2@email.com',
+      canView: false,
+      isEditable: true,
+    },
+    {
+      rithmId: '654-987-321',
+      profileImageRithmId: '654-987-321',
+      firstName: 'Test 3',
+      lastName: 'Eagle 3',
+      email: 'test3@email.com',
+      canView: true,
+      isEditable: false,
+    },
+    {
+      rithmId: '654-321-987',
+      profileImageRithmId: '654-321-987',
+      firstName: 'Test 4',
+      lastName: 'Eagle 4',
+      email: 'test4@email.com',
+      canView: false,
+      isEditable: false,
     },
   ];
   let dashboardService: DashboardService;
@@ -84,17 +94,13 @@ describe('ManagementMemberDashboardModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
   it('should catch error when unable to add users ', () => {
     spyOn(dashboardService, 'addDashboardMembers').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
     component.addDashboardMembers();
     expect(spyError).toHaveBeenCalled();
   });
@@ -105,10 +111,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
       'addDashboardMembers'
     ).and.callThrough();
     component.addDashboardMembers();
-    expect(spyService).toHaveBeenCalledOnceWith(
-      component.dashboardRithmId,
-      component.usersAdd
-    );
+    expect(spyService).toHaveBeenCalledOnceWith(component.usersAdd);
   });
 
   it('should call getUsersDashboardPersonal', () => {
@@ -120,17 +123,14 @@ describe('ManagementMemberDashboardModalComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
-it('should catch error if petition to return getUsersDashboardPersonal', () => {
-  spyOn(
-    TestBed.inject(DashboardService),
-    'getUsersDashboardPersonal'
-  ).and.returnValue(
-    throwError(() => {
-      throw new Error();
-    })
-  );
-  const spyError = spyOn(errorService, 'displayError').and.callThrough();
-  component.ngOnInit();
-  expect(spyError).toHaveBeenCalled();
-});
+  it('should catch error if petition to return getUsersDashboardPersonal', () => {
+    spyOn(dashboardService, 'getUsersDashboardPersonal').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
 });

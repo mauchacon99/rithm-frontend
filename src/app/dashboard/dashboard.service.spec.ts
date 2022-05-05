@@ -12,7 +12,6 @@ import {
   EditDataWidget,
   ItemListWidgetModal,
   ColumnFieldsWidget,
-  User,
   MemberDashboard,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -755,40 +754,48 @@ describe('DashboardService', () => {
   });
 
   it('should add user to dashboard', () => {
-    const dashboardRithmId = '123-123-123';
-    const expectDataResponse: User[] = [
+    const responseMembers: MemberDashboard[] = [
       {
-        rithmId: '1234',
-        firstName: 'Testy',
-        lastName: 'Test',
-        email: 'test@test.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '1/2/34',
-        role: null,
-        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-        defaultDashboardType: RoleDashboardMenu.Company,
-        defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
       },
       {
-        rithmId: '123',
-        firstName: 'Testy',
-        lastName: 'Test',
-        email: 'test@test.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '1/2/34',
-        role: 'admin',
-        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-        defaultDashboardType: RoleDashboardMenu.Personal,
-        defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
       },
     ];
-    service
-      .addDashboardMembers(dashboardRithmId, expectDataResponse)
-      .subscribe((response) => {
-        expect(response).toEqual(expectDataResponse);
-      });
+    service.addDashboardMembers(responseMembers).subscribe((response) => {
+      expect(response).toEqual(responseMembers);
+    });
+  });
 
   it('should get users to dashboard personal', () => {
     const expectedResponse: MemberDashboard[] = [
@@ -834,6 +841,4 @@ describe('DashboardService', () => {
       expect(response).toEqual(expectedResponse);
     });
   });
-  });
-  });
-
+});
