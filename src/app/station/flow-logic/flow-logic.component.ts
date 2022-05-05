@@ -85,7 +85,7 @@ export class FlowLogicComponent implements OnInit {
   scheduleTriggerOptions = ['Container Check', 'Date Interval'];
 
   /** The powers of current station. */
-  stationPowers : Power[] = [];
+  stationPowers: Power[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -400,19 +400,18 @@ export class FlowLogicComponent implements OnInit {
    */
   private getStationPowers(): void {
     this.stationService
-    .getStationPowers(this.rithmId)
-    .pipe(first())
-    .subscribe({
-      next: (powers) => {
-        this.stationPowers = powers;
-      },
-      error: (error: unknown) => {
-        this.errorService.displayError(
-          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-          error
-        );
-      },
-    });
-
+      .getStationPowers(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (powers) => {
+          this.stationPowers = powers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
