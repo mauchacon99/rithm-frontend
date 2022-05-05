@@ -9,6 +9,10 @@
 }
 
 .select-filter {
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #fff;
+  }
+
   .mat-form-field {
     @apply border rounded overflow-hidden;
 
@@ -19,10 +23,6 @@
 
   .mat-focused {
     @apply border-brightBlue;
-  }
-
-  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-    background-color: #fff;
   }
 }
 
