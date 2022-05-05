@@ -6,7 +6,10 @@ import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
@@ -28,7 +31,15 @@ describe('ManagementMemberDashboardModalComponent', () => {
         ManagementMemberDashboardModalComponent,
         MockComponent(MemberDashboardListModalComponent),
       ],
-      imports: [MatDialogModule, MatCheckboxModule, MatFormFieldModule],
+      imports: [
+        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatInputModule,
+        FormsModule
+      ],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }],
     }).compileComponents();
   });
