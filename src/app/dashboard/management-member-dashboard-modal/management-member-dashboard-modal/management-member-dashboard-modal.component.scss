@@ -3,29 +3,55 @@
     background-color: #fff;
   }
 
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0 10px !important;
+  }
+
   .mat-form-field {
     @apply border rounded overflow-hidden;
-
-    height: 60px;
-    width: 160px;
+    padding: 0 !important;
+    height: 45px;
+    width: 130px;
     border-color: #ddd;
   }
 
   .mat-focused {
     @apply border-brightBlue;
   }
+
+  ::ng-deep .mat-select-min-line {
+    font-size: 13px !important;
+  }
 }
 
 .input-search {
   ::ng-deep .mat-form-field {
     height: 50px;
+    width: 100%;
+  }
+
+  ::ng-deep .mat-form-field-flex {
+    @apply h-[50px] w-full md:w-2/4;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding-top: 1px !important;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    margin: 0 !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 2px;
   }
 
   input.mat-input-element {
+    margin-top: 3px;
     margin-left: 8px;
   }
 }
 
-.height-container {
-  height: calc(100% - 220px);
+.actions {
+  padding: 0 !important;
 }

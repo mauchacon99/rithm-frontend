@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FilterOptionType } from 'src/models';
+import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 
 /**Interface data modal. */
 interface ModalData {
@@ -24,13 +24,14 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   dashboardType!: string;
 
   /** Selected filter. */
-  selectedFilterValue!: FilterOptionType;
+  selectedFilterValue: FilterOptionTypeMemberDashboard =
+    FilterOptionTypeMemberDashboard.All;
 
   /** Filter options. */
-  optionsSelectList: FilterOptionType[] = [
-    FilterOptionType.All,
-    FilterOptionType.ViewOnly,
-    FilterOptionType.CanEdit,
+  optionsSelectList: FilterOptionTypeMemberDashboard[] = [
+    FilterOptionTypeMemberDashboard.All,
+    FilterOptionTypeMemberDashboard.ViewOnly,
+    FilterOptionTypeMemberDashboard.CanEdit,
   ];
 
   /** Search value. */

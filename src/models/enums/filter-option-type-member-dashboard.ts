@@ -1,5 +1,5 @@
 /** Filter options. */
-export enum FilterOptionType {
+export enum FilterOptionTypeMemberDashboard {
   /** All users. */
   All = 'All',
   /** Filter by users who have read permission. */
