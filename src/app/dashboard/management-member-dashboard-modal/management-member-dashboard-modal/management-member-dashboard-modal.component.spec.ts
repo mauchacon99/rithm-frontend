@@ -5,24 +5,23 @@ import { RoleDashboardMenu, User } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
-import { MockDashboardService, MockErrorService } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
   let fixture: ComponentFixture<ManagementMemberDashboardModalComponent>;
-  let dashboardService: DashboardService;
 
   const DIALOG_TEST_DATA: {
     /** Selected dashboardRithmId. */
     dashboardRithmId: string;
     /** Selected dashboardType. */
-    dashboardType: string;
+    dashboardType: RoleDashboardMenu;
   } = {
     dashboardRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-    dashboardType: RoleDashboardMenu.Company,
+    dashboardType: RoleDashboardMenu.Personal,
   };
 
   const TEST_USERS: User[] = [
@@ -53,6 +52,8 @@ describe('ManagementMemberDashboardModalComponent', () => {
       defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
     },
   ];
+  let dashboardService: DashboardService;
+  let errorService: ErrorService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -75,12 +76,14 @@ describe('ManagementMemberDashboardModalComponent', () => {
     component.dashboardRithmId = '123-123-132';
     component.usersAdd = TEST_USERS;
     dashboardService = TestBed.inject(DashboardService);
+    errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 
   it('should catch error when unable to add users ', () => {
     spyOn(dashboardService, 'addDashboardMembers').and.returnValue(
@@ -107,4 +110,27 @@ describe('ManagementMemberDashboardModalComponent', () => {
       component.usersAdd
     );
   });
+
+  it('should call getUsersDashboardPersonal', () => {
+    const spyService = spyOn(
+      dashboardService,
+      'getUsersDashboardPersonal'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+it('should catch error if petition to return getUsersDashboardPersonal', () => {
+  spyOn(
+    TestBed.inject(DashboardService),
+    'getUsersDashboardPersonal'
+  ).and.returnValue(
+    throwError(() => {
+      throw new Error();
+    })
+  );
+  const spyError = spyOn(errorService, 'displayError').and.callThrough();
+  component.ngOnInit();
+  expect(spyError).toHaveBeenCalled();
+});
 });

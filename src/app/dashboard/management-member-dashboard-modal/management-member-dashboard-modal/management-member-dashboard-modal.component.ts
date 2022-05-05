@@ -3,14 +3,15 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { User } from 'src/models';
-import { DashboardService } from '../../dashboard.service';
+import { MemberDashboard, RoleDashboardMenu } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 
 /**Interface data modal. */
 interface ModalData {
   /** Selected dashboardRithmId. */
   dashboardRithmId: string;
   /** Selected dashboardType. */
-  dashboardType: string;
+  dashboardType: RoleDashboardMenu;
 }
 
 /** Manage members modal. */
@@ -20,11 +21,17 @@ interface ModalData {
   styleUrls: ['./management-member-dashboard-modal.component.scss'],
 })
 export class ManagementMemberDashboardModalComponent implements OnInit {
+  /** Members dashboard personal. */
+  membersDashboard!: MemberDashboard[];
+
   /** Selected dashboardRithmId. */
   dashboardRithmId!: string;
 
   /** Selected dashboardType. */
-  dashboardType!: string;
+  dashboardType!: RoleDashboardMenu;
+
+  /** Enum type of role dashboard. */
+  enumRoleDashboardMenu = RoleDashboardMenu;
 
   /** Users to add to dashboard. */
   usersAdd!: User[];
@@ -43,6 +50,27 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardRithmId = this.modalData.dashboardRithmId;
     this.dashboardType = this.modalData.dashboardType;
+    if (this.dashboardType === this.enumRoleDashboardMenu.Personal) {
+      this.getUsersDashboardPersonal();
+    }
+  }
+
+  /** Get users to dashboard personal. */
+  private getUsersDashboardPersonal(): void {
+    this.dashboardService
+      .getUsersDashboardPersonal()
+      .pipe(first())
+      .subscribe({
+        next: (membersDashboard) => {
+          this.membersDashboard = membersDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
