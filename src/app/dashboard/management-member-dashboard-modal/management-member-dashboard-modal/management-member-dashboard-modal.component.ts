@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FilterOptionType } from 'src/models';
 
 /**Interface data modal. */
 interface ModalData {
@@ -22,6 +23,22 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Selected dashboardType. */
   dashboardType!: string;
 
+  /** Selected filter. */
+  selectedFilterValue!: FilterOptionType;
+
+  /** Filter options. */
+  optionsSelectList: FilterOptionType[] = [
+    FilterOptionType.All,
+    FilterOptionType.ViewOnly,
+    FilterOptionType.CanEdit,
+  ];
+
+  /** Search value. */
+  search = '';
+
+  /** Select all checked. */
+  checkedSelectAll = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public modalData: ModalData
@@ -31,5 +48,12 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardRithmId = this.modalData.dashboardRithmId;
     this.dashboardType = this.modalData.dashboardType;
+  }
+
+  /**
+   * Detected change in mat-select.
+   */
+  matSelectChange(): void {
+    /** Detected change here with selectedFilterValue. */
   }
 }

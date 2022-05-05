@@ -5,6 +5,8 @@ import { RoleDashboardMenu } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
@@ -26,7 +28,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
         ManagementMemberDashboardModalComponent,
         MockComponent(MemberDashboardListModalComponent),
       ],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, MatCheckboxModule, MatFormFieldModule],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }],
     }).compileComponents();
   });

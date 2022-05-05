@@ -1,0 +1,30 @@
+.input-search {
+  ::ng-deep .mat-form-field {
+    height: 50px;
+  }
+
+  input.mat-input-element {
+    margin-left: 8px;
+  }
+}
+
+.select-filter {
+  .mat-form-field {
+    @apply border rounded overflow-hidden;
+    height: 60px;
+    width: 160px;
+    border-color: #dddddd;
+  }
+
+  .mat-focused {
+    @apply border-brightBlue;
+  }
+
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #fff;
+  }
+}
+
+.height-container {
+  height: calc(100% - 220px);
+}
