@@ -22,7 +22,6 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
   RoleDashboardMenu,
   Power,
   TriggerType,
@@ -1844,6 +1843,47 @@ export class MockStationService {
       },
     ];
     return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get the users roster to the station.
+   *
+   * @param stationRithmId The id of the current station.
+   * @returns StationRosterMember array.
+   */
+  getStationAllRoster(
+    stationRithmId: string
+  ): Observable<StationRosterMember[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve the users roster of the station',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const userRoster: StationRosterMember[] = [
+        {
+          rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+        {
+          rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ];
+      return of(userRoster).pipe(delay(1000));
+    }
   }
 
   /**
