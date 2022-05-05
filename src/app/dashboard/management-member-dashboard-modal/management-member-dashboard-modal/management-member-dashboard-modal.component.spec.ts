@@ -5,6 +5,10 @@ import { RoleDashboardMenu } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService, MockDashboardService } from 'src/mocks';
+import { throwError } from 'rxjs';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
@@ -14,11 +18,14 @@ describe('ManagementMemberDashboardModalComponent', () => {
     /** Selected dashboardRithmId. */
     dashboardRithmId: string;
     /** Selected dashboardType. */
-    dashboardType: string;
+    dashboardType: RoleDashboardMenu;
   } = {
     dashboardRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-    dashboardType: RoleDashboardMenu.Company,
+    dashboardType: RoleDashboardMenu.Personal,
   };
+
+  let dashboardService: DashboardService;
+  let errorService: ErrorService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -27,17 +34,46 @@ describe('ManagementMemberDashboardModalComponent', () => {
         MockComponent(MemberDashboardListModalComponent),
       ],
       imports: [MatDialogModule],
-      providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: DashboardService, useClass: MockDashboardService },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManagementMemberDashboardModalComponent);
     component = fixture.componentInstance;
+    dashboardService = TestBed.inject(DashboardService);
+    errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call getUsersDashboardPersonal', () => {
+    const spyService = spyOn(
+      dashboardService,
+      'getUsersDashboardPersonal'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return getUsersDashboardPersonal', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getUsersDashboardPersonal'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 });
