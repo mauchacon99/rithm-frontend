@@ -11,9 +11,10 @@
 .select-filter {
   .mat-form-field {
     @apply border rounded overflow-hidden;
+
     height: 60px;
     width: 160px;
-    border-color: #dddddd;
+    border-color: #ddd;
   }
 
   .mat-focused {
