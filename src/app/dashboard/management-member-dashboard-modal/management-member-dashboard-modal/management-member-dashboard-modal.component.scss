@@ -6,6 +6,7 @@
 
   .mat-form-field {
     @apply border rounded overflow-hidden;
+
     padding: 0 !important;
     height: 45px;
     width: 130px;
@@ -17,7 +18,7 @@
   }
 
   ::ng-deep .mat-select-min-line {
-    font-size: 0.8em !important;
+    @apply text-sm;
   }
 }
 
