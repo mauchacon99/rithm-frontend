@@ -472,6 +472,8 @@ describe('DocumentComponent', () => {
   it('should called service to save answers and then auto flow the container', async () => {
     const expectedAnswer = component.documentAnswer;
     const documentService = TestBed.inject(DocumentService);
+    component.shouldFlowContainer = true;
+    fixture.autoDetectChanges();
 
     const spySaveContainerAnswers = spyOn(
       TestBed.inject(DocumentService),
@@ -495,9 +497,9 @@ describe('DocumentComponent', () => {
       appendedName: '',
     });
 
-    const documentName = 'New Document Name';
+    component.saveDocumentChanges();
 
-    component.saveAnswersFlowDocument();
+    const documentName = 'New Document Name';
 
     expect(spySaveContainerAnswers).toHaveBeenCalledOnceWith(
       component.documentInformation.documentRithmId,
@@ -513,50 +515,6 @@ describe('DocumentComponent', () => {
     expect(dialogSpy).toHaveBeenCalledOnceWith(
       'The container has saved and flowed successfully'
     );
-  });
-
-  it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
-    component.documentLoading = false;
-    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
-    fixture.detectChanges();
-    const spyMethod = spyOn(
-      component,
-      'saveAnswersFlowDocument'
-    ).and.callThrough();
-    const button =
-      fixture.debugElement.nativeElement.querySelector('#document-flow');
-
-    button.click();
-
-    expect(spyMethod).toHaveBeenCalled();
-  });
-
-  describe('navigateRouterTesting', () => {
-    let router: Router;
-    let routerNavigateSpy: jasmine.Spy;
-
-    beforeEach(() => {
-      router = TestBed.inject(Router);
-      routerNavigateSpy = spyOn(router, 'navigateByUrl');
-    });
-
-    xit('should redirect to map if forkJoin run successfully and user is an admin', () => {
-      //testing postponed
-      component.saveAnswersFlowDocument();
-      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('map');
-    });
-
-    xit('should redirect to dashboard if forkJoin run successfully and user is not an admin', () => {
-      //testing postponed
-      component.saveAnswersFlowDocument();
-      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
-    });
-
-    xit('should not redirect if some petition is wrong', () => {
-      //testing postponed
-      component.saveAnswersFlowDocument();
-      expect(routerNavigateSpy).not.toHaveBeenCalled();
-    });
   });
 
   describe('Document when isWidget is true', () => {

@@ -28,7 +28,7 @@
     <ng-container *ngIf="!viewNewContainer; else newContainer">
       <div
         class="textured-bg grid grid-cols-12 min-h-full"
-        [ngClass]="{ 'mt-12': !isWidget }"
+        [ngClass]="{ 'mt-10': !isWidget }"
       >
         <!-- Left column -->
         <app-connected-station-pane
@@ -169,13 +169,14 @@
                   </button>
                   <button
                     mat-raised-button
+                    type="submit"
                     color="accent"
                     data-testid="document-flow"
                     id="document-flow"
                     [disabled]="
                       !documentForm.valid || (isWidget && !isUserAdminOrOwner)
                     "
-                    (click)="saveAnswersFlowDocument()"
+                    (click)="shouldFlowContainer = true"
                   >
                     {{ flowButtonName }}
                   </button>
@@ -223,7 +224,7 @@
     <ng-template #newContainer>
       <div
         class="textured-bg grid grid-cols-12 min-h-full"
-        [ngClass]="{ 'mt-12': !isWidget }"
+        [ngClass]="{ 'mt-10': !isWidget }"
       >
         <!-- Left column -->
         <app-connected-station-pane
@@ -380,6 +381,7 @@
                     Previous Station
                   </button>
                   <button
+                    type="submit"
                     mat-raised-button
                     color="accent"
                     data-testid="document-flow"
@@ -387,7 +389,7 @@
                     [disabled]="
                       !documentForm.valid || (isWidget && !isUserAdminOrOwner)
                     "
-                    (click)="saveAnswersFlowDocument()"
+                    (click)="shouldFlowContainer = true"
                   >
                     {{ flowButtonName }}
                   </button>
