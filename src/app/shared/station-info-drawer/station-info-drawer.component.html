@@ -29,22 +29,50 @@
             <p class="pt-2">{{ stationName }}</p>
           </div>
           <ng-template #editStationName>
-            <mat-form-field
-              appearance="outline"
-              class="w-full mat-station-name"
-            >
-              <mat-label>Station Name</mat-label>
-              <input
-                matInput
-                type="text"
-                id="station"
-                data-testid="station-name-field"
-                [(ngModel)]="stationName"
-                (keyup)="reportNewStationMapChange()"
-                (blur)="stationName = deleteSpace(stationName)"
-                (focusout)="updateStationInfoDrawerName()"
-              />
-            </mat-form-field>
+            <div class="setting-name-section w-full">
+              <mat-form-field
+                hintLabel="Max Characters length"
+                appearance="outline"
+                class="w-full mat-station-name"
+              >
+                <mat-label>Station Name</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  id="station"
+                  data-testid="station-name-field"
+                  autocomplete="off"
+                  maxlength="30"
+                  [(ngModel)]="stationName"
+                  (keyup)="reportNewStationMapChange()"
+                  (blur)="stationName = deleteSpace(stationName)"
+                  [disabled]="savingNameStation"
+                />
+                <mat-hint align="end"
+                  >{{ stationName.length || 0 }}/30</mat-hint
+                >
+                <button
+                  matSuffix
+                  id="save-station-name-button"
+                  data-testid="save-station-name-button"
+                  *ngIf="
+                    stationName !== stationInformation.name && !locallyCreated
+                  "
+                  class="text-accent-300"
+                  (click)="saveNameStationButton()"
+                  matTooltip="Click to save the name station"
+                >
+                  <i
+                    class="fa-solid fa-xl"
+                    [ngClass]="
+                      savingNameStation
+                        ? 'fa-spinner fa-spin'
+                        : 'fa-floppy-disk fa-beat-fade'
+                    "
+                  ></i>
+                </button>
+              </mat-form-field>
+            </div>
           </ng-template>
         </section>
 
@@ -220,7 +248,10 @@
                 data-testid="button-name"
                 autocomplete="off"
                 maxlength="10"
-                [disabled]="openedFromMap && mapMode !== mapModeEnum.Build"
+                [disabled]="
+                  (openedFromMap && mapMode !== mapModeEnum.Build) ||
+                  savingButtonText
+                "
               />
               <mat-hint align="end"
                 >{{ flowButtonName.length || 0 }}/10</mat-hint
@@ -239,10 +270,11 @@
               >
                 <i
                   class="fa-solid fa-xl"
-                  [ngClass]="{
-                    'fa-floppy-disk fa-beat-fade': !savingButtonText,
-                    'fa-spinner fa-spin': savingButtonText
-                  }"
+                  [ngClass]="
+                    savingButtonText
+                      ? 'fa-spinner fa-spin'
+                      : 'fa-floppy-disk fa-beat-fade'
+                  "
                 ></i>
               </button>
             </mat-form-field>
