@@ -181,7 +181,7 @@ export class StationComponent
   circlesWidget!: string;
 
   /** Flag that show if is text component selected. */
-  textAlignSetting = false;
+  showTextAlignIcons = false;
 
   /** List of all text widget types. */
   readonly textWidgetTypes = [
@@ -865,7 +865,7 @@ export class StationComponent
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
         this.closeSettingDrawer();
-        this.textAlignSetting = false;
+        this.showTextAlignIcons = false;
         break;
       case 'setting':
         enabledMode = false;
@@ -874,7 +874,7 @@ export class StationComponent
       case 'layout':
         enabledMode = true;
         this.closeSettingDrawer();
-        this.textAlignSetting = false;
+        this.showTextAlignIcons = false;
         break;
       default:
         break;
@@ -1001,7 +1001,7 @@ export class StationComponent
    * and Save or update the changes to the station frame widgets.
    */
   async saveStationWidgetChanges(): Promise<void> {
-    this.textAlignSetting = false;
+    this.showTextAlignIcons = false;
     let hasQuestions = false;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions?.length === 0) {
@@ -1135,7 +1135,7 @@ export class StationComponent
     if (confirm) {
       this.editMode = false;
       this.setGridMode('preview');
-      this.textAlignSetting = false;
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1241,7 +1241,7 @@ export class StationComponent
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
     if (this.settingMode) {
       this.setGridMode('layout');
-      this.textAlignSetting = false;
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1255,7 +1255,7 @@ export class StationComponent
     field: Question | ImageWidgetObject | string,
     type: FrameType
   ): void {
-    this.textAlignSetting = false;
+    this.showTextAlignIcons = false;
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
@@ -1305,10 +1305,10 @@ export class StationComponent
           this.inputFrameWidgetItems[this.widgetFocused].type
         )
       ) {
-        this.textAlignSetting = true;
+        this.showTextAlignIcons = true;
       }
     } else {
-      this.textAlignSetting = false;
+      this.showTextAlignIcons = false;
     }
   }
 
