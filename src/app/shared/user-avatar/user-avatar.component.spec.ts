@@ -75,7 +75,7 @@ describe('UserAvatarComponent', () => {
   });
 
   it('should call method getImageUser', () => {
-    component.profileImageId = '123-123132';
+    component.profileImageRithmId = '123-123132';
     const methodGetImageUserService = spyOn(
       documentService,
       'getImageUser'
@@ -83,12 +83,12 @@ describe('UserAvatarComponent', () => {
     component['getImageUser']();
 
     expect(methodGetImageUserService).toHaveBeenCalledOnceWith(
-      component.profileImageId
+      component.profileImageRithmId
     );
   });
 
   it('should catch an error if the request to get image data', () => {
-    component.profileImageId = '123-123132';
+    component.profileImageRithmId = '123-123132';
     spyOn(documentService, 'getImageUser').and.returnValue(
       throwError(() => {
         throw new Error();
@@ -103,7 +103,7 @@ describe('UserAvatarComponent', () => {
   });
 
   it('should delete render image when image id is empty', () => {
-    component.profileImageId = '';
+    component.profileImageRithmId = '';
     expect(component.classProfileImage).toEqual('');
   });
 });

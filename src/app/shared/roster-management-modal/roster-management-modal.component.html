@@ -30,7 +30,7 @@
                 : removeMemberFromRoster(member.rithmId)
             "
             [hoverEffect]="true"
-            [profileImageId]="member.profileImageId || ''"
+            [profileImageRithmId]="member.profileImageRithmId || ''"
           ></app-user-avatar>
         </div>
       </ng-container>
@@ -88,7 +88,7 @@
                 [lastName]="user.lastName"
                 [hideToolTip]="true"
                 [badge]="getCurrentBadge(user)"
-                [profileImageId]="user.profileImageId || ''"
+                [profileImageRithmId]="user.profileImageRithmId || ''"
               >
               </app-user-avatar>
             </div>
