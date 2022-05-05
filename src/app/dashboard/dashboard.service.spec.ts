@@ -12,6 +12,7 @@ import {
   EditDataWidget,
   ItemListWidgetModal,
   ColumnFieldsWidget,
+  User,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -750,5 +751,42 @@ describe('DashboardService', () => {
     ];
 
     expect(service.groupColumnsStationWidget(columns)).toEqual(expectedColumns);
+  });
+
+  it('should add user to dashboard', () => {
+    const dashboardRithmId = '123-123-123';
+    const expectDataResponse: User[] = [
+      {
+        rithmId: '1234',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/34',
+        role: null,
+        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        defaultDashboardType: RoleDashboardMenu.Company,
+        defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      },
+      {
+        rithmId: '123',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/34',
+        role: 'admin',
+        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        defaultDashboardType: RoleDashboardMenu.Personal,
+        defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
+      },
+    ];
+    service
+      .addDashboardMembers(dashboardRithmId, expectDataResponse)
+      .subscribe((response) => {
+        expect(response).toEqual(expectDataResponse);
+      });
   });
 });

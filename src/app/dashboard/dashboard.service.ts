@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { delay, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -14,6 +14,8 @@ import {
   ItemListWidgetModal,
   WidgetType,
   ColumnFieldsWidget,
+  RoleDashboardMenu,
+  User,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -492,5 +494,50 @@ export class DashboardService {
         params,
       }
     );
+  }
+
+  /**
+   * Add members to dashboard.
+   *
+   * @param dashboardRithmId Dashboard rithm id.
+   * @param users Users to add to dashboard.
+   * @returns The user list added to dashboard.
+   */
+  addDashboardMembers(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    dashboardRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    users: User[]
+  ): Observable<User[]> {
+    const addedUsers: User[] = [
+      {
+        rithmId: '1234',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/34',
+        role: null,
+        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        defaultDashboardType: RoleDashboardMenu.Company,
+        defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      },
+      {
+        rithmId: '123',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/34',
+        role: 'admin',
+        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        defaultDashboardType: RoleDashboardMenu.Personal,
+        defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
+      },
+    ];
+
+    return of(addedUsers).pipe(delay(1000));
   }
 }

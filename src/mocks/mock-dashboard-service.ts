@@ -10,6 +10,7 @@ import {
   ColumnsDocumentInfo,
   ItemListWidgetModal,
   ColumnFieldsWidget,
+  User,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -785,5 +786,48 @@ export class MockDashboardService {
     ];
 
     return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Add members to dashboard.
+   *
+   * @param dashboardRithmId Dashboard rithm id.
+   * @param users Users to add to dashboard.
+   * @returns The user list added to dashboard.
+   */
+  addDashboardMembers(
+    dashboardRithmId: string,
+    users: User[]
+  ): Observable<User[]> {
+    const addedUsers: User[] = [
+      {
+        rithmId: '1234',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/34',
+        role: null,
+        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        defaultDashboardType: RoleDashboardMenu.Company,
+        defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
+      },
+      {
+        rithmId: '123',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/34',
+        role: 'admin',
+        organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        defaultDashboardType: RoleDashboardMenu.Personal,
+        defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
+      },
+    ];
+
+    return of(addedUsers).pipe(delay(1000));
   }
 }
