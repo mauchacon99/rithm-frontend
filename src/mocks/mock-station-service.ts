@@ -1936,29 +1936,4 @@ export class MockStationService {
       return of(stationPowers).pipe(delay(1000));
     }
   }
-
-  /**
-   * Delete powers from the stations.
-   *
-   * @param powerOfStation Power that will be removed.
-   * @param stationRithmId Specific id of the station where the power will be removed.
-   * @returns Empty.
-   */
-  deleteStationPowers(
-    powerOfStation: Power[],
-    stationRithmId: string
-  ): Observable<unknown> {
-    if (!powerOfStation || !stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot delete the powers of current station.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return of().pipe(delay(1000));
-    }
-  }
 }

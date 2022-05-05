@@ -420,9 +420,9 @@ export class FlowLogicComponent implements OnInit {
    *
    * @param powerRemove The power that will be removed.
    */
-  deleteStationPowers(powerRemove: Power[]): void {
-    this.stationService
-      .deleteStationPowers(powerRemove, this.rithmId)
+  deleteStationPowers(powerRemove: Power): void {
+    this.documentService
+      .deleteStationPowers(powerRemove.rithmId, this.rithmId)
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function

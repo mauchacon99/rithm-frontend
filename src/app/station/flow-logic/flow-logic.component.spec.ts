@@ -1067,16 +1067,16 @@ describe('FlowLogicComponent', () => {
 
   it('should call the method that will be deleted powers of the station.', () => {
     const spyService = spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'deleteStationPowers'
     ).and.callThrough();
-    component.deleteStationPowers(powerRemove);
+    component.deleteStationPowers(powerRemove[0]);
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should detect when the deleteStationPowers method fails.', () => {
     spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'deleteStationPowers'
     ).and.returnValue(
       throwError(() => {
@@ -1087,7 +1087,7 @@ describe('FlowLogicComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.deleteStationPowers(powerRemove);
+    component.deleteStationPowers(powerRemove[0]);
     expect(spyError).toHaveBeenCalled();
   });
 
