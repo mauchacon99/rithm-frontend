@@ -325,6 +325,88 @@
                       </button>
                     </div>
                     <div class="flex">
+                      <div
+                        class="flex"
+                        *ngIf="settingMode && showTextAlignIcons"
+                      >
+                        <mat-button-toggle-group
+                          name="alignHorizontalButtons"
+                          aria-label="Align Horizontal buttons"
+                          value="0"
+                          class="button-group"
+                        >
+                          <mat-button-toggle
+                            value="left"
+                            aria-label="Text align left"
+                            data-testid="left-align-button"
+                            id="left-align-button"
+                            ><span
+                              class="fa fa-align-left text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="center"
+                            aria-label="Text align center"
+                            data-testid="center-align-button"
+                            id="center-align-button"
+                            ><span
+                              class="fa fa-align-center text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="right"
+                            aria-label="Text align right"
+                            data-testid="right-align-button"
+                            id="right-align-button"
+                            ><span
+                              class="fa fa-align-right text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-divider
+                            class="px-1"
+                            [vertical]="true"
+                          ></mat-divider>
+                        </mat-button-toggle-group>
+                        <mat-button-toggle-group
+                          name="alignVerticalButtons"
+                          aria-label="Align Vertical buttons"
+                          value="1"
+                          class="button-group ml-3"
+                        >
+                          <mat-button-toggle
+                            value="middle"
+                            aria-label="Text align middle"
+                            data-testid="middle-align-button"
+                            id="middle-align-button"
+                            ><span
+                              class="fa-solid fa-distribute-spacing-vertical text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="top"
+                            aria-label="Text align top"
+                            data-testid="top-align-button"
+                            id="top-align-button"
+                            ><span
+                              class="fa-solid fa-objects-align-top text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-button-toggle
+                            value="bottom"
+                            aria-label="Text align bottom"
+                            data-testid="bottom-align-button"
+                            id="bottom-align-button"
+                            ><span
+                              class="fa-solid fa-objects-align-bottom text-secondary-500 fa-lg"
+                            ></span
+                          ></mat-button-toggle>
+                          <mat-divider
+                            class="px-1"
+                            [vertical]="true"
+                          ></mat-divider>
+                        </mat-button-toggle-group>
+                      </div>
+
                       <button
                         *ngIf="layoutMode"
                         type="button"
@@ -396,7 +478,7 @@
                             widgetItem.type === frameType.CircleImage,
                           'border-accent-300 border-2': widgetFocused === i
                         }"
-                        (click)="settingMode || focusWidget(i)"
+                        (click)="focusWidget(i)"
                         *ngFor="
                           let widgetItem of inputFrameWidgetItems;
                           let i = index;
