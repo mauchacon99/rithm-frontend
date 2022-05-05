@@ -272,7 +272,7 @@
       <ul class="rules-left-side-added-rules"></ul>
     </aside>
     <div
-    *ngIf="!powersLoading; else powersLoading"
+      *ngIf="!powersLoading; else powersLoading"
       class="rules-right-side w-full border-l border-secondary-100 overflow-hidden"
     >
       <section
@@ -573,9 +573,9 @@
     </div>
     <ng-template #powersLoading>
       <app-loading-indicator
-          id="component-power-loading"
-          class="flex-grow m-auto"
-        ></app-loading-indicator>
+        id="component-power-loading"
+        class="flex-grow m-auto"
+      ></app-loading-indicator>
     </ng-template>
   </div>
 </ng-template>
