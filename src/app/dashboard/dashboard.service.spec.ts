@@ -12,6 +12,7 @@ import {
   EditDataWidget,
   ItemListWidgetModal,
   ColumnFieldsWidget,
+  MemberDashboard,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -750,5 +751,32 @@ describe('DashboardService', () => {
     ];
 
     expect(service.groupColumnsStationWidget(columns)).toEqual(expectedColumns);
+  });
+
+  it('should get users to dashboard personal', () => {
+    const expectedResponse: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle',
+        email: 'test2@email.com',
+        canView: true,
+        isEditable: true,
+      },
+    ];
+
+    service.getUsersDashboardPersonal().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 });

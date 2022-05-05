@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { delay, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -14,6 +14,7 @@ import {
   ItemListWidgetModal,
   WidgetType,
   ColumnFieldsWidget,
+  MemberDashboard,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -492,5 +493,35 @@ export class DashboardService {
         params,
       }
     );
+  }
+
+  /**
+   * Get users to dashboard personal.
+   *
+   * @returns An Observable of an array of MemberDashboard objects.
+   */
+  getUsersDashboardPersonal(): Observable<MemberDashboard[]> {
+    const responseMembers: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle',
+        email: 'test2@email.com',
+        canView: true,
+        isEditable: true,
+      },
+    ];
+
+    return of(responseMembers).pipe(delay(1000));
   }
 }
