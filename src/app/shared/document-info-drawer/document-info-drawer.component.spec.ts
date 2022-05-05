@@ -12,6 +12,7 @@ import {
   MockUserService,
   MockDocumentService,
   MockPopupService,
+  MockOrganizationService,
 } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
@@ -40,6 +41,7 @@ import { ConnectedStationsModalComponent } from 'src/app/document/connected-stat
 import { MatTabsModule } from '@angular/material/tabs';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
 import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
+import { OrganizationService } from 'src/app/core/organization.service';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -53,8 +55,9 @@ describe('DocumentInfoDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         DocumentInfoDrawerComponent,
-        MockComponent(LoadingIndicatorComponent),
+        UserListModalComponent,
         ConnectedStationsModalComponent,
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -64,6 +67,7 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: OrganizationService, useClass: MockOrganizationService },
       ],
       imports: [
         MatCheckboxModule,
@@ -456,33 +460,30 @@ describe('DocumentInfoDrawerComponent', () => {
 
   it('should to call method openModalUserListModal after clicked in on the assignUserSection', () => {
     component.isStation = false;
+    component.documentAssignedUser = [];
     fixture.detectChanges();
-    const openModalUserListModalSpy = spyOn(
-      component,
-      'openModalUserListModal'
-    ).and.callThrough();
-    const assignUserSection = fixture.nativeElement.querySelector(
+    const openUserListModalSpy = spyOn(component, 'openUserListModal');
+    const assignUserSection = fixture.debugElement.nativeElement.querySelector(
       '#open-modal-user-list'
-    );
+    ) as HTMLButtonElement;
     expect(assignUserSection).toBeTruthy();
     assignUserSection.click();
-    expect(openModalUserListModalSpy).toHaveBeenCalled();
+    expect(openUserListModalSpy).toHaveBeenCalled();
   });
 
   it('should to call the modal the user list', () => {
     component.stationRithmId = stationId;
+    fixture.detectChanges();
     const expectDataModal = {
       minWidth: '550px',
       minHeight: '450px',
-      data: {
-        stationRithmId: stationId,
-      },
+      data: stationId,
     };
     const dialogSpy = spyOn(
       TestBed.inject(MatDialog),
       'open'
     ).and.callThrough();
-    component.openModalUserListModal();
+    component.openUserListModal();
     expect(dialogSpy).toHaveBeenCalledOnceWith(
       UserListModalComponent,
       expectDataModal
