@@ -1017,4 +1017,20 @@ export class StationService {
   unTouchDataLinkForm(): void {
     this.dataLinkFormUnTouched$.next();
   }
+
+  /**
+   * Get the users roster to the station.
+   *
+   * @param stationRithmId The id of the current station.
+   * @returns StationRosterMember array.
+   */
+  getStationAllRoster(
+    stationRithmId: string
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set('rithmId', stationRithmId);
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster`,
+      { params }
+    );
+  }
 }
