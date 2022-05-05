@@ -33,5 +33,5 @@ export interface Comment {
   readonly userLastName?: string;
 
   /** User Image or Photo. */
-  readonly profileImageId?: string;
+  readonly profileImageRithmId?: string;
 }

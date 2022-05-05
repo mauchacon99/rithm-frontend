@@ -347,7 +347,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should show change and delete button when user image is true', () => {
-    component.profileImageId = '12313212323';
+    component.profileImageRithmId = '12313212323';
     component.accountCreate = false;
     component.showProfilePhoto = true;
     fixture.detectChanges();
@@ -366,7 +366,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should show upload button when user image is true', () => {
-    component.profileImageId = '';
+    component.profileImageRithmId = '';
     component.accountCreate = false;
     component.showProfilePhoto = true;
     fixture.detectChanges();
@@ -385,7 +385,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should show loading  when user image is uploading', () => {
-    component.profileImageId = '';
+    component.profileImageRithmId = '';
     component.accountCreate = false;
     component.showProfilePhoto = true;
     component.isLoadingUploadImageUser = true;
@@ -397,7 +397,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should show error  when user image is uploading', () => {
-    component.profileImageId = '';
+    component.profileImageRithmId = '';
     component.accountCreate = false;
     component.showProfilePhoto = true;
     component.errorUploadImageUser = true;
@@ -409,7 +409,7 @@ describe('UserFormComponent', () => {
   });
 
   it('should display a confirmation pop up', async () => {
-    component.profileImageId = '12312313212';
+    component.profileImageRithmId = '12312313212';
     const confirmationData = {
       title: 'Delete image user?',
       message: 'This cannot be undone!',
@@ -421,12 +421,12 @@ describe('UserFormComponent', () => {
     const popUpConfirmSpy = spyOn(popupService, 'confirm').and.callThrough();
     await component.confirmRemoveUserImage();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
-    expect(component.profileImageId).toEqual('');
+    expect(component.profileImageRithmId).toEqual('');
   });
 
   it('should delete image user', () => {
-    component.profileImageId = '13213211315';
+    component.profileImageRithmId = '13213211315';
     component['deleteImageUser']();
-    expect(component.profileImageId).toEqual('');
+    expect(component.profileImageRithmId).toEqual('');
   });
 });

@@ -74,7 +74,7 @@ export class UserFormComponent
   confirmPasswordLabel = '';
 
   /** User image. */
-  profileImageId!: string;
+  profileImageRithmId!: string;
 
   /** Load indicator upload image. */
   isLoadingUploadImageUser = false;
@@ -98,7 +98,7 @@ export class UserFormComponent
     if (!this.accountCreate) {
       this.split();
       this.currentUser = this.userService.user;
-      this.profileImageId = this.currentUser?.profileImageId || '';
+      this.profileImageRithmId = this.currentUser?.profileImageId || '';
     }
 
     this.passwordLabel = this.getPasswordLabel();
@@ -312,11 +312,13 @@ export class UserFormComponent
       .uploadImageUser(file)
       .pipe(first())
       .subscribe({
-        next: (profileImageId) => {
+        next: (profileImageRithmId) => {
           this.isLoadingUploadImageUser = false;
           this.errorUploadImageUser = false;
-          this.profileImageId = profileImageId;
-          this.userForm.controls['vaultRithmId'].setValue(this.profileImageId);
+          this.profileImageRithmId = profileImageRithmId;
+          this.userForm.controls['vaultRithmId'].setValue(
+            this.profileImageRithmId
+          );
           this.userForm.controls['isLoadingImage'].setValue(
             !this.isLoadingUploadImageUser
           );
@@ -339,8 +341,8 @@ export class UserFormComponent
    * Delete image user.
    */
   private deleteImageUser(): void {
-    this.profileImageId = '';
-    this.userForm.controls['vaultRithmId']?.setValue(this.profileImageId);
+    this.profileImageRithmId = '';
+    this.userForm.controls['vaultRithmId']?.setValue(this.profileImageRithmId);
   }
 
   /**
