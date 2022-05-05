@@ -9,7 +9,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
@@ -38,7 +41,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
         MatCheckboxModule,
         MatSelectModule,
         MatInputModule,
-        FormsModule
+        FormsModule,
       ],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }],
     }).compileComponents();
