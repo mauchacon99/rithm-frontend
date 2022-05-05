@@ -259,13 +259,13 @@ export class UserService {
           if (!this.user) {
             throw new Error('There is no existing user to update');
           }
-          if (dataUser.firstName !== undefined) {
+          if (dataUser?.firstName !== undefined) {
             user.firstName = dataUser.firstName;
           }
-          if (dataUser.lastName !== undefined) {
+          if (dataUser?.lastName !== undefined) {
             user.lastName = dataUser.lastName;
           }
-          if (dataUser.profileImageId !== undefined) {
+          if (dataUser?.profileImageId !== undefined) {
             user.profileImageId = dataUser.profileImageId;
           }
           localStorage.setItem('user', JSON.stringify(user));
