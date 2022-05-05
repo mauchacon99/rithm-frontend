@@ -153,4 +153,8 @@ textarea {
     background-color: transparent;
     border: none;
   }
+
+  ::ng-deep .mat-button-toggle-label-content {
+    line-height: 2.25rem;
+  }
 }
