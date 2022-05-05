@@ -10,6 +10,7 @@ import {
   ColumnsDocumentInfo,
   ItemListWidgetModal,
   ColumnFieldsWidget,
+  MemberDashboard,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -785,5 +786,53 @@ export class MockDashboardService {
     ];
 
     return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Get users to dashboard personal.
+   *
+   * @returns An Observable of an array of MemberDashboard objects.
+   */
+  getUsersDashboardPersonal(): Observable<MemberDashboard[]> {
+    const responseMembers: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+
+    return of(responseMembers).pipe(delay(1000));
   }
 }
