@@ -14,6 +14,8 @@ import {
   Rule,
   RuleType,
   FlowLogicRule,
+  TriggerType,
+  Power,
 } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -107,6 +109,36 @@ describe('FlowLogicComponent', () => {
           },
         ],
       },
+    },
+  ];
+  const powerRemove: Power[] = [
+    {
+      rithmId: '3j4k-3h2j-hj4j',
+      triggers: [
+        {
+          rithmId: '3j4k-3h2j-hj5h',
+          type: TriggerType.ManualFlow,
+          source: 'Source Trigger #1',
+          value: 'Value Trigger #1',
+        },
+      ],
+      actions: [
+        {
+          rithmId: '3j4k-3h2j-ft5h',
+          type: 'Type Action #1',
+          target: 'Target Action #1',
+          data: 'Data Action #1',
+          resultMapping: 'Result Action #1',
+          header: 'Header Action #1',
+        },
+      ],
+      stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowToStationRithmIds: [
+        '73d47261-1932-4fcf-82bd-159eb1a72422',
+        '73d47261-1932-4fcf-82bd-159eb1a7242g',
+      ],
+      name: 'Power Test #1',
+      condition: 'Condition Test #1',
     },
   ];
 
@@ -1030,6 +1062,32 @@ describe('FlowLogicComponent', () => {
       'displayError'
     ).and.callThrough();
     component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method that will be deleted powers of the station.', () => {
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'deleteStationPowers'
+    ).and.callThrough();
+    component.deleteStationPowers(powerRemove);
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should detect when the deleteStationPowers method fails.', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'deleteStationPowers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.deleteStationPowers(powerRemove);
     expect(spyError).toHaveBeenCalled();
   });
 

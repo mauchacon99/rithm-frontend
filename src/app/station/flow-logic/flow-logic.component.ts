@@ -414,4 +414,25 @@ export class FlowLogicComponent implements OnInit {
         },
       });
   }
+
+  /**
+   * Delete the power of current station.
+   *
+   * @param powerRemove The power that will be removed.
+   */
+  deleteStationPowers(powerRemove: Power[]): void {
+    this.stationService
+      .deleteStationPowers(powerRemove, this.rithmId)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
 }
