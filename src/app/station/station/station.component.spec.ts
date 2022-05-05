@@ -231,10 +231,6 @@ describe('StationComponent', () => {
   it('should call service methods to update data when save button is clicked ', () => {
     component.stationForm.get('stationTemplateForm')?.markAsTouched();
     component.stationForm.get('stationTemplateForm')?.markAsDirty();
-    const spyUpdateStationName = spyOn(
-      TestBed.inject(StationService),
-      'updateStationName'
-    ).and.callThrough();
     const spyUpdateNameTemplate = spyOn(
       TestBed.inject(StationService),
       'updateDocumentNameTemplate'
@@ -258,7 +254,6 @@ describe('StationComponent', () => {
     button.click();
 
     expect(spyFunctionSave).toHaveBeenCalled();
-    expect(spyUpdateStationName).toHaveBeenCalled();
     expect(spyUpdateNameTemplate).toHaveBeenCalled();
     expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
