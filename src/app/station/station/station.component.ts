@@ -180,7 +180,7 @@ export class StationComponent
   /** Circles in the gridster. */
   circlesWidget!: string;
 
-  /** Flag that show if is text component selected. */
+  /** Flag to indicate whether the focus is on a text component or not. */
   showTextAlignIcons = false;
 
   /** List of all text widget types. */
