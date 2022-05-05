@@ -1909,23 +1909,23 @@ describe('StationService', () => {
   });
 
   it('should return the users roster to the station.', () => {
-    const expectedResponse: StationRosterMember[] =  [
+    const expectedResponse: StationRosterMember[] = [
       {
-          rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
-          firstName: 'Marry',
-          lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com',
-          isOwner: false,
-          isWorker: true,
-        },
-        {
-          rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isOwner: false,
-          isWorker: true,
-        },
+        rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
     ];
     service.getStationAllRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);

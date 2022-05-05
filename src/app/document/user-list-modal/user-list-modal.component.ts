@@ -80,11 +80,11 @@ export class UserListModalComponent implements OnInit {
   /**
    * Get Station All Roster.
    */
-  private getStationAllRoster(): void{
-    this.stationService.getStationAllRoster(this.stationRithmId)
-    .pipe(first())
-    .subscribe(
-      {
+  private getStationAllRoster(): void {
+    this.stationService
+      .getStationAllRoster(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
         next: (users) => {
           this.userRoster = users;
         },
@@ -95,18 +95,17 @@ export class UserListModalComponent implements OnInit {
             error
           );
         },
-      }
-    );
+      });
   }
 
   /**
    * Get All Organization users.
    */
-   private getOrganizationUsers(): void{
-    this.orgService.getUsersForOrganization(this.userService.user?.organization, 1)
-    .pipe(first())
-    .subscribe(
-      {
+  private getOrganizationUsers(): void {
+    this.orgService
+      .getUsersForOrganization(this.userService.user?.organization, 1)
+      .pipe(first())
+      .subscribe({
         next: (orgData) => {
           this.userRoster = orgData.users;
         },
@@ -117,8 +116,7 @@ export class UserListModalComponent implements OnInit {
             error
           );
         },
-      }
-    );
+      });
   }
 
   /**

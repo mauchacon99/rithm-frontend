@@ -1002,7 +1002,7 @@ export class StationService {
    * @returns StationRosterMember array.
    */
   getStationAllRoster(
-    stationRithmId: string,
+    stationRithmId: string
   ): Observable<StationRosterMember[]> {
     const params = new HttpParams().set('rithmId', stationRithmId);
     return this.http.get<StationRosterMember[]>(

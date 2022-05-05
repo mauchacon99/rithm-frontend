@@ -1849,20 +1849,20 @@ export class MockStationService {
    * @param stationRithmId The id of the current station.
    * @returns StationRosterMember array.
    */
-   getStationAllRoster(
-      stationRithmId: string,
-    ): Observable<StationRosterMember[]> {
-      if (!stationRithmId) {
-        return throwError(
-          () =>
-            new HttpErrorResponse({
-              error: {
-                error: 'Cannot retrieve the users roster of the station',
-              },
-            })
-        ).pipe(delay(1000));
-      } else {
-        const userRoster: StationRosterMember[] = [
+  getStationAllRoster(
+    stationRithmId: string
+  ): Observable<StationRosterMember[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve the users roster of the station',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const userRoster: StationRosterMember[] = [
         {
           rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
           firstName: 'Marry',
@@ -1878,9 +1878,9 @@ export class MockStationService {
           email: 'workeruser@inpivota.com',
           isOwner: false,
           isWorker: true,
-        }
-        ];
-        return of(userRoster).pipe(delay(1000));
-      }
+        },
+      ];
+      return of(userRoster).pipe(delay(1000));
     }
+  }
 }

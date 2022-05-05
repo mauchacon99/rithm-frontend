@@ -933,11 +933,12 @@ export class StationComponent
             frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
-                frame.minItemRows = frame.questions &&
-                frame.questions?.length &&
-                frame.questions?.length > 4
-                  ? frame.questions.length
-                  : 4;
+                frame.minItemRows =
+                  frame.questions &&
+                  frame.questions?.length &&
+                  frame.questions?.length > 4
+                    ? frame.questions.length
+                    : 4;
                 frame.minItemCols = 6;
                 frame.questions =
                   frame.questions && frame.questions?.length > 0
