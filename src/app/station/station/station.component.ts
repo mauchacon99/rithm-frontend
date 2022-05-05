@@ -205,7 +205,7 @@ export class StationComponent
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
-      dataLink: this.fb.control(''),
+      dataLinkForm: this.fb.control(''),
     });
   }
 
@@ -253,6 +253,17 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
+  }
+
+  /**
+   * Listen the DataLink form is updated with saved data-links.
+   */
+  private subscribeDataLinkFormUnTouched(): void {
+    this.stationService.dataLinkFormUnTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.resetStationForm();
       });
   }
 
@@ -352,6 +363,7 @@ export class StationComponent
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
     this.subscribeStationFormTouched();
+    this.subscribeDataLinkFormUnTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
     this.displayDataLinks();
@@ -434,7 +446,8 @@ export class StationComponent
         (!this.stationForm.valid ||
           !(
             this.stationForm.dirty ||
-            this.stationForm.controls.stationTemplateForm.touched
+            this.stationForm.controls.stationTemplateForm.touched ||
+            this.stationForm.controls.dataLinkForm.touched
           ))) ||
       // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
@@ -1335,6 +1348,7 @@ export class StationComponent
     setTimeout(() => {
       this.stationForm.markAsPristine();
       this.stationForm.controls.stationTemplateForm.markAsUntouched();
+      this.stationForm.controls.dataLinkForm.markAsUntouched();
     }, 0);
   }
 

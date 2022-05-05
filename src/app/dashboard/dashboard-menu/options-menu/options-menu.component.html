@@ -20,6 +20,7 @@
 <mat-menu #menuDashboard="matMenu">
   <button
     mat-menu-item
+    (click)="openDialogManagementMembers()"
     *ngIf="dashboardRole !== roleDashboardMenu.Company && isManageMember"
   >
     <i class="fas fa-users"></i>

@@ -70,6 +70,9 @@ export class StationService {
   /** The questions to be updated when it changes in station page. */
   allStations$ = new BehaviorSubject<Station[]>([]);
 
+  /** Set unTouch to data-link form. */
+  dataLinkFormUnTouched$ = new Subject<void>();
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -1008,5 +1011,10 @@ export class StationService {
     return this.http.get<DataLinkObject[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-link?stationRithmId=${stationRithmId}`
     );
+  }
+
+  /** Set unTouch to station template form. */
+  unTouchDataLinkForm(): void {
+    this.dataLinkFormUnTouched$.next();
   }
 }

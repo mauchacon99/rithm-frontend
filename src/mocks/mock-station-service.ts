@@ -23,6 +23,7 @@ import {
   GroupTrafficData,
   StationWidgetPreBuilt,
   DocumentCurrentStation,
+  RoleDashboardMenu,
 } from 'src/models';
 
 /**
@@ -61,6 +62,9 @@ export class MockStationService {
 
   /** The questions to be updated when it changes in station page. */
   allStations$ = new BehaviorSubject<Station[]>([]);
+
+  /** Set unTouch to data-link form. */
+  dataLinkFormUnTouched$ = new Subject<void>();
 
   /**
    * Gets a station information.
@@ -1624,6 +1628,8 @@ export class MockStationService {
             createdDate: '1/2/34',
             role: null,
             organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+            defaultDashboardType: RoleDashboardMenu.Personal,
+            defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
           },
         },
       ];
@@ -1883,5 +1889,10 @@ export class MockStationService {
       ];
       return of(dataLinks).pipe(delay(1000));
     }
+  }
+
+  /** Set unTouch to station template form. */
+  unTouchDataLinkForm(): void {
+    this.dataLinkFormUnTouched$.next();
   }
 }

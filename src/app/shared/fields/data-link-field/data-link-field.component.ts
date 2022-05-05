@@ -354,6 +354,7 @@ export class DataLinkFieldComponent
             )?.rithmId
           );
         this.dataLinkFieldForm.controls.selectBaseValue.markAllAsTouched();
+        this.stationService.unTouchDataLinkForm();
         break;
       case 'selectedMatchingValue':
         this.dataLinkFieldForm
@@ -364,6 +365,7 @@ export class DataLinkFieldComponent
             )?.rithmId
           );
         this.dataLinkFieldForm.controls.selectedMatchingValue.markAllAsTouched();
+        this.stationService.unTouchDataLinkForm();
         break;
       case 'selectedDisplayFields':
         for (const id of this.data.displayFields) {
@@ -375,6 +377,7 @@ export class DataLinkFieldComponent
           .get('selectedDisplayFields')
           ?.setValue(displayIds);
         this.dataLinkFieldForm.controls.selectedDisplayFields.markAllAsTouched();
+        this.stationService.unTouchDataLinkForm();
         break;
       case 'targetStation':
         this.dataLinkFieldForm
@@ -393,6 +396,7 @@ export class DataLinkFieldComponent
         );
         this.dataLinkFieldForm.controls.targetStation.markAllAsTouched();
         this.subscribeCurrentStationQuestions();
+        this.stationService.unTouchDataLinkForm();
         break;
       default:
         return;
