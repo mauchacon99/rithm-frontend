@@ -248,20 +248,23 @@
 </ng-container>
 
 <ng-template #newView>
-  <div class="flex h-full">
-    <aside class="rules-left-side p-4 min-w-[266px]">
+  <div class="rules-tab-content">
+    <aside
+      class="rules-left-side p-4"
+      [ngClass]="{ showRulesList: showRulesList }"
+    >
       <ul class="rules-left-side-menu border-b border-secondary-100">
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'triggers' }"
-          (click)="ruleSelectedMenu = 'triggers'"
+          (click)="displayRuleContent('triggers')"
         >
           <i class="fa-regular fa-clock"></i> Station Triggers
         </li>
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
-          (click)="ruleSelectedMenu = 'rules'; getAllStations()"
+          (click)="displayRuleContent('rules'); getAllStations()"
         >
           <i class="fa-regular fa-square-plus"></i> New Rule
         </li>
@@ -271,8 +274,16 @@
     <div
       class="rules-right-side w-full border-l border-secondary-100 overflow-hidden"
     >
+      <section
+        class="goback-arrow-section text-secondary-500 sm:hidden p-2 flex items-center"
+      >
+        <button mat-icon-button (click)="showRulesList = true">
+          <i class="fa-solid fa-arrow-left fa-2x"></i>
+        </button>
+        <span class="mx-2">Rules</span>
+      </section>
       <section class="rules-right-side-title w-full">
-        <div class="py-6 pr-6 pl-8 flex justify-between items-center">
+        <div class="py-2 sm:py-6 pr-6 pl-8 flex justify-between items-center">
           <p
             class="tracking-tight text-xl font-semibold"
             *ngIf="ruleSelectedMenu === 'rules'"
@@ -486,7 +497,10 @@
           >
             <!-- Tab Flow -->
             <mat-tab label="tab-flow" aria-label="tab-flow">
-              <section [formGroup]="flowFieldForm">
+              <section
+                class="tab-flow-content flex items-center"
+                [formGroup]="flowFieldForm"
+              >
                 <mat-form-field class="md:w-2/5 w-full" appearance="outline">
                   <mat-label> Available Stations </mat-label>
                   <mat-select formControlName="stations" multiple>
@@ -497,12 +511,12 @@
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
-                  <mat-icon matSuffix *ngIf="stationLoading">
-                    <app-loading-indicator
-                      [diameter]="24"
-                    ></app-loading-indicator>
-                  </mat-icon>
                 </mat-form-field>
+                <div class="px-3" *ngIf="stationLoading">
+                  <app-loading-indicator
+                    inlineText="Loading Stations..."
+                  ></app-loading-indicator>
+                </div>
               </section>
             </mat-tab>
 

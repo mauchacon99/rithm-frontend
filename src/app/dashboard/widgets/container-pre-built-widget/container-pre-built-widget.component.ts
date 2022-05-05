@@ -15,6 +15,7 @@ import { ContainerWidgetPreBuilt } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
+import { DocumentComponent } from 'src/app/document/document/document.component';
 
 /** Container preview build. */
 @Component({
@@ -31,8 +32,32 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Edit mode dashboard. */
-  @Input() editMode!: boolean;
+  /** The component for the document info header. */
+  @ViewChild(DocumentComponent, { static: false })
+  documentComponent!: DocumentComponent;
+
+  /** EditMode the widget. */
+  private _editMode = false;
+
+  /** Set edit mode toggle from dashboard. */
+  @Input() set editMode(value: boolean) {
+    this._editMode = value;
+    if (value && this.isDocument) {
+      this.viewDocument(null);
+    }
+  }
+
+  /**
+   * Get edit mode toggle from dashboard.
+   *
+   * @returns Boolean to edit mode.
+   */
+  get editMode(): boolean {
+    return this._editMode;
+  }
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
@@ -63,8 +88,8 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   /** Columns staticts to show on table. */
   displayedColumns = [
-    'nameContainer',
-    'flowedTimeUTC',
+    'documentName',
+    'timeInStation',
     'stationName',
     'stationOwners',
     'viewDocument',
@@ -75,6 +100,21 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   /** Show message if fail get containers. */
   failedGetContainers = false;
+
+  /** Update document list when a new document is created. */
+  reloadDocumentList = false;
+
+  /** To set its expanded the widget. */
+  isExpandWidget = false;
+
+  /** Variable to show if the error message should be displayed. */
+  displayDocumentError = false;
+
+  /** View detail document. */
+  isDocument = false;
+
+  /** Document id selected for view. */
+  documentSelected: ContainerWidgetPreBuilt | null = null;
 
   constructor(
     private documentService: DocumentService,
@@ -145,6 +185,50 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
       timeInStation = 'None';
     }
     return timeInStation;
+  }
+
+  /**
+   * View detail document.
+   *
+   * @param documentSelected Document selected.
+   * @param reloadDocuments Boolean when is true, reload the documents.
+   */
+  viewDocument(
+    documentSelected: ContainerWidgetPreBuilt | null,
+    reloadDocuments = false
+  ): void {
+    this.documentSelected = documentSelected;
+    this.isDocument = !this.isDocument;
+    if (this.reloadDocumentList || reloadDocuments) {
+      this.getContainerWidgetPreBuilt();
+      this.reloadDocumentList = false;
+    }
+    if (this.isExpandWidget) {
+      this.toggleExpandWidget();
+    }
+  }
+
+  /**
+   * Reload list of documents.
+   *
+   * @param isReturnListDocuments To return to list of documents, true to reload list.
+   * @param isReloadListDocuments Reload list of documents when click to see list.
+   */
+  widgetReloadListDocuments(
+    isReturnListDocuments: boolean,
+    isReloadListDocuments: boolean
+  ): void {
+    if (isReloadListDocuments) {
+      this.reloadDocumentList = isReloadListDocuments;
+    } else {
+      this.viewDocument(null, isReturnListDocuments);
+    }
+  }
+
+  /** Expand widget. */
+  toggleExpandWidget(): void {
+    this.isExpandWidget = !this.isExpandWidget;
+    this.expandWidget.emit(this.isExpandWidget);
   }
 
   /** Toggle drawer when click on edit group search widget. */

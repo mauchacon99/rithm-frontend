@@ -154,7 +154,36 @@
                   </button>
                 </div>
                 <ng-template #noAssignedUser>
-                  <div class="col-span-full">No assigned user</div>
+                  <div class="unassigned-user-section flex items-center py-2">
+                    <button
+                      id="open-modal-user-list"
+                      data-testid="open-modal-user-list"
+                      class="shadow-none"
+                      (mouseenter)="assignedNewUser = true"
+                      (mouseleave)="assignedNewUser = false"
+                      (click)="openModalUserListModal()"
+                      matTooltip="Assigned User"
+                      matTooltipPosition="above"
+                    >
+                      <span class="fa-stack fa-lg">
+                        <i
+                          class="fa-solid fa-circle fa-stack-2x"
+                          [ngClass]="
+                            assignedNewUser
+                              ? 'text-accent-500'
+                              : 'text-secondary-500'
+                          "
+                        ></i>
+                        <i
+                          class="fa-solid fa-stack-1x text-white"
+                          [ngClass]="
+                            assignedNewUser ? 'fa-user-plus' : 'fa-user-minus'
+                          "
+                        ></i>
+                      </span>
+                    </button>
+                    <p class="text-secondary-500">Not assigned</p>
+                  </div>
                 </ng-template>
               </ng-container>
             </ng-template>
