@@ -626,12 +626,6 @@ export class StationComponent
         );
     }
     const petitionsUpdateStation = [
-      // Update station Name.
-      this.stationService.updateStationName(
-        this.stationName,
-        this.stationInformation.rithmId
-      ),
-
       // Update appended fields to document.
       this.stationService.updateDocumentNameTemplate(
         this.stationInformation.rithmId,
@@ -658,7 +652,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , stationQuestions]) => {
+        next: ([, , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
