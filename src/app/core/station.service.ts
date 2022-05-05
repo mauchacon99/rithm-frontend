@@ -1078,7 +1078,7 @@ export class StationService {
    * @param stationRithmId Specific id of the station where the power will be removed.
    * @returns Empty.
    */
-   deleteStationPowers(
+  deleteStationPowers(
     powerOfStation: Power[],
     stationRithmId: string
   ): Observable<unknown> {

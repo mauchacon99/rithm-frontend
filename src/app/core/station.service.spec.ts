@@ -2011,8 +2011,10 @@ describe('StationService', () => {
       },
     ];
 
-    service.deleteStationPowers(powerRemove,stationId).subscribe((response) => {
-      expect(response).toEqual([]);
-    });
+    service
+      .deleteStationPowers(powerRemove, stationId)
+      .subscribe((response) => {
+        expect(response).toEqual([]);
+      });
   });
 });
