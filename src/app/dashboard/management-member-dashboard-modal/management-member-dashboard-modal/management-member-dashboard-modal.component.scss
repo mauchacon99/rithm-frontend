@@ -1,10 +1,7 @@
 .select-filter {
   ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-    background-color: #fff;
-  }
-
-  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
     padding: 0 10px !important;
+    background-color: #fff;
   }
 
   .mat-form-field {
@@ -20,17 +17,18 @@
   }
 
   ::ng-deep .mat-select-min-line {
-    font-size: 13px !important;
+    font-size: 0.8em !important;
   }
 }
 
+// New template styles
 .input-search {
   ::ng-deep .mat-form-field {
     height: 50px;
     width: 100%;
   }
 
-  ::ng-deep .mat-form-field-flex {
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
     @apply h-[50px] w-full md:w-2/4;
   }
 
@@ -38,7 +36,7 @@
     padding-top: 1px !important;
   }
 
-  ::ng-deep .mat-form-field-wrapper {
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
     margin: 0 !important;
   }
 
