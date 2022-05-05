@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 import { MockPopupService, MockUserService } from 'src/mocks';
-import { User } from 'src/models';
+import { RoleDashboardMenu, User } from 'src/models';
 import { DashboardComponent } from '../dashboard/dashboard/dashboard.component';
 
 import { AdminAuthGuard } from './admin-auth.guard';
@@ -20,6 +20,8 @@ const user: User = {
   isEmailVerified: true,
   notificationSettings: null,
   organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+  defaultDashboardType: RoleDashboardMenu.Personal,
+  defaultDashboardId: '597cf562-27a4-4968-5628-046ccfee24fd',
 };
 
 describe('AdminAuthGuard', () => {
