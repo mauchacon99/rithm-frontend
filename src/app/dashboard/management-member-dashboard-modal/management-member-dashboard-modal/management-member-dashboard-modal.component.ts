@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MemberDashboard, RoleDashboardMenu } from 'src/models';
@@ -31,6 +32,23 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
 
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
+
+  /** Selected filter. */
+  selectedFilterValue: FilterOptionTypeMemberDashboard =
+    FilterOptionTypeMemberDashboard.All;
+
+  /** Filter options. */
+  optionsSelectList: FilterOptionTypeMemberDashboard[] = [
+    FilterOptionTypeMemberDashboard.All,
+    FilterOptionTypeMemberDashboard.ViewOnly,
+    FilterOptionTypeMemberDashboard.CanEdit,
+  ];
+
+  /** Search value. */
+  search = '';
+
+  /** Select all checked. */
+  checkedSelectAll = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -64,5 +82,12 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Detected change in mat-select.
+   */
+  matSelectChange(): void {
+    /** Detected change here with selectedFilterValue. */
   }
 }
