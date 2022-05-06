@@ -577,13 +577,13 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
-    component.widgetReloadListDocuments(false, true);
+    component.widgetReloadListDocuments(false, true, []);
     expect(component.reloadDocumentList).toBeTrue();
   });
 
   it('should return list of documents and reload list', () => {
     const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
-    component.widgetReloadListDocuments(true, false);
+    component.widgetReloadListDocuments(true, false, []);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
   });
@@ -904,5 +904,49 @@ describe('StationWidgetComponent', () => {
         question
       );
     });
+  });
+
+  it('should emit reloadStationsFlow', () => {
+    component.documentIdSelected = '333-333-333';
+    const stationFlow = ['123-456-789'];
+    const spyEmit = spyOn(
+      component.reloadStationsFlow,
+      'emit'
+    ).and.callThrough();
+
+    component.widgetReloadListDocuments(true, true, stationFlow);
+
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      stationFlow,
+      currentStation: component.stationRithmId,
+      documentFlow: component.documentIdSelected,
+    });
+  });
+
+  it('should call getStationWidgetDocuments when stationFlow change', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.isDocument = false;
+    component.stationRithmId = '123-456-789';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should set reloadDocumentList to true when stationFlow change', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(component.reloadDocumentList).toBeTrue();
   });
 });

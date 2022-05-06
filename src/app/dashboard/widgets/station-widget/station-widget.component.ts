@@ -21,6 +21,7 @@ import {
   StationRosterMember,
   Question,
   WidgetDocument,
+  reloadStationFlow,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -124,11 +125,30 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
+  /** Set data for station widget. */
+  @Input() set stationFlow(value: reloadStationFlow) {
+    if (this.stationRithmId && value) {
+      if (
+        value.stationFlow.includes(this.stationRithmId) ||
+        value.currentStation === this.stationRithmId
+      ) {
+        if (!this.isDocument) {
+          this.getStationWidgetDocuments();
+        } else {
+          this.reloadDocumentList = true;
+        }
+      }
+    }
+  }
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** Reload stations or document Flowed or saved. */
+  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
 
   /**
    * Whether the drawer is open.
@@ -315,15 +335,24 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
    *
    * @param isReturnListDocuments To return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow Station rithm id when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[]
   ): void {
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
     } else {
       this.viewDocument('', isReturnListDocuments);
+    }
+    if (stationFlow.length) {
+      this.reloadStationsFlow.emit({
+        stationFlow,
+        currentStation: this.stationRithmId,
+        documentFlow: this.documentIdSelected,
+      });
     }
   }
 

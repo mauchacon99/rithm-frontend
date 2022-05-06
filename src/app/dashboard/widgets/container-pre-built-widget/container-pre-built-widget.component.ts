@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ContainerWidgetPreBuilt } from 'src/models';
+import { ContainerWidgetPreBuilt, reloadStationFlow } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
@@ -56,14 +56,28 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
-  /** If expand or not the widget. */
-  @Output() expandWidget = new EventEmitter<boolean>();
-
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** Set data for station widget. */
+  @Input() set stationFlow(value: reloadStationFlow) {
+    if (value) {
+      if (!this.isDocument) {
+        this.getContainerWidgetPreBuilt();
+      } else {
+        this.reloadDocumentList = true;
+      }
+    }
+  }
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Reload stations or document Flowed or saved. */
+  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
 
   /**
    * Whether the drawer is open.
@@ -213,15 +227,24 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
    *
    * @param isReturnListDocuments To return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow Station rithm id when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[]
   ): void {
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
     } else {
       this.viewDocument(null, isReturnListDocuments);
+    }
+    if (stationFlow.length) {
+      this.reloadStationsFlow.emit({
+        stationFlow,
+        currentStation: this.documentSelected?.stationRithmId || '',
+        documentFlow: this.documentSelected?.documentRithmId || '',
+      });
     }
   }
 
