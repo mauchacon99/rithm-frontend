@@ -8,6 +8,6 @@ export interface reloadStationFlow {
   /** The station flowed. */
   stationFlow: string[];
 
-  /** Document rithmId flowed */
+  /** Document rithmId flowed. */
   documentFlow: string;
 }

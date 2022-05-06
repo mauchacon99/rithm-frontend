@@ -100,7 +100,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<ContainerWidgetPreBuilt>;
 
-  /** Columns staticts to show on table. */
+  /** Columns statics to show on table. */
   displayedColumns = [
     'documentName',
     'timeInStation',
