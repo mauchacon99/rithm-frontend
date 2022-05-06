@@ -1011,16 +1011,18 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should call the method that get powers of the station.', () => {
+    component.flowLogicView = true;
     const spyService = spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getStationPowers'
     ).and.callThrough();
-    component.ngOnInit();
+    component.ngOnChanges();
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should detect when the getStationPowers method fails.', () => {
-    spyOn(TestBed.inject(StationService), 'getStationPowers').and.returnValue(
+    component.flowLogicView = true;
+    spyOn(TestBed.inject(DocumentService), 'getStationPowers').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -1029,7 +1031,7 @@ describe('FlowLogicComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component.ngOnChanges();
     expect(spyError).toHaveBeenCalled();
   });
 
