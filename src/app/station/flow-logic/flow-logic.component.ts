@@ -29,7 +29,7 @@ import { StationService } from 'src/app/core/station.service';
 })
 export class FlowLogicComponent implements OnInit {
   /** Schedule trigger type form. */
-  scheduleTriggerField: FormGroup;
+  scheduleTriggerForm: FormGroup;
 
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
@@ -87,6 +87,9 @@ export class FlowLogicComponent implements OnInit {
   /** The powers of current station. */
   stationPowers: Power[] = [];
 
+  /** The date and time zone shown, if true. */
+  showDateTimeZone = false;
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -97,8 +100,8 @@ export class FlowLogicComponent implements OnInit {
     private splitService: SplitService,
     private stationService: StationService
   ) {
-    this.scheduleTriggerField = this.fb.group({
-      scheduleTriggerType: '',
+    this.scheduleTriggerForm = this.fb.group({
+      scheduleTriggerType: this.fb.control(''),
     });
   }
 
@@ -413,5 +416,19 @@ export class FlowLogicComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   *
+   */
+  triggerTypeSelect(): void {
+    const selectedTriggerType =
+      this.scheduleTriggerForm.controls.scheduleTriggerType.value;
+    if (selectedTriggerType === 'Date Interval') {
+      this.showDateTimeZone = true;
+    } else {
+      this.showDateTimeZone = false;
+    }
   }
 }

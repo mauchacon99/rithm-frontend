@@ -52,3 +52,9 @@
     }
   }
 }
+
+.time-zone .button-group-meridian {
+  ::ng-deep .mat-button-toggle-label-content {
+    @apply leading-7;
+  }
+}
