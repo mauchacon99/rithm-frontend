@@ -33,10 +33,9 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
 
-<<<<<<< HEAD
   /** Users to add to dashboard. */
   usersAdd!: MemberDashboard[];
-=======
+
   /** Selected filter. */
   selectedFilterValue: FilterOptionTypeMemberDashboard =
     FilterOptionTypeMemberDashboard.All;
@@ -53,7 +52,6 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
 
   /** Select all checked. */
   checkedSelectAll = false;
->>>>>>> dev
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
