@@ -24,7 +24,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     dashboardType: RoleDashboardMenu.Personal,
   };
 
-  const TEST_USERS: MemberDashboard[] = [
+  const testUsers: MemberDashboard[] = [
     {
       rithmId: '123-456-789',
       profileImageRithmId: '123-456-789',
