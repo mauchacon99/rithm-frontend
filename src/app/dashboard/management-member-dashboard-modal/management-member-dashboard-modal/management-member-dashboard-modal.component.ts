@@ -32,6 +32,12 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
 
+  /** Loading get user members. */
+  isLoadingGetUserMembers = false;
+
+  /** Show error if get users members. */
+  errorGetUsersMember = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public modalData: ModalData,
@@ -49,15 +55,21 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   }
 
   /** Get users to dashboard personal. */
-  private getUsersDashboardPersonal(): void {
+  getUsersDashboardPersonal(): void {
+    this.isLoadingGetUserMembers = true;
+    this.errorGetUsersMember = false;
     this.dashboardService
       .getUsersDashboardPersonal()
       .pipe(first())
       .subscribe({
         next: (membersDashboard) => {
+          this.isLoadingGetUserMembers = false;
+          this.errorGetUsersMember = false;
           this.membersDashboard = membersDashboard;
         },
         error: (error: unknown) => {
+          this.isLoadingGetUserMembers = false;
+          this.errorGetUsersMember = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

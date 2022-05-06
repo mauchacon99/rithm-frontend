@@ -1,2 +1,19 @@
-<p>management-member-dashboard-modal works!</p>
-<app-member-dashboard-list-modal></app-member-dashboard-list-modal>
+<!--Loading -->
+<app-loading-widget
+  *ngIf="isLoadingGetUserMembers"
+  id="app-loading-indicator-user-member"
+></app-loading-widget>
+
+<!--Show error -->
+<app-error-widget
+  *ngIf="errorGetUsersMember"
+  id="error-load-user-member"
+  [errorMessage]="'Unable to obtain members.'"
+  (tryAgain)="getUsersDashboardPersonal()"
+>
+</app-error-widget>
+
+<div *ngIf="!isLoadingGetUserMembers && !errorGetUsersMember">
+  <p>management-member-dashboard-modal works!</p>
+  <app-member-dashboard-list-modal></app-member-dashboard-list-modal>
+</div>
