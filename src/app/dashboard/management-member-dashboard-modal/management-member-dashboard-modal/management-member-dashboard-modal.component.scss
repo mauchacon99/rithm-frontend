@@ -1,0 +1,56 @@
+.select-filter {
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0 10px !important;
+    background-color: #fff;
+  }
+
+  .mat-form-field {
+    @apply border rounded overflow-hidden;
+
+    padding: 0 !important;
+    height: 45px;
+    width: 130px;
+    border-color: #ddd;
+  }
+
+  .mat-focused {
+    @apply border-brightBlue;
+  }
+
+  ::ng-deep .mat-select-min-line {
+    @apply text-sm;
+  }
+}
+
+// New template styles
+.input-search {
+  ::ng-deep .mat-form-field {
+    height: 50px;
+    width: 100%;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+    @apply h-[50px] w-full md:w-2/4;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding-top: 1px !important;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0 !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 2px;
+  }
+
+  input.mat-input-element {
+    margin-top: 3px;
+    margin-left: 8px;
+  }
+}
+
+.actions {
+  padding: 0 !important;
+}

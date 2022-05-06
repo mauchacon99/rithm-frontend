@@ -563,7 +563,8 @@ describe('DocumentComponent', () => {
       expect(expectSpyMethod).toHaveBeenCalled();
     });
 
-    it('Should disable buttons save and flow when is not admin or owner worker', () => {
+    it('should disable buttons save and flow when is not admin or owner worker', () => {
+      component.footerExpanded = true;
       component.documentInformation.stationOwners = [
         {
           email: 'rithmadmin@inpivota.com',
@@ -583,29 +584,6 @@ describe('DocumentComponent', () => {
       expect(btnFlow.disabled).toBeTrue();
       expect(btnSave.disabled).toBeTrue();
       expect(component.isUserAdminOrOwner).toBeFalse();
-    });
-
-    it('Should disable buttons save and flow when is not admin or owner worker', () => {
-      const userRithmId = TestBed.inject(UserService).user.rithmId;
-      component.documentInformation.stationOwners = [
-        {
-          email: 'rithmadmin@inpivota.com',
-          firstName: 'admin',
-          isAssigned: false,
-          lastName: 'user',
-          rithmId: userRithmId,
-        },
-      ];
-      component.isWidget = true;
-      component.documentLoading = false;
-      fixture.detectChanges();
-      const btnFlow =
-        fixture.elementRef.nativeElement.querySelector('#document-flow');
-      const btnSave =
-        fixture.elementRef.nativeElement.querySelector('#document-save');
-      expect(btnFlow.disabled).toBeFalse();
-      expect(btnSave.disabled).toBeFalse();
-      expect(component.isUserAdminOrOwner).toBeTrue();
     });
   });
 
