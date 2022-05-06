@@ -19,6 +19,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -48,7 +50,11 @@ describe('OptionsMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OptionsMenuComponent, MockComponent(MenuComponent)],
+      declarations: [
+        OptionsMenuComponent,
+        MockComponent(MenuComponent),
+        MockComponent(ManagementMemberDashboardModalComponent),
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
@@ -65,6 +71,7 @@ describe('OptionsMenuComponent', () => {
         ]),
         MatSidenavModule,
         NoopAnimationsModule,
+        MatDialogModule,
       ],
     }).compileComponents();
   });
@@ -361,5 +368,42 @@ describe('OptionsMenuComponent', () => {
     component.deleteDashboard(rithmId);
     expect(deletePersonalDashboard).toHaveBeenCalled();
     expect(toggleDrawer).toHaveBeenCalled();
+  });
+
+  it('should open modal openDialogManagementMembers', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    component.rithmId = rithmId;
+    component.dashboardRole = RoleDashboardMenu.Company;
+
+    fixture.detectChanges();
+
+    const methodSpy = spyOn(
+      component,
+      'openDialogManagementMembers'
+    ).and.callThrough();
+
+    const matDialogSpy = spyOn(TestBed.inject(MatDialog), 'open');
+
+    component.openDialogManagementMembers();
+
+    expect(methodSpy).toHaveBeenCalled();
+    expect(matDialogSpy).toHaveBeenCalledOnceWith(
+      ManagementMemberDashboardModalComponent,
+      {
+        panelClass: [
+          'w-5/6',
+          'sm:w-3/5',
+          'h-[95%]',
+          'sm:h-5/6',
+          'custom-margin-modal',
+        ],
+        maxWidth: '1500px',
+        disableClose: true,
+        data: {
+          dashboardRithmId: rithmId,
+          dashboardType: RoleDashboardMenu.Company,
+        },
+      }
+    );
   });
 });

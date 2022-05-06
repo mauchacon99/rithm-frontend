@@ -56,6 +56,9 @@ export class FileFieldComponent
   /** Is file is uploaded or not. */
   isFileUploaded = false;
 
+  /** Is file is deleted or not. */
+  isFileDeleted = false;
+
   /** The name of uploaded file. */
   fileName = '';
 
@@ -258,6 +261,7 @@ export class FileFieldComponent
       okButtonText: 'Remove',
     });
     if (confirm) {
+      this.isFileDeleted = true;
       const documentAnswer: DocumentAnswer = {
         questionRithmId: this.field.rithmId,
         documentRithmId: this.documentId,
@@ -275,6 +279,7 @@ export class FileFieldComponent
         .subscribe({
           next: () => {
             this.isFileUploaded = false;
+            this.isFileDeleted = false;
             this.popupService.notify(
               'The document has been deleted successfully.'
             );

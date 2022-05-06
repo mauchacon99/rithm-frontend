@@ -34,7 +34,7 @@
     <span class="text-base"> Upload </span>
   </button>
 </div>
-<section *ngIf="isFileUploaded" class="flex w-3/4 h-full justify-start">
+<section *ngIf="isFileUploaded" class="flex w-3/4 justify-start">
   <div class="w-14 text-center">
     <i class="fa-solid fa-file text-4xl text-secondary-300 px-2 py-3"></i>
   </div>
@@ -42,7 +42,16 @@
     <span class="block text-sm text-accent-300">{{ fileName }}</span>
     <span class="block text-xs">{{ fileSize.toFixed(2) }}kb</span>
   </div>
-  <div class="w-13 text-center" (click)="deleteDocument()">
+  <div
+    class="w-13 text-center cursor-pointer"
+    (click)="deleteDocument()"
+    [ngClass]="{ 'pointer-events-none opacity-50': isFileDeleted }"
+  >
     <i class="fas fa-times text-xl text-secondary-500 px-4 py-3"></i>
   </div>
+  <app-loading-indicator
+    *ngIf="isFileDeleted"
+    [diameter]="30"
+    class="pt-3"
+  ></app-loading-indicator>
 </section>
