@@ -11,6 +11,14 @@ import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
@@ -37,7 +45,15 @@ describe('ManagementMemberDashboardModalComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
-      imports: [MatDialogModule],
+      imports: [
+        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatInputModule,
+        FormsModule,
+      ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
