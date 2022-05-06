@@ -84,7 +84,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     fixture = TestBed.createComponent(ManagementMemberDashboardModalComponent);
     component = fixture.componentInstance;
     component.dashboardRithmId = '123-123-132';
-    component.usersAdd = TEST_USERS;
+    component.usersAdd = testUsers;
     dashboardService = TestBed.inject(DashboardService);
     errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();

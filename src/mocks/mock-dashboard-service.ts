@@ -794,9 +794,7 @@ export class MockDashboardService {
    * @param users Users to add to dashboard.
    * @returns List users added.
    */
-  addDashboardMembers(
-    users: MemberDashboard[]
-  ): Observable<MemberDashboard[]> {
+  addDashboardMembers(users: MemberDashboard[]): Observable<MemberDashboard[]> {
     const responseMembers: MemberDashboard[] = [
       {
         rithmId: '123-456-789',

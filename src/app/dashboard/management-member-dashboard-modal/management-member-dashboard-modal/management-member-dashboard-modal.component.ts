@@ -35,9 +35,6 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Users to add to dashboard. */
   usersAdd!: MemberDashboard[];
 
-  /** Current users to add to dashboard. */
-  currentUsers!: MemberDashboard[];
-
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public modalData: ModalData,
@@ -82,7 +79,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (currentUsers) => {
-          this.currentUsers = currentUsers;
+          this.membersDashboard = currentUsers;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
