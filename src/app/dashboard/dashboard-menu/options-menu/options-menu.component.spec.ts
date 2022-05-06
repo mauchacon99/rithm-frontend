@@ -413,6 +413,7 @@ describe('OptionsMenuComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
+        disableClose: true,
         data: {
           dashboardRithmId: rithmId,
           dashboardType: RoleDashboardMenu.Company,
