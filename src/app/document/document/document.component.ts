@@ -110,6 +110,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Show or hidden accordion for all field. */
   accordionFieldAllExpanded = false;
 
+  /** Expands/collapse the responsive footer. */
+  footerExpanded = false;
+
   /** To check click SubHeader. */
   clickSubHeader = false;
 
