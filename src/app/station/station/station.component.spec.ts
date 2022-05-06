@@ -64,6 +64,7 @@ import {
 } from 'src/mocks';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -115,6 +116,7 @@ describe('StationComponent', () => {
         GridsterModule,
         MatSlideToggleModule,
         ComingSoonMessageModule,
+        MatButtonToggleModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

@@ -1,2 +1,58 @@
-<p>management-member-dashboard-modal works!</p>
-<app-member-dashboard-list-modal></app-member-dashboard-list-modal>
+<div>
+  <h3>Manage Members</h3>
+  <div class="md:flex md:justify-between mt-3">
+    <div class="w-full input-search">
+      <mat-form-field appearance="outline">
+        <input
+          [(ngModel)]="search"
+          type="text"
+          matInput
+          placeholder="Search containers"
+          id="search-documents"
+          data-testid="search-documents"
+          maxlength="55"
+          autocomplete="off"
+        />
+        <span matPrefix><i class="fas fa-search text-secondary-300"></i></span>
+      </mat-form-field>
+    </div>
+
+    <div class="select-filter mt-2 md:mt-0">
+      <mat-form-field appearance="fill" floatLabel="never">
+        <mat-label class="text-xs">Access Type</mat-label>
+        <mat-select
+          [(ngModel)]="selectedFilterValue"
+          (selectionChange)="matSelectChange()"
+        >
+          <mat-option *ngFor="let filter of optionsSelectList" [value]="filter">
+            {{ filter }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <mat-checkbox [(ngModel)]="checkedSelectAll">Select All</mat-checkbox>
+  </div>
+</div>
+
+<div
+  class="h-[calc(100%-230px)] md:h-[calc(100%-165px)] overflow-scroll scrollbar"
+>
+  <app-member-dashboard-list-modal></app-member-dashboard-list-modal>
+</div>
+
+<div class="w-full flex justify-end actions" mat-dialog-actions>
+  <button
+    data-testid="close-dialog-button"
+    mat-button
+    [mat-dialog-close]="true"
+  >
+    CANCEL
+  </button>
+
+  <button data-testid="close-dialog-button" mat-button color="accent">
+    SAVE
+  </button>
+</div>
