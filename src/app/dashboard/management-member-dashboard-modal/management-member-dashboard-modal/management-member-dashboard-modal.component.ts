@@ -72,7 +72,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Get users to dashboard personal. */
   private getUsersDashboardPersonal(): void {
     this.dashboardService
-      .getUsersDashboardPersonal()
+      .getUsersDashboardPersonal(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (membersDashboard) => {

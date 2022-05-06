@@ -804,6 +804,9 @@ export class MockDashboardService {
         email: 'test1@email.com',
         canView: true,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '987-654-321',
@@ -813,6 +816,9 @@ export class MockDashboardService {
         email: 'test2@email.com',
         canView: false,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-987-321',
@@ -822,6 +828,9 @@ export class MockDashboardService {
         email: 'test3@email.com',
         canView: true,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-321-987',
@@ -831,6 +840,9 @@ export class MockDashboardService {
         email: 'test4@email.com',
         canView: false,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
     ];
 
@@ -840,9 +852,12 @@ export class MockDashboardService {
   /**
    * Get users to dashboard personal.
    *
+   * @param dashboardRithmId Users to add to dashboard.
    * @returns An Observable of an array of MemberDashboard objects.
    */
-  getUsersDashboardPersonal(): Observable<MemberDashboard[]> {
+  getUsersDashboardPersonal(
+    dashboardRithmId: string
+  ): Observable<MemberDashboard[]> {
     const responseMembers: MemberDashboard[] = [
       {
         rithmId: '123-456-789',
@@ -852,6 +867,9 @@ export class MockDashboardService {
         email: 'test1@email.com',
         canView: true,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '987-654-321',
@@ -861,6 +879,9 @@ export class MockDashboardService {
         email: 'test2@email.com',
         canView: false,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-987-321',
@@ -870,6 +891,9 @@ export class MockDashboardService {
         email: 'test3@email.com',
         canView: true,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-321-987',
@@ -879,6 +903,9 @@ export class MockDashboardService {
         email: 'test4@email.com',
         canView: false,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
     ];
 

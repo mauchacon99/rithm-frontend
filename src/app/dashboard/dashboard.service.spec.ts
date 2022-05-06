@@ -763,6 +763,9 @@ describe('DashboardService', () => {
         email: 'test1@email.com',
         canView: true,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '987-654-321',
@@ -772,6 +775,9 @@ describe('DashboardService', () => {
         email: 'test2@email.com',
         canView: false,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-987-321',
@@ -781,6 +787,9 @@ describe('DashboardService', () => {
         email: 'test3@email.com',
         canView: true,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-321-987',
@@ -790,6 +799,9 @@ describe('DashboardService', () => {
         email: 'test4@email.com',
         canView: false,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
     ];
     service.addDashboardMembers(responseMembers).subscribe((response) => {
@@ -798,6 +810,7 @@ describe('DashboardService', () => {
   });
 
   it('should get users to dashboard personal', () => {
+    const dashboardRithmId = '123-654-789';
     const expectedResponse: MemberDashboard[] = [
       {
         rithmId: '123-456-789',
@@ -807,6 +820,9 @@ describe('DashboardService', () => {
         email: 'test1@email.com',
         canView: true,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '987-654-321',
@@ -816,6 +832,9 @@ describe('DashboardService', () => {
         email: 'test2@email.com',
         canView: false,
         isEditable: true,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-987-321',
@@ -825,6 +844,9 @@ describe('DashboardService', () => {
         email: 'test3@email.com',
         canView: true,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
       {
         rithmId: '654-321-987',
@@ -834,11 +856,27 @@ describe('DashboardService', () => {
         email: 'test4@email.com',
         canView: false,
         isEditable: false,
+        image:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
+        imageName: 'dev',
       },
     ];
 
-    service.getUsersDashboardPersonal().subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    service
+      .getUsersDashboardPersonal(dashboardRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/shared-users?dashboardRithmId=${dashboardRithmId}`
+    );
+
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('dashboardRithmId')).toEqual(
+      dashboardRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
