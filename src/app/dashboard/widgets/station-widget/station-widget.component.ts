@@ -342,17 +342,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     isReloadListDocuments: boolean,
     stationFlow: string[]
   ): void {
-    if (isReloadListDocuments) {
-      this.reloadDocumentList = isReloadListDocuments;
-    } else {
-      this.viewDocument('', isReturnListDocuments);
-    }
     if (stationFlow.length) {
       this.reloadStationsFlow.emit({
         stationFlow,
         currentStation: this.stationRithmId,
         documentFlow: this.documentIdSelected,
       });
+    }
+    if (isReloadListDocuments) {
+      this.reloadDocumentList = isReloadListDocuments;
+    } else {
+      this.viewDocument('', isReturnListDocuments);
     }
   }
 
