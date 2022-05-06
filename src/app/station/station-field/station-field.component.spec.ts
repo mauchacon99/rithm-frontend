@@ -7,10 +7,16 @@ import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
 import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
-import { MockStationService, MockPopupService } from 'src/mocks';
+import {
+  MockStationService,
+  MockPopupService,
+  MockErrorService,
+} from 'src/mocks';
 import { QuestionFieldType, DialogOptions } from 'src/models';
 import { StationFieldComponent } from './station-field.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { throwError } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('StationFieldComponent', () => {
   let component: StationFieldComponent;
@@ -26,6 +32,7 @@ describe('StationFieldComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
   });
@@ -178,5 +185,29 @@ describe('StationFieldComponent', () => {
     );
     await component.removeField();
     expect(removeOption).toHaveBeenCalled();
+  });
+
+  it('should call the method that returns all stations.', () => {
+    const getAllStations = spyOn(
+      TestBed.inject(StationService),
+      'getAllStations'
+    ).and.callThrough();
+
+    component['getAllStations']();
+    expect(getAllStations).toHaveBeenCalled();
+  });
+
+  it('should show error message when request for get all stations fails', () => {
+    spyOn(TestBed.inject(StationService), 'getAllStations').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getAllStations']();
+    expect(spyError).toHaveBeenCalled();
   });
 });

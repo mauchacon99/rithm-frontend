@@ -113,30 +113,6 @@ describe('DataLinkFieldComponent', () => {
     expect(valueExpected).not.toBe('');
   });
 
-  xit('should call the method that returns all stations.', () => {
-    const getAllStations = spyOn(
-      TestBed.inject(StationService),
-      'getAllStations'
-    ).and.callThrough();
-
-    component.ngOnInit();
-    expect(getAllStations).toHaveBeenCalled();
-  });
-
-  xit('should show error message when request for get all stations fails', () => {
-    spyOn(TestBed.inject(StationService), 'getAllStations').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyError).toHaveBeenCalled();
-  });
-
   it('should call the method that returns station questions.', () => {
     component.stations = [STATIONS];
     const getStationQuestions = spyOn(
