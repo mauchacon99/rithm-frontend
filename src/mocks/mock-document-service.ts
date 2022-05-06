@@ -2055,14 +2055,14 @@ export class MockDocumentService {
   /**
    * Get the container widgets.
    *
-   * @param stationRithmId The current station id.
    * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
    * @param type The frame type.
    * @returns The station widget data.
    */
   getContainerWidgets(
-    stationRithmId: string,
     documentRithmId: string,
+    stationRithmId: string,
     type?: FrameType
   ): Observable<StationFrameWidget[]> {
     if (!stationRithmId || !documentRithmId) {

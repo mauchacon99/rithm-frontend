@@ -721,8 +721,8 @@ export class DocumentService {
    * @returns The container widget data.
    */
   getContainerWidgets(
-    stationRithmId: string,
     documentRithmId: string,
+    stationRithmId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type?: FrameType
   ): Observable<StationFrameWidget[]> {
@@ -731,7 +731,7 @@ export class DocumentService {
       .set('stationRithmId', stationRithmId);
 
     return this.http.get<StationFrameWidget[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type`,
       {
         params,
       }
