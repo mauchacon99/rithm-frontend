@@ -65,15 +65,15 @@
                   <i
                     class="fa-solid fa-xl"
                     [ngClass]="{
-                      'fa-floppy-disk fa-beat-fade' : !savingNameStation
+                      'fa-floppy-disk fa-beat-fade': !savingNameStation
                     }"
-                    ></i>
-                    <div *ngIf="savingNameStation">
-                      <app-loading-indicator
+                  ></i>
+                  <div *ngIf="savingNameStation">
+                    <app-loading-indicator
                       [diameter]="25"
                       id="station-name-loading"
                     ></app-loading-indicator>
-                    </div>
+                  </div>
                 </button>
               </mat-form-field>
             </div>
@@ -275,15 +275,14 @@
                 <i
                   class="fa-solid fa-xl"
                   [ngClass]="{
-                    'fa-floppy-disk fa-beat-fade' :!savingButtonText
-                  }
-                  "
+                    'fa-floppy-disk fa-beat-fade': !savingButtonText
+                  }"
                 ></i>
                 <div *ngIf="savingButtonText">
                   <app-loading-indicator
-                  [diameter]="25"
-                  id="flow-button-text-loading"
-                ></app-loading-indicator>
+                    [diameter]="25"
+                    id="flow-button-text-loading"
+                  ></app-loading-indicator>
                 </div>
               </button>
             </mat-form-field>
