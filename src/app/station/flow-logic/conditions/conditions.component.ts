@@ -50,7 +50,7 @@ export class ConditionsComponent implements OnInit {
   /** The station Flow Logic Rule. */
   @Input() flowLogicRules: FlowLogicRule[] = [];
 
-  /** The station Flow Logic Rule. */
+  /** Current station's fields as options for the select field name. */
   @Input() currentStationQuestions: Question[] = [];
 
   /** List of question field type. */
