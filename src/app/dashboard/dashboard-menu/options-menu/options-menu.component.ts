@@ -200,6 +200,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         'custom-margin-modal',
       ],
       maxWidth: '1500px',
+      disableClose: true,
       data: {
         dashboardRithmId: this.rithmId,
         dashboardType: this.dashboardRole,

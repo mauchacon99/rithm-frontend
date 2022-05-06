@@ -55,6 +55,7 @@ import { PreBuiltWidgetTemplateModalComponent } from './widget-modal/pre-built-w
 import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-widget/container-pre-built-widget.component';
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
 import { MemberDashboardListModalComponent } from './management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -116,6 +117,7 @@ import { MemberDashboardListModalComponent } from './management-member-dashboard
     MatSortModule,
     ComingSoonMessageModule,
     NgChartsModule,
+    MatCheckboxModule,
   ],
   providers: [MobileBrowserChecker],
 })
