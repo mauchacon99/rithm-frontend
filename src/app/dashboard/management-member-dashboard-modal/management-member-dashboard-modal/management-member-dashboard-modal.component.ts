@@ -35,7 +35,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Loading get user members. */
   isLoadingGetUserMembers = false;
 
-  /** Show error if get users members. */
+  /** Show error if get users members fails. */
   errorGetUsersMember = false;
 
   constructor(
