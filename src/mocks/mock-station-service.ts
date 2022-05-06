@@ -22,8 +22,9 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
   RoleDashboardMenu,
+  Power,
+  TriggerType,
 } from 'src/models';
 
 /**
@@ -1842,5 +1843,97 @@ export class MockStationService {
       },
     ];
     return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get the users roster to the station.
+   *
+   * @param stationRithmId The id of the current station.
+   * @returns StationRosterMember array.
+   */
+  getStationAllRoster(
+    stationRithmId: string
+  ): Observable<StationRosterMember[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve the users roster of the station',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const userRoster: StationRosterMember[] = [
+        {
+          rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+        {
+          rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ];
+      return of(userRoster).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get powers of current station.
+   *
+   * @param stationRithmId Specific id of station.
+   * @returns The power of a station.
+   */
+  getStationPowers(stationRithmId: string): Observable<Power[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive the powers of current station.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationPowers: Power[] = [
+        {
+          rithmId: '3j4k-3h2j-hj4j',
+          triggers: [
+            {
+              rithmId: '3j4k-3h2j-hj5h',
+              type: TriggerType.ManualFlow,
+              source: 'Source Trigger #1',
+              value: 'Value Trigger #1',
+            },
+          ],
+          actions: [
+            {
+              rithmId: '3j4k-3h2j-ft5h',
+              type: 'Type Action #1',
+              target: 'Target Action #1',
+              data: 'Data Action #1',
+              resultMapping: 'Result Action #1',
+              header: 'Header Action #1',
+            },
+          ],
+          stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowToStationRithmIds: [
+            '73d47261-1932-4fcf-82bd-159eb1a72422',
+            '73d47261-1932-4fcf-82bd-159eb1a7242g',
+          ],
+          name: 'Power Test #1',
+          condition: 'Condition Test #1',
+        },
+      ];
+      return of(stationPowers).pipe(delay(1000));
+    }
   }
 }
