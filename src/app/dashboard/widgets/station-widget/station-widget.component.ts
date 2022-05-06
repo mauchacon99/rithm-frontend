@@ -353,6 +353,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     }
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
+      this.documentIdSelected = '';
     } else {
       this.viewDocument('', isReturnListDocuments);
     }
