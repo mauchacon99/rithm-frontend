@@ -9,6 +9,14 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
@@ -71,7 +79,15 @@ describe('ManagementMemberDashboardModalComponent', () => {
         ManagementMemberDashboardModalComponent,
         MockComponent(MemberDashboardListModalComponent),
       ],
-      imports: [MatDialogModule],
+      imports: [
+        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatInputModule,
+        FormsModule,
+      ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
