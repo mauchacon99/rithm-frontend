@@ -234,17 +234,17 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
     isReloadListDocuments: boolean,
     stationFlow: string[]
   ): void {
-    if (isReloadListDocuments) {
-      this.reloadDocumentList = isReloadListDocuments;
-    } else {
-      this.viewDocument(null, isReturnListDocuments);
-    }
     if (stationFlow.length) {
       this.reloadStationsFlow.emit({
         stationFlow,
         currentStation: this.documentSelected?.stationRithmId || '',
         documentFlow: this.documentSelected?.documentRithmId || '',
       });
+    }
+    if (isReloadListDocuments) {
+      this.reloadDocumentList = isReloadListDocuments;
+    } else {
+      this.viewDocument(null, isReturnListDocuments);
     }
   }
 
