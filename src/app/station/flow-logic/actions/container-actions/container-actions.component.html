@@ -50,11 +50,17 @@
               [multiple]="true"
               #multiSelect
             >
-              <mat-option class="bg-brightBlue">
+              <mat-option>
                 <ngx-mat-select-search
                   placeholderLabel="Search..."
                   formControlName="conditionStationsFilter"
-                ></ngx-mat-select-search>
+                  noEntriesFoundLabel="Not match found..."
+                >
+                <span aria-hidden="true" class="close" ngxMatSelectSearchClear>
+                  <i class="fa-solid fa-xmark"></i>
+                </span>
+
+                </ngx-mat-select-search>
               </mat-option>
               <mat-option
                 *ngFor="let stations of filteredOptionsAutocomplete$ | async"
