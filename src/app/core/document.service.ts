@@ -715,8 +715,8 @@ export class DocumentService {
   /**
    * Get the widgets of a container.
    *
-   * @param stationRithmId The current station id.
    * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
    * @param type The frame type.
    * @returns The container widget data.
    */

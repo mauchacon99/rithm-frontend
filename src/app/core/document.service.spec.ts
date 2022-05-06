@@ -1143,7 +1143,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  fit('should get container widgets', () => {
+  it('should get container widgets', () => {
     const expectedResponse: StationFrameWidget[] = [
       {
         rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
