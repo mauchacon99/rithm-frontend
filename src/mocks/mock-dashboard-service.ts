@@ -795,7 +795,6 @@ export class MockDashboardService {
    * @returns List users added.
    */
   addDashboardMembers(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     users: MemberDashboard[]
   ): Observable<MemberDashboard[]> {
     const responseMembers: MemberDashboard[] = [
