@@ -1,0 +1,33 @@
+.select-condition ::ng-deep {
+  .mat-form-field-infix {
+    @apply py-0.5 h-11 w-36;
+  }
+
+  .mat-form-field-wrapper {
+    @apply pb-0;
+  }
+
+  .mat-select-value-text {
+    @apply text-secondary-300 text-xs;
+  }
+
+  .mat-select-trigger {
+    @apply items-end;
+  }
+}
+
+.add-condition-form ::ng-deep {
+  .mat-form-field-wrapper ::ng-deep {
+    @apply pb-0 m-0;
+  }
+
+  .mat-form-field ::ng-deep {
+    flex-grow: 1 !important;
+  }
+
+  .condition-buttons-action {
+    ::ng-deep .mat-button-wrapper {
+      @apply font-semibold text-sm;
+    }
+  }
+}

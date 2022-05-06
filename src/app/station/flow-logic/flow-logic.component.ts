@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
+  Question,
   Rule,
   RuleEquation,
   RuleType,
@@ -10,11 +11,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -25,6 +27,9 @@ import { UserService } from 'src/app/core/user.service';
   styleUrls: ['./flow-logic.component.scss'],
 })
 export class FlowLogicComponent implements OnInit {
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
@@ -37,11 +42,11 @@ export class FlowLogicComponent implements OnInit {
   /** Allow switch between new/old interface. */
   flowLogicView = false;
 
-  /** Determine what fields are currently in the form condition the previous fields. */
-  switchConditionPreviousFields = true;
-
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
+
+  /** The station Flow Logic Rule. */
+  currentStationQuestions: Question[] = [];
 
   /* Loading the rules list  by type  */
   flowLogicLoadingByRuleType: string | null = null;
@@ -56,9 +61,6 @@ export class FlowLogicComponent implements OnInit {
   manuallyTooltip =
     'Upon pressing the flow button, containers will be checked and flowed to their destination';
 
-  /** Selected value condition type for rules. */
-  selectedConditionType = 'all';
-
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
@@ -72,16 +74,14 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
-  /** The error if rules fails . */
-  openFormCondition = false;
-
   constructor(
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
-    private splitService: SplitService
+    private splitService: SplitService,
+    private stationService: StationService
   ) {}
 
   /**
@@ -90,6 +90,18 @@ export class FlowLogicComponent implements OnInit {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
+    this.subscribeCurrentStationQuestions();
+  }
+
+  /**
+   * Listen the currentStationQuestions Service.
+   */
+  private subscribeCurrentStationQuestions(): void {
+    this.stationService.currentStationQuestions$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        this.currentStationQuestions = questions;
+      });
   }
 
   /**
@@ -355,5 +367,13 @@ export class FlowLogicComponent implements OnInit {
         break;
     }
     return operatorTranslated;
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

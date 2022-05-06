@@ -50,6 +50,7 @@ import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ConditionsComponent } from './flow-logic/conditions/conditions.component';
 @NgModule({
   declarations: [
     StationComponent,
@@ -61,6 +62,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     RuleModalComponent,
     BuildDrawerComponent,
     DataLinkModalComponent,
+    ConditionsComponent,
   ],
   imports: [
     CommonModule,

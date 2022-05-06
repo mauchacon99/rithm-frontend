@@ -1,0 +1,191 @@
+<div
+  class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
+>
+  <p class="tracking-tight text-sm">CONDITIONS</p>
+  <div class="select-condition">
+    <mat-form-field appearance="outline">
+      <mat-label> Condition Requirement </mat-label>
+      <mat-select [(ngModel)]="selectedConditionType">
+        <mat-option value="all"> All must be true </mat-option>
+        <mat-option value="any"> Any must be true </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<section
+  class="condition w-full py-6"
+  *ngIf="!openFormCondition; else displayFormCondition"
+>
+  <div class="condition-view-preview" *ngIf="!flowLogicRules.length">
+    <div class="condition-view-preview-icon flex justify-center">
+      <i class="fa-solid fa-clipboard-list text-accent-500 fa-3x"></i>
+    </div>
+    <div class="condition-view-preview-description flex justify-center">
+      <p class="w-1/2 text-center text-sm py-4">
+        Conditions check the value saved on the container the trigger actions
+      </p>
+    </div>
+  </div>
+  <div
+    class="button-add-condition flex"
+    [ngClass]="[
+      flowLogicRules.length ? 'justify-start pl-8' : 'justify-center'
+    ]"
+  >
+    <button
+      mat-stroked-button
+      data-testid="add-condition"
+      color="accent"
+      (click)="openFormCondition = true"
+      [disabled]="!currentStationQuestions.length"
+    >
+      Add Condition
+    </button>
+  </div>
+</section>
+<ng-template #displayFormCondition>
+  <section class="add-condition-form flex-col pl-8 py-6 max-w-sm">
+    <!-- first operand question list -->
+    <section class="first-operand-question-list flex mb-6">
+      <mat-form-field appearance="outline">
+        <mat-label> Field Name </mat-label>
+        <mat-select
+          id="first-operand-selector"
+          data-testid="first-operand-selector"
+          [disabled]="!firstOperandQuestionList.length"
+          [(value)]="firstOperandQuestionRithmId"
+        >
+          <mat-option
+            *ngFor="let question of firstOperandQuestionList"
+            attr.data-testid="first-operand-option-{{ question.rithmId }}"
+            [value]="question.rithmId"
+            [disabled]="!firstOperandQuestionList.length"
+            (click)="setFirstOperandInformation(question)"
+          >
+            {{ question.prompt }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+    <!-- comparison type -->
+    <section class="comparison-type flex mb-6">
+      <!-- operators list -->
+      <mat-form-field appearance="outline">
+        <mat-label> Comparison Type </mat-label>
+        <mat-select
+          id="operator-selector"
+          data-testid="operator-selector"
+          [disabled]="!firstOperandQuestionRithmId"
+          [(ngModel)]="operatorSelected"
+          [ngModelOptions]="{ standalone: true }"
+          (selectionChange)="resetQuestionFieldComponent()"
+        >
+          <mat-option
+            *ngFor="let operator of operatorList"
+            id="operator-option-{{ operator.value }}"
+            attr.data-testid="operator-option-{{ operator.value }}"
+            [value]="operator"
+          >
+            {{ operator.text }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+    <!-- second operand question list -->
+    <section class="second-operand-question-list flex mb-6 space-x-1">
+      <mat-form-field
+        appearance="outline"
+        *ngIf="switchConditionPreviousFields; else fieldCustomValue"
+      >
+        <mat-label> Previous Fields </mat-label>
+        <mat-select
+          id="second-operand-selector"
+          data-testid="second-operand-selector"
+          [disabled]="!operatorSelected || !secondOperandQuestionList.length"
+          [(ngModel)]="secondOperand.value"
+          [ngModelOptions]="{ standalone: true }"
+          (focus)="
+            secondOperandQuestionList.length && resetQuestionFieldComponent()
+          "
+        >
+          <mat-option
+            *ngFor="let question of secondOperandQuestionList"
+            id="second-operand-option-{{ question.rithmId }}"
+            attr.data-testid="second-operand-option-{{ question.rithmId }}"
+            [value]="question.rithmId"
+            (click)="setSecondOperandInformation(question)"
+          >
+            {{ question.prompt }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-stroked-button
+        [disabled]="!operatorSelected"
+        (click)="switchConditionPreviousFields = !switchConditionPreviousFields"
+      >
+        <i
+          class="fa-solid text-accent-500 fa-xl"
+          [class]="[
+            switchConditionPreviousFields ? 'fa-keyboard' : 'fa-angle-down'
+          ]"
+        ></i>
+      </button>
+    </section>
+    <ng-template #fieldCustomValue>
+      <ng-container [ngSwitch]="displayOperatorType">
+        <app-number-field
+          *ngSwitchCase="questionFieldType.Number"
+          #numberField
+          [field]="secondOperandDefaultQuestion"
+          [validateMask]="validateFormat"
+        >
+        </app-number-field>
+        <app-date-field
+          *ngSwitchCase="questionFieldType.Date"
+          #dateField
+          [field]="secondOperandDefaultQuestion"
+        >
+        </app-date-field>
+        <app-select-field
+          *ngSwitchCase="
+            questionFieldType.Select ||
+            questionFieldType.MultiSelect ||
+            questionFieldType.CheckList
+          "
+          #selectField
+          [field]="secondOperandDefaultQuestion"
+        >
+        </app-select-field>
+        <app-text-field
+          *ngSwitchDefault
+          #textField
+          [field]="secondOperandDefaultQuestion"
+          [labelTag]="secondOperandDefaultQuestion.prompt"
+          [isStation]="true"
+          [isInput]="true"
+          [validateMask]="validateFormat"
+        >
+        </app-text-field>
+      </ng-container>
+    </ng-template>
+    <div class="condition-buttons-action mb-6 space-x-2">
+      <button
+        mat-button
+        data-testid="condition-cancel"
+        (click)="openFormCondition = !openFormCondition"
+      >
+        Cancel
+      </button>
+      <button
+        mat-button
+        color="accent"
+        data-testid="condition-save"
+        [disabled]="!secondOperand.value"
+        (click)="setEquationContent()"
+      >
+        Save
+      </button>
+    </div>
+  </section>
+</ng-template>
