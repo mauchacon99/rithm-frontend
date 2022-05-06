@@ -139,143 +139,92 @@
 
 <!--Display questions with list of the columns-->
 <ng-template #displayQuestionsWithDataColumns>
-  <ng-container *ngFor="let column of documentColumns">
-    <ng-container *ngFor="let questionList of dataDocumentWidget.questions">
-      <ng-container *ngFor="let questions of questionList.questions">
-        <ng-container *ngIf="questions.rithmId === column.questionId">
-          <ng-container
-            *ngTemplateOutlet="
-              questionColumn;
-              context: { $implicit: questions }
-            "
-          ></ng-container>
-        </ng-container>
-      </ng-container>
-    </ng-container>
+  <ng-container *ngFor="let question of getValueQuestions">
+    <ng-container
+      *ngTemplateOutlet="questionColumn; context: { $implicit: question }"
+    ></ng-container>
   </ng-container>
 </ng-template>
 
 <!--Display questions default if columns is empty-->
 <ng-template #displayQuestionsDefault>
   <ng-container *ngFor="let questionList of dataDocumentWidget.questions">
-    <ng-container *ngFor="let questions of questionList.questions">
+    <ng-container *ngFor="let question of questionList.questions">
       <ng-container
-        *ngTemplateOutlet="questionColumn; context: { $implicit: questions }"
+        *ngTemplateOutlet="questionColumn; context: { $implicit: question }"
       ></ng-container>
     </ng-container>
   </ng-container>
 </ng-template>
 
+<ng-template #withOutData>
+  <span class="cursor-default" title="Without Value">N/A</span>
+</ng-template>
+
+<!--Links template-->
+<ng-template #linkTemplate let-type="type" let-value="value">
+  <ng-container *ngIf="value; else withOutData">
+    <a
+      [title]="value"
+      [href]="type + value"
+      target="_blank"
+      class="text-accent-500 underline"
+      [ngClass]="{
+        'text-secondary-500 pointer-events-none cursor-not-allowed': editMode
+      }"
+    >
+      {{ value }}</a
+    >
+  </ng-container>
+</ng-template>
+
 <!--Question column-->
-<ng-template #questionColumn let-questions>
+<ng-template #questionColumn let-question>
   <div class="py-3 border-b border-b-secondary-200">
     <p class="font-semibold text-sm">
       {{
-        questions.questionType === 'instructions'
+        question.detail.questionType === 'instructions'
           ? 'Instruction'
-          : questions.prompt
+          : question.detail.prompt
       }}
     </p>
     <ng-template #withOutLink>
-      <span class="cursor-default" title="Without Link"
-        >This question doesn't have an answer.</span
-      >
+      <span class="cursor-default">This question doesn't have an answer.</span>
     </ng-template>
-
-    <div [ngSwitch]="questions.questionType">
-      <ng-container *ngSwitchCase="questionFieldType.Phone">
-        <ng-container *ngIf="questions.answer?.value; else withOutLink">
-          <a
-            [href]="'tel:+' + questions.answer?.value"
-            target="_blank"
-            class="text-accent-500 underline text-xs"
-            [ngClass]="{
-              'text-secondary-500 pointer-events-none cursor-not-allowed':
-                editMode
-            }"
-          >
-            {{ questions.answer?.value }}
-          </a>
-        </ng-container>
-      </ng-container>
-      <ng-container *ngSwitchCase="questionFieldType.Email">
-        <ng-container *ngIf="questions.answer?.value; else withOutLink">
-          <a
-            [href]="'mailto:' + questions.answer?.value"
-            target="_blank"
-            class="text-accent-500 underline text-xs"
-            [ngClass]="{
-              'text-secondary-500 pointer-events-none cursor-not-allowed':
-                editMode
-            }"
-          >
-            {{ questions.answer?.value }}
-          </a>
-        </ng-container>
-      </ng-container>
-      <ng-container *ngSwitchCase="questionFieldType.URL">
-        <ng-container *ngIf="questions.answer?.value; else withOutLink">
-          <a
-            title="{{ questions.answer?.value }}"
-            [href]="questions.answer?.value"
-            target="_blank"
-            class="text-accent-500 underline text-xs"
-            [ngClass]="{
-              'text-secondary-500 pointer-events-none cursor-not-allowed':
-                editMode
-            }"
-          >
-            {{ questions.answer?.value }}</a
-          >
-        </ng-container>
-      </ng-container>
-      <p *ngSwitchCase="questionFieldType.CheckList" class="pt-3 text-sm">
-        <span *ngFor="let answer of questions.answer?.asArray">
-          <i
-            class="fas"
-            [ngClass]="
-              answer.isChecked
-                ? 'fa-check-square text-accent-500'
-                : 'fa-square text-secondary-500'
-            "
-          ></i>
-          - {{ answer.value }}<br />
-        </span>
-      </p>
-      <p *ngSwitchCase="questionFieldType.MultiSelect" class="pt-3 text-sm">
-        <ng-container *ngFor="let answer of questions.answer?.asArray">
-          <i
-            class="fas"
-            [ngClass]="
-              answer.isChecked
-                ? 'fa-check-square text-accent-500'
-                : 'fa-square text-secondary-500'
-            "
-          ></i>
-          -
-          {{ answer.value }}
-          <br />
-        </ng-container>
-      </p>
-      <p *ngSwitchCase="questionFieldType.Select" class="pt-3 text-sm">
-        <ng-container *ngFor="let answer of questions.answer?.asArray">
-          <i
-            class="fas"
-            [ngClass]="
-              answer.isChecked
-                ? 'fa-check-square text-accent-500'
-                : 'fa-square text-secondary-500'
-            "
-          ></i>
-          - {{ answer.value }} <br />
-        </ng-container>
-      </p>
-      <p *ngSwitchCase="'instructions'" class="pt-3 text-sm">
-        {{ questions.prompt }}
-      </p>
-      <p *ngSwitchDefault class="pt-3 text-sm">
-        {{ questions.answer?.value || "This question doesn't have an answer." }}
-      </p>
-    </div>
+    <ng-container
+      *ngIf="
+        question.detail.questionType === questionFieldType.Phone ||
+          question.detail.questionType === questionFieldType.Email ||
+          question.detail.questionType === questionFieldType.URL;
+        else defaultQuestion
+      "
+    >
+      <ng-container
+        *ngTemplateOutlet="
+          linkTemplate;
+          context: {
+            type:
+              question.detail.questionType === questionFieldType.Phone
+                ? 'tel:+'
+                : question.detail.questionType === questionFieldType.Email
+                ? 'mailto:'
+                : '',
+            value: question.value
+          }
+        "
+      ></ng-container>
+    </ng-container>
+    <ng-template #defaultQuestion>
+      <span
+        *ngIf="question.value; else withOutData"
+        [title]="
+          question.detail.questionType === questionFieldType.LongText
+            ? question.value
+            : ''
+        "
+        [innerHTML]="question.value"
+      ></span>
+    </ng-template>
+    <!--****-->
   </div>
 </ng-template>

@@ -13,6 +13,7 @@ import {
   ColumnFieldsWidget,
   DashboardItem,
   DocumentWidget,
+  Question,
   QuestionFieldType,
   WidgetType,
 } from 'src/models';
@@ -169,6 +170,88 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Toggle drawer when click on edit station widget. */
   toggleEditDocument(): void {
     this.toggleDrawer.emit(+this.dataDocumentWidget.questions.length);
+  }
+
+  /**
+   * Get question value by type.
+   *
+   * @returns Question Value.
+   */
+  get getValueQuestions(): {
+    /**Value html */
+    value: string | null;
+    /**All question information */
+    detail: Question;
+  }[] {
+    const questions: {
+      /**Value html */
+      value: string | null;
+      /**All question information */
+      detail: Question;
+    }[] = [];
+    this.documentColumns.forEach((column) => {
+      this.dataDocumentWidget.questions.forEach((questionList) => {
+        const question = questionList.questions.find(
+          (q) => q.rithmId === column.questionId
+        );
+        if (question) {
+          questions.push({
+            detail: question,
+            value: this.getHTMLQuestionValue(question),
+          });
+        }
+      });
+    });
+
+    return questions;
+  }
+
+  /**
+   * Set HTML value.
+   *
+   * @param question Question to validate.
+   * @returns String value to show on HTML.
+   */
+  private getHTMLQuestionValue(question: Question): string | null {
+    if (question.questionType === this.questionFieldType.Select) {
+      if (question?.answer?.asArray?.length) {
+        if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
+          return '---';
+        }
+        const values: string[] = [];
+        question?.answer?.asArray?.map((answer) => {
+          if (answer.isChecked) {
+            values.push(answer.value);
+          }
+        });
+        return values.join('<br>') || null;
+      }
+      return null;
+    }
+
+    if (
+      question.questionType === this.questionFieldType.CheckList ||
+      question.questionType === this.questionFieldType.MultiSelect
+    ) {
+      if (question?.answer?.asArray?.length) {
+        const values: string[] = [];
+        question?.answer?.asArray?.map((answer) => {
+          values.push(
+            `<i class="fas ${
+              answer.isChecked
+                ? 'fa-check-square text-accent-500'
+                : 'fa-square text-secondary-500'
+            }"></i> ${answer.value}`
+          );
+        });
+        return values.join('<br>') || null;
+      }
+      return null;
+    }
+    if (question.questionType === this.questionFieldType.Instructions) {
+      return question.prompt || null;
+    }
+    return question?.answer?.value || null;
   }
 
   /** Clean subscriptions. */

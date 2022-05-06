@@ -477,11 +477,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       (questionDocument) => questionDocument.rithmId === questionRithmId
     );
     if (question) {
-      if (
-        question.questionType === this.questionFieldType.CheckList ||
-        question.questionType === this.questionFieldType.MultiSelect ||
-        question.questionType === this.questionFieldType.Select
-      ) {
+      if (question.questionType === this.questionFieldType.Select) {
         if (question?.answer?.asArray?.length) {
           if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
             return '---';
@@ -491,6 +487,29 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
             if (answer.isChecked) {
               values.push(answer.value);
             }
+          });
+          return values.join('<br>') || null;
+        }
+        return null;
+      }
+
+      if (
+        question.questionType === this.questionFieldType.CheckList ||
+        question.questionType === this.questionFieldType.MultiSelect
+      ) {
+        if (question?.answer?.asArray?.length) {
+          if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
+            return '---';
+          }
+          const values: string[] = [];
+          question?.answer?.asArray?.map((answer) => {
+            values.push(
+              `<i class="fas ${
+                answer.isChecked
+                  ? 'fa-check-square text-accent-500'
+                  : 'fa-square text-secondary-500'
+              }"></i> ${answer.value}`
+            );
           });
           return values.join('<br>') || null;
         }
