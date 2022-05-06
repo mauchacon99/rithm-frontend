@@ -41,6 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatRippleModule } from '@angular/material/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { Router } from '@angular/router';
 
 const DIALOG_TEST_DATA: StationDocumentsModalData = {
   stationName: 'A Station',
@@ -221,5 +222,23 @@ describe('StationDocumentsModalComponent', () => {
     btnClose.click();
     expect(spyMethod).toHaveBeenCalled();
     expect(spyMatDialogRef).toHaveBeenCalled();
+  });
+
+  it('should redirect to document page', () => {
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const stationRithmId = '64E7631C-B371-4A13-AEDB-0732AC79154D';
+    const documentId = '64E7631C-B371-4A13-AEDB-0732AC79154D';
+    component['stationRithmId'] = stationRithmId;
+    const spyRoute = spyOn(TestBed.inject(Router), 'navigate');
+
+    fixture.detectChanges();
+    component.goToDocument(documentId);
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(['/', 'document', documentId], {
+      queryParams: {
+        documentId,
+        stationId: stationRithmId,
+      },
+    });
   });
 });
