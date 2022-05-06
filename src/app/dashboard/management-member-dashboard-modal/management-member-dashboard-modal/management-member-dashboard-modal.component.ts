@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MemberDashboard, RoleDashboardMenu } from 'src/models';
@@ -31,6 +32,26 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
 
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
+
+  /** Users to add to dashboard. */
+  usersAdd!: MemberDashboard[];
+
+  /** Selected filter. */
+  selectedFilterValue: FilterOptionTypeMemberDashboard =
+    FilterOptionTypeMemberDashboard.All;
+
+  /** Filter options. */
+  optionsSelectList: FilterOptionTypeMemberDashboard[] = [
+    FilterOptionTypeMemberDashboard.All,
+    FilterOptionTypeMemberDashboard.ViewOnly,
+    FilterOptionTypeMemberDashboard.CanEdit,
+  ];
+
+  /** Search value. */
+  search = '';
+
+  /** Select all checked. */
+  checkedSelectAll = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -64,5 +85,33 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Add members to dashboard.
+   *
+   */
+  addDashboardMembers(): void {
+    this.dashboardService
+      .addDashboardMembers(this.usersAdd)
+      .pipe(first())
+      .subscribe({
+        next: (currentUsers) => {
+          this.membersDashboard = currentUsers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Detected change in mat-select.
+   */
+  matSelectChange(): void {
+    /** Detected change here with selectedFilterValue. */
   }
 }
