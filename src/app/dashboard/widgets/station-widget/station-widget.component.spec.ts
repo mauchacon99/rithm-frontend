@@ -949,4 +949,17 @@ describe('StationWidgetComponent', () => {
     };
     expect(component.reloadDocumentList).toBeTrue();
   });
+
+  it('should call viewDocument when stationFlow change', () => {
+    component.documentIdSelected = '333-333-333';
+    component.isDocument = true;
+    component.stationRithmId = '222-222-222';
+    const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalledWith('', true);
+  });
 });

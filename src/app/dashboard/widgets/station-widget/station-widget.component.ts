@@ -132,7 +132,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         value.stationFlow.includes(this.stationRithmId) ||
         value.currentStation === this.stationRithmId
       ) {
-        if (!this.isDocument) {
+        if (this.documentIdSelected === value.documentFlow && this.isDocument) {
+          this.viewDocument('', true);
+        } else if (!this.isDocument) {
           this.getStationWidgetDocuments();
         } else {
           this.reloadDocumentList = true;
