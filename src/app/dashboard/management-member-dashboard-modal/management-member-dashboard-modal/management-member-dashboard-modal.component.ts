@@ -33,6 +33,9 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
 
+  /** Users to add to dashboard. */
+  usersAdd!: MemberDashboard[];
+
   /** Selected filter. */
   selectedFilterValue: FilterOptionTypeMemberDashboard =
     FilterOptionTypeMemberDashboard.All;
@@ -74,6 +77,27 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
       .subscribe({
         next: (membersDashboard) => {
           this.membersDashboard = membersDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Add members to dashboard.
+   *
+   */
+  addDashboardMembers(): void {
+    this.dashboardService
+      .addDashboardMembers(this.usersAdd)
+      .pipe(first())
+      .subscribe({
+        next: (currentUsers) => {
+          this.membersDashboard = currentUsers;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
