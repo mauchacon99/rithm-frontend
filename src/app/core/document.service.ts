@@ -204,9 +204,13 @@ export class DocumentService {
       if (element.type === QuestionFieldType.File) {
         if (element.file) {
           formData.append(`answers[${index}].file`, element.file);
+        } else {
+          formData.append(`answers[${index}].file`, '');
         }
         if (element.filename) {
           formData.append(`answers[${index}].filename`, element.filename);
+        } else {
+          formData.append(`answers[${index}].filename`, '');
         }
       }
       formData.append(`answers[${index}].questionUpdated`, 'true');
