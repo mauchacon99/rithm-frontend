@@ -4,13 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  throwError,
-  from,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, from } from 'rxjs';
 import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -29,7 +23,7 @@ import {
   DataLinkObject,
   GroupTrafficData,
   StandardNumberJSON,
-  StationWidgetPreBuilt
+  StationWidgetPreBuilt,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 

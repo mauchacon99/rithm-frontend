@@ -23,7 +23,7 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  RoleDashboardMenu
+  RoleDashboardMenu,
 } from 'src/models';
 import { StationService } from './station.service';
 

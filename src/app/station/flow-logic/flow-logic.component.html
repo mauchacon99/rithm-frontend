@@ -248,7 +248,10 @@
 </ng-container>
 
 <ng-template #newView>
-  <div *ngIf="!powersLoading; else powersLoadingIndicator" class="rules-tab-content">
+  <div
+    *ngIf="!powersLoading; else powersLoadingIndicator"
+    class="rules-tab-content"
+  >
     <aside
       class="rules-left-side p-4"
       [ngClass]="{ showRulesList: showRulesList }"
