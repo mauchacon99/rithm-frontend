@@ -275,9 +275,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         ? true
         : false;
 
-    this.selectedDefaultDashboard
-      ? this.markDefaultDashboard.emit(true)
-      : this.markDefaultDashboard.emit(false);
+    this.markDefaultDashboard.emit(this.selectedDefaultDashboard);
   }
 
   /** Clean subscriptions. */
