@@ -7,14 +7,19 @@ import { ExpansionMenuComponent } from './expansion-menu.component';
 import { MockComponent } from 'ng-mocks';
 import { OptionsMenuComponent } from '../options-menu/options-menu.component';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDashboardService, MockErrorService } from 'src/mocks';
+import {
+  MockDashboardService,
+  MockErrorService,
+  MockUserService,
+} from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, User, WidgetType } from 'src/models';
 import { of, throwError } from 'rxjs';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { UserService } from 'src/app/core/user.service';
 
 describe('ExpansionMenuComponent', () => {
   let component: ExpansionMenuComponent;
@@ -62,6 +67,20 @@ describe('ExpansionMenuComponent', () => {
     },
   ];
 
+  const testUser: User = {
+    firstName: 'Samus',
+    lastName: 'Aran',
+    email: 'ycantmetroidcrawl@metroid.com',
+    isEmailVerified: true,
+    createdDate: new Date().toISOString(),
+    rithmId: 'kj34k3jkj',
+    notificationSettings: null,
+    role: null,
+    organization: '',
+    defaultDashboardType: RoleDashboardMenu.Personal,
+    defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -73,6 +92,7 @@ describe('ExpansionMenuComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: UserService, useClass: MockUserService },
       ],
       imports: [
         MatExpansionModule,
@@ -318,5 +338,22 @@ describe('ExpansionMenuComponent', () => {
     button.click();
     expect(spyHiddenDrawer).toHaveBeenCalledOnceWith();
     expect(spyDrawer).toHaveBeenCalledOnceWith('menuDashboard');
+  });
+
+  it('Should subscribe to user.userData$', () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
+    const spyUserService = spyOn(
+      TestBed.inject(UserService).userData$,
+      'next'
+    ).and.callThrough();
+    component.ngOnInit();
+    TestBed.inject(UserService).userData$.next(testUser);
+    expect(spyUserService).toHaveBeenCalled();
+    expect(component.indexDefaultDashboard).toBeUndefined();
+  });
+
+  it('Should set index of default dashboard', () => {
+    component.markDefaultDashboard(true, 2);
+    expect(component.indexDefaultDashboard).toBe(2);
   });
 });

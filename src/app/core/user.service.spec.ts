@@ -252,6 +252,8 @@ describe('UserService', () => {
       firstName: 'James',
       lastName: 'Anderson',
       password: 'mamamia',
+      defaultDashboardId: undefined,
+      defaultDashboardType: undefined,
     };
 
     service.updateUserAccount(changedAccountInfo).subscribe((response) => {
