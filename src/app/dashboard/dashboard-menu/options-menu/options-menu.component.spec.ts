@@ -61,6 +61,7 @@ describe('OptionsMenuComponent', () => {
     notificationSettings: null,
     role: null,
     organization: '',
+    profileImageRithmId: 'f47cf568-27a4-4968-5628-f46ccfee24ff',
     defaultDashboardType: RoleDashboardMenu.Personal,
     defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
   };

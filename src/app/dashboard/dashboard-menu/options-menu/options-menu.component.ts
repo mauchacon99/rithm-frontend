@@ -247,11 +247,17 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * Set default dashboard.
    */
   setDefaultDashboard(): void {
+    const data = this.selectedDefaultDashboard
+      ? {
+          defaultDashboardId: '',
+        }
+      : {
+          defaultDashboardType: this.dashboardRole,
+          defaultDashboardId: this.rithmId,
+        };
+
     this.user
-      .updateUserAccount({
-        defaultDashboardType: this.dashboardRole,
-        defaultDashboardId: this.rithmId,
-      })
+      .updateUserAccount(data)
       .pipe(first())
       .subscribe({
         next: () => {

@@ -75,7 +75,10 @@ export class ExpansionMenuComponent implements OnInit {
   private detectDefaultDashboard$(): void {
     this.user.userData$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (user) => {
-        if (user.defaultDashboardType !== this.dashboardRole) {
+        if (
+          user.defaultDashboardType !== this.dashboardRole ||
+          !user.defaultDashboardId
+        ) {
           this.indexDefaultDashboard = undefined;
         }
       },
