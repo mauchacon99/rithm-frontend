@@ -98,7 +98,7 @@ export class UserFormComponent
     if (!this.accountCreate) {
       this.split();
       this.currentUser = this.userService.user;
-      this.profileImageRithmId = this.currentUser?.profileImageId || '';
+      this.profileImageRithmId = this.currentUser?.profileImageRithmId || '';
     }
 
     this.passwordLabel = this.getPasswordLabel();
