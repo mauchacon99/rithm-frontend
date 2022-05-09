@@ -416,5 +416,16 @@ describe('DocumentWidgetComponent', () => {
         '<i class="fas fa-square text-secondary-500"></i> dev1'
       );
     });
+
+    it('should call getDocumentWidget when stationFlow change', () => {
+      const spyMethod = spyOn(component, 'getDocumentWidget').and.callThrough();
+      component.documentRithmId = '333-333-333';
+      component.stationFlow = {
+        stationFlow: ['123-456-789'],
+        currentStation: '222-222-222',
+        documentFlow: '333-333-333',
+      };
+      expect(spyMethod).toHaveBeenCalled();
+    });
   });
 });

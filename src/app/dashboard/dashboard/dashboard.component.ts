@@ -20,6 +20,7 @@ import {
   DashboardData,
   DashboardItem,
   EditDataWidget,
+  reloadStationFlow,
   RoleDashboardMenu,
   WidgetType,
 } from 'src/models';
@@ -86,6 +87,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Dashboard data Copy for save original data in mode edit. */
   dashboardDataCopy!: DashboardData;
+
+  /** Reload station when document has flow. */
+  stationFlow!: reloadStationFlow;
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
