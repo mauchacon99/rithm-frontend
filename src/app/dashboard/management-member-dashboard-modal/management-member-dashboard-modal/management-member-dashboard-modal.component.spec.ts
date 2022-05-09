@@ -9,6 +9,8 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
+import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
+import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
@@ -78,6 +80,8 @@ describe('ManagementMemberDashboardModalComponent', () => {
       declarations: [
         ManagementMemberDashboardModalComponent,
         MockComponent(MemberDashboardListModalComponent),
+        MockComponent(LoadingWidgetComponent),
+        MockComponent(ErrorWidgetComponent),
       ],
       imports: [
         BrowserAnimationsModule,
@@ -147,6 +151,21 @@ describe('ManagementMemberDashboardModalComponent', () => {
     );
     const spyError = spyOn(errorService, 'displayError').and.callThrough();
     component.ngOnInit();
+    fixture.detectChanges();
+    const errorLoadingDashboard =
+      fixture.debugElement.nativeElement.querySelector(
+        '#error-load-user-member'
+      );
+    expect(errorLoadingDashboard).toBeTruthy();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should render the app-loading-indicator component', () => {
+    component.isLoadingGetUserMembers = true;
+    fixture.detectChanges();
+    const loader = fixture.debugElement.nativeElement.querySelector(
+      '#app-loading-indicator-user-member'
+    );
+    expect(loader).toBeTruthy();
   });
 });
