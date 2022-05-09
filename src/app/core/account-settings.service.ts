@@ -32,5 +32,5 @@ interface UserFirstLast {
   lastName: string;
 
   /** RithmId the image the user specific. */
-  profileImageId: string;
+  profileImageRithmId: string;
 }

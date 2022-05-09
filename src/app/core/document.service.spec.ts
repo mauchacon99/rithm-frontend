@@ -770,6 +770,7 @@ describe('DocumentService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          profileImageRithmId: '123-456-789',
           defaultDashboardType: RoleDashboardMenu.Personal,
           defaultDashboardId: '777cf568-27a4-4968-5628-046ccfee24fd',
         },
@@ -796,6 +797,7 @@ describe('DocumentService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          profileImageRithmId: '123-456-789',
           defaultDashboardType: RoleDashboardMenu.Company,
           defaultDashboardId: '197cf568-27a4-4968-5628-046ccfee24fd',
         },
@@ -1140,6 +1142,48 @@ describe('DocumentService', () => {
     expect(req.request.body).toBeFalsy();
 
     req.flush(expectedData);
+    httpTestingController.verify();
+  });
+
+  it('should get container widgets', () => {
+    const expectedResponse: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        questions: [],
+        id: 0,
+      },
+      {
+        rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 1,
+        x: 0,
+        y: 0,
+        type: FrameType.Headline,
+        data: '',
+        id: 1,
+      },
+    ];
+
+    service.getContainerWidgets(documentId, stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type?documentRithmId=${documentId}&stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toEqual(documentId);
+    expect(req.request.params.get('stationRithmId')).toEqual(stationId);
+
+    req.flush(expectedResponse);
     httpTestingController.verify();
   });
 });
