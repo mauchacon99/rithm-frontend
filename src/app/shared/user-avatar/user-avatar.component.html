@@ -8,7 +8,7 @@
     '-ml-2.5': isDrawer,
     'animate-pulse': isLoading
   }"
-  matTooltip="{{ firstName + ' ' + lastName }}"
+  matTooltip="{{ initials }}"
   [matTooltipDisabled]="hideToolTip"
   class="relative cursor-pointer flex justify-center items-center"
   (mouseenter)="hoverEffect ? (badgeHover = true) : (badgeHover = false)"
@@ -30,8 +30,8 @@
     matBadgePosition="below after"
     [matBadgeColor]="badgeHover || badge === 'minus' ? 'warn' : 'accent'"
     type="button"
-    class="absolute"
+    class="w-full h-full absolute"
   >
-    {{ initials }}
+    {{ classProfileImage ? '' : initials }}
   </button>
 </div>
