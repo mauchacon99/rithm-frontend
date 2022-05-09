@@ -35,6 +35,7 @@ import {
   ImageData,
   Power,
   TriggerType,
+  ActionType,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -1161,7 +1162,7 @@ describe('DocumentService', () => {
         actions: [
           {
             rithmId: '3j4k-3h2j-ft5h',
-            type: 'Type Action #1',
+            type: ActionType.CreateDocument,
             target: 'Target Action #1',
             data: 'Data Action #1',
             resultMapping: 'Result Action #1',
