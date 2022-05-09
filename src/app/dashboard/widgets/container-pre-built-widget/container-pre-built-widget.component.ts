@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ContainerWidgetPreBuilt, reloadStationFlow } from 'src/models';
+import { ContainerWidgetPreBuilt, ReloadStationFlow } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
@@ -60,7 +60,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   @Input() showButtonSetting = false;
 
   /** Set data for station widget. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     // Is it was call flow or save.
     if (value) {
       // If document flowed or saved exist on this container.
@@ -93,7 +93,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   @Output() toggleDrawer = new EventEmitter<number>();
 
   /** Reload stations or document Flowed or saved. */
-  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
+  @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
 
   /**
    * Whether the drawer is open.

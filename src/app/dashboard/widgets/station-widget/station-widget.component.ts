@@ -21,7 +21,7 @@ import {
   StationRosterMember,
   Question,
   WidgetDocument,
-  reloadStationFlow,
+  ReloadStationFlow,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -126,7 +126,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** Set data for station widget. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     if (this.stationRithmId && value) {
       // if it's the same current station was flow or destiny station flowed.
       if (
@@ -160,7 +160,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @Output() expandWidget = new EventEmitter<boolean>();
 
   /** Reload stations or document Flowed or saved. */
-  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
+  @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
 
   /**
    * Whether the drawer is open.
