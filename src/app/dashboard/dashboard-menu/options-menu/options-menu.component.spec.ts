@@ -10,6 +10,7 @@ import {
   MockDashboardService,
   MockErrorService,
   MockPopupService,
+  MockUserService,
 } from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,6 +22,8 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { UserService } from 'src/app/core/user.service';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -60,6 +63,18 @@ describe('OptionsMenuComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            // eslint-disable-next-line rxjs/finnish
+            paramMap: of(
+              convertToParamMap({
+                dashboardId: '747cf568-27a4-4968-5628-046ccfee24fd',
+              })
+            ),
+          },
+        },
       ],
       imports: [
         MatMenuModule,
@@ -352,7 +367,7 @@ describe('OptionsMenuComponent', () => {
   it('should call dashboardService.toggleLoadingDashboard for update dashboard when is deleted', () => {
     component.dashboardRole = RoleDashboardMenu.Company;
     component.index = 0;
-    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const rithmId = '747cf568-27a4-4968-5628-046ccfee24fd';
     fixture.detectChanges();
 
     const deletePersonalDashboard = spyOn(
@@ -398,11 +413,19 @@ describe('OptionsMenuComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
+        disableClose: true,
         data: {
           dashboardRithmId: rithmId,
           dashboardType: RoleDashboardMenu.Company,
         },
       }
     );
+  });
+
+  it('should validate if the current route is default', () => {
+    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
+    component.ngOnInit();
+    expect(component.paramRithmId).toEqual(defaultDashboard);
+    expect(component.selectedDefaultDashboard).toBeTrue();
   });
 });

@@ -9,6 +9,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -58,6 +59,8 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
 
+  selectedDefaultDashboard = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
@@ -65,7 +68,8 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private user: UserService
   ) {}
 
   /**
@@ -75,6 +79,9 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
+        if (this.user.user.defaultDashboardId === this.paramRithmId) {
+          this.selectedDefaultDashboard = true;
+        }
       },
     });
   }
@@ -200,6 +207,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         'custom-margin-modal',
       ],
       maxWidth: '1500px',
+      disableClose: true,
       data: {
         dashboardRithmId: this.rithmId,
         dashboardType: this.dashboardRole,

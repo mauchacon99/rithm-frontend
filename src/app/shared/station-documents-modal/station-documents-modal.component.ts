@@ -199,6 +199,21 @@ export class StationDocumentsModalComponent implements OnInit {
   }
 
   /**
+   * Navigate the user to the document page.
+   *
+   * @param documentId The Id of the document to view.
+   */
+  goToDocument(documentId: string): void {
+    this.closeModal();
+    this.router.navigate(['/', 'document', documentId], {
+      queryParams: {
+        documentId,
+        stationId: this.stationRithmId,
+      },
+    });
+  }
+
+  /**
    * The closeModal() function closes the modal.
    */
   closeModal(): void {
