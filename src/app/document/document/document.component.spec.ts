@@ -633,6 +633,7 @@ describe('DocumentComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: true,
       isReloadListDocuments: false,
+      stationFlow: [],
     });
   });
 
@@ -701,18 +702,38 @@ describe('DocumentComponent', () => {
     );
   });
 
-  it('should emit event for executed petition and refresh widget', () => {
+  it('should emit event for executed petition and refresh widget', async () => {
     component.isWidget = true;
-    const spyEmit = spyOn(component.returnDocumentsWidget, 'emit');
+    component.shouldFlowContainer = false;
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveDocumentAnswer'
+    ).and.returnValue(of([]));
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'updateDocumentName'
+    ).and.returnValue(of('New container Name'));
+
+    const spyEmit = spyOn(
+      component.returnDocumentsWidget,
+      'emit'
+    ).and.callThrough();
     const spyMethod = spyOn(
       component,
       'widgetReloadListDocuments'
     ).and.callThrough();
-    component.saveDocumentChanges();
-    expect(spyMethod).toHaveBeenCalledOnceWith(false, true);
+
+    await component.saveDocumentChanges();
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(false, true, [
+      'rithmIdTempOnlySave',
+    ]);
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: false,
       isReloadListDocuments: true,
+      stationFlow: ['rithmIdTempOnlySave'],
     });
   });
 
