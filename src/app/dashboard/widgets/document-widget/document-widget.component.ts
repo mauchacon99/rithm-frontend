@@ -202,7 +202,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
         }
       });
     });
-    console.log(questions);
     return questions;
   }
 
