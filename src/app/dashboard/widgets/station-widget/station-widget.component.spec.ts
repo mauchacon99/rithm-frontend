@@ -941,6 +941,7 @@ describe('StationWidgetComponent', () => {
   it('should set reloadDocumentList to true when stationFlow change', () => {
     component.reloadDocumentList = false;
     component.isDocument = true;
+    component.documentIdSelected = '234-234234-6666';
     component.stationRithmId = '222-222-222';
     component.stationFlow = {
       stationFlow: ['123-456-789'],
@@ -961,5 +962,18 @@ describe('StationWidgetComponent', () => {
       documentFlow: '333-333-333',
     };
     expect(spyMethod).toHaveBeenCalledWith('', true);
+  });
+
+  it('should set reloadDocumentList to true when a document was saved', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.documentIdSelected = '333-333-333';
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['rithmIdTempOnlySave'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(component.reloadDocumentList).toBeTrue();
   });
 });

@@ -128,20 +128,26 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Set data for station widget. */
   @Input() set stationFlow(value: reloadStationFlow) {
     if (this.stationRithmId && value) {
+      // if it's the same current station was flow or destiny station flowed.
       if (
         value.stationFlow.includes(this.stationRithmId) ||
         value.currentStation === this.stationRithmId
       ) {
+        // If the document selected was flow.
         if (
           this.documentIdSelected === value.documentFlow &&
           this.isDocument &&
           !value.stationFlow.includes('rithmIdTempOnlySave')
         ) {
           this.viewDocument('', true);
-        } else if (!this.isDocument) {
-          this.getStationWidgetDocuments();
-        } else {
+        }
+        // If there is any document opened and the document was not flow, or the document saved.
+        else if (this.isDocument) {
           this.reloadDocumentList = true;
+        }
+        // If there are no documents opened.
+        else {
+          this.getStationWidgetDocuments();
         }
       }
     }
