@@ -416,17 +416,5 @@ describe('DocumentWidgetComponent', () => {
         '<i class="fas fa-square text-secondary-500"></i> dev1'
       );
     });
-
-    it('should call viewDocument when stationFlow change and its the same document', () => {
-      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
-      component.isDocument = true;
-      component.documentSelected = containers[0];
-      component.stationFlow = {
-        stationFlow: ['123-456-789'],
-        currentStation: '222-222-222',
-        documentFlow: containers[0].documentRithmId,
-      };
-      expect(spyMethod).toHaveBeenCalledOnceWith(null, true);
-    });
   });
 });
