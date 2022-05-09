@@ -283,7 +283,8 @@
       (returnDocumentsWidget)="
         widgetReloadListDocuments(
           $event.isReturnListDocuments,
-          $event.isReloadListDocuments
+          $event.isReloadListDocuments,
+          $event.stationFlow
         )
       "
       [documentRithmIdWidget]="documentSelected?.documentRithmId || ''"
