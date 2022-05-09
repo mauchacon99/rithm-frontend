@@ -444,14 +444,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.mapHelper.viewStationButtonClick$.next(false);
             }
           } else {
-            this.mapService.centerHelper.centerActive$.next(true);
-            this.mapService.centerHelper.centerCount$.next(1);
-            this.mapService.centerHelper.center(
-              CenterPanType.MapCenter,
-              0,
-              dataReceived
-            );
-            this.mapService.mapHelper.viewStationButtonClick$.next(false);
+            /** The boundary element must be defined in order to be able to center. */
+            if (this.mapService.mapHelper.boundaryElement) {
+              this.mapService.centerHelper.centerActive$.next(true);
+              this.mapService.centerHelper.centerCount$.next(1);
+              this.mapService.centerHelper.center(
+                CenterPanType.MapCenter,
+                0,
+                dataReceived
+              );
+              this.mapService.mapHelper.viewStationButtonClick$.next(false);
+            }
           }
         }
 
