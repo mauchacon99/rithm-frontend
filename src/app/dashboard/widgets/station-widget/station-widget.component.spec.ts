@@ -909,6 +909,7 @@ describe('StationWidgetComponent', () => {
   it('should emit reloadStationsFlow', () => {
     component.documentIdSelected = '333-333-333';
     const stationFlow = ['123-456-789'];
+    component.stationRithmId = '4fb462ec-0772-49dc-8cfb-3849d70ad168';
     const spyEmit = spyOn(
       component.reloadStationsFlow,
       'emit'
