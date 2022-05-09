@@ -21,6 +21,14 @@ import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 
+/** Local interface to display question and html value. */
+interface HTMLResponse {
+  /**Value html */
+  value: string | null;
+  /**All question information */
+  detail: Question;
+}
+
 /**
  * Component for list field the document how widget.
  */
@@ -177,18 +185,8 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    *
    * @returns Question Value.
    */
-  get getValueQuestions(): {
-    /**Value html */
-    value: string | null;
-    /**All question information */
-    detail: Question;
-  }[] {
-    const questions: {
-      /**Value html */
-      value: string | null;
-      /**All question information */
-      detail: Question;
-    }[] = [];
+  get getValueQuestions(): HTMLResponse[] {
+    const questions: HTMLResponse[] = [];
     this.documentColumns.forEach((column) => {
       this.dataDocumentWidget.questions.forEach((questionList) => {
         const question = questionList.questions.find(
