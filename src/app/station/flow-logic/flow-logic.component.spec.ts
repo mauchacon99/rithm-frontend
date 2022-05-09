@@ -16,6 +16,7 @@ import {
   FlowLogicRule,
   TriggerType,
   Power,
+  ActionType,
 } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -125,7 +126,7 @@ describe('FlowLogicComponent', () => {
       actions: [
         {
           rithmId: '3j4k-3h2j-ft5h',
-          type: 'Type Action #1',
+          type: ActionType.CreateDocument,
           target: 'Target Action #1',
           data: 'Data Action #1',
           resultMapping: 'Result Action #1',
