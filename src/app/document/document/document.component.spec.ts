@@ -30,6 +30,7 @@ import {
   FrameType,
   MoveDocument,
   QuestionFieldType,
+  StationFrameWidget,
   StationRosterMember,
 } from 'src/models';
 import { of, throwError } from 'rxjs';
@@ -632,6 +633,7 @@ describe('DocumentComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: true,
       isReloadListDocuments: false,
+      stationFlow: [],
     });
   });
 
@@ -700,18 +702,38 @@ describe('DocumentComponent', () => {
     );
   });
 
-  it('should emit event for executed petition and refresh widget', () => {
+  it('should emit event for executed petition and refresh widget', async () => {
     component.isWidget = true;
-    const spyEmit = spyOn(component.returnDocumentsWidget, 'emit');
+    component.shouldFlowContainer = false;
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveDocumentAnswer'
+    ).and.returnValue(of([]));
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'updateDocumentName'
+    ).and.returnValue(of('New container Name'));
+
+    const spyEmit = spyOn(
+      component.returnDocumentsWidget,
+      'emit'
+    ).and.callThrough();
     const spyMethod = spyOn(
       component,
       'widgetReloadListDocuments'
     ).and.callThrough();
-    component.saveDocumentChanges();
-    expect(spyMethod).toHaveBeenCalledOnceWith(false, true);
+
+    await component.saveDocumentChanges();
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(false, true, [
+      'rithmIdTempOnlySave',
+    ]);
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: false,
       isReloadListDocuments: true,
+      stationFlow: ['rithmIdTempOnlySave'],
     });
   });
 
@@ -772,5 +794,55 @@ describe('DocumentComponent', () => {
       documentId,
       FrameType.DataLink
     );
+  });
+
+  it('should call getContainerWidgets', () => {
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return get container widgets fails', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method that get the frame types of the current container', () => {
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        questions: [],
+        id: 0,
+      },
+    ];
+
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.returnValue(of(frameStationWidget));
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
   });
 });

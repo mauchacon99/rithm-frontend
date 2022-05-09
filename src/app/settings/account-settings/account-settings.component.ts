@@ -74,7 +74,7 @@ export class AccountSettingsComponent {
           this.accountSettingsService.setUser({
             firstName,
             lastName,
-            profileImageId: vaultRithmId,
+            profileImageRithmId: vaultRithmId,
           });
         },
         error: (error: unknown) => {
