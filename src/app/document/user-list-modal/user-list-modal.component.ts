@@ -18,6 +18,8 @@ export class UserListModalComponent implements OnInit {
   /** The user roster for the current station. */
   userRoster: StationRosterMember[] | User[] = [];
 
+  seasons: number[] = [1, 2, 3, 4, 5, 6];
+
   /** The station Id. */
   stationRithmId = '';
 

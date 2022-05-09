@@ -1,7 +1,45 @@
 <div class="modal-container">
   <section class="flex flex-col">
-    <h4 class="text-center font-semibold">Assign Container</h4>
-    <div class="overflow-y-auto h-[350px] pt-2"></div>
+    <h4 class="text-left font-semibold">Assign Container</h4>
+    <div class="overflow-y-auto h-[350px] pt-2">
+      <mat-radio-group
+        aria-labelledby="radio-group-label"
+        class="radio-group px-2"
+      >
+        <mat-radio-button
+          class="radio-button"
+          *ngFor="let user of userRoster"
+          [value]="user.rithmId"
+        >
+          <div class="unassigned-user-section flex items-center py-2">
+            <button
+              id="open-modal-user-list"
+              data-testid="open-modal-user-list"
+              class="shadow-none mr-3"
+              matTooltip="Assigned User"
+              matTooltipPosition="above"
+            >
+              <span class="fa-stack fa-lg">
+                <i
+                  class="fa-solid fa-circle fa-stack-2x"
+                  [ngClass]="'text-secondary-500'"
+                ></i>
+                <i
+                  class="fa-solid fa-stack-1x text-white"
+                  [ngClass]="'fa-user-plus'"
+                ></i>
+              </span>
+            </button>
+            <div class="flex w-full flex-col justify-center">
+              <h6>{{ user.firstName }} {{ user.lastName }}</h6>
+              <p class="lowercase font-normal text-brightBlue text-xs">
+                {{ user.email }}
+              </p>
+            </div>
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
     <div mat-dialog-actions class="flex justify-end self-end">
       <button
         mat-button
