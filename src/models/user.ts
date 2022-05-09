@@ -35,7 +35,7 @@ export interface User {
   readonly organization: string;
 
   /** User Image or Photo. */
-  profileImageId?: string;
+  profileImageRithmId: string;
 
   /** Dashboard type default dashboard for this user. */
   defaultDashboardType: RoleDashboardMenu;
