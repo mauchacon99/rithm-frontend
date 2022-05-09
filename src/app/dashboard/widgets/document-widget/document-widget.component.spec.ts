@@ -11,7 +11,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DashboardItem, DocumentWidget, QuestionFieldType, WidgetType } from 'src/models';
+import {
+  DashboardItem,
+  DocumentWidget,
+  Question,
+  QuestionFieldType,
+  WidgetType,
+} from 'src/models';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -36,38 +42,39 @@ describe('DocumentWidgetComponent', () => {
     maxItemRows: 12,
   };
 
+  const questions: Question[] = [
+    {
+      rithmId: '1020-654684304-05060708-090100',
+      prompt: 'Instructions',
+      questionType: QuestionFieldType.Instructions,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      answer: {
+        questionRithmId: '',
+        referAttribute: '',
+        value: 'Some value.',
+      },
+    },
+    {
+      rithmId: '1020-65sdvsd4-05060708-090trhrth',
+      prompt: 'Name your field',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+      value: '',
+    },
+  ];
   const documents: DocumentWidget = {
     documentName: 'Untitled Document',
     documentRithmId: '123-123-123',
     questions: [
       {
         stationRithmId: '123132-123123-123123',
-        questions: [
-          {
-            rithmId: '1020-654684304-05060708-090100',
-            prompt: 'Instructions',
-            questionType: QuestionFieldType.Instructions,
-            isReadOnly: false,
-            isRequired: true,
-            isPrivate: false,
-            children: [],
-            answer: {
-              questionRithmId: '',
-              referAttribute: '',
-              value: 'Some value.',
-            },
-          },
-          {
-            rithmId: '1020-65sdvsd4-05060708-090trhrth',
-            prompt: 'Name your field',
-            questionType: QuestionFieldType.ShortText,
-            isReadOnly: false,
-            isRequired: true,
-            isPrivate: false,
-            children: [],
-            value: '',
-          },
-        ],
+        questions: questions,
       },
     ],
     stations: [
@@ -291,20 +298,14 @@ describe('DocumentWidgetComponent', () => {
     });
 
     it('should return [] if question dont exist', () => {
-      expect(
-        component.getValueQuestions
-      ).toEqual([]);
+      expect(component.getValueQuestions).toEqual([]);
     });
-    it('should getHTMLQuestionValue', () => {
+    fit('should getHTMLQuestionValue', () => {
       //pasarle una question con diferentes tipos para que caiga en cada if y esperar que sea el concatenado segun se mande
-      //const string =  component[''](questio)
-      expect(
-        component.getValueQuestions
-      ).toEqual([]);
+      //const string =  component['getHTMLQuestionValue'](questions[0]);
+      //empty questions
+      //const emptyQuestions = component['getHTMLQuestionValue'](questions[1]);
+      expect(component.getValueQuestions).toEqual([]);
     });
-
-
-
-
   });
 });
