@@ -1181,7 +1181,7 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toEqual(powerRemove);
       });
-      });
+  });
   it('should get container widgets', () => {
     const expectedResponse: StationFrameWidget[] = [
       {
