@@ -409,10 +409,10 @@ describe('DocumentWidgetComponent', () => {
       );
       const noOption = component['getHTMLQuestionValue'](questions[2]);
       expect(noOption).toEqual('---');
-      const oneNoCheckedOptionselected = component['getHTMLQuestionValue'](
+      const oneNoCheckedOptionSelected = component['getHTMLQuestionValue'](
         questions[3]
       );
-      expect(oneNoCheckedOptionselected).toEqual(
+      expect(oneNoCheckedOptionSelected).toEqual(
         '<i class="fas fa-square text-secondary-500"></i> dev1'
       );
     });
