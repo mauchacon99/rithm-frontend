@@ -2055,6 +2055,58 @@ export class MockDocumentService {
   }
 
   /**
+   * Get the container widgets.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
+   * @param type The frame type.
+   * @returns The station widget data.
+   */
+  getContainerWidgets(
+    documentRithmId: string,
+    stationRithmId: string,
+    type?: FrameType
+  ): Observable<StationFrameWidget[]> {
+    if (!stationRithmId || !documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve frame widgets',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const containerWidgets: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          questions: [],
+          id: 0,
+        },
+        {
+          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 1,
+          x: 0,
+          y: 0,
+          type: FrameType.Headline,
+          data: '',
+          id: 1,
+        },
+      ];
+      return of(containerWidgets).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get powers of current station.
    *
    * @param stationRithmId Specific id of station.
