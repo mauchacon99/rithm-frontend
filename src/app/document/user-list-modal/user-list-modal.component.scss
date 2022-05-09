@@ -1,10 +1,9 @@
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  margin: 15px 0;
-  align-items: flex-start;
-}
+.list-user-to-assign {
+  .radio-group {
+    @apply flex flex-col mt-4 items-start;
+  }
 
-.radio-button {
-  margin: 5px;
+  .radio-button {
+    @apply m-1;
+  }
 }

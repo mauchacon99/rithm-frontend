@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
 import { of } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
@@ -38,6 +39,7 @@ describe('UserListModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UserListModalComponent],
+      imports: [MatRadioModule],
       providers: [
         { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
