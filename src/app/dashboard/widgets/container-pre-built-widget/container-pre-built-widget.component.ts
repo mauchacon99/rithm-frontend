@@ -61,11 +61,27 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   /** Set data for station widget. */
   @Input() set stationFlow(value: reloadStationFlow) {
+    // Is it was call flow or save.
     if (value) {
-      if (!this.isDocument) {
-        this.getContainerWidgetPreBuilt();
-      } else {
-        this.reloadDocumentList = true;
+      // If document flowed or saved exist on this container.
+      if (
+        this.containers.some(
+          ({ documentRithmId }) => documentRithmId === value.documentFlow
+        )
+      ) {
+        // If document flowed or saved it's open, and it's the same
+        if (
+          this.isDocument &&
+          this.documentSelected?.documentRithmId === value.documentFlow
+        ) {
+          this.viewDocument(null, true);
+        } // If document flowed or saved it's open, and it's not the same.
+        else if (this.isDocument) {
+          this.reloadDocumentList = true;
+        } // Reload documents.
+        else {
+          this.getContainerWidgetPreBuilt();
+        }
       }
     }
   }
