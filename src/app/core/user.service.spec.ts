@@ -29,6 +29,7 @@ const testUser: User = {
   notificationSettings: null,
   role: null,
   organization: '',
+  profileImageRithmId: '123-456-789',
   defaultDashboardType: RoleDashboardMenu.Personal,
   defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
 };
@@ -254,6 +255,7 @@ describe('UserService', () => {
       password: 'mamamia',
       defaultDashboardId: undefined,
       defaultDashboardType: undefined,
+      vaultRithmId: '123-456-789',
     };
 
     service.updateUserAccount(changedAccountInfo).subscribe((response) => {
@@ -265,7 +267,6 @@ describe('UserService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/update`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(changedAccountInfo);
 
     req.flush(null);
     httpTestingController.verify();
