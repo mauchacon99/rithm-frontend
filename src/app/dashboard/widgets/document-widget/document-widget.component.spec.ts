@@ -11,7 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DashboardItem, WidgetType } from 'src/models';
+import { DashboardItem, DocumentWidget, QuestionFieldType, WidgetType } from 'src/models';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -34,6 +34,48 @@ describe('DocumentWidgetComponent', () => {
     minItemRows: 4,
     maxItemCols: 12,
     maxItemRows: 12,
+  };
+
+  const documents: DocumentWidget = {
+    documentName: 'Untitled Document',
+    documentRithmId: '123-123-123',
+    questions: [
+      {
+        stationRithmId: '123132-123123-123123',
+        questions: [
+          {
+            rithmId: '1020-654684304-05060708-090100',
+            prompt: 'Instructions',
+            questionType: QuestionFieldType.Instructions,
+            isReadOnly: false,
+            isRequired: true,
+            isPrivate: false,
+            children: [],
+            answer: {
+              questionRithmId: '',
+              referAttribute: '',
+              value: 'Some value.',
+            },
+          },
+          {
+            rithmId: '1020-65sdvsd4-05060708-090trhrth',
+            prompt: 'Name your field',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: true,
+            isPrivate: false,
+            children: [],
+            value: '',
+          },
+        ],
+      },
+    ],
+    stations: [
+      {
+        stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+        stationName: 'New station',
+      },
+    ],
   };
 
   beforeEach(async () => {
@@ -241,5 +283,28 @@ describe('DocumentWidgetComponent', () => {
     component['parseDataColumnsWidget']();
     expect(component.documentRithmId).toEqual(expectDataWidget.documentRithmId);
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
+  });
+
+  describe('getValueQuestion', () => {
+    beforeEach(() => {
+      component.dataDocumentWidget = documents;
+    });
+
+    it('should return [] if question dont exist', () => {
+      expect(
+        component.getValueQuestions
+      ).toEqual([]);
+    });
+    it('should getHTMLQuestionValue', () => {
+      //pasarle una question con diferentes tipos para que caiga en cada if y esperar que sea el concatenado segun se mande
+      //const string =  component[''](questio)
+      expect(
+        component.getValueQuestions
+      ).toEqual([]);
+    });
+
+
+
+
   });
 });
