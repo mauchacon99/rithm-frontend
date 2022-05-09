@@ -1014,6 +1014,29 @@ describe('FlowLogicComponent', () => {
     });
   });
 
+  it('should call the method that get powers of the station.', () => {
+    const spyService = spyOn(
+      TestBed.inject(StationService),
+      'getStationPowers'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should detect when the getStationPowers method fails.', () => {
+    spyOn(TestBed.inject(StationService), 'getStationPowers').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
+
   describe('Testing split.io', () => {
     let splitService: SplitService;
     let userService: UserService;

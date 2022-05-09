@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
+  Power,
   Rule,
   RuleEquation,
   RuleType,
@@ -28,6 +29,9 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./flow-logic.component.scss'],
 })
 export class FlowLogicComponent implements OnInit {
+  /** Schedule trigger type form. */
+  scheduleTriggerField: FormGroup;
+
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
@@ -88,16 +92,29 @@ export class FlowLogicComponent implements OnInit {
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
+  /** Schedule trigger type list view if true. */
+  scheduleTrigger = false;
+
+  /** The different options for the schedule trigger type. */
+  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+
+  /** The powers of current station. */
+  stationPowers: Power[] = [];
+
   constructor(
+    private fb: FormBuilder,
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
     private splitService: SplitService,
-    private fb: FormBuilder,
     private stationService: StationService
-  ) {}
+  ) {
+    this.scheduleTriggerField = this.fb.group({
+      scheduleTriggerType: '',
+    });
+  }
 
   /**
    * Life cycle init the component.
@@ -109,6 +126,7 @@ export class FlowLogicComponent implements OnInit {
     this.flowFieldForm = this.fb.group({
       stations: [''],
     });
+    this.getStationPowers();
   }
 
   /**
@@ -443,5 +461,25 @@ export class FlowLogicComponent implements OnInit {
    */
   showRules(): void {
     this.showRulesList = !this.showRulesList;
+  }
+
+  /**
+   * Get the powers (triggers, actions, flow) of current station.
+   */
+  private getStationPowers(): void {
+    this.stationService
+      .getStationPowers(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (powers) => {
+          this.stationPowers = powers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

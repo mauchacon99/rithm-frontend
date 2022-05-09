@@ -24,6 +24,8 @@ import {
   GroupTrafficData,
   StationWidgetPreBuilt,
   RoleDashboardMenu,
+  Power,
+  TriggerType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -532,6 +534,14 @@ describe('StationService', () => {
     service.getStationWorkerRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should returns the owner roster for a given station', () => {
@@ -557,6 +567,14 @@ describe('StationService', () => {
     service.getStationOwnerRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should add a new member to the owner roster', () => {
@@ -1890,5 +1908,74 @@ describe('StationService', () => {
     expect(req.request.params.get('pageSize')).toBe(pageSize.toString());
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should return the users roster to the station.', () => {
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    service.getStationAllRoster(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should get the powers related to the current station', () => {
+    const expectedResponse: Power[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j',
+        triggers: [
+          {
+            rithmId: '3j4k-3h2j-hj5h',
+            type: TriggerType.ManualFlow,
+            source: 'Source Trigger #1',
+            value: 'Value Trigger #1',
+          },
+        ],
+        actions: [
+          {
+            rithmId: '3j4k-3h2j-ft5h',
+            type: 'Type Action #1',
+            target: 'Target Action #1',
+            data: 'Data Action #1',
+            resultMapping: 'Result Action #1',
+            header: 'Header Action #1',
+          },
+        ],
+        stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowToStationRithmIds: [
+          '73d47261-1932-4fcf-82bd-159eb1a72422',
+          '73d47261-1932-4fcf-82bd-159eb1a7242g',
+        ],
+        name: 'Power Test #1',
+        condition: 'Condition Test #1',
+      },
+    ];
+
+    service.getStationPowers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 });
