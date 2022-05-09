@@ -703,21 +703,43 @@ export class DocumentService {
           })
       ).pipe(delay(1000));
     } else {
-      const frameByType: StationFrameWidget[] = [
+      const params = new HttpParams()
+        .set('stationRithmId', stationRithmId)
+        .set('documentRithmId', documentRithmId);
+
+      return this.http.get<StationFrameWidget[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
         {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.DataLink,
-          data: '',
-          id: 0,
-        },
-      ];
-      return of(frameByType).pipe(delay(1000));
+          params,
+        }
+      );
     }
+  }
+
+  /**
+   * Get the widgets of a container.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
+   * @param type The frame type.
+   * @returns The container widget data.
+   */
+  getContainerWidgets(
+    documentRithmId: string,
+    stationRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type?: FrameType
+  ): Observable<StationFrameWidget[]> {
+    const params = new HttpParams()
+      .set('documentRithmId', documentRithmId)
+      .set('stationRithmId', stationRithmId);
+
+    return this.http.get<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type`,
+      {
+        params,
+      }
+    );
   }
 
   /**

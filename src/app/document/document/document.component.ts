@@ -275,6 +275,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subscribeDrawerContext$();
     this.subscribeDocumentName$();
     this.subscribeDocumentAnswer$();
+    this.getContainerWidgets();
     if (!this.isWidget) {
       this.sidenavDrawerService.setDrawer(this.detailDrawer);
       this.getParams();
@@ -437,6 +438,26 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       : this.isUserAdmin
       ? this.router.navigateByUrl('map')
       : this.router.navigateByUrl('dashboard');
+  }
+
+  /**
+   * Get all types of frameWidgets of the container.
+   */
+  private getContainerWidgets(): void {
+    this.documentService
+      .getContainerWidgets(this.documentId, this.stationId)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
