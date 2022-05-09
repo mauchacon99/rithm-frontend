@@ -69,6 +69,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     isReturnListDocuments: boolean;
     /** When assign new worker, reload list of documents in widget when click to see list. */
     isReloadListDocuments: boolean;
+    /** Station rithmId when flow document. */
+    stationFlow: string[];
   }>();
 
   /** Observable for when the component is destroyed. */
@@ -273,6 +275,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subscribeDrawerContext$();
     this.subscribeDocumentName$();
     this.subscribeDocumentAnswer$();
+    this.getContainerWidgets();
     if (!this.isWidget) {
       this.sidenavDrawerService.setDrawer(this.detailDrawer);
       this.getParams();
@@ -415,18 +418,46 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Navigates the user back to the dashboard page.
    *
    * @param isReturnListDocuments Boolean, when is true, return and reload to the documents list in widget.
+   * @param stationFlow RithmId of station when flow document.
    */
-  private navigateBack(isReturnListDocuments = false): void {
+  private navigateBack(
+    isReturnListDocuments = false,
+    stationFlow: string[] = []
+  ): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
     // If is widget return to the documents list
     this.isWidget
-      ? this.widgetReloadListDocuments(isReturnListDocuments, false)
+      ? this.widgetReloadListDocuments(
+          isReturnListDocuments,
+          false,
+          stationFlow
+        )
       : this.isUserAdmin
       ? this.router.navigateByUrl('map')
       : this.router.navigateByUrl('dashboard');
+  }
+
+  /**
+   * Get all types of frameWidgets of the container.
+   */
+  private getContainerWidgets(): void {
+    this.documentService
+      .getContainerWidgets(this.documentId, this.stationId)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
@@ -434,14 +465,17 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    *
    * @param isReturnListDocuments Return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow RithmId of station when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[] = []
   ): void {
     this.returnDocumentsWidget.emit({
       isReturnListDocuments,
       isReloadListDocuments,
+      stationFlow,
     });
   }
 
@@ -555,10 +589,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
-    // Reload widget for show new values in widget.
-    if (this.isWidget) {
-      this.widgetReloadListDocuments(false, true);
-    }
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
@@ -584,6 +614,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.shouldFlowContainer = false;
           } else {
             this.getDocumentStationData();
+            // Reload widget for show new values in widget.
+            if (this.isWidget) {
+              this.widgetReloadListDocuments(false, true, [
+                'rithmIdTempOnlySave',
+              ]);
+            }
           }
         },
         error: (error: unknown) => {
@@ -635,7 +671,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
                 this.getParams();
               });
           } else {
-            this.navigateBack(true);
+            this.navigateBack(true, data);
           }
         },
         error: (error: unknown) => {
