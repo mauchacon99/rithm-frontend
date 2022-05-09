@@ -29,6 +29,7 @@
 
 .showButton {
   @apply md:hidden;
+  width: 25px !important;
 }
 
 .item:hover .showButton {
