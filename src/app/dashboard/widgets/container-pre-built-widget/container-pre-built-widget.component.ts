@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ContainerWidgetPreBuilt } from 'src/models';
+import { ContainerWidgetPreBuilt, reloadStationFlow } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
@@ -56,14 +56,44 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
-  /** If expand or not the widget. */
-  @Output() expandWidget = new EventEmitter<boolean>();
-
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** Set data for station widget. */
+  @Input() set stationFlow(value: reloadStationFlow) {
+    // Is it was call flow or save.
+    if (value) {
+      // If document flowed or saved exist on this container.
+      if (
+        this.containers.some(
+          ({ documentRithmId }) => documentRithmId === value.documentFlow
+        )
+      ) {
+        // If document flowed or saved it's open, and it's the same
+        if (
+          this.isDocument &&
+          this.documentSelected?.documentRithmId === value.documentFlow
+        ) {
+          this.viewDocument(null, true);
+        } // If document flowed or saved it's open, and it's not the same.
+        else if (this.isDocument) {
+          this.reloadDocumentList = true;
+        } // Reload documents.
+        else {
+          this.getContainerWidgetPreBuilt();
+        }
+      }
+    }
+  }
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Reload stations or document Flowed or saved. */
+  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
 
   /**
    * Whether the drawer is open.
@@ -86,7 +116,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<ContainerWidgetPreBuilt>;
 
-  /** Columns staticts to show on table. */
+  /** Columns statics to show on table. */
   displayedColumns = [
     'documentName',
     'timeInStation',
@@ -213,11 +243,20 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
    *
    * @param isReturnListDocuments To return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow Station rithm id when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[]
   ): void {
+    if (stationFlow.length) {
+      this.reloadStationsFlow.emit({
+        stationFlow,
+        currentStation: this.documentSelected?.stationRithmId || '',
+        documentFlow: this.documentSelected?.documentRithmId || '',
+      });
+    }
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
     } else {

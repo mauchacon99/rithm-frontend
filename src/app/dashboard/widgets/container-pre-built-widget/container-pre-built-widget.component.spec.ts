@@ -220,13 +220,13 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   });
 
   it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
-    component.widgetReloadListDocuments(false, true);
+    component.widgetReloadListDocuments(false, true, []);
     expect(component.reloadDocumentList).toBeTrue();
   });
 
   it('should return list of documents and reload list', () => {
     const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
-    component.widgetReloadListDocuments(true, false);
+    component.widgetReloadListDocuments(true, false, []);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith(null, true);
   });
@@ -263,5 +263,67 @@ describe('ContainerPreBuiltWidgetComponent', () => {
     component.isDrawerOpen;
     expect(spyMethod).toHaveBeenCalled();
     expect(component.isDrawerOpen).toBeTrue();
+  });
+
+  it('should emit reloadStationsFlow', () => {
+    component.documentSelected = component.containers[0];
+    const stationFlow = ['123-456-789'];
+    const spyEmit = spyOn(
+      component.reloadStationsFlow,
+      'emit'
+    ).and.callThrough();
+
+    component.widgetReloadListDocuments(true, true, stationFlow);
+
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      stationFlow,
+      currentStation: component.documentSelected.stationRithmId,
+      documentFlow: component.documentSelected.documentRithmId,
+    });
+  });
+
+  it('should call getContainerWidgetPreBuilt when stationFlow change', () => {
+    const spyMethod = spyOn(
+      component,
+      'getContainerWidgetPreBuilt'
+    ).and.callThrough();
+    component.isDocument = false;
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: containers[0].documentRithmId,
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should set reloadDocumentList to true when stationFlow change', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.documentSelected = {
+      documentRithmId: '123-456-789',
+      documentName: 'Document name 2',
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      stationName: 'Station name 2',
+      timeInStation: '2022-05-02T23:38:03.183Z',
+      stationOwners: [],
+    };
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: containers[0].documentRithmId,
+    };
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call viewDocument when stationFlow change and its the same document', () => {
+    const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+    component.isDocument = true;
+    component.documentSelected = containers[0];
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: containers[0].documentRithmId,
+    };
+    expect(spyMethod).toHaveBeenCalledOnceWith(null, true);
   });
 });
