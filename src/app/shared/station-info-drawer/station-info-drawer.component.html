@@ -58,18 +58,22 @@
                   *ngIf="
                     stationName !== stationInformation.name && !locallyCreated
                   "
-                  class="text-accent-300"
+                  class="flex text-accent-300"
                   (click)="saveNameStationButton()"
                   matTooltip="Click to save the name station"
                 >
                   <i
                     class="fa-solid fa-xl"
-                    [ngClass]="
-                      savingNameStation
-                        ? 'fa-spinner fa-spin'
-                        : 'fa-floppy-disk fa-beat-fade'
-                    "
+                    [ngClass]="{
+                      'fa-floppy-disk fa-beat-fade': !savingNameStation
+                    }"
                   ></i>
+                  <div *ngIf="savingNameStation">
+                    <app-loading-indicator
+                      [diameter]="25"
+                      id="station-name-loading"
+                    ></app-loading-indicator>
+                  </div>
                 </button>
               </mat-form-field>
             </div>
@@ -264,18 +268,22 @@
                   flowButtonName !== stationInformation.flowButton &&
                   !locallyCreated
                 "
-                class="text-accent-300"
+                class="flex text-accent-300"
                 (click)="saveButtonSettings()"
                 matTooltip="Click to save the current text"
               >
                 <i
                   class="fa-solid fa-xl"
-                  [ngClass]="
-                    savingButtonText
-                      ? 'fa-spinner fa-spin'
-                      : 'fa-floppy-disk fa-beat-fade'
-                  "
+                  [ngClass]="{
+                    'fa-floppy-disk fa-beat-fade': !savingButtonText
+                  }"
                 ></i>
+                <div *ngIf="savingButtonText">
+                  <app-loading-indicator
+                    [diameter]="25"
+                    id="flow-button-text-loading"
+                  ></app-loading-indicator>
+                </div>
               </button>
             </mat-form-field>
           </div>
