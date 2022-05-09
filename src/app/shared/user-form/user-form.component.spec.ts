@@ -47,6 +47,7 @@ describe('UserFormComponent', () => {
     isEmailVerified: true,
     notificationSettings: null,
     organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+    profileImageRithmId: '123-456-789',
     defaultDashboardType: RoleDashboardMenu.Personal,
     defaultDashboardId: '147cf568-27a4-4968-5628-046ddfee24fd',
   };
