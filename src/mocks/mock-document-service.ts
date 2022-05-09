@@ -1668,6 +1668,7 @@ export class MockDocumentService {
             createdDate: '1/2/34',
             role: null,
             organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+            profileImageRithmId: '123-456-789',
             defaultDashboardType: RoleDashboardMenu.Personal,
             defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
           },

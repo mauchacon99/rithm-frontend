@@ -56,11 +56,11 @@ export class TopNavComponent implements OnInit {
           user &&
           user.firstName !== null &&
           user.lastName !== null &&
-          user.profileImageId !== null
+          user.profileImageRithmId !== null
         ) {
           this.user.firstName = user?.firstName;
           this.user.lastName = user?.lastName;
-          this.user.profileImageId = user?.profileImageId;
+          this.user.profileImageRithmId = user?.profileImageRithmId;
         }
       });
 
