@@ -49,3 +49,13 @@
     @apply h-full;
   }
 }
+
+.responsive-bottom-bar {
+  ::ng-deep .mat-button {
+    @apply font-semibold;
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    @apply flex flex-col space-y-2;
+  }
+}
