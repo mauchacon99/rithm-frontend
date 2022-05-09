@@ -12,8 +12,7 @@
   (tryAgain)="getUsersDashboardPersonal()"
 >
 </app-error-widget>
-
-<div *ngIf="!isLoadingGetUserMembers && !errorGetUsersMember">
+<ng-container *ngIf="!isLoadingGetUserMembers && !errorGetUsersMember">
   <div>
     <h3>Manage Members</h3>
     <div class="md:flex md:justify-between mt-3">
@@ -77,4 +76,4 @@
       SAVE
     </button>
   </div>
-</div>
+</ng-container>
