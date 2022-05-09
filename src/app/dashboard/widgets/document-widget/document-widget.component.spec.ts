@@ -44,28 +44,126 @@ describe('DocumentWidgetComponent', () => {
 
   const questions: Question[] = [
     {
-      rithmId: '1020-654684304-05060708-090100',
-      prompt: 'Instructions',
-      questionType: QuestionFieldType.Instructions,
-      isReadOnly: false,
+      rithmId: '',
+      questionType: QuestionFieldType.CheckList,
+      prompt: 'checklist',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
       isRequired: true,
-      isPrivate: false,
-      children: [],
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
       answer: {
-        questionRithmId: '',
-        referAttribute: '',
-        value: 'Some value.',
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asArray: [
+          {
+            value: 'dev1',
+            isChecked: true,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
       },
+      children: [],
     },
     {
-      rithmId: '1020-65sdvsd4-05060708-090trhrth',
-      prompt: 'Name your field',
-      questionType: QuestionFieldType.ShortText,
-      isReadOnly: false,
+      rithmId: '',
+      questionType: QuestionFieldType.CheckList,
+      prompt: 'checklist',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
       isRequired: true,
-      isPrivate: false,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
+      answer: {
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
+      },
       children: [],
-      value: '',
+    },
+    {
+      rithmId: '',
+      questionType: QuestionFieldType.Select,
+      prompt: 'checklist',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
+      isRequired: true,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
+      answer: {
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asArray: [
+          {
+            value: 'dev1',
+            isChecked: false,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
+      },
+      children: [],
+    },
+    {
+      rithmId: '',
+      questionType: QuestionFieldType.CheckList,
+      prompt: 'checklist',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
+      isRequired: true,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
+      answer: {
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asArray: [
+          {
+            value: 'dev1',
+            isChecked: false,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
+      },
+      children: [],
     },
   ];
   const documents: DocumentWidget = {
@@ -300,12 +398,23 @@ describe('DocumentWidgetComponent', () => {
     it('should return [] if question dont exist', () => {
       expect(component.getValueQuestions).toEqual([]);
     });
-    fit('should getHTMLQuestionValue', () => {
-      //pasarle una question con diferentes tipos para que caiga en cada if y esperar que sea el concatenado segun se mande
-      //const string =  component['getHTMLQuestionValue'](questions[0]);
-      //empty questions
-      //const emptyQuestions = component['getHTMLQuestionValue'](questions[1]);
+
+    it('should getHTMLQuestionValue', () => {
       expect(component.getValueQuestions).toEqual([]);
+      const emptyQuestions = component['getHTMLQuestionValue'](questions[1]);
+      expect(emptyQuestions).toBeNull();
+      const oneCheckedOption = component['getHTMLQuestionValue'](questions[0]);
+      expect(oneCheckedOption).toEqual(
+        '<i class="fas fa-check-square text-accent-500"></i> dev1'
+      );
+      const noOption = component['getHTMLQuestionValue'](questions[2]);
+      expect(noOption).toEqual('---');
+      const oneNoCheckedOptionselected = component['getHTMLQuestionValue'](
+        questions[3]
+      );
+      expect(oneNoCheckedOptionselected).toEqual(
+        '<i class="fas fa-square text-secondary-500"></i> dev1'
+      );
     });
   });
 });
