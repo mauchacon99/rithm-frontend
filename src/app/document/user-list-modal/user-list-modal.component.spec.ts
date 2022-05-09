@@ -25,7 +25,7 @@ const USER: User = {
   isEmailVerified: true,
   notificationSettings: null,
   organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-  profileImageId: 'CC792DCD-26C7-4856-A8E6-2191A7DAECA5',
+  profileImageRithmId: 'CC792DCD-26C7-4856-A8E6-2191A7DAECA5',
   createdDate: '',
   defaultDashboardType: RoleDashboardMenu.Company,
   defaultDashboardId: '',
