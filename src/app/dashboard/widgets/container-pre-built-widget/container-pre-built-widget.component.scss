@@ -14,3 +14,18 @@ th.mat-header-cell:first-of-type {
 tr.mat-header-row {
   height: 30px !important;
 }
+
+.table-sort ::ng-deep {
+  .mat-sort-header-ste,
+  .mat-sort-header-arrow {
+    display: none !important;
+  }
+}
+
+.button-right {
+  right: -1px !important;
+}
+
+.mat-icon-button {
+  margin-top: -10px !important;
+}

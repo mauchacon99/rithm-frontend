@@ -38,10 +38,12 @@ import {
   StationFrameWidget,
   FrameType,
   ContainerWidgetPreBuilt,
+  DocumentCurrentStation,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
+const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
 
 /**
  * Service for all document behavior and business logic.
@@ -200,9 +202,13 @@ export class DocumentService {
       if (element.type === QuestionFieldType.File) {
         if (element.file) {
           formData.append(`answers[${index}].file`, element.file);
+        } else {
+          formData.append(`answers[${index}].file`, '');
         }
         if (element.filename) {
           formData.append(`answers[${index}].filename`, element.filename);
+        } else {
+          formData.append(`answers[${index}].filename`, '');
         }
       }
       formData.append(`answers[${index}].questionUpdated`, 'true');
@@ -663,43 +669,14 @@ export class DocumentService {
   }
 
   /**
-   * Get containers.
+   * Get containers assigned to me.
    *
    * @returns Data containers.
    */
   getContainerWidgetPreBuilt(): Observable<ContainerWidgetPreBuilt[]> {
-    const containers: ContainerWidgetPreBuilt[] = [
-      {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
-        containerRithmId: '1365442c-82d6-4035-893w-86ga9de5a7e3',
-        stationName: 'Station name',
-        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationOwners: [
-          {
-            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
-            firstName: 'Testy',
-            lastName: 'Rithm',
-            email: 'Testy@Rithm.com',
-          },
-          {
-            rithmId: '4813442c-12c6-4021-673a-86fa9deca7c9',
-            firstName: 'Testy',
-            lastName: 'Last',
-            email: 'Testy@Rithm.com',
-          },
-        ],
-      },
-      {
-        flowedTimeUTC: '2022-04-05T17:24:01.0115021',
-        nameContainer: 'Container name',
-        containerRithmId: '1365442c-82d6-4035-86ga9de5a7e3',
-        stationName: 'Station name',
-        stationRithmId: '3813442c-82c6-4035-86fa9deca7c3',
-        stationOwners: [],
-      },
-    ];
-    return of(containers).pipe(delay(1000));
+    return this.http.get<ContainerWidgetPreBuilt[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-to-me`
+    );
   }
 
   /**
@@ -726,20 +703,93 @@ export class DocumentService {
           })
       ).pipe(delay(1000));
     } else {
-      const frameByType: StationFrameWidget[] = [
+      const params = new HttpParams()
+        .set('stationRithmId', stationRithmId)
+        .set('documentRithmId', documentRithmId);
+
+      return this.http.get<StationFrameWidget[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
         {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.DataLink,
-          data: '',
-          id: 0,
-        },
-      ];
-      return of(frameByType).pipe(delay(1000));
+          params,
+        }
+      );
     }
+  }
+
+  /**
+   * Get the widgets of a container.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
+   * @param type The frame type.
+   * @returns The container widget data.
+   */
+  getContainerWidgets(
+    documentRithmId: string,
+    stationRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type?: FrameType
+  ): Observable<StationFrameWidget[]> {
+    const params = new HttpParams()
+      .set('documentRithmId', documentRithmId)
+      .set('stationRithmId', stationRithmId);
+
+    return this.http.get<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type`,
+      {
+        params,
+      }
+    );
+  }
+
+  /**
+   * Get the current stations from containers.
+   *
+   * @param documentRithmId The current document id.
+   * @returns The current stations.
+   */
+  getCurrentStations(
+    documentRithmId: string
+  ): Observable<DocumentCurrentStation[]> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentCurrentStation[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/current-stations`,
+      { params }
+    );
+  }
+
+  /**
+   * Upload image to user.
+   *
+   * @param file File to upload.
+   * @returns Id of image uploaded.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  uploadImageUser(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http
+      .post<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+        formData
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get Image user.
+   *
+   * @param imageRithmId Image Rithm Id.
+   * @returns Image Data.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getImageUser(imageRithmId: string): Observable<ImageData> {
+    const params = new HttpParams().set('vaultFileRithmId', imageRithmId);
+    return this.http.get<ImageData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+      {
+        params,
+      }
+    );
   }
 }

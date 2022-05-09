@@ -12,6 +12,7 @@ import {
   MockUserService,
   MockDocumentService,
   MockPopupService,
+  MockOrganizationService,
 } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
@@ -38,6 +39,9 @@ import { throwError } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
+import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
+import { OrganizationService } from 'src/app/core/organization.service';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -51,8 +55,9 @@ describe('DocumentInfoDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         DocumentInfoDrawerComponent,
-        MockComponent(LoadingIndicatorComponent),
+        UserListModalComponent,
         ConnectedStationsModalComponent,
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -62,6 +67,7 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: OrganizationService, useClass: MockOrganizationService },
       ],
       imports: [
         MatCheckboxModule,
@@ -380,6 +386,106 @@ describe('DocumentInfoDrawerComponent', () => {
     component.openModalMoveDocument();
     expect(dialogSpy).toHaveBeenCalledOnceWith(
       ConnectedStationsModalComponent,
+      expectDataModal
+    );
+  });
+
+  it('should to call the modal the location', () => {
+    component.stationRithmId = stationId;
+    const expectDataModal = {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: stationId,
+        documentRithmId: documentId,
+      },
+    };
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
+    component.openModalLocation();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      LocationModalComponent,
+      expectDataModal
+    );
+  });
+
+  it('should to call method openModalLocation after clicked in arrow location section', () => {
+    component.isStation = false;
+    component.isUserAdminOrOwner = true;
+    fixture.detectChanges();
+    const openModalLocationSpy = spyOn(
+      component,
+      'openModalLocation'
+    ).and.callThrough();
+    const ArrowLocationSection = fixture.nativeElement.querySelector(
+      '#open-modal-Location'
+    );
+    expect(ArrowLocationSection).toBeTruthy();
+    ArrowLocationSection.click();
+    expect(openModalLocationSpy).toHaveBeenCalled();
+  });
+
+  it('should call the service to get the current Stations', () => {
+    component.stationRithmId = stationId;
+    const spyMethod = spyOn(
+      TestBed.inject(DocumentService),
+      'getCurrentStations'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyMethod).toHaveBeenCalledOnceWith(component.documentRithmId);
+  });
+
+  it('should call the errorService if the request getCurrentStations fails', () => {
+    component.stationRithmId = stationId;
+    const currentStationsEventSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getCurrentStations'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(currentStationsEventSpy).toHaveBeenCalledWith(
+      component.documentRithmId
+    );
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should to call method openModalUserListModal after clicked in on the assignUserSection', () => {
+    component.isStation = false;
+    component.documentAssignedUser = [];
+    fixture.detectChanges();
+    const openUserListModalSpy = spyOn(component, 'openUserListModal');
+    const assignUserSection = fixture.debugElement.nativeElement.querySelector(
+      '#open-modal-user-list'
+    ) as HTMLButtonElement;
+    expect(assignUserSection).toBeTruthy();
+    assignUserSection.click();
+    expect(openUserListModalSpy).toHaveBeenCalled();
+  });
+
+  it('should to call the modal the user list', () => {
+    component.stationRithmId = stationId;
+    fixture.detectChanges();
+    const expectDataModal = {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: stationId,
+    };
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
+    component.openUserListModal();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      UserListModalComponent,
       expectDataModal
     );
   });

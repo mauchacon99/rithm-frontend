@@ -4,8 +4,15 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  throwError,
+  from,
+  of,
+} from 'rxjs';
+import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
   DocumentGenerationStatus,
@@ -22,10 +29,10 @@ import {
   DocumentEvent,
   DataLinkObject,
   GroupTrafficData,
-  FrameType,
   StandardNumberJSON,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
+  Power,
+  TriggerType,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -271,6 +278,38 @@ export class StationService {
   }
 
   /**
+   * Get organization users for a specific stationGroup.
+   *
+   * @param stationGroupRithmId The Specific id of stationGroup.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationGroupRosterMembers(
+    stationGroupRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
+    if (!pageNum) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Invalid page number.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const params = new HttpParams()
+        .set('stationGroupRithmId', stationGroupRithmId)
+        .set('pageNum', pageNum)
+        .set('pageSize', 20);
+      return this.http.get<StationPotentialRostersUsers>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users`,
+        { params }
+      );
+    }
+  }
+
+  /**
    * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
@@ -381,6 +420,23 @@ export class StationService {
     return this.http.put<StationRosterMember[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
       userIds
+    );
+  }
+
+  /**
+   * Adds users to the owners roster group.
+   *
+   * @param stationGroupRithmId The Specific id of station.
+   * @param owners The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+  addUserStationGroupToOwnersRoster(
+    stationGroupRithmId: string,
+    owners: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.put<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`,
+      owners
     );
   }
 
@@ -553,10 +609,16 @@ export class StationService {
     const params = new HttpParams()
       .set('stationRithmId', stationRithmId)
       .set('includePreviousQuestions', includePreviousQuestions);
-    return this.http.get<Question[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
-      { params }
-    );
+    return this.http
+      .get<Question[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+        { params }
+      )
+      .pipe(
+        concatMap(from),
+        distinct((question) => question.rithmId),
+        toArray()
+      );
   }
 
   /**
@@ -760,45 +822,16 @@ export class StationService {
    * @param stationRithmId The current station id.
    * @returns The station widget data.
    */
-  getStationWidgets(stationRithmId: string): Observable<StationFrameWidget[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive  the number of container',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const stationWidgets: StationFrameWidget[] = [
-        {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.Input,
-          data: '',
-          questions: [],
-          id: 0,
-        },
-        {
-          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 1,
-          x: 0,
-          y: 0,
-          type: FrameType.Headline,
-          data: '',
-          id: 1,
-        },
-      ];
-
-      return of(stationWidgets).pipe(delay(1000));
-    }
+  getStationWidgets(
+    stationRithmId: string
+  ): Observable<StationFrameWidget[] | undefined> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http
+      .get<StationInformation>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info-frames`,
+        { params }
+      )
+      .pipe(map((response) => response.frames));
   }
 
   /**
@@ -817,6 +850,23 @@ export class StationService {
     return this.http.get<StationRosterMember[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster`,
       { params }
+    );
+  }
+
+  /**
+   * Adds worker roster for a given station group.
+   *
+   * @param stationGroupRithmId The id of the given station group.
+   * @param workers List of RithmIds of the users to add.
+   * @returns A rosterMember array.
+   */
+  addUserStationGroupWorkersRoster(
+    stationGroupRithmId: string,
+    workers: string[]
+  ): Observable<StationRosterMember[]> {
+    return this.http.put<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`,
+      workers
     );
   }
 
@@ -909,80 +959,32 @@ export class StationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup.
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
-    const mockGetGroupTrafficData: GroupTrafficData = {
-      title: 'Group Eagle',
-      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
-      labels: [
-        'station 1',
-        'station 2',
-        'station 3',
-        'station 4',
-        'station 5 with a long text for test view',
-        'station 6',
-        'station 7',
-      ],
-      stationDocumentCounts: [10, 5, 8, 10, 20, 35, 7],
-      averageDocumentFlow: [3000, 72000, 60, 2880, 10080, 40, 120],
-      averageDocumentFlowLabels: [
-        '2 days',
-        '7 weeks',
-        '1 hour',
-        '2 days',
-        '1 weeks',
-        '40 minutes',
-        '2 hour',
-      ],
-    };
-    return of(mockGetGroupTrafficData).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('rithmId', stationGroupRithmId)
+      .set('forceRefresh', forceRefresh);
+    return this.http.get<GroupTrafficData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic`,
+      { params }
+    );
   }
 
   /**
-   * Get user stations.
+   * Get user prebuilt stations.
    *
-   * @returns User Stations.
+   * @returns User prebuilt Stations.
    */
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
-    const stationWidgetData: StationWidgetPreBuilt[] = [
-      {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
-        totalContainers: 5,
-        stationGroup: 'Eagle',
-        stationOwners: [
-          {
-            rithmId: '',
-            firstName: 'Marry',
-            lastName: 'Poppins',
-            email: 'marrypoppins@inpivota.com',
-            isOwner: false,
-            isWorker: true,
-          },
-          {
-            rithmId: '',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: false,
-            isWorker: true,
-          },
-        ],
-      },
-      {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
-        totalContainers: 1,
-        stationGroup: '  ',
-        stationOwners: [],
-      },
-    ];
-    return of(stationWidgetData).pipe(delay(1000));
+    return this.http.get<StationWidgetPreBuilt[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/member-station`
+    );
   }
 
   /**
@@ -1003,32 +1005,69 @@ export class StationService {
   }
 
   /**
-   * Get the current stations from containers.
+   * Get the users roster to the station.
    *
-   * @param stationRithmId The current station id.
-   * @returns The current stations.
+   * @param stationRithmId The id of the current station.
+   * @returns StationRosterMember array.
    */
-  getCurrentStations(
+  getStationAllRoster(
     stationRithmId: string
-  ): Observable<DocumentCurrentStation[]> {
+  ): Observable<StationRosterMember[]> {
+    const params = new HttpParams().set('rithmId', stationRithmId);
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster`,
+      { params }
+    );
+  }
+
+  /**
+   * Get powers of current station.
+   *
+   * @param stationRithmId Specific id of station.
+   * @returns The power of a station.
+   */
+  getStationPowers(stationRithmId: string): Observable<Power[]> {
     if (!stationRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'retrieve a list of stations for this container',
+              error: 'Cannot retrive the powers of current station.',
             },
           })
       ).pipe(delay(1000));
     } else {
-      const currentStationsResponse: DocumentCurrentStation[] = [
+      const stationPowers: Power[] = [
         {
-          name: 'Testy',
-          rithmId: '123',
-          flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+          rithmId: '3j4k-3h2j-hj4j',
+          triggers: [
+            {
+              rithmId: '3j4k-3h2j-hj5h',
+              type: TriggerType.ManualFlow,
+              source: 'Source Trigger #1',
+              value: 'Value Trigger #1',
+            },
+          ],
+          actions: [
+            {
+              rithmId: '3j4k-3h2j-ft5h',
+              type: 'Type Action #1',
+              target: 'Target Action #1',
+              data: 'Data Action #1',
+              resultMapping: 'Result Action #1',
+              header: 'Header Action #1',
+            },
+          ],
+          stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowToStationRithmIds: [
+            '73d47261-1932-4fcf-82bd-159eb1a72422',
+            '73d47261-1932-4fcf-82bd-159eb1a7242g',
+          ],
+          name: 'Power Test #1',
+          condition: 'Condition Test #1',
         },
       ];
-      return of(currentStationsResponse).pipe(delay(1000));
+      return of(stationPowers).pipe(delay(1000));
     }
   }
 }

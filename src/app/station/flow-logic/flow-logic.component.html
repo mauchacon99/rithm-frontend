@@ -1,8 +1,8 @@
-<div
-  class="h-full w-full"
-  *ngIf="nextStations.length; else notConnectedStations"
->
-  <ng-container *ngIf="!flowLogicView; else newView">
+<ng-container *ngIf="!flowLogicView; else newView">
+  <div
+    class="h-full w-full"
+    *ngIf="nextStations.length; else notConnectedStations"
+  >
     <div *ngIf="ruleError">
       <p class="text-center text-error-500" id="rules-error">
         Error: Unable to retrieve the flow rules.
@@ -229,23 +229,346 @@
         </div>
       </div>
     </section>
-  </ng-container>
-  <ng-template #newView>
-    <div>
-      <p>Flow logic rule: new view.</p>
+  </div>
+  <ng-template #flowLogicRuleLoading>
+    <div class="flex justify-left" id="flow-logic-loading-rules">
+      <app-loading-indicator
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
     </div>
   </ng-template>
-</div>
-<ng-template #flowLogicRuleLoading>
-  <div class="flex justify-left" id="flow-logic-loading-rules">
-    <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
-  </div>
-</ng-template>
-<ng-template #notConnectedStations>
-  <div class="w-100 mt-10">
-    <p class="text-center text-error-500">
-      There are not any forward connections, please make a connection in order
-      to add flow logic.
-    </p>
+  <ng-template #notConnectedStations>
+    <div class="w-100 mt-10">
+      <p class="text-center text-error-500">
+        There are not any forward connections, please make a connection in order
+        to add flow logic.
+      </p>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #newView>
+  <div class="rules-tab-content">
+    <aside
+      class="rules-left-side p-4"
+      [ngClass]="{ showRulesList: showRulesList }"
+    >
+      <ul class="rules-left-side-menu border-b border-secondary-100">
+        <li
+          class="py-2 cursor-pointer"
+          [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'triggers' }"
+          (click)="displayRuleContent('triggers')"
+        >
+          <i class="fa-regular fa-clock"></i> Station Triggers
+        </li>
+        <li
+          class="py-2 cursor-pointer"
+          [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
+          (click)="displayRuleContent('rules')"
+        >
+          <i class="fa-regular fa-square-plus"></i> New Rule
+        </li>
+      </ul>
+      <ul class="rules-left-side-added-rules"></ul>
+    </aside>
+    <div
+      class="rules-right-side w-full border-l border-secondary-100 overflow-hidden"
+    >
+      <section
+        class="goback-arrow-section text-secondary-500 sm:hidden p-2 flex items-center"
+      >
+        <button mat-icon-button (click)="showRulesList = true">
+          <i class="fa-solid fa-arrow-left fa-2x"></i>
+        </button>
+        <span class="mx-2">Rules</span>
+      </section>
+      <section class="rules-right-side-title w-full">
+        <div class="py-2 sm:py-6 pr-6 pl-8 flex justify-between items-center">
+          <p
+            class="tracking-tight text-xl font-semibold"
+            *ngIf="ruleSelectedMenu === 'rules'"
+          >
+            Untitled Rule
+            <i class="fa-solid fa-pencil text-xl ml-1 cursor-pointer"></i>
+          </p>
+          <p
+            class="tracking-tight text-xl font-semibold"
+            *ngIf="ruleSelectedMenu === 'triggers'"
+          >
+            Station Triggers
+          </p>
+          <button mat-icon-button>
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+        </div>
+      </section>
+      <section class="rules-right-side-triggers w-full">
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            {{ ruleSelectedMenu === 'triggers' ? 'STANDARD ' : '' }}TRIGGERS
+          </p>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Manually Flow
+            <i
+              class="fa-solid fa-circle-question text-secondary-200 text-xl ml-1"
+              [matTooltip]="manuallyTooltip"
+              [matTooltipPosition]="'right'"
+            ></i>
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Check container
+            {{ ruleSelectedMenu === 'triggers' ? 'only on ' : 'on' }} arrival
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Check all containers on
+            {{ ruleSelectedMenu === 'triggers' ? 'new ' : '' }} container
+            arrival
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">
+            Check all
+            {{ ruleSelectedMenu === 'triggers' ? 'on ' : '' }} containers on
+            container departure
+          </p>
+          <mat-slide-toggle></mat-slide-toggle>
+        </div>
+        <div
+          class="title flex items-center border-b border-secondary-50 pl-8 pr-6 pt-8 pb-10"
+          *ngIf="ruleSelectedMenu === 'rules'"
+        >
+          <button mat-stroked-button color="accent">Add Trigger</button>
+        </div>
+      </section>
+      <section
+        class="rules-right-side-schedule w-full"
+        *ngIf="ruleSelectedMenu === 'triggers'"
+      >
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6 mt-5"
+        >
+          <p class="tracking-tight text-sm">SCHEDULED TRIGGERS</p>
+        </div>
+        <div
+          class="flex justify-center items-center flex-col text-center mb-6"
+          *ngIf="!scheduleTrigger"
+        >
+          <i class="far fa-clock text-4xl text-accent-500 mt-6"></i>
+          <p class="py-4 w-5/6 md:w-2/4 text-sm">
+            Schedule triggers can be configured to check conditions and flow
+            documents automatically
+          </p>
+          <button
+            mat-stroked-button
+            data-testid="button-addTrigger-schedule"
+            color="accent"
+            (click)="scheduleTrigger = !scheduleTrigger"
+          >
+            Add Trigger
+          </button>
+        </div>
+        <div
+          class="flex items-start flex-col px-8 py-5"
+          *ngIf="scheduleTrigger"
+        >
+          <mat-form-field class="md:w-2/4 w-full" appearance="outline">
+            <mat-label>Trigger Type</mat-label>
+            <mat-select formControlName="scheduleTriggerType">
+              <mat-option
+                *ngFor="let option of scheduleTriggerOptions | keyvalue"
+                [value]="option.value"
+              >
+                {{ option.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="flex flex-row">
+            <button
+              mat-flat-button
+              data-testid="button-schedule-cancel"
+              (click)="scheduleTrigger = !scheduleTrigger"
+            >
+              Cancel
+            </button>
+            <button
+              mat-flat-button
+              data-testid="button-schedule-cancel"
+              [disabled]
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </section>
+      <section
+        *ngIf="ruleSelectedMenu === 'rules'"
+        class="rules-right-side-conditions w-full"
+      >
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">CONDITIONS</p>
+          <div class="select-condition">
+            <mat-form-field appearance="outline">
+              <mat-label> Condition Requirement </mat-label>
+              <mat-select [(ngModel)]="selectedConditionType">
+                <mat-option value="all"> All must be true </mat-option>
+                <mat-option value="any"> Any must be true </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="w-full py-6">
+          <ng-container *ngIf="!flowLogicRules.length">
+            <div class="flex justify-center">
+              <i class="fa-solid fa-clipboard-list text-accent-500 fa-3x"></i>
+            </div>
+            <div class="flex justify-center">
+              <p class="w-1/2 text-center text-sm py-4">
+                Conditions check the value saved on the container the trigger
+                actions
+              </p>
+            </div>
+          </ng-container>
+          <div
+            class="flex"
+            [ngClass]="[
+              flowLogicRules.length ? 'justify-start pl-8' : 'justify-center'
+            ]"
+          >
+            <button
+              mat-stroked-button
+              data-testid="add-condition"
+              color="accent"
+            >
+              Add Condition
+            </button>
+          </div>
+        </div>
+      </section>
+      <section
+        class="rules-right-side-actions w-full"
+        *ngIf="ruleSelectedMenu === 'rules'"
+      >
+        <div
+          class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
+        >
+          <p class="tracking-tight text-sm">Actions</p>
+        </div>
+        <div
+          class="action-buttons-container border-b border-secondary-50 pt-8 pb-10 overflow-x-auto"
+        >
+          <mat-button-toggle-group
+            name="actionButtons"
+            aria-label="Action buttons"
+            value="0"
+            class="button-group"
+            #groupTabsFlow="matButtonToggleGroup"
+          >
+            <mat-button-toggle
+              value="0"
+              data-testid="toggle-button-flow"
+              id="toggle-button-flow"
+              >Flow
+            </mat-button-toggle>
+            <mat-button-toggle
+              value="1"
+              data-testid="toggle-button-container"
+              id="toggle-button-container"
+              >Container
+            </mat-button-toggle>
+            <mat-button-toggle
+              value="2"
+              data-testid="toggle-button-user"
+              id="toggle-button-user"
+              >User
+            </mat-button-toggle>
+            <mat-button-toggle
+              value="3"
+              data-testid="toggle-button-notifications"
+              id="toggle-button-notifications"
+            >
+              Notifications</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="4"
+              data-testid="toggle-button-integrations"
+              id="toggle-button-integrations"
+            >
+              Integrations</mat-button-toggle
+            >
+            <mat-button-toggle
+              value="5"
+              data-testid="toggle-button-advanced"
+              id="toggle-button-advanced"
+              >Advanced
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="tabs-flow-container">
+          <mat-tab-group
+            class="tabs-flow-rules"
+            [selectedIndex]="groupTabsFlow.value"
+          >
+            <!-- Tab Flow -->
+            <mat-tab label="tab-flow" aria-label="tab-flow">
+              <section></section>
+            </mat-tab>
+
+            <!-- Tab Container -->
+            <mat-tab label="tab-container" aria-label="tab-container">
+              <section></section>
+            </mat-tab>
+
+            <!-- Tab User -->
+            <mat-tab label="tab-user" aria-label="tab-user">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Notification -->
+            <mat-tab label="tab-notification" aria-label="tab-notification">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Integrations -->
+            <mat-tab label="tab-integrations" aria-label="tab-integrations">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+
+            <!-- Tab Advanced -->
+            <mat-tab label="tab-advanced" aria-label="tab-advanced">
+              <section class="pt-6 pb-10">
+                <app-coming-soon-message></app-coming-soon-message>
+              </section>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </section>
+    </div>
   </div>
 </ng-template>

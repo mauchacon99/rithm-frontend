@@ -123,12 +123,15 @@
           *ngIf="widgetType === enumWidgetType.PreBuiltContainer"
           class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
           [editMode]="false"
+          [showButtonSetting]="false"
         >
         </app-container-pre-built-widget>
 
         <app-station-pre-built-widget
           *ngIf="widgetType === enumWidgetType.PreBuiltStation"
           class="w-full md:w-3/5 h-[400px] shadow-lg rounded-md overflow-hidden"
+          [editMode]="false"
+          [showButtonSetting]="false"
         >
         </app-station-pre-built-widget>
       </div>

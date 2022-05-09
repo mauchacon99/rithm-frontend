@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
+  Power,
   Rule,
   RuleEquation,
   RuleType,
@@ -15,6 +16,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -25,6 +28,9 @@ import { UserService } from 'src/app/core/user.service';
   styleUrls: ['./flow-logic.component.scss'],
 })
 export class FlowLogicComponent implements OnInit {
+  /** Schedule trigger type form. */
+  scheduleTriggerField: FormGroup;
+
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
@@ -37,6 +43,9 @@ export class FlowLogicComponent implements OnInit {
   /** Allow switch between new/old interface. */
   flowLogicView = false;
 
+  /** Allow switch between new/old interface. */
+  showRulesList = true;
+
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
 
@@ -45,6 +54,16 @@ export class FlowLogicComponent implements OnInit {
 
   /** Contains the new flow logic rule for saved . */
   newFlowLogic!: FlowLogicRule;
+
+  /** Determine what menu is currently selected. */
+  ruleSelectedMenu: 'triggers' | 'rules' = 'triggers';
+
+  /** Tooltip. */
+  manuallyTooltip =
+    'Upon pressing the flow button, containers will be checked and flowed to their destination';
+
+  /** Selected value condition type for rules. */
+  selectedConditionType = 'all';
 
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
@@ -59,14 +78,29 @@ export class FlowLogicComponent implements OnInit {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** Schedule trigger type list view if true. */
+  scheduleTrigger = false;
+
+  /** The different options for the schedule trigger type. */
+  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+
+  /** The powers of current station. */
+  stationPowers: Power[] = [];
+
   constructor(
+    private fb: FormBuilder,
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
-    private splitService: SplitService
-  ) {}
+    private splitService: SplitService,
+    private stationService: StationService
+  ) {
+    this.scheduleTriggerField = this.fb.group({
+      scheduleTriggerType: '',
+    });
+  }
 
   /**
    * Life cycle init the component.
@@ -74,6 +108,7 @@ export class FlowLogicComponent implements OnInit {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
+    this.getStationPowers();
   }
 
   /**
@@ -339,5 +374,44 @@ export class FlowLogicComponent implements OnInit {
         break;
     }
     return operatorTranslated;
+  }
+
+  /**
+   * Toggle the responsive view to hide/show rules list.
+   *
+   * @param menuSelected Rules menu selected.
+   */
+  displayRuleContent(menuSelected: 'triggers' | 'rules'): void {
+    this.ruleSelectedMenu = menuSelected;
+    if (this.showRulesList) {
+      this.showRulesList = false;
+    }
+  }
+
+  /**
+   * Toggle the responsive view to hide/show rules list.
+   */
+  showRules(): void {
+    this.showRulesList = !this.showRulesList;
+  }
+
+  /**
+   * Get the powers (triggers, actions, flow) of current station.
+   */
+  private getStationPowers(): void {
+    this.stationService
+      .getStationPowers(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (powers) => {
+          this.stationPowers = powers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

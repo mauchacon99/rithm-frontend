@@ -194,8 +194,9 @@ describe('DocumentWidgetComponent', () => {
     });
 
     it('should receive the drawer context for the component', () => {
-      expect(component.drawerContext).not.toBe('stationWidget');
-      sidenavDrawer.drawerContext$.next('stationWidget');
+      const expectData = 'widgetDashboard';
+      expect(component.drawerContext).not.toBe(expectData);
+      sidenavDrawer.drawerContext$.next(expectData);
       sidenavDrawer.drawerContext$.subscribe((data) => {
         expect(component.drawerContext).toBe(data);
       });

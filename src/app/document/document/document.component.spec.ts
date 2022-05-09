@@ -30,6 +30,7 @@ import {
   FrameType,
   MoveDocument,
   QuestionFieldType,
+  StationFrameWidget,
   StationRosterMember,
 } from 'src/models';
 import { of, throwError } from 'rxjs';
@@ -471,6 +472,8 @@ describe('DocumentComponent', () => {
   it('should called service to save answers and then auto flow the container', async () => {
     const expectedAnswer = component.documentAnswer;
     const documentService = TestBed.inject(DocumentService);
+    component.shouldFlowContainer = true;
+    fixture.autoDetectChanges();
 
     const spySaveContainerAnswers = spyOn(
       TestBed.inject(DocumentService),
@@ -494,9 +497,9 @@ describe('DocumentComponent', () => {
       appendedName: '',
     });
 
-    const documentName = 'New Document Name';
+    component.saveDocumentChanges();
 
-    component.saveAnswersFlowDocument();
+    const documentName = 'New Document Name';
 
     expect(spySaveContainerAnswers).toHaveBeenCalledOnceWith(
       component.documentInformation.documentRithmId,
@@ -512,50 +515,6 @@ describe('DocumentComponent', () => {
     expect(dialogSpy).toHaveBeenCalledOnceWith(
       'The container has saved and flowed successfully'
     );
-  });
-
-  it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
-    component.documentLoading = false;
-    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
-    fixture.detectChanges();
-    const spyMethod = spyOn(
-      component,
-      'saveAnswersFlowDocument'
-    ).and.callThrough();
-    const button =
-      fixture.debugElement.nativeElement.querySelector('#document-flow');
-
-    button.click();
-
-    expect(spyMethod).toHaveBeenCalled();
-  });
-
-  describe('navigateRouterTesting', () => {
-    let router: Router;
-    let routerNavigateSpy: jasmine.Spy;
-
-    beforeEach(() => {
-      router = TestBed.inject(Router);
-      routerNavigateSpy = spyOn(router, 'navigateByUrl');
-    });
-
-    xit('should redirect to map if forkJoin run successfully and user is an admin', () => {
-      //testing postponed
-      component.saveAnswersFlowDocument();
-      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('map');
-    });
-
-    xit('should redirect to dashboard if forkJoin run successfully and user is not an admin', () => {
-      //testing postponed
-      component.saveAnswersFlowDocument();
-      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
-    });
-
-    xit('should not redirect if some petition is wrong', () => {
-      //testing postponed
-      component.saveAnswersFlowDocument();
-      expect(routerNavigateSpy).not.toHaveBeenCalled();
-    });
   });
 
   describe('Document when isWidget is true', () => {
@@ -604,7 +563,8 @@ describe('DocumentComponent', () => {
       expect(expectSpyMethod).toHaveBeenCalled();
     });
 
-    it('Should disable buttons save and flow when is not admin or owner worker', () => {
+    it('should disable buttons save and flow when is not admin or owner worker', () => {
+      component.footerExpanded = true;
       component.documentInformation.stationOwners = [
         {
           email: 'rithmadmin@inpivota.com',
@@ -624,29 +584,6 @@ describe('DocumentComponent', () => {
       expect(btnFlow.disabled).toBeTrue();
       expect(btnSave.disabled).toBeTrue();
       expect(component.isUserAdminOrOwner).toBeFalse();
-    });
-
-    it('Should disable buttons save and flow when is not admin or owner worker', () => {
-      const userRithmId = TestBed.inject(UserService).user.rithmId;
-      component.documentInformation.stationOwners = [
-        {
-          email: 'rithmadmin@inpivota.com',
-          firstName: 'admin',
-          isAssigned: false,
-          lastName: 'user',
-          rithmId: userRithmId,
-        },
-      ];
-      component.isWidget = true;
-      component.documentLoading = false;
-      fixture.detectChanges();
-      const btnFlow =
-        fixture.elementRef.nativeElement.querySelector('#document-flow');
-      const btnSave =
-        fixture.elementRef.nativeElement.querySelector('#document-save');
-      expect(btnFlow.disabled).toBeFalse();
-      expect(btnSave.disabled).toBeFalse();
-      expect(component.isUserAdminOrOwner).toBeTrue();
     });
   });
 
@@ -836,5 +773,55 @@ describe('DocumentComponent', () => {
       documentId,
       FrameType.DataLink
     );
+  });
+
+  it('should call getContainerWidgets', () => {
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return get container widgets fails', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method that get the frame types of the current container', () => {
+    const frameStationWidget: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        questions: [],
+        id: 0,
+      },
+    ];
+
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.returnValue(of(frameStationWidget));
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
   });
 });

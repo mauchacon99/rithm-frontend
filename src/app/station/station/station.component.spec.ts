@@ -62,6 +62,9 @@ import {
   MockUserService,
   MockPopupService,
 } from 'src/mocks';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -96,6 +99,7 @@ describe('StationComponent', () => {
         MockComponent(BannerWidgetComponent),
         MockComponent(BuildDrawerComponent),
         MockComponent(CircleImageWidgetComponent),
+        MockComponent(FlowLogicComponent),
       ],
       imports: [
         NoopAnimationsModule,
@@ -110,6 +114,9 @@ describe('StationComponent', () => {
         MatExpansionModule,
         MatDividerModule,
         GridsterModule,
+        MatSlideToggleModule,
+        ComingSoonMessageModule,
+        MatButtonToggleModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -224,10 +231,6 @@ describe('StationComponent', () => {
   it('should call service methods to update data when save button is clicked ', () => {
     component.stationForm.get('stationTemplateForm')?.markAsTouched();
     component.stationForm.get('stationTemplateForm')?.markAsDirty();
-    const spyUpdateStationName = spyOn(
-      TestBed.inject(StationService),
-      'updateStationName'
-    ).and.callThrough();
     const spyUpdateNameTemplate = spyOn(
       TestBed.inject(StationService),
       'updateDocumentNameTemplate'
@@ -251,7 +254,6 @@ describe('StationComponent', () => {
     button.click();
 
     expect(spyFunctionSave).toHaveBeenCalled();
-    expect(spyUpdateStationName).toHaveBeenCalled();
     expect(spyUpdateNameTemplate).toHaveBeenCalled();
     expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
@@ -740,7 +742,7 @@ describe('StationComponent', () => {
         minItemCols: 6,
         questions: [],
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
       {
@@ -765,7 +767,7 @@ describe('StationComponent', () => {
           },
         ],
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 1,
       },
     ];
@@ -1163,7 +1165,7 @@ describe('StationComponent', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
     ];
@@ -1224,7 +1226,7 @@ describe('StationComponent', () => {
         x: 0,
         y: 0,
         type: FrameType.Input,
-        data: '',
+        data: '[]',
         id: 0,
       },
     ];
@@ -1249,7 +1251,7 @@ describe('StationComponent', () => {
       TestBed.inject(StationService),
       'getStationWidgets'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getStationWidgets']();
     expect(spyService).toHaveBeenCalled();
   });
 
@@ -1263,7 +1265,7 @@ describe('StationComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.ngOnInit();
+    component['getStationWidgets']();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -1338,7 +1340,7 @@ describe('StationComponent', () => {
             },
           ],
           // eslint-disable-next-line max-len
-          data: "[{'rithmId':'3j4k-3h2j-hj4j','prompt':'Label #1','questionType':'QuestionFieldType.ShortText','isReadOnly':false,'isRequired':false,'isPrivate':false,'children':[],'originalStationRithmId':'3j4k-3h2j-hj4j'}]",
+          data: `[{"rithmId":"3j4k-3h2j-hj4j","prompt":"Label #1","questionType":"QuestionFieldType.ShortText","isReadOnly":false,"isRequired":false,"isPrivate":false,"children":[],"originalStationRithmId":"3j4k-3h2j-hj4j"}]`,
           id: 0,
         },
       ];
@@ -1350,6 +1352,7 @@ describe('StationComponent', () => {
         'saveStationWidgets'
       ).and.returnValue(of(frameStationWidget));
       component['saveStationWidgetsChanges']();
+      component.stationLoading = true;
       fixture.detectChanges();
       const stationLoading =
         fixture.debugElement.nativeElement.querySelector('#gridster-loading');
@@ -1368,7 +1371,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Input,
-          data: '',
+          data: '[]',
           questions: [],
           id: 0,
         },
@@ -1378,7 +1381,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1392,7 +1395,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Headline,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1401,7 +1404,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1415,7 +1418,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Body,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1424,7 +1427,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1438,8 +1441,8 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.Title,
-          data: '',
           id: 0,
+          data: '',
         },
       ];
 
@@ -1447,7 +1450,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1470,7 +1473,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
 
@@ -1484,7 +1487,7 @@ describe('StationComponent', () => {
           x: 0,
           y: 0,
           type: FrameType.CircleImage,
-          data: '',
+          data: '[]',
           id: 0,
         },
       ];
@@ -1493,7 +1496,7 @@ describe('StationComponent', () => {
         TestBed.inject(StationService),
         'getStationWidgets'
       ).and.returnValue(of(frameStationWidget));
-      component.ngOnInit();
+      component['getStationWidgets']();
       expect(spyService).toHaveBeenCalled();
     });
   });

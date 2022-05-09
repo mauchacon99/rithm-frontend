@@ -14,6 +14,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
+import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
+import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
 
 /**
  * Component for document drawer.
@@ -109,6 +111,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** Use for station events history. */
+  currentStationsLength = 0;
+
+  /** Whether the station events history is underway. */
+  eventsLengthCurrent = true;
+
+  /** Identifies the button hover to assign a user. */
+  assignedNewUser = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -158,16 +169,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.getDocumentTimeInStation();
         }
       });
-
-    /** Get Document Appended Fields from Behaviour Subject. */
-    this.stationService.documentStationNameFields$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((appendedFields) => {
-        this.options = appendedFields.filter((field) => field.questionRithmId);
-        if (this.questions.length > 0) {
-          this.filterFieldsAndQuestions();
-        }
-      });
   }
 
   /**
@@ -176,6 +177,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+    if (!this.isStation) {
+      this.getCurrentStations();
+    }
+    this.subscribeDocumentName();
+    this.subscribeDocumentStationNameFields();
+  }
+
+  /**
+   * Subscribe the subject documentName.
+   */
+  private subscribeDocumentName(): void {
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -188,6 +200,20 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             error
           );
         },
+      });
+  }
+
+  /**
+   * Get Document Appended Fields from Behaviour Subject.
+   */
+  private subscribeDocumentStationNameFields(): void {
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appendedFields) => {
+        this.options = appendedFields.filter((field) => field.questionRithmId);
+        if (this.questions.length > 0) {
+          this.filterFieldsAndQuestions();
+        }
       });
   }
 
@@ -540,6 +566,54 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         documentRithmId: this.documentRithmId,
         stationRithmId: this.stationRithmId,
       },
+    });
+  }
+
+  /**
+   * Open a modal to move location.
+   */
+  openModalLocation(): void {
+    this.dialog.open(LocationModalComponent, {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: {
+        stationRithmId: this.stationRithmId,
+        documentRithmId: this.documentRithmId,
+      },
+    });
+  }
+
+  /**
+   * Get the current stations from containers.
+   */
+  private getCurrentStations(): void {
+    this.eventsLengthCurrent = true;
+    this.documentService
+      .getCurrentStations(this.documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          this.currentStationsLength = data.length;
+          this.eventsLengthCurrent = false;
+        },
+        error: (error: unknown) => {
+          this.eventsLengthCurrent = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Open a modal to move assign Container.
+   */
+  openUserListModal(): void {
+    this.dialog.open(UserListModalComponent, {
+      minWidth: '550px',
+      minHeight: '450px',
+      data: this.stationRithmId,
     });
   }
 }

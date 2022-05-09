@@ -33,6 +33,7 @@ import {
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
+  GridsterItemComponentInterface,
   GridsterPush,
 } from 'angular-gridster2';
 import { StationService } from 'src/app/core/station.service';
@@ -42,7 +43,8 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { FlowLogicComponent } from 'src/app/station/flow-logic/flow-logic.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { RandomIdGenerator } from 'src/helpers';
+import { v4 as uuidv4 } from 'uuid';
+
 /**
  * Main component for viewing a station.
  */
@@ -141,6 +143,9 @@ export class StationComponent
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
+  /** The selected tab index/init. */
+  headerTabIndex = 0;
+
   /** Grid initial values. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
@@ -155,6 +160,7 @@ export class StationComponent
     resizable: {
       enabled: true,
     },
+    itemResizeCallback: StationComponent.itemResize,
     margin: 12,
     minCols: 24,
     maxCols: 24,
@@ -165,11 +171,24 @@ export class StationComponent
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
 
+  /** Whether the request to get the widgets is currently underway. */
+  widgetLoading = false;
+
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** Helper class for random id generator. */
-  private randomIdGenerator: RandomIdGenerator;
+  /** Circles in the gridster. */
+  circlesWidget!: string;
+
+  /** Flag to indicate whether the focus is on a text component or not. */
+  showTextAlignIcons = false;
+
+  /** List of all text widget types. */
+  readonly textWidgetTypes = [
+    FrameType.Body,
+    FrameType.Title,
+    FrameType.Headline,
+  ];
 
   constructor(
     private stationService: StationService,
@@ -188,7 +207,6 @@ export class StationComponent
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
     });
-    this.randomIdGenerator = new RandomIdGenerator();
   }
 
   /**
@@ -336,8 +354,31 @@ export class StationComponent
     this.subscribeStationFormTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
-    this.getStationWidgets();
     if (!this.editMode) this.setGridMode('preview');
+  }
+
+  /**
+   * Gridster resize item event.
+   *
+   * @param item Current resized item.
+   * @param itemComponent Item Interface.
+   */
+  static itemResize(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface
+  ): void {
+    if (item.type === FrameType.CircleImage) {
+      const itemTo: GridsterItem = itemComponent.$item;
+      if (itemTo.rows < item.rows || itemTo.cols < item.cols) {
+        itemTo.cols = itemTo.rows < item.rows ? itemTo.rows : itemTo.cols;
+        itemTo.rows = itemTo.cols < item.cols ? itemTo.cols : itemTo.rows;
+      }
+
+      if (itemTo.rows > item.rows || itemTo.cols > item.cols) {
+        itemTo.cols = itemTo.rows > item.rows ? itemTo.rows : itemTo.cols;
+        itemTo.rows = itemTo.cols > item.cols ? itemTo.cols : itemTo.rows;
+      }
+    }
   }
 
   /** Comment. */
@@ -363,6 +404,15 @@ export class StationComponent
   }
 
   /**
+   * Click for tab selected item inside sub-header.
+   *
+   * @param headerTabIndex To catch event that verify click tab selected item.
+   */
+  headerSelectedTab(headerTabIndex: number): void {
+    this.headerTabIndex = headerTabIndex;
+  }
+
+  /**
    * Whether to show the backdrop for the comment and history drawers.
    *
    * @returns Whether to show the backdrop.
@@ -378,11 +428,14 @@ export class StationComponent
    */
   get disableSaveButton(): boolean {
     return (
-      !this.stationForm.valid ||
-      !(
-        this.stationForm.dirty ||
-        this.stationForm.controls.stationTemplateForm.touched
-      ) ||
+      // If current tab is document and form field values are not changed.
+      (!this.isFlowLogicTab &&
+        (!this.stationForm.valid ||
+          !(
+            this.stationForm.dirty ||
+            this.stationForm.controls.stationTemplateForm.touched
+          ))) ||
+      // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
   }
@@ -454,6 +507,7 @@ export class StationComponent
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
             );
+            this.getStationWidgets();
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
@@ -477,7 +531,7 @@ export class StationComponent
    */
   addQuestion(fieldType: QuestionFieldType): void {
     const newQuestion: Question = {
-      rithmId: this.randomIdGenerator.getRandRithmId(4),
+      rithmId: uuidv4(),
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
@@ -507,8 +561,10 @@ export class StationComponent
     const framesForDatalink: StationFrameWidget[] = [];
     /** Build a frame for each existing datalink. */
     this.dataLinkArray.forEach((dl) => {
+      const elementRithmId = uuidv4();
+      dl.frameRithmId = elementRithmId;
       const frameTemplate = {
-        rithmId: this.randomIdGenerator.getRandRithmId(6),
+        rithmId: elementRithmId,
         stationRithmId: this.stationRithmId,
         cols: 24,
         rows: 4,
@@ -528,8 +584,7 @@ export class StationComponent
           if (frames && frames.length) {
             const requestRow: Observable<DataLinkObject>[] = [];
             Promise.all(
-              this.dataLinkArray.map(async (dl, ind) => {
-                dl.frameRithmId = frames[ind].rithmId;
+              this.dataLinkArray.map(async (dl) => {
                 requestRow.push(
                   this.documentService.saveDataLink(this.stationRithmId, dl)
                 );
@@ -581,12 +636,6 @@ export class StationComponent
         );
     }
     const petitionsUpdateStation = [
-      // Update station Name.
-      this.stationService.updateStationName(
-        this.stationName,
-        this.stationInformation.rithmId
-      ),
-
       // Update appended fields to document.
       this.stationService.updateDocumentNameTemplate(
         this.stationInformation.rithmId,
@@ -613,7 +662,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , stationQuestions]) => {
+        next: ([, , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
@@ -761,7 +810,7 @@ export class StationComponent
     ];
     children.forEach((element) => {
       const child: Question = {
-        rithmId: this.randomIdGenerator.getRandRithmId(4),
+        rithmId: uuidv4(),
         prompt: element.prompt,
         questionType: element.type,
         isReadOnly: false,
@@ -810,6 +859,7 @@ export class StationComponent
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
         this.closeSettingDrawer();
+        this.showTextAlignIcons = false;
         break;
       case 'setting':
         enabledMode = false;
@@ -818,6 +868,7 @@ export class StationComponent
       case 'layout':
         enabledMode = true;
         this.closeSettingDrawer();
+        this.showTextAlignIcons = false;
         break;
       default:
         break;
@@ -877,21 +928,28 @@ export class StationComponent
    * Get the station frame widgets.
    */
   private getStationWidgets(): void {
+    this.widgetLoading = true;
     this.stationService
       .getStationWidgets(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
           /**Add individual properties for every Type. */
-          inputFrames.forEach((frame, index) => {
+          inputFrames?.forEach((frame, index) => {
+            frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
-                frame.minItemRows = 4;
+                frame.minItemRows =
+                  frame.questions &&
+                  frame.questions?.length &&
+                  frame.questions?.length > 4
+                    ? frame.questions.length
+                    : 4;
                 frame.minItemCols = 6;
                 frame.questions =
                   frame.questions && frame.questions?.length > 0
                     ? frame.questions
-                    : [];
+                    : JSON.parse(frame.data);
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:
@@ -905,8 +963,7 @@ export class StationComponent
                 frame.type = FrameType.Body;
                 break;
               case FrameType.Title:
-                frame.minItemCols = 24;
-                frame.minItemRows = 1;
+                frame.minItemCols = 6;
                 frame.maxItemRows = 1;
                 frame.type = FrameType.Title;
                 break;
@@ -926,8 +983,10 @@ export class StationComponent
             this.inputFrameWidgetItems.push(frame);
             this.changedOptions();
           });
+          this.widgetLoading = false;
         },
         error: (error: unknown) => {
+          this.widgetLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -941,6 +1000,7 @@ export class StationComponent
    * and Save or update the changes to the station frame widgets.
    */
   async saveStationWidgetChanges(): Promise<void> {
+    this.showTextAlignIcons = false;
     let hasQuestions = false;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions?.length === 0) {
@@ -969,7 +1029,7 @@ export class StationComponent
    * Save or update the changes make the station frame widgets.
    */
   private saveStationWidgetsChanges(): void {
-    this.stationLoading = true;
+    this.widgetLoading = true;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions) {
         field.data = JSON.stringify(field.questions);
@@ -995,13 +1055,13 @@ export class StationComponent
               inputFrames.filter((iframe) => iframe.type === FrameType.Input)
             );
           } else {
-            this.stationLoading = false;
+            this.widgetLoading = false;
             this.setGridMode('preview');
           }
           this.changedOptions();
         },
         error: (error: unknown) => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -1033,7 +1093,7 @@ export class StationComponent
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
     } else {
-      this.stationLoading = false;
+      this.widgetLoading = false;
       this.setGridMode('preview');
     }
   }
@@ -1048,11 +1108,11 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: () => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.setGridMode('preview');
         },
         error: (error: unknown) => {
-          this.stationLoading = false;
+          this.widgetLoading = false;
           this.setGridMode('preview');
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -1074,6 +1134,7 @@ export class StationComponent
     if (confirm) {
       this.editMode = false;
       this.setGridMode('preview');
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1103,7 +1164,7 @@ export class StationComponent
     type: CdkDragDrop<string, string, FrameType> | FrameType
   ): void {
     const inputFrame: StationFrameWidget = {
-      rithmId: this.randomIdGenerator.getRandRithmId(4),
+      rithmId: uuidv4(),
       stationRithmId: this.stationRithmId,
       cols: 1,
       rows: 1,
@@ -1147,8 +1208,7 @@ export class StationComponent
       case FrameType.Title:
         inputFrame.cols = 24;
         inputFrame.rows = 1;
-        inputFrame.minItemCols = 24;
-        inputFrame.minItemRows = 1;
+        inputFrame.minItemCols = 6;
         inputFrame.maxItemRows = 1;
         inputFrame.type = FrameType.Title;
         break;
@@ -1180,6 +1240,7 @@ export class StationComponent
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
     if (this.settingMode) {
       this.setGridMode('layout');
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1193,6 +1254,7 @@ export class StationComponent
     field: Question | ImageWidgetObject | string,
     type: FrameType
   ): void {
+    this.showTextAlignIcons = false;
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
@@ -1236,6 +1298,17 @@ export class StationComponent
    */
   focusWidget(index: number): void {
     this.widgetFocused = index === this.widgetFocused ? -1 : index;
+    if (this.widgetFocused !== -1 && this.settingMode) {
+      if (
+        this.textWidgetTypes.includes(
+          this.inputFrameWidgetItems[this.widgetFocused].type
+        )
+      ) {
+        this.showTextAlignIcons = true;
+      }
+    } else {
+      this.showTextAlignIcons = false;
+    }
   }
 
   /**

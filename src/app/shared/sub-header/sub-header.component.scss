@@ -3,3 +3,19 @@
     @apply text-accent-A100;
   }
 }
+
+.new-station-tabs {
+  ::ng-deep .mat-tab-label {
+    height: 40px;
+    padding: 0 15px;
+    min-width: 10px !important;
+  }
+
+  ::ng-deep .mat-tab-header-pagination {
+    display: none;
+  }
+
+  ::ng-deep .mat-tab-header {
+    border-bottom: none;
+  }
+}

@@ -288,6 +288,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     ) {
       this.sidenavDrawerService.drawerData$.next(false);
     }
+    /** Reset context and drawer opening when we have opened a station on the map. */
+    if (this.drawerMode === 'stationInfo') {
+      this.mapService.mapHelper.isDrawerOpened$.next(false);
+      this.sidenavDrawerService.drawerContext$.next('');
+    }
   }
 
   /**

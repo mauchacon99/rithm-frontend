@@ -23,7 +23,9 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
+  RoleDashboardMenu,
+  Power,
+  TriggerType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -532,6 +534,14 @@ describe('StationService', () => {
     service.getStationWorkerRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should returns the owner roster for a given station', () => {
@@ -557,6 +567,14 @@ describe('StationService', () => {
     service.getStationOwnerRoster(stationId).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should add a new member to the owner roster', () => {
@@ -936,7 +954,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -966,7 +984,7 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
+        rithmId: '3j4k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -1450,6 +1468,8 @@ describe('StationService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          defaultDashboardType: RoleDashboardMenu.Personal,
+          defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
         },
       },
     ];
@@ -1561,41 +1581,91 @@ describe('StationService', () => {
   });
 
   it('should get getStationWidgets', () => {
-    const expectedResponse: StationFrameWidget[] = [
-      {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: '',
-        questions: [],
-        id: 0,
-      },
-      {
-        rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 1,
-        x: 0,
-        y: 0,
-        type: FrameType.Headline,
-        data: '',
-        id: 1,
-      },
-    ];
+    const expectedResponse: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+          name: 'Development',
+          totalDocuments: 5,
+          isGenerator: true,
+        },
+      ],
+      previousStations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+          name: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true,
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false,
+        },
+      ],
+      frames: [
+        {
+          rithmId: '9144-3f0d-e1f1',
+          stationRithmId: 'qwe-321-ert-123',
+          id: 0,
+          x: 6,
+          y: 1,
+          cols: 6,
+          rows: 4,
+          type: FrameType.Headline,
+          data: '',
+          questions: [],
+        },
+      ],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2,
+      allowPreviousButton: false,
+      allowAllOrgWorkers: false,
+      allowExternalWorkers: true,
+      flowButton: 'Flow',
+      isChained: false,
+    };
 
     service.getStationWidgets(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
+      expect(response).toEqual(expectedResponse.frames);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info-frames?stationRithmId=${stationId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should call getGroupTrafficData', () => {
-    const expectedData: GroupTrafficData = {
+    const expectedResponse: GroupTrafficData = {
       title: 'Group Eagle',
-      stationGroupRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
+      stationGroupRithmId: stationId,
       labels: [
         'station 1',
         'station 2',
@@ -1617,20 +1687,28 @@ describe('StationService', () => {
         '2 hour',
       ],
     };
-    service
-      .getGroupTrafficData('9360D633-A1B9-4AC5-93E8-58316C1FDD9F')
-      .subscribe((response) => {
-        expect(response).toEqual(expectedData);
-      });
+    service.getGroupTrafficData(stationId, true).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/traffic?rithmId=${stationId}&forceRefresh=true`
+    );
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    expect(req.request.params.get('forceRefresh')).toBe('true');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
-  it('should call getUserStationData', () => {
+  it('should call getStationWidgetPreBuiltData', () => {
     const expectedData: StationWidgetPreBuilt[] = [
       {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
+        rithmId: 'qwe-321-ert-123',
+        name: 'Mars station',
         totalContainers: 5,
-        stationGroup: 'Eagle',
+        groupName: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1651,16 +1729,23 @@ describe('StationService', () => {
         ],
       },
       {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
+        rithmId: '123-456-789',
+        name: 'Grogu station',
         totalContainers: 1,
-        stationGroup: '  ',
+        groupName: '  ',
         stationOwners: [],
       },
     ];
     service.getStationWidgetPreBuiltData().subscribe((response) => {
       expect(response).toEqual(expectedData);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/member-station`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedData);
+    httpTestingController.verify();
   });
 
   it('should call saveInputFrameQuestions', () => {
@@ -1700,17 +1785,197 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should get a current stations list for containers', () => {
-    const stationRithmId = '6375027-78345-73824-54244';
-    const expectCurrentStationsResponse: DocumentCurrentStation[] = [
+  it('should add a new member to station group owners roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
       {
-        name: 'Testy',
-        rithmId: '123',
-        flowedTimeUTC: '2022-04-18T20:34:24.118Z',
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
       },
     ];
-    service.getCurrentStations(stationRithmId).subscribe((response) => {
-      expect(response).toEqual(expectCurrentStationsResponse);
+
+    service
+      .addUserStationGroupToOwnersRoster(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/admins?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should add a new member to station group workers roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '123-456-789',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '987-654-321',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+
+    service
+      .addUserStationGroupWorkersRoster(stationGroupRithmId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/roster?stationGroupRithmId=${stationGroupRithmId}`
+    );
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the potential roster members of the stationGroup', () => {
+    const pageNum = 1;
+    const pageSize = 20;
+    const expectedResponse: StationPotentialRostersUsers = {
+      users: [
+        {
+          rithmId: '12dasd1-asd12asdasd-asdas',
+          firstName: 'Cesar',
+          lastName: 'Quijada',
+          email: 'strut@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-ffff1',
+          firstName: 'Maria',
+          lastName: 'Quintero',
+          email: 'Maquin@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-a231',
+          firstName: 'Pedro',
+          lastName: 'Perez',
+          email: 'pperez@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+      ],
+      totalUsers: 3,
+    };
+
+    service
+      .getPotentialStationGroupRosterMembers(stationId, pageNum)
+      .subscribe((users) => {
+        expect(users).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION_GROUP}/potential-roster-users?stationGroupRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationGroupRithmId')).toBe(stationId);
+    expect(req.request.params.get('pageNum')).toBe(pageNum.toString());
+    expect(req.request.params.get('pageSize')).toBe(pageSize.toString());
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return the users roster to the station.', () => {
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
+    service.getStationAllRoster(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster?rithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('rithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should get the powers related to the current station', () => {
+    const expectedResponse: Power[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j',
+        triggers: [
+          {
+            rithmId: '3j4k-3h2j-hj5h',
+            type: TriggerType.ManualFlow,
+            source: 'Source Trigger #1',
+            value: 'Value Trigger #1',
+          },
+        ],
+        actions: [
+          {
+            rithmId: '3j4k-3h2j-ft5h',
+            type: 'Type Action #1',
+            target: 'Target Action #1',
+            data: 'Data Action #1',
+            resultMapping: 'Result Action #1',
+            header: 'Header Action #1',
+          },
+        ],
+        stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowToStationRithmIds: [
+          '73d47261-1932-4fcf-82bd-159eb1a72422',
+          '73d47261-1932-4fcf-82bd-159eb1a7242g',
+        ],
+        name: 'Power Test #1',
+        condition: 'Condition Test #1',
+      },
+    ];
+
+    service.getStationPowers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
     });
   });
 });

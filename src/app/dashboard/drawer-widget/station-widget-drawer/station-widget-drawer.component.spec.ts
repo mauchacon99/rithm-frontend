@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material/select';
 
 import { StationWidgetDrawerComponent } from './station-widget-drawer.component';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import {
   ColumnsDocumentInfo,
   OptionsSelectWidgetDrawer,
@@ -83,7 +82,6 @@ describe('StationWidgetDrawerComponent', () => {
         BrowserAnimationsModule,
       ],
       providers: [
-        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
@@ -95,8 +93,7 @@ describe('StationWidgetDrawerComponent', () => {
     fixture = TestBed.createComponent(StationWidgetDrawerComponent);
     component = fixture.componentInstance;
     component.questions = questions;
-    fixture.detectChanges();
-    component.dataDrawerStation = {
+    component.dataDrawer = {
       widgetItem: {
         rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
         cols: 4,
@@ -113,23 +110,11 @@ describe('StationWidgetDrawerComponent', () => {
       widgetIndex: 0,
       quantityElementsWidget: 2,
     };
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('Should subscribe to SidenavDrawerService.drawerData$', () => {
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
-
-    expect(component.stationRithmId).toEqual(dataWidget.stationRithmId);
-    expect(component.stationColumns).toEqual(dataWidget.columns);
-    expect(component.dataDrawerStation.widgetIndex).toEqual(
-      dataEditWidget.widgetIndex
-    );
-    expect(component.dataDrawerStation.widgetItem).toEqual(
-      dataEditWidget.widgetItem
-    );
   });
 
   it('should show loading indicator', () => {
@@ -176,6 +161,7 @@ describe('StationWidgetDrawerComponent', () => {
   describe('Functionality of the columns', () => {
     beforeEach(() => {
       component.isLoading = false;
+      component.failedLoadDrawer = false;
       component.stationRithmId = dataWidget.stationRithmId;
       component.stationColumns = [
         {
@@ -186,7 +172,7 @@ describe('StationWidgetDrawerComponent', () => {
           questionId: 'd17f6f7a-9642-45e0-8221-e48045d3c97e',
         },
       ];
-      component.dataDrawerStation = {
+      component.dataDrawer = {
         widgetItem: {
           rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
           cols: 4,
@@ -203,8 +189,8 @@ describe('StationWidgetDrawerComponent', () => {
         widgetIndex: 0,
         quantityElementsWidget: 2,
       };
-      component.dataDrawerStation.widgetIndex = dataEditWidget.widgetIndex;
-      component.dataDrawerStation.widgetItem = JSON.parse(
+      component.dataDrawer.widgetIndex = dataEditWidget.widgetIndex;
+      component.dataDrawer.widgetItem = JSON.parse(
         JSON.stringify(dataEditWidget.widgetItem)
       );
       component.questions = questions;
@@ -276,7 +262,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should add new column', () => {
-      component.dataDrawerStation.quantityElementsWidget = 1;
+      component.dataDrawer.quantityElementsWidget = 1;
       fixture.detectChanges();
       const spyMethod = spyOn(component, 'addNewColumn').and.callThrough();
       const btnNewColumn =
@@ -289,7 +275,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should disable add new column', () => {
-      component.dataDrawerStation.quantityElementsWidget = 1;
+      component.dataDrawer.quantityElementsWidget = 1;
       fixture.detectChanges();
       spyOnProperty(component, 'disabledNewColumn').and.returnValue(true);
       const btnNewColumn =
@@ -344,6 +330,23 @@ describe('StationWidgetDrawerComponent', () => {
       expect(component.disabledNewColumn).toBeFalse();
     });
 
+    it('should disable add new column when maximum limit of columns is reached', () => {
+      spyOnProperty(component, 'isStationMultiline').and.returnValue(false);
+      component.dataDrawer.quantityElementsWidget = 1;
+      for (
+        let index = 0;
+        index <= component.MAXIMUM_COLUMNS_ALLOWED + 1;
+        index++
+      ) {
+        component.addNewColumn();
+      }
+      fixture.detectChanges();
+      const message = fixture.nativeElement.querySelector('#message-limited');
+      expect(message).toBeTruthy();
+      expect(component.limitedColumnsReached).toBeTrue();
+      expect(component.disabledNewColumn).toBeTrue();
+    });
+
     it('should delete a column', () => {
       const spyMethod = spyOn(component, 'deleteColumn').and.callThrough();
       component['loadColumnsSelect']();
@@ -392,8 +395,8 @@ describe('StationWidgetDrawerComponent', () => {
 
     it('should emit updateDataWidget$ to update widget', () => {
       const expectData = {
-        widgetItem: component.dataDrawerStation.widgetItem,
-        widgetIndex: component.dataDrawerStation.widgetIndex,
+        widgetItem: component.dataDrawer.widgetItem,
+        widgetIndex: component.dataDrawer.widgetIndex,
         quantityElementsWidget: 2,
       };
       const spyService = spyOn(
@@ -464,7 +467,7 @@ describe('StationWidgetDrawerComponent', () => {
       expect(spyError).toHaveBeenCalled();
     });
     it('should render message for show user this station not documents assigned', () => {
-      component.dataDrawerStation.quantityElementsWidget = 0;
+      component.dataDrawer.quantityElementsWidget = 0;
       component.questions = [];
       fixture.detectChanges();
       const renderMessage = fixture.debugElement.nativeElement.querySelector(
@@ -474,7 +477,7 @@ describe('StationWidgetDrawerComponent', () => {
     });
 
     it('should no render message for show user this station not documents assigned', () => {
-      component.dataDrawerStation.quantityElementsWidget = 1;
+      component.dataDrawer.quantityElementsWidget = 1;
       fixture.detectChanges();
       const renderMessage = fixture.debugElement.nativeElement.querySelector(
         '#message-not-documents-assigned-to-station'
@@ -487,40 +490,19 @@ describe('StationWidgetDrawerComponent', () => {
         imageId: '123-456-789',
         imageName: 'Image name',
       };
-      component.dataDrawerStation.widgetItem = dataEditWidget.widgetItem;
+      component.dataDrawer.widgetItem = dataEditWidget.widgetItem;
 
       component.image = image;
 
-      expect(component.dataDrawerStation.widgetItem.imageId).toEqual(
-        image.imageId
-      );
-      expect(component.dataDrawerStation.widgetItem.imageName).toEqual(
+      expect(component.dataDrawer.widgetItem.imageId).toEqual(image.imageId);
+      expect(component.dataDrawer.widgetItem.imageName).toEqual(
         image.imageName
       );
     });
   });
 
-  it('Should emit widgetIndex', () => {
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
-    const spySetWidgetIndex = spyOn(component.getWidgetIndex, 'emit');
-    component.ngOnInit();
-    expect(spySetWidgetIndex).toHaveBeenCalledOnceWith(
-      dataEditWidget.widgetIndex
-    );
-  });
-
-  it('Should emit getWidgetItem', () => {
-    TestBed.inject(SidenavDrawerService).drawerData$.next(dataEditWidget);
-    const spySetWidgetType = spyOn(component.getWidgetItem, 'emit');
-    component.ngOnInit();
-    expect(spySetWidgetType).toHaveBeenCalledOnceWith(
-      dataEditWidget.widgetItem
-    );
-  });
-
   it('should set default columns if station columns are empty and station is type multiline', () => {
-    component.dataDrawerStation.widgetItem.widgetType =
-      WidgetType.StationMultiline;
+    component.dataDrawer.widgetItem.widgetType = WidgetType.StationMultiline;
     component.stationColumns = [];
     const dataExpected = [
       { name: ColumnsDocumentInfo.Name },
@@ -539,8 +521,7 @@ describe('StationWidgetDrawerComponent', () => {
       { name: 'Question', questionId: '123-456-789' },
       { name: ColumnsDocumentInfo.TimeInStation },
     ];
-    component.dataDrawerStation.widgetItem.widgetType =
-      WidgetType.StationMultiline;
+    component.dataDrawer.widgetItem.widgetType = WidgetType.StationMultiline;
     component.stationColumns = dataExpected;
 
     component['setDefaultColumnsStationMultiline']();
@@ -549,8 +530,7 @@ describe('StationWidgetDrawerComponent', () => {
   });
 
   it('should return false when check type question not able and station multiline', () => {
-    component.dataDrawerStation.widgetItem.widgetType =
-      WidgetType.StationMultiline;
+    component.dataDrawer.widgetItem.widgetType = WidgetType.StationMultiline;
     const question: Question = {
       prompt: 'Fake question 2',
       rithmId: '3j4k-3h2j-hj4j',
@@ -567,8 +547,7 @@ describe('StationWidgetDrawerComponent', () => {
   });
 
   it('should return true when check type question able and station multiline', () => {
-    component.dataDrawerStation.widgetItem.widgetType =
-      WidgetType.StationMultiline;
+    component.dataDrawer.widgetItem.widgetType = WidgetType.StationMultiline;
     const question: Question = {
       prompt: 'Fake question 2',
       rithmId: '3j4k-3h2j-hj4j',
@@ -585,8 +564,7 @@ describe('StationWidgetDrawerComponent', () => {
   });
 
   it('should return false when check type question able and station multiline and its third select', () => {
-    component.dataDrawerStation.widgetItem.widgetType =
-      WidgetType.StationMultiline;
+    component.dataDrawer.widgetItem.widgetType = WidgetType.StationMultiline;
     const question: Question = {
       prompt: 'Fake question 2',
       rithmId: '3j4k-3h2j-hj4j',

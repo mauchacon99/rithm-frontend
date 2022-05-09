@@ -15,6 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
+import { MatSortModule } from '@angular/material/sort';
 import { NgChartsModule } from 'ng2-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -52,6 +53,9 @@ import { GroupTrafficWidgetComponent } from './widgets/group-traffic-widget/grou
 import { StationPreBuiltWidgetComponent } from './widgets/station-pre-built-widget/station-pre-built-widget.component';
 import { PreBuiltWidgetTemplateModalComponent } from './widget-modal/pre-built-widget-template-modal/pre-built-widget-template-modal.component';
 import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-widget/container-pre-built-widget.component';
+import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { MemberDashboardListModalComponent } from './management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -82,6 +86,8 @@ import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-
     StationPreBuiltWidgetComponent,
     PreBuiltWidgetTemplateModalComponent,
     ContainerPreBuiltWidgetComponent,
+    ManagementMemberDashboardModalComponent,
+    MemberDashboardListModalComponent,
   ],
   imports: [
     CommonModule,
@@ -108,8 +114,10 @@ import { ContainerPreBuiltWidgetComponent } from './widgets/container-pre-built-
     MatExpansionModule,
     MatListModule,
     MatButtonToggleModule,
+    MatSortModule,
     ComingSoonMessageModule,
     NgChartsModule,
+    MatCheckboxModule,
   ],
   providers: [MobileBrowserChecker],
 })

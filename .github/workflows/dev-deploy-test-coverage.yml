@@ -1,0 +1,29 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+name: Dev Deployments Test Coverage
+on:
+  push:
+    branches: [dev]
+  repository_dispatch:
+    types: [dev_just_pushed]
+
+jobs:
+  test-coverage:
+    runs-on: [self-hosted, devrunner]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Installing dependencies
+        run: npm ci --no-audit
+
+      - name: Generating test coverage
+        run: npm run test-ci
+
+      - name: Deploying documentation site
+        run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force

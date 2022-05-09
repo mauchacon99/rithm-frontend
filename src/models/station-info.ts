@@ -1,6 +1,7 @@
 import { Question } from './question';
 import { ConnectedStationInfo } from './connected-station-info';
 import { StationRosterMember } from './station-roster-member';
+import { StationFrameWidget } from './station-frame-widget';
 
 /**
  * Represents all information about station.
@@ -60,4 +61,7 @@ export interface StationInformation {
 
   /** Contains if group of stations is chained. */
   isChained: boolean;
+
+  /** Contains the widgets related each frame. */
+  frames?: StationFrameWidget[];
 }

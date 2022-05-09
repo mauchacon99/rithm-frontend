@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -8,6 +8,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from 'src/app/core/user.service';
 import { Router } from '@angular/router';
 import { SplitService } from 'src/app/core/split.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -19,8 +21,27 @@ import { SplitService } from 'src/app/core/split.service';
   providers: [UtcTimeConversion],
 })
 export class StationDocumentsModalComponent implements OnInit {
+  /** Reference to sort table. */
+  @ViewChild(MatSort) set tableSort(value: MatSort) {
+    if (value) {
+      this.dataSourceTable.sort = value;
+    }
+  }
+
   /** The documents to show in the modal. */
   documents: Document[] = [];
+
+  /** Interface for list data in widget. */
+  dataSourceTable!: MatTableDataSource<Document>;
+
+  /** Columns statics to show on table. */
+  displayedColumns = [
+    'documentName',
+    'updatedTimeUTC',
+    'flowedTimeUTC',
+    'userAssigned',
+    'viewDocument',
+  ];
 
   /** The current page number. */
   activeNum = 1;
@@ -30,6 +51,9 @@ export class StationDocumentsModalComponent implements OnInit {
 
   /** The station rithmId. */
   private stationRithmId = '';
+
+  /* Value of search input. */
+  search = '';
 
   /** Total number of documents at this station. */
   totalNumDocs = 0;
@@ -89,6 +113,7 @@ export class StationDocumentsModalComponent implements OnInit {
         next: (documentsResponse) => {
           if (documentsResponse) {
             this.documents = documentsResponse.documents;
+            this.dataSourceTable = new MatTableDataSource(this.documents);
             this.totalNumDocs = documentsResponse.totalDocuments;
             this.userType = documentsResponse.userType;
           }
@@ -96,7 +121,7 @@ export class StationDocumentsModalComponent implements OnInit {
         },
         error: (error: unknown) => {
           this.isLoading = false;
-          this.dialogRef.close();
+          this.closeModal();
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -116,7 +141,7 @@ export class StationDocumentsModalComponent implements OnInit {
       this.router.navigate([`/document/${rithmId}`], {
         queryParams: { documentId: rithmId, stationId: this.stationRithmId },
       });
-      this.dialogRef.close();
+      this.closeModal();
     }
   }
 
@@ -133,19 +158,6 @@ export class StationDocumentsModalComponent implements OnInit {
     );
   }
 
-  // TODO: get first and last names separately from API to avoid necessitating the following:
-  /**
-   * Gets a specified portion of a full name.
-   *
-   * @param fullName The full name of the assigned user.
-   * @param firstLastIndex The index of the desired name portion (0 for first, 1 for last).
-   * @returns The desired name.
-   */
-  getNamePortion(fullName: string, firstLastIndex: 0 | 1): string {
-    const names = fullName.split(' ');
-    return names[firstLastIndex];
-  }
-
   /**
    * Split Service for show or hidden section Admin Portal.
    */
@@ -160,5 +172,51 @@ export class StationDocumentsModalComponent implements OnInit {
         this.errorService.logError(error);
       },
     });
+  }
+
+  /**
+   * Uses the helper: UtcTimeConversion.
+   * Tells how long a document has been in a station for.
+   *
+   * @param timeEntered Reflects time a document entered a station.
+   * @returns A string reading something like "4 days" or "32 minutes".
+   */
+  getElapsedTimeNewTemplate(timeEntered: string): string {
+    let timeInStation: string;
+    if (timeEntered && timeEntered !== 'Unknown') {
+      timeInStation = this.utcTimeConversion.getElapsedTimeText(
+        this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
+      );
+      if (timeInStation === '1 day') {
+        timeInStation = ' Yesterday';
+      } else {
+        timeInStation += ' ago';
+      }
+    } else {
+      timeInStation = 'None';
+    }
+    return timeInStation;
+  }
+
+  /**
+   * Navigate the user to the document page.
+   *
+   * @param documentId The Id of the document to view.
+   */
+  goToDocument(documentId: string): void {
+    this.closeModal();
+    this.router.navigate(['/', 'document', documentId], {
+      queryParams: {
+        documentId,
+        stationId: this.stationRithmId,
+      },
+    });
+  }
+
+  /**
+   * The closeModal() function closes the modal.
+   */
+  closeModal(): void {
+    this.dialogRef.close();
   }
 }

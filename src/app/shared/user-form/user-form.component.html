@@ -1,31 +1,91 @@
 <ng-container [formGroup]="userForm">
   <div *ngIf="!accountCreate && showProfilePhoto">
-    <div class="w-full flex space-x-3 py-5 items-center">
+    <div
+      class="w-full flex space-x-3 py-5 items-center"
+      [ngClass]="{ 'animate-pulse': isLoadingUploadImageUser }"
+    >
+      <input
+        type="hidden"
+        name="isLoadingImage"
+        formControlName="isLoadingImage"
+      />
+      <input type="hidden" name="vaultRithmId" formControlName="vaultRithmId" />
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"
         [lastName]="accountCreate ? lastName.value : currentUser.lastName"
+        [profileImageRithmId]="profileImageRithmId || ''"
+        [isLarge]="true"
       ></app-user-avatar>
 
-      <button
-        mat-stroked-button
-        color="accent"
-        mat-button
-        id="upload-image-button"
-        data-testid="upload-image-button"
-        type="button"
-        (click)="fileInput.click()"
-      >
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-        Upload photo
-        <input
-          #fileInput
-          type="file"
-          accept="image/png,image/jpeg,image/jpg"
-          id="upload-image-input"
-          [hidden]="true"
-          (change)="uploadImage($event)"
-        />
-      </button>
+      <div>
+        <ng-container *ngIf="!profileImageRithmId && !isLoadingUploadImageUser">
+          <button
+            mat-stroked-button
+            color="accent"
+            mat-button
+            id="upload-image-button"
+            data-testid="upload-image-button"
+            type="button"
+            (click)="fileInput.click()"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            Upload image
+          </button>
+        </ng-container>
+        <ng-container *ngIf="profileImageRithmId && !isLoadingUploadImageUser">
+          <div class="grid gap-4 grid-cols-2 padding-button">
+            <div>
+              <button
+                mat-stroked-button
+                color="accent"
+                mat-button
+                id="change-image-button"
+                data-testid="change-image-button"
+                type="button"
+                (click)="fileInput.click()"
+              >
+                <p class="text-semibold">CHANGE</p>
+              </button>
+            </div>
+            <div>
+              <button
+                mat-button
+                color="warn"
+                mat-button
+                id="delete-image-button"
+                data-testid="delete-image-button"
+                type="button"
+                (click)="confirmRemoveUserImage()"
+              >
+                <p class="text-semibold">DELETE</p>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+        <!--Show error-->
+        <div
+          class="text-error-500 text-center my-4"
+          id="error-loading-upload-photo"
+          *ngIf="errorUploadImageUser"
+        >
+          Error to upload image.
+        </div>
+      </div>
+
+      <input
+        #fileInput
+        type="file"
+        accept="image/png,image/jpeg,image/jpg"
+        id="upload-image-input"
+        [hidden]="true"
+        (change)="uploadImage($event)"
+      />
+      <!--Loading upload image-->
+      <div *ngIf="isLoadingUploadImageUser" id="loading-upload-photo">
+        <app-loading-indicator
+          [inlineText]="'Uploading...'"
+        ></app-loading-indicator>
+      </div>
     </div>
   </div>
 

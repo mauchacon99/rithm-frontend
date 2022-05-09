@@ -9,6 +9,8 @@ import {
   EditDataWidget,
   ColumnsDocumentInfo,
   ItemListWidgetModal,
+  ColumnFieldsWidget,
+  MemberDashboard,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -38,7 +40,7 @@ export class MockDashboardService {
     key: string;
   }[] = [
     {
-      name: 'Document',
+      name: 'Container',
       key: ColumnsDocumentInfo.Name,
     },
     {
@@ -184,16 +186,6 @@ export class MockDashboardService {
         name and the field that matches your search.`,
       },
     },
-    [WidgetType.StationGroup]: {
-      title: '',
-      description: '',
-      descriptionComponent: {
-        title: '',
-        type: '',
-        customizable: '',
-        description: ``,
-      },
-    },
     //Pre built section container.
     [WidgetType.PreBuiltContainer]: {
       title: 'My Containers',
@@ -218,6 +210,31 @@ export class MockDashboardService {
       },
     },
   };
+
+  /**
+   * Group columns of station widget.
+   *
+   * @param columns Columns to group.
+   * @returns Columns grouped.
+   */
+  groupColumnsStationWidget(
+    columns: ColumnFieldsWidget[]
+  ): ColumnFieldsWidget[] {
+    const columnsGrouped: ColumnFieldsWidget[] = [];
+    columns.map((column) => {
+      if (
+        !columnsGrouped.some((value) => {
+          if (column.questionId) {
+            return value.questionId === column.questionId;
+          }
+          return value.name === column.name;
+        })
+      ) {
+        columnsGrouped.push(column);
+      }
+    });
+    return columnsGrouped;
+  }
 
   /**
    * Update data of the widget since drawer station.
@@ -383,7 +400,14 @@ export class MockDashboardService {
         stationName: 'Step 4',
         priority: 18,
         flowedTimeUTC: '0001-01-01T00:00:00',
-        userAssigned: '',
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
         updatedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         isEscalated: false,
       },
@@ -402,7 +426,14 @@ export class MockDashboardService {
         documentName: 'Really long document name',
         stationName: 'really long Station name',
         priority: 1,
-        userAssigned: '',
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
         isEscalated: false,
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
@@ -413,7 +444,14 @@ export class MockDashboardService {
         documentName: 'New Doc 2',
         stationName: 'Station name',
         priority: 2,
-        userAssigned: '',
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
         isEscalated: false,
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
@@ -748,5 +786,102 @@ export class MockDashboardService {
     ];
 
     return of(itemListWidgetModal).pipe(delay(1000));
+  }
+
+  /**
+   * Add members to dashboard.
+   *
+   * @param users Users to add to dashboard.
+   * @returns List users added.
+   */
+  addDashboardMembers(users: MemberDashboard[]): Observable<MemberDashboard[]> {
+    const responseMembers: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+
+    return of(responseMembers).pipe(delay(1000));
+  }
+
+  /**
+   * Get users to dashboard personal.
+   *
+   * @returns An Observable of an array of MemberDashboard objects.
+   */
+  getUsersDashboardPersonal(): Observable<MemberDashboard[]> {
+    const responseMembers: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+
+    return of(responseMembers).pipe(delay(1000));
   }
 }

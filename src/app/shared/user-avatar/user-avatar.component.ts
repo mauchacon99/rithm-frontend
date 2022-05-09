@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { UserService } from 'src/app/core/user.service';
 import { ImageData } from 'src/models/index';
 
 /**
  * Reusable component for displaying a user's avatar.
  */
 @Component({
-  selector: 'app-user-avatar[firstName][lastName]',
+  selector: 'app-user-avatar[firstName][lastName][profileImageRithmId]',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
 })
@@ -37,14 +37,44 @@ export class UserAvatarComponent {
   /** If avatars are small. */
   @Input() isSmall = false;
 
-  /** Image Rithm Id. */
-  imageRithmId!: string;
+  /** If avatars are large. */
+  @Input() isLarge = false;
+
+  /** Profile image Rithm Id. */
+  private _profileImageRithmId = '';
+
+  /** Set profile image Rithm Id. */
+  @Input() set profileImageRithmId(profileImageRithmId: string) {
+    this._profileImageRithmId = profileImageRithmId;
+    if (profileImageRithmId) {
+      this.getImageUser();
+    } else {
+      this.classProfileImage = '';
+    }
+  }
+
+  /**
+   * Get profile image id.
+   *
+   * @returns Profile image idt.
+   */
+  get profileImageRithmId(): string {
+    return this._profileImageRithmId;
+  }
 
   /** Image data. */
-  imageData!: ImageData;
+  set imageData(image: ImageData) {
+    this.classProfileImage = image.imageData;
+  }
+
+  /** Load indicator getting image. */
+  isLoading = false;
+
+  /** Class to render profile image. */
+  classProfileImage = '';
 
   constructor(
-    private userService: UserService,
+    private documentService: DocumentService,
     private errorService: ErrorService
   ) {}
 
@@ -86,20 +116,21 @@ export class UserAvatarComponent {
 
   /**
    * Get Image user.
+   *
    */
   private getImageUser(): void {
-    this.userService
-      .getImageUser(this.imageRithmId)
+    this.isLoading = true;
+    this.documentService
+      .getImageUser(this.profileImageRithmId)
       .pipe(first())
       .subscribe({
         next: (imageData) => {
+          this.isLoading = false;
           this.imageData = imageData;
         },
         error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          this.isLoading = false;
+          this.errorService.logError(error);
         },
       });
   }

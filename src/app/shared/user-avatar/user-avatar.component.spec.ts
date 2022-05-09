@@ -3,27 +3,29 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { By } from '@angular/platform-browser';
 import { UserAvatarComponent } from './user-avatar.component';
-import { MockErrorService, MockUserService } from 'src/mocks';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { UserService } from 'src/app/core/user.service';
 import { throwError } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('UserAvatarComponent', () => {
   let component: UserAvatarComponent;
   let fixture: ComponentFixture<UserAvatarComponent>;
+  let documentService: DocumentService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UserAvatarComponent],
       imports: [MatTooltipModule, MatBadgeModule],
       providers: [
-        { provide: UserService, useClass: MockUserService },
+        { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(UserAvatarComponent);
     component = fixture.componentInstance;
     component.firstName = 'tyler';
@@ -73,30 +75,35 @@ describe('UserAvatarComponent', () => {
   });
 
   it('should call method getImageUser', () => {
-    component.imageRithmId = '123-123132';
+    component.profileImageRithmId = '123-123132';
     const methodGetImageUserService = spyOn(
-      TestBed.inject(UserService),
+      documentService,
       'getImageUser'
     ).and.callThrough();
     component['getImageUser']();
 
     expect(methodGetImageUserService).toHaveBeenCalledOnceWith(
-      component.imageRithmId
+      component.profileImageRithmId
     );
   });
 
   it('should catch an error if the request to get image data', () => {
-    component.imageRithmId = '123-123132';
-    spyOn(TestBed.inject(UserService), 'getImageUser').and.returnValue(
+    component.profileImageRithmId = '123-123132';
+    spyOn(documentService, 'getImageUser').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
     const spyError = spyOn(
       TestBed.inject(ErrorService),
-      'displayError'
+      'logError'
     ).and.callThrough();
     component['getImageUser']();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should delete render image when image id is empty', () => {
+    component.profileImageRithmId = '';
+    expect(component.classProfileImage).toEqual('');
   });
 });
