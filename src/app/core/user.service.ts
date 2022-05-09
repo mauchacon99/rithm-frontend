@@ -265,8 +265,8 @@ export class UserService {
           if (dataUser?.lastName !== undefined) {
             user.lastName = dataUser.lastName;
           }
-          if (dataUser?.profileImageId !== undefined) {
-            user.profileImageId = dataUser.profileImageId;
+          if (dataUser?.profileImageRithmId !== undefined) {
+            user.profileImageRithmId = dataUser.profileImageRithmId;
           }
           localStorage.setItem('user', JSON.stringify(user));
         })
@@ -294,7 +294,7 @@ export class UserService {
       changedAccountInfo.password = accountInfo.password;
     }
 
-    if (accountInfo.vaultRithmId !== this.user?.profileImageId) {
+    if (accountInfo.vaultRithmId !== this.user?.profileImageRithmId) {
       changedAccountInfo.vaultRithmId = accountInfo.vaultRithmId;
     }
 
