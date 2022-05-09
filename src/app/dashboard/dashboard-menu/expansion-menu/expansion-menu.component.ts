@@ -77,7 +77,7 @@ export class ExpansionMenuComponent implements OnInit {
       next: (user) => {
         if (
           user.defaultDashboardType !== this.dashboardRole ||
-          !user.defaultDashboardId
+          !user.defaultDashboardType
         ) {
           this.indexDefaultDashboard = undefined;
         }

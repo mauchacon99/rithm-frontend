@@ -11,7 +11,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { RoleDashboardMenu } from 'src/models';
+import { RoleDashboardMenu, UserAccountInfo } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -249,6 +249,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   setDefaultDashboard(): void {
     const data = this.selectedDefaultDashboard
       ? {
+          defaultDashboardType: '',
           defaultDashboardId: '',
         }
       : {
@@ -257,7 +258,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         };
 
     this.user
-      .updateUserAccount(data)
+      .updateUserAccount(data as UserAccountInfo)
       .pipe(first())
       .subscribe({
         next: () => {
