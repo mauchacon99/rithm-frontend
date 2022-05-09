@@ -25,12 +25,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FrameType,
   MoveDocument,
   QuestionFieldType,
-  StationFrameWidget,
   StationRosterMember,
 } from 'src/models';
 import { of, throwError } from 'rxjs';
@@ -85,6 +84,16 @@ describe('DocumentComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
         { provide: SplitService, useClass: MockSplitService },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            // eslint-disable-next-line rxjs/finnish
+            queryParams: of({
+              stationId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+              documentId: 'f74147da-fd64-4244-b533-081990118e95',
+            }),
+          },
+        },
       ],
     }).compileComponents();
   });
@@ -775,7 +784,7 @@ describe('DocumentComponent', () => {
     );
   });
 
-  it('should call getContainerWidgets', () => {
+  it('should call getContainerWidgets when calling ngOnInit and is not a widget', () => {
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getContainerWidgets'
@@ -799,29 +808,5 @@ describe('DocumentComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
-  });
-
-  it('should call the method that get the frame types of the current container', () => {
-    const frameStationWidget: StationFrameWidget[] = [
-      {
-        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        cols: 6,
-        rows: 4,
-        x: 0,
-        y: 0,
-        type: FrameType.Input,
-        data: '',
-        questions: [],
-        id: 0,
-      },
-    ];
-
-    const spyService = spyOn(
-      TestBed.inject(DocumentService),
-      'getContainerWidgets'
-    ).and.returnValue(of(frameStationWidget));
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
   });
 });
