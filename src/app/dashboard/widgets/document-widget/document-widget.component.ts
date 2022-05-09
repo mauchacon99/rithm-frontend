@@ -14,6 +14,7 @@ import {
   DashboardItem,
   DocumentWidget,
   QuestionFieldType,
+  reloadStationFlow,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
@@ -57,6 +58,15 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    */
   get dataWidget(): string {
     return this._dataWidget;
+  }
+
+  /** A setter for the stationFlow property to reload document when its flowed. */
+  @Input() set stationFlow(value: reloadStationFlow) {
+    if (this.documentRithmId) {
+      if (value && this.documentRithmId === value.documentFlow) {
+        this.getDocumentWidget();
+      }
+    }
   }
 
   /** Open drawer. */
