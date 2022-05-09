@@ -32,4 +32,10 @@ export interface QuestionAnswer {
 
   /** The value of the Answer.*/
   value: string;
+
+  /** Name of the uploaded file.*/
+  fileName?: string;
+
+  /** Size of the uploaded file.*/
+  fileSize?: number;
 }
