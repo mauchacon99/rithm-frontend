@@ -53,6 +53,8 @@ export class ExpansionMenuComponent implements OnInit {
   /** Mark dashboard default. */
   indexDefaultDashboard!: number | undefined;
 
+  /** Is admin. */
+  isAdmin = false;
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
@@ -64,6 +66,7 @@ export class ExpansionMenuComponent implements OnInit {
 
   /** Init live cycle component. */
   ngOnInit(): void {
+    this.isAdmin = this.user.isAdmin;
     this.detectDefaultDashboard$();
     this.getToListDashboards();
     this.isPrincipalPageDashboard = this.router.url === '/dashboard';
