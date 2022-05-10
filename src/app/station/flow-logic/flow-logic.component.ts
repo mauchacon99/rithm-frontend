@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -17,7 +24,6 @@ import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -27,7 +33,7 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit {
+export class FlowLogicComponent implements OnInit, OnChanges {
   /** Schedule trigger type form. */
   scheduleTriggerForm: FormGroup;
 
@@ -65,19 +71,6 @@ export class FlowLogicComponent implements OnInit {
   /** Selected value condition type for rules. */
   selectedConditionType = 'all';
 
-  /** Lading/Errors block. */
-  /* Loading the list of rules of flow logic*/
-  ruleLoading = false;
-
-  /* Loading the list of stations flow logic*/
-  flowLogicLoading = true;
-
-  /** The error if rules fails . */
-  ruleError = false;
-
-  /** The error if rules fails . */
-  flowRuleError = false;
-
   /** Schedule trigger type list view if true. */
   scheduleTrigger = false;
 
@@ -90,6 +83,22 @@ export class FlowLogicComponent implements OnInit {
   /** The date and time zone shown, if true. */
   showDateTimeZone = false;
 
+  /** Lading/Errors block. */
+  /* Loading the list of rules of flow logic*/
+  ruleLoading = false;
+
+  /* Loading the list of stations flow logic*/
+  flowLogicLoading = true;
+
+  /* Loading the powers on the station*/
+  powersLoading = false;
+
+  /** The error if rules fails . */
+  ruleError = false;
+
+  /** The error if rules fails . */
+  flowRuleError = false;
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -97,8 +106,7 @@ export class FlowLogicComponent implements OnInit {
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
-    private splitService: SplitService,
-    private stationService: StationService
+    private splitService: SplitService
   ) {
     this.scheduleTriggerForm = this.fb.group({
       scheduleTriggerType: this.fb.control(''),
@@ -111,7 +119,15 @@ export class FlowLogicComponent implements OnInit {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
-    this.getStationPowers();
+  }
+
+  /**
+   * Detect changes.
+   */
+  ngOnChanges(): void {
+    if (this.flowLogicView && !this.stationPowers.length) {
+      this.getStationPowers();
+    }
   }
 
   /**
@@ -402,14 +418,17 @@ export class FlowLogicComponent implements OnInit {
    * Get the powers (triggers, actions, flow) of current station.
    */
   private getStationPowers(): void {
-    this.stationService
+    this.powersLoading = true;
+    this.documentService
       .getStationPowers(this.rithmId)
       .pipe(first())
       .subscribe({
         next: (powers) => {
           this.stationPowers = powers;
+          this.powersLoading = false;
         },
         error: (error: unknown) => {
+          this.powersLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

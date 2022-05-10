@@ -50,6 +50,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ContainerActionsComponent } from './flow-logic/actions/container-actions/container-actions.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 @NgModule({
   declarations: [
     StationComponent,
@@ -60,6 +65,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     RuleModalComponent,
     BuildDrawerComponent,
     DataLinkModalComponent,
+    ContainerActionsComponent,
   ],
   imports: [
     CommonModule,
@@ -105,6 +111,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     ComingSoonMessageModule,
     MatButtonToggleModule,
     MatDatepickerModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    NgxMatSelectSearchModule,
   ],
 })
 export class StationModule {}
