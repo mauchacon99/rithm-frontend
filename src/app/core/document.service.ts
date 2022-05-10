@@ -821,15 +821,13 @@ export class DocumentService {
     const fileCompress = await imageCompression(file, options)
       .then((compressedFile) => {
         console.log('compresion ok', compressedFile);
-
         return compressedFile;
       })
       .catch((fileNotCompress) => {
         console.log('Compresion fail', fileNotCompress);
-
         return fileNotCompress;
       });
-    console.log('compresion', fileCompress);
+    console.log('compresion', file, fileCompress);
 
     return fileCompress;
   }
