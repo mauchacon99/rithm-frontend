@@ -308,13 +308,16 @@ describe('UserService', () => {
   });
 
   it('should return attribute for update user', () => {
-    const changedAccountInfo = service['getChangedAccountInfo'](testUser);
-    expect(changedAccountInfo).toEqual({
-      firstName: 'Samus',
-      lastName: 'Aran',
+    const dataExpect: UserAccountInfo = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      password: 'qwerty',
       defaultDashboardType: RoleDashboardMenu.Personal,
       defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
-    });
+      vaultRithmId: '123-654-789',
+    };
+    const changedAccountInfo = service['getChangedAccountInfo'](dataExpect);
+    expect(changedAccountInfo).toBeTruthy();
   });
 
   it('should update user', () => {
