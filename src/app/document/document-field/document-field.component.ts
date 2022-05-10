@@ -37,6 +37,12 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
   /** The document field to display. */
   @Input() field!: Question;
 
+  /** The document id as an optional parameter. */
+  @Input() documentRithmId = '';
+
+  /** The station id as an optional parameter. */
+  @Input() stationRithmId = '';
+
   /** The field type. */
   fieldTypes = QuestionFieldType;
 
