@@ -268,7 +268,14 @@ export class UserService {
           if (dataUser?.profileImageRithmId !== undefined) {
             user.profileImageRithmId = dataUser.profileImageRithmId;
           }
+          if (dataUser?.defaultDashboardType !== undefined) {
+            user.defaultDashboardType = dataUser.defaultDashboardType;
+          }
+          if (dataUser?.defaultDashboardId !== undefined) {
+            user.defaultDashboardId = dataUser.defaultDashboardId;
+          }
           localStorage.setItem('user', JSON.stringify(user));
+          this.setUserData();
         })
       );
   }
@@ -296,6 +303,15 @@ export class UserService {
 
     if (accountInfo.vaultRithmId !== this.user?.profileImageRithmId) {
       changedAccountInfo.vaultRithmId = accountInfo.vaultRithmId;
+    }
+
+    if (accountInfo.defaultDashboardId !== this.user?.defaultDashboardId) {
+      changedAccountInfo.defaultDashboardId = accountInfo.defaultDashboardId;
+    }
+
+    if (accountInfo.defaultDashboardType !== this.user?.defaultDashboardType) {
+      changedAccountInfo.defaultDashboardType =
+        accountInfo.defaultDashboardType;
     }
 
     return changedAccountInfo;

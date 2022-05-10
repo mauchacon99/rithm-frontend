@@ -16,6 +16,7 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { StationListGroup, WidgetType } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Component for list field the groups how widget.
@@ -78,6 +79,9 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** Whether the action to get list station group fails. */
   errorStationGroup = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -112,6 +116,7 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   getStationGroups(): void {
     this.isLoading = true;
     this.errorStationGroup = false;
+    this.permissionError = true;
     this.stationService
       .getStationGroups(this.stationGroupRithmId)
       .pipe(first())
@@ -124,6 +129,10 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
           this.subStationGroupData = this.dataStationGroup.subStationGroups;
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.errorStationGroup = true;
           this.errorService.logError(error);

@@ -8,6 +8,7 @@
   *ngIf="errorStationGroup"
   id="error-load-widget-station-group"
   [errorMessage]="'Unable to retrieve group data'"
+  [permission]="permissionError"
   (tryAgain)="getStationGroups()"
 >
 </app-error-widget>
