@@ -36,6 +36,7 @@ import {
   Power,
   TriggerType,
   ActionType,
+  OptionsCompressFile,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -1103,7 +1104,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should upload image user', () => {
+  it('should upload image user', async () => {
     const expectedResponse = {
       data: 'ewf34tf-3ge343-g34g3e',
     };
@@ -1112,8 +1113,7 @@ describe('DocumentService', () => {
     });
     const formData = new FormData();
     formData.append('image', file);
-
-    service.uploadImageUser(file).subscribe((response) => {
+    (await service.uploadImageUser(file)).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
 
@@ -1263,5 +1263,19 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toEqual(powerRemove);
       });
+  });
+  it('should send file compressImage', async () => {
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1920,
+    };
+    const file = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    const expectedResponse = await service.compressImage(
+      file,
+      configCompressImage
+    );
+    expect(expectedResponse).toEqual(file);
   });
 });

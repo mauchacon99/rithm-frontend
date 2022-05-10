@@ -22,7 +22,7 @@ import { ActivatedRoute } from '@angular/router';
  *
  */
 @Component({
-  selector: 'app-file-field',
+  selector: 'app-file-field[documentId][stationId]',
   templateUrl: './file-field.component.html',
   styleUrls: ['./file-field.component.scss'],
   providers: [
@@ -47,6 +47,12 @@ export class FileFieldComponent
   /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
+  /** The document id as an required parameter. */
+  @Input() documentId!: string;
+
+  /** The station id as an required parameter. */
+  @Input() stationId!: string;
+
   /** The form to add this field in the template. */
   fileFieldForm!: FormGroup;
 
@@ -64,12 +70,6 @@ export class FileFieldComponent
 
   /** The size of uploaded file. */
   fileSize = 0;
-
-  /** Document Id. */
-  private documentId = '';
-
-  /** Station Id. */
-  private stationId = '';
 
   constructor(
     private documentService: DocumentService,
@@ -94,7 +94,6 @@ export class FileFieldComponent
 
     this.fileFieldForm.get('fileType')?.markAsTouched();
     this.fileFieldForm.get('fileType')?.updateValueAndValidity();
-    this.getParams();
     if (this.field.answer?.value && this.field.answer?.fileName) {
       this.getDocumentDetails();
     }
@@ -180,38 +179,6 @@ export class FileFieldComponent
       fieldVal = this.field.value ? this.field.value : '';
     }
     return fieldVal;
-  }
-
-  /**
-   * Attempts to retrieve the document info from the query params in the URL and make the requests.
-   */
-  private getParams(): void {
-    this.route.queryParams.pipe(first()).subscribe({
-      next: (params) => {
-        if (!params.stationId || !params.documentId) {
-          this.handleInvalidParams();
-        } else {
-          this.documentId = params.documentId;
-          this.stationId = params.stationId;
-        }
-      },
-      error: (error: unknown) => {
-        this.errorService.displayError(
-          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-          error
-        );
-      },
-    });
-  }
-
-  /**
-   * Navigates the user back to dashboard and displays a message about the invalid params.
-   */
-  private handleInvalidParams(): void {
-    this.errorService.displayError(
-      'The link you followed is invalid. Please double check the URL and try again.',
-      new Error('Invalid params for document')
-    );
   }
 
   /**

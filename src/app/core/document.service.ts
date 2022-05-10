@@ -42,8 +42,10 @@ import {
   Power,
   TriggerType,
   ActionType,
+  OptionsCompressFile,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
+import imageCompression from 'browser-image-compression';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
@@ -767,16 +769,40 @@ export class DocumentService {
    * @param file File to upload.
    * @returns Id of image uploaded.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  uploadImageUser(file: File): Observable<string> {
+  async uploadImageUser(file: File): Promise<Observable<string>> {
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1920,
+    };
     const formData = new FormData();
-    formData.append('image', file);
+    const compressImage = await this.compressImage(file, configCompressImage);
+    formData.append('image', compressImage);
+
     return this.http
       .post<StandardStringJSON>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
         formData
       )
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * It takes a file and an options object as parameters, and returns a compressed file.
+   *
+   * @param file - File - The file to be compressed.
+   * @param options - OptionsCompressFile.
+   * @returns A promise that resolves to a compressed file.
+   */
+  compressImage(file: File, options: OptionsCompressFile): Promise<File> {
+    return imageCompression(file, options)
+      .then((compressedFile) => {
+        return new File([compressedFile], file.name, {
+          type: file.type,
+        });
+      })
+      .catch(() => {
+        return file;
+      });
   }
 
   /**
