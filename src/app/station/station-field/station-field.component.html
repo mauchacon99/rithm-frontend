@@ -143,8 +143,8 @@
           <mat-checkbox
             [name]="field.rithmId"
             [formControlName]="'isRequired-' + field.rithmId"
-            [attr.disabled]="
-              !field.isReadOnly &&
+            [disabled]="
+              field.isReadOnly &&
               stationRithmId !== field.originalStationRithmId
             "
             [checked]="field.isRequired"
@@ -173,7 +173,7 @@
             <mat-checkbox
               [name]="field.rithmId"
               [attr.formControlName]="'isReadOnly-' + field.rithmId"
-              [checked]="field.isReadOnly"
+              [checked]="!field.isReadOnly"
               (change)="setEditable($event)"
             >
               Editable Field
