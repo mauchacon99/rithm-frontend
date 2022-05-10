@@ -49,6 +49,29 @@ import imageCompression from 'browser-image-compression';
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
 
+interface Options {
+  /** Number.POSITIVE_INFINITY. */
+  maxSizeMB?: number;
+  /** Undefined. */
+  maxWidthOrHeight?: number;
+  /** Boolean. */
+  useWebWorker?: boolean;
+  /** Default 10. */
+  maxIteration?: number;
+  /** Default to be the exif orientation from the image file. */
+  exifOrientation?: number;
+  /** A function takes one progress argument (progress from 0 to 100). */
+  onProgress?: (progress: number) => void;
+  /** Default to be the original mime type from the image file. */
+  fileType?: string;
+  /** Default 1.0. */
+  initialQuality?: number;
+  /** Boolean. */
+  alwaysKeepResolution?: boolean;
+  /** Default undefined. */
+  signal?: AbortSignal;
+}
+
 /**
  * Service for all document behavior and business logic.
  */
@@ -769,19 +792,15 @@ export class DocumentService {
    * @returns Id of image uploaded.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async uploadImageUser(file: File): Observable<string> {
-    const configCompressImage = {
+  async uploadImageUser(file: File): Promise<Observable<string>> {
+    const configCompressImage: Options = {
       maxSizeMB: 0.02,
       maxWidthOrHeight: 3840,
     };
     const formData = new FormData();
-    await imageCompression(file, configCompressImage)
-      .then((compressedFile) => {
-        formData.append('image', compressedFile);
-      })
-      .catch(() => {
-        formData.append('image', file);
-      });
+    const compressImage = await this.compressImage(file, configCompressImage);
+    formData.append('image', compressImage);
+    console.log('FormData', formData);
 
     return this.http
       .post<StandardStringJSON>(
@@ -789,6 +808,30 @@ export class DocumentService {
         formData
       )
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * It takes a file and options as input and returns a compressed file as output.
+   *
+   * @param file - File - The file to be compressed.
+   * @param options - Options.
+   * @returns A promise that resolves to a file.
+   */
+  async compressImage(file: File, options: Options): Promise<File> {
+    const fileCompress = await imageCompression(file, options)
+      .then((compressedFile) => {
+        console.log('compresion ok', compressedFile);
+
+        return compressedFile;
+      })
+      .catch((fileNotCompress) => {
+        console.log('Compresion fail', fileNotCompress);
+
+        return fileNotCompress;
+      });
+    console.log('compresion', fileCompress);
+
+    return fileCompress;
   }
 
   /**
