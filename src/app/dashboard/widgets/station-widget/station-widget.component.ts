@@ -364,7 +364,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     isReloadListDocuments: boolean,
     stationFlow: string[]
   ): void {
-    console.log({ isReturnListDocuments, isReloadListDocuments, stationFlow });
     if (stationFlow.length) {
       this.reloadStationsFlow.emit({
         stationFlow,
