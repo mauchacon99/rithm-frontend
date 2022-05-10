@@ -188,9 +188,6 @@
           : question.detail.prompt
       }}
     </p>
-    <ng-template #withOutLink>
-      <span class="cursor-default">This question doesn't have an answer.</span>
-    </ng-template>
     <ng-container
       *ngIf="
         question.detail.questionType === questionFieldType.Phone ||

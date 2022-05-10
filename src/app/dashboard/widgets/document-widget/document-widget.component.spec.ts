@@ -47,7 +47,7 @@ describe('DocumentWidgetComponent', () => {
 
   const questions: Question[] = [
     {
-      rithmId: '',
+      rithmId: '45454-54545-45454',
       questionType: QuestionFieldType.CheckList,
       prompt: 'checklist',
       isPrivate: true,
@@ -166,6 +166,119 @@ describe('DocumentWidgetComponent', () => {
         asDate: '2021-12-14T14:10:31.030Z',
         value: 'string',
       },
+      children: [],
+    },
+    {
+      rithmId: '',
+      questionType: QuestionFieldType.Instructions,
+      prompt: 'Instructions',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
+      isRequired: true,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
+      answer: {
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asArray: [
+          {
+            value: 'dev1',
+            isChecked: false,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
+      },
+      children: [],
+    },
+    {
+      rithmId: '',
+      questionType: QuestionFieldType.City,
+      prompt: 'Instructions',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
+      isRequired: true,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
+      answer: {
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asArray: [
+          {
+            value: 'dev1',
+            isChecked: false,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
+      },
+      children: [],
+    },
+    {
+      rithmId: '',
+      questionType: QuestionFieldType.Select,
+      prompt: 'Instructions',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
+      isRequired: true,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
+      answer: {
+        questionRithmId: 'string',
+        referAttribute: 'string',
+        asArray: [
+          {
+            value: 'dev1',
+            isChecked: true,
+          },
+        ],
+        asInt: 0,
+        asDecimal: 0,
+        asString: 'string',
+        asDate: '2021-12-14T14:10:31.030Z',
+        value: 'string',
+      },
+      children: [],
+    },
+    {
+      rithmId: '',
+      questionType: QuestionFieldType.Select,
+      prompt: 'Instructions',
+      isPrivate: true,
+      isEncrypted: true,
+      isReadOnly: true,
+      isRequired: true,
+      possibleAnswers: [
+        {
+          rithmId: 'string',
+          text: 'string',
+          default: true,
+        },
+      ],
       children: [],
     },
   ];
@@ -445,12 +558,8 @@ describe('DocumentWidgetComponent', () => {
       component.dataDocumentWidget = documents;
     });
 
-    it('should return [] if question dont exist', () => {
-      expect(component.getValueQuestions).toEqual([]);
-    });
-
     it('should getHTMLQuestionValue', () => {
-      expect(component.getValueQuestions).toEqual([]);
+      expect(component.getValueQuestions.length).toEqual(1);
       const emptyQuestions = component['getHTMLQuestionValue'](questions[1]);
       expect(emptyQuestions).toBeNull();
       const oneCheckedOption = component['getHTMLQuestionValue'](questions[0]);
@@ -465,6 +574,18 @@ describe('DocumentWidgetComponent', () => {
       expect(oneNoCheckedOptionSelected).toEqual(
         '<i class="fas fa-square text-secondary-500"></i> dev1'
       );
+      const instructionsQuestion = component['getHTMLQuestionValue'](
+        questions[4]
+      );
+      expect(instructionsQuestion).toEqual('Instructions');
+      const cityQuestion = component['getHTMLQuestionValue'](questions[5]);
+      expect(cityQuestion).toEqual('string');
+      const selectedTrue = component['getHTMLQuestionValue'](questions[6]);
+      expect(selectedTrue).toEqual('dev1');
+      const selectQuestionWithoutAnswer = component['getHTMLQuestionValue'](
+        questions[7]
+      );
+      expect(selectQuestionWithoutAnswer).toBeNull();
     });
 
     it('should to process questions ', () => {
