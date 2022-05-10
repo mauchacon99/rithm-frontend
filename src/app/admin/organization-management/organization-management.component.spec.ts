@@ -15,7 +15,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 import { MockOrganizationService } from 'src/mocks/mock-organization-service';
-import { User } from 'src/models';
+import { RoleDashboardMenu, User } from 'src/models';
 
 import { OrganizationManagementComponent } from './organization-management.component';
 
@@ -30,6 +30,9 @@ const TEST_USERS: User[] = [
     createdDate: '1/2/34',
     role: null,
     organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+    profileImageRithmId: '123-456-789',
+    defaultDashboardType: RoleDashboardMenu.Company,
+    defaultDashboardId: '147cf568-27a4-4968-5628-046ccfee24fd',
   },
   {
     rithmId: '123',
@@ -41,6 +44,9 @@ const TEST_USERS: User[] = [
     createdDate: '1/2/34',
     role: 'admin',
     organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+    profileImageRithmId: '123-456-789',
+    defaultDashboardType: RoleDashboardMenu.Personal,
+    defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
   },
 ];
 

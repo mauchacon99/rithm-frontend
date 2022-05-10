@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { StationRoutingModule } from './station-routing.module';
 import { StationComponent } from './station/station.component';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
-import { PowersComponent } from './powers/powers.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -59,7 +58,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
   declarations: [
     StationComponent,
     FlowLogicComponent,
-    PowersComponent,
     ToolbarComponent,
     StationFieldComponent,
     StationTemplateComponent,

@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -86,7 +87,8 @@ export class UserFormComponent
     private userService: UserService,
     private popupService: PopupService,
     private splitService: SplitService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -96,6 +98,7 @@ export class UserFormComponent
     if (!this.accountCreate) {
       this.split();
       this.currentUser = this.userService.user;
+      this.profileImageRithmId = this.currentUser?.profileImageRithmId || '';
     }
 
     this.passwordLabel = this.getPasswordLabel();
@@ -118,6 +121,7 @@ export class UserFormComponent
       ],
       password: ['', []],
       confirmPassword: ['', []],
+      vaultRithmId: [''],
       isLoadingImage: [true, Validators.requiredTrue],
     });
 
@@ -301,8 +305,10 @@ export class UserFormComponent
     this.userForm.controls['isLoadingImage'].setValue(
       !this.isLoadingUploadImageUser
     );
+    this.userForm.touched.valueOf();
+    this.userForm.valid.valueOf();
     this.errorUploadImageUser = false;
-    this.userService
+    this.documentService
       .uploadImageUser(file)
       .pipe(first())
       .subscribe({
@@ -310,6 +316,9 @@ export class UserFormComponent
           this.isLoadingUploadImageUser = false;
           this.errorUploadImageUser = false;
           this.profileImageRithmId = profileImageRithmId;
+          this.userForm.controls['vaultRithmId'].setValue(
+            this.profileImageRithmId
+          );
           this.userForm.controls['isLoadingImage'].setValue(
             !this.isLoadingUploadImageUser
           );
@@ -333,6 +342,7 @@ export class UserFormComponent
    */
   private deleteImageUser(): void {
     this.profileImageRithmId = '';
+    this.userForm.controls['vaultRithmId']?.setValue(this.profileImageRithmId);
   }
 
   /**

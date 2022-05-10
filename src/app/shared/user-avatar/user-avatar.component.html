@@ -10,22 +10,28 @@
   }"
   matTooltip="{{ firstName + ' ' + lastName }}"
   [matTooltipDisabled]="hideToolTip"
-  class="cursor-pointer flex justify-center items-center"
+  class="relative cursor-pointer flex justify-center items-center"
   (mouseenter)="hoverEffect ? (badgeHover = true) : (badgeHover = false)"
   (mouseleave)="badgeHover = false"
 >
-  <img *ngIf="classProfileImage" [src]="classProfileImage" alt="star" />
+  <img
+    *ngIf="classProfileImage"
+    [src]="classProfileImage"
+    [alt]="imageData?.imageName || 'imageUser'"
+    class="w-full h-full object-cover rounded-full"
+  />
   <button *ngIf="badge === 'none' && !classProfileImage" type="button">
     {{ initials }}
   </button>
   <button
-    *ngIf="badge !== 'none' && !classProfileImage"
+    *ngIf="badge !== 'none'"
     [matBadge]="getBadge()"
     matBadgeSize="small"
     matBadgePosition="below after"
     [matBadgeColor]="badgeHover || badge === 'minus' ? 'warn' : 'accent'"
     type="button"
+    class="w-full h-full absolute"
   >
-    {{ initials }}
+    {{ classProfileImage ? '' : initials }}
   </button>
 </div>

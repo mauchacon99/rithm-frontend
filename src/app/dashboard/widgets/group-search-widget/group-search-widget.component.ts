@@ -159,7 +159,7 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   openDocsModal(station: StationListGroup): void {
     if (!this.editMode) {
       this.dialog.open(StationDocumentsModalComponent, {
-        minWidth: '370px',
+        minWidth: '300px',
         data: {
           stationName: station.name,
           stationId: station.rithmId,

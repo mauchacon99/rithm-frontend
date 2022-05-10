@@ -248,20 +248,26 @@
 </ng-container>
 
 <ng-template #newView>
-  <div class="flex h-full">
-    <aside class="rules-left-side p-4 min-w-[266px]">
+  <div
+    *ngIf="!powersLoading; else powersLoadingIndicator"
+    class="rules-tab-content"
+  >
+    <aside
+      class="rules-left-side p-4"
+      [ngClass]="{ showRulesList: showRulesList }"
+    >
       <ul class="rules-left-side-menu border-b border-secondary-100">
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'triggers' }"
-          (click)="ruleSelectedMenu = 'triggers'"
+          (click)="displayRuleContent('triggers')"
         >
           <i class="fa-regular fa-clock"></i> Station Triggers
         </li>
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
-          (click)="ruleSelectedMenu = 'rules'"
+          (click)="displayRuleContent('rules')"
         >
           <i class="fa-regular fa-square-plus"></i> New Rule
         </li>
@@ -271,8 +277,16 @@
     <div
       class="rules-right-side w-full border-l border-secondary-100 overflow-hidden"
     >
+      <section
+        class="goback-arrow-section text-secondary-500 sm:hidden p-2 flex items-center"
+      >
+        <button mat-icon-button (click)="showRulesList = true">
+          <i class="fa-solid fa-arrow-left fa-2x"></i>
+        </button>
+        <span class="mx-2">Rules</span>
+      </section>
       <section class="rules-right-side-title w-full">
-        <div class="py-6 pr-6 pl-8 flex justify-between items-center">
+        <div class="py-2 sm:py-6 pr-6 pl-8 flex justify-between items-center">
           <p
             class="tracking-tight text-xl font-semibold"
             *ngIf="ruleSelectedMenu === 'rules'"
@@ -357,7 +371,10 @@
         >
           <p class="tracking-tight text-sm">SCHEDULED TRIGGERS</p>
         </div>
-        <div class="flex justify-center items-center flex-col text-center mb-6">
+        <div
+          class="flex justify-center items-center flex-col text-center mb-6"
+          *ngIf="!scheduleTrigger"
+        >
           <i class="far fa-clock text-4xl text-accent-500 mt-6"></i>
           <p class="py-4 w-5/6 md:w-2/4 text-sm">
             Schedule triggers can be configured to check conditions and flow
@@ -367,9 +384,42 @@
             mat-stroked-button
             data-testid="button-addTrigger-schedule"
             color="accent"
+            (click)="scheduleTrigger = !scheduleTrigger"
           >
             Add Trigger
           </button>
+        </div>
+        <div
+          class="flex items-start flex-col px-8 py-5"
+          *ngIf="scheduleTrigger"
+        >
+          <mat-form-field class="md:w-2/4 w-full" appearance="outline">
+            <mat-label>Trigger Type</mat-label>
+            <mat-select formControlName="scheduleTriggerType">
+              <mat-option
+                *ngFor="let option of scheduleTriggerOptions | keyvalue"
+                [value]="option.value"
+              >
+                {{ option.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="flex flex-row">
+            <button
+              mat-flat-button
+              data-testid="button-schedule-cancel"
+              (click)="scheduleTrigger = !scheduleTrigger"
+            >
+              Cancel
+            </button>
+            <button
+              mat-flat-button
+              data-testid="button-schedule-cancel"
+              [disabled]
+            >
+              Save
+            </button>
+          </div>
         </div>
       </section>
       <section
@@ -526,4 +576,11 @@
       </section>
     </div>
   </div>
+  <ng-template #powersLoadingIndicator>
+    <div class="flex h-full justify-center items-center">
+      <app-loading-indicator
+        id="component-power-loading"
+      ></app-loading-indicator>
+    </div>
+  </ng-template>
 </ng-template>

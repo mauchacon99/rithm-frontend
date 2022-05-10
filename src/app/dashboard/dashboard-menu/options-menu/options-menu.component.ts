@@ -7,6 +7,9 @@ import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -18,11 +21,12 @@ import { PopupService } from 'src/app/core/popup.service';
   styleUrls: ['./options-menu.component.scss'],
 })
 export class OptionsMenuComponent implements OnInit, OnDestroy {
+  /** Allows functionality of MatMenu to toggle the menu open. */
+  @ViewChild(MatMenuTrigger)
+  private optionsMenuTrigger!: MatMenuTrigger;
+
   /** Parameter for hide or show option manage member. */
   @Input() isManageMember = false;
-
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
 
   /**
    * Dashboard type from expansion-menu.
@@ -34,15 +38,6 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    */
   @Input() showDefaultDashboard = false;
 
-  /** Validate type of role. */
-  roleDashboardMenu = RoleDashboardMenu;
-
-  /** Display or not mat menu when its generate new dashboard. */
-  isGenerateNewDashboard = false;
-
-  /** Rithm id get for params.*/
-  paramRithmId!: string | null;
-
   /** Show option. */
   @Input() isDashboardListOptions!: boolean;
 
@@ -52,9 +47,19 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Index of dashboard . */
   @Input() index!: number;
 
-  /** Allows functionality of MatMenu to toggle the menu open. */
-  @ViewChild(MatMenuTrigger)
-  private optionsMenuTrigger!: MatMenuTrigger;
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Validate type of role. */
+  roleDashboardMenu = RoleDashboardMenu;
+
+  /** Rithm id get for params.*/
+  paramRithmId!: string | null;
+
+  /** Display or not mat menu when its generate new dashboard. */
+  isGenerateNewDashboard = false;
+
+  selectedDefaultDashboard = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -62,7 +67,9 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private user: UserService
   ) {}
 
   /**
@@ -72,6 +79,9 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
+        if (this.user.user.defaultDashboardId === this.paramRithmId) {
+          this.selectedDefaultDashboard = true;
+        }
       },
     });
   }
@@ -182,6 +192,27 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     });
 
     if (response && this.rithmId) this.deleteDashboard(this.rithmId);
+  }
+
+  /**
+   * Open dialog add widget.
+   */
+  openDialogManagementMembers(): void {
+    this.dialog.open(ManagementMemberDashboardModalComponent, {
+      panelClass: [
+        'w-5/6',
+        'sm:w-3/5',
+        'h-[95%]',
+        'sm:h-5/6',
+        'custom-margin-modal',
+      ],
+      maxWidth: '1500px',
+      disableClose: true,
+      data: {
+        dashboardRithmId: this.rithmId,
+        dashboardType: this.dashboardRole,
+      },
+    });
   }
 
   /** Clean subscriptions. */

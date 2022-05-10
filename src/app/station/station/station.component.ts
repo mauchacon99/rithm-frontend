@@ -180,6 +180,16 @@ export class StationComponent
   /** Circles in the gridster. */
   circlesWidget!: string;
 
+  /** Flag to indicate whether the focus is on a text component or not. */
+  showTextAlignIcons = false;
+
+  /** List of all text widget types. */
+  readonly textWidgetTypes = [
+    FrameType.Body,
+    FrameType.Title,
+    FrameType.Headline,
+  ];
+
   constructor(
     private stationService: StationService,
     private documentService: DocumentService,
@@ -551,8 +561,10 @@ export class StationComponent
     const framesForDatalink: StationFrameWidget[] = [];
     /** Build a frame for each existing datalink. */
     this.dataLinkArray.forEach((dl) => {
+      const elementRithmId = uuidv4();
+      dl.frameRithmId = elementRithmId;
       const frameTemplate = {
-        rithmId: uuidv4(),
+        rithmId: elementRithmId,
         stationRithmId: this.stationRithmId,
         cols: 24,
         rows: 4,
@@ -572,8 +584,7 @@ export class StationComponent
           if (frames && frames.length) {
             const requestRow: Observable<DataLinkObject>[] = [];
             Promise.all(
-              this.dataLinkArray.map(async (dl, ind) => {
-                dl.frameRithmId = frames[ind].rithmId;
+              this.dataLinkArray.map(async (dl) => {
                 requestRow.push(
                   this.documentService.saveDataLink(this.stationRithmId, dl)
                 );
@@ -625,12 +636,6 @@ export class StationComponent
         );
     }
     const petitionsUpdateStation = [
-      // Update station Name.
-      this.stationService.updateStationName(
-        this.stationName,
-        this.stationInformation.rithmId
-      ),
-
       // Update appended fields to document.
       this.stationService.updateDocumentNameTemplate(
         this.stationInformation.rithmId,
@@ -657,7 +662,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , stationQuestions]) => {
+        next: ([, , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
@@ -854,6 +859,7 @@ export class StationComponent
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
         this.closeSettingDrawer();
+        this.showTextAlignIcons = false;
         break;
       case 'setting':
         enabledMode = false;
@@ -862,6 +868,7 @@ export class StationComponent
       case 'layout':
         enabledMode = true;
         this.closeSettingDrawer();
+        this.showTextAlignIcons = false;
         break;
       default:
         break;
@@ -932,7 +939,12 @@ export class StationComponent
             frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
-                frame.minItemRows = 4;
+                frame.minItemRows =
+                  frame.questions &&
+                  frame.questions?.length &&
+                  frame.questions?.length > 4
+                    ? frame.questions.length
+                    : 4;
                 frame.minItemCols = 6;
                 frame.questions =
                   frame.questions && frame.questions?.length > 0
@@ -988,6 +1000,7 @@ export class StationComponent
    * and Save or update the changes to the station frame widgets.
    */
   async saveStationWidgetChanges(): Promise<void> {
+    this.showTextAlignIcons = false;
     let hasQuestions = false;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions?.length === 0) {
@@ -1121,6 +1134,7 @@ export class StationComponent
     if (confirm) {
       this.editMode = false;
       this.setGridMode('preview');
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1226,6 +1240,7 @@ export class StationComponent
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
     if (this.settingMode) {
       this.setGridMode('layout');
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1239,6 +1254,7 @@ export class StationComponent
     field: Question | ImageWidgetObject | string,
     type: FrameType
   ): void {
+    this.showTextAlignIcons = false;
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
@@ -1282,6 +1298,17 @@ export class StationComponent
    */
   focusWidget(index: number): void {
     this.widgetFocused = index === this.widgetFocused ? -1 : index;
+    if (this.widgetFocused !== -1 && this.settingMode) {
+      if (
+        this.textWidgetTypes.includes(
+          this.inputFrameWidgetItems[this.widgetFocused].type
+        )
+      ) {
+        this.showTextAlignIcons = true;
+      }
+    } else {
+      this.showTextAlignIcons = false;
+    }
   }
 
   /**
