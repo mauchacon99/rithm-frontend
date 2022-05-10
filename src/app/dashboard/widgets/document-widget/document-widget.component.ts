@@ -214,7 +214,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Set HTML value.
+   * get value to show by each question.
    *
    * @param question Question to validate.
    * @returns String value to show on HTML.
