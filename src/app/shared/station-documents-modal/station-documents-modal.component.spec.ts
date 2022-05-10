@@ -14,7 +14,7 @@ import {
 } from 'src/mocks';
 import { MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
-import { StationDocumentsModalData, UserType } from 'src/models';
+import { Document, StationDocumentsModalData, UserType } from 'src/models';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -38,10 +38,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatRippleModule } from '@angular/material/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 
 const DIALOG_TEST_DATA: StationDocumentsModalData = {
   stationName: 'A Station',
@@ -52,6 +53,27 @@ describe('StationDocumentsModalComponent', () => {
   let component: StationDocumentsModalComponent;
   let fixture: ComponentFixture<StationDocumentsModalComponent>;
   let loader: HarnessLoader;
+
+  const documents: Document[] = [
+    {
+      documentName: 'Almond Flour',
+      stationName: 'Dry Goods & Liquids',
+      flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+      priority: 2,
+      userAssigned: {
+        rithmId: '123132132',
+        firstName: 'Demo',
+        lastName: 'User',
+        email: 'demo@demo.com',
+        isWorker: true,
+        isOwner: false,
+      },
+      isEscalated: true,
+      updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+      documentRithmId: '',
+      stationRithmId: '',
+    },
+  ];
 
   const dialogMock = {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -239,6 +261,83 @@ describe('StationDocumentsModalComponent', () => {
         documentId,
         stationId: stationRithmId,
       },
+    });
+  });
+
+  describe('New template', () => {
+    it('should validate scroll and call getDocumentsByScrollAndSearch', () => {
+      const mockScroll = {
+        target: {
+          offsetHeight: 9,
+          scrollHeight: 9,
+          scrollTop: 9,
+        },
+      };
+      component.isLoadingScroll = false;
+      component.totalNumDocs = 10;
+      component.dataSourceTable = new MatTableDataSource(documents);
+      const spyMethod = spyOn(
+        component,
+        'getDocumentsByScrollAndSearch'
+      ).and.callThrough();
+
+      component.validateScroll(mockScroll as unknown as Event);
+
+      expect(spyMethod).toHaveBeenCalledOnceWith(true);
+    });
+
+    it('should call getStationDocuments when search documents', () => {
+      component.search = 'Any document';
+      component.pageScroll = 3;
+      component['stationRithmId'] = '123-456-789';
+      const spyService = spyOn(
+        TestBed.inject(DocumentService),
+        'getStationDocuments'
+      ).and.callThrough();
+
+      component.getDocumentsByScrollAndSearch();
+
+      expect(spyService).toHaveBeenCalledOnceWith(
+        component['stationRithmId'],
+        component.pageScroll,
+        component.search
+      );
+      expect(component.pageScroll).toEqual(1);
+    });
+
+    it('should call getStationDocuments when make pagination with scroll', () => {
+      const spyService = spyOn(
+        TestBed.inject(DocumentService),
+        'getStationDocuments'
+      ).and.callThrough();
+
+      component.getDocumentsByScrollAndSearch(true);
+
+      expect(spyService).toHaveBeenCalledOnceWith(
+        component['stationRithmId'],
+        component.pageScroll,
+        component.search
+      );
+      expect(component.pageScroll).toEqual(2);
+    });
+
+    it('should call dialogError when fail request', () => {
+      spyOn(
+        TestBed.inject(DocumentService),
+        'getStationDocuments'
+      ).and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      const spyService = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
+
+      component.getDocumentsByScrollAndSearch();
+
+      expect(spyService).toHaveBeenCalled();
     });
   });
 });

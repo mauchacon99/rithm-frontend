@@ -77,15 +77,21 @@ export class DocumentService {
    *
    * @param stationId The station for which to get the documents.
    * @param pageNum The desired page number of results.
+   * @param documentName Search documents by name.
+   * @param pageSize Limit of documents per page.
    * @returns A list of documents (one page worth).
    */
   getStationDocuments(
     stationId: string,
-    pageNum: number
+    pageNum: number,
+    documentName = '',
+    pageSize = 10
   ): Observable<StationDocuments> {
     const params = new HttpParams()
       .set('stationId', stationId)
-      .set('pageNum', pageNum);
+      .set('pageNum', pageNum)
+      .set('pageSize', pageSize)
+      .set('documentName', documentName);
     return this.http.get<StationDocuments>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents`,
       { params }

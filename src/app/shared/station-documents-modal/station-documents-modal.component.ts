@@ -49,6 +49,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Is the content being loaded. */
   isLoading = true;
 
+  /** Is loading to get documents by scroll. */
+  isLoadingScroll = false;
+
   /** The station rithmId. */
   private stationRithmId = '';
 
@@ -57,6 +60,9 @@ export class StationDocumentsModalComponent implements OnInit {
 
   /** Total number of documents at this station. */
   totalNumDocs = 0;
+
+  /** Number of page to get documents. */
+  pageScroll = 1;
 
   /** Role of the user. */
   userType = UserType.None;
@@ -98,11 +104,67 @@ export class StationDocumentsModalComponent implements OnInit {
   }
 
   /**
+   * Validate scroll to get documents.
+   *
+   * @param scroll Event of callback scroll.
+   */
+  validateScroll(scroll: Event): void {
+    const target = scroll?.target as HTMLElement;
+    const tableViewHeight = target?.offsetHeight; // viewport: ~500px
+    const tableScrollHeight = target?.scrollHeight; // length of all table
+    const scrollLocation = target?.scrollTop; // how far user scrolled
+
+    // If the user has scrolled within 200px of the bottom, add more data
+    const buffer = 200;
+    const limit = tableScrollHeight - tableViewHeight - buffer;
+
+    if (
+      scrollLocation > limit &&
+      !this.isLoadingScroll &&
+      this.dataSourceTable.data.length < this.totalNumDocs
+    ) {
+      this.getDocumentsByScrollAndSearch(true);
+    }
+  }
+
+  /**
+   * Get pagination data by infinite scroll.
+   *
+   * @param isScroll When paginate documents by scroll.
+   */
+  getDocumentsByScrollAndSearch(isScroll = false): void {
+    this.pageScroll = isScroll ? this.pageScroll + 1 : 1;
+    this.isLoadingScroll = true;
+    this.documentService
+      .getStationDocuments(this.stationRithmId, this.pageScroll, this.search)
+      .pipe(first())
+      .subscribe({
+        next: (documentsResponse) => {
+          if (documentsResponse) {
+            this.documents = isScroll
+              ? this.documents.concat(documentsResponse.documents)
+              : documentsResponse.documents;
+            this.dataSourceTable = new MatTableDataSource(this.documents);
+            this.totalNumDocs = documentsResponse.totalDocuments;
+            this.userType = documentsResponse.userType;
+          }
+          this.isLoadingScroll = false;
+        },
+        error: (error: unknown) => {
+          this.isLoadingScroll = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Gets a page list of documents.
    *
    * @param pageNum The desired page of document results.
    */
-  //TODO: look into making this reusable since this method is similar to one on organization-management.component.ts
   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
