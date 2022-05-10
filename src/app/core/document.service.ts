@@ -39,6 +39,9 @@ import {
   FrameType,
   ContainerWidgetPreBuilt,
   DocumentCurrentStation,
+  TriggerType,
+  Power,
+  ActionType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -202,9 +205,13 @@ export class DocumentService {
       if (element.type === QuestionFieldType.File) {
         if (element.file) {
           formData.append(`answers[${index}].file`, element.file);
+        } else {
+          formData.append(`answers[${index}].file`, '');
         }
         if (element.filename) {
           formData.append(`answers[${index}].filename`, element.filename);
+        } else {
+          formData.append(`answers[${index}].filename`, '');
         }
       }
       formData.append(`answers[${index}].questionUpdated`, 'true');
@@ -699,21 +706,43 @@ export class DocumentService {
           })
       ).pipe(delay(1000));
     } else {
-      const frameByType: StationFrameWidget[] = [
+      const params = new HttpParams()
+        .set('stationRithmId', stationRithmId)
+        .set('documentRithmId', documentRithmId);
+
+      return this.http.get<StationFrameWidget[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-types`,
         {
-          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          cols: 6,
-          rows: 4,
-          x: 0,
-          y: 0,
-          type: FrameType.DataLink,
-          data: '',
-          id: 0,
-        },
-      ];
-      return of(frameByType).pipe(delay(1000));
+          params,
+        }
+      );
     }
+  }
+
+  /**
+   * Get the widgets of a container.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
+   * @param type The frame type.
+   * @returns The container widget data.
+   */
+  getContainerWidgets(
+    documentRithmId: string,
+    stationRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type?: FrameType
+  ): Observable<StationFrameWidget[]> {
+    const params = new HttpParams()
+      .set('documentRithmId', documentRithmId)
+      .set('stationRithmId', stationRithmId);
+
+    return this.http.get<StationFrameWidget[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type`,
+      {
+        params,
+      }
+    );
   }
 
   /**
@@ -765,5 +794,56 @@ export class DocumentService {
         params,
       }
     );
+  }
+
+  /**
+   * Get powers of current station.
+   *
+   * @param stationRithmId Specific id of station.
+   * @returns The power of a station.
+   */
+  getStationPowers(stationRithmId: string): Observable<Power[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive the powers of current station.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationPowers: Power[] = [
+        {
+          rithmId: '3j4k-3h2j-hj4j',
+          triggers: [
+            {
+              rithmId: '3j4k-3h2j-hj5h',
+              type: TriggerType.ManualFlow,
+              source: 'Source Trigger #1',
+              value: 'Value Trigger #1',
+            },
+          ],
+          actions: [
+            {
+              rithmId: '3j4k-3h2j-ft5h',
+              type: ActionType.CreateDocument,
+              target: 'Target Action #1',
+              data: 'Data Action #1',
+              resultMapping: 'Result Action #1',
+              header: 'Header Action #1',
+            },
+          ],
+          stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowToStationRithmIds: [
+            '73d47261-1932-4fcf-82bd-159eb1a72422',
+            '73d47261-1932-4fcf-82bd-159eb1a7242g',
+          ],
+          name: 'Power Test #1',
+          condition: 'Condition Test #1',
+        },
+      ];
+      return of(stationPowers).pipe(delay(1000));
+    }
   }
 }

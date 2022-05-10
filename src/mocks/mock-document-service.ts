@@ -30,6 +30,9 @@ import {
   ContainerWidgetPreBuilt,
   DocumentCurrentStation,
   RoleDashboardMenu,
+  Power,
+  TriggerType,
+  ActionType,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1666,6 +1669,7 @@ export class MockDocumentService {
             createdDate: '1/2/34',
             role: null,
             organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+            profileImageRithmId: '123-456-789',
             defaultDashboardType: RoleDashboardMenu.Personal,
             defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
           },
@@ -2050,5 +2054,108 @@ export class MockDocumentService {
       imageName: 'Image Name',
     };
     return of(image).pipe(delay(1000));
+  }
+
+  /**
+   * Get the container widgets.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @param stationRithmId The current station id.
+   * @param type The frame type.
+   * @returns The station widget data.
+   */
+  getContainerWidgets(
+    documentRithmId: string,
+    stationRithmId: string,
+    type?: FrameType
+  ): Observable<StationFrameWidget[]> {
+    if (!stationRithmId || !documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve frame widgets',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const containerWidgets: StationFrameWidget[] = [
+        {
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 4,
+          x: 0,
+          y: 0,
+          type: FrameType.Input,
+          data: '',
+          questions: [],
+          id: 0,
+        },
+        {
+          rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          cols: 6,
+          rows: 1,
+          x: 0,
+          y: 0,
+          type: FrameType.Headline,
+          data: '',
+          id: 1,
+        },
+      ];
+      return of(containerWidgets).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get powers of current station.
+   *
+   * @param stationRithmId Specific id of station.
+   * @returns The power of a station.
+   */
+  getStationPowers(stationRithmId: string): Observable<Power[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrive the powers of current station.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationPowers: Power[] = [
+        {
+          rithmId: '3j4k-3h2j-hj4j',
+          triggers: [
+            {
+              rithmId: '3j4k-3h2j-hj5h',
+              type: TriggerType.ManualFlow,
+              source: 'Source Trigger #1',
+              value: 'Value Trigger #1',
+            },
+          ],
+          actions: [
+            {
+              rithmId: '3j4k-3h2j-ft5h',
+              type: ActionType.CreateDocument,
+              target: 'Target Action #1',
+              data: 'Data Action #1',
+              resultMapping: 'Result Action #1',
+              header: 'Header Action #1',
+            },
+          ],
+          stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowToStationRithmIds: [
+            '73d47261-1932-4fcf-82bd-159eb1a72422',
+            '73d47261-1932-4fcf-82bd-159eb1a7242g',
+          ],
+          name: 'Power Test #1',
+          condition: 'Condition Test #1',
+        },
+      ];
+      return of(stationPowers).pipe(delay(1000));
+    }
   }
 }

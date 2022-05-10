@@ -18,7 +18,7 @@ describe('AccountSettingsService', () => {
     const expectedData = {
       firstName: 'Test',
       lastName: 'Test2',
-      profileImageId: '123-654-789',
+      profileImageRithmId: '123-654-789',
     };
     service.currentUser$.subscribe((data) => {
       expect(data).toEqual(expectedData);
