@@ -195,8 +195,8 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    *
    * @returns An array with question values.
    */
-  get getValueQuestions(): HTMLResponse[] {
-    const questions: HTMLResponse[] = [];
+  get getValueQuestions(): QuestionValuesColumn[] {
+    const questions: QuestionValuesColumn[] = [];
     this.documentColumns.forEach((column) => {
       this.dataDocumentWidget.questions.forEach((questionList) => {
         const question = questionList.questions.find(
@@ -214,7 +214,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * get value to show by each question.
+   * Get value to show by each question.
    *
    * @param question Question to validate.
    * @returns String value to show on HTML.
