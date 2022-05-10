@@ -1,15 +1,17 @@
-<div class="px-3">
+<div class="px-3 h-[110px] overflow-hidden border-b-2 color-border">
   <app-header-menu></app-header-menu>
 </div>
-<div>
+<div class="h-[calc(100%-110px)] overflow-auto">
   <mat-accordion multi>
     <app-expansion-menu
       [isManageMember]="isManageMember"
       [dashboardRole]="dashboardRole.Company"
+      [showDefaultDashboard]="showDefaultDashboard"
     ></app-expansion-menu>
     <app-expansion-menu
       [isManageMember]="isManageMember"
       [dashboardRole]="dashboardRole.Personal"
+      [showDefaultDashboard]="showDefaultDashboard"
     ></app-expansion-menu>
   </mat-accordion>
 </div>

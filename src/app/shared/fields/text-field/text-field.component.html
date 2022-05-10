@@ -8,12 +8,10 @@
       widgetItem: widgetItem
     }"
   >
-    <ng-container *ngIf="widgetItem; else oldView">
-      <mat-label *ngIf="!isStation">{{ labelTag }}</mat-label>
-    </ng-container>
-    <ng-template #oldView>
-      <mat-label>{{ labelTag }}</mat-label>
-    </ng-template>
+    <!-- Whether is a widget but is not a station (is a container) -->
+    <mat-label *ngIf="widgetItem && !isStation">{{ labelTag }}</mat-label>
+    <!-- Whether is not a widget no matter if is a station or container-->
+    <mat-label *ngIf="!widgetItem">{{ labelTag }}</mat-label>
     <div matPrefix class="icon">
       <!-- Text Icons -->
       <i
@@ -99,7 +97,7 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <div *ngIf="isStation; else noStation">
+    <ng-container *ngIf="isStation; else noStation">
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput"
         matInput
@@ -149,7 +147,7 @@
         "
       >
       </textarea>
-    </div>
+    </ng-container>
     <ng-template #noStation>
       <input
         *ngIf="field.questionType !== fieldTypeEnum.LongText"

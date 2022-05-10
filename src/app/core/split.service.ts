@@ -168,4 +168,13 @@ export class SplitService {
   public getPreBuiltWidgetTreatment(): string {
     return this.splitClient.getTreatment('pre_built_widgets_split');
   }
+
+  /**
+   * Get the section Default Dashboard.
+   *
+   * @returns Split treatment.
+   */
+  public getDefaultDashboardTreatment(): string {
+    return this.splitClient.getTreatment('default_dashboard_split');
+  }
 }

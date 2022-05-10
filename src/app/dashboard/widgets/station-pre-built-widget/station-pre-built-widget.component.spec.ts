@@ -23,10 +23,10 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   const stationWidgetData = [
     {
-      stationRithmId: 'qwe-321-ert-123',
-      stationName: 'Mars station',
+      rithmId: 'qwe-321-ert-123',
+      name: 'Mars station',
       totalContainers: 5,
-      stationGroup: 'Eagle',
+      groupName: 'Eagle',
       stationOwners: [
         {
           rithmId: '',
@@ -139,10 +139,10 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should executed modal for render documents the specific station', () => {
     const expectData = {
-      minWidth: '370px',
+      minWidth: '300px',
       data: {
-        stationName: stationWidgetData[0].stationName,
-        stationId: stationWidgetData[0].stationRithmId,
+        stationName: stationWidgetData[0].name,
+        stationId: stationWidgetData[0].rithmId,
       },
     };
     const spyModal = spyOn(matDialog, 'open');
@@ -158,8 +158,8 @@ describe('StationPreBuiltWidgetComponent', () => {
     const expectData = {
       minWidth: '370px',
       data: {
-        stationName: stationWidgetData[0].stationName,
-        stationId: stationWidgetData[0].stationRithmId,
+        stationName: stationWidgetData[0].name,
+        stationId: stationWidgetData[0].rithmId,
       },
     };
     const spyModal = spyOn(matDialog, 'open');

@@ -19,6 +19,9 @@ export class MenuComponent implements OnInit {
   /** Show or hidden option manage member. */
   isManageMember = false;
 
+  /** Show or hidden default dashboard. */
+  showDefaultDashboard = false;
+
   constructor(
     private userService: UserService,
     private splitService: SplitService,
@@ -41,6 +44,8 @@ export class MenuComponent implements OnInit {
       next: () => {
         this.isManageMember =
           this.splitService.getManageUserTreatment() === 'on';
+        this.showDefaultDashboard =
+          this.splitService.getDefaultDashboardTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

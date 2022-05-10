@@ -1,8 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
   Question,
+  Power,
   Rule,
   RuleEquation,
   RuleType,
@@ -17,6 +26,7 @@ import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationService } from 'src/app/core/station.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for the flow logic tab on a station.
@@ -26,9 +36,12 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit {
+export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
+
+  /** Schedule trigger type form. */
+  scheduleTriggerField: FormGroup;
 
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
@@ -41,6 +54,9 @@ export class FlowLogicComponent implements OnInit {
 
   /** Allow switch between new/old interface. */
   flowLogicView = false;
+
+  /** Allow switch between new/old interface. */
+  showRulesList = true;
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
@@ -61,12 +77,27 @@ export class FlowLogicComponent implements OnInit {
   manuallyTooltip =
     'Upon pressing the flow button, containers will be checked and flowed to their destination';
 
+  /** Selected value condition type for rules. */
+  selectedConditionType = 'all';
+
+  /** Schedule trigger type list view if true. */
+  scheduleTrigger = false;
+
+  /** The different options for the schedule trigger type. */
+  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+
+  /** The powers of current station. */
+  stationPowers: Power[] = [];
+
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
 
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
+
+  /* Loading the powers on the station*/
+  powersLoading = false;
 
   /** The error if rules fails . */
   ruleError = false;
@@ -75,6 +106,7 @@ export class FlowLogicComponent implements OnInit {
   flowRuleError = false;
 
   constructor(
+    private fb: FormBuilder,
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
@@ -82,7 +114,11 @@ export class FlowLogicComponent implements OnInit {
     private userService: UserService,
     private splitService: SplitService,
     private stationService: StationService
-  ) {}
+  ) {
+    this.scheduleTriggerField = this.fb.group({
+      scheduleTriggerType: '',
+    });
+  }
 
   /**
    * Life cycle init the component.
@@ -102,6 +138,15 @@ export class FlowLogicComponent implements OnInit {
       .subscribe((questions) => {
         this.currentStationQuestions = questions;
       });
+  }
+
+  /**
+   * Detect changes.
+   */
+  ngOnChanges(): void {
+    if (this.flowLogicView && !this.stationPowers.length) {
+      this.getStationPowers();
+    }
   }
 
   /**
@@ -375,5 +420,47 @@ export class FlowLogicComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+   /**
+   * Toggle the responsive view to hide/show rules list.
+   *
+   * @param menuSelected Rules menu selected.
+   */
+  displayRuleContent(menuSelected: 'triggers' | 'rules'): void {
+    this.ruleSelectedMenu = menuSelected;
+    if (this.showRulesList) {
+      this.showRulesList = false;
+    }
+  }
+
+  /**
+   * Toggle the responsive view to hide/show rules list.
+   */
+  showRules(): void {
+    this.showRulesList = !this.showRulesList;
+  }
+
+  /**
+   * Get the powers (triggers, actions, flow) of current station.
+   */
+  private getStationPowers(): void {
+    this.powersLoading = true;
+    this.documentService
+      .getStationPowers(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (powers) => {
+          this.stationPowers = powers;
+          this.powersLoading = false;
+        },
+        error: (error: unknown) => {
+          this.powersLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

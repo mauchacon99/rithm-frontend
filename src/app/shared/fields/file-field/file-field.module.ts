@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FileFieldComponent } from './file-field.component';
 import { UploadFileModalModule } from 'src/app/shared/fields/upload-file-modal/upload-file-modal.module';
+import { LoadingIndicatorModule } from '../../loading-indicator/loading-indicator.module';
 @NgModule({
   declarations: [FileFieldComponent],
   imports: [
@@ -17,6 +18,7 @@ import { UploadFileModalModule } from 'src/app/shared/fields/upload-file-modal/u
     MatInputModule,
     MatButtonModule,
     UploadFileModalModule,
+    LoadingIndicatorModule,
   ],
 
   exports: [FileFieldComponent],

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { StationRoutingModule } from './station-routing.module';
 import { StationComponent } from './station/station.component';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
-import { PowersComponent } from './powers/powers.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -51,11 +50,15 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ConditionsComponent } from './flow-logic/conditions/conditions.component';
+import { ContainerActionsComponent } from './flow-logic/actions/container-actions/container-actions.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 @NgModule({
   declarations: [
     StationComponent,
     FlowLogicComponent,
-    PowersComponent,
     ToolbarComponent,
     StationFieldComponent,
     StationTemplateComponent,
@@ -63,6 +66,7 @@ import { ConditionsComponent } from './flow-logic/conditions/conditions.componen
     BuildDrawerComponent,
     DataLinkModalComponent,
     ConditionsComponent,
+    ContainerActionsComponent,
   ],
   imports: [
     CommonModule,
@@ -107,6 +111,9 @@ import { ConditionsComponent } from './flow-logic/conditions/conditions.componen
     MatSlideToggleModule,
     ComingSoonMessageModule,
     MatButtonToggleModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    NgxMatSelectSearchModule,
   ],
 })
 export class StationModule {}

@@ -1,69 +1,102 @@
-<div
-  class="grid grid-cols-3 py-0"
-  [ngClass]="newInterfaceView ? 'textured-bg' : 'bg-secondary-400 '"
->
-  <div *ngIf="newInterfaceView && isStation">
-    <mat-tab-group
-      mat-align-tabs="start"
-      [selectedIndex]="0"
-      class="new-station-tabs"
-      (selectedTabChange)="tabSelectedChanged($event)"
+<ng-container *ngIf="!newInterfaceView; else newSubHeader">
+  <div class="grid grid-cols-3 py-0 bg-secondary-400">
+    <div
+      class="text-white"
+      [ngClass]="{
+        'col-start-2 text-center': title,
+        'h-10 ': !title
+      }"
     >
-      <mat-tab label="Container" aria-label="Container">
-        <ng-template mat-tab-label>
-          <span data-testid="Container-tab" class="font-bold text-sm"
-            >Container</span
-          >
-        </ng-template>
-      </mat-tab>
-      <mat-tab label="Rules" aria-label="Rules">
-        <ng-template mat-tab-label>
-          <span data-testid="Rules-tab" class="font-bold text-sm">Rules</span>
-        </ng-template>
-      </mat-tab>
-      <mat-tab label="Settings" aria-label="Settings">
-        <ng-template mat-tab-label>
-          <span data-testid="Settings-tab" class="font-bold text-sm"
-            >Settings</span
-          >
-        </ng-template>
-      </mat-tab>
-    </mat-tab-group>
+      <h6 class="leading-10">{{ title }}</h6>
+    </div>
   </div>
-  <div
-    [ngClass]="{
-      'col-start-2 text-center': title,
-      'h-10 ': !title,
-      'text-white': !newInterfaceView
-    }"
-  >
-    <h6 class="leading-10">{{ newInterfaceView ? stationName : title }}</h6>
-  </div>
-  <div
-    class="justify-self-end px-3 md:px-5"
-    *ngIf="newInterfaceView && !isStation"
-  >
-    <button
-      class="group"
-      type="button"
-      [ngClass]="{ active: activeItem === 'stationInfo' }"
-      data-testid="station-info-button"
-      id="station-info-button"
-      mat-icon-button
-      (click)="toggleDrawer('stationInfo')"
+</ng-container>
+<ng-template #newSubHeader>
+  <div class="flex flex-wrap md:justify-between py-0 textured-bg">
+    <div
+      *ngIf="!isStation"
+      class="order-4 md:order-1 w-full md:w-1/3 xl:w-1/5"
+    ></div>
+    <div *ngIf="isStation" class="order-4 md:order-1 w-full md:w-1/3 xl:w-1/5">
+      <mat-tab-group
+        mat-stretch-tabs
+        mat-align-tabs="center"
+        [selectedIndex]="0"
+        class="new-station-tabs"
+        (selectedTabChange)="tabSelectedChanged($event)"
+      >
+        <mat-tab label="Container" aria-label="Container">
+          <ng-template mat-tab-label>
+            <span data-testid="Container-tab" class="font-bold text-sm"
+              >Container</span
+            >
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Rules" aria-label="Rules">
+          <ng-template mat-tab-label>
+            <span data-testid="Rules-tab" class="font-bold text-sm">Rules</span>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Settings" aria-label="Settings">
+          <ng-template mat-tab-label>
+            <span data-testid="Settings-tab" class="font-bold text-sm"
+              >Settings</span
+            >
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div
+      class="order-2 px-6 flex-grow-[2] md:flex-grow-0 flex justify-between md:justify-center md:w-1/3"
+      [ngClass]="{
+        'col-start-2 text-center': title,
+        'h-10 ': !title
+      }"
     >
-      <i class="fas fa-info-circle group-hover:text-accent-100 text-lg"></i>
-    </button>
-    <button
-      class="group"
-      type="button"
-      [ngClass]="{ active: activeItem === 'comments' }"
-      data-testid="comment-button"
-      id="comment-button"
-      mat-icon-button
-      (click)="toggleDrawer('comments')"
-    >
-      <i class="far fa-comment-alt group-hover:text-accent-100 text-lg"></i>
-    </button>
+      <button
+        type="button"
+        class="inline-block md:hidden"
+        data-testid="station-info-button"
+        id="station-info-button"
+        (click)="toggleDrawer('stationInfo')"
+      >
+        <i class="fas fa-info-circle group-hover:text-accent-100 text-lg"></i>
+      </button>
+      <h6 class="leading-10">{{ stationName }}</h6>
+      <button
+        type="button"
+        class="inline-block md:hidden"
+        data-testid="comment-button"
+        id="comment-button"
+        (click)="toggleDrawer('comments')"
+      >
+        <i class="far fa-comment-alt group-hover:text-accent-100 text-lg"></i>
+      </button>
+    </div>
+
+    <div class="order-3 w-1/3 xl:w-1/5 justify-end hidden md:flex">
+      <button
+        class="group order-1 md:order-3"
+        type="button"
+        [ngClass]="{ active: activeItem === 'stationInfo' }"
+        data-testid="station-info-button"
+        id="station-info-button"
+        mat-icon-button
+        (click)="toggleDrawer('stationInfo')"
+      >
+        <i class="fas fa-info-circle group-hover:text-accent-100 text-lg"></i>
+      </button>
+      <button
+        class="group order-3 md:order-4"
+        type="button"
+        [ngClass]="{ active: activeItem === 'comments' }"
+        data-testid="comment-button"
+        id="comment-button"
+        mat-icon-button
+        (click)="toggleDrawer('comments')"
+      >
+        <i class="far fa-comment-alt group-hover:text-accent-100 text-lg"></i>
+      </button>
+    </div>
   </div>
-</div>
+</ng-template>

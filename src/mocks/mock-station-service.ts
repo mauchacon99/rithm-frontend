@@ -22,7 +22,9 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
+  RoleDashboardMenu,
+  Power,
+  TriggerType,
 } from 'src/models';
 
 /**
@@ -396,6 +398,60 @@ export class MockStationService {
     pageNum: number
   ): Observable<StationPotentialRostersUsers> {
     if (!organizationId || !pageNum) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const orgUsers: StationPotentialRostersUsers = {
+        users: [
+          {
+            rithmId: '12dasd1-asd12asdasd-asdas',
+            firstName: 'Cesar',
+            lastName: 'Quijada',
+            email: 'strut@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+          {
+            rithmId: '12dasd1-asd12asdasd-ffff1',
+            firstName: 'Maria',
+            lastName: 'Quintero',
+            email: 'Maquin@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+          {
+            rithmId: '12dasd1-asd12asdasd-a231',
+            firstName: 'Pedro',
+            lastName: 'Perez',
+            email: 'pperez@gmail.com',
+            isOwner: true,
+            isWorker: true,
+          },
+        ],
+        totalUsers: 3,
+      };
+      return of(orgUsers).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get organization users for a specific stationGroup.
+   *
+   * @param stationGroupRithmId The Specific id of stationGroup.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationGroupRosterMembers(
+    stationGroupRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
+    if (!stationGroupRithmId || !pageNum) {
       return throwError(
         () =>
           new HttpErrorResponse({
@@ -891,7 +947,7 @@ export class MockStationService {
         },
         {
           prompt: 'Fake question 2',
-          rithmId: '3j4k-3h2j-hj4j',
+          rithmId: '3j4k-3h2j-hj5j',
           questionType: QuestionFieldType.Number,
           isReadOnly: false,
           isRequired: true,
@@ -1567,6 +1623,9 @@ export class MockStationService {
             createdDate: '1/2/34',
             role: null,
             organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+            profileImageRithmId: '123-456-789',
+            defaultDashboardType: RoleDashboardMenu.Personal,
+            defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
           },
         },
       ];
@@ -1601,11 +1660,13 @@ export class MockStationService {
   /**
    * Get traffic data document in stations.
    *
-   * @param stationGroupRithmId RithmId of groupStation to graph.
+   * @param stationGroupRithmId RithmId fot stationGroup.
+   * @param forceRefresh If True, recalculates the value for TotalDocument and AverageTimeInStation.
    * @returns The data to graph.
    */
   getGroupTrafficData(
-    stationGroupRithmId: string
+    stationGroupRithmId: string,
+    forceRefresh: boolean
   ): Observable<GroupTrafficData> {
     const mockGetGroupTrafficData: GroupTrafficData = {
       title: 'Group Eagle',
@@ -1642,10 +1703,10 @@ export class MockStationService {
   getStationWidgetPreBuiltData(): Observable<StationWidgetPreBuilt[]> {
     const stationWidgetData: StationWidgetPreBuilt[] = [
       {
-        stationRithmId: 'qwe-321-ert-123',
-        stationName: 'Mars station',
+        rithmId: 'qwe-321-ert-123',
+        name: 'Mars station',
         totalContainers: 5,
-        stationGroup: 'Eagle',
+        groupName: 'Eagle',
         stationOwners: [
           {
             rithmId: '',
@@ -1666,10 +1727,10 @@ export class MockStationService {
         ],
       },
       {
-        stationRithmId: '123-456-789',
-        stationName: 'Grogu station',
+        rithmId: '123-456-789',
+        name: 'Grogu station',
         totalContainers: 1,
-        stationGroup: '  ',
+        groupName: '  ',
         stationOwners: [],
       },
     ];
@@ -1783,5 +1844,46 @@ export class MockStationService {
       },
     ];
     return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get the users roster to the station.
+   *
+   * @param stationRithmId The id of the current station.
+   * @returns StationRosterMember array.
+   */
+  getStationAllRoster(
+    stationRithmId: string
+  ): Observable<StationRosterMember[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve the users roster of the station',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const userRoster: StationRosterMember[] = [
+        {
+          rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+        {
+          rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ];
+      return of(userRoster).pipe(delay(1000));
+    }
   }
 }

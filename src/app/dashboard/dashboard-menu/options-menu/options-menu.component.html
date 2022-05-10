@@ -10,13 +10,6 @@
   <i class="fas fa-ellipsis-h text-lg"></i>
 </button>
 <mat-menu #menuList="matMenu">
-  <button
-    mat-menu-item
-    *ngIf="dashboardRole === roleDashboardMenu.Company && isManageMember"
-  >
-    <i class="fas fa-users"></i>
-    <span class="p-4">Manage Members</span>
-  </button>
   <button mat-menu-item (click)="generateNewDashboard()">
     <i class="fas fa-plus"></i>
     <span class="p-4">New Dashboard</span>
@@ -24,7 +17,24 @@
 </mat-menu>
 
 <mat-menu #menuDashboard="matMenu">
-  <button mat-menu-item *ngIf="isManageMember">
+  <button
+    mat-menu-item
+    *ngIf="showDefaultDashboard"
+    [disabled]="selectedDefaultDashboard"
+  >
+    <i
+      class="fa-solid fa-house-user"
+      [ngClass]="{
+        'text-accent-500': selectedDefaultDashboard
+      }"
+    ></i>
+    <span class="p-4">Default Dashboard</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="openDialogManagementMembers()"
+    *ngIf="dashboardRole !== roleDashboardMenu.Company && isManageMember"
+  >
     <i class="fas fa-users"></i>
     <span class="p-4">Manage Members</span>
   </button>
