@@ -252,6 +252,9 @@ describe('UserService', () => {
     const changedAccountInfo: UserAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
+      password: 'mamamia',
+      defaultDashboardId: undefined,
+      defaultDashboardType: undefined,
       vaultRithmId: '123-456-789',
     };
 
@@ -302,5 +305,50 @@ describe('UserService', () => {
 
     req.flush(termsAndConditions);
     httpTestingController.verify();
+  });
+
+  it('should return attribute for update user', () => {
+    const changedAccountInfo = service['getChangedAccountInfo'](testUser);
+    expect(changedAccountInfo).toEqual({
+      firstName: 'Samus',
+      lastName: 'Aran',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+    });
+  });
+
+  it('should update user', () => {
+    localStorage.setItem('user', JSON.stringify(testUser));
+    const changedAccountInfo: UserAccountInfo = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      password: 'qwerty',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+    };
+
+    const expectedResponse = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      password: 'qwerty',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+    };
+
+    const setUserDataSpy = spyOn(service, 'setUserData').and.callThrough();
+
+    service.updateUserAccount(changedAccountInfo).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/update`
+    );
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+
+    expect(setUserDataSpy).toHaveBeenCalled();
   });
 });
