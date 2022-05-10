@@ -4,14 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  throwError,
-  from,
-  of,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, from } from 'rxjs';
 import { concatMap, delay, distinct, map, toArray } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -31,9 +24,6 @@ import {
   GroupTrafficData,
   StandardNumberJSON,
   StationWidgetPreBuilt,
-  Power,
-  TriggerType,
-  ActionType,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 
@@ -1019,56 +1009,5 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster`,
       { params }
     );
-  }
-
-  /**
-   * Get powers of current station.
-   *
-   * @param stationRithmId Specific id of station.
-   * @returns The power of a station.
-   */
-  getStationPowers(stationRithmId: string): Observable<Power[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot retrive the powers of current station.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const stationPowers: Power[] = [
-        {
-          rithmId: '3j4k-3h2j-hj4j',
-          triggers: [
-            {
-              rithmId: '3j4k-3h2j-hj5h',
-              type: TriggerType.ManualFlow,
-              source: 'Source Trigger #1',
-              value: 'Value Trigger #1',
-            },
-          ],
-          actions: [
-            {
-              rithmId: '3j4k-3h2j-ft5h',
-              type: ActionType.CreateDocument,
-              target: 'Target Action #1',
-              data: 'Data Action #1',
-              resultMapping: 'Result Action #1',
-              header: 'Header Action #1',
-            },
-          ],
-          stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-          flowToStationRithmIds: [
-            '73d47261-1932-4fcf-82bd-159eb1a72422',
-            '73d47261-1932-4fcf-82bd-159eb1a7242g',
-          ],
-          name: 'Power Test #1',
-          condition: 'Condition Test #1',
-        },
-      ];
-      return of(stationPowers).pipe(delay(1000));
-    }
   }
 }

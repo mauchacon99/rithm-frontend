@@ -1147,8 +1147,8 @@ describe('DocumentService', () => {
     req.flush(expectedData);
     httpTestingController.verify();
   });
-  it('should delete the powers from current station', () => {
-    const powerRemove: Power[] = [
+  it('should get the powers related to the current station', () => {
+    const expectedResponse: Power[] = [
       {
         rithmId: '3j4k-3h2j-hj4j',
         triggers: [
@@ -1179,12 +1179,11 @@ describe('DocumentService', () => {
       },
     ];
 
-    service
-      .deleteStationPowers(powerRemove[0].rithmId, stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(powerRemove);
-      });
+    service.getStationPowers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
+
   it('should get container widgets', () => {
     const expectedResponse: StationFrameWidget[] = [
       {
