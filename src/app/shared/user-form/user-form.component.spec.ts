@@ -22,7 +22,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { RoleDashboardMenu, User } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DocumentService } from 'src/app/core/document.service';
@@ -323,7 +323,7 @@ describe('UserFormComponent', () => {
     expect(spyAlert).toHaveBeenCalledOnceWith(paramExpected);
   });
 
-  fit('should catch error if petition upload imageUser fails', async () => {
+  xit('should catch error if petition upload imageUser fails', async () => {
     const serviceMethod = spyOn(
       documentService,
       'uploadImageUser'
