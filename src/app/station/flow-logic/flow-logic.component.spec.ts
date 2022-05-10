@@ -48,6 +48,7 @@ import { UserService } from 'src/app/core/user.service';
 
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
+import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -130,6 +131,7 @@ describe('FlowLogicComponent', () => {
         MockComponent(TextFieldComponent),
         MockComponent(NumberFieldComponent),
         MockComponent(DateFieldComponent),
+        MockComponent(ContainerActionsComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },

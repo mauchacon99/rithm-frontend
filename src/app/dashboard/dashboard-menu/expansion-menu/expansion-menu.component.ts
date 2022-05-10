@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardData } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -28,6 +29,9 @@ export class ExpansionMenuComponent implements OnInit {
    */
   @Input() showDefaultDashboard = false;
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Status expanded, this save the state the panel for show icon expanded. */
   panelOpenState = true;
 
@@ -46,17 +50,39 @@ export class ExpansionMenuComponent implements OnInit {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
+  /** Mark dashboard default. */
+  indexDefaultDashboard!: number | undefined;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private router: Router
+    private router: Router,
+    private user: UserService,
+    private cd: ChangeDetectorRef
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
+    this.detectDefaultDashboard$();
     this.getToListDashboards();
     this.isPrincipalPageDashboard = this.router.url === '/dashboard';
+  }
+
+  /**
+   * Detect when another dashboard is assigned as default between expansions.
+   */
+  private detectDefaultDashboard$(): void {
+    this.user.userData$.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (user) => {
+        if (
+          user.defaultDashboardType !== this.dashboardRole ||
+          !user.defaultDashboardType
+        ) {
+          this.indexDefaultDashboard = undefined;
+        }
+      },
+    });
   }
 
   /** Get list to dashboard in expansion menu. */
@@ -90,5 +116,24 @@ export class ExpansionMenuComponent implements OnInit {
    */
   hiddenDrawer(): void {
     this.sidenavDrawerService.toggleDrawer('menuDashboard');
+  }
+
+  /**
+   * Mark dashboard as default.
+   *
+   * @param isDefault Is default dashboard.
+   * @param index Index of dashboard.
+   */
+  markDefaultDashboard(isDefault: boolean, index: number): void {
+    if (isDefault) {
+      this.indexDefaultDashboard = index;
+      this.cd.detectChanges();
+    }
+  }
+
+  /** Clean subscriptions. */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

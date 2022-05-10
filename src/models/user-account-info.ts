@@ -1,3 +1,5 @@
+import { RoleDashboardMenu } from './enums/role-dashboard-menu.enum';
+
 /**
  * Represents all information about user account.
  */
@@ -13,4 +15,10 @@ export interface UserAccountInfo {
 
   /** User Image or Photo. */
   vaultRithmId?: string;
+
+  /** Dashboard type default dashboard for this user. */
+  defaultDashboardType?: RoleDashboardMenu;
+
+  /** Dashboard rithmId  default dashboard for this user. */
+  defaultDashboardId?: string;
 }
