@@ -267,24 +267,24 @@ export class ConditionsComponent implements OnInit {
     let display = 'string';
     switch (this.firstOperandQuestionType) {
       case QuestionFieldType.Date:
-        display = this.questionFieldType.Date;
+        display = 'date';
         break;
       case QuestionFieldType.State:
       case QuestionFieldType.Select:
-        display = this.questionFieldType.Select;
+        display = 'select';
         break;
       case QuestionFieldType.MultiSelect:
-        display = this.questionFieldType.MultiSelect;
+        display = 'multiselect';
         break;
       case QuestionFieldType.CheckList:
-        display = this.questionFieldType.CheckList;
+        display = 'checklist';
         break;
       case QuestionFieldType.Number:
       case QuestionFieldType.Phone:
       case QuestionFieldType.CreditCard:
       case QuestionFieldType.Currency:
       case QuestionFieldType.Zip:
-        display = this.questionFieldType.Number;
+        display = 'number';
         break;
       default:
         display = 'string';
@@ -343,6 +343,9 @@ export class ConditionsComponent implements OnInit {
     this.secondOperandDefaultQuestion.questionType = questionType;
     this.firstOperand.value = rithmId;
     this.firstOperand.text = prompt;
+    this.operatorSelected = null;
+    this.secondOperand.value = '';
+    this.switchConditionPreviousFields = true;
     this.setOperatorList(questionType);
     if (childIndex < 0) {
       switch (questionSelected.questionType) {
@@ -481,19 +484,19 @@ export class ConditionsComponent implements OnInit {
     this.validateFormat =
       this.operatorSelected?.text === 'contains' ? false : true;
     switch (this.displayOperatorType) {
-      case this.questionFieldType.Number:
+      case 'string':
+        this.textField?.ngOnInit();
+        break;
+      case 'number':
         this.numberField?.ngOnInit();
         break;
-      case this.questionFieldType.Date:
+      case 'date':
         this.dateField?.ngOnInit();
         break;
-      case this.questionFieldType.Select:
-      case this.questionFieldType.MultiSelect:
-      case this.questionFieldType.CheckList:
+      case 'select':
+      case 'multiselect':
+      case 'checklist':
         this.selectField?.ngOnInit();
-        break;
-      default:
-        this.textField?.ngOnInit();
         break;
     }
   }

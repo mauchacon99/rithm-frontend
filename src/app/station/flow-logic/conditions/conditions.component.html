@@ -5,7 +5,7 @@
   <div class="select-condition">
     <mat-form-field appearance="outline">
       <mat-label> Condition Requirement </mat-label>
-      <mat-select [(ngModel)]="selectedConditionType">
+      <mat-select [(value)]="selectedConditionType">
         <mat-option value="all"> All must be true </mat-option>
         <mat-option value="any"> Any must be true </mat-option>
       </mat-select>
@@ -44,7 +44,10 @@
   </div>
 </section>
 <ng-template #displayFormCondition>
-  <section class="add-condition-form flex-col pl-8 py-6 max-w-sm">
+  <section
+    class="add-condition-form flex-col pl-8 py-6 max-w-sm"
+    id="add-condition-form"
+  >
     <!-- first operand question list -->
     <section class="first-operand-question-list flex mb-6">
       <mat-form-field appearance="outline">
@@ -76,8 +79,7 @@
           id="operator-selector"
           data-testid="operator-selector"
           [disabled]="!firstOperandQuestionRithmId"
-          [(ngModel)]="operatorSelected"
-          [ngModelOptions]="{ standalone: true }"
+          [(value)]="operatorSelected"
           (selectionChange)="resetQuestionFieldComponent()"
         >
           <mat-option
@@ -102,8 +104,7 @@
           id="second-operand-selector"
           data-testid="second-operand-selector"
           [disabled]="!operatorSelected || !secondOperandQuestionList.length"
-          [(ngModel)]="secondOperand.value"
-          [ngModelOptions]="{ standalone: true }"
+          [(value)]="secondOperand.value"
           (focus)="
             secondOperandQuestionList.length && resetQuestionFieldComponent()
           "
@@ -134,29 +135,6 @@
     </section>
     <ng-template #fieldCustomValue>
       <ng-container [ngSwitch]="displayOperatorType">
-        <app-number-field
-          *ngSwitchCase="questionFieldType.Number"
-          #numberField
-          [field]="secondOperandDefaultQuestion"
-          [validateMask]="validateFormat"
-        >
-        </app-number-field>
-        <app-date-field
-          *ngSwitchCase="questionFieldType.Date"
-          #dateField
-          [field]="secondOperandDefaultQuestion"
-        >
-        </app-date-field>
-        <app-select-field
-          *ngSwitchCase="
-            questionFieldType.Select ||
-            questionFieldType.MultiSelect ||
-            questionFieldType.CheckList
-          "
-          #selectField
-          [field]="secondOperandDefaultQuestion"
-        >
-        </app-select-field>
         <app-text-field
           *ngSwitchDefault
           #textField
@@ -167,6 +145,25 @@
           [validateMask]="validateFormat"
         >
         </app-text-field>
+        <app-number-field
+          *ngSwitchCase="'number'"
+          #numberField
+          [field]="secondOperandDefaultQuestion"
+          [validateMask]="validateFormat"
+        >
+        </app-number-field>
+        <app-date-field
+          *ngSwitchCase="'date'"
+          #dateField
+          [field]="secondOperandDefaultQuestion"
+        >
+        </app-date-field>
+        <app-select-field
+          *ngSwitchCase="'multiselect' || 'checklist' || 'select'"
+          #selectField
+          [field]="secondOperandDefaultQuestion"
+        >
+        </app-select-field>
       </ng-container>
     </ng-template>
     <div class="condition-buttons-action mb-6 space-x-2">
@@ -181,7 +178,7 @@
         mat-button
         color="accent"
         data-testid="condition-save"
-        [disabled]="!secondOperand.value"
+        [disabled]="!secondOperand.value || !secondOperandDefaultQuestion"
         (click)="setEquationContent()"
       >
         Save
