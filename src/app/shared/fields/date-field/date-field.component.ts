@@ -62,7 +62,7 @@ export class DateFieldComponent
    */
   ngOnInit(): void {
     this.dateFieldForm = this.fb.group({
-      date: [this.fieldValue, []],
+      date: [{ value: this.fieldValue, disabled: this.field.isReadOnly }, []],
     });
 
     if (this.field.isRequired) {

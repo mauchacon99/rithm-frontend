@@ -13,4 +13,17 @@ describe('AccountSettingsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should be false the emit and subscribe to subject updatedUser$', () => {
+    const expectedData = {
+      firstName: 'Test',
+      lastName: 'Test2',
+      profileImageRithmId: '123-654-789',
+    };
+    service.currentUser$.subscribe((data) => {
+      expect(data).toEqual(expectedData);
+    });
+
+    service.setUser(expectedData);
+  });
 });

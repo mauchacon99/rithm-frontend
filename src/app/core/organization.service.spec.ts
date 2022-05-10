@@ -4,7 +4,11 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { OrganizationUsers, OrganizationInfo } from 'src/models';
+import {
+  OrganizationUsers,
+  OrganizationInfo,
+  RoleDashboardMenu,
+} from 'src/models';
 import { OrganizationService } from './organization.service';
 
 const MICROSERVICE_PATH = '/userservice/api/organization';
@@ -44,6 +48,9 @@ describe('OrganizationService', () => {
           createdDate: '1/2/20',
           role: null,
           organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          profileImageRithmId: '123-456-789',
+          defaultDashboardType: RoleDashboardMenu.Personal,
+          defaultDashboardId: '117cf568-27a4-4968-5628-046ccfee24fd',
         },
         {
           rithmId: '1234',
@@ -55,6 +62,9 @@ describe('OrganizationService', () => {
           createdDate: '7/4/21',
           role: null,
           organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          profileImageRithmId: '123-456-789',
+          defaultDashboardType: RoleDashboardMenu.Personal,
+          defaultDashboardId: '997cf568-27a4-4968-5628-046ccfee24fd',
         },
         {
           rithmId: '7812',
@@ -66,6 +76,9 @@ describe('OrganizationService', () => {
           createdDate: '5/9/21',
           role: 'admin',
           organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          profileImageRithmId: '123-456-789',
+          defaultDashboardType: RoleDashboardMenu.Company,
+          defaultDashboardId: '437cf568-27a4-4968-5628-046ccfee24fd',
         },
       ],
     };

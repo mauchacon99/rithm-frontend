@@ -1,7 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { OrganizationInfo, OrganizationUsers } from 'src/models';
+import {
+  OrganizationInfo,
+  OrganizationUsers,
+  RoleDashboardMenu,
+} from 'src/models';
 
 /**
  * Mocks methods of the `OrganizationService`.
@@ -43,6 +47,9 @@ export class MockOrganizationService {
             createdDate: '1/2/20',
             role: null,
             organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            profileImageRithmId: '123-456-789',
+            defaultDashboardType: RoleDashboardMenu.Personal,
+            defaultDashboardId: '547cf568-27a4-4928-5648-046ccfee24fd',
           },
           {
             rithmId: '1234',
@@ -54,6 +61,9 @@ export class MockOrganizationService {
             createdDate: '7/4/21',
             role: null,
             organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            profileImageRithmId: '123-456-789',
+            defaultDashboardType: RoleDashboardMenu.Company,
+            defaultDashboardId: '337cf568-27a4-4968-5628-046ccfee2412',
           },
           {
             rithmId: '7812',
@@ -65,6 +75,9 @@ export class MockOrganizationService {
             createdDate: '5/9/21',
             role: 'admin',
             organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            profileImageRithmId: '123-456-789',
+            defaultDashboardType: RoleDashboardMenu.Personal,
+            defaultDashboardId: '9747cf568-27a4-4912-5628-046ccfee24fd',
           },
         ],
       };

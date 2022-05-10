@@ -57,6 +57,103 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Whether de container is displayed inside a widget or not. */
   @Input() isWidget = false;
 
+  /** Id for station in widget. */
+  @Input() stationRithmIdWidget!: string;
+
+  /** Id for document id widget. */
+  @Input() documentRithmIdWidget!: string;
+
+  /** Return to list of the documents only with isWidget. */
+  @Output() returnDocumentsWidget = new EventEmitter<{
+    /** When click in flow, return to list of documents in widget. */
+    isReturnListDocuments: boolean;
+    /** When assign new worker, reload list of documents in widget when click to see list. */
+    isReloadListDocuments: boolean;
+    /** Station rithmId when flow document. */
+    stationFlow: string[];
+  }>();
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Document form. */
+  documentForm: FormGroup;
+
+  /** The information about the document within a station. */
+  documentInformation!: DocumentStationInformation;
+
+  /** Different types of input frames components.*/
+  frameType = FrameType;
+
+  /** Document Id. */
+  private documentId = '';
+
+  /** Station Id. */
+  private stationId = '';
+
+  /** Get Document Name from BehaviorSubject. */
+  private documentName = '';
+
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
+
+  /** Get flow button name. */
+  flowButtonName = '';
+
+  /** View new station. */
+  viewNewContainer = false;
+
+  /** Whether the request to get the document info is currently underway. */
+  documentLoading = true;
+
+  /** Whether the request to get connected stations is currently underway. */
+  connectedStationsLoading = true;
+
+  /** Show or hidden accordion for all field. */
+  accordionFieldAllExpanded = false;
+
+  /** Expands/collapse the responsive footer. */
+  footerExpanded = false;
+
+  /** To check click SubHeader. */
+  clickSubHeader = false;
+
+  /** To check click comment. */
+  clickComment = false;
+
+  /** Whether the document allow previous button or not. */
+  allowPreviousButton = false;
+
+  /** Should flow the container. */
+  shouldFlowContainer = false;
+
+  /** Grid initial values. */
+  options: GridsterConfig = {
+    gridType: 'verticalFixed',
+    fixedRowHeight: 50,
+    displayGrid: 'none',
+    pushItems: false,
+    draggable: {
+      enabled: false,
+      ignoreContent: false,
+    },
+    resizable: {
+      enabled: false,
+    },
+    margin: 12,
+    minCols: 24,
+    maxCols: 24,
+  };
+
+  /** The list of stations that this document could flow to. */
+  forwardStations: ConnectedStationInfo[] = [];
+
+  /** The list of stations that this document came from. */
+  previousStations: ConnectedStationInfo[] = [];
+
+  /** The all document answers the document actually. */
+  documentAnswer: DocumentAnswer[] = [];
+
   /** Station Widgets array. */
   inputFrameWidgetItems: StationFrameWidget[] = [
     {
@@ -149,95 +246,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     },
   ];
 
-  /** Id for station in widget. */
-  @Input() stationRithmIdWidget!: string;
-
-  /** Id for document id widget. */
-  @Input() documentRithmIdWidget!: string;
-
-  /** Return to list of the documents only with isWidget. */
-  @Output() returnDocumentsWidget = new EventEmitter<{
-    /** When click in flow, return to list of documents in widget. */
-    isReturnListDocuments: boolean;
-    /** When assign new worker, reload list of documents in widget when click to see list. */
-    isReloadListDocuments: boolean;
-  }>();
-
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
-
-  /** Document form. */
-  documentForm: FormGroup;
-
-  /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
-
-  /** Different types of input frames components.*/
-  frameType = FrameType;
-
-  /** Document Id. */
-  private documentId = '';
-
-  /** Station Id. */
-  private stationId = '';
-
-  /** Get Document Name from BehaviorSubject. */
-  private documentName = '';
-
-  /** The context of what is open in the drawer. */
-  drawerContext = 'comments';
-
-  /** Whether the request to get the document info is currently underway. */
-  documentLoading = true;
-
-  /** Whether the request to get connected stations is currently underway. */
-  connectedStationsLoading = true;
-
-  /** Show or hidden accordion for all field. */
-  accordionFieldAllExpanded = false;
-
-  /** To check click SubHeader. */
-  clickSubHeader = false;
-
-  /** To check click comment. */
-  clickComment = false;
-
-  /** Whether the document allow previous button or not. */
-  allowPreviousButton = false;
-
-  /** Grid initial values. */
-  options: GridsterConfig = {
-    gridType: 'verticalFixed',
-    fixedRowHeight: 50,
-    displayGrid: 'none',
-    pushItems: false,
-    draggable: {
-      enabled: false,
-      ignoreContent: false,
-    },
-    resizable: {
-      enabled: false,
-    },
-    margin: 12,
-    minCols: 24,
-    maxCols: 24,
-  };
-
-  /** The list of stations that this document could flow to. */
-  forwardStations: ConnectedStationInfo[] = [];
-
-  /** The list of stations that this document came from. */
-  previousStations: ConnectedStationInfo[] = [];
-
-  /** The all document answers the document actually. */
-  documentAnswer: DocumentAnswer[] = [];
-
-  /** Get flow button name. */
-  flowButtonName = '';
-
-  /** View new station. */
-  viewNewContainer = false;
-
   /** The list of frames related to the associated station and document. */
   framesByType: StationFrameWidget[] = [];
 
@@ -267,6 +275,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subscribeDrawerContext$();
     this.subscribeDocumentName$();
     this.subscribeDocumentAnswer$();
+    this.getContainerWidgets();
     if (!this.isWidget) {
       this.sidenavDrawerService.setDrawer(this.detailDrawer);
       this.getParams();
@@ -409,18 +418,46 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Navigates the user back to the dashboard page.
    *
    * @param isReturnListDocuments Boolean, when is true, return and reload to the documents list in widget.
+   * @param stationFlow RithmId of station when flow document.
    */
-  private navigateBack(isReturnListDocuments = false): void {
+  private navigateBack(
+    isReturnListDocuments = false,
+    stationFlow: string[] = []
+  ): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
     // If is widget return to the documents list
     this.isWidget
-      ? this.widgetReloadListDocuments(isReturnListDocuments, false)
+      ? this.widgetReloadListDocuments(
+          isReturnListDocuments,
+          false,
+          stationFlow
+        )
       : this.isUserAdmin
       ? this.router.navigateByUrl('map')
       : this.router.navigateByUrl('dashboard');
+  }
+
+  /**
+   * Get all types of frameWidgets of the container.
+   */
+  private getContainerWidgets(): void {
+    this.documentService
+      .getContainerWidgets(this.documentId, this.stationId)
+      .pipe(first())
+      .subscribe({
+        next: (inputFrames) => {
+          this.inputFrameWidgetItems = inputFrames;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
@@ -428,14 +465,17 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    *
    * @param isReturnListDocuments Return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow RithmId of station when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[] = []
   ): void {
     this.returnDocumentsWidget.emit({
       isReturnListDocuments,
       isReloadListDocuments,
+      stationFlow,
     });
   }
 
@@ -549,10 +589,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
-    // Reload widget for show new values in widget.
-    if (this.isWidget) {
-      this.widgetReloadListDocuments(false, true);
-    }
     this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
@@ -573,69 +609,23 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.getDocumentStationData();
+          if (this.shouldFlowContainer) {
+            this.autoFlowContainer();
+            this.shouldFlowContainer = false;
+          } else {
+            this.getDocumentStationData();
+            // Reload widget for show new values in widget.
+            if (this.isWidget) {
+              this.widgetReloadListDocuments(false, true, [
+                'rithmIdTempOnlySave',
+              ]);
+            }
+          }
         },
         error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Save document answers and auto flow.
-   */
-  saveAnswersFlowDocument(): void {
-    this.documentForm.markAllAsTouched();
-    this.documentLoading = true;
-    this.saveDocumentAnswer();
-  }
-
-  /**
-   * Save document answers (isolate request).
-   */
-  private saveDocumentAnswer(): void {
-    this.documentService
-      .saveDocumentAnswer(
-        this.documentInformation.documentRithmId,
-        this.documentAnswer
-      )
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.updateDocumentName();
-        },
-        error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end saving answers and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Update document name (isolate request).
-   */
-  private updateDocumentName(): void {
-    this.documentService
-      .updateDocumentName(
-        this.documentInformation.documentRithmId,
-        this.documentName
-      )
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.autoFlowContainer();
-        },
-        error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end updating container's name and we're looking into it. Please try again in a little while.",
             error
           );
         },
@@ -681,7 +671,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
                 this.getParams();
               });
           } else {
-            this.navigateBack(true);
+            this.navigateBack(true, data);
           }
         },
         error: (error: unknown) => {

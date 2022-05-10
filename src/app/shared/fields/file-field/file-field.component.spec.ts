@@ -65,11 +65,11 @@ describe('FileFieldComponent', () => {
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-        { provide: DocumentService, useValue: MockDocumentService },
+        { provide: DocumentService, useClass: MockDocumentService },
         { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: ErrorService, useValue: MockErrorService },
-        { provide: PopupService, useValue: MockPopupService },
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -127,5 +127,19 @@ describe('FileFieldComponent', () => {
     expect(component.fileName).toBe(fileData.name);
     expect(component.fileSize).toBe(fileData.size);
     expect(component.isFileUploaded).toBeTrue();
+  });
+
+  it('should display a confirm dialog when remove document icon clicked.', () => {
+    const confirmationData = {
+      title: 'Remove Document',
+      message: `Are you sure you want remove document?`,
+      okButtonText: 'Remove',
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    component.deleteDocument();
+    expect(popUpConfirmSpy).toHaveBeenCalledWith(confirmationData);
   });
 });

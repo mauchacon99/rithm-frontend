@@ -10,6 +10,7 @@ import {
   MockDashboardService,
   MockErrorService,
   MockPopupService,
+  MockUserService,
 } from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -19,6 +20,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { UserService } from 'src/app/core/user.service';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -48,12 +53,28 @@ describe('OptionsMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OptionsMenuComponent, MockComponent(MenuComponent)],
+      declarations: [
+        OptionsMenuComponent,
+        MockComponent(MenuComponent),
+        MockComponent(ManagementMemberDashboardModalComponent),
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            // eslint-disable-next-line rxjs/finnish
+            paramMap: of(
+              convertToParamMap({
+                dashboardId: '747cf568-27a4-4968-5628-046ccfee24fd',
+              })
+            ),
+          },
+        },
       ],
       imports: [
         MatMenuModule,
@@ -65,6 +86,7 @@ describe('OptionsMenuComponent', () => {
         ]),
         MatSidenavModule,
         NoopAnimationsModule,
+        MatDialogModule,
       ],
     }).compileComponents();
   });
@@ -345,7 +367,7 @@ describe('OptionsMenuComponent', () => {
   it('should call dashboardService.toggleLoadingDashboard for update dashboard when is deleted', () => {
     component.dashboardRole = RoleDashboardMenu.Company;
     component.index = 0;
-    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const rithmId = '747cf568-27a4-4968-5628-046ccfee24fd';
     fixture.detectChanges();
 
     const deletePersonalDashboard = spyOn(
@@ -361,5 +383,49 @@ describe('OptionsMenuComponent', () => {
     component.deleteDashboard(rithmId);
     expect(deletePersonalDashboard).toHaveBeenCalled();
     expect(toggleDrawer).toHaveBeenCalled();
+  });
+
+  it('should open modal openDialogManagementMembers', () => {
+    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    component.rithmId = rithmId;
+    component.dashboardRole = RoleDashboardMenu.Company;
+
+    fixture.detectChanges();
+
+    const methodSpy = spyOn(
+      component,
+      'openDialogManagementMembers'
+    ).and.callThrough();
+
+    const matDialogSpy = spyOn(TestBed.inject(MatDialog), 'open');
+
+    component.openDialogManagementMembers();
+
+    expect(methodSpy).toHaveBeenCalled();
+    expect(matDialogSpy).toHaveBeenCalledOnceWith(
+      ManagementMemberDashboardModalComponent,
+      {
+        panelClass: [
+          'w-5/6',
+          'sm:w-3/5',
+          'h-[95%]',
+          'sm:h-5/6',
+          'custom-margin-modal',
+        ],
+        maxWidth: '1500px',
+        disableClose: true,
+        data: {
+          dashboardRithmId: rithmId,
+          dashboardType: RoleDashboardMenu.Company,
+        },
+      }
+    );
+  });
+
+  it('should validate if the current route is default', () => {
+    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
+    component.ngOnInit();
+    expect(component.paramRithmId).toEqual(defaultDashboard);
+    expect(component.selectedDefaultDashboard).toBeTrue();
   });
 });

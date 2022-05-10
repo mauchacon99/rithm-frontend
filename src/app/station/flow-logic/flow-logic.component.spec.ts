@@ -48,6 +48,7 @@ import { UserService } from 'src/app/core/user.service';
 
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
+import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -130,6 +131,7 @@ describe('FlowLogicComponent', () => {
         MockComponent(TextFieldComponent),
         MockComponent(NumberFieldComponent),
         MockComponent(DateFieldComponent),
+        MockComponent(ContainerActionsComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -1008,6 +1010,42 @@ describe('FlowLogicComponent', () => {
         expect(spyFunc).toHaveBeenCalled();
       });
     });
+  });
+
+  it('should call the method that get powers of the station.', () => {
+    component.flowLogicView = true;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getStationPowers'
+    ).and.callThrough();
+    component.ngOnChanges();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should detect when the getStationPowers method fails.', () => {
+    component.flowLogicView = true;
+    spyOn(TestBed.inject(DocumentService), 'getStationPowers').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnChanges();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should activate the loading in the powers of station', () => {
+    component.flowLogicView = true;
+    component.powersLoading = true;
+    fixture.detectChanges();
+    const powersLoading = fixture.debugElement.nativeElement.querySelector(
+      '#component-power-loading'
+    );
+    expect(component.powersLoading).toBeTrue();
+    expect(powersLoading).toBeTruthy();
   });
 
   describe('Testing split.io', () => {

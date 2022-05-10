@@ -24,7 +24,7 @@ export class TopNavComponent implements OnInit {
   navItems = ['dashboard', 'map'];
 
   /** User variable. */
-  user: User;
+  user!: User;
 
   /** Init the browser width. */
   innerWidth = 0;
@@ -39,22 +39,28 @@ export class TopNavComponent implements OnInit {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     private accountSettingsService: AccountSettingsService
-  ) {
-    // Setup...
-    this.user = this.userService.user as User;
-  }
+  ) {}
 
   /**
    * Sets updated user first name and last name in account settings component.
    *
    */
   ngOnInit(): void {
+    // Setup...
+    this.user = this.userService.user as User;
+
     this.accountSettingsService.currentUser$
       .pipe(takeUntil(this.sub$))
       .subscribe((user) => {
-        if (user && user.firstName && user.lastName) {
+        if (
+          user &&
+          user.firstName !== null &&
+          user.lastName !== null &&
+          user.profileImageRithmId !== null
+        ) {
           this.user.firstName = user?.firstName;
           this.user.lastName = user?.lastName;
+          this.user.profileImageRithmId = user?.profileImageRithmId;
         }
       });
 

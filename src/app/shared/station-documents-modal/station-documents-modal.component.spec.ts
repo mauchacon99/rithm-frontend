@@ -34,6 +34,14 @@ import { MockComponent } from 'ng-mocks';
 import { UserService } from 'src/app/core/user.service';
 import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatRippleModule } from '@angular/material/core';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { Router } from '@angular/router';
 
 const DIALOG_TEST_DATA: StationDocumentsModalData = {
   stationName: 'A Station',
@@ -62,6 +70,13 @@ describe('StationDocumentsModalComponent', () => {
         NoopAnimationsModule,
         MatTooltipModule,
         MatDialogModule,
+        MatInputModule,
+        MatSortModule,
+        FormsModule,
+        MatButtonModule,
+        MatTableModule,
+        MatRippleModule,
+        InfiniteScrollModule,
       ],
       providers: [
         { provide: PopupService, useClass: MockPopupService },
@@ -165,6 +180,65 @@ describe('StationDocumentsModalComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(errorService).toHaveBeenCalled();
       expect(component.showContainerModal).toBeFalse();
+    });
+  });
+
+  it('should return the time in a string', () => {
+    component.documents = [
+      {
+        documentName: 'Almond Flour',
+        stationName: 'Dry Goods & Liquids',
+        flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+        priority: 2,
+        userAssigned: {
+          rithmId: '123132132',
+          firstName: 'Demo',
+          lastName: 'User',
+          email: 'demo@demo.com',
+          isWorker: true,
+          isOwner: false,
+        },
+        isEscalated: true,
+        updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+        documentRithmId: '',
+        stationRithmId: '',
+      },
+    ];
+    const time = component.getElapsedTimeNewTemplate(
+      component.documents[0].flowedTimeUTC
+    );
+    expect(time).toBeTruthy();
+  });
+
+  it('should call close the modal in dialogRef service', () => {
+    component.showContainerModal = true;
+    fixture.detectChanges();
+    const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+    const spyMethod = spyOn(component, 'closeModal').and.callThrough();
+    const btnClose = fixture.nativeElement.querySelector(
+      '#close-station-document-modal'
+    );
+    expect(btnClose).toBeTruthy();
+    btnClose.click();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(spyMatDialogRef).toHaveBeenCalled();
+  });
+
+  it('should redirect to document page', () => {
+    const navigateSpy = spyOn(component, 'goToDocument').and.callThrough();
+    const stationRithmId = '64E7631C-B371-4A13-AEDB-0732AC79154D';
+    const documentId = '64E7631C-B371-4A13-AEDB-0732AC79154D';
+    component['stationRithmId'] = stationRithmId;
+    const spyRoute = spyOn(TestBed.inject(Router), 'navigate');
+
+    fixture.detectChanges();
+    component.goToDocument(documentId);
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(spyRoute).toHaveBeenCalledOnceWith(['/', 'document', documentId], {
+      queryParams: {
+        documentId,
+        stationId: stationRithmId,
+      },
     });
   });
 });

@@ -285,8 +285,8 @@ export class StationFieldComponent
    * @param checkboxEvent Event fired when the checkbox changes.
    */
   setEditable(checkboxEvent: MatCheckboxChange): void {
-    this.field.isReadOnly = checkboxEvent.checked;
-    if (!this.field.isReadOnly) {
+    this.field.isReadOnly = !checkboxEvent.checked;
+    if (this.field.isReadOnly) {
       this.field.isRequired = false;
     }
     this.stationService.touchStationForm();
