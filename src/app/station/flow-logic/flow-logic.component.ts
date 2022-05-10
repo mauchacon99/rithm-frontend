@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -6,7 +13,6 @@ import {
   Rule,
   RuleEquation,
   RuleType,
-  Station,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
@@ -28,7 +34,7 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit {
+export class FlowLogicComponent implements OnInit, OnChanges {
   /** Schedule trigger type form. */
   scheduleTriggerField: FormGroup;
 
@@ -66,32 +72,6 @@ export class FlowLogicComponent implements OnInit {
   /** Selected value condition type for rules. */
   selectedConditionType = 'all';
 
-  /** Lading/Errors block. */
-  /* Loading the list of rules of flow logic*/
-  ruleLoading = false;
-
-  /* Loading the list of stations flow logic*/
-  flowLogicLoading = true;
-
-  /** The error if rules fails . */
-  ruleError = false;
-
-  /** The error if rules fails . */
-  flowRuleError = false;
-
-  /**Filtered form station List. */
-  filteredStations$: Observable<Station[]> | undefined;
-
-  /** The form to add this field in the template. */
-  flowFieldForm!: FormGroup;
-
-  /** The list of all stations. */
-  stations: Station[] = [];
-
-  /** Loading/Errors block. */
-  /* Loading in input auto-complete the list of all stations. */
-  stationLoading = false;
-
   /** Schedule trigger type list view if true. */
   scheduleTrigger = false;
 
@@ -100,6 +80,35 @@ export class FlowLogicComponent implements OnInit {
 
   /** The powers of current station. */
   stationPowers: Power[] = [];
+
+  /** Lading/Errors block. */
+  /* Loading the list of rules of flow logic*/
+  ruleLoading = false;
+
+  /* Loading the list of stations flow logic*/
+  flowLogicLoading = true;
+
+  /* Loading the powers on the station*/
+  powersLoading = false;
+
+  /** The error if rules fails . */
+  ruleError = false;
+
+  /** The error if rules fails . */
+  flowRuleError = false;
+
+  /**Filtered form station List. */
+  filteredStations$: Observable<ConnectedStationInfo[]> | undefined;
+
+  /** The form to add this field in the template. */
+  flowFieldForm!: FormGroup;
+
+  /** The list of all stations. */
+  stations: ConnectedStationInfo[] = [];
+
+  /** Loading/Errors block. */
+  /* Loading in input auto-complete the list of all stations. */
+  stationLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -127,6 +136,15 @@ export class FlowLogicComponent implements OnInit {
       stations: [''],
     });
     this.getStationPowers();
+  }
+
+  /**
+   * Detect changes.
+   */
+  ngOnChanges(): void {
+    if (this.flowLogicView && !this.stationPowers.length) {
+      this.getStationPowers();
+    }
   }
 
   /**
@@ -397,14 +415,16 @@ export class FlowLogicComponent implements OnInit {
   /**
    * Get the list of all stations.
    */
-  getAllStations(): void {
+  getPreviousAndNextStations(): void {
     this.stationLoading = true;
     this.stationService
-      .getAllStations()
+      .getPreviousAndNextStations(this.rithmId)
       .pipe(first())
       .subscribe({
         next: (stations) => {
-          this.stations = stations;
+          this.stations = [];
+          this.stations = this.stations.concat(stations.nextStations);
+          this.stations = this.stations.concat(stations.previousStations);
           this.filterStations();
           this.stationLoading = false;
         },
@@ -437,7 +457,7 @@ export class FlowLogicComponent implements OnInit {
    * @param value Current String in Field Forms.
    * @returns Filtered value.
    */
-  private _filter(value: string): Station[] {
+  private _filter(value: string): ConnectedStationInfo[] {
     const filterValue = value?.toLowerCase();
     return this.stations.filter((option) =>
       option.name.toLowerCase().includes(filterValue)
@@ -467,14 +487,17 @@ export class FlowLogicComponent implements OnInit {
    * Get the powers (triggers, actions, flow) of current station.
    */
   private getStationPowers(): void {
-    this.stationService
+    this.powersLoading = true;
+    this.documentService
       .getStationPowers(this.rithmId)
       .pipe(first())
       .subscribe({
         next: (powers) => {
           this.stationPowers = powers;
+          this.powersLoading = false;
         },
         error: (error: unknown) => {
+          this.powersLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

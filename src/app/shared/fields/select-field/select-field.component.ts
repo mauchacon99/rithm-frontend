@@ -56,7 +56,10 @@ export class SelectFieldComponent
   ngOnInit(): void {
     this.selectFieldForm = this.fb.group({
       [this.field.questionType]: [
-        this.fieldValue !== undefined ? this.fieldValue : '',
+        {
+          value: this.fieldValue !== undefined ? this.fieldValue : '',
+          disabled: this.field.isReadOnly,
+        },
         [],
       ],
     });

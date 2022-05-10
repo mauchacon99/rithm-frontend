@@ -242,4 +242,15 @@ describe('DocumentWidgetComponent', () => {
     expect(component.documentRithmId).toEqual(expectDataWidget.documentRithmId);
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
   });
+
+  it('should call getDocumentWidget when stationFlow change', () => {
+    const spyMethod = spyOn(component, 'getDocumentWidget').and.callThrough();
+    component.documentRithmId = '333-333-333';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
 });

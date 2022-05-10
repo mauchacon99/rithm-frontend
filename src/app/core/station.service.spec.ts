@@ -24,8 +24,6 @@ import {
   GroupTrafficData,
   StationWidgetPreBuilt,
   RoleDashboardMenu,
-  Power,
-  TriggerType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -1468,6 +1466,7 @@ describe('StationService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          profileImageRithmId: '123-456-789',
           defaultDashboardType: RoleDashboardMenu.Personal,
           defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
         },
@@ -1940,42 +1939,5 @@ describe('StationService', () => {
     expect(req.request.params.get('rithmId')).toBe(stationId);
     req.flush(expectedResponse);
     httpTestingController.verify();
-  });
-
-  it('should get the powers related to the current station', () => {
-    const expectedResponse: Power[] = [
-      {
-        rithmId: '3j4k-3h2j-hj4j',
-        triggers: [
-          {
-            rithmId: '3j4k-3h2j-hj5h',
-            type: TriggerType.ManualFlow,
-            source: 'Source Trigger #1',
-            value: 'Value Trigger #1',
-          },
-        ],
-        actions: [
-          {
-            rithmId: '3j4k-3h2j-ft5h',
-            type: 'Type Action #1',
-            target: 'Target Action #1',
-            data: 'Data Action #1',
-            resultMapping: 'Result Action #1',
-            header: 'Header Action #1',
-          },
-        ],
-        stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowToStationRithmIds: [
-          '73d47261-1932-4fcf-82bd-159eb1a72422',
-          '73d47261-1932-4fcf-82bd-159eb1a7242g',
-        ],
-        name: 'Power Test #1',
-        condition: 'Condition Test #1',
-      },
-    ];
-
-    service.getStationPowers(stationId).subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
   });
 });
