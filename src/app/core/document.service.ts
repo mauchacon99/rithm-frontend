@@ -799,8 +799,9 @@ export class DocumentService {
     };
     const formData = new FormData();
     const compressImage = await this.compressImage(file, configCompressImage);
+
+    console.log('Imagen Comprimida', compressImage);
     formData.append('image', compressImage);
-    console.log('FormData', formData);
 
     return this.http
       .post<StandardStringJSON>(
@@ -829,7 +830,9 @@ export class DocumentService {
       });
     console.log('compresion', file, fileCompress);
 
-    return fileCompress;
+    return new File([fileCompress], file.name, {
+      type: file.type,
+    });
   }
 
   /**
