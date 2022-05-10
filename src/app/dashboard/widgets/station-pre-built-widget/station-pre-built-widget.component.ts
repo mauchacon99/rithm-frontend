@@ -16,6 +16,7 @@ import { StationService } from 'src/app/core/station.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationWidgetPreBuilt } from 'src/models';
 import { MatSort } from '@angular/material/sort';
+import { HttpErrorResponse } from '@angular/common/http';
 /**
  * Component for station prebuilt.
  */
@@ -68,6 +69,9 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Whether the action to get station prebuilt fails. */
   errorStationPrebuilt = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   /** Columns static to show on table. */
   displayedColumns = ['name', 'totalContainers', 'groupName', 'stationOwners'];
 
@@ -97,6 +101,7 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   getStationWidgetPreBuiltData(): void {
     this.isLoading = true;
     this.errorStationPrebuilt = false;
+    this.permissionError = true;
     this.stationService
       .getStationWidgetPreBuiltData()
       .pipe(first())
@@ -108,6 +113,10 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
           this.dataSourceTable = new MatTableDataSource(stationWidgetData);
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.errorStationPrebuilt = true;
           this.errorService.logError(error);

@@ -16,6 +16,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
 import { DocumentComponent } from 'src/app/document/document/document.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Container preview build. */
 @Component({
@@ -143,6 +144,9 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** View detail document. */
   isDocument = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   /** Document id selected for view. */
   documentSelected: ContainerWidgetPreBuilt | null = null;
 
@@ -175,6 +179,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   getContainerWidgetPreBuilt(): void {
     this.isLoading = true;
     this.failedGetContainers = false;
+    this.permissionError = true;
     this.documentService
       .getContainerWidgetPreBuilt()
       .pipe(first())
@@ -186,6 +191,10 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
           this.dataSourceTable = new MatTableDataSource(containers);
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.failedGetContainers = true;
           this.errorService.logError(error);

@@ -84,6 +84,7 @@ export class StationDocumentsModalComponent implements OnInit {
     private userService: UserService
   ) {
     this.stationRithmId = this.modalData.stationId;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   /**
