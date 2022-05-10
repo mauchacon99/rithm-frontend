@@ -769,7 +769,6 @@ export class DocumentService {
    * @param file File to upload.
    * @returns Id of image uploaded.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async uploadImageUser(file: File): Promise<Observable<string>> {
     const configCompressImage: OptionsCompressFile = {
       maxSizeMB: 0.02,
@@ -777,8 +776,6 @@ export class DocumentService {
     };
     const formData = new FormData();
     const compressImage = await this.compressImage(file, configCompressImage);
-
-    console.log('Imagen Comprimida', file, compressImage);
     formData.append('image', compressImage);
 
     return this.http
@@ -790,11 +787,11 @@ export class DocumentService {
   }
 
   /**
-   * It takes a file and options as input and returns a compressed file as output.
+   * It takes a file and an options object as parameters, and returns a compressed file.
    *
    * @param file - File - The file to be compressed.
-   * @param options - Options.
-   * @returns A promise that resolves to a file.
+   * @param options - OptionsCompressFile.
+   * @returns A promise that resolves to a compressed file.
    */
   async compressImage(file: File, options: OptionsCompressFile): Promise<File> {
     const imageCompress = await imageCompression(file, options)
