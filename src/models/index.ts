@@ -81,3 +81,4 @@ export * from './power-actions';
 export * from './power';
 export * from './member-dashboard';
 export * from './reload-station-flow';
+export * from './options-compress-file';
