@@ -17,6 +17,7 @@ import {
   QuestionFieldType,
   StationRosterMember,
   StationWidgetData,
+  StatusError,
   WidgetDocument,
   WidgetType,
 } from 'src/models';
@@ -976,5 +977,20 @@ describe('StationWidgetComponent', () => {
       documentFlow: '333-333-333',
     };
     expect(component.reloadDocumentList).toBeTrue();
+  });
+  it("should catch error when user don't have permissions", () => {
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      throwError(() => {
+        const error = new Error() as unknown as StatusError;
+        error.status = 403;
+        throw error;
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getStationWidgetDocuments();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });

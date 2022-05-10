@@ -14,7 +14,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { ContainerWidgetPreBuilt } from 'src/models';
+import { ContainerWidgetPreBuilt, StatusError } from 'src/models';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
@@ -325,5 +325,21 @@ describe('ContainerPreBuiltWidgetComponent', () => {
       documentFlow: containers[0].documentRithmId,
     };
     expect(spyMethod).toHaveBeenCalledOnceWith(null, true);
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(documentService, 'getContainerWidgetPreBuilt').and.returnValue(
+      throwError(() => {
+        const error = new Error() as unknown as StatusError;
+        error.status = 403;
+        throw error;
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getContainerWidgetPreBuilt();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });

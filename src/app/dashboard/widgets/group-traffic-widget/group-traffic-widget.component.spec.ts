@@ -12,7 +12,12 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { DashboardItem, GroupTrafficData, WidgetType } from 'src/models';
+import {
+  DashboardItem,
+  GroupTrafficData,
+  StatusError,
+  WidgetType,
+} from 'src/models';
 import { NgChartsModule } from 'ng2-charts';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
@@ -242,5 +247,21 @@ describe('GroupTrafficWidgetComponent', () => {
     component.isDrawerOpen;
     expect(spyMethod).toHaveBeenCalled();
     expect(component.isDrawerOpen).toBeTrue();
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(stationService, 'getGroupTrafficData').and.returnValue(
+      throwError(() => {
+        const error = new Error() as unknown as StatusError;
+        error.status = 403;
+        throw error;
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getGroupTrafficData();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });
