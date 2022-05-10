@@ -12,6 +12,7 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 import { MockComponent } from 'ng-mocks';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
@@ -202,5 +203,19 @@ describe('StationPreBuiltWidgetComponent', () => {
     component.isDrawerOpen;
     expect(spyMethod).toHaveBeenCalled();
     expect(component.isDrawerOpen).toBeTrue();
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(stationService, 'getStationWidgetPreBuiltData').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getStationWidgetPreBuiltData();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });

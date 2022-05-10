@@ -45,6 +45,12 @@ export class DocumentTemplateComponent
   /** Whether the document is displayed inside the widged or not. */
   @Input() isWidget = false;
 
+  /** The document id as an optional parameter. */
+  @Input() documentRithmId = '';
+
+  /** The station id as an optional parameter. */
+  @Input() stationRithmId = '';
+
   constructor(private fb: FormBuilder) {
     this.documentTemplateForm = this.fb.group({
       documentFieldForm: this.fb.control(''),
