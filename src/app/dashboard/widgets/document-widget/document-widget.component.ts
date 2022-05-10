@@ -191,9 +191,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get question value by type.
+   * Get questions values by document columns.
    *
-   * @returns Question Value.
+   * @returns An array with question values.
    */
   get getValueQuestions(): HTMLResponse[] {
     const questions: HTMLResponse[] = [];
