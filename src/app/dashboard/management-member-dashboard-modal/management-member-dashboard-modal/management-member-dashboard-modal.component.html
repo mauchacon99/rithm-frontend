@@ -9,6 +9,7 @@
   *ngIf="errorGetUsersMember"
   id="error-load-user-member"
   [errorMessage]="'Unable to obtain members.'"
+  [permission]="true"
   (tryAgain)="getUsersDashboardPersonal()"
 >
 </app-error-widget>
