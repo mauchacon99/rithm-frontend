@@ -14,7 +14,7 @@ import {
 } from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, User, WidgetType } from 'src/models';
 import { MenuComponent } from '../menu/menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -49,6 +49,21 @@ describe('OptionsMenuComponent', () => {
         maxItemRows: 12,
       },
     ],
+  };
+
+  const testUser: User = {
+    firstName: 'Samus',
+    lastName: 'Aran',
+    email: 'ycantmetroidcrawl@metroid.com',
+    isEmailVerified: true,
+    createdDate: new Date().toISOString(),
+    rithmId: 'kj34k3jkj',
+    notificationSettings: null,
+    role: null,
+    organization: '',
+    profileImageRithmId: 'f47cf568-27a4-4968-5628-f46ccfee24ff',
+    defaultDashboardType: RoleDashboardMenu.Personal,
+    defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
   };
 
   beforeEach(async () => {
@@ -422,10 +437,94 @@ describe('OptionsMenuComponent', () => {
     );
   });
 
-  it('should validate if the current route is default', () => {
+  it('should validate if is default and emit value', () => {
     const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
-    component.ngOnInit();
+    component.rithmId = defaultDashboard;
+    fixture.detectChanges();
+
+    const markDefaultDashboardSpy = spyOn(
+      component.markDefaultDashboard,
+      'emit'
+    ).and.callThrough();
+    component['isDefaultDashboard']();
     expect(component.paramRithmId).toEqual(defaultDashboard);
     expect(component.selectedDefaultDashboard).toBeTrue();
+    expect(markDefaultDashboardSpy).toHaveBeenCalledOnceWith(true);
+  });
+
+  it('should validate if not is default and emit value', () => {
+    component.rithmId = '';
+    fixture.detectChanges();
+
+    const markDefaultDashboardSpy = spyOn(
+      component.markDefaultDashboard,
+      'emit'
+    ).and.callThrough();
+    component['isDefaultDashboard']();
+    expect(component.selectedDefaultDashboard).toBeFalse();
+    expect(markDefaultDashboardSpy).toHaveBeenCalledOnceWith(false);
+  });
+
+  it('should set default dashboard', () => {
+    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
+    component.dashboardRole = RoleDashboardMenu.Company;
+    component.rithmId = defaultDashboard;
+    const updateUserAccountSpy = spyOn(
+      TestBed.inject(UserService),
+      'updateUserAccount'
+    ).and.callThrough();
+    component.setDefaultDashboard();
+    expect(updateUserAccountSpy).toHaveBeenCalledOnceWith({
+      defaultDashboardType: RoleDashboardMenu.Company,
+      defaultDashboardId: defaultDashboard,
+    });
+  });
+
+  it('should call errorService if petition updateUserAccount fail', () => {
+    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
+    component.dashboardRole = RoleDashboardMenu.Company;
+    component.rithmId = defaultDashboard;
+    const updateUserAccountSpy = spyOn(
+      TestBed.inject(UserService),
+      'updateUserAccount'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const logErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'logError'
+    ).and.callThrough();
+
+    component.setDefaultDashboard();
+    expect(updateUserAccountSpy).toHaveBeenCalledOnceWith({
+      defaultDashboardType: RoleDashboardMenu.Company,
+      defaultDashboardId: defaultDashboard,
+    });
+    expect(logErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should get params of path', () => {
+    component.ngOnInit();
+    expect(component.paramRithmId).toEqual(
+      '747cf568-27a4-4968-5628-046ccfee24fd'
+    );
+  });
+
+  it('Should subscribe to user.userData$', () => {
+    const spyUserService = spyOn(
+      TestBed.inject(UserService).userData$,
+      'next'
+    ).and.callThrough();
+    const spyIsDefaultDashboard = spyOn(
+      component,
+      'isDefaultDashboard'
+    ).and.callThrough();
+    component.ngOnInit();
+    TestBed.inject(UserService).userData$.next(testUser);
+    expect(spyUserService).toHaveBeenCalled();
+    expect(spyIsDefaultDashboard).toHaveBeenCalled();
   });
 });
