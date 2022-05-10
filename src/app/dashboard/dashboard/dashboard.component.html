@@ -70,6 +70,7 @@
             {{ dashboardData.name }}
           </h2>
           <button
+          *ngIf="dashboardData.isEditable"
             mat-icon-button
             id="menu-edit-button"
             data-testid="menu-edit-button"
