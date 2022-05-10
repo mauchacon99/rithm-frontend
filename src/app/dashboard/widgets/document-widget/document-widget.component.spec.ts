@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { DocumentWidgetComponent } from './document-widget.component';
+import {
+  DocumentWidgetComponent,
+  QuestionValuesColumn,
+} from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
@@ -182,6 +185,53 @@ describe('DocumentWidgetComponent', () => {
       },
     ],
   };
+
+  const questionValuesColumn: QuestionValuesColumn[] = [
+    {
+      detail: {
+        questionType: QuestionFieldType.CheckList,
+        prompt: 'checklist',
+        isPrivate: false,
+        isEncrypted: false,
+        isReadOnly: false,
+        isRequired: false,
+        possibleAnswers: [
+          {
+            rithmId: 'B76B9162-05B0-4497-9820-BA8748ABBF5B',
+            text: 'dev1',
+            default: false,
+          },
+          {
+            rithmId: 'F2F4BDE2-FBC1-4432-83F6-B704B3571E2F',
+            text: 'dev2',
+            default: false,
+          },
+          {
+            rithmId: '14F9EAF5-94BF-441E-96F5-983B8AF38400',
+            text: 'dev3',
+            default: false,
+          },
+        ],
+        rithmId: '99e8e757-e746-4410-a8a4-5864314ad5da',
+        answer: {
+          questionRithmId: '99e8e757-e746-4410-a8a4-5864314ad5da',
+          referAttribute: 'asArray',
+          value: '',
+          asArray: [
+            {
+              value: 'dev1',
+              isChecked: true,
+            },
+          ],
+          fileSize: 0,
+        },
+        children: [],
+      },
+      value:
+        // eslint-disable-next-line max-len
+        '<i class="fas fa-check-square text-accent-500"></i> dev1<br><i class="fas fa-check-square text-accent-500"></i> dev2<br><i class="fas fa-square text-secondary-500"></i> dev3',
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -415,6 +465,14 @@ describe('DocumentWidgetComponent', () => {
       expect(oneNoCheckedOptionSelected).toEqual(
         '<i class="fas fa-square text-secondary-500"></i> dev1'
       );
+    });
+
+    it('should to process questions ', () => {
+      spyOnProperty(component, 'getValueQuestions').and.returnValue(
+        questionValuesColumn
+      );
+
+      expect(component.getValueQuestions).toEqual(questionValuesColumn);
     });
 
     it('should call getDocumentWidget when stationFlow change', () => {
