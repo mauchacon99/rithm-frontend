@@ -8,6 +8,7 @@
 >
   <div class="flex flex-col">
     <mat-checkbox
+      [disabled]="field.isReadOnly"
       [ngClass]="{ required: !checkFieldForm.valid }"
       *ngFor="let possibleAnswer of field.possibleAnswers; let i = index"
       formControlName="{{ possibleAnswer.text }}"
