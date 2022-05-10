@@ -20,7 +20,7 @@
   <button
     mat-menu-item
     *ngIf="showDefaultDashboard"
-    [disabled]="selectedDefaultDashboard"
+    (click)="setDefaultDashboard()"
   >
     <i
       class="fa-solid fa-house-user"
