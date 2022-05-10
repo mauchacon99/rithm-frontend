@@ -9,6 +9,7 @@
   *ngIf="failedLoadWidget"
   id="error-load-widget"
   [errorMessage]="'Unable to retrieve document data'"
+  [permission]="permissionError"
   (tryAgain)="getDocumentWidget()"
 >
 </app-error-widget>

@@ -14,6 +14,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+
 import {
   DashboardItem,
   DocumentWidget,
@@ -21,6 +22,7 @@ import {
   QuestionFieldType,
   WidgetType,
 } from 'src/models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -606,5 +608,19 @@ describe('DocumentWidgetComponent', () => {
       };
       expect(spyMethod).toHaveBeenCalled();
     });
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(documentService, 'getDocumentWidget').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getDocumentWidget();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });
