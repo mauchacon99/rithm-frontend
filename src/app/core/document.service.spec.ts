@@ -1225,4 +1225,43 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should delete the powers from current station', () => {
+    const powerRemove: Power[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j',
+        triggers: [
+          {
+            rithmId: '3j4k-3h2j-hj5h',
+            type: TriggerType.ManualFlow,
+            source: 'Source Trigger #1',
+            value: 'Value Trigger #1',
+          },
+        ],
+        actions: [
+          {
+            rithmId: '3j4k-3h2j-ft5h',
+            type: ActionType.CreateDocument,
+            target: 'Target Action #1',
+            data: 'Data Action #1',
+            resultMapping: 'Result Action #1',
+            header: 'Header Action #1',
+          },
+        ],
+        stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowToStationRithmIds: [
+          '73d47261-1932-4fcf-82bd-159eb1a72422',
+          '73d47261-1932-4fcf-82bd-159eb1a7242g',
+        ],
+        name: 'Power Test #1',
+        condition: 'Condition Test #1',
+      },
+    ];
+
+    service
+      .deleteStationPowers(powerRemove[0].rithmId, stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(powerRemove);
+      });
+  });
 });

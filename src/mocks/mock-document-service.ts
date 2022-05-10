@@ -34,7 +34,6 @@ import {
   TriggerType,
   ActionType,
 } from 'src/models';
-import { ActionType } from 'src/models/enums/action-type-enum';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
