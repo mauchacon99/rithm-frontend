@@ -48,9 +48,15 @@ gridster {
   }
 }
 
-@media (max-width: 1920px) and (min-width: 768px) {
+@media (max-width: 1919px) and (min-width: 768px) {
   .edit-mode-gridster {
     height: 75vh !important;
+  }
+}
+
+@media (max-width: 1920px) {
+  .edit-mode-gridster {
+    height: 83vh !important;
   }
 }
 
