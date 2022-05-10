@@ -1103,7 +1103,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should upload image user', () => {
+  it('should upload image user', async () => {
     const expectedResponse = {
       data: 'ewf34tf-3ge343-g34g3e',
     };
@@ -1113,7 +1113,7 @@ describe('DocumentService', () => {
     const formData = new FormData();
     formData.append('image', file);
 
-    service.uploadImageUser(file).subscribe((response) => {
+    (await service.uploadImageUser(file)).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
 

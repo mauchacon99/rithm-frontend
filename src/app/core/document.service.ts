@@ -42,35 +42,13 @@ import {
   TriggerType,
   Power,
   ActionType,
+  OptionsCompressFile,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import imageCompression from 'browser-image-compression';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
-
-interface Options {
-  /** Number.POSITIVE_INFINITY. */
-  maxSizeMB?: number;
-  /** Undefined. */
-  maxWidthOrHeight?: number;
-  /** Boolean. */
-  useWebWorker?: boolean;
-  /** Default 10. */
-  maxIteration?: number;
-  /** Default to be the exif orientation from the image file. */
-  exifOrientation?: number;
-  /** A function takes one progress argument (progress from 0 to 100). */
-  onProgress?: (progress: number) => void;
-  /** Default to be the original mime type from the image file. */
-  fileType?: string;
-  /** Default 1.0. */
-  initialQuality?: number;
-  /** Boolean. */
-  alwaysKeepResolution?: boolean;
-  /** Default undefined. */
-  signal?: AbortSignal;
-}
 
 /**
  * Service for all document behavior and business logic.
@@ -793,14 +771,14 @@ export class DocumentService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async uploadImageUser(file: File): Promise<Observable<string>> {
-    const configCompressImage: Options = {
+    const configCompressImage: OptionsCompressFile = {
       maxSizeMB: 0.02,
-      maxWidthOrHeight: 3840,
+      maxWidthOrHeight: 1920,
     };
     const formData = new FormData();
     const compressImage = await this.compressImage(file, configCompressImage);
 
-    console.log('Imagen Comprimida', compressImage);
+    console.log('Imagen Comprimida', file, compressImage);
     formData.append('image', compressImage);
 
     return this.http
@@ -818,19 +796,16 @@ export class DocumentService {
    * @param options - Options.
    * @returns A promise that resolves to a file.
    */
-  async compressImage(file: File, options: Options): Promise<File> {
-    const fileCompress = await imageCompression(file, options)
+  async compressImage(file: File, options: OptionsCompressFile): Promise<File> {
+    const imageCompress = await imageCompression(file, options)
       .then((compressedFile) => {
-        console.log('compresion ok', compressedFile);
         return compressedFile;
       })
       .catch((fileNotCompress) => {
-        console.log('Compresion fail', fileNotCompress);
         return fileNotCompress;
       });
-    console.log('compresion', file, fileCompress);
 
-    return new File([fileCompress], file.name, {
+    return new File([imageCompress], file.name, {
       type: file.type,
     });
   }
