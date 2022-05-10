@@ -63,7 +63,11 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** A setter for the stationFlow property to reload document when its flowed. */
   @Input() set stationFlow(value: reloadStationFlow) {
     if (this.documentRithmId) {
-      if (value && this.documentRithmId === value.documentFlow) {
+      if (
+        value &&
+        this.documentRithmId === value.documentFlow &&
+        !value.stationFlow.includes('rithmIdTempOnlySaveUser')
+      ) {
         this.getDocumentWidget();
       }
     }
