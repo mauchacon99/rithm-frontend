@@ -15,6 +15,7 @@ import {
   DocumentWidget,
   QuestionFieldType,
   reloadStationFlow,
+  StatusError,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
@@ -101,6 +102,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   /** Columns for list the widget. */
   documentColumns: ColumnFieldsWidget[] = [];
 
@@ -155,6 +159,10 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
           this.failedLoadWidget = false;
         },
         error: (error: unknown) => {
+          const { status } = error as StatusError;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.failedLoadWidget = true;
           this.errorService.logError(error);

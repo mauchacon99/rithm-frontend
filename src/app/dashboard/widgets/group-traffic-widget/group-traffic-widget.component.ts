@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardItem, GroupTrafficData } from 'src/models';
+import { DashboardItem, GroupTrafficData, StatusError } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ChartConfiguration, LegendItem } from 'chart.js';
@@ -121,6 +121,9 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
 
   /** Whether the action to get group traffic fails. */
   errorGroupTraffic = false;
+
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
 
   /** Config static chart data. */
   configChart: ChartConfiguration = {
@@ -258,6 +261,10 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           this.setConfigChart();
         },
         error: (error: unknown) => {
+          const { status } = error as StatusError;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.errorGroupTraffic = true;
           this.errorService.logError(error);

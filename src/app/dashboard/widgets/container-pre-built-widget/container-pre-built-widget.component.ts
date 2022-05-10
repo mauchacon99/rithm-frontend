@@ -11,7 +11,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ContainerWidgetPreBuilt, reloadStationFlow } from 'src/models';
+import {
+  ContainerWidgetPreBuilt,
+  reloadStationFlow,
+  StatusError,
+} from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
@@ -143,6 +147,9 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** View detail document. */
   isDocument = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   /** Document id selected for view. */
   documentSelected: ContainerWidgetPreBuilt | null = null;
 
@@ -186,6 +193,10 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
           this.dataSourceTable = new MatTableDataSource(containers);
         },
         error: (error: unknown) => {
+          const { status } = error as StatusError;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.failedGetContainers = true;
           this.errorService.logError(error);

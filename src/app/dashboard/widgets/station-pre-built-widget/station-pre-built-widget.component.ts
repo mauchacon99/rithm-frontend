@@ -14,7 +14,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
-import { StationWidgetPreBuilt } from 'src/models';
+import { StationWidgetPreBuilt, StatusError } from 'src/models';
 import { MatSort } from '@angular/material/sort';
 /**
  * Component for station prebuilt.
@@ -68,6 +68,9 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Whether the action to get station prebuilt fails. */
   errorStationPrebuilt = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   /** Columns static to show on table. */
   displayedColumns = ['name', 'totalContainers', 'groupName', 'stationOwners'];
 
@@ -108,6 +111,10 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
           this.dataSourceTable = new MatTableDataSource(stationWidgetData);
         },
         error: (error: unknown) => {
+          const { status } = error as StatusError;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.errorStationPrebuilt = true;
           this.errorService.logError(error);

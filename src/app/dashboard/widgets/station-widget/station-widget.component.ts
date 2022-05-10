@@ -22,6 +22,7 @@ import {
   Question,
   WidgetDocument,
   reloadStationFlow,
+  StatusError,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -213,6 +214,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** View detail document. */
   isDocument = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   /** Type of drawer opened. */
   drawerContext!: string;
 
@@ -293,6 +297,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.generateDataTable();
         },
         error: (error: unknown) => {
+          const { status } = error as StatusError;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.failedLoadWidget = true;
           this.isLoading = false;
           this.errorService.logError(error);

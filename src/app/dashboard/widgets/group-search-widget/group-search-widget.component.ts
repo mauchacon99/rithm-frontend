@@ -13,7 +13,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MapService } from 'src/app/map/map.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
-import { StationListGroup, WidgetType } from 'src/models';
+import { StationListGroup, StatusError, WidgetType } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
@@ -78,6 +78,9 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** Whether the action to get list station group fails. */
   errorStationGroup = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -124,6 +127,10 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
           this.subStationGroupData = this.dataStationGroup.subStationGroups;
         },
         error: (error: unknown) => {
+          const { status } = error as StatusError;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.errorStationGroup = true;
           this.errorService.logError(error);

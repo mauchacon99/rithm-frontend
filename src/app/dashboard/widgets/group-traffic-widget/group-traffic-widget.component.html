@@ -8,6 +8,7 @@
   *ngIf="errorGroupTraffic"
   id="error-load-widget-group-traffic"
   [errorMessage]="'Unable to retrieve group traffic data'"
+  [permission]="permissionError"
   (tryAgain)="getGroupTrafficData()"
 >
 </app-error-widget>
