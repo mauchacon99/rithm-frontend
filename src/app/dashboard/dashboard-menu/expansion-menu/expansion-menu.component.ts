@@ -55,6 +55,7 @@ export class ExpansionMenuComponent implements OnInit {
 
   /** Is admin. */
   isAdmin = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
