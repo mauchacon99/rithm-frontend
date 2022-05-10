@@ -14,7 +14,8 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { ContainerWidgetPreBuilt, StatusError } from 'src/models';
+import { ContainerWidgetPreBuilt } from 'src/models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
@@ -330,9 +331,7 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   it("should catch error when user don't have permissions", () => {
     spyOn(documentService, 'getContainerWidgetPreBuilt').and.returnValue(
       throwError(() => {
-        const error = new Error() as unknown as StatusError;
-        error.status = 403;
-        throw error;
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
     const spyMethodError = spyOn(errorService, 'logError').and.callThrough();

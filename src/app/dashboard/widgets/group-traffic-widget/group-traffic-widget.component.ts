@@ -8,11 +8,12 @@ import {
 } from '@angular/core';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardItem, GroupTrafficData, StatusError } from 'src/models';
+import { DashboardItem, GroupTrafficData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ChartConfiguration, LegendItem } from 'chart.js';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Component for station group traffic.
@@ -250,6 +251,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   getGroupTrafficData(): void {
     this.isLoading = true;
     this.errorGroupTraffic = false;
+    this.permissionError = true;
     this.stationService
       .getGroupTrafficData(this.stationGroupRithmId, true)
       .pipe(first())
@@ -261,7 +263,7 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           this.setConfigChart();
         },
         error: (error: unknown) => {
-          const { status } = error as StatusError;
+          const { status } = error as HttpErrorResponse;
           if (status === 403) {
             this.permissionError = false;
           }

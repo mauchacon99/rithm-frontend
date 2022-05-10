@@ -12,7 +12,7 @@ import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/err
 import { MockComponent } from 'ng-mocks';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StatusError } from '../../../../models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
@@ -208,9 +208,7 @@ describe('StationPreBuiltWidgetComponent', () => {
   it("should catch error when user don't have permissions", () => {
     spyOn(stationService, 'getStationWidgetPreBuiltData').and.returnValue(
       throwError(() => {
-        const error = new Error() as unknown as StatusError;
-        error.status = 403;
-        throw error;
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
     const spyMethodError = spyOn(errorService, 'logError').and.callThrough();

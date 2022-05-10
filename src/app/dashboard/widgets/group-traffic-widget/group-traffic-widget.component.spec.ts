@@ -12,14 +12,10 @@ import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import {
-  DashboardItem,
-  GroupTrafficData,
-  StatusError,
-  WidgetType,
-} from 'src/models';
+import { DashboardItem, GroupTrafficData, WidgetType } from 'src/models';
 import { NgChartsModule } from 'ng2-charts';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
@@ -252,9 +248,7 @@ describe('GroupTrafficWidgetComponent', () => {
   it("should catch error when user don't have permissions", () => {
     spyOn(stationService, 'getGroupTrafficData').and.returnValue(
       throwError(() => {
-        const error = new Error() as unknown as StatusError;
-        error.status = 403;
-        throw error;
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
     const spyMethodError = spyOn(errorService, 'logError').and.callThrough();

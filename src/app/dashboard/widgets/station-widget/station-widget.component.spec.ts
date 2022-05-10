@@ -17,7 +17,6 @@ import {
   QuestionFieldType,
   StationRosterMember,
   StationWidgetData,
-  StatusError,
   WidgetDocument,
   WidgetType,
 } from 'src/models';
@@ -36,6 +35,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { UserService } from 'src/app/core/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -978,12 +978,11 @@ describe('StationWidgetComponent', () => {
     };
     expect(component.reloadDocumentList).toBeTrue();
   });
+
   it("should catch error when user don't have permissions", () => {
     spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
       throwError(() => {
-        const error = new Error() as unknown as StatusError;
-        error.status = 403;
-        throw error;
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
     const spyMethodError = spyOn(errorService, 'logError').and.callThrough();

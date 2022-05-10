@@ -14,8 +14,9 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
-import { StationWidgetPreBuilt, StatusError } from 'src/models';
+import { StationWidgetPreBuilt } from 'src/models';
 import { MatSort } from '@angular/material/sort';
+import { HttpErrorResponse } from '@angular/common/http';
 /**
  * Component for station prebuilt.
  */
@@ -100,6 +101,7 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   getStationWidgetPreBuiltData(): void {
     this.isLoading = true;
     this.errorStationPrebuilt = false;
+    this.permissionError = true;
     this.stationService
       .getStationWidgetPreBuiltData()
       .pipe(first())
@@ -111,7 +113,7 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
           this.dataSourceTable = new MatTableDataSource(stationWidgetData);
         },
         error: (error: unknown) => {
-          const { status } = error as StatusError;
+          const { status } = error as HttpErrorResponse;
           if (status === 403) {
             this.permissionError = false;
           }

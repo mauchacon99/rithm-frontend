@@ -15,12 +15,12 @@ import {
   DocumentWidget,
   QuestionFieldType,
   reloadStationFlow,
-  StatusError,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Component for list field the document how widget.
@@ -149,6 +149,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   getDocumentWidget(): void {
     this.isLoading = true;
     this.failedLoadWidget = false;
+    this.permissionError = true;
     this.documentService
       .getDocumentWidget(this.documentRithmId)
       .pipe(first())
@@ -159,7 +160,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
           this.failedLoadWidget = false;
         },
         error: (error: unknown) => {
-          const { status } = error as StatusError;
+          const { status } = error as HttpErrorResponse;
           if (status === 403) {
             this.permissionError = false;
           }

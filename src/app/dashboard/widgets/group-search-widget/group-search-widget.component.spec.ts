@@ -24,7 +24,7 @@ import { StationComponent } from 'src/app/station/station/station.component';
 import { MapService } from 'src/app/map/map.service';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StatusError } from '../../../../models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
@@ -386,9 +386,7 @@ describe('GroupSearchWidgetComponent', () => {
   it("should catch error when user don't have permissions", () => {
     spyOn(stationService, 'getStationGroups').and.returnValue(
       throwError(() => {
-        const error = new Error() as unknown as StatusError;
-        error.status = 403;
-        throw error;
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
     const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
