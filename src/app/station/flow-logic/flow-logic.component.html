@@ -248,7 +248,10 @@
 </ng-container>
 
 <ng-template #newView>
-  <div class="rules-tab-content">
+  <div
+    *ngIf="!powersLoading; else powersLoadingIndicator"
+    class="rules-tab-content"
+  >
     <aside
       class="rules-left-side p-4"
       [ngClass]="{ showRulesList: showRulesList }"
@@ -571,4 +574,11 @@
       </section>
     </div>
   </div>
+  <ng-template #powersLoadingIndicator>
+    <div class="flex h-full justify-center items-center">
+      <app-loading-indicator
+        id="component-power-loading"
+      ></app-loading-indicator>
+    </div>
+  </ng-template>
 </ng-template>

@@ -59,6 +59,9 @@ export class NestedFieldComponent implements OnInit {
    */
   ngOnInit(): void {
     this.childrenFields = this.field.children;
+    this.childrenFields.forEach((child) => {
+      child.isReadOnly = this.field.isReadOnly;
+    });
 
     if (this.childrenFields[3].questionType === 'state') {
       this.childrenFields[3].possibleAnswers = STATES;
