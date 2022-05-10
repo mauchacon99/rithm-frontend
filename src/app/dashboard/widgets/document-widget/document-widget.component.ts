@@ -23,7 +23,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 
 /** Local interface to display question and html value. */
-interface HTMLResponse {
+interface QuestionValuesColumn {
   /**Value html */
   value: string | null;
   /**All question information */
