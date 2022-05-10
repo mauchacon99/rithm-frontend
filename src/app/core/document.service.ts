@@ -44,6 +44,7 @@ import {
   ActionType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
+import imageCompression from 'browser-image-compression';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
@@ -769,14 +770,31 @@ export class DocumentService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   uploadImageUser(file: File): Observable<string> {
-    const formData = new FormData();
-    formData.append('image', file);
-    return this.http
-      .post<StandardStringJSON>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
-        formData
-      )
-      .pipe(map((response) => response.data));
+    const configCompressImage = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 3840,
+    };
+    imageCompression(file, configCompressImage)
+      .then((compressedFile) => {
+        const formData = new FormData();
+        formData.append('image', compressedFile);
+        return this.http
+          .post<StandardStringJSON>(
+            `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+            formData
+          )
+          .pipe(map((response) => response.data));
+      })
+      .catch(() => {
+        const formData = new FormData();
+        formData.append('image', file);
+        return this.http
+          .post<StandardStringJSON>(
+            `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+            formData
+          )
+          .pipe(map((response) => response.data));
+      });
   }
 
   /**
