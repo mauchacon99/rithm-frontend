@@ -769,32 +769,26 @@ export class DocumentService {
    * @returns Id of image uploaded.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  uploadImageUser(file: File): Observable<string> {
+  async uploadImageUser(file: File): Observable<string> {
     const configCompressImage = {
       maxSizeMB: 0.02,
       maxWidthOrHeight: 3840,
     };
-    imageCompression(file, configCompressImage)
+    const formData = new FormData();
+    await imageCompression(file, configCompressImage)
       .then((compressedFile) => {
-        const formData = new FormData();
         formData.append('image', compressedFile);
-        return this.http
-          .post<StandardStringJSON>(
-            `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
-            formData
-          )
-          .pipe(map((response) => response.data));
       })
       .catch(() => {
-        const formData = new FormData();
         formData.append('image', file);
-        return this.http
-          .post<StandardStringJSON>(
-            `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
-            formData
-          )
-          .pipe(map((response) => response.data));
       });
+
+    return this.http
+      .post<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
+        formData
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**
