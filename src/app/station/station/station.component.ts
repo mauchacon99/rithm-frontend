@@ -1112,7 +1112,7 @@ export class StationComponent
       frames.forEach((frame) => {
         if (frame.data !== '') {
           const fQuestions: Question[] = JSON.parse(frame.data);
-          if (fQuestions.length) {
+          if (fQuestions && fQuestions.length) {
             frameQuestionRequest.push(
               this.stationService.saveInputFrameQuestions(
                 frame.rithmId,

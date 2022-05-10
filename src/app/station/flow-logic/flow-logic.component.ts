@@ -422,7 +422,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.complete();
   }
 
-   /**
+  /**
    * Toggle the responsive view to hide/show rules list.
    *
    * @param menuSelected Rules menu selected.

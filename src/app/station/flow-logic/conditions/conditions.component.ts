@@ -267,24 +267,24 @@ export class ConditionsComponent implements OnInit {
     let display = 'string';
     switch (this.firstOperandQuestionType) {
       case QuestionFieldType.Date:
-        display = this.questionFieldType.Date;
+        display = 'date';
         break;
       case QuestionFieldType.State:
       case QuestionFieldType.Select:
-        display = this.questionFieldType.Select;
+        display = 'select';
         break;
       case QuestionFieldType.MultiSelect:
-        display = this.questionFieldType.MultiSelect;
+        display = 'multiselect';
         break;
       case QuestionFieldType.CheckList:
-        display = this.questionFieldType.CheckList;
+        display = 'checklist';
         break;
       case QuestionFieldType.Number:
       case QuestionFieldType.Phone:
       case QuestionFieldType.CreditCard:
       case QuestionFieldType.Currency:
       case QuestionFieldType.Zip:
-        display = this.questionFieldType.Number;
+        display = 'number';
         break;
       default:
         display = 'string';
