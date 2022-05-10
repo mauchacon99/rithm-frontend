@@ -35,9 +35,46 @@ gridster {
 .gridster {
   height: calc(100vh - 150px) !important;
 }
+@media (max-width: 712px) {
+  .gridster {
+    height: 66vh !important;
+  }
+}
 
-.edit-mode-gridster {
-  height: 68vh !important;
+@media (max-width: 412px) {
+  .gridster {
+    height: 82vh !important;
+  }
+}
+
+@media (min-width: 413px) {
+  .gridster {
+    height: 86vh !important;
+  }
+}
+
+@media (max-width: 1920px)  {
+  .edit-mode-gridster {
+    height: 75vh !important;
+  }
+}
+
+@media (max-width: 712px) {
+  .edit-mode-gridster {
+    height: 53vh !important;
+  }
+}
+
+@media (max-width: 767px) and (min-width: 713px) {
+  .edit-mode-gridster {
+    height: 68vh !important;
+  }
+}
+
+@media (max-width: 412px) {
+  .edit-mode-gridster {
+    height: 65vh !important;
+  }
 }
 
 ::ng-deep .custom-margin-modal {
