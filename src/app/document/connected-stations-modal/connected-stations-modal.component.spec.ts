@@ -300,10 +300,7 @@ describe('ConnectedStationsModalComponent', () => {
   });
 
   it('should call the service to unassign a user when move a document.', () => {
-    spyOn(
-      TestBed.inject(DocumentService),
-      'moveDocument'
-    ).and.callThrough();
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
 
     const unassignSpy = spyOn(
       TestBed.inject(DocumentService),
@@ -318,12 +315,12 @@ describe('ConnectedStationsModalComponent', () => {
   });
 
   it('should show error message when request for unassigned user fails.', () => {
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
+
     spyOn(
       TestBed.inject(DocumentService),
-      'moveDocument'
-    ).and.callThrough();
-
-    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(
+      'unassignUserToDocument'
+    ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
