@@ -78,7 +78,7 @@ export class UserService {
           this.accessToken = new AccessToken(response.accessToken);
           localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
           localStorage.setItem('user', JSON.stringify(response.user));
-          this.managerCache.delete('');
+          this.managerCache.clear();
           this.userData$.next(response.user);
           return response;
         })
