@@ -1,7 +1,8 @@
 import { Component, Input, ViewChild, OnInit } from '@angular/core';
-
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import {
+  DocumentAnswer,
   FlowLogicRule,
   OperandType,
   OperatorType,
@@ -18,6 +19,7 @@ import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { SelectFieldComponent } from 'src/app/shared/fields/select-field/select-field.component';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  *
@@ -43,6 +45,9 @@ export class ConditionsComponent implements OnInit {
   /** The component date-field to be updated. */
   @ViewChild('selectField', { static: false })
   selectField!: SelectFieldComponent;
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
 
   /** The station id used to get previous fields. */
   @Input() stationRithmId!: string;
@@ -227,7 +232,8 @@ export class ConditionsComponent implements OnInit {
 
   constructor(
     private errorService: ErrorService,
-    private stationService: StationService
+    private stationService: StationService,
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -235,6 +241,7 @@ export class ConditionsComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getStationPreviousQuestions();
+    this.subscribeDocumentAnswers();
   }
 
   /**
@@ -326,6 +333,23 @@ export class ConditionsComponent implements OnInit {
     return secondOperandQuestions;
   }
 
+  /** Listeners functions. */
+
+  /**
+   * Listen the answerSubject from documents.
+   */
+  subscribeDocumentAnswers(): void {
+    //Gets from documentAnswer the value to be set to the second operand
+    this.documentService.documentAnswer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((answer: DocumentAnswer) => {
+        this.secondOperand.text = answer.value;
+        this.secondOperand.value = answer.value;
+        this.secondOperand.questionType = this.firstOperand.questionType;
+        this.switchConditionPreviousFields = true;
+      });
+  }
+
   /**
    * Set operator list for the comparison type and set first operand type.
    *
@@ -345,7 +369,6 @@ export class ConditionsComponent implements OnInit {
     this.firstOperand.text = prompt;
     this.operatorSelected = null;
     this.secondOperand.value = '';
-    this.switchConditionPreviousFields = true;
     this.setOperatorList(questionType);
     if (childIndex < 0) {
       switch (questionSelected.questionType) {
@@ -414,7 +437,6 @@ export class ConditionsComponent implements OnInit {
     this.secondOperandQuestionPrompt = questionSelected.prompt;
     this.secondOperand.questionType = questionSelected.questionType;
     this.secondOperand.text = questionSelected.prompt;
-    this.switchConditionPreviousFields = true;
   }
 
   /**
@@ -474,7 +496,7 @@ export class ConditionsComponent implements OnInit {
         text: this.secondOperand.text,
       },
     };
-    this.resetValues();
+    this.closeForm();
   }
 
   /**
@@ -512,12 +534,7 @@ export class ConditionsComponent implements OnInit {
       value: '',
       text: '',
     };
-    this.secondOperand = {
-      type: OperandType.String,
-      questionType: QuestionFieldType.ShortText,
-      value: '',
-      text: '',
-    };
+    this.resetValuesSecondOperand();
     this.operatorSelected = null;
     this.operatorList = [];
     this.firstOperandQuestionType = QuestionFieldType.ShortText;
@@ -550,5 +567,34 @@ export class ConditionsComponent implements OnInit {
         value: '',
       },
     };
+  }
+
+  /**
+   * Close form add condition.
+   */
+  closeForm(): void {
+    this.resetValues();
+    this.openFormCondition = false;
+  }
+
+  /**
+   * Reset second operand object values.
+   */
+  resetValuesSecondOperand(): void {
+    this.secondOperand = {
+      type: OperandType.String,
+      questionType: QuestionFieldType.ShortText,
+      value: '',
+      text: '',
+    };
+    this.switchConditionPreviousFields = !this.switchConditionPreviousFields;
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

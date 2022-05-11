@@ -1,3 +1,4 @@
+import { DocumentService } from './../../../core/document.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { MockComponent } from 'ng-mocks';
@@ -12,10 +13,19 @@ import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
-import { OperandType, Question, QuestionFieldType } from 'src/models';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockStationService,
+} from 'src/mocks';
+import {
+  OperandType,
+  OperatorType,
+  Question,
+  QuestionFieldType,
+} from 'src/models';
 
-fdescribe('ConditionsComponent', () => {
+describe('ConditionsComponent', () => {
   let component: ConditionsComponent;
   let fixture: ComponentFixture<ConditionsComponent>;
   let selectLoader: HarnessLoader;
@@ -32,6 +42,7 @@ fdescribe('ConditionsComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -241,5 +252,121 @@ fdescribe('ConditionsComponent', () => {
       '#add-condition-form'
     );
     expect(formCondition).toBeTruthy();
+  });
+
+  it('should reset the object second of operand.', () => {
+    const secondOperandEmpty = {
+      type: OperandType.String,
+      questionType: QuestionFieldType.ShortText,
+      value: '',
+      text: '',
+    };
+    component.switchConditionPreviousFields = true;
+    component.secondOperand = {
+      type: OperandType.String,
+      questionType: QuestionFieldType.ShortText,
+      value: 'fake',
+      text: 'fake-example',
+    };
+
+    fixture.detectChanges();
+    component.resetValuesSecondOperand();
+
+    expect(component.secondOperand).toEqual(secondOperandEmpty);
+    expect(component.switchConditionPreviousFields).toBeFalsy();
+  });
+
+  it('should call method to reset ValuesSecondOperand when button is clicked.', () => {
+    component.openFormCondition = true;
+    component.operatorSelected = {
+      text: 'fake-data',
+      value: OperatorType.GreaterThan,
+    };
+    fixture.detectChanges();
+    const spyResetValuesSecondOperand = spyOn(
+      component,
+      'resetValuesSecondOperand'
+    ).and.callThrough();
+    const buttonSwitchCondition = fixture.nativeElement.querySelector(
+      '#button-switch-condition'
+    );
+    expect(buttonSwitchCondition).toBeTruthy();
+    buttonSwitchCondition.click();
+    expect(spyResetValuesSecondOperand).toHaveBeenCalled();
+  });
+
+  it('should display the section of the second operand.', () => {
+    component.openFormCondition = true;
+    component.operatorSelected = {
+      text: 'fake-data',
+      value: OperatorType.GreaterThan,
+    };
+    fixture.detectChanges();
+
+    const secondOperandSection = fixture.nativeElement.querySelector(
+      '#second-operand-section'
+    );
+    expect(secondOperandSection).toBeTruthy();
+  });
+
+  describe('Control buttons condition', () => {
+    it('should disabled button save ', () => {
+      component.openFormCondition = true;
+      component.secondOperand = {
+        type: OperandType.String,
+        questionType: QuestionFieldType.ShortText,
+        value: '',
+        text: '',
+      };
+      fixture.detectChanges();
+      const selectOperatorSelected =
+        fixture.nativeElement.querySelector('#condition-save');
+      expect(selectOperatorSelected).toBeTruthy();
+      expect(selectOperatorSelected.disabled).toBeTrue();
+    });
+    it('should allow to enable the save button when the second section of the operand is not empty.', () => {
+      component.openFormCondition = true;
+      component.secondOperand = {
+        type: OperandType.String,
+        questionType: QuestionFieldType.ShortText,
+        value: 'fake-data',
+        text: 'fake-data',
+      };
+      fixture.detectChanges();
+      const spySetEquationContent = spyOn(
+        component,
+        'setEquationContent'
+      ).and.callThrough();
+      const selectOperatorSelected =
+        fixture.nativeElement.querySelector('#condition-save');
+      expect(selectOperatorSelected).toBeTruthy();
+      expect(selectOperatorSelected.disabled).toBeFalsy();
+      selectOperatorSelected.click();
+      expect(spySetEquationContent).toHaveBeenCalled();
+    });
+    it('should cancel the save of form add condition.', () => {
+      component.openFormCondition = true;
+      const spyCloseForm = spyOn(component, 'closeForm').and.callThrough();
+      const spyResetValues = spyOn(component, 'resetValues').and.callThrough();
+      fixture.detectChanges();
+      const btnConditionCancel =
+        fixture.nativeElement.querySelector('#condition-cancel');
+      expect(btnConditionCancel).toBeTruthy();
+      btnConditionCancel.click();
+      expect(spyCloseForm).toHaveBeenCalled();
+      expect(spyResetValues).toHaveBeenCalled();
+      expect(component.openFormCondition).toBeFalsy();
+    });
+  });
+
+  it('should hide the section of the second operand.', () => {
+    component.openFormCondition = true;
+    component.operatorSelected = null;
+    fixture.detectChanges();
+
+    const secondOperandSection = fixture.nativeElement.querySelector(
+      '#second-operand-section'
+    );
+    expect(secondOperandSection).toBeNull();
   });
 });

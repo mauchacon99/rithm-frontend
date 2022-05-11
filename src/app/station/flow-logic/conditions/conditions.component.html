@@ -64,7 +64,6 @@
             data-testid="operator-selector"
             [disabled]="!firstOperandQuestionRithmId"
             [(value)]="operatorSelected"
-          
             (selectionChange)="resetQuestionFieldComponent()"
           >
             <mat-option
@@ -79,19 +78,22 @@
         </mat-form-field>
       </section>
       <!-- second operand section -->
-      <section class="second-operand-section flex space-x-2">
+      <section
+        class="second-operand-section flex space-x-2"
+        *ngIf="operatorSelected"
+        data-testid="second-operand-section"
+        id="second-operand-section"
+      >
         <section
           class="second-operand-previous-fields w-full flex"
-          *ngIf="switchConditionPreviousFields; else customFields"
+          *ngIf="!switchConditionPreviousFields; else customFields"
         >
           <mat-form-field appearance="outline">
             <mat-label> Previous Fields </mat-label>
             <mat-select
               id="second-operand-selector"
               data-testid="second-operand-selector"
-              [disabled]="
-                !operatorSelected || !secondOperandQuestionList.length
-              "
+              [disabled]="!secondOperandQuestionList.length"
               [(value)]="secondOperand.value"
               (focus)="
                 secondOperandQuestionList.length &&
@@ -113,6 +115,7 @@
         <ng-template #customFields>
           <div
             class="second-operand-custom-fields w-full flex"
+            disabled
             [ngSwitch]="displayOperatorType"
           >
             <app-text-field
@@ -177,10 +180,9 @@
 
         <button
           mat-stroked-button
-          [disabled]="!operatorSelected"
-          (click)="
-            switchConditionPreviousFields = !switchConditionPreviousFields
-          "
+          (click)="resetValuesSecondOperand()"
+          data-testid="button-switch-condition"
+          id="button-switch-condition"
         >
           <i
             class="fa-solid text-accent-500 fa-xl"
@@ -194,15 +196,17 @@
         <button
           mat-button
           data-testid="condition-cancel"
-          (click)="openFormCondition = !openFormCondition"
+          id="condition-cancel"
+          (click)="closeForm()"
         >
           Cancel
         </button>
         <button
           mat-button
           color="accent"
+          id="condition-save"
           data-testid="condition-save"
-          [disabled]="!secondOperand.value || !secondOperandDefaultQuestion"
+          [disabled]="!secondOperand.value"
           (click)="setEquationContent()"
         >
           Save
