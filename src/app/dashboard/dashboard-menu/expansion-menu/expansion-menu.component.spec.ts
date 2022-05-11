@@ -44,6 +44,8 @@ describe('ExpansionMenuComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     },
     {
       rithmId: '123654-789654-7852',
@@ -64,6 +66,8 @@ describe('ExpansionMenuComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     },
   ];
 

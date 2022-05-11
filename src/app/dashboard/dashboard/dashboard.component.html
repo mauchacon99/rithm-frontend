@@ -70,7 +70,10 @@
             {{ dashboardData.name }}
           </h2>
           <button
-          *ngIf="dashboardData.isEditable"
+            *ngIf="
+              dashboardData.type === roleDashboardMenu.Company ||
+              (isAdmin && dashboardData.isEditable)
+            "
             mat-icon-button
             id="menu-edit-button"
             data-testid="menu-edit-button"

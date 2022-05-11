@@ -71,6 +71,8 @@ describe('DashboardComponent', () => {
         maxItemRows: 12,
       },
     ],
+    isEditable: true,
+    canView: false,
   };
 
   beforeEach(async () => {
@@ -98,6 +100,7 @@ describe('DashboardComponent', () => {
         { provide: ElementRef, useValue: MockService(ElementRef) },
         { provide: MobileBrowserChecker, useClass: MobileBrowserChecker },
       ],
+
       imports: [
         MatSidenavModule,
         NoopAnimationsModule,
@@ -185,6 +188,8 @@ describe('DashboardComponent', () => {
       name: 'update Dashboard',
       widgets: [],
       type: RoleDashboardMenu.Personal,
+      isEditable: false,
+      canView: false,
     };
     const spyMethodUpdateDashboard = spyOn(
       component,
@@ -215,6 +220,8 @@ describe('DashboardComponent', () => {
       name: 'update Dashboard',
       widgets: [],
       type: RoleDashboardMenu.Company,
+      isEditable: false,
+      canView: false,
     };
     const spyMethodUpdateDashboard = spyOn(
       component,
@@ -343,6 +350,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     fixture.detectChanges();
     const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
@@ -526,6 +535,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     let renderer: Renderer2;
 
@@ -650,6 +661,8 @@ describe('DashboardComponent', () => {
         },
       ],
       type: RoleDashboardMenu.Company,
+      isEditable: false,
+      canView: false,
     };
 
     component.dashboardData = dashboardData;
@@ -713,6 +726,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     fixture.detectChanges();
 
@@ -846,5 +861,36 @@ describe('DashboardComponent', () => {
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(1920);
     expect(spyChangeGridster).toHaveBeenCalled();
+  });
+
+  it('should show editMode button if the dashboard is company', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Company;
+    fixture.detectChanges();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeTruthy();
+  });
+
+  it('should hidden editMode button if the dashboard is personal and the user not is admin', () => {
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    spyOnProperty(component, 'isAdmin').and.returnValue(false);
+    fixture.detectChanges();
+    const btnSave = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(btnSave).toBeNull();
+  });
+
+  it('should hidden editMode button if the dashboard is personal and the user is admin and dashboard is editable', () => {
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    fixture.detectChanges();
+    const btnSave = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(btnSave).toBeTruthy();
   });
 });
