@@ -110,6 +110,18 @@ export class UploadFileModalComponent implements OnInit {
   }
 
   /**
+   * Gets the details of dragged file.
+   *
+   * @param event List of files dragged into file drop zone.
+   */
+  onFilesDragged(event: FileList): void {
+    this.file = event[0];
+    if (this.file) {
+      this.updateFieldAnswer();
+    }
+  }
+
+  /**
    * Save uploaded file.
    */
   saveData(): void {
