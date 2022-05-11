@@ -25,6 +25,8 @@
         </div>
       </div>
       <app-options-menu
+        id="options"
+        *ngIf="isAdmin || dashboardRole === roleDashboardMenu.Personal"
         [isManageMember]="isManageMember"
         [dashboardRole]="dashboardRole"
         [isDashboardListOptions]="true"
