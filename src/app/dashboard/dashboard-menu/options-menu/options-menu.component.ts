@@ -72,6 +72,9 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Mark dashboard as default. */
   selectedDefaultDashboard = false;
 
+  /** If user is an admin. */
+  isAdmin = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
@@ -87,6 +90,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.isAdmin = this.user.isAdmin;
     this.getParams();
     this.detectDefaultDashboard$();
   }
@@ -278,9 +282,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     this.selectedDefaultDashboard =
       (defaultDashboard === this.paramRithmId &&
         defaultDashboard === this.rithmId) ||
-      this.rithmId === this.user.user.defaultDashboardId
-        ? true
-        : false;
+      this.rithmId === this.user.user.defaultDashboardId;
 
     this.markDefaultDashboard.emit(this.selectedDefaultDashboard);
   }
