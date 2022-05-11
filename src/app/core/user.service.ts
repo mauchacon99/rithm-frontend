@@ -75,7 +75,7 @@ export class UserService {
       )
       .pipe(
         map((response) => {
-          this.managerCache.clear();
+          this.invalidateCacheBucket();
           this.accessToken = new AccessToken(response.accessToken);
           localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
           localStorage.setItem('user', JSON.stringify(response.user));
@@ -89,11 +89,19 @@ export class UserService {
    * Signs the user out of the system and clears stored data.
    */
   signOut(): void {
+    this.invalidateCacheBucket();
     this.accessToken = undefined;
     this.cookieService.deleteAll();
     localStorage.clear();
     sessionStorage.clear();
     this.router.navigateByUrl('');
+  }
+
+  /**
+   * It clears the cache of all the managers.
+   */
+  invalidateCacheBucket(): void {
+    this.managerCache.clear();
   }
 
   /**

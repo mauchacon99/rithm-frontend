@@ -776,7 +776,7 @@ export class DocumentService {
   async uploadImageUser(file: File): Promise<Observable<string>> {
     const configCompressImage: OptionsCompressFile = {
       maxSizeMB: 0.02,
-      maxWidthOrHeight: 1920,
+      maxWidthOrHeight: 1024,
     };
     const formData = new FormData();
     const compressImage = await this.compressImage(file, configCompressImage);

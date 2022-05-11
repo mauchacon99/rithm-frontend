@@ -6,10 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './token.interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { DialogModule } from '../shared/dialog/dialog.module';
-import {
-  HttpCacheInterceptorModule,
-  //useHttpCacheLocalStorage,
-} from '@ngneat/cashew';
+import { HttpCacheInterceptorModule } from '@ngneat/cashew';
 
 @NgModule({
   declarations: [],
@@ -22,8 +19,6 @@ import {
     DialogModule,
   ],
   providers: [
-    // REMOVE OR NOT FOR SAVE DATA IN LOCAL STORAGE.
-    //useHttpCacheLocalStorage,
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,
