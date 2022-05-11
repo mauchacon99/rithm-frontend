@@ -131,11 +131,17 @@ export class StationFieldComponent
         this.addOption(this.field.questionType);
       }
     }
+    const isDisabled =
+      this.field.isReadOnly &&
+      this.stationRithmId !== this.field.originalStationRithmId;
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
       [this.field.questionType]: [''],
       optionField: [''],
-      [`isRequired-${this.field.rithmId}`]: [this.field.isRequired],
+      [`isRequired-${this.field.rithmId}`]: {
+        disabled: isDisabled,
+        readonly: this.field.isReadOnly,
+      },
       [`isPrivate-${this.field.rithmId}`]: [this.field.isPrivate],
       [`isReadonly-${this.field.rithmId}`]: [this.field.isReadOnly],
     });
@@ -152,6 +158,22 @@ export class StationFieldComponent
    * @returns The Label tag for each additional field.
    */
   get labelTag(): string {
+    const label =
+      this.field.questionType === this.fieldType.Select
+        ? 'Add Option'
+        : this.field.questionType === this.fieldType.MultiSelect ||
+          this.field.questionType === this.fieldType.CheckList
+        ? 'Add Item'
+        : 'Name your field';
+    return label;
+  }
+
+  /**
+   * Returns the correct label tag.
+   *
+   * @returns The Label tag for each additional field.
+   */
+  get disable(): string {
     const label =
       this.field.questionType === this.fieldType.Select
         ? 'Add Option'

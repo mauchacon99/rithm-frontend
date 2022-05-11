@@ -143,10 +143,6 @@
           <mat-checkbox
             [name]="field.rithmId"
             [formControlName]="'isRequired-' + field.rithmId"
-            [disabled]="
-              field.isReadOnly &&
-              stationRithmId !== field.originalStationRithmId
-            "
             [checked]="field.isRequired"
             (change)="setRequired($event)"
           >
