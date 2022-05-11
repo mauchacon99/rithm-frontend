@@ -47,7 +47,6 @@ export class LocationModalComponent implements OnInit {
   ) {
     this.stationRithmId = data.stationRithmId;
     this.documentRithmId = data.documentRithmId;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   /**
