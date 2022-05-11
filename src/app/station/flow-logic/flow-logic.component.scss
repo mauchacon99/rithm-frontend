@@ -16,6 +16,12 @@
   }
 }
 
+.tabs-flow-container {
+  ::ng-deep .mat-tab-header {
+    border-bottom: 0;
+  }
+}
+
 .rules-tab-content {
   @apply flex h-full flex-wrap sm:flex-nowrap;
 
@@ -58,12 +64,6 @@
         }
       }
     }
-  }
-}
-
-.tabs-flow-container ::ng-deep {
-  .mat-tab-header {
-    border-bottom: 0;
   }
 }
 
