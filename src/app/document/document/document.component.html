@@ -73,7 +73,11 @@
             <app-document-info-header
               (sendNewUserAssigned)="setNewAssignedUser($event)"
               [isWidget]="isWidget"
-              (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
+              (isReloadListDocuments)="
+                widgetReloadListDocuments(false, $event, [
+                  'rithmIdTempOnlySaveUser'
+                ])
+              "
               [documentInformation]="documentInformation"
               [viewNewStation]="false"
             ></app-document-info-header>
@@ -330,7 +334,11 @@
             <app-document-info-header
               (sendNewUserAssigned)="setNewAssignedUser($event)"
               [isWidget]="isWidget"
-              (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
+              (isReloadListDocuments)="
+                widgetReloadListDocuments(false, $event, [
+                  'rithmIdTempOnlySaveUser'
+                ])
+              "
               [documentInformation]="documentInformation"
               [viewNewStation]="false"
             ></app-document-info-header>
