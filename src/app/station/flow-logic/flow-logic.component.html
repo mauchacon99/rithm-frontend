@@ -389,38 +389,107 @@
             Add Trigger
           </button>
         </div>
-        <div
-          class="flex items-start flex-col px-8 py-5"
+
+        <form
+          class="shedule-content-section"
           *ngIf="scheduleTrigger"
+          [formGroup]="scheduleTriggerForm"
         >
-          <mat-form-field class="md:w-2/4 w-full" appearance="outline">
-            <mat-label>Trigger Type</mat-label>
-            <mat-select formControlName="scheduleTriggerType">
-              <mat-option
-                *ngFor="let option of scheduleTriggerOptions | keyvalue"
-                [value]="option.value"
+          <section class="trigger-type-section">
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Trigger Type</mat-label>
+              <mat-select
+                formControlName="scheduleTriggerType"
+                (selectionChange)="triggerTypeSelect()"
               >
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div class="flex flex-row">
+                <mat-option
+                  *ngFor="let option of scheduleTriggerOptions | keyvalue"
+                  [value]="option.value"
+                >
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </section>
+
+          <section
+            class="trigger-interval-time-section"
+            *ngIf="showDateTimeZone"
+          >
+            <section class="trigger-datepicker-section">
+              <mat-form-field
+                class="w-full"
+                color="accent"
+                appearance="outline"
+              >
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </section>
+
+            <section class="trigger-time-section">
+              <mat-form-field appearance="outline">
+                <input matInput value="11" />
+              </mat-form-field>
+              <span>:</span>
+              <mat-form-field appearance="outline">
+                <input matInput value="00" />
+              </mat-form-field>
+              <mat-button-toggle-group
+                appearance="legacy"
+                name="actionButtons"
+                aria-label="Action buttons"
+                value="0"
+                [vertical]="true"
+                color="accent"
+              >
+                <mat-button-toggle
+                  value="0"
+                  data-testid="toggle-button-am"
+                  id="toggle-button-am"
+                  >AM
+                </mat-button-toggle>
+                <mat-button-toggle
+                  value="1"
+                  data-testid="toggle-button-pm"
+                  id="toggle-button-pm"
+                  >PM
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Time Zone</mat-label>
+                <mat-select>
+                  <mat-option></mat-option>
+                </mat-select>
+              </mat-form-field>
+            </section>
+          </section>
+
+          <section class="schedule-control-buttons flex space-x-2">
             <button
-              mat-flat-button
+              mat-button
               data-testid="button-schedule-cancel"
+              id="button-schedule-cancel"
               (click)="scheduleTrigger = !scheduleTrigger"
             >
               Cancel
             </button>
             <button
-              mat-flat-button
-              data-testid="button-schedule-cancel"
+              mat-button
+              data-testid="button-schedule-Save"
+              id="button-schedule-Save"
+              color="accent"
               [disabled]
             >
               Save
             </button>
-          </div>
-        </div>
+          </section>
+        </form>
       </section>
       <section
         *ngIf="ruleSelectedMenu === 'rules'"
