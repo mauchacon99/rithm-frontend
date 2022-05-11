@@ -71,8 +71,9 @@
           </h2>
           <button
             *ngIf="
-              dashboardData.type === roleDashboardMenu.Company ||
-              (isAdmin && dashboardData.isEditable)
+              (dashboardData.type === roleDashboardMenu.Company && isAdmin) ||
+              (dashboardData.type === roleDashboardMenu.Personal &&
+                dashboardData.isEditable)
             "
             mat-icon-button
             id="menu-edit-button"

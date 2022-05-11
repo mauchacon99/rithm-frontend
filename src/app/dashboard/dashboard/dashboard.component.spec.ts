@@ -688,6 +688,8 @@ describe('DashboardComponent', () => {
   });
 
   it('should get queryParam edit and toggleEditMode', fakeAsync(() => {
+    component.dashboardData.type = RoleDashboardMenu.Company;
+    fixture.detectChanges();
     TestBed.inject(Router).navigate(
       ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
       {
@@ -869,6 +871,7 @@ describe('DashboardComponent', () => {
     component.isCreateNewDashboard = false;
     component.errorLoadingDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Company;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
     fixture.detectChanges();
     const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
     expect(editMode).toBeTruthy();
@@ -877,7 +880,9 @@ describe('DashboardComponent', () => {
   it('should hidden editMode button if the dashboard is personal and the user not is admin', () => {
     component.isLoading = false;
     component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData.isEditable = false;
     spyOnProperty(component, 'isAdmin').and.returnValue(false);
     fixture.detectChanges();
     const btnSave = fixture.nativeElement.querySelector('#menu-edit-button');
@@ -888,6 +893,7 @@ describe('DashboardComponent', () => {
     component.isLoading = false;
     component.isCreateNewDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData.isEditable = true;
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
     fixture.detectChanges();
     const btnSave = fixture.nativeElement.querySelector('#menu-edit-button');
