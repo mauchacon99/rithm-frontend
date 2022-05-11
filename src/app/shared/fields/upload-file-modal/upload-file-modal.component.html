@@ -8,10 +8,14 @@
     <div class="w-full pb-4 pt-6">
       <div class="flex justify-start w-full h-56">
         <section
+          appDragAndDropZone
+          (fileDropped)="onFilesDragged($event)"
           *ngIf="!isLoading && !fileUpload"
-          class="flex flex-col w-full h-full border-dashed border-2 border-secondary-200 hover:bg-secondary-50 hover:border-secondary-300"
+          class="flex flex-col w-full h-full"
         >
-          <div class="flex flex-col items-center justify-center pt-7">
+          <div
+            class="flex flex-col items-center justify-center placeholder-opacity-70 h-full"
+          >
             <span
               class="fa-2xl mt-6 my-8 fa-solid fa-arrow-up-from-bracket fa-xl text-accent-800"
             ></span>

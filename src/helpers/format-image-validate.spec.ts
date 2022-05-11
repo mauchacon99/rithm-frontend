@@ -10,6 +10,5 @@ describe('Format validate', () => {
     expect(FormatImageValidate.isValidFormatImage('jpeg')).toBeTrue();
     expect(FormatImageValidate.isValidFormatImage('jpg')).toBeTrue();
     expect(FormatImageValidate.isValidFormatImage('png')).toBeTrue();
-    expect(FormatImageValidate.isValidFormatImage('gif')).toBeTrue();
   });
 });

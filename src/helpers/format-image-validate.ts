@@ -12,8 +12,7 @@ export class FormatImageValidate {
     return !!(
       extension === 'jpeg' ||
       extension === 'jpg' ||
-      extension === 'png' ||
-      extension === 'gif'
+      extension === 'png'
     );
   }
 }

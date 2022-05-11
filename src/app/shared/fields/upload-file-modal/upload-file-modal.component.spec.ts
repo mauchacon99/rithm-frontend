@@ -20,7 +20,7 @@ describe('UploadFileModalComponent', () => {
       providers: [
         { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: DocumentService, useValue: MockDocumentService },
+        { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useValue: MockErrorService },
         { provide: PopupService, useValue: MockPopupService },
       ],
@@ -57,5 +57,24 @@ describe('UploadFileModalComponent', () => {
     btnClose.click();
     expect(spyMethod).toHaveBeenCalled();
     expect(spyMatDialogRef).toHaveBeenCalled();
+  });
+
+  it('should upload the file once any file is dragged', () => {
+    const mockFile = [
+      {
+        lastModified: '1649560275133',
+        lastModifiedDate: new Date(0),
+        name: 'MyFile.png',
+        size: 46565,
+        type: 'image/png',
+        webkitRelativePath: '',
+        item: '',
+      },
+    ] as unknown;
+    const spyUpdateField = spyOn(component, 'updateFieldAnswer');
+    const files = mockFile as FileList;
+    component.onFilesDragged(mockFile as FileList);
+    expect(component.file).toBe(files[0]);
+    expect(spyUpdateField).toHaveBeenCalled();
   });
 });
