@@ -75,10 +75,10 @@ export class UserService {
       )
       .pipe(
         map((response) => {
+          this.managerCache.clear();
           this.accessToken = new AccessToken(response.accessToken);
           localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
           localStorage.setItem('user', JSON.stringify(response.user));
-          this.managerCache.clear();
           this.userData$.next(response.user);
           return response;
         })
