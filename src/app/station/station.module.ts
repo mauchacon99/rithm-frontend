@@ -53,6 +53,7 @@ import { ContainerActionsComponent } from './flow-logic/actions/container-action
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     MatAutocompleteModule,
     MatChipsModule,
     NgxMatSelectSearchModule,
+    MatMenuModule
   ],
 })
 export class StationModule {}
