@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpCacheManager } from '@ngneat/cashew';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -32,7 +33,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private managerCache: HttpCacheManager
   ) {}
 
   /**
@@ -76,6 +78,7 @@ export class UserService {
           this.accessToken = new AccessToken(response.accessToken);
           localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
           localStorage.setItem('user', JSON.stringify(response.user));
+          this.managerCache.delete('');
           this.userData$.next(response.user);
           return response;
         })

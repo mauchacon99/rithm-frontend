@@ -46,6 +46,7 @@ import {
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import imageCompression from 'browser-image-compression';
+import { CacheBucket, withCache } from '@ngneat/cashew';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
@@ -57,6 +58,9 @@ const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
   providedIn: 'root',
 })
 export class DocumentService {
+  /** Bucket contain avatars. */
+  avatarsBucket = new CacheBucket();
+
   /** The Name of the Document as BehaviorSubject. */
   documentName$ = new BehaviorSubject<DocumentName>({
     baseName: '',
@@ -818,6 +822,9 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
       {
         params,
+        context: withCache({
+          bucket: this.avatarsBucket,
+        }),
       }
     );
   }
