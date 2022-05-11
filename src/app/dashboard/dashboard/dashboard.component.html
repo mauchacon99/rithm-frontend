@@ -71,7 +71,9 @@
           </h2>
           <button
             *ngIf="
-              (dashboardData.type === roleDashboardMenu.Company && isAdmin) ||
+              (dashboardData.type === roleDashboardMenu.Company &&
+                isAdmin &&
+                dashboardData.isEditable) ||
               (dashboardData.type === roleDashboardMenu.Personal &&
                 dashboardData.isEditable)
             "

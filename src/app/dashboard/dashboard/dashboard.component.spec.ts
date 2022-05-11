@@ -688,8 +688,9 @@ describe('DashboardComponent', () => {
   });
 
   it('should get queryParam edit and toggleEditMode', fakeAsync(() => {
-    component.dashboardData.type = RoleDashboardMenu.Company;
+    component.dashboardData.isEditable = true;
     fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
     TestBed.inject(Router).navigate(
       ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
       {
@@ -865,38 +866,84 @@ describe('DashboardComponent', () => {
     expect(spyChangeGridster).toHaveBeenCalled();
   });
 
-  it('should show editMode button if the dashboard is company', () => {
+  it('should show editMode button when user=admin and isEditable=true and type=Company', () => {
     component.editMode = false;
     component.isLoading = false;
     component.isCreateNewDashboard = false;
     component.errorLoadingDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Company;
+    component.dashboardData.isEditable = true;
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
     fixture.detectChanges();
     const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
     expect(editMode).toBeTruthy();
   });
 
-  it('should hidden editMode button if the dashboard is personal and the user not is admin', () => {
+  it('should show editMode button when user=admin and isEditable=true and type=personal', () => {
+    component.editMode = false;
     component.isLoading = false;
     component.isCreateNewDashboard = false;
     component.errorLoadingDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Personal;
-    component.dashboardData.isEditable = false;
-    spyOnProperty(component, 'isAdmin').and.returnValue(false);
-    fixture.detectChanges();
-    const btnSave = fixture.nativeElement.querySelector('#menu-edit-button');
-    expect(btnSave).toBeNull();
-  });
-
-  it('should hidden editMode button if the dashboard is personal and the user is admin and dashboard is editable', () => {
-    component.isLoading = false;
-    component.isCreateNewDashboard = false;
-    component.dashboardData.type = RoleDashboardMenu.Personal;
     component.dashboardData.isEditable = true;
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
     fixture.detectChanges();
-    const btnSave = fixture.nativeElement.querySelector('#menu-edit-button');
-    expect(btnSave).toBeTruthy();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeTruthy();
   });
+
+  it('should hidden editMode button when user=admin and isEditable=false', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Company;
+    component.dashboardData.isEditable = false;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    fixture.detectChanges();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeNull();
+  });
+
+  it('should validate getQueryParams when user=admin and isEditable=true', fakeAsync(() => {
+    component.dashboardData.type = RoleDashboardMenu.Company;
+    component.dashboardData.isEditable = true;
+    fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
+    component['getQueryParams']();
+    expect(component.editMode).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
+  }));
+
+  it('should validate getQueryParams when user=!admin and isEditable=true and type=personal', fakeAsync(() => {
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData.isEditable = true;
+    fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(false);
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
+    component['getQueryParams']();
+    expect(component.editMode).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
+  }));
 });
