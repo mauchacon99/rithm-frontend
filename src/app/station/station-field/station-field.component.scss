@@ -5,3 +5,11 @@ button {
     }
   }
 }
+
+.station-file-component {
+  @apply mb-2;
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
