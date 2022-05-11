@@ -39,11 +39,13 @@ import {
   FrameType,
   ContainerWidgetPreBuilt,
   DocumentCurrentStation,
-  TriggerType,
   Power,
+  TriggerType,
   ActionType,
+  OptionsCompressFile,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
+import imageCompression from 'browser-image-compression';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
@@ -767,16 +769,40 @@ export class DocumentService {
    * @param file File to upload.
    * @returns Id of image uploaded.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  uploadImageUser(file: File): Observable<string> {
+  async uploadImageUser(file: File): Promise<Observable<string>> {
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1920,
+    };
     const formData = new FormData();
-    formData.append('image', file);
+    const compressImage = await this.compressImage(file, configCompressImage);
+    formData.append('image', compressImage);
+
     return this.http
       .post<StandardStringJSON>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
         formData
       )
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * It takes a file and an options object as parameters, and returns a compressed file.
+   *
+   * @param file - File - The file to be compressed.
+   * @param options - OptionsCompressFile.
+   * @returns A promise that resolves to a compressed file.
+   */
+  compressImage(file: File, options: OptionsCompressFile): Promise<File> {
+    return imageCompression(file, options)
+      .then((compressedFile) => {
+        return new File([compressedFile], file.name, {
+          type: file.type,
+        });
+      })
+      .catch(() => {
+        return file;
+      });
   }
 
   /**
@@ -809,6 +835,61 @@ export class DocumentService {
           new HttpErrorResponse({
             error: {
               error: 'Cannot retrive the powers of current station.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationPowers: Power[] = [
+        {
+          rithmId: '3j4k-3h2j-hj4j',
+          triggers: [
+            {
+              rithmId: '3j4k-3h2j-hj5h',
+              type: TriggerType.ManualFlow,
+              source: 'Source Trigger #1',
+              value: 'Value Trigger #1',
+            },
+          ],
+          actions: [
+            {
+              rithmId: '3j4k-3h2j-ft5h',
+              type: ActionType.CreateDocument,
+              target: 'Target Action #1',
+              data: 'Data Action #1',
+              resultMapping: 'Result Action #1',
+              header: 'Header Action #1',
+            },
+          ],
+          stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          flowToStationRithmIds: [
+            '73d47261-1932-4fcf-82bd-159eb1a72422',
+            '73d47261-1932-4fcf-82bd-159eb1a7242g',
+          ],
+          name: 'Power Test #1',
+          condition: 'Condition Test #1',
+        },
+      ];
+      return of(stationPowers).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Delete powers from the stations.
+   *
+   * @param powerRithmId Specific id of the power.
+   * @param stationRithmId Specific id of the station where the power will be removed.
+   * @returns A object.
+   */
+  deleteStationPowers(
+    powerRithmId: string,
+    stationRithmId: string
+  ): Observable<unknown> {
+    if (!powerRithmId || !stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot delete the powers of current station.',
             },
           })
       ).pipe(delay(1000));
