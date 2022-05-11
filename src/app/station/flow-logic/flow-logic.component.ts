@@ -75,7 +75,7 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   scheduleTrigger = false;
 
   /** The different options for the schedule trigger type. */
-  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+  readonly scheduleTriggerOptions = ['Container Check', 'Date Interval'];
 
   /** The powers of current station. */
   stationPowers: Power[] = [];
@@ -462,7 +462,7 @@ export class FlowLogicComponent implements OnInit, OnChanges {
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        next: () => { },
+        next: () => {},
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
