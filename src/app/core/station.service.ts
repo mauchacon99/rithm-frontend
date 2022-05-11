@@ -26,6 +26,7 @@ import {
   StationWidgetPreBuilt,
 } from 'src/models';
 import { StationGroupData } from 'src/models/station-group-data';
+import { StationOptimized } from 'src/models/station-optimized';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 const MICROSERVICE_PATH_STATION_GROUP = '/stationservice/api/stationGroup';
@@ -1008,6 +1009,17 @@ export class StationService {
     return this.http.get<StationRosterMember[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/all-roster`,
       { params }
+    );
+  }
+
+  /**
+   * Gets all the stations of way optimized.
+   *
+   * @returns An list with all stations.
+   */
+   getAllStationsOptimized(): Observable<StationOptimized[]> {
+    return this.http.get<StationOptimized[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`
     );
   }
 }
