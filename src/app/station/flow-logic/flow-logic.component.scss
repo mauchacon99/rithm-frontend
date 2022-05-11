@@ -61,8 +61,8 @@
   }
 }
 
-.tabs-flow-container {
-  ::ng-deep .mat-tab-header {
+.tabs-flow-container ::ng-deep {
+  .mat-tab-header {
     border-bottom: 0;
   }
 }
