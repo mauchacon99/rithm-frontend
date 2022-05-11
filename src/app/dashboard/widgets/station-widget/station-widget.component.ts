@@ -138,7 +138,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         if (
           this.documentIdSelected === value.documentFlow &&
           this.isDocument &&
-          !value.stationFlow.includes('rithmIdTempOnlySave')
+          !value.stationFlow.includes('rithmIdTempOnlySave') &&
+          !value.stationFlow.includes('rithmIdTempOnlySaveUser')
         ) {
           this.viewDocument('', true);
         }
@@ -147,7 +148,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.reloadDocumentList = true;
         }
         // If there are no documents opened.
-        else {
+        else if (!value.stationFlow.includes('rithmIdTempOnlySaveUser')) {
+          this.getStationWidgetDocuments();
+        }
+        // If the document has assigned new user.
+        else if (
+          value.stationFlow.includes('rithmIdTempOnlySaveUser') &&
+          this.columnsAllField.some(
+            (column) => column.name === this.columnsDocumentInfo.AssignedUser
+          )
+        ) {
           this.getStationWidgetDocuments();
         }
       }

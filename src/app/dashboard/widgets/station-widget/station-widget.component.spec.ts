@@ -981,6 +981,26 @@ describe('StationWidgetComponent', () => {
     expect(component.reloadDocumentList).toBeTrue();
   });
 
+  it('should call getStationWidgetDocuments when stationFlow change and assign new user', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.columnsAllField = [
+      {
+        name: ColumnsDocumentInfo.AssignedUser,
+      },
+    ];
+    component.isDocument = false;
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['rithmIdTempOnlySaveUser'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
   it("should catch error when user don't have permissions", () => {
     spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
       throwError(() => {
