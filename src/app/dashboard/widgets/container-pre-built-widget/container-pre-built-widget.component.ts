@@ -68,7 +68,8 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
       if (
         this.containers.some(
           ({ documentRithmId }) => documentRithmId === value.documentFlow
-        )
+        ) ||
+        value.stationFlow.includes('rithmIdTempOnlySaveUser')
       ) {
         // If document flowed or saved it's open, and it's the same
         if (
