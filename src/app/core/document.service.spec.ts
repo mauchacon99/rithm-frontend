@@ -1113,6 +1113,12 @@ describe('DocumentService', () => {
       type: 'image/jpeg',
     });
     const formData = new FormData();
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1024,
+    };
+
+    const spyCompress = spyOn(service, 'compressImage').and.callThrough();
     formData.append('image', file);
     (await service.uploadImageUser(file)).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
@@ -1123,6 +1129,7 @@ describe('DocumentService', () => {
     );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(formData);
+    expect(spyCompress).toHaveBeenCalledWith(file, configCompressImage);
 
     req.flush(expectedResponse);
     httpTestingController.verify();
@@ -1267,10 +1274,11 @@ describe('DocumentService', () => {
         expect(response).toEqual(powerRemove);
       });
   });
+
   it('should send file compressImage', async () => {
     const configCompressImage: OptionsCompressFile = {
       maxSizeMB: 0.02,
-      maxWidthOrHeight: 1920,
+      maxWidthOrHeight: 1024,
     };
     const file = new File(new Array<Blob>(), 'image', {
       type: 'image/jpeg',

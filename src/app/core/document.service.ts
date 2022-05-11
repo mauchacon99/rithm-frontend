@@ -797,7 +797,7 @@ export class DocumentService {
    * @param options - OptionsCompressFile.
    * @returns A promise that resolves to a compressed file.
    */
-  compressImage(file: File, options: OptionsCompressFile): Promise<File> {
+  async compressImage(file: File, options: OptionsCompressFile): Promise<File> {
     return imageCompression(file, options)
       .then((compressedFile) => {
         return new File([compressedFile], file.name, {
