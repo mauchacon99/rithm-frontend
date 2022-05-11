@@ -388,4 +388,29 @@ describe('ExpansionMenuComponent', () => {
     component.markDefaultDashboard(true, 2);
     expect(component.indexDefaultDashboard).toBe(2);
   });
+
+  it('Should hidden options in company if not is admin', () => {
+    component.isAdmin = false;
+    fixture.detectChanges();
+    const options =
+      fixture.debugElement.nativeElement.querySelector('#options');
+    expect(options).toBeNull();
+  });
+
+  it('Should show options in company just if admin', () => {
+    component.isAdmin = true;
+    fixture.detectChanges();
+    const options =
+      fixture.debugElement.nativeElement.querySelector('#options');
+    expect(options).toBeTruthy();
+  });
+
+  it('Should show options in personal', () => {
+    component.dashboardRole = RoleDashboardMenu.Personal;
+    component.isAdmin = false;
+    fixture.detectChanges();
+    const options =
+      fixture.debugElement.nativeElement.querySelector('#options');
+    expect(options).toBeTruthy();
+  });
 });
