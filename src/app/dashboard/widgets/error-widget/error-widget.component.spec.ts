@@ -22,7 +22,8 @@ describe('ErrorWidgetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit ', () => {
+  it('should emit try again', () => {
+    component.permission = true;
     const emit = spyOn(component.tryAgain, 'emit');
     const reloadRequest = spyOn(component, 'reloadRequest').and.callThrough();
     fixture.detectChanges();
