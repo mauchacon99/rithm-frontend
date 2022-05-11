@@ -8,6 +8,7 @@
   *ngIf="errorStationPrebuilt"
   id="error-load-widget-station-pre-built"
   [errorMessage]="'Unable to retrieve stations data'"
+  [permission]="permissionError"
   (tryAgain)="getStationWidgetPreBuiltData()"
 >
 </app-error-widget>

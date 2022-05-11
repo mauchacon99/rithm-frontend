@@ -349,8 +349,7 @@ export class StationComponent
   ngOnInit(): void {
     this.getTreatment();
     this.sidenavDrawerService.setDrawer(this.drawer);
-    this.getParams();
-    this.getPreviousAndNextStations();
+
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -399,6 +398,8 @@ export class StationComponent
       next: () => {
         this.viewNewStation =
           this.splitService.getStationDocumentTreatment() === 'on';
+        this.getParams();
+        this.getPreviousAndNextStations();
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -465,7 +466,7 @@ export class StationComponent
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.params.pipe(first()).subscribe({
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         if (!params.stationId) {
           this.handleInvalidParams();
@@ -522,13 +523,12 @@ export class StationComponent
             this.stationForm.controls.generalInstructions.setValue(
               stationInfo.instructions
             );
-            // this.inputFrameWidgetItems[0].questions =
-            //   this.stationInformation.questions;
-            /** Update the current station questions whenever it changes. */
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
             );
-            this.getStationWidgets();
+            if (this.viewNewStation) {
+              this.getStationWidgets();
+            }
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';

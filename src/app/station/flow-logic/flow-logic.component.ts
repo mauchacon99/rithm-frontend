@@ -41,7 +41,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Schedule trigger type form. */
-  scheduleTriggerField: FormGroup;
+  scheduleTriggerForm: FormGroup;
 
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
@@ -84,10 +84,13 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   scheduleTrigger = false;
 
   /** The different options for the schedule trigger type. */
-  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+  readonly scheduleTriggerOptions = ['Container Check', 'Date Interval'];
 
   /** The powers of current station. */
   stationPowers: Power[] = [];
+
+  /** The date and time zone shown, if true. */
+  showDateTimeZone = false;
 
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
@@ -115,8 +118,8 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
     private splitService: SplitService,
     private stationService: StationService
   ) {
-    this.scheduleTriggerField = this.fb.group({
-      scheduleTriggerType: '',
+    this.scheduleTriggerForm = this.fb.group({
+      scheduleTriggerType: this.fb.control(''),
     });
   }
 
@@ -456,6 +459,41 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
         },
         error: (error: unknown) => {
           this.powersLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   *
+   */
+  triggerTypeSelect(): void {
+    const selectedTriggerType =
+      this.scheduleTriggerForm.controls.scheduleTriggerType.value;
+    if (selectedTriggerType === 'Date Interval') {
+      this.showDateTimeZone = true;
+    } else {
+      this.showDateTimeZone = false;
+    }
+  }
+
+  /**
+   * Delete the power of current station.
+   *
+   * @param powerRemove The power that will be removed.
+   */
+  deleteStationPowers(powerRemove: Power): void {
+    this.documentService
+      .deleteStationPowers(powerRemove.rithmId, this.rithmId)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

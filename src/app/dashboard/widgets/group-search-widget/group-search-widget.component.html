@@ -8,6 +8,7 @@
   *ngIf="errorStationGroup"
   id="error-load-widget-station-group"
   [errorMessage]="'Unable to retrieve group data'"
+  [permission]="permissionError"
   (tryAgain)="getStationGroups()"
 >
 </app-error-widget>
@@ -119,7 +120,7 @@
     </div>
 
     <ng-template #stationGroupsEmpty>
-      <div id="station-group-empty" class="text-sm text-center">
+      <div id="station-group-empty" class="text-sm pt-4 text-center">
         No stations or sub groups found in this group.
       </div>
     </ng-template>

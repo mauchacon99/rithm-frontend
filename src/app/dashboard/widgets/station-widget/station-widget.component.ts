@@ -32,6 +32,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -137,7 +138,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         if (
           this.documentIdSelected === value.documentFlow &&
           this.isDocument &&
-          !value.stationFlow.includes('rithmIdTempOnlySave')
+          !value.stationFlow.includes('rithmIdTempOnlySave') &&
+          !value.stationFlow.includes('rithmIdTempOnlySaveUser')
         ) {
           this.viewDocument('', true);
         }
@@ -146,7 +148,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.reloadDocumentList = true;
         }
         // If there are no documents opened.
-        else {
+        else if (!value.stationFlow.includes('rithmIdTempOnlySaveUser')) {
+          this.getStationWidgetDocuments();
+        }
+        // If the document has assigned new user.
+        else if (
+          value.stationFlow.includes('rithmIdTempOnlySaveUser') &&
+          this.columnsAllField.some(
+            (column) => column.name === this.columnsDocumentInfo.AssignedUser
+          )
+        ) {
           this.getStationWidgetDocuments();
         }
       }
@@ -212,6 +223,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** View detail document. */
   isDocument = false;
+
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
 
   /** Type of drawer opened. */
   drawerContext!: string;
@@ -282,6 +296,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   getStationWidgetDocuments(): void {
     this.failedLoadWidget = false;
     this.isLoading = true;
+    this.permissionError = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId, this.columnsFieldPetition)
       .pipe(first())
@@ -293,6 +308,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.generateDataTable();
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.failedLoadWidget = true;
           this.isLoading = false;
           this.errorService.logError(error);
