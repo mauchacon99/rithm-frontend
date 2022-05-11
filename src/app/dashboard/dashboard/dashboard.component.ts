@@ -427,7 +427,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private getQueryParams(): void {
     this.route.queryParams.pipe(first()).subscribe((queryParams) => {
       this.editMode =
-        (this.isAdmin && this.dashboardData.isEditable) ||
+        this.isAdmin ||
         (this.dashboardData.type === this.roleDashboardMenu.Personal &&
           this.dashboardData.isEditable)
           ? queryParams['editMode'] === 'true'

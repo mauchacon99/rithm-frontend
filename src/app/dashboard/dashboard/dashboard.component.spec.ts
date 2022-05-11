@@ -866,49 +866,31 @@ describe('DashboardComponent', () => {
     expect(spyChangeGridster).toHaveBeenCalled();
   });
 
-  it('should show editMode button when user=admin and isEditable=true and type=Company', () => {
+  it('should show editMode button when user=admin and type=Company', () => {
     component.editMode = false;
     component.isLoading = false;
     component.isCreateNewDashboard = false;
     component.errorLoadingDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Company;
-    component.dashboardData.isEditable = true;
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
     fixture.detectChanges();
     const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
     expect(editMode).toBeTruthy();
   });
 
-  it('should show editMode button when user=admin and isEditable=true and type=personal', () => {
+  it('should show editMode button when user=admin and type=personal', () => {
     component.editMode = false;
     component.isLoading = false;
     component.isCreateNewDashboard = false;
     component.errorLoadingDashboard = false;
     component.dashboardData.type = RoleDashboardMenu.Personal;
-    component.dashboardData.isEditable = true;
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
     fixture.detectChanges();
     const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
     expect(editMode).toBeTruthy();
   });
 
-  it('should hidden editMode button when user=admin and isEditable=false', () => {
-    component.editMode = false;
-    component.isLoading = false;
-    component.isCreateNewDashboard = false;
-    component.errorLoadingDashboard = false;
-    component.dashboardData.type = RoleDashboardMenu.Company;
-    component.dashboardData.isEditable = false;
-    spyOnProperty(component, 'isAdmin').and.returnValue(true);
-    fixture.detectChanges();
-    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
-    expect(editMode).toBeNull();
-  });
-
-  it('should validate getQueryParams when user=admin and isEditable=true', fakeAsync(() => {
-    component.dashboardData.type = RoleDashboardMenu.Company;
-    component.dashboardData.isEditable = true;
-    fixture.detectChanges();
+  it('should validate getQueryParams when user=admin', fakeAsync(() => {
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
     TestBed.inject(Router).navigate(
       ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
@@ -926,7 +908,7 @@ describe('DashboardComponent', () => {
     expect(spyService).toHaveBeenCalled();
   }));
 
-  it('should validate getQueryParams when user=!admin and isEditable=true and type=personal', fakeAsync(() => {
+  it('should validate getQueryParams when user=!admin and type=personal', fakeAsync(() => {
     component.dashboardData.type = RoleDashboardMenu.Personal;
     component.dashboardData.isEditable = true;
     fixture.detectChanges();
