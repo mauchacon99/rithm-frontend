@@ -33,49 +33,14 @@ gridster {
 }
 
 .gridster {
-  height: calc(100vh - 120px) !important;
+  height: calc(100vh - 150px) !important;
 }
 
-@media (max-width: 412px) {
-  .gridster {
-    height: 82vh !important;
-  }
-}
-
-@media (min-width: 413px) and (max-width: 413px) {
-  .gridster {
-    height: 86vh !important;
-  }
-}
-
-@media (max-width: 1919px) and (min-width: 768px) {
-  .edit-mode-gridster {
-    height: 75vh !important;
-  }
-}
-
-@media (max-width: 1920px) {
-  .edit-mode-gridster {
-    height: 83vh !important;
-  }
-}
-
-@media (max-width: 767px) and (min-width: 713px) {
-  .edit-mode-gridster {
-    height: 68vh !important;
-  }
-}
-
-@media (max-width: 712px) {
-  .edit-mode-gridster {
-    height: 68vh !important;
-  }
-}
-
-@media (max-width: 412px) {
-  .gridster .edit-mode-gridster {
-    height: 68vh !important;
-  }
+.edit-mode-gridster {
+  @apply h-[calc(100vh-300px)];
+  @apply sm:h-[calc(100vh-280px)];
+  @apply md:h-[calc(100vh-202px)];
+  @apply lg:h-[calc(100vh-215px)];
 }
 
 ::ng-deep .custom-margin-modal {
