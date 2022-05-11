@@ -1017,7 +1017,7 @@ export class StationService {
    *
    * @returns An list with all stations.
    */
-   getAllStationsOptimized(): Observable<StationOptimized[]> {
+  getAllStationsOptimized(): Observable<StationOptimized[]> {
     return this.http.get<StationOptimized[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`
     );
