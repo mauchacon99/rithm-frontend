@@ -186,11 +186,29 @@ export class ConnectedStationsModalComponent implements OnInit {
   }
 
   /**
+   * Unassign user to document.
+   */
+  private unassignUserToDocument(): void {
+    this.documentService
+      .unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Move the document from a station to another.
    */
   moveDocument(): void {
     this.moveDocumentError = false;
     this.connectedStationLoading = true;
+    this.unassignUserToDocument();
     const moveDocument: MoveDocument = {
       fromStationRithmId: this.stationRithmId,
       toStationRithmIds: [this.formMoveDocument.value?.rithmId],
