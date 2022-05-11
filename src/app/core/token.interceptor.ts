@@ -6,13 +6,11 @@ import {
   HttpInterceptor,
   HttpErrorResponse,
   HttpStatusCode,
-  HttpContextToken,
 } from '@angular/common/http';
 import { UserService } from './user.service';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
 import { PopupService } from './popup.service';
-export const IS_CACHE_ENABLED = new HttpContextToken<boolean>(() => false);
 
 /** API routes that don't require an access token. */
 const NO_AUTH_ROUTES = [
@@ -105,9 +103,6 @@ export class TokenInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (request.context.get(IS_CACHE_ENABLED) === true) {
-      console.log(request.context.get(IS_CACHE_ENABLED), ' CACHE');
-    }
     return next.handle(request).pipe(
       catchError((error: unknown) => {
         // If unauthorized, sign the user out

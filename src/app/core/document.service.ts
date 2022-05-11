@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
-  HttpContext,
-  HttpContextToken,
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
@@ -48,7 +46,6 @@ import {
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import imageCompression from 'browser-image-compression';
-import { IS_CACHE_ENABLED } from './token.interceptor';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 const MICROSERVICE_PATH_FILE_USER = '/documentservice/api/vault';
@@ -821,7 +818,6 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH_FILE_USER}/profile-image`,
       {
         params,
-        context: new HttpContext().set(IS_CACHE_ENABLED, true),
       }
     );
   }
