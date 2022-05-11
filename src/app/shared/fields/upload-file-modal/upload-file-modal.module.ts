@@ -4,9 +4,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
+import { DragAndDropZoneDirective } from 'src/helpers/directives/drag-and-drop-zone.directive';
 
 @NgModule({
-  declarations: [UploadFileModalComponent],
+  declarations: [UploadFileModalComponent, DragAndDropZoneDirective],
   imports: [
     CommonModule,
     MatDialogModule,
