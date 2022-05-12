@@ -373,10 +373,13 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should to call the modal to move the document', () => {
     component.documentRithmId = documentId;
     component.stationRithmId = stationId;
+    component.documentAssignedUser = [];
+    
     const expectDataModal = {
       data: {
         documentRithmId: documentId,
         stationRithmId: stationId,
+        assignedUser: component.documentAssignedUser.length,
       },
     };
     const dialogSpy = spyOn(
