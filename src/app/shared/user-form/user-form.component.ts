@@ -98,7 +98,7 @@ export class UserFormComponent
     if (!this.accountCreate) {
       this.split();
       this.currentUser = this.userService.user;
-      this.profileImageRithmId = this.currentUser?.profileImageId || '';
+      this.profileImageRithmId = this.currentUser?.profileImageRithmId || '';
     }
 
     this.passwordLabel = this.getPasswordLabel();
@@ -300,7 +300,7 @@ export class UserFormComponent
    *
    * @param file File to upload.
    */
-  private uploadImageUser(file: File): void {
+  private async uploadImageUser(file: File): Promise<void> {
     this.isLoadingUploadImageUser = true;
     this.userForm.controls['isLoadingImage'].setValue(
       !this.isLoadingUploadImageUser
@@ -308,33 +308,30 @@ export class UserFormComponent
     this.userForm.touched.valueOf();
     this.userForm.valid.valueOf();
     this.errorUploadImageUser = false;
-    this.documentService
-      .uploadImageUser(file)
-      .pipe(first())
-      .subscribe({
-        next: (profileImageRithmId) => {
-          this.isLoadingUploadImageUser = false;
-          this.errorUploadImageUser = false;
-          this.profileImageRithmId = profileImageRithmId;
-          this.userForm.controls['vaultRithmId'].setValue(
-            this.profileImageRithmId
-          );
-          this.userForm.controls['isLoadingImage'].setValue(
-            !this.isLoadingUploadImageUser
-          );
-        },
-        error: (error: unknown) => {
-          this.isLoadingUploadImageUser = false;
-          this.errorUploadImageUser = true;
-          this.userForm.controls['isLoadingImage'].setValue(
-            !this.isLoadingUploadImageUser
-          );
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+    (await this.documentService.uploadImageUser(file)).pipe(first()).subscribe({
+      next: (profileImageRithmId: string) => {
+        this.isLoadingUploadImageUser = false;
+        this.errorUploadImageUser = false;
+        this.profileImageRithmId = profileImageRithmId;
+        this.userForm.controls['vaultRithmId'].setValue(
+          this.profileImageRithmId
+        );
+        this.userForm.controls['isLoadingImage'].setValue(
+          !this.isLoadingUploadImageUser
+        );
+      },
+      error: (error: unknown) => {
+        this.isLoadingUploadImageUser = false;
+        this.errorUploadImageUser = true;
+        this.userForm.controls['isLoadingImage'].setValue(
+          !this.isLoadingUploadImageUser
+        );
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**

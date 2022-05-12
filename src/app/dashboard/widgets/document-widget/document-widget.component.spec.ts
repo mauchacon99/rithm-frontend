@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DashboardItem, WidgetType } from 'src/models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -241,5 +242,30 @@ describe('DocumentWidgetComponent', () => {
     component['parseDataColumnsWidget']();
     expect(component.documentRithmId).toEqual(expectDataWidget.documentRithmId);
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
+  });
+
+  it('should call getDocumentWidget when stationFlow change', () => {
+    const spyMethod = spyOn(component, 'getDocumentWidget').and.callThrough();
+    component.documentRithmId = '333-333-333';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(documentService, 'getDocumentWidget').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getDocumentWidget();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });

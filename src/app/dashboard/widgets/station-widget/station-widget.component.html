@@ -9,6 +9,7 @@
   *ngIf="failedLoadWidget"
   id="error-load-widget"
   [errorMessage]="'Unable to retrieve station data'"
+  [permission]="permissionError"
   (tryAgain)="getStationWidgetDocuments()"
 >
 </app-error-widget>
@@ -443,7 +444,8 @@
       (returnDocumentsWidget)="
         widgetReloadListDocuments(
           $event.isReturnListDocuments,
-          $event.isReloadListDocuments
+          $event.isReloadListDocuments,
+          $event.stationFlow
         )
       "
       [documentRithmIdWidget]="documentIdSelected"

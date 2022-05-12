@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
@@ -17,7 +24,6 @@ import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -27,9 +33,9 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit {
+export class FlowLogicComponent implements OnInit, OnChanges {
   /** Schedule trigger type form. */
-  scheduleTriggerField: FormGroup;
+  scheduleTriggerForm: FormGroup;
 
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
@@ -65,6 +71,18 @@ export class FlowLogicComponent implements OnInit {
   /** Selected value condition type for rules. */
   selectedConditionType = 'all';
 
+  /** Schedule trigger type list view if true. */
+  scheduleTrigger = false;
+
+  /** The different options for the schedule trigger type. */
+  readonly scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+
+  /** The powers of current station. */
+  stationPowers: Power[] = [];
+
+  /** The date and time zone shown, if true. */
+  showDateTimeZone = false;
+
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
@@ -72,20 +90,14 @@ export class FlowLogicComponent implements OnInit {
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
 
+  /* Loading the powers on the station*/
+  powersLoading = false;
+
   /** The error if rules fails . */
   ruleError = false;
 
   /** The error if rules fails . */
   flowRuleError = false;
-
-  /** Schedule trigger type list view if true. */
-  scheduleTrigger = false;
-
-  /** The different options for the schedule trigger type. */
-  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
-
-  /** The powers of current station. */
-  stationPowers: Power[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -94,11 +106,10 @@ export class FlowLogicComponent implements OnInit {
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
-    private splitService: SplitService,
-    private stationService: StationService
+    private splitService: SplitService
   ) {
-    this.scheduleTriggerField = this.fb.group({
-      scheduleTriggerType: '',
+    this.scheduleTriggerForm = this.fb.group({
+      scheduleTriggerType: this.fb.control(''),
     });
   }
 
@@ -108,7 +119,15 @@ export class FlowLogicComponent implements OnInit {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
-    this.getStationPowers();
+  }
+
+  /**
+   * Detect changes.
+   */
+  ngOnChanges(): void {
+    if (this.flowLogicView && !this.stationPowers.length) {
+      this.getStationPowers();
+    }
   }
 
   /**
@@ -399,13 +418,51 @@ export class FlowLogicComponent implements OnInit {
    * Get the powers (triggers, actions, flow) of current station.
    */
   private getStationPowers(): void {
-    this.stationService
+    this.powersLoading = true;
+    this.documentService
       .getStationPowers(this.rithmId)
       .pipe(first())
       .subscribe({
         next: (powers) => {
           this.stationPowers = powers;
+          this.powersLoading = false;
         },
+        error: (error: unknown) => {
+          this.powersLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   *
+   */
+  triggerTypeSelect(): void {
+    const selectedTriggerType =
+      this.scheduleTriggerForm.controls.scheduleTriggerType.value;
+    if (selectedTriggerType === 'Date Interval') {
+      this.showDateTimeZone = true;
+    } else {
+      this.showDateTimeZone = false;
+    }
+  }
+
+  /**
+   * Delete the power of current station.
+   *
+   * @param powerRemove The power that will be removed.
+   */
+  deleteStationPowers(powerRemove: Power): void {
+    this.documentService
+      .deleteStationPowers(powerRemove.rithmId, this.rithmId)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",

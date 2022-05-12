@@ -279,6 +279,8 @@ describe('DashboardService', () => {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     service
       .getDashboardWidgets(expectDashboardData.rithmId)
@@ -317,6 +319,8 @@ describe('DashboardService', () => {
           maxItemCols: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
       expect(response).toEqual(updateDashboard);
@@ -351,6 +355,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
       {
         rithmId: '123654-789654-7852',
@@ -371,6 +377,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
     ];
 
@@ -408,6 +416,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
       {
         rithmId: '123654-789654-7852-963',
@@ -428,6 +438,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
     ];
 
@@ -464,6 +476,8 @@ describe('DashboardService', () => {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     const expectBody = { name: expectedResponse.name };
@@ -502,6 +516,8 @@ describe('DashboardService', () => {
           maxItemCols: 2,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
@@ -537,6 +553,8 @@ describe('DashboardService', () => {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     const expectBody = { name: expectedResponse.name };
@@ -751,6 +769,50 @@ describe('DashboardService', () => {
     ];
 
     expect(service.groupColumnsStationWidget(columns)).toEqual(expectedColumns);
+  });
+
+  it('should add user to dashboard', () => {
+    const responseMembers: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+    service.addDashboardMembers(responseMembers).subscribe((response) => {
+      expect(response).toEqual(responseMembers);
+    });
   });
 
   it('should get users to dashboard personal', () => {

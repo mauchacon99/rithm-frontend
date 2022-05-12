@@ -70,6 +70,11 @@
             {{ dashboardData.name }}
           </h2>
           <button
+            *ngIf="
+              isAdmin ||
+              (dashboardData.type === roleDashboardMenu.Personal &&
+                dashboardData.isEditable)
+            "
             mat-icon-button
             id="menu-edit-button"
             data-testid="menu-edit-button"
@@ -164,16 +169,18 @@
                 item.widgetType === enumWidgetType.StationMultiline ||
                 item.widgetType === enumWidgetType.StationMultilineBanner
               "
-              (expandWidget)="toggleExpandWidget(index, $event)"
               [dataWidget]="item.data"
               [widgetType]="item.widgetType"
               [image]="{
                 imageId: item.imageId || null,
                 imageName: item.imageName || null
               }"
+              [stationFlow]="stationFlow"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (expandWidget)="toggleExpandWidget(index, $event)"
+              (reloadStationsFlow)="stationFlow = $event"
             >
             </app-station-widget>
             <app-document-widget
@@ -184,6 +191,7 @@
               "
               [dataWidget]="item.data"
               [widgetItem]="item"
+              [stationFlow]="stationFlow"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
@@ -219,8 +227,10 @@
               *ngIf="item.widgetType === enumWidgetType.PreBuiltContainer"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [stationFlow]="stationFlow"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
+              (reloadStationsFlow)="stationFlow = $event"
             >
             </app-container-pre-built-widget>
           </gridster-item>

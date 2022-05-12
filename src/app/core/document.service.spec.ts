@@ -3,6 +3,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { HttpCacheInterceptorModule } from '@ngneat/cashew';
 import { environment } from 'src/environments/environment';
 import {
   ForwardPreviousStationsDocument,
@@ -33,6 +34,10 @@ import {
   DocumentCurrentStation,
   RoleDashboardMenu,
   ImageData,
+  Power,
+  TriggerType,
+  ActionType,
+  OptionsCompressFile,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -84,7 +89,7 @@ describe('DocumentService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, HttpCacheInterceptorModule],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -770,6 +775,7 @@ describe('DocumentService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          profileImageRithmId: '123-456-789',
           defaultDashboardType: RoleDashboardMenu.Personal,
           defaultDashboardId: '777cf568-27a4-4968-5628-046ccfee24fd',
         },
@@ -796,6 +802,7 @@ describe('DocumentService', () => {
           createdDate: '1/2/34',
           role: null,
           organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          profileImageRithmId: '123-456-789',
           defaultDashboardType: RoleDashboardMenu.Company,
           defaultDashboardId: '197cf568-27a4-4968-5628-046ccfee24fd',
         },
@@ -1098,7 +1105,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should upload image user', () => {
+  it('should upload image user', async () => {
     const expectedResponse = {
       data: 'ewf34tf-3ge343-g34g3e',
     };
@@ -1106,9 +1113,14 @@ describe('DocumentService', () => {
       type: 'image/jpeg',
     });
     const formData = new FormData();
-    formData.append('image', file);
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1024,
+    };
 
-    service.uploadImageUser(file).subscribe((response) => {
+    const spyCompress = spyOn(service, 'compressImage').and.callThrough();
+    formData.append('image', file);
+    (await service.uploadImageUser(file)).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
 
@@ -1117,6 +1129,7 @@ describe('DocumentService', () => {
     );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(formData);
+    expect(spyCompress).toHaveBeenCalledWith(file, configCompressImage);
 
     req.flush(expectedResponse);
     httpTestingController.verify();
@@ -1138,8 +1151,142 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('vaultFileRithmId')).toEqual(imageId);
     expect(req.request.body).toBeFalsy();
+    expect(req.request.context).toBeTruthy();
 
     req.flush(expectedData);
     httpTestingController.verify();
+  });
+
+  it('should get the powers related to the current station', () => {
+    const expectedResponse: Power[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j',
+        triggers: [
+          {
+            rithmId: '3j4k-3h2j-hj5h',
+            type: TriggerType.ManualFlow,
+            source: 'Source Trigger #1',
+            value: 'Value Trigger #1',
+          },
+        ],
+        actions: [
+          {
+            rithmId: '3j4k-3h2j-ft5h',
+            type: ActionType.CreateDocument,
+            target: 'Target Action #1',
+            data: 'Data Action #1',
+            resultMapping: 'Result Action #1',
+            header: 'Header Action #1',
+          },
+        ],
+        stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowToStationRithmIds: [
+          '73d47261-1932-4fcf-82bd-159eb1a72422',
+          '73d47261-1932-4fcf-82bd-159eb1a7242g',
+        ],
+        name: 'Power Test #1',
+        condition: 'Condition Test #1',
+      },
+    ];
+
+    service.getStationPowers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
+  it('should get container widgets', () => {
+    const expectedResponse: StationFrameWidget[] = [
+      {
+        rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 4,
+        x: 0,
+        y: 0,
+        type: FrameType.Input,
+        data: '',
+        questions: [],
+        id: 0,
+      },
+      {
+        rithmId: '3813442c-82c6-4035-903a-86f39deca2c1',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        cols: 6,
+        rows: 1,
+        x: 0,
+        y: 0,
+        type: FrameType.Headline,
+        data: '',
+        id: 1,
+      },
+    ];
+
+    service.getContainerWidgets(documentId, stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/frames-by-type?documentRithmId=${documentId}&stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toEqual(documentId);
+    expect(req.request.params.get('stationRithmId')).toEqual(stationId);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should delete the powers from current station', () => {
+    const powerRemove: Power[] = [
+      {
+        rithmId: '3j4k-3h2j-hj4j',
+        triggers: [
+          {
+            rithmId: '3j4k-3h2j-hj5h',
+            type: TriggerType.ManualFlow,
+            source: 'Source Trigger #1',
+            value: 'Value Trigger #1',
+          },
+        ],
+        actions: [
+          {
+            rithmId: '3j4k-3h2j-ft5h',
+            type: ActionType.CreateDocument,
+            target: 'Target Action #1',
+            data: 'Data Action #1',
+            resultMapping: 'Result Action #1',
+            header: 'Header Action #1',
+          },
+        ],
+        stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowToStationRithmIds: [
+          '73d47261-1932-4fcf-82bd-159eb1a72422',
+          '73d47261-1932-4fcf-82bd-159eb1a7242g',
+        ],
+        name: 'Power Test #1',
+        condition: 'Condition Test #1',
+      },
+    ];
+
+    service
+      .deleteStationPowers(powerRemove[0].rithmId, stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(powerRemove);
+      });
+  });
+
+  it('should send file compressImage', async () => {
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1024,
+    };
+    const file = new File(new Array<Blob>(), 'image', {
+      type: 'image/jpeg',
+    });
+    const expectedResponse = await service.compressImage(
+      file,
+      configCompressImage
+    );
+    expect(expectedResponse).toEqual(file);
   });
 });

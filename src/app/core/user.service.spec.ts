@@ -5,6 +5,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpCacheManager } from '@ngneat/cashew';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import {
@@ -29,9 +30,13 @@ const testUser: User = {
   notificationSettings: null,
   role: null,
   organization: '',
+  profileImageRithmId: '123-456-789',
   defaultDashboardType: RoleDashboardMenu.Personal,
   defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
 };
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const clear = () => {};
 
 describe('UserService', () => {
   let service: UserService;
@@ -41,6 +46,7 @@ describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [{ provide: HttpCacheManager, useValue: { clear } }],
     });
     service = TestBed.inject(UserService);
     router = TestBed.inject(Router);
@@ -59,6 +65,7 @@ describe('UserService', () => {
       refreshTokenGuid: 'ab5d4-ae56g',
       user: testUser,
     };
+    const spyCache = spyOn(service, 'invalidateCacheBucket').and.callThrough();
 
     service
       .signIn('johndoe@email.com', 'password1234')
@@ -69,6 +76,7 @@ describe('UserService', () => {
           expectedResponse.accessToken
         );
         expect(service.user).toEqual(expectedResponse.user);
+        expect(spyCache).toHaveBeenCalled();
       });
 
     // outgoing request
@@ -85,9 +93,11 @@ describe('UserService', () => {
   it('should clear memory on sign out', () => {
     service.accessToken = new AccessToken('jdkfjslkdjflks');
     localStorage.setItem('user', JSON.stringify(testUser));
+    const spyCache = spyOn(service, 'invalidateCacheBucket').and.callThrough();
     service.signOut();
     expect(service.accessToken).toBeUndefined();
     expect(service.user).toBeNull();
+    expect(spyCache).toHaveBeenCalledWith();
   });
 
   it('should clear local storage on sign out', () => {
@@ -252,6 +262,9 @@ describe('UserService', () => {
       firstName: 'James',
       lastName: 'Anderson',
       password: 'mamamia',
+      defaultDashboardId: undefined,
+      defaultDashboardType: undefined,
+      vaultRithmId: '123-456-789',
     };
 
     service.updateUserAccount(changedAccountInfo).subscribe((response) => {
@@ -263,7 +276,6 @@ describe('UserService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/update`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(changedAccountInfo);
 
     req.flush(null);
     httpTestingController.verify();
@@ -302,5 +314,63 @@ describe('UserService', () => {
 
     req.flush(termsAndConditions);
     httpTestingController.verify();
+  });
+
+  it('should return attribute for update user', () => {
+    const dataExpect: UserAccountInfo = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      password: 'qwerty',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+      vaultRithmId: '123-654-789',
+    };
+    const changedAccountInfo = service['getChangedAccountInfo'](dataExpect);
+    expect(changedAccountInfo).toBeTruthy();
+  });
+
+  it('should update user', () => {
+    localStorage.setItem('user', JSON.stringify(testUser));
+    const changedAccountInfo: UserAccountInfo = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      password: 'qwerty',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+    };
+
+    const expectedResponse = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      password: 'qwerty',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
+    };
+
+    const setUserDataSpy = spyOn(service, 'setUserData').and.callThrough();
+
+    service.updateUserAccount(changedAccountInfo).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/update`
+    );
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+
+    expect(setUserDataSpy).toHaveBeenCalled();
+  });
+
+  it('should call and delete cache storage', () => {
+    const spyCache = spyOn(
+      TestBed.inject(HttpCacheManager),
+      'clear'
+    ).and.callThrough();
+
+    service.invalidateCacheBucket();
+    expect(spyCache).toHaveBeenCalled();
   });
 });

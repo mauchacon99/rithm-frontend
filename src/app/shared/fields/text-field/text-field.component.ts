@@ -101,7 +101,10 @@ export class TextFieldComponent
    */
   ngOnInit(): void {
     this.textFieldForm = this.fb.group({
-      [this.field.questionType]: [this.fieldValue, []],
+      [this.field.questionType]: [
+        { value: this.fieldValue, disabled: this.field.isReadOnly },
+        [],
+      ],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.

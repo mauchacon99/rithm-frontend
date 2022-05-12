@@ -21,6 +21,7 @@ import {
   StationRosterMember,
   Question,
   WidgetDocument,
+  reloadStationFlow,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -31,6 +32,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -124,11 +126,52 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
+  /** Set data for station widget. */
+  @Input() set stationFlow(value: reloadStationFlow) {
+    if (this.stationRithmId && value) {
+      // if it's the same current station was flow or destiny station flowed.
+      if (
+        value.stationFlow.includes(this.stationRithmId) ||
+        value.currentStation === this.stationRithmId
+      ) {
+        // If the document selected was flow.
+        if (
+          this.documentIdSelected === value.documentFlow &&
+          this.isDocument &&
+          !value.stationFlow.includes('rithmIdTempOnlySave') &&
+          !value.stationFlow.includes('rithmIdTempOnlySaveUser')
+        ) {
+          this.viewDocument('', true);
+        }
+        // If there is any document opened and the document was not flow, or the document saved.
+        else if (this.isDocument) {
+          this.reloadDocumentList = true;
+        }
+        // If there are no documents opened.
+        else if (!value.stationFlow.includes('rithmIdTempOnlySaveUser')) {
+          this.getStationWidgetDocuments();
+        }
+        // If the document has assigned new user.
+        else if (
+          value.stationFlow.includes('rithmIdTempOnlySaveUser') &&
+          this.columnsAllField.some(
+            (column) => column.name === this.columnsDocumentInfo.AssignedUser
+          )
+        ) {
+          this.getStationWidgetDocuments();
+        }
+      }
+    }
+  }
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** Reload stations or document Flowed or saved. */
+  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
 
   /**
    * Whether the drawer is open.
@@ -180,6 +223,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** View detail document. */
   isDocument = false;
+
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
 
   /** Type of drawer opened. */
   drawerContext!: string;
@@ -250,6 +296,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   getStationWidgetDocuments(): void {
     this.failedLoadWidget = false;
     this.isLoading = true;
+    this.permissionError = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId, this.columnsFieldPetition)
       .pipe(first())
@@ -261,6 +308,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.generateDataTable();
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.failedLoadWidget = true;
           this.isLoading = false;
           this.errorService.logError(error);
@@ -315,11 +366,20 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
    *
    * @param isReturnListDocuments To return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow Station rithm id when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[]
   ): void {
+    if (stationFlow.length) {
+      this.reloadStationsFlow.emit({
+        stationFlow,
+        currentStation: this.stationRithmId,
+        documentFlow: this.documentIdSelected,
+      });
+    }
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
     } else {

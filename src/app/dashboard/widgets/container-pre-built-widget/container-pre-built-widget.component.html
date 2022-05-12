@@ -9,6 +9,7 @@
   *ngIf="failedGetContainers"
   id="error-load-widget-container-pre-built"
   [errorMessage]="'Unable to retrieve containers data'"
+  [permission]="permissionError"
   (tryAgain)="getContainerWidgetPreBuilt()"
 >
 </app-error-widget>
@@ -283,7 +284,8 @@
       (returnDocumentsWidget)="
         widgetReloadListDocuments(
           $event.isReturnListDocuments,
-          $event.isReloadListDocuments
+          $event.isReloadListDocuments,
+          $event.stationFlow
         )
       "
       [documentRithmIdWidget]="documentSelected?.documentRithmId || ''"

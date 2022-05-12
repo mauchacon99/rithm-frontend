@@ -1,14 +1,23 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { RoleDashboardMenu } from 'src/models';
+import { RoleDashboardMenu, UserAccountInfo } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -46,6 +55,8 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Index of dashboard . */
   @Input() index!: number;
 
+  @Output() markDefaultDashboard = new EventEmitter<boolean>();
+
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -58,6 +69,12 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
 
+  /** Mark dashboard as default. */
+  selectedDefaultDashboard = false;
+
+  /** If user is an admin. */
+  isAdmin = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
@@ -65,16 +82,38 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private popupService: PopupService,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private user: UserService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
+    this.isAdmin = this.user.isAdmin;
+    this.getParams();
+    this.detectDefaultDashboard$();
+  }
+
+  /**
+   * Get params for this path.
+   */
+  private getParams(): void {
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
+        this.isDefaultDashboard();
+      },
+    });
+  }
+
+  /**
+   * Detect when another dashboard is assigned as default in expansions defined.
+   */
+  private detectDefaultDashboard$(): void {
+    this.user.userData$.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: () => {
+        this.isDefaultDashboard();
       },
     });
   }
@@ -206,6 +245,46 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         dashboardType: this.dashboardRole,
       },
     });
+  }
+
+  /**
+   * Set default dashboard.
+   */
+  setDefaultDashboard(): void {
+    const data = this.selectedDefaultDashboard
+      ? {
+          defaultDashboardType: '',
+          defaultDashboardId: '',
+        }
+      : {
+          defaultDashboardType: this.dashboardRole,
+          defaultDashboardId: this.rithmId,
+        };
+
+    this.user
+      .updateUserAccount(data as UserAccountInfo)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.isDefaultDashboard();
+        },
+        error: (error: unknown) => {
+          this.errorService.logError(error);
+        },
+      });
+  }
+
+  /**
+   * Validate if this dashboard is default.
+   */
+  isDefaultDashboard(): void {
+    const defaultDashboard = this.user.user.defaultDashboardId;
+    this.selectedDefaultDashboard =
+      (defaultDashboard === this.paramRithmId &&
+        defaultDashboard === this.rithmId) ||
+      this.rithmId === this.user.user.defaultDashboardId;
+
+    this.markDefaultDashboard.emit(this.selectedDefaultDashboard);
   }
 
   /** Clean subscriptions. */

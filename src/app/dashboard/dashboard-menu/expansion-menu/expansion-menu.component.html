@@ -25,6 +25,8 @@
         </div>
       </div>
       <app-options-menu
+        id="options"
+        *ngIf="isAdmin || dashboardRole === roleDashboardMenu.Personal"
         [isManageMember]="isManageMember"
         [dashboardRole]="dashboardRole"
         [isDashboardListOptions]="true"
@@ -71,6 +73,13 @@
           "
           routerLinkActive="bg-accent-100"
         >
+          <div class="w-2">
+            <i
+              class="fa-solid fa-house-user text-accent-300 text-base"
+              *ngIf="indexDefaultDashboard === i"
+            ></i>
+          </div>
+
           <div class="w-full flex justify-between items-center ml-5">
             {{ dashboard.name.trim() || 'Untitled Dashboard.' }}
             <app-options-menu
@@ -81,6 +90,7 @@
               [rithmId]="dashboard.rithmId"
               [showDefaultDashboard]="showDefaultDashboard"
               [index]="i"
+              (markDefaultDashboard)="markDefaultDashboard($event, i)"
             ></app-options-menu>
           </div>
         </mat-list-item>

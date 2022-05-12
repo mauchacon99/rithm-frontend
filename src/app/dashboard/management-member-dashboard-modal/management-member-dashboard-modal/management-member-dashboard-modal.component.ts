@@ -33,6 +33,15 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
 
+  /** Loading get user members. */
+  isLoadingGetUserMembers = false;
+
+  /** Show error if get users members fails. */
+  errorGetUsersMember = false;
+
+  /** Users to add to dashboard. */
+  usersAdd!: MemberDashboard[];
+
   /** Selected filter. */
   selectedFilterValue: FilterOptionTypeMemberDashboard =
     FilterOptionTypeMemberDashboard.All;
@@ -67,13 +76,40 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   }
 
   /** Get users to dashboard personal. */
-  private getUsersDashboardPersonal(): void {
+  getUsersDashboardPersonal(): void {
+    this.isLoadingGetUserMembers = true;
+    this.errorGetUsersMember = false;
     this.dashboardService
       .getUsersDashboardPersonal()
       .pipe(first())
       .subscribe({
         next: (membersDashboard) => {
+          this.isLoadingGetUserMembers = false;
+          this.errorGetUsersMember = false;
           this.membersDashboard = membersDashboard;
+        },
+        error: (error: unknown) => {
+          this.isLoadingGetUserMembers = false;
+          this.errorGetUsersMember = true;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Add members to dashboard.
+   *
+   */
+  addDashboardMembers(): void {
+    this.dashboardService
+      .addDashboardMembers(this.usersAdd)
+      .pipe(first())
+      .subscribe({
+        next: (currentUsers) => {
+          this.membersDashboard = currentUsers;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

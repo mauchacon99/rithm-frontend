@@ -14,11 +14,13 @@ import {
   DashboardItem,
   DocumentWidget,
   QuestionFieldType,
+  reloadStationFlow,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Component for list field the document how widget.
@@ -59,6 +61,19 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     return this._dataWidget;
   }
 
+  /** A setter for the stationFlow property to reload document when its flowed. */
+  @Input() set stationFlow(value: reloadStationFlow) {
+    if (this.documentRithmId) {
+      if (
+        value &&
+        this.documentRithmId === value.documentFlow &&
+        !value.stationFlow.includes('rithmIdTempOnlySaveUser')
+      ) {
+        this.getDocumentWidget();
+      }
+    }
+  }
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
@@ -90,6 +105,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Show error if get documentWidget fails. */
   failedLoadWidget = false;
+
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
 
   /** Columns for list the widget. */
   documentColumns: ColumnFieldsWidget[] = [];
@@ -135,6 +153,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   getDocumentWidget(): void {
     this.isLoading = true;
     this.failedLoadWidget = false;
+    this.permissionError = true;
     this.documentService
       .getDocumentWidget(this.documentRithmId)
       .pipe(first())
@@ -145,6 +164,10 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
           this.failedLoadWidget = false;
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          if (status === 403) {
+            this.permissionError = false;
+          }
           this.isLoading = false;
           this.failedLoadWidget = true;
           this.errorService.logError(error);

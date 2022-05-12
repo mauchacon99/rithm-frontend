@@ -35,6 +35,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { UserService } from 'src/app/core/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -577,13 +578,13 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
-    component.widgetReloadListDocuments(false, true);
+    component.widgetReloadListDocuments(false, true, []);
     expect(component.reloadDocumentList).toBeTrue();
   });
 
   it('should return list of documents and reload list', () => {
     const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
-    component.widgetReloadListDocuments(true, false);
+    component.widgetReloadListDocuments(true, false, []);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
   });
@@ -904,5 +905,111 @@ describe('StationWidgetComponent', () => {
         question
       );
     });
+  });
+
+  it('should emit reloadStationsFlow', () => {
+    component.documentIdSelected = '333-333-333';
+    const stationFlow = ['123-456-789'];
+    component.stationRithmId = '4fb462ec-0772-49dc-8cfb-3849d70ad168';
+    const spyEmit = spyOn(
+      component.reloadStationsFlow,
+      'emit'
+    ).and.callThrough();
+
+    component.widgetReloadListDocuments(true, true, stationFlow);
+
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      stationFlow,
+      currentStation: component.stationRithmId,
+      documentFlow: component.documentIdSelected,
+    });
+  });
+
+  it('should call getStationWidgetDocuments when stationFlow change', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.isDocument = false;
+    component.stationRithmId = '123-456-789';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should set reloadDocumentList to true when stationFlow change', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.documentIdSelected = '234-234234-6666';
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call viewDocument when stationFlow change', () => {
+    component.documentIdSelected = '333-333-333';
+    component.isDocument = true;
+    component.stationRithmId = '222-222-222';
+    const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalledWith('', true);
+  });
+
+  it('should set reloadDocumentList to true when a document was saved', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.documentIdSelected = '333-333-333';
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['rithmIdTempOnlySave'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call getStationWidgetDocuments when stationFlow change and assign new user', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.columnsAllField = [
+      {
+        name: ColumnsDocumentInfo.AssignedUser,
+      },
+    ];
+    component.isDocument = false;
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['rithmIdTempOnlySaveUser'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getStationWidgetDocuments();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.permissionError).toBeFalse();
   });
 });

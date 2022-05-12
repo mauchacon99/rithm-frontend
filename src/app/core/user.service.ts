@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpCacheManager } from '@ngneat/cashew';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -32,7 +33,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private managerCache: HttpCacheManager
   ) {}
 
   /**
@@ -73,6 +75,7 @@ export class UserService {
       )
       .pipe(
         map((response) => {
+          this.invalidateCacheBucket();
           this.accessToken = new AccessToken(response.accessToken);
           localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
           localStorage.setItem('user', JSON.stringify(response.user));
@@ -86,11 +89,19 @@ export class UserService {
    * Signs the user out of the system and clears stored data.
    */
   signOut(): void {
+    this.invalidateCacheBucket();
     this.accessToken = undefined;
     this.cookieService.deleteAll();
     localStorage.clear();
     sessionStorage.clear();
     this.router.navigateByUrl('');
+  }
+
+  /**
+   * It clears the cache of all the managers.
+   */
+  invalidateCacheBucket(): void {
+    this.managerCache.clear();
   }
 
   /**
@@ -265,10 +276,17 @@ export class UserService {
           if (dataUser?.lastName !== undefined) {
             user.lastName = dataUser.lastName;
           }
-          if (dataUser?.profileImageId !== undefined) {
-            user.profileImageId = dataUser.profileImageId;
+          if (dataUser?.profileImageRithmId !== undefined) {
+            user.profileImageRithmId = dataUser.profileImageRithmId;
+          }
+          if (dataUser?.defaultDashboardType !== undefined) {
+            user.defaultDashboardType = dataUser.defaultDashboardType;
+          }
+          if (dataUser?.defaultDashboardId !== undefined) {
+            user.defaultDashboardId = dataUser.defaultDashboardId;
           }
           localStorage.setItem('user', JSON.stringify(user));
+          this.setUserData();
         })
       );
   }
@@ -294,8 +312,17 @@ export class UserService {
       changedAccountInfo.password = accountInfo.password;
     }
 
-    if (accountInfo.vaultRithmId !== this.user?.profileImageId) {
+    if (accountInfo.vaultRithmId !== this.user?.profileImageRithmId) {
       changedAccountInfo.vaultRithmId = accountInfo.vaultRithmId;
+    }
+
+    if (accountInfo.defaultDashboardId !== this.user?.defaultDashboardId) {
+      changedAccountInfo.defaultDashboardId = accountInfo.defaultDashboardId;
+    }
+
+    if (accountInfo.defaultDashboardType !== this.user?.defaultDashboardType) {
+      changedAccountInfo.defaultDashboardType =
+        accountInfo.defaultDashboardType;
     }
 
     return changedAccountInfo;
