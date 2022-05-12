@@ -99,6 +99,25 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** The different options for the date interval repeat type. */
+  readonly dateIntervalRepeatOptions = [
+    'Never',
+    'Every minute (coming soon)',
+    'Hourly (coming soon)',
+    'Daily',
+    'Weekly',
+    'Weekdays',
+    'Weekends',
+    'Monthly',
+    'Yearly',
+  ];
+
+  /** The repeat forever to shown, if true. */
+  showRepeatForever = false;
+
+  /** The end repeat start. */
+  startDate = new Date();
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -110,7 +129,13 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   ) {
     this.scheduleTriggerForm = this.fb.group({
       scheduleTriggerType: this.fb.control(''),
+      intervalRepeatType: this.fb.control(''),
+      isRepeat: false,
+      endRepeatDate: '',
     });
+
+    /** The date interval end repeat date to be next of the current date. */
+    this.startDate.setDate(this.startDate.getDate() + 1);
   }
 
   /**
@@ -448,6 +473,20 @@ export class FlowLogicComponent implements OnInit, OnChanges {
       this.showDateTimeZone = true;
     } else {
       this.showDateTimeZone = false;
+    }
+  }
+
+  /**
+   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   *
+   */
+  intervalRepeatTypeSelect(): void {
+    const selectedIntevalRepeatType =
+      this.scheduleTriggerForm.controls.intervalRepeatType.value;
+    if (selectedIntevalRepeatType !== 'Never') {
+      this.showRepeatForever = true;
+    } else {
+      this.showRepeatForever = false;
     }
   }
 
