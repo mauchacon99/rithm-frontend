@@ -17,6 +17,6 @@ export interface DashboardData {
   /** If user can edit the dashboard. */
   isEditable: boolean;
 
-  /** Can view widget. */
+  /** If user can view widgets. */
   canView: boolean;
 }
