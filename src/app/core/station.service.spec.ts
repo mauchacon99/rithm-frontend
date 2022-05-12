@@ -25,6 +25,7 @@ import {
   StationWidgetPreBuilt,
   RoleDashboardMenu,
 } from 'src/models';
+import { StationOptimized } from 'src/models/station-optimized';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -1937,6 +1938,47 @@ describe('StationService', () => {
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('rithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return a list optimized of all stations', () => {
+    const expectedResponse: StationOptimized[] = [
+      {
+        rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
+        name: 'Test Name',
+        instructions: 'Instructions Test #1',
+        dueDate: '1 day',
+        createdByRithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        createdDateUTC: '2021-12-13T22:27:48.39',
+        updatedByRithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        updatedDateUTC: '2022-05-09T16:13:28.3564695',
+        organizationRithmId: '7D9854CF-1070-4F4C-81C1-7ACD433A2EE1',
+        archived: false,
+        priority: 0,
+        locationX: -377,
+        locationY: 33,
+        documentGeneratorStatus: 1,
+        workerCanRenameDocuments: true,
+        notes: null,
+        isChained: false,
+        allowExternalWorkers: true,
+        allowAllOrgWorkers: true,
+        altStationButtons: false,
+        allowPreviousButton: true,
+        flowButton: 'Flow Test #1',
+      },
+    ];
+
+    service.getAllStationsOptimized().subscribe((response) => {
+      expect(response).toBeDefined();
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`
+    );
+    expect(req.request.method).toEqual('GET');
+
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
