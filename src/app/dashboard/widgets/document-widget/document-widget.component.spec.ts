@@ -555,7 +555,7 @@ describe('DocumentWidgetComponent', () => {
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
   });
 
-  fdescribe('getValueQuestion', () => {
+  describe('getValueQuestion', () => {
     beforeEach(() => {
       component.dataDocumentWidget = documents;
     });

@@ -231,18 +231,18 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
    *
    * @returns An array with question values.
    */
-     get getDefaultValueQuestions(): QuestionValuesColumn[] {
-      const questions: QuestionValuesColumn[] = [];
-        this.dataDocumentWidget.questions.forEach((questionList) => {
-          questionList.questions.forEach(question => {
-              questions.push({
-                detail: question,
-                value: this.getHTMLQuestionValue(question),
-              });
-          });
+  get getDefaultValueQuestions(): QuestionValuesColumn[] {
+    const questions: QuestionValuesColumn[] = [];
+    this.dataDocumentWidget.questions.forEach((questionList) => {
+      questionList.questions.forEach((question) => {
+        questions.push({
+          detail: question,
+          value: this.getHTMLQuestionValue(question),
         });
-      return questions;
-    }
+      });
+    });
+    return questions;
+  }
 
   /**
    * Get value to show by each question.
