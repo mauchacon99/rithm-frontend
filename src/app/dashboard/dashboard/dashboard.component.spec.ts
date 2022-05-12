@@ -71,6 +71,8 @@ describe('DashboardComponent', () => {
         maxItemRows: 12,
       },
     ],
+    isEditable: true,
+    canView: false,
   };
 
   beforeEach(async () => {
@@ -98,6 +100,7 @@ describe('DashboardComponent', () => {
         { provide: ElementRef, useValue: MockService(ElementRef) },
         { provide: MobileBrowserChecker, useClass: MobileBrowserChecker },
       ],
+
       imports: [
         MatSidenavModule,
         NoopAnimationsModule,
@@ -185,6 +188,8 @@ describe('DashboardComponent', () => {
       name: 'update Dashboard',
       widgets: [],
       type: RoleDashboardMenu.Personal,
+      isEditable: false,
+      canView: false,
     };
     const spyMethodUpdateDashboard = spyOn(
       component,
@@ -215,6 +220,8 @@ describe('DashboardComponent', () => {
       name: 'update Dashboard',
       widgets: [],
       type: RoleDashboardMenu.Company,
+      isEditable: false,
+      canView: false,
     };
     const spyMethodUpdateDashboard = spyOn(
       component,
@@ -343,6 +350,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     fixture.detectChanges();
     const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
@@ -526,6 +535,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     let renderer: Renderer2;
 
@@ -650,6 +661,8 @@ describe('DashboardComponent', () => {
         },
       ],
       type: RoleDashboardMenu.Company,
+      isEditable: false,
+      canView: false,
     };
 
     component.dashboardData = dashboardData;
@@ -675,6 +688,9 @@ describe('DashboardComponent', () => {
   });
 
   it('should get queryParam edit and toggleEditMode', fakeAsync(() => {
+    component.dashboardData.isEditable = true;
+    fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
     TestBed.inject(Router).navigate(
       ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
       {
@@ -713,6 +729,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     fixture.detectChanges();
 
@@ -847,4 +865,67 @@ describe('DashboardComponent', () => {
     expect(component.options.mobileBreakpoint).toBe(1920);
     expect(spyChangeGridster).toHaveBeenCalled();
   });
+
+  it('should show editMode button when user=admin and type=Company', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Company;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    fixture.detectChanges();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeTruthy();
+  });
+
+  it('should show editMode button when user=admin and type=personal', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    fixture.detectChanges();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeTruthy();
+  });
+
+  it('should validate getQueryParams when user=admin', fakeAsync(() => {
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
+    component['getQueryParams']();
+    expect(component.editMode).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
+  }));
+
+  it('should validate getQueryParams when user=!admin and type=personal', fakeAsync(() => {
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData.isEditable = true;
+    fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(false);
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
+    component['getQueryParams']();
+    expect(component.editMode).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
+  }));
 });

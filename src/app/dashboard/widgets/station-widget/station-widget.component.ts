@@ -572,11 +572,13 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         }
         return null;
       }
+
       if (question.questionType === this.questionFieldType.Instructions) {
         return question.prompt || null;
       }
       return question?.answer?.value || null;
     }
+
     return null;
   }
 
