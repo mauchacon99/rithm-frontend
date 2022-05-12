@@ -397,9 +397,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
   assignUserToDocument(): void {
-    if (this.isWidget) {
-      this.isReloadListDocuments.emit(true);
-    }
     this.loadingAssignUser = true;
     this.displayAssignUserError = false;
     this.documentService
@@ -411,6 +408,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
+          if (this.isWidget) {
+            this.isReloadListDocuments.emit(true);
+          }
           this.displayAssignUserError = false;
           this.getAssignedUserToDocument();
         },
