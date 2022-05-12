@@ -1,7 +1,6 @@
 .app-conditions {
   ::ng-deep .mat-form-field-wrapper {
-    margin: 0;
-    padding-bottom: 0;
+    @apply m-0 pb-0;
   }
 
   ::ng-deep .mat-form-field {

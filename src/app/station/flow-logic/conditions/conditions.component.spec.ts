@@ -29,7 +29,15 @@ describe('ConditionsComponent', () => {
   let component: ConditionsComponent;
   let fixture: ComponentFixture<ConditionsComponent>;
   let selectLoader: HarnessLoader;
-
+  const questionFake: Question = {
+    prompt: 'Example question#1',
+    rithmId: '3j4k-3h2j-hj4j',
+    questionType: QuestionFieldType.Number,
+    isReadOnly: false,
+    isRequired: true,
+    isPrivate: false,
+    children: [],
+  };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -76,17 +84,8 @@ describe('ConditionsComponent', () => {
   });
 
   it('should set the operator list as operator options when adding the field type question', () => {
-    const question: Question = {
-      prompt: 'Example question#1',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: QuestionFieldType.Number,
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [],
-    };
     expect(component.operatorList).toHaveSize(0);
-    component.setFirstOperandInformation(question);
+    component.setFirstOperandInformation(questionFake);
     expect(component.operatorList.length > 0).toBeTrue();
   });
 
@@ -108,15 +107,7 @@ describe('ConditionsComponent', () => {
   });
 
   it('should set the first operand type and first operand text when calling setOperatorList', () => {
-    const question: Question = {
-      prompt: 'Fieldset #1',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: QuestionFieldType.Number,
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [],
-    };
+    const question: Question = questionFake;
     expect(component.firstOperandQuestionType).toBeUndefined();
     component.setFirstOperandInformation(question);
     expect(component.firstOperandQuestionType).toEqual(OperandType.Number);

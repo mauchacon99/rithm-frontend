@@ -21,7 +21,7 @@
     >
       <button
         mat-stroked-button
-        data-testid="add-condition"
+        data-testid="add-condition-rule"
         color="accent"
         (click)="openFormCondition = true"
         [disabled]="!currentStationQuestions.length"
@@ -186,7 +186,7 @@
         >
           <i
             class="fa-solid text-accent-500 fa-xl"
-            [class]="[
+            [ngClass]="[
               switchConditionPreviousFields ? 'fa-keyboard' : 'fa-angle-down'
             ]"
           ></i>
