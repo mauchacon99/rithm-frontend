@@ -7,29 +7,18 @@
         class="radio-group px-2"
       >
         <mat-radio-button
-          class="radio-button"
+          class="radio-button w-full"
           *ngFor="let user of userRoster"
           [value]="user.rithmId"
         >
           <div class="unassigned-user-section flex items-center py-2">
-            <button
-              id="open-modal-user-list"
-              data-testid="open-modal-user-list"
-              class="shadow-none mr-3"
-              matTooltip="Assigned User"
-              matTooltipPosition="above"
-            >
-              <span class="fa-stack fa-lg">
-                <i
-                  class="fa-solid fa-circle fa-stack-2x"
-                  [ngClass]="'text-secondary-500'"
-                ></i>
-                <i
-                  class="fa-solid fa-stack-1x text-white"
-                  [ngClass]="'fa-user-plus'"
-                ></i>
-              </span>
-            </button>
+            <app-user-avatar
+              [firstName]="user.firstName"
+              [lastName]="user.lastName"
+              [navProfile]="true"
+              class="mx-2"
+              [profileImageRithmId]="user?.profileImageRithmId || ''"
+            ></app-user-avatar>
             <div class="flex w-full flex-col justify-center">
               <h6>{{ user.firstName }} {{ user.lastName }}</h6>
               <p class="lowercase font-normal text-brightBlue text-xs">
