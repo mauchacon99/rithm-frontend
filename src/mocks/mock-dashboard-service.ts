@@ -488,6 +488,8 @@ export class MockDashboardService {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     return of(widgets).pipe(delay(1000));
@@ -531,6 +533,8 @@ export class MockDashboardService {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
       {
         rithmId: '123654-789654-7852',
@@ -551,6 +555,8 @@ export class MockDashboardService {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
     ];
 
@@ -583,6 +589,8 @@ export class MockDashboardService {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
       {
         rithmId: '123654-789654-7852-963',
@@ -603,6 +611,8 @@ export class MockDashboardService {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
     ];
 
@@ -634,6 +644,8 @@ export class MockDashboardService {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     return of(newDashboard).pipe(delay(1000));
@@ -664,6 +676,8 @@ export class MockDashboardService {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     return of(newDashboard).pipe(delay(1000));
