@@ -38,6 +38,8 @@ import { CircleImageWidgetModule } from 'src/app/shared/station-document-widgets
 import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/input-frame-widget/input-frame-widget.module';
 import { LocationModalComponent } from './folder/location-modal/location-modal.component';
 import { UserListModalComponent } from './user-list-modal/user-list-modal.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,8 @@ import { UserListModalComponent } from './user-list-modal/user-list-modal.compon
     BannerWidgetModule,
     CircleImageWidgetModule,
     InputFrameWidgetModule,
+    MatRadioModule,
+    UserAvatarModule,
   ],
   exports: [DocumentComponent],
 })
