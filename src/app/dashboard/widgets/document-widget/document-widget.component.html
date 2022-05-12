@@ -163,17 +163,19 @@
 <!--Links template-->
 <ng-template #linkTemplate let-type="type" let-value="value">
   <ng-container *ngIf="value; else withOutData">
-    <a
-      [title]="value"
-      [href]="type + value"
-      target="_blank"
-      class="text-accent-500 underline"
-      [ngClass]="{
-        'text-secondary-500 pointer-events-none cursor-not-allowed': editMode
-      }"
-    >
-      {{ value }}</a
-    >
+    <p class="text-xs">
+      <a
+        [title]="value"
+        [href]="type + value"
+        target="_blank"
+        class="text-accent-500 underline"
+        [ngClass]="{
+          'text-secondary-500 pointer-events-none cursor-not-allowed': editMode
+        }"
+      >
+        {{ value }}</a
+      >
+    </p>
   </ng-container>
 </ng-template>
 
@@ -213,7 +215,7 @@
     <ng-template #defaultQuestion>
       <p
         *ngIf="question.value; else withOutData"
-        class="line-clamp-3 text-xs"
+        class="text-xs"
         [title]="
           question.detail.questionType === questionFieldType.LongText
             ? question.value
