@@ -279,6 +279,8 @@ describe('DashboardService', () => {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     service
       .getDashboardWidgets(expectDashboardData.rithmId)
@@ -317,6 +319,8 @@ describe('DashboardService', () => {
           maxItemCols: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
       expect(response).toEqual(updateDashboard);
@@ -351,6 +355,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
       {
         rithmId: '123654-789654-7852',
@@ -371,6 +377,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
     ];
 
@@ -408,6 +416,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
       {
         rithmId: '123654-789654-7852-963',
@@ -428,6 +438,8 @@ describe('DashboardService', () => {
             y: 0,
           },
         ],
+        isEditable: false,
+        canView: false,
       },
     ];
 
@@ -464,6 +476,8 @@ describe('DashboardService', () => {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     const expectBody = { name: expectedResponse.name };
@@ -502,6 +516,8 @@ describe('DashboardService', () => {
           maxItemCols: 2,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
@@ -537,6 +553,8 @@ describe('DashboardService', () => {
           maxItemRows: 12,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
 
     const expectBody = { name: expectedResponse.name };
