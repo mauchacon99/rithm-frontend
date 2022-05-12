@@ -157,7 +157,7 @@
 </ng-template>
 
 <ng-template #withOutData>
-  <span class="cursor-default" title="Without Value">N/A</span>
+  <p class="text-xs cursor-default" title="Without Value">N/A</p>
 </ng-template>
 
 <!--Links template-->
@@ -211,15 +211,16 @@
       ></ng-container>
     </ng-container>
     <ng-template #defaultQuestion>
-      <span
+      <p
         *ngIf="question.value; else withOutData"
+        class="line-clamp-3 text-xs"
         [title]="
           question.detail.questionType === questionFieldType.LongText
             ? question.value
             : ''
         "
         [innerHTML]="question.value"
-      ></span>
+      ></p>
     </ng-template>
   </div>
 </ng-template>

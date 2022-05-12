@@ -5,3 +5,11 @@
 .container-document-banner-profile {
   height: calc(100% - 167px);
 }
+
+.line-clamp-3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
