@@ -6,12 +6,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './token.interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { DialogModule } from '../shared/dialog/dialog.module';
+import { HttpCacheInterceptorModule } from '@ngneat/cashew';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     HttpClientModule,
+    HttpCacheInterceptorModule.forRoot(),
     MatDialogModule,
     MatSnackBarModule,
     DialogModule,
