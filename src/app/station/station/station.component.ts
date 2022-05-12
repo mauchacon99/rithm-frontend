@@ -164,6 +164,8 @@ export class StationComponent
     margin: 12,
     minCols: 24,
     maxCols: 24,
+    keepFixedHeightInMobile:true,
+    mobileBreakpoint: 50
   };
 
   /** Loading / Error variables. */
