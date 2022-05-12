@@ -946,10 +946,8 @@ export class StationComponent
                     ? frame.questions.length
                     : 4;
                 frame.minItemCols = 6;
-                frame.questions =
-                  frame.questions && frame.questions?.length > 0
-                    ? frame.questions
-                    : JSON.parse(frame.data);
+                frame.cols = frame.cols < frame.minItemCols ? 6 : frame.cols;
+                frame.rows = frame.rows < frame.minItemRows ? 4 : frame.rows;
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:
