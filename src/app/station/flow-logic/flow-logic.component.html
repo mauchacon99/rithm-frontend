@@ -300,9 +300,18 @@
           >
             Station Triggers
           </p>
-          <button mat-icon-button>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
             <i class="fa-solid fa-ellipsis"></i>
           </button>
+          <mat-menu #menu="matMenu">
+            <button
+              data-testid="delete-power-station"
+              id="delete-power-station"
+              mat-menu-item
+            >
+              Delete Rule
+            </button>
+          </mat-menu>
         </div>
       </section>
       <section class="rules-right-side-triggers w-full">
