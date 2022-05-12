@@ -35,7 +35,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FlowLogicComponent implements OnInit, OnChanges {
   /** Schedule trigger type form. */
-  scheduleTriggerField: FormGroup;
+  scheduleTriggerForm: FormGroup;
 
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
@@ -75,10 +75,13 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   scheduleTrigger = false;
 
   /** The different options for the schedule trigger type. */
-  scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+  readonly scheduleTriggerOptions = ['Container Check', 'Date Interval'];
 
   /** The powers of current station. */
   stationPowers: Power[] = [];
+
+  /** The date and time zone shown, if true. */
+  showDateTimeZone = false;
 
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
@@ -105,8 +108,8 @@ export class FlowLogicComponent implements OnInit, OnChanges {
     private userService: UserService,
     private splitService: SplitService
   ) {
-    this.scheduleTriggerField = this.fb.group({
-      scheduleTriggerType: '',
+    this.scheduleTriggerForm = this.fb.group({
+      scheduleTriggerType: this.fb.control(''),
     });
   }
 
@@ -432,6 +435,20 @@ export class FlowLogicComponent implements OnInit, OnChanges {
           );
         },
       });
+  }
+
+  /**
+   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   *
+   */
+  triggerTypeSelect(): void {
+    const selectedTriggerType =
+      this.scheduleTriggerForm.controls.scheduleTriggerType.value;
+    if (selectedTriggerType === 'Date Interval') {
+      this.showDateTimeZone = true;
+    } else {
+      this.showDateTimeZone = false;
+    }
   }
 
   /**
