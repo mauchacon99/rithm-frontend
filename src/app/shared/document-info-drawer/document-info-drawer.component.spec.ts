@@ -374,7 +374,7 @@ describe('DocumentInfoDrawerComponent', () => {
     component.documentRithmId = documentId;
     component.stationRithmId = stationId;
     component.documentAssignedUser = [];
-    
+
     const expectDataModal = {
       data: {
         documentRithmId: documentId,
