@@ -250,7 +250,7 @@ describe('ConnectedStationsModalComponent', () => {
   it('should call the method that returns all stations.', () => {
     const getAllStations = spyOn(
       TestBed.inject(StationService),
-      'getAllStations'
+      'getAllStationsOptimized'
     ).and.callThrough();
 
     spyOnProperty(component, 'isAdmin').and.returnValue(true);
