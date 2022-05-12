@@ -5,6 +5,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpCacheManager } from '@ngneat/cashew';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import {
@@ -34,6 +35,9 @@ const testUser: User = {
   defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const clear = () => {};
+
 describe('UserService', () => {
   let service: UserService;
   let router: Router;
@@ -42,6 +46,7 @@ describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [{ provide: HttpCacheManager, useValue: { clear } }],
     });
     service = TestBed.inject(UserService);
     router = TestBed.inject(Router);
@@ -60,6 +65,7 @@ describe('UserService', () => {
       refreshTokenGuid: 'ab5d4-ae56g',
       user: testUser,
     };
+    const spyCache = spyOn(service, 'invalidateCacheBucket').and.callThrough();
 
     service
       .signIn('johndoe@email.com', 'password1234')
@@ -70,6 +76,7 @@ describe('UserService', () => {
           expectedResponse.accessToken
         );
         expect(service.user).toEqual(expectedResponse.user);
+        expect(spyCache).toHaveBeenCalled();
       });
 
     // outgoing request
@@ -86,9 +93,11 @@ describe('UserService', () => {
   it('should clear memory on sign out', () => {
     service.accessToken = new AccessToken('jdkfjslkdjflks');
     localStorage.setItem('user', JSON.stringify(testUser));
+    const spyCache = spyOn(service, 'invalidateCacheBucket').and.callThrough();
     service.signOut();
     expect(service.accessToken).toBeUndefined();
     expect(service.user).toBeNull();
+    expect(spyCache).toHaveBeenCalledWith();
   });
 
   it('should clear local storage on sign out', () => {
@@ -353,5 +362,15 @@ describe('UserService', () => {
     httpTestingController.verify();
 
     expect(setUserDataSpy).toHaveBeenCalled();
+  });
+
+  it('should call and delete cache storage', () => {
+    const spyCache = spyOn(
+      TestBed.inject(HttpCacheManager),
+      'clear'
+    ).and.callThrough();
+
+    service.invalidateCacheBucket();
+    expect(spyCache).toHaveBeenCalled();
   });
 });
