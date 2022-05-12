@@ -3,6 +3,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { HttpCacheInterceptorModule } from '@ngneat/cashew';
 import { environment } from 'src/environments/environment';
 import {
   ForwardPreviousStationsDocument,
@@ -88,7 +89,7 @@ describe('DocumentService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, HttpCacheInterceptorModule],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -1119,6 +1120,12 @@ describe('DocumentService', () => {
       type: 'image/jpeg',
     });
     const formData = new FormData();
+    const configCompressImage: OptionsCompressFile = {
+      maxSizeMB: 0.02,
+      maxWidthOrHeight: 1024,
+    };
+
+    const spyCompress = spyOn(service, 'compressImage').and.callThrough();
     formData.append('image', file);
     (await service.uploadImageUser(file)).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
@@ -1129,6 +1136,7 @@ describe('DocumentService', () => {
     );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(formData);
+    expect(spyCompress).toHaveBeenCalledWith(file, configCompressImage);
 
     req.flush(expectedResponse);
     httpTestingController.verify();
@@ -1150,10 +1158,12 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('vaultFileRithmId')).toEqual(imageId);
     expect(req.request.body).toBeFalsy();
+    expect(req.request.context).toBeTruthy();
 
     req.flush(expectedData);
     httpTestingController.verify();
   });
+
   it('should get the powers related to the current station', () => {
     const expectedResponse: Power[] = [
       {
@@ -1271,10 +1281,11 @@ describe('DocumentService', () => {
         expect(response).toEqual(powerRemove);
       });
   });
+
   it('should send file compressImage', async () => {
     const configCompressImage: OptionsCompressFile = {
       maxSizeMB: 0.02,
-      maxWidthOrHeight: 1920,
+      maxWidthOrHeight: 1024,
     };
     const file = new File(new Array<Blob>(), 'image', {
       type: 'image/jpeg',
