@@ -39,7 +39,7 @@ import { InputFrameWidgetModule } from 'src/app/shared/station-document-widgets/
 import { LocationModalComponent } from './folder/location-modal/location-modal.component';
 import { UserListModalComponent } from './user-list-modal/user-list-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
-import { UserAvatarModule } from '../shared/user-avatar/user-avatar.module';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [
