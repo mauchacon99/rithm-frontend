@@ -8,6 +8,6 @@ export interface ConnectedModalData {
   /** The Station rithmId. */
   stationRithmId: string;
 
-  /** A property of the interface. */
+  /** Number of users assigned to document. */
   assignedUser?: number;
 }
