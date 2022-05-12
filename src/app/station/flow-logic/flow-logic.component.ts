@@ -477,13 +477,13 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   * Update's the selected interval repeat type array for date interval repeat forever.
    *
    */
   intervalRepeatTypeSelect(): void {
-    const selectedIntevalRepeatType =
+    const selectedIntervalRepeatType =
       this.scheduleTriggerForm.controls.intervalRepeatType.value;
-    if (selectedIntevalRepeatType !== 'Never') {
+    if (selectedIntervalRepeatType !== 'Never') {
       this.showRepeatForever = true;
     } else {
       this.showRepeatForever = false;
