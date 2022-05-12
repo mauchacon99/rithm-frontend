@@ -26,6 +26,7 @@ import {
   Power,
   TriggerType,
 } from 'src/models';
+import { StationOptimized } from 'src/models/station-optimized';
 
 /**
  * Mocks methods of the `StationService`.
@@ -1885,5 +1886,40 @@ export class MockStationService {
       ];
       return of(userRoster).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Gets all the stations of way optimized.
+   *
+   * @returns An list with all stations.
+   */
+  getAllStationsOptimized(): Observable<StationOptimized[]> {
+    const stationOptimized: StationOptimized[] = [
+      {
+        rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
+        name: 'Test Name',
+        instructions: 'Instructions Test #1',
+        dueDate: '1 day',
+        createdByRithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        createdDateUTC: '2021-12-13T22:27:48.39',
+        updatedByRithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        updatedDateUTC: '2022-05-09T16:13:28.3564695',
+        organizationRithmId: '7D9854CF-1070-4F4C-81C1-7ACD433A2EE1',
+        archived: false,
+        priority: 0,
+        locationX: -377,
+        locationY: 33,
+        documentGeneratorStatus: 1,
+        workerCanRenameDocuments: true,
+        notes: null,
+        isChained: false,
+        allowExternalWorkers: true,
+        allowAllOrgWorkers: true,
+        altStationButtons: false,
+        allowPreviousButton: true,
+        flowButton: 'Flow Test #1',
+      },
+    ];
+    return of(stationOptimized).pipe(delay(1000));
   }
 }
