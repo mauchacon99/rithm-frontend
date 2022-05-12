@@ -227,6 +227,24 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get default questions values by document columns.
+   *
+   * @returns An array with question values.
+   */
+     get getDefaultValueQuestions(): QuestionValuesColumn[] {
+      const questions: QuestionValuesColumn[] = [];
+        this.dataDocumentWidget.questions.forEach((questionList) => {
+          questionList.questions.forEach(question => {
+              questions.push({
+                detail: question,
+                value: this.getHTMLQuestionValue(question),
+              });
+          });
+        });
+      return questions;
+    }
+
+  /**
    * Get value to show by each question.
    *
    * @param question Question to validate.

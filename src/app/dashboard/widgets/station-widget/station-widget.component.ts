@@ -558,9 +558,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         question.questionType === this.questionFieldType.MultiSelect
       ) {
         if (question?.answer?.asArray?.length) {
-          if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
-            return '---';
-          }
           const values: string[] = [];
           question?.answer?.asArray?.map((answer) => {
             values.push(

@@ -555,7 +555,7 @@ describe('DocumentWidgetComponent', () => {
     expect(component.documentColumns).toEqual(expectDataWidget.columns);
   });
 
-  describe('getValueQuestion', () => {
+  fdescribe('getValueQuestion', () => {
     beforeEach(() => {
       component.dataDocumentWidget = documents;
     });
@@ -594,8 +594,14 @@ describe('DocumentWidgetComponent', () => {
       spyOnProperty(component, 'getValueQuestions').and.returnValue(
         questionValuesColumn
       );
-
       expect(component.getValueQuestions).toEqual(questionValuesColumn);
+    });
+
+    it('should return default questions ', () => {
+      spyOnProperty(component, 'getDefaultValueQuestions').and.returnValue(
+        questionValuesColumn
+      );
+      expect(component.getDefaultValueQuestions).toEqual(questionValuesColumn);
     });
 
     it('should call getDocumentWidget when stationFlow change', () => {

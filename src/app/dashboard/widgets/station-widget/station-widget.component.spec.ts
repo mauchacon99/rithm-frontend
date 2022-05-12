@@ -896,7 +896,7 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('---');
+        ).toEqual('<i class="fas fa-square text-secondary-500"></i> value 1');
       });
     });
 

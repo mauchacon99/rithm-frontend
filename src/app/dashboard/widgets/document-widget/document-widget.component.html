@@ -149,13 +149,11 @@
 
 <!--Display questions default if columns is empty-->
 <ng-template #displayQuestionsDefault>
-  <ng-container *ngFor="let questionList of dataDocumentWidget.questions">
-    <ng-container *ngFor="let question of questionList.questions">
+    <ng-container *ngFor="let question of getDefaultValueQuestions">
       <ng-container
         *ngTemplateOutlet="questionColumn; context: { $implicit: question }"
       ></ng-container>
     </ng-container>
-  </ng-container>
 </ng-template>
 
 <ng-template #withOutData>
