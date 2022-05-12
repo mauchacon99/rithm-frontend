@@ -598,10 +598,39 @@ describe('DocumentWidgetComponent', () => {
     });
 
     it('should return default questions ', () => {
-      spyOnProperty(component, 'getDefaultValueQuestions').and.returnValue(
-        questionValuesColumn
-      );
+      expect(component.getDefaultValueQuestions.length).toEqual(8);
+      component.dataDocumentWidget = {
+        documentName: 'Untitled Document',
+        documentRithmId,
+        questions: [
+          {
+            stationRithmId: '98789798-8641-1161616',
+            questions: questions,
+          },
+          {
+            stationRithmId: 'we5r4w9er-165we1r6w5e1r-we56r1we',
+            questions: questions,
+          },
+          {
+            stationRithmId: '1we89r4we5616wer8-1w65e1rw65er-1w5w1w5w1w5w',
+            questions: questions,
+          },
+        ],
+        stations: [
+          {
+            stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+            stationName: 'New station',
+          },
+        ],
+      };
+      spyOnProperty(
+        component,
+        'getDefaultValueQuestions',
+        'get'
+      ).and.returnValue(questionValuesColumn);
+      component.getDefaultValueQuestions;
       expect(component.getDefaultValueQuestions).toEqual(questionValuesColumn);
+      expect(component.dataDocumentWidget.questions.length).toBe(3);
     });
 
     it('should call getDocumentWidget when stationFlow change', () => {
