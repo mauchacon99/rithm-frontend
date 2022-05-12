@@ -167,7 +167,7 @@ export class ConnectedStationsModalComponent implements OnInit {
   private getAllStations(): void {
     this.connectedStationLoading = true;
     this.stationService
-      .getAllStations()
+      .getAllStationsOptimized()
       .pipe(first())
       .subscribe({
         next: (stations) => {
