@@ -12,8 +12,12 @@ import { UserService } from './user.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AccessToken } from 'src/helpers';
+import { HttpCacheManager } from '@ngneat/cashew';
 
 const USER_SERVICE_PATH = '/userservice/api/user';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const clear = () => {};
 
 describe('TokenInterceptor', () => {
   let httpTestingController: HttpTestingController;
@@ -27,6 +31,7 @@ describe('TokenInterceptor', () => {
         UserService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: HttpCacheManager, useValue: { clear } },
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
