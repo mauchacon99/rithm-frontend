@@ -49,7 +49,8 @@ export class UserAvatarComponent {
     if (profileImageRithmId) {
       this.getImageUser();
     } else {
-      this.classProfileImage = '';
+      this.imageAvatarData = '';
+      this.ImageAvatarName = '';
     }
   }
 
@@ -64,14 +65,18 @@ export class UserAvatarComponent {
 
   /** Image data. */
   set imageData(image: ImageData) {
-    this.classProfileImage = image.imageData;
+    this.imageAvatarData = image.imageData;
+    this.ImageAvatarName = image.imageName;
   }
 
   /** Load indicator getting image. */
   isLoading = false;
 
-  /** Class to render profile image. */
-  classProfileImage = '';
+  /** Data the avatar for render. */
+  imageAvatarData = '';
+
+  /** Image name the avatar. */
+  ImageAvatarName = '';
 
   constructor(
     private documentService: DocumentService,
