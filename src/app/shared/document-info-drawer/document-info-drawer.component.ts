@@ -566,7 +566,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       data: {
         documentRithmId: this.documentRithmId,
         stationRithmId: this.stationRithmId,
-        assignedUser: this.documentAssignedUser.length
+        assignedUser: this.documentAssignedUser.length,
       },
     });
   }
