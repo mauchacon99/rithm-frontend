@@ -49,6 +49,8 @@ describe('OptionsMenuComponent', () => {
         maxItemRows: 12,
       },
     ],
+    isEditable: false,
+    canView: false,
   };
 
   const testUser: User = {
