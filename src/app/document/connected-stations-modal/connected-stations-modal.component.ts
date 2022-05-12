@@ -64,6 +64,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Label Select of modal. */
   label = 'Select Station';
 
+  /** The Label Select of modal. */
+  assignedUser: number | undefined = 0;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
@@ -77,6 +80,7 @@ export class ConnectedStationsModalComponent implements OnInit {
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
+    this.assignedUser = data.assignedUser;
   }
 
   /**
@@ -208,7 +212,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   moveDocument(): void {
     this.moveDocumentError = false;
     this.connectedStationLoading = true;
-    this.unassignUserToDocument();
+    if (this.assignedUser && this.assignedUser > 0) {
+      this.unassignUserToDocument();
+    }
     const moveDocument: MoveDocument = {
       fromStationRithmId: this.stationRithmId,
       toStationRithmIds: [this.formMoveDocument.value?.rithmId],

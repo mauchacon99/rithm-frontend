@@ -544,6 +544,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.documentAssignedUser = [];
           this.assignedUserLoading = false;
         },
         error: (error: unknown) => {
@@ -565,6 +566,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       data: {
         documentRithmId: this.documentRithmId,
         stationRithmId: this.stationRithmId,
+        assignedUser: this.documentAssignedUser.length
       },
     });
   }

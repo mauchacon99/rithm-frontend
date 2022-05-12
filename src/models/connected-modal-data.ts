@@ -7,4 +7,7 @@ export interface ConnectedModalData {
 
   /** The Station rithmId. */
   stationRithmId: string;
+
+  /** A property of the interface. */
+  assignedUser?: number;
 }
