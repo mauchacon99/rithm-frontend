@@ -129,7 +129,8 @@
 
         <div
           class="text-center py-2 text-sm"
-          *ngIf="!dataDocumentWidget.questions.length"
+          *ngIf="!getValueQuestions.length || !getDefaultValueQuestions.length"
+          id="without-question-message"
         >
           This document doesn't have any questions.
         </div>
