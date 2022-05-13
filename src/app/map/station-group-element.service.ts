@@ -1344,8 +1344,9 @@ export class StationGroupElementService {
       let boundingBox = ctx.measureText(icon).actualBoundingBoxDescent;
 
       // If it is a cancel button type we add the spacing to the icon
-      if (typeButton === 'buttonCancel' && boundingBox < 0) {
-        boundingBox = boundingBox + ICON_Y_PADDING * this.mapScale;
+      if (typeButton === 'buttonCancel' && boundingBox <= 0) {
+        const scaledIcon = boundingBox + ICON_Y_PADDING * this.mapScale;
+        boundingBox = scaledIcon;
       }
 
       // Paint the icon on the map.
