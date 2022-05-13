@@ -35,6 +35,7 @@ export class ErrorWidgetComponent {
   }
 
   constructor(private sidenavDrawerService: SidenavDrawerService) {}
+
   /**
    * Try again.
    */
