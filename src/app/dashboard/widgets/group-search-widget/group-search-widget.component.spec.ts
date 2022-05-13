@@ -149,7 +149,6 @@ describe('GroupSearchWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -157,7 +156,6 @@ describe('GroupSearchWidgetComponent', () => {
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorStationGroup).toBeTrue();
-    expect(spyService).toHaveBeenCalled();
   });
 
   it('should rendered component loading for widget', () => {
@@ -389,11 +387,9 @@ describe('GroupSearchWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationGroups();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
 
@@ -403,11 +399,9 @@ describe('GroupSearchWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationGroups();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.widgetDeleted).toBeTrue();
   });
 

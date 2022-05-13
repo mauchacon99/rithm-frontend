@@ -182,17 +182,6 @@ describe('StationWidgetComponent', () => {
     );
   });
 
-  it('should show error message when request station widget document  data', () => {
-    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
-  });
-
   it('should show button if station is manual', () => {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
@@ -1007,11 +996,8 @@ describe('StationWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetDocuments();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
 
@@ -1021,11 +1007,8 @@ describe('StationWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetDocuments();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.widgetDeleted).toBeTrue();
   });
 

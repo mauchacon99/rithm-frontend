@@ -130,7 +130,6 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.errorStationPrebuilt = true;
-          this.errorService.logError(error);
         },
       });
   }

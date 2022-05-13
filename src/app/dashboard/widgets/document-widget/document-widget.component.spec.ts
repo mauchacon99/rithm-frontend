@@ -400,14 +400,11 @@ describe('DocumentWidgetComponent', () => {
       })
     );
 
-    const spyError = spyOn(errorService, 'logError').and.callThrough();
-
     component.getDocumentWidget();
 
     expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
       component.documentRithmId
     );
-    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call method getDocumentWidget', () => {
@@ -651,11 +648,9 @@ describe('DocumentWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getDocumentWidget();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
 
@@ -665,11 +660,9 @@ describe('DocumentWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getDocumentWidget();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.widgetDeleted).toBeTrue();
   });
 

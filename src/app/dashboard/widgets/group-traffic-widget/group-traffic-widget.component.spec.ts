@@ -119,7 +119,6 @@ describe('GroupTrafficWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -127,7 +126,6 @@ describe('GroupTrafficWidgetComponent', () => {
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorGroupTraffic).toBeTrue();
-    expect(spyService).toHaveBeenCalled();
   });
 
   it('should call and show sidenavService', () => {
@@ -251,11 +249,8 @@ describe('GroupTrafficWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getGroupTrafficData();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
 
@@ -265,11 +260,8 @@ describe('GroupTrafficWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getGroupTrafficData();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.widgetDeleted).toBeTrue();
   });
 

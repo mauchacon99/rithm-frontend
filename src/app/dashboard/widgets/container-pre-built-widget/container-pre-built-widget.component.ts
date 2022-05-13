@@ -209,7 +209,6 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.failedGetContainers = true;
-          this.errorService.logError(error);
         },
       });
   }

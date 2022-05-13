@@ -190,7 +190,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.failedLoadWidget = true;
-          this.errorService.logError(error);
         },
       });
   }

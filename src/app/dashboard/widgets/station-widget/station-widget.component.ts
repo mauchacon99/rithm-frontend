@@ -325,7 +325,6 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           }
           this.failedLoadWidget = true;
           this.isLoading = false;
-          this.errorService.logError(error);
         },
       });
   }

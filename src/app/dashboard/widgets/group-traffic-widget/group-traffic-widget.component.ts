@@ -280,7 +280,6 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.errorGroupTraffic = true;
-          this.errorService.logError(error);
         },
       });
   }

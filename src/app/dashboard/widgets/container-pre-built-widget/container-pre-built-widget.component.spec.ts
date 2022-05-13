@@ -129,14 +129,12 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorComponent = fixture.nativeElement.querySelector(
       '#error-load-widget-container-pre-built'
     );
     expect(errorComponent).toBeTruthy();
-    expect(spyMethodError).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
   });
@@ -334,11 +332,9 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getContainerWidgetPreBuilt();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
 
@@ -348,11 +344,9 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getContainerWidgetPreBuilt();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.widgetDeleted).toBeTrue();
   });
 

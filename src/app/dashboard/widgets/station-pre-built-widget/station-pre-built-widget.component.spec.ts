@@ -101,7 +101,6 @@ describe('StationPreBuiltWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -109,7 +108,6 @@ describe('StationPreBuiltWidgetComponent', () => {
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorStationPrebuilt).toBeTrue();
-    expect(spyService).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -211,11 +209,9 @@ describe('StationPreBuiltWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetPreBuiltData();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
 
@@ -225,11 +221,8 @@ describe('StationPreBuiltWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetPreBuiltData();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.widgetDeleted).toBeTrue();
   });
 

@@ -146,7 +146,6 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.errorStationGroup = true;
-          this.errorService.logError(error);
         },
       });
   }
