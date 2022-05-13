@@ -629,7 +629,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Emit event for delete widget. */
   removeWidget(): void {
     this.deleteWidget.emit();
-    this.toggleEditStation();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

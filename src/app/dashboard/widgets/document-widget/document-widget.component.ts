@@ -304,7 +304,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Emit event for delete widget. */
   removeWidget(): void {
     this.deleteWidget.emit();
-    this.toggleEditDocument();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

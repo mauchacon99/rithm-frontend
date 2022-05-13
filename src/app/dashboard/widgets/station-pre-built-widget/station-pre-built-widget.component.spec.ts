@@ -230,6 +230,6 @@ describe('StationPreBuiltWidgetComponent', () => {
     const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
     component.removeWidget();
     expect(spyDeteleWidget).toHaveBeenCalled();
-    expect(spyDrawer).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });
