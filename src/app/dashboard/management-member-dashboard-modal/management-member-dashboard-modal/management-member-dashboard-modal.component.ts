@@ -105,7 +105,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    */
   addDashboardMembers(): void {
     this.dashboardService
-      .addDashboardMembers(this.dashboardRithmId,this.usersAdd)
+      .addDashboardMembers(this.dashboardRithmId, this.usersAdd)
       .pipe(first())
       .subscribe({
         next: () => {

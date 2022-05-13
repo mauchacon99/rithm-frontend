@@ -799,10 +799,10 @@ describe('DashboardService', () => {
         rithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
         firstName: 'Boba2',
         lastName: 'Fett',
-        email: "boba.fett@inpivota.com",
+        email: 'boba.fett@inpivota.com',
         canView: true,
         isEditable: true,
-        profileImageRithmId: '383D75B3-AC4A-431C-9597-F3DA1A136547'
+        profileImageRithmId: '383D75B3-AC4A-431C-9597-F3DA1A136547',
       },
       {
         rithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
@@ -811,11 +811,11 @@ describe('DashboardService', () => {
         email: 'din.djarin@inpivota.com',
         canView: true,
         isEditable: true,
-        profileImageRithmId: '19DEEFC5-5090-4986-9C19-4E971F715D59'
-      }
+        profileImageRithmId: '19DEEFC5-5090-4986-9C19-4E971F715D59',
+      },
     ];
     service
-      .addDashboardMembers(expectDashboardData.rithmId,responseMembers)
+      .addDashboardMembers(expectDashboardData.rithmId, responseMembers)
       .subscribe((response) => {
         expect(response).toEqual(expectDashboardData);
       });

@@ -131,7 +131,10 @@ describe('ManagementMemberDashboardModalComponent', () => {
       'addDashboardMembers'
     ).and.callThrough();
     component.addDashboardMembers();
-    expect(spyService).toHaveBeenCalledOnceWith(component.dashboardRithmId,component.usersAdd);
+    expect(spyService).toHaveBeenCalledOnceWith(
+      component.dashboardRithmId,
+      component.usersAdd
+    );
   });
 
   it('should call getUsersDashboardPersonal', () => {

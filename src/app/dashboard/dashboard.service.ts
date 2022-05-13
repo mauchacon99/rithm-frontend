@@ -502,15 +502,18 @@ export class DashboardService {
    * @param users Users to add to dashboard.
    * @returns Returns a updated dashboard.
    */
-  addDashboardMembers(dashboardRithmId: string, users: MemberDashboard[] ): Observable<DashboardData> {
-      return this.http.post<DashboardData>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,
-        {
-           dashboardRithmId: dashboardRithmId,
-           users: users
-           }
-      );
-    }
+  addDashboardMembers(
+    dashboardRithmId: string,
+    users: MemberDashboard[]
+  ): Observable<DashboardData> {
+    return this.http.post<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,
+      {
+        dashboardRithmId: dashboardRithmId,
+        users: users,
+      }
+    );
+  }
 
   /**
    * Get users to dashboard personal.
