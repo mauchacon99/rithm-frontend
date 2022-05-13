@@ -1,7 +1,7 @@
 /**
  * Represents the data to reload stations when flowed a document.
  */
-export interface reloadStationFlow {
+export interface ReloadStationFlow {
   /** The current station. */
   currentStation: string;
 
