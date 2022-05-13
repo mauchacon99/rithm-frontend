@@ -14,7 +14,7 @@ import {
 } from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DashboardData, RoleDashboardMenu, User, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MenuComponent } from '../menu/menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
