@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ImageData } from 'src/models/index';
+import { ImageData } from 'src/models';
 
 /**
  * Reusable component for displaying a user's avatar.
@@ -49,7 +49,7 @@ export class UserAvatarComponent {
     if (profileImageRithmId) {
       this.getImageUser();
     } else {
-      this.classProfileImage = '';
+      this.imageData = { imageData: '', imageName: '' };
     }
   }
 
@@ -62,16 +62,11 @@ export class UserAvatarComponent {
     return this._profileImageRithmId;
   }
 
-  /** Image data. */
-  set imageData(image: ImageData) {
-    this.classProfileImage = image.imageData;
-  }
+  /** Image data avatar. */
+  imageData: ImageData = { imageData: '', imageName: '' };
 
   /** Load indicator getting image. */
   isLoading = false;
-
-  /** Class to render profile image. */
-  classProfileImage = '';
 
   constructor(
     private documentService: DocumentService,
