@@ -15,12 +15,12 @@
   (mouseleave)="badgeHover = false"
 >
   <img
-    *ngIf="classProfileImage"
-    [src]="classProfileImage"
-    [alt]="imageData?.imageName || 'imageUser'"
+    *ngIf="imageData.imageData"
+    [src]="imageData.imageData"
+    [alt]="imageData.imageName || 'imageUser'"
     class="w-full h-full object-cover rounded-full"
   />
-  <button *ngIf="badge === 'none' && !classProfileImage" type="button">
+  <button *ngIf="badge === 'none' && !imageData.imageData" type="button">
     {{ initials }}
   </button>
   <button
@@ -32,6 +32,6 @@
     type="button"
     class="w-full h-full absolute"
   >
-    {{ classProfileImage ? '' : initials }}
+    {{ imageData.imageData ? '' : initials }}
   </button>
 </div>
