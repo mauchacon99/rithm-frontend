@@ -859,4 +859,79 @@ describe('DashboardService', () => {
       expect(response).toEqual(expectedResponse);
     });
   });
+
+  fit('should update dashboard', () => {
+    const expectDashboardData: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+      isEditable: false,
+      canView: false,
+    };
+    const responseMembers: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Eagle 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+    service
+      .updatePermissionUsersDashboard(expectDashboardData.rithmId,responseMembers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectDashboardData);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`
+    );
+    expect(req.request.method).toEqual('POST');
+    req.flush(expectDashboardData);
+    httpTestingController.verify();
+  });
 });

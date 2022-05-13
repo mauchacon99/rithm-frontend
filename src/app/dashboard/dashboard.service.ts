@@ -594,4 +594,21 @@ export class DashboardService {
 
     return of(responseMembers).pipe(delay(1000));
   }
+
+  /**
+   * Update a dashboard.
+   *
+   * @param dashboardRithmId String of the rithmId dashboard.
+   * @param users Users to add to dashboard.
+   * @returns Returns a updated dashboard.
+   */
+   updatePermissionUsersDashboard(dashboardRithmId: string, users: MemberDashboard[] ): Observable<DashboardData> {
+    return this.http.post<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,
+      {
+         dashboardRithmId: dashboardRithmId,
+         users: users
+         }
+    );
+  }
 }
