@@ -355,8 +355,8 @@ describe('StationDocumentsModalComponent', () => {
     testPromise.then(() => {
       expect(spyService).toHaveBeenCalledOnceWith(
         component['stationRithmId'],
-      1,
-      component.search,
+        1,
+        component.search
       );
     });
   });

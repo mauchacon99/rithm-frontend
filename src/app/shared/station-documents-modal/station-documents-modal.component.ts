@@ -76,7 +76,6 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Init a timeout variable to be used in method get results. */
   timeout = setTimeout(() => '', 1000);
 
-
   constructor(
     private documentService: DocumentService,
     @Inject(MAT_DIALOG_DATA) public modalData: StationDocumentsModalData,
@@ -279,6 +278,15 @@ export class StationDocumentsModalComponent implements OnInit {
     });
   }
 
+  /**
+   * Sending search value to get mach result.
+   */
+  getSearchResult(): void {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.getDocumentsByScrollAndSearch();
+    }, 750);
+  }
 
   /**
    * The closeModal() function closes the modal.
