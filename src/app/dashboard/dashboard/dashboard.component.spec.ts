@@ -47,6 +47,7 @@ import { MobileBrowserChecker } from 'src/helpers';
 import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -287,7 +288,7 @@ describe('DashboardComponent', () => {
   it('should catch error if petition to return dashboard for id service fails when is dashboard default', () => {
     spyOn(dashboardService, 'getDashboardWidgets').and.returnValue(
       throwError(() => {
-        throw new Error();
+        throw new HttpErrorResponse({ error: 'any error', status: 404 });
       })
     );
     const spyError = spyOn(

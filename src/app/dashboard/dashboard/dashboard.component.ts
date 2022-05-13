@@ -29,6 +29,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { MobileBrowserChecker } from 'src/helpers';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Main component for the dashboard screens.
@@ -385,7 +386,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
           this.isLoading = false;
-          if (isDefault) {
+          const { status } = error as HttpErrorResponse;
+          if (isDefault && status === 400) {
             this.getOrganizationDashboard();
             this.setNullDashboardUser();
           } else {
