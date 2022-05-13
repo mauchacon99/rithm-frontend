@@ -10,7 +10,6 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
 import { ContainerWidgetPreBuilt, reloadStationFlow } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';

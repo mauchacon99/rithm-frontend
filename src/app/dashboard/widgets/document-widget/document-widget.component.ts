@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
 import {
   ColumnFieldsWidget,
   DashboardItem,

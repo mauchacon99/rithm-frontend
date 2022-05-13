@@ -10,11 +10,7 @@ import { throwError } from 'rxjs';
 
 import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
-import {
-  MockErrorService,
-  MockMapService,
-  MockStationService,
-} from 'src/mocks';
+import { MockMapService, MockStationService } from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { StationGroupData } from 'src/models/station-group-data';

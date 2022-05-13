@@ -3,7 +3,7 @@ import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
 import { MatSortModule } from '@angular/material/sort';
 import { DocumentService } from 'src/app/core/document.service';
-import { MockErrorService, MockDocumentService } from 'src/mocks';
+import { MockDocumentService } from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 
 import { ContainerPreBuiltWidgetComponent } from './container-pre-built-widget.component';

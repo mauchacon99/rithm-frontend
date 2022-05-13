@@ -1,9 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MockDashboardService,
-  MockErrorService,
-  MockStationService,
-} from 'src/mocks';
+import { MockDashboardService, MockStationService } from 'src/mocks';
 import { GroupTrafficWidgetComponent } from './group-traffic-widget.component';
 import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';

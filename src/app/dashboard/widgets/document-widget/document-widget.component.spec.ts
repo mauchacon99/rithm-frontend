@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { MockDocumentService } from 'src/mocks';
 import {
   DocumentWidgetComponent,
   QuestionValuesColumn,

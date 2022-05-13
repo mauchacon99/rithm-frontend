@@ -7,7 +7,6 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { first, Subject, takeUntil } from 'rxjs';
-import { ErrorService } from 'src/app/core/error.service';
 import { DashboardItem, GroupTrafficData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
