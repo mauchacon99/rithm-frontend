@@ -163,9 +163,7 @@ export class StationComponent
     itemResizeCallback: StationComponent.itemResize,
     margin: 12,
     minCols: 24,
-    maxCols: 24,
-    keepFixedHeightInMobile: true,
-    mobileBreakpoint: 50,
+    maxCols: 24
   };
 
   /** Loading / Error variables. */
