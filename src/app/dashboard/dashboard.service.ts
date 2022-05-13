@@ -498,54 +498,19 @@ export class DashboardService {
   /**
    * Add members to dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @param users Users to add to dashboard.
-   * @returns List users added.
+   * @returns Returns a updated dashboard.
    */
-  addDashboardMembers(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    users: MemberDashboard[]
-  ): Observable<MemberDashboard[]> {
-    const responseMembers: MemberDashboard[] = [
-      {
-        rithmId: '123-456-789',
-        profileImageRithmId: '123-456-789',
-        firstName: 'Test 1',
-        lastName: 'Eagle 1',
-        email: 'test1@email.com',
-        canView: true,
-        isEditable: true,
-      },
-      {
-        rithmId: '987-654-321',
-        profileImageRithmId: '987-654-321',
-        firstName: 'Test 2',
-        lastName: 'Eagle 2',
-        email: 'test2@email.com',
-        canView: false,
-        isEditable: true,
-      },
-      {
-        rithmId: '654-987-321',
-        profileImageRithmId: '654-987-321',
-        firstName: 'Test 3',
-        lastName: 'Eagle 3',
-        email: 'test3@email.com',
-        canView: true,
-        isEditable: false,
-      },
-      {
-        rithmId: '654-321-987',
-        profileImageRithmId: '654-321-987',
-        firstName: 'Test 4',
-        lastName: 'Eagle 4',
-        email: 'test4@email.com',
-        canView: false,
-        isEditable: false,
-      },
-    ];
-
-    return of(responseMembers).pipe(delay(1000));
-  }
+  addDashboardMembers(dashboardRithmId: string, users: MemberDashboard[] ): Observable<DashboardData> {
+      return this.http.post<DashboardData>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,
+        {
+           dashboardRithmId: dashboardRithmId,
+           users: users
+           }
+      );
+    }
 
   /**
    * Get users to dashboard personal.
@@ -593,22 +558,5 @@ export class DashboardService {
     ];
 
     return of(responseMembers).pipe(delay(1000));
-  }
-
-  /**
-   * Update a dashboard.
-   *
-   * @param dashboardRithmId String of the rithmId dashboard.
-   * @param users Users to add to dashboard.
-   * @returns Returns a updated dashboard.
-   */
-   updatePermissionUsersDashboard(dashboardRithmId: string, users: MemberDashboard[] ): Observable<DashboardData> {
-    return this.http.post<DashboardData>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,
-      {
-         dashboardRithmId: dashboardRithmId,
-         users: users
-         }
-    );
   }
 }

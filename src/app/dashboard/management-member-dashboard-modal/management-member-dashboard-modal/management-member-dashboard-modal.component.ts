@@ -105,11 +105,11 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    */
   addDashboardMembers(): void {
     this.dashboardService
-      .addDashboardMembers(this.usersAdd)
+      .addDashboardMembers(this.dashboardRithmId,this.usersAdd)
       .pipe(first())
       .subscribe({
-        next: (currentUsers) => {
-          this.membersDashboard = currentUsers;
+        next: () => {
+          this.getUsersDashboardPersonal();
         },
         error: (error: unknown) => {
           this.errorService.displayError(
