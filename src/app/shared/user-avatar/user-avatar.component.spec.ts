@@ -104,6 +104,6 @@ describe('UserAvatarComponent', () => {
 
   it('should delete render image when image id is empty', () => {
     component.profileImageRithmId = '';
-    expect(component.classProfileImage).toEqual('');
+    expect(component.imageData).toEqual({ imageData: '', imageName: '' });
   });
 });

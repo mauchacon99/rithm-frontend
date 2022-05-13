@@ -74,11 +74,15 @@ export class MockDocumentService {
    *
    * @param stationId The station for which to get the documents.
    * @param pageNum The desired page number of results.
+   * @param documentName Search documents by name.
+   * @param pageSize Limit of documents per page.
    * @returns A list of documents (one page worth).
    */
   getStationDocuments(
     stationId: string,
-    pageNum: number
+    pageNum: number,
+    documentName = '',
+    pageSize = 10
   ): Observable<StationDocuments> {
     const ELEMENT_DATA: StationDocuments = {
       documents: [

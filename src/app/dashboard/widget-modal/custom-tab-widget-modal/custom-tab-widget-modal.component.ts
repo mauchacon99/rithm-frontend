@@ -30,7 +30,7 @@ export class CustomTabWidgetModalComponent implements OnInit {
   /** List table Groups. */
   dataSourceTableGroup!: MatTableDataSource<ItemListWidgetModal>;
 
-  // Init a timeout variable to be used in method get results.
+  /** Init a timeout variable to be used in method get results. */
   timeout = setTimeout(() => '', 1000);
 
   /** Loading indicator tab station. */
