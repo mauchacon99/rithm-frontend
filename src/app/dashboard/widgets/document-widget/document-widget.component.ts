@@ -131,7 +131,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   questionFieldType = QuestionFieldType;
 
   constructor(
-    private errorService: ErrorService,
     private documentService: DocumentService,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService

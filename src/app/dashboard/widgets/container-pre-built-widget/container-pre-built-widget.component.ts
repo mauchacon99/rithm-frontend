@@ -159,7 +159,6 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private sidenavDrawerService: SidenavDrawerService
   ) {}

@@ -10,7 +10,6 @@ import { throwError } from 'rxjs';
 
 import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
-import { ErrorService } from 'src/app/core/error.service';
 import {
   MockErrorService,
   MockMapService,
@@ -30,7 +29,6 @@ describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
   let fixture: ComponentFixture<GroupSearchWidgetComponent>;
   let stationService: StationService;
-  let errorService: ErrorService;
   let mapService: MapService;
   let sidenavDrawerService: SidenavDrawerService;
   const dataWidget =
@@ -110,7 +108,6 @@ describe('GroupSearchWidgetComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: MapService, useClass: MockMapService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -119,7 +116,6 @@ describe('GroupSearchWidgetComponent', () => {
 
   beforeEach(() => {
     stationService = TestBed.inject(StationService);
-    errorService = TestBed.inject(ErrorService);
     mapService = TestBed.inject(MapService);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(GroupSearchWidgetComponent);

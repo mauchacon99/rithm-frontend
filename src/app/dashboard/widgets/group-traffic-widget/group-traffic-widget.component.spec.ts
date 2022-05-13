@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ErrorService } from 'src/app/core/error.service';
 import {
   MockDashboardService,
   MockErrorService,
@@ -22,7 +21,6 @@ describe('GroupTrafficWidgetComponent', () => {
   let fixture: ComponentFixture<GroupTrafficWidgetComponent>;
   let stationService: StationService;
   let dashboardService: DashboardService;
-  let errorService: ErrorService;
   let sidenavDrawerService: SidenavDrawerService;
   const dataWidget =
     '{"stationGroupRithmId":"7f0611fe-dfd2-42ec-9e06-9f4e4e0b24bb", "valueShowGraphic":"5"}';
@@ -66,7 +64,6 @@ describe('GroupTrafficWidgetComponent', () => {
       ],
       imports: [NgChartsModule],
       providers: [
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -77,7 +74,6 @@ describe('GroupTrafficWidgetComponent', () => {
   beforeEach(() => {
     stationService = TestBed.inject(StationService);
     dashboardService = TestBed.inject(DashboardService);
-    errorService = TestBed.inject(ErrorService);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(GroupTrafficWidgetComponent);
     component = fixture.componentInstance;

@@ -83,7 +83,6 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService
   ) {}

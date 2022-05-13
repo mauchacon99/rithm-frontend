@@ -217,7 +217,6 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
 
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService,
     private dashboardService: DashboardService,
     private sidenavDrawerService: SidenavDrawerService
   ) {}

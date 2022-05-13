@@ -3,7 +3,6 @@ import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
 import { MatSortModule } from '@angular/material/sort';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDocumentService } from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 
@@ -20,7 +19,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
   let fixture: ComponentFixture<ContainerPreBuiltWidgetComponent>;
-  let errorService: ErrorService;
   let documentService: DocumentService;
   let sidenavDrawerService: SidenavDrawerService;
   const containers: ContainerWidgetPreBuilt[] = [
@@ -49,7 +47,6 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         BrowserAnimationsModule,
       ],
       providers: [
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -57,7 +54,6 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   });
 
   beforeEach(() => {
-    errorService = TestBed.inject(ErrorService);
     documentService = TestBed.inject(DocumentService);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(ContainerPreBuiltWidgetComponent);

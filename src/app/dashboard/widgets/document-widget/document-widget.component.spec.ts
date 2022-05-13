@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
-import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import {
   DocumentWidgetComponent,
@@ -27,7 +26,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
   let fixture: ComponentFixture<DocumentWidgetComponent>;
-  let errorService: ErrorService;
   let documentService: DocumentService;
   const dataWidget =
     '{"documentRithmId":"8263330A-BCAA-40DB-8C06-D4C111D5C9DA","columns":[{"name":"Test","questionId":"45454-54545-45454"}]}';
@@ -355,16 +353,12 @@ describe('DocumentWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
-      providers: [
-        { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService },
-      ],
+      providers: [{ provide: DocumentService, useClass: MockDocumentService }],
       imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    errorService = TestBed.inject(ErrorService);
     documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(DocumentWidgetComponent);
     component = fixture.componentInstance;

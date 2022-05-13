@@ -90,7 +90,6 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
 
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService,
     private dialog: MatDialog,
     private router: Router,
     private mapService: MapService,
