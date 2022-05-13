@@ -54,7 +54,7 @@
     }"
   >
     <!--  Header Container  -->
-    <div class="m-2">
+    <div class="m-2" #headerWidget>
       <div class="h-[30px] -mx-2 flex justify-between items-center">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
           {{ dataStationWidget.stationName || 'Untitled Station' }}
@@ -68,7 +68,8 @@
             id="create-new-document"
             (click)="createNewDocument()"
           >
-            New Document <i class="fas fa-plus"></i>
+            {{ headerWidget.clientWidth <= 350 ? '' : 'New Document' }}
+            <i class="fas fa-plus"></i>
           </button>
           <div
             *ngIf="displayDocumentError"
