@@ -42,6 +42,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
 import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
 import { OrganizationService } from 'src/app/core/organization.service';
+import { MatRadioModule } from '@angular/material/radio';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -81,6 +82,7 @@ describe('DocumentInfoDrawerComponent', () => {
         RouterTestingModule,
         MatDialogModule,
         MatTabsModule,
+        MatRadioModule,
       ],
     }).compileComponents();
   });
