@@ -53,21 +53,6 @@ describe('OptionsMenuComponent', () => {
     canView: false,
   };
 
-  const testUser: User = {
-    firstName: 'Samus',
-    lastName: 'Aran',
-    email: 'ycantmetroidcrawl@metroid.com',
-    isEmailVerified: true,
-    createdDate: new Date().toISOString(),
-    rithmId: 'kj34k3jkj',
-    notificationSettings: null,
-    role: null,
-    organization: '',
-    profileImageRithmId: 'f47cf568-27a4-4968-5628-f46ccfee24ff',
-    defaultDashboardType: RoleDashboardMenu.Personal,
-    defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
-  };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
