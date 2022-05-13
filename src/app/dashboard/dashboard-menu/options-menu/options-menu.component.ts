@@ -1,17 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { RoleDashboardMenu, UserAccountInfo } from 'src/models';
+import { RoleDashboardMenu, User, UserAccountInfo } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -55,7 +47,14 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   /** Index of dashboard . */
   @Input() index!: number;
 
-  @Output() markDefaultDashboard = new EventEmitter<boolean>();
+  /**
+   * Current user.
+   *
+   * @returns Current user .
+   */
+  get user(): User {
+    return this.userService.user;
+  }
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -68,9 +67,6 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
 
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
-
-  /** Mark dashboard as default. */
-  selectedDefaultDashboard = false;
 
   /** If user is an admin. */
   isAdmin = false;
@@ -92,7 +88,6 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isAdmin = this.userService.isAdmin;
     this.getParams();
-    this.detectDefaultDashboard$();
   }
 
   /**
@@ -102,18 +97,6 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     this.activatedRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         this.paramRithmId = params.get('dashboardId');
-        this.isDefaultDashboard();
-      },
-    });
-  }
-
-  /**
-   * Detect when another dashboard is assigned as default in expansions defined.
-   */
-  private detectDefaultDashboard$(): void {
-    this.userService.userData$.pipe(takeUntil(this.destroyed$)).subscribe({
-      next: () => {
-        this.isDefaultDashboard();
       },
     });
   }
@@ -232,9 +215,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     if (response && this.rithmId) this.deleteDashboard(this.rithmId);
   }
 
-  /**
-   * Open dialog add widget.
-   */
+  /** Open dialog add widget. */
   openDialogManagementMembers(): void {
     this.dialog.open(ManagementMemberDashboardModalComponent, {
       panelClass: [
@@ -253,44 +234,21 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Set default dashboard.
-   */
+  /** Set default dashboard. */
   setDefaultDashboard(): void {
-    const data = this.selectedDefaultDashboard
-      ? {
-          defaultDashboardType: '',
-          defaultDashboardId: '',
-        }
-      : {
-          defaultDashboardType: this.dashboardRole,
-          defaultDashboardId: this.rithmId,
-        };
+    const defaultDashboard: UserAccountInfo = {
+      defaultDashboardType: this.dashboardRole,
+      defaultDashboardId: this.rithmId,
+    };
 
     this.userService
-      .updateUserAccount(data as UserAccountInfo)
+      .updateUserAccount(defaultDashboard)
       .pipe(first())
       .subscribe({
-        next: () => {
-          this.isDefaultDashboard();
-        },
         error: (error: unknown) => {
           this.errorService.logError(error);
         },
       });
-  }
-
-  /**
-   * Validate if this dashboard is default.
-   */
-  isDefaultDashboard(): void {
-    const defaultDashboard = this.userService.user.defaultDashboardId;
-    this.selectedDefaultDashboard =
-      (defaultDashboard === this.paramRithmId &&
-        defaultDashboard === this.rithmId) ||
-      this.rithmId === this.userService.user.defaultDashboardId;
-
-    this.markDefaultDashboard.emit(this.selectedDefaultDashboard);
   }
 
   /** Clean subscriptions. */

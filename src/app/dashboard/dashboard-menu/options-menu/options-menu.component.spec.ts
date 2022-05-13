@@ -439,34 +439,6 @@ describe('OptionsMenuComponent', () => {
     );
   });
 
-  it('should validate if is default and emit value', () => {
-    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
-    component.rithmId = defaultDashboard;
-    fixture.detectChanges();
-
-    const markDefaultDashboardSpy = spyOn(
-      component.markDefaultDashboard,
-      'emit'
-    ).and.callThrough();
-    component['isDefaultDashboard']();
-    expect(component.paramRithmId).toEqual(defaultDashboard);
-    expect(component.selectedDefaultDashboard).toBeTrue();
-    expect(markDefaultDashboardSpy).toHaveBeenCalledOnceWith(true);
-  });
-
-  it('should validate if not is default and emit value', () => {
-    component.rithmId = '';
-    fixture.detectChanges();
-
-    const markDefaultDashboardSpy = spyOn(
-      component.markDefaultDashboard,
-      'emit'
-    ).and.callThrough();
-    component['isDefaultDashboard']();
-    expect(component.selectedDefaultDashboard).toBeFalse();
-    expect(markDefaultDashboardSpy).toHaveBeenCalledOnceWith(false);
-  });
-
   it('should set default dashboard', () => {
     const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
     component.dashboardRole = RoleDashboardMenu.Company;
@@ -513,20 +485,5 @@ describe('OptionsMenuComponent', () => {
     expect(component.paramRithmId).toEqual(
       '747cf568-27a4-4968-5628-046ccfee24fd'
     );
-  });
-
-  it('Should subscribe to user.userData$', () => {
-    const spyUserService = spyOn(
-      TestBed.inject(UserService).userData$,
-      'next'
-    ).and.callThrough();
-    const spyIsDefaultDashboard = spyOn(
-      component,
-      'isDefaultDashboard'
-    ).and.callThrough();
-    component.ngOnInit();
-    TestBed.inject(UserService).userData$.next(testUser);
-    expect(spyUserService).toHaveBeenCalled();
-    expect(spyIsDefaultDashboard).toHaveBeenCalled();
   });
 });
