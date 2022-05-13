@@ -36,4 +36,22 @@ describe('ErrorWidgetComponent', () => {
     expect(reloadRequest).toHaveBeenCalled();
     expect(emit).toHaveBeenCalledOnceWith();
   });
+
+  it('should call removeWidget', () => {
+    component.widgetDeleted = true;
+    component.permission = true;
+    fixture.detectChanges();
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+
+    const spyRemoveWidget = spyOn(component, 'removeWidget').and.callThrough();
+    const buttonDelete =
+      fixture.debugElement.nativeElement.querySelector('#delete-widget');
+    expect(buttonDelete).toBeTruthy();
+    buttonDelete.click();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyRemoveWidget).toHaveBeenCalled();
+  });
 });
