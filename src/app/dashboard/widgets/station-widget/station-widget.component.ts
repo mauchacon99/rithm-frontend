@@ -138,7 +138,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         if (
           this.documentIdSelected === value.documentFlow &&
           this.isDocument &&
-          !value.stationFlow.includes('rithmIdTempOnlySave')
+          !value.stationFlow.includes('rithmIdTempOnlySave') &&
+          !value.stationFlow.includes('rithmIdTempOnlySaveUser')
         ) {
           this.viewDocument('', true);
         }
@@ -147,7 +148,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.reloadDocumentList = true;
         }
         // If there are no documents opened.
-        else {
+        else if (!value.stationFlow.includes('rithmIdTempOnlySaveUser')) {
+          this.getStationWidgetDocuments();
+        }
+        // If the document has assigned new user.
+        else if (
+          value.stationFlow.includes('rithmIdTempOnlySaveUser') &&
+          this.columnsAllField.some(
+            (column) => column.name === this.columnsDocumentInfo.AssignedUser
+          )
+        ) {
           this.getStationWidgetDocuments();
         }
       }
@@ -527,11 +537,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       (questionDocument) => questionDocument.rithmId === questionRithmId
     );
     if (question) {
-      if (
-        question.questionType === this.questionFieldType.CheckList ||
-        question.questionType === this.questionFieldType.MultiSelect ||
-        question.questionType === this.questionFieldType.Select
-      ) {
+      if (question.questionType === this.questionFieldType.Select) {
         if (question?.answer?.asArray?.length) {
           if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
             return '---';
@@ -546,11 +552,33 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         }
         return null;
       }
+
+      if (
+        question.questionType === this.questionFieldType.CheckList ||
+        question.questionType === this.questionFieldType.MultiSelect
+      ) {
+        if (question?.answer?.asArray?.length) {
+          const values: string[] = [];
+          question?.answer?.asArray?.map((answer) => {
+            values.push(
+              `<i class="fas ${
+                answer.isChecked
+                  ? 'fa-check-square text-accent-500'
+                  : 'fa-square text-secondary-500'
+              }"></i> ${answer.value}`
+            );
+          });
+          return values.join('<br>') || null;
+        }
+        return null;
+      }
+
       if (question.questionType === this.questionFieldType.Instructions) {
         return question.prompt || null;
       }
       return question?.answer?.value || null;
     }
+
     return null;
   }
 

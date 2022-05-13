@@ -188,15 +188,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subscribeDrawerContext$();
     this.subscribeDocumentName$();
     this.subscribeDocumentAnswer$();
-
-    if (!this.isWidget) {
-      this.sidenavDrawerService.setDrawer(this.detailDrawer);
-      this.getParams();
-    } else {
-      this.documentId = this.documentRithmIdWidget;
-      this.stationId = this.stationRithmIdWidget;
-      this.getDocumentStationData();
-    }
   }
 
   /**
@@ -239,6 +230,14 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       next: () => {
         this.viewNewContainer =
           this.splitService.getStationDocumentTreatment() === 'on';
+        if (!this.isWidget) {
+          this.sidenavDrawerService.setDrawer(this.detailDrawer);
+          this.getParams();
+        } else {
+          this.documentId = this.documentRithmIdWidget;
+          this.stationId = this.stationRithmIdWidget;
+          this.getDocumentStationData();
+        }
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -296,7 +295,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.queryParams.pipe(first()).subscribe({
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         if (!params.stationId || !params.documentId) {
           this.handleInvalidParams();
@@ -305,7 +304,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.stationId = params.stationId;
           this.getDocumentStationData();
           this.getConnectedStations();
-          this.getContainerWidgets();
+          if (this.viewNewContainer) {
+            this.getContainerWidgets();
+          }
         }
       },
       error: (error: unknown) => {
