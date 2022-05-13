@@ -1,7 +1,34 @@
 <div class="modal-container">
   <section class="flex flex-col">
-    <h4 class="text-center font-semibold">Assign Container</h4>
-    <div class="overflow-y-auto h-[350px] pt-2"></div>
+    <h4 class="text-left font-semibold">Assign Container</h4>
+    <div class="list-user-to-assign overflow-y-auto h-[350px] pt-2">
+      <mat-radio-group
+        aria-labelledby="radio-group-label"
+        class="radio-group px-2"
+      >
+        <mat-radio-button
+          class="radio-button w-full"
+          *ngFor="let user of userRoster"
+          [value]="user.rithmId"
+        >
+          <div class="unassigned-user-section flex items-center py-2">
+            <app-user-avatar
+              [firstName]="user.firstName"
+              [lastName]="user.lastName"
+              [navProfile]="true"
+              class="mx-2"
+              [profileImageRithmId]="user?.profileImageRithmId || ''"
+            ></app-user-avatar>
+            <div class="flex w-full flex-col justify-center">
+              <h6>{{ user.firstName }} {{ user.lastName }}</h6>
+              <p class="lowercase font-normal text-accent-500 text-xs">
+                {{ user.email }}
+              </p>
+            </div>
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
     <div mat-dialog-actions class="flex justify-end self-end">
       <button
         mat-button
