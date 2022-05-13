@@ -83,14 +83,14 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private user: UserService
+    private userService: UserService
   ) {}
 
   /**
    * Initial Method.
    */
   ngOnInit(): void {
-    this.isAdmin = this.user.isAdmin;
+    this.isAdmin = this.userService.isAdmin;
     this.getParams();
     this.detectDefaultDashboard$();
   }
@@ -111,7 +111,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * Detect when another dashboard is assigned as default in expansions defined.
    */
   private detectDefaultDashboard$(): void {
-    this.user.userData$.pipe(takeUntil(this.destroyed$)).subscribe({
+    this.userService.userData$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: () => {
         this.isDefaultDashboard();
       },
@@ -165,6 +165,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * @param rithmId The dashboard rithmId to delete.
    */
   deleteDashboard(rithmId: string): void {
+    const isDefaultDashboard = rithmId === this.userService.user.defaultDashboardId;
     const isCurrentDashboard = rithmId === this.paramRithmId;
     const isCurrentPrincipalDashboard = this.paramRithmId === null;
     /* Index is principal dashboard when is 0 this is specified in dashboard-component getOrganizationDashboard
@@ -173,7 +174,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
       this.index === 0 && this.dashboardRole === this.roleDashboardMenu.Company;
 
     if (
-      isCurrentDashboard ||
+      isCurrentDashboard || isDefaultDashboard ||
       (isCurrentPrincipalDashboard && isPrincipalDashboard)
     ) {
       this.dashboardService.toggleLoadingDashboard(true);
@@ -188,7 +189,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
 
     deleteDashboard$.pipe(first()).subscribe({
       next: () => {
-        if (isCurrentPrincipalDashboard && isPrincipalDashboard)
+        if (isCurrentPrincipalDashboard && isPrincipalDashboard || isDefaultDashboard)
           this.dashboardService.toggleLoadingDashboard(false, true);
         //dashboardService.toggleLoadingDashboard is to reload dashboard component
         else if (isCurrentDashboard) this.router.navigate(['/', 'dashboard']);
@@ -261,7 +262,7 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
           defaultDashboardId: this.rithmId,
         };
 
-    this.user
+    this.userService
       .updateUserAccount(data as UserAccountInfo)
       .pipe(first())
       .subscribe({
@@ -278,11 +279,11 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * Validate if this dashboard is default.
    */
   isDefaultDashboard(): void {
-    const defaultDashboard = this.user.user.defaultDashboardId;
+    const defaultDashboard = this.userService.user.defaultDashboardId;
     this.selectedDefaultDashboard =
       (defaultDashboard === this.paramRithmId &&
         defaultDashboard === this.rithmId) ||
-      this.rithmId === this.user.user.defaultDashboardId;
+      this.rithmId === this.userService.user.defaultDashboardId;
 
     this.markDefaultDashboard.emit(this.selectedDefaultDashboard);
   }

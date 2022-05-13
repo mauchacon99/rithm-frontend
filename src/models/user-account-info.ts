@@ -17,8 +17,8 @@ export interface UserAccountInfo {
   vaultRithmId?: string;
 
   /** Dashboard type default dashboard for this user. */
-  defaultDashboardType?: RoleDashboardMenu;
+  defaultDashboardType?: RoleDashboardMenu | null;
 
   /** Dashboard rithmId  default dashboard for this user. */
-  defaultDashboardId?: string;
+  defaultDashboardId?: string | null;
 }
