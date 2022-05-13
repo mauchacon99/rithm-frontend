@@ -487,7 +487,6 @@
                           (mouseenter)="widgetMoveButton = i"
                           (mouseleave)="widgetMoveButton = -1"
                         >
-                          
                           <div
                             class="h-gridster"
                             [ngClass]="{
@@ -500,7 +499,11 @@
                               type="button"
                               class="drag-handler"
                               data-testid="button-drag-handler"
-                              *ngIf="widgetMoveButton === i && layoutMode && !isMobile"
+                              *ngIf="
+                                widgetMoveButton === i &&
+                                layoutMode &&
+                                !isMobile
+                              "
                             >
                               <i class="fas fa-arrows fa-xl"></i>
                             </button>
