@@ -14,7 +14,7 @@ import {
   DocumentWidget,
   Question,
   QuestionFieldType,
-  reloadStationFlow,
+  ReloadStationFlow,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
@@ -70,7 +70,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** A setter for the stationFlow property to reload document when its flowed. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     if (this.documentRithmId) {
       if (
         value &&
