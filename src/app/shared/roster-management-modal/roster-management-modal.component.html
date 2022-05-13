@@ -7,151 +7,149 @@
   </div>
 
   <!-- Current roster members -->
-    <div class="pt-2 flex justify-center items-center h-full">
-      <div
-        class="gap-2 flex justify-center"
-        *ngIf="
-          rosterMembers.length > 0 || loadingMembers;
-          else rosterMembersEmpty
-        "
-      >
-        <ng-container *ngIf="!loadingMembers">
-          <div
-            class="float-left my-1 mx-px first:ml-0"
-            *ngFor="let member of rosterMembers"
-          >
-            <app-user-avatar
-              [firstName]="member.firstName"
-              [lastName]="member.lastName"
-              [navProfile]="true"
-              [badge]="'check'"
-              (click)="
-                isGroup
-                  ? removeMemberFromRosterGroup(member.rithmId)
-                  : removeMemberFromRoster(member.rithmId)
-              "
-              [hoverEffect]="true"
-              [profileImageRithmId]="member.profileImageRithmId || ''"
-            ></app-user-avatar>
-          </div>
-        </ng-container>
-        <!-- Loading indicator for current roster members -->
-        <div class="w-24 items-center py-2" *ngIf="loadingMembers">
-          <app-loading-indicator
-            id="roster-member-loading"
-            [inlineText]="'Loading...'"
-          ></app-loading-indicator>
-        </div>
-      </div>
-      <ng-template #rosterMembersEmpty>
-        <p class="leading-none text-error-500 my-3">
-          There are no {{ rosterType }} roster members
-        </p>
-      </ng-template>
-    </div>
-    <div class="flex justify-center text-xs" *ngIf="addRemoveRosterError">
-      <span class="text-error-500">Error: Unable to add/remove member</span>
-    </div>
-
-  <!-- List of organization members -->
+  <div class="pt-2 flex justify-center items-center h-full">
     <div
-      class="flex items-start justify-center pt-4 overflow-y-auto relative list-area"
-      *ngIf="totalPotentialUsers > 0 || listLoading"
+      class="gap-2 flex justify-center"
+      *ngIf="
+        rosterMembers.length > 0 || loadingMembers;
+        else rosterMembersEmpty
+      "
     >
-      <div
-        class="screen-box-roster"
-        [ngClass]="{
-          'loading-active absolute top-2 left-0 h-full w-full z-1':
-          loadingMembers
-        }"
-      ></div>
-      <!-- Loading indicator for list of members -->
-      <div
-        class="h-full w-full flex justify-center items-center pt-2"
-        *ngIf="listLoading"
-      >
+      <ng-container *ngIf="!loadingMembers">
+        <div
+          class="float-left my-1 mx-px first:ml-0"
+          *ngFor="let member of rosterMembers"
+        >
+          <app-user-avatar
+            [firstName]="member.firstName"
+            [lastName]="member.lastName"
+            [navProfile]="true"
+            [badge]="'check'"
+            (click)="
+              isGroup
+                ? removeMemberFromRosterGroup(member.rithmId)
+                : removeMemberFromRoster(member.rithmId)
+            "
+            [hoverEffect]="true"
+            [profileImageRithmId]="member.profileImageRithmId || ''"
+          ></app-user-avatar>
+        </div>
+      </ng-container>
+      <!-- Loading indicator for current roster members -->
+      <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator
-          id="user-organization-loading"
-          class="flex-grow m-auto"
+          id="roster-member-loading"
+          [inlineText]="'Loading...'"
         ></app-loading-indicator>
       </div>
-      <!-- List of members -->
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-        *ngIf="!listLoading"
-      >
-        <ng-container *ngFor="let user of users">
-          <div class="h-100">
-            <div
-              [ngClass]="{
-                'border-accent-500':
-                  rosterType === 'workers' ? user.isWorker : user.isOwner,
-                'border-error-500': userHadLastError(user.rithmId),
-                'pointer-events-none': loadingMembers
-              }"
-              class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
-              (click)="toggleSelectedUser(user.rithmId)"
-            >
-              <div class="my-1">
-                <app-user-avatar
-                  [firstName]="user.firstName"
-                  [lastName]="user.lastName"
-                  [hideToolTip]="true"
-                  [badge]="getCurrentBadge(user)"
-                  [profileImageRithmId]="user.profileImageRithmId || ''"
-                >
-                </app-user-avatar>
-              </div>
-              <div class="flex flex-col justify-center overflow-hidden">
-                <p class="leading-none pl-2 mb-1 truncate">
-                  {{ user.firstName }} {{ user.lastName }}
-                </p>
-                <p
-                  class="leading-none overline-font pl-2 text-secondary-500 truncate"
-                >
-                  {{ user.email }}
-                </p>
-              </div>
-            </div>
-            <div
-              class="col-xs-12 text-center truncate text-xs"
-              *ngIf="userHadLastError(user.rithmId)"
-            >
-              <span class="text-error-500"
-                >Error: Unable to add/remove member</span
+    </div>
+    <ng-template #rosterMembersEmpty>
+      <p class="leading-none text-error-500 my-3">
+        There are no {{ rosterType }} roster members
+      </p>
+    </ng-template>
+  </div>
+  <div class="flex justify-center text-xs" *ngIf="addRemoveRosterError">
+    <span class="text-error-500">Error: Unable to add/remove member</span>
+  </div>
+
+  <!-- List of organization members -->
+  <div
+    class="flex items-start justify-center pt-4 overflow-y-auto relative list-area"
+    *ngIf="totalPotentialUsers > 0 || listLoading"
+  >
+    <div
+      class="screen-box-roster"
+      [ngClass]="{
+        'loading-active absolute top-2 left-0 h-full w-full z-1': loadingMembers
+      }"
+    ></div>
+    <!-- Loading indicator for list of members -->
+    <div
+      class="h-full w-full flex justify-center items-center pt-2"
+      *ngIf="listLoading"
+    >
+      <app-loading-indicator
+        id="user-organization-loading"
+        class="flex-grow m-auto"
+      ></app-loading-indicator>
+    </div>
+    <!-- List of members -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      *ngIf="!listLoading"
+    >
+      <ng-container *ngFor="let user of users">
+        <div class="h-100">
+          <div
+            [ngClass]="{
+              'border-accent-500':
+                rosterType === 'workers' ? user.isWorker : user.isOwner,
+              'border-error-500': userHadLastError(user.rithmId),
+              'pointer-events-none': loadingMembers
+            }"
+            class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
+            (click)="toggleSelectedUser(user.rithmId)"
+          >
+            <div class="my-1">
+              <app-user-avatar
+                [firstName]="user.firstName"
+                [lastName]="user.lastName"
+                [hideToolTip]="true"
+                [badge]="getCurrentBadge(user)"
+                [profileImageRithmId]="user.profileImageRithmId || ''"
               >
+              </app-user-avatar>
+            </div>
+            <div class="flex flex-col justify-center overflow-hidden">
+              <p class="leading-none pl-2 mb-1 truncate">
+                {{ user.firstName }} {{ user.lastName }}
+              </p>
+              <p
+                class="leading-none overline-font pl-2 text-secondary-500 truncate"
+              >
+                {{ user.email }}
+              </p>
             </div>
           </div>
-        </ng-container>
-      </div>
+          <div
+            class="col-xs-12 text-center truncate text-xs"
+            *ngIf="userHadLastError(user.rithmId)"
+          >
+            <span class="text-error-500"
+              >Error: Unable to add/remove member</span
+            >
+          </div>
+        </div>
+      </ng-container>
     </div>
-    <!-- Loading indicator for not found members -->
-    <div
-      *ngIf="totalPotentialUsers === 0 && !listLoading"
-      class="flex justify-center text-center my-40"
-    >
-      <p>Members not found</p>
-    </div>
+  </div>
+  <!-- Loading indicator for not found members -->
+  <div
+    *ngIf="totalPotentialUsers === 0 && !listLoading"
+    class="flex justify-center text-center my-40"
+  >
+    <p>Members not found</p>
+  </div>
 
   <!-- Paginator -->
-    <div
-      *ngIf="!listLoading && totalPotentialUsers > 0"
-      class="flex justify-center"
-      [ngClass]="{
-        'pointer-events-none text-secondary-200':
-          loadingMembers
-      }"
+  <div
+    *ngIf="!listLoading && totalPotentialUsers > 0"
+    class="flex justify-center"
+    [ngClass]="{
+      'pointer-events-none text-secondary-200': loadingMembers
+    }"
+  >
+    <app-pagination
+      (currentPageNum)="
+        getPotentialStationRosterMembers(stationOrGroupRithmId, $event)
+      "
+      [numItems]="totalPotentialUsers"
+      [numPerPage]="20"
+      [activeNum]="pageNumUsersOrganization"
     >
-      <app-pagination
-        (currentPageNum)="
-          getPotentialStationRosterMembers(stationOrGroupRithmId, $event)
-        "
-        [numItems]="totalPotentialUsers"
-        [numPerPage]="20"
-        [activeNum]="pageNumUsersOrganization"
-      >
-      </app-pagination>
-    </div>
+    </app-pagination>
+  </div>
 
   <!-- Buttons -->
   <div mat-dialog-actions class="flex justify-end">
