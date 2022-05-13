@@ -51,6 +51,7 @@ import { UserService } from 'src/app/core/user.service';
 
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
 
 const formBuilder = new FormBuilder();
@@ -158,6 +159,7 @@ describe('FlowLogicComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         MatTooltipModule,
+        MatDatepickerModule,
       ],
       declarations: [
         FlowLogicComponent,

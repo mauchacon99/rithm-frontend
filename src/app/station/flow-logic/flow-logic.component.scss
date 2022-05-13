@@ -67,8 +67,45 @@
   }
 }
 
-.tab-flow-content ::ng-deep {
-  .mat-form-field-wrapper {
+.tab-flow-content {
+  ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 0;
+  }
+}
+
+.shedule-content-section {
+  @apply py-6 px-8;
+
+  ::ng-deep .mat-form-field-wrapper {
+    @apply m-0 pb-0;
+  }
+
+  .trigger-type-section,
+  .trigger-interval-time-section {
+    @apply mb-6;
+
+    min-width: 400px;
+    max-width: 420px;
+
+    .trigger-datepicker-section {
+      @apply mb-6;
+    }
+
+    .trigger-time-section {
+      @apply flex items-center space-x-2;
+
+      ::ng-deep .mat-form-field:nth-child(1),
+      ::ng-deep .mat-form-field:nth-child(3) {
+        @apply w-14 text-center;
+      }
+
+      ::ng-deep .mat-button-toggle-group {
+        @apply shadow-none border border-secondary-50 rounded-md w-20;
+
+        ::ng-deep .mat-button-toggle-label-content {
+          @apply p-0 leading-[32px];
+        }
+      }
+    }
   }
 }
