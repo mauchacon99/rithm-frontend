@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { UserService } from 'src/app/core/user.service';
+import { MockUserService } from 'src/mocks';
 
 import { ErrorWidgetComponent } from './error-widget.component';
 
@@ -9,6 +12,10 @@ describe('ErrorWidgetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ErrorWidgetComponent],
+      providers: [
+        { provide: UserService, useClass: MockUserService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+      ],
     }).compileComponents();
   });
 
@@ -41,7 +48,7 @@ describe('ErrorWidgetComponent', () => {
     component.widgetDeleted = true;
     component.permission = true;
     fixture.detectChanges();
-    const spyDeteleWidget = spyOn(
+    const spyDeleteWidget = spyOn(
       component.deleteWidget,
       'emit'
     ).and.callThrough();
@@ -51,7 +58,7 @@ describe('ErrorWidgetComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#delete-widget');
     expect(buttonDelete).toBeTruthy();
     buttonDelete.click();
-    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDeleteWidget).toHaveBeenCalled();
     expect(spyRemoveWidget).toHaveBeenCalled();
   });
 });

@@ -281,6 +281,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Open drawer only button delete widget. */
   removeWidget(): void {
     this.deleteWidget = true;
+    this.editMode = true;
   }
 
   /**

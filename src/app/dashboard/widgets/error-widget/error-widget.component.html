@@ -34,7 +34,7 @@
       </button>
 
       <button
-        *ngIf="permission && widgetDeleted"
+        *ngIf="(permission && widgetDeleted) || (isAdmin && widgetDeleted)"
         mat-stroked-button
         color="warn"
         (click)="removeWidget()"

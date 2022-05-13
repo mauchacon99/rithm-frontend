@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for show error.
@@ -9,7 +10,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   templateUrl: './error-widget.component.html',
   styleUrls: ['./error-widget.component.scss'],
 })
-export class ErrorWidgetComponent {
+export class ErrorWidgetComponent implements OnInit {
   /** Show message error. */
   @Input() errorMessage!: string;
 
@@ -25,6 +26,9 @@ export class ErrorWidgetComponent {
   /** Output try again. */
   @Output() deleteWidget = new EventEmitter();
 
+  /** Validate if the current user is admin. */
+  isAdmin = false;
+
   /**
    * Whether the drawer is open.
    *
@@ -34,7 +38,15 @@ export class ErrorWidgetComponent {
     return this.sidenavDrawerService.isDrawerOpen;
   }
 
-  constructor(private sidenavDrawerService: SidenavDrawerService) {}
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService
+  ) {}
+
+  /** Init method. */
+  ngOnInit(): void {
+    this.isAdmin = this.userService.isAdmin;
+  }
 
   /**
    * Try again.
