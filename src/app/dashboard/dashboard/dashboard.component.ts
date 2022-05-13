@@ -625,7 +625,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /** Set dashboard to null when the dashboard default does not exist. */
-  setNullDashboardUser(): void {
+  private setNullDashboardUser(): void {
     this.userService
       .updateUserAccount({
         defaultDashboardType: null,
