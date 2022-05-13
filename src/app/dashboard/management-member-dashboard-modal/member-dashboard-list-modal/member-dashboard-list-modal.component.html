@@ -1,1 +1,56 @@
-<p>member-dashboard-list-modal works!</p>
+<div
+  class="w-full flex justify-between py-3 overflow-hidden items-center"
+  [formGroup]="form"
+>
+  <div
+    class="flex items-center md:ml-5"
+    [ngClass]="{
+      'space-x-2': isMobileDevice,
+      'space-x-5': !isMobileDevice
+    }"
+  >
+    <div>
+      <mat-checkbox formControlName="check"></mat-checkbox>
+    </div>
+    <div
+      class="flex items-center"
+      [ngClass]="{ 'space-x-2': isMobileDevice, 'space-x-5': !isMobileDevice }"
+    >
+      <div>
+        <app-user-avatar
+          [firstName]="member.firstName"
+          [lastName]="member.lastName"
+          [profileImageRithmId]="member.profileImageRithmId"
+          [isDrawer]="isMobileDevice ? false : true"
+        >
+        </app-user-avatar>
+      </div>
+      <div>
+        <p class="text-sm md:text-base">
+          {{ member.firstName + ' ' + member.lastName }}
+        </p>
+        <p class="text-sm md:text-base text-accent-500">{{ member.email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <mat-chip-list
+      [ngClass]="{
+        'chip-custom': isEditable,
+        'chip-custom-width': isMobileDevice
+      }"
+    >
+      <mat-chip [disabled]="!check" (click)="onChange()"
+        >Edit
+        <i
+          class="fa-solid ml-2"
+          [ngClass]="{
+            'fa-circle-check': isEditable,
+            'fa-circle-xmark': !isEditable
+          }"
+        ></i>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</div>
