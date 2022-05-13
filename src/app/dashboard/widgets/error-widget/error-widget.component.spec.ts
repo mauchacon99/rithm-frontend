@@ -44,7 +44,7 @@ describe('ErrorWidgetComponent', () => {
     expect(emit).toHaveBeenCalledOnceWith();
   });
 
-  it('should call removeWidget', () => {
+  it('should call removeWidget and show button if have permission', () => {
     component.widgetDeleted = true;
     component.permission = true;
     fixture.detectChanges();
@@ -60,5 +60,25 @@ describe('ErrorWidgetComponent', () => {
     buttonDelete.click();
     expect(spyDeleteWidget).toHaveBeenCalled();
     expect(spyRemoveWidget).toHaveBeenCalled();
+  });
+
+  it('should hidden button if do not have permission and not is admin', () => {
+    component.widgetDeleted = true;
+    component.permission = false;
+    component.isAdmin = false;
+    fixture.detectChanges();
+    const buttonDelete =
+      fixture.debugElement.nativeElement.querySelector('#delete-widget');
+    expect(buttonDelete).toBeNull();
+  });
+
+  it('should show button if is admin', () => {
+    component.widgetDeleted = true;
+    component.permission = false;
+    component.isAdmin = true;
+    fixture.detectChanges();
+    const buttonDelete =
+      fixture.debugElement.nativeElement.querySelector('#delete-widget');
+    expect(buttonDelete).toBeTruthy();
   });
 });
