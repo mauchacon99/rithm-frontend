@@ -13,6 +13,7 @@ import {
   RuleOperand,
 } from 'src/models';
 import { STATES } from 'src/helpers';
+import { v4 as uuidv4 } from 'uuid';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
@@ -85,7 +86,7 @@ export class ConditionsComponent implements OnInit {
   /** The default value for the second question if is needed.*/
   secondOperandDefaultQuestion: Question = {
     questionType: QuestionFieldType.ShortText,
-    rithmId: Math.random().toString(36).slice(2),
+    rithmId: uuidv4(),
     prompt: 'Custom',
     isReadOnly: false,
     isRequired: false,
@@ -94,7 +95,7 @@ export class ConditionsComponent implements OnInit {
     children: [],
     possibleAnswers: [],
     answer: {
-      questionRithmId: Math.random().toString(36).slice(2),
+      questionRithmId: uuidv4(),
       referAttribute: '',
       asArray: [
         {
@@ -167,11 +168,6 @@ export class ConditionsComponent implements OnInit {
       text: 'contains',
       value: OperatorType.Contains,
     },
-    /** Not contain, not working. */
-    // {
-    //   text: 'does not contain',
-    //   value: OperatorType.NotContains,
-    // },
   ];
 
   /** Number group for the operator options. */
@@ -212,10 +208,6 @@ export class ConditionsComponent implements OnInit {
       text: 'after',
       value: OperatorType.After,
     },
-    // {
-    //   text: 'on',
-    //   value: OperatorType.On,
-    // },
   ];
 
   /** Select group for the operator options. */
@@ -543,7 +535,7 @@ export class ConditionsComponent implements OnInit {
     this.secondOperandQuestionPrompt = '';
     this.secondOperandDefaultQuestion = {
       questionType: QuestionFieldType.ShortText,
-      rithmId: Math.random().toString(36).slice(2),
+      rithmId: uuidv4(),
       prompt: 'Custom',
       isReadOnly: false,
       isRequired: false,
@@ -552,7 +544,7 @@ export class ConditionsComponent implements OnInit {
       children: [],
       possibleAnswers: [],
       answer: {
-        questionRithmId: Math.random().toString(36).slice(2),
+        questionRithmId: uuidv4(),
         referAttribute: '',
         asArray: [
           {
