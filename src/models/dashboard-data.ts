@@ -13,4 +13,10 @@ export interface DashboardData {
 
   /** List for widgets in the dashboard. */
   widgets: DashboardItem[];
+
+  /** If user can edit the dashboard. */
+  isEditable: boolean;
+
+  /** If user can view widgets. */
+  canView: boolean;
 }
