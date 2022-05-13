@@ -136,6 +136,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     defaultLayerIndex: 1,
     maxLayerIndex: 2,
     baseLayerIndex: 1,
+    disableWarnings: true,
   };
 
   constructor(
