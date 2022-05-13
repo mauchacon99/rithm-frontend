@@ -13,14 +13,23 @@ import {
   ColumnFieldsWidget,
   DashboardItem,
   DocumentWidget,
+  Question,
   QuestionFieldType,
-  reloadStationFlow,
+  ReloadStationFlow,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { takeUntil } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+
+/** Local interface to display question and html value. */
+export interface QuestionValuesColumn {
+  /**Value html */
+  value: string | null;
+  /**All question information */
+  detail: Question;
+}
 
 /**
  * Component for list field the document how widget.
@@ -62,7 +71,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** A setter for the stationFlow property to reload document when its flowed. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     if (this.documentRithmId) {
       if (
         value &&
@@ -192,6 +201,95 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Toggle drawer when click on edit station widget. */
   toggleEditDocument(): void {
     this.toggleDrawer.emit(+this.dataDocumentWidget.questions.length);
+  }
+
+  /**
+   * Get questions values by document columns.
+   *
+   * @returns An array with question values.
+   */
+  get getValueQuestions(): QuestionValuesColumn[] {
+    const questions: QuestionValuesColumn[] = [];
+    this.documentColumns.forEach((column) => {
+      this.dataDocumentWidget.questions.forEach((questionList) => {
+        const question = questionList.questions.find(
+          (q) => q.rithmId === column.questionId
+        );
+        if (question) {
+          questions.push({
+            detail: question,
+            value: this.getHTMLQuestionValue(question),
+          });
+        }
+      });
+    });
+    return questions;
+  }
+
+  /**
+   * Get default questions values by document columns.
+   *
+   * @returns An array with question values.
+   */
+  get getDefaultValueQuestions(): QuestionValuesColumn[] {
+    const questions: QuestionValuesColumn[] = [];
+    this.dataDocumentWidget.questions.forEach((questionList) => {
+      questionList.questions.forEach((question) => {
+        questions.push({
+          detail: question,
+          value: this.getHTMLQuestionValue(question),
+        });
+      });
+    });
+    return questions;
+  }
+
+  /**
+   * Get value to show by each question.
+   *
+   * @param question Question to validate.
+   * @returns String value to show on HTML.
+   */
+  private getHTMLQuestionValue(question: Question): string | null {
+    if (question.questionType === this.questionFieldType.Select) {
+      if (question?.answer?.asArray?.length) {
+        if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
+          return '---';
+        }
+        const values: string[] = [];
+        question?.answer?.asArray?.map((answer) => {
+          if (answer.isChecked) {
+            values.push(answer.value);
+          }
+        });
+        return values.join('<br>') || null;
+      }
+      return null;
+    }
+
+    if (
+      question.questionType === this.questionFieldType.CheckList ||
+      question.questionType === this.questionFieldType.MultiSelect
+    ) {
+      if (question?.answer?.asArray?.length) {
+        const values: string[] = [];
+        question?.answer?.asArray?.map((answer) => {
+          values.push(
+            `<i class="fas ${
+              answer.isChecked
+                ? 'fa-check-square text-accent-500'
+                : 'fa-square text-secondary-500'
+            }"></i> ${answer.value}`
+          );
+        });
+        return values.join('<br>') || null;
+      }
+      return null;
+    }
+    if (question.questionType === this.questionFieldType.Instructions) {
+      return question.prompt || null;
+    }
+    return question?.answer?.value || null;
   }
 
   /** Clean subscriptions. */
