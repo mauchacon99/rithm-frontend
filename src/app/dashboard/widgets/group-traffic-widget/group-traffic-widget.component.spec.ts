@@ -258,4 +258,29 @@ describe('GroupTrafficWidgetComponent', () => {
     expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(stationService, 'getGroupTrafficData').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getGroupTrafficData();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalled();
+  });
 });

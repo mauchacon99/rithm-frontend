@@ -2,11 +2,15 @@
   <div class="w-full h-full flex items-center justify-center">
     <div class="w-full text-center">
       <i
-        [ngClass]="!permission ? 'text-accent-500' : 'text-error-500'"
+        [ngClass]="
+          !permission || widgetDeleted ? 'text-accent-500' : 'text-error-500'
+        "
         class="fas fa-exclamation-triangle text-3xl"
       ></i>
       <h3
-        [ngClass]="!permission ? 'text-accent-500' : 'text-error-500'"
+        [ngClass]="
+          !permission || widgetDeleted ? 'text-accent-500' : 'text-error-500'
+        "
         class="truncate"
       >
         ERROR
@@ -19,7 +23,7 @@
         }}
       </p>
       <button
-        *ngIf="permission"
+        *ngIf="permission && !widgetDeleted"
         mat-stroked-button
         color="warn"
         (click)="reloadRequest()"
@@ -27,6 +31,18 @@
         data-testid="try-again"
       >
         Try Again
+      </button>
+
+      <button
+        *ngIf="permission && widgetDeleted"
+        mat-stroked-button
+        color="warn"
+        (click)="removeWidget()"
+        id="delete-widget"
+        data-testid="delete-widget"
+        [disabled]="isDrawerOpen"
+      >
+        Remove widget
       </button>
     </div>
   </div>

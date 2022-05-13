@@ -42,6 +42,9 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
+  /** Remove widget fron drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
+
   /**
    * Whether the drawer is open.
    *
@@ -71,6 +74,9 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   /** Display error if user have permissions to see widget. */
   permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Columns static to show on table. */
   displayedColumns = ['name', 'totalContainers', 'groupName', 'stationOwners'];
@@ -114,8 +120,13 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.isLoading = false;
           this.errorStationPrebuilt = true;
@@ -144,6 +155,12 @@ export class StationPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Toggle drawer when click on edit group search widget. */
   toggleEditStation(): void {
     this.toggleDrawer.emit(+this.stationWidgetData.length);
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleEditStation();
   }
 
   /** Clean subscriptions. */

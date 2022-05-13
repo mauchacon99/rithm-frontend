@@ -59,6 +59,9 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
+  /** Show only button delete widget. */
+  ShowOnlyButtonDelete: boolean | undefined = false;
+
   /** Whether the called widget-drawer. */
   drawerMode: 'widgetDashboard' = 'widgetDashboard';
 
@@ -92,6 +95,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
           this.dataDrawer = dataDrawer;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.widgetType = dataDrawer.widgetItem.widgetType;
+          this.ShowOnlyButtonDelete = dataDrawer.deleteWidget;
           this.imageUploaded = {
             imageId: dataDrawer.widgetItem.imageId || null,
             imageName: dataDrawer.widgetItem.imageName || null,

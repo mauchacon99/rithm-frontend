@@ -115,6 +115,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   showButtonSetting = false;
 
+  /** Show only button delete widget in drawer. */
+  deleteWidget = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -270,7 +273,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       widgetItem,
       widgetIndex,
       quantityElementsWidget,
+      deleteWidget: this.deleteWidget,
     });
+    this.deleteWidget = false;
+  }
+
+  /** Open drawer only button delete widget. */
+  removeWidget(): void {
+    this.deleteWidget = true;
   }
 
   /**

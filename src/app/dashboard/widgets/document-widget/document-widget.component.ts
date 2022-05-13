@@ -86,6 +86,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
+  /** Remove widget fron drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
+
   /**
    * Whether the drawer is open.
    *
@@ -117,6 +120,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Display error if user have permissions to see widget. */
   permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Columns for list the widget. */
   documentColumns: ColumnFieldsWidget[] = [];
@@ -174,8 +180,13 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.isLoading = false;
           this.failedLoadWidget = true;
@@ -290,6 +301,12 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
       return question.prompt || null;
     }
     return question?.answer?.value || null;
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleEditDocument();
   }
 
   /** Clean subscriptions. */

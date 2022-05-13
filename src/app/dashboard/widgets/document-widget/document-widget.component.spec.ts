@@ -658,4 +658,36 @@ describe('DocumentWidgetComponent', () => {
     expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
   });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(documentService, 'getDocumentWidget').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
+
+    component.getDocumentWidget();
+
+    expect(spyMethodError).toHaveBeenCalled();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    component.dataDocumentWidget = {
+      documentName: 'new document',
+      documentRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+      questions: [],
+      stations: [],
+    };
+    fixture.detectChanges();
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalled();
+  });
 });

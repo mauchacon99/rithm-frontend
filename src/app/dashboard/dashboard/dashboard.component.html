@@ -181,6 +181,7 @@
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
               (reloadStationsFlow)="stationFlow = $event"
+              (deleteWidget)="removeWidget()"
             >
             </app-station-widget>
             <app-document-widget
@@ -195,6 +196,7 @@
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             >
             </app-document-widget>
             <app-group-search-widget
@@ -204,6 +206,7 @@
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             >
             </app-group-search-widget>
             <app-group-traffic-widget
@@ -215,12 +218,14 @@
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             ></app-group-traffic-widget>
             <app-station-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             ></app-station-pre-built-widget>
 
             <app-container-pre-built-widget
@@ -231,6 +236,7 @@
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
               (reloadStationsFlow)="stationFlow = $event"
+              (deleteWidget)="removeWidget()"
             >
             </app-container-pre-built-widget>
           </gridster-item>

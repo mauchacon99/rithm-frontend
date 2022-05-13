@@ -75,6 +75,9 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
+  /** Remove widget fron drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
+
   /**
    * Whether the drawer is open.
    *
@@ -125,6 +128,9 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
 
   /** Display error if user have permissions to see widget. */
   permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Config static chart data. */
   configChart: ChartConfiguration = {
@@ -264,8 +270,13 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.isLoading = false;
           this.errorGroupTraffic = true;
@@ -384,6 +395,12 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
         : this.paginationChart - this.valueShowGraphic;
 
     this.setConfigChart();
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleEditStation();
   }
 
   /** Clean subscriptions. */
