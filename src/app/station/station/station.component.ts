@@ -442,6 +442,15 @@ export class StationComponent
   }
 
   /**
+   * Whether the screen width is below a certain amount.
+   *
+   * @returns True if width is below a certain amount.
+   */
+  get isMobile(): boolean {
+    return window.innerWidth <= 672;
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
