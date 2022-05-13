@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ImageData } from 'src/models/index';
+import { ImageData } from 'src/models';
 
 /**
  * Reusable component for displaying a user's avatar.
