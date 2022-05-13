@@ -165,7 +165,8 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
    * @param rithmId The dashboard rithmId to delete.
    */
   deleteDashboard(rithmId: string): void {
-    const isDefaultDashboard = rithmId === this.userService.user.defaultDashboardId;
+    const isDefaultDashboard =
+      rithmId === this.userService.user.defaultDashboardId;
     const isCurrentDashboard = rithmId === this.paramRithmId;
     const isCurrentPrincipalDashboard = this.paramRithmId === null;
     /* Index is principal dashboard when is 0 this is specified in dashboard-component getOrganizationDashboard
@@ -174,7 +175,8 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
       this.index === 0 && this.dashboardRole === this.roleDashboardMenu.Company;
 
     if (
-      isCurrentDashboard || isDefaultDashboard ||
+      isCurrentDashboard ||
+      isDefaultDashboard ||
       (isCurrentPrincipalDashboard && isPrincipalDashboard)
     ) {
       this.dashboardService.toggleLoadingDashboard(true);
@@ -189,7 +191,10 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
 
     deleteDashboard$.pipe(first()).subscribe({
       next: () => {
-        if (isCurrentPrincipalDashboard && isPrincipalDashboard || isDefaultDashboard)
+        if (
+          (isCurrentPrincipalDashboard && isPrincipalDashboard) ||
+          isDefaultDashboard
+        )
           this.dashboardService.toggleLoadingDashboard(false, true);
         //dashboardService.toggleLoadingDashboard is to reload dashboard component
         else if (isCurrentDashboard) this.router.navigate(['/', 'dashboard']);

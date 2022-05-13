@@ -363,7 +363,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param dashboardRithmId String of rithmId of dashboard.
    * @param isDefault Boolean if the dashboard to load is default.
    */
-  private getDashboardByRithmId(dashboardRithmId: string, isDefault = false): void {
+  private getDashboardByRithmId(
+    dashboardRithmId: string,
+    isDefault = false
+  ): void {
     this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
@@ -623,14 +626,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Set dashboard to null when the dashboard default does not exist. */
   setNullDashboardUser(): void {
-    this.userService.updateUserAccount({
-      defaultDashboardType: null,
-      defaultDashboardId: null,
-    }).pipe(first()).subscribe({
-      error: (error: unknown) => {
-        this.errorService.logError(error);
-      },
-    });
+    this.userService
+      .updateUserAccount({
+        defaultDashboardType: null,
+        defaultDashboardId: null,
+      })
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.logError(error);
+        },
+      });
   }
 
   /** Clean subscriptions. */
