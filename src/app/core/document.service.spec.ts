@@ -101,6 +101,8 @@ describe('DocumentService', () => {
 
   it('should return a list of documents for a station', () => {
     const pageNum = 1;
+    const pageSize = 10;
+    const documentName = '';
     const expectedResponse: StationDocuments = {
       documents: [
         /* eslint-disable max-len */
@@ -222,10 +224,15 @@ describe('DocumentService', () => {
     service.getStationDocuments(stationId, pageNum).subscribe((response) => {
       expect(response.documents.length).toBeGreaterThanOrEqual(0);
     });
+    const expectUrl = [
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents?`,
+      `stationId=${stationId}&`,
+      `pageNum=${pageNum}&`,
+      `pageSize=${pageSize}&`,
+      `documentName=${documentName}`,
+    ];
 
-    const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents?stationId=${stationId}&pageNum=${pageNum}`
-    );
+    const req = httpTestingController.expectOne(expectUrl.join(''));
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
 
