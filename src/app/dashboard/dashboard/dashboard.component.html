@@ -182,6 +182,7 @@
               [stationFlow]="stationFlow"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
               (reloadStationsFlow)="stationFlow = $event"
@@ -199,6 +200,7 @@
               [stationFlow]="stationFlow"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (deleteWidget)="removeWidget()"
             >
@@ -209,6 +211,7 @@
               [widgetType]="item.widgetType"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (deleteWidget)="removeWidget()"
             >
@@ -221,6 +224,7 @@
               [widgetItem]="item"
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (deleteWidget)="removeWidget()"
             ></app-group-traffic-widget>
@@ -228,6 +232,7 @@
               *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (deleteWidget)="removeWidget()"
             ></app-station-pre-built-widget>
@@ -237,6 +242,7 @@
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               [stationFlow]="stationFlow"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
               (reloadStationsFlow)="stationFlow = $event"

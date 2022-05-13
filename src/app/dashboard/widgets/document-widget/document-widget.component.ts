@@ -82,10 +82,13 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
-  /** Remove widget fron drawer if this widget has been deleted. */
+  /** Remove widget from drawer if this widget has been deleted. */
   @Output() deleteWidget = new EventEmitter();
 
   /**

@@ -46,7 +46,7 @@ describe('ErrorWidgetComponent', () => {
 
   it('should call removeWidget and show button if have permission', () => {
     component.widgetDeleted = true;
-    component.permission = true;
+    component.dashboardPermission = true;
     fixture.detectChanges();
     const spyDeleteWidget = spyOn(
       component.deleteWidget,
@@ -64,7 +64,7 @@ describe('ErrorWidgetComponent', () => {
 
   it('should hidden button if do not have permission and not is admin', () => {
     component.widgetDeleted = true;
-    component.permission = false;
+    component.dashboardPermission = false;
     component.isAdmin = false;
     fixture.detectChanges();
     const buttonDelete =
@@ -74,7 +74,7 @@ describe('ErrorWidgetComponent', () => {
 
   it('should show button if is admin', () => {
     component.widgetDeleted = true;
-    component.permission = false;
+    component.dashboardPermission = false;
     component.isAdmin = true;
     fixture.detectChanges();
     const buttonDelete =

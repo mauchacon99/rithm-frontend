@@ -20,6 +20,9 @@ export class ErrorWidgetComponent implements OnInit {
   /** Show message for delete widget. */
   @Input() widgetDeleted = false;
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Output try again. */
   @Output() tryAgain = new EventEmitter();
 

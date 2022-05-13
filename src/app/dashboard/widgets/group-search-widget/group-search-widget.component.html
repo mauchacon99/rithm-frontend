@@ -9,11 +9,12 @@
   id="error-load-widget-station-group"
   [errorMessage]="
     widgetDeleted
-      ? 'Oops, it looks like this widget has been removed.'
+      ? 'Oops, it looks like this group has been removed.'
       : 'Unable to retrieve group data'
   "
   [permission]="permissionError"
   [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
   (deleteWidget)="removeWidget()"
   (tryAgain)="getStationGroups()"
 >

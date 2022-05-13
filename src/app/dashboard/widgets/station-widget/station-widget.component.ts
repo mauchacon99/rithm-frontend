@@ -164,6 +164,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
@@ -173,7 +176,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Reload stations or document Flowed or saved. */
   @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
 
-  /** Remove widget fron drawer if this widget has been deleted. */
+  /** Remove widget from drawer if this widget has been deleted. */
   @Output() deleteWidget = new EventEmitter();
 
   /**

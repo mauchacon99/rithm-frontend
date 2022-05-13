@@ -36,13 +36,16 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Set data for group widget. */
   @Input() dataWidget!: string;
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
-  /** Remove widget fron drawer if this widget has been deleted. */
+  /** Remove widget from drawer if this widget has been deleted. */
   @Output() deleteWidget = new EventEmitter();
 
   /**

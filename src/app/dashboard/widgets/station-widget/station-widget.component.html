@@ -10,11 +10,12 @@
   id="error-load-widget"
   [errorMessage]="
     widgetDeleted
-      ? 'Oops, it looks like this widget has been removed.'
+      ? 'Oops, it looks like station has been removed.'
       : 'Unable to retrieve station data'
   "
   [permission]="permissionError"
   [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
   (deleteWidget)="removeWidget()"
   (tryAgain)="getStationWidgetDocuments()"
 >

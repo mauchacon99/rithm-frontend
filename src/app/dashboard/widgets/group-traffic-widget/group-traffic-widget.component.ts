@@ -68,13 +68,16 @@ export class GroupTrafficWidgetComponent implements OnInit, OnDestroy {
   /** Data the all widget Group. */
   @Input() widgetItem!: DashboardItem;
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Index Widget. */
   @Input() indexWidget!: number;
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
-  /** Remove widget fron drawer if this widget has been deleted. */
+  /** Remove widget from drawer if this widget has been deleted. */
   @Output() deleteWidget = new EventEmitter();
 
   /**
