@@ -112,7 +112,7 @@ export class FlowLogicComponent implements OnInit, OnChanges {
     'Yearly',
   ];
 
-  /** The repeat forever to shown, if true. */
+  /** Display date interval repeat section if 'never' isn't selected, else hide. */
   showRepeatForever = false;
 
   /** The end repeat start. */
@@ -477,8 +477,8 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Update's the selected interval repeat type array for date interval repeat forever.
-   *
+   * Update's the selected interval repeat type array for date interval
+   * repeat forever section to display.
    */
   intervalRepeatTypeSelect(): void {
     const selectedIntervalRepeatType =
