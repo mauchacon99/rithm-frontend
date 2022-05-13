@@ -229,11 +229,9 @@
       <div class="w-full flex justify-center pt-2" *ngIf="isLoadingScroll">
         <app-loading-indicator inlineText="Loading..."></app-loading-indicator>
       </div>
-      <div
-        class="flex justify-between items-center text-sm md:text-base py-3 pr-1"
-      >
-        <p>Containers: {{ dataSourceTable?.data?.length }}</p>
-        <p>Total containers: {{ totalNumDocs }}</p>
+      <div class="flex justify-between items-center py-3 pr-1">
+        <p class="text-sm">Containers: {{ dataSourceTable?.data?.length }}</p>
+        <p class="text-sm">Total containers: {{ totalNumDocs }}</p>
       </div>
     </div>
 
