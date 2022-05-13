@@ -34,6 +34,36 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<Document>;
 
+  /** The station rithmId. */
+  private stationRithmId = '';
+
+  /* Value of search input. */
+  search = '';
+
+  /** Whether the action to get split get container modal. */
+  showContainerModal = false;
+
+  /** Is the content being loaded. */
+  isLoading = true;
+
+  /** Is loading to get documents by scroll. */
+  isLoadingScroll = false;
+
+  /** Total number of documents at this station. */
+  totalNumDocs = 0;
+
+  /** Number of page to get documents. */
+  pageScroll = 1;
+
+  /** The current page number. */
+  activeNum = 1;
+
+  /** Role of the user. */
+  userType = UserType.None;
+
+  /** The user type enum object. */
+  userTypeEnum = UserType;
+
   /** Columns statics to show on table. */
   displayedColumns = [
     'documentName',
@@ -43,35 +73,9 @@ export class StationDocumentsModalComponent implements OnInit {
     'viewDocument',
   ];
 
-  /** The current page number. */
-  activeNum = 1;
+  /** Init a timeout variable to be used in method get results. */
+  timeout = setTimeout(() => '', 1000);
 
-  /** Is the content being loaded. */
-  isLoading = true;
-
-  /** Is loading to get documents by scroll. */
-  isLoadingScroll = false;
-
-  /** The station rithmId. */
-  private stationRithmId = '';
-
-  /* Value of search input. */
-  search = '';
-
-  /** Total number of documents at this station. */
-  totalNumDocs = 0;
-
-  /** Number of page to get documents. */
-  pageScroll = 1;
-
-  /** Role of the user. */
-  userType = UserType.None;
-
-  /** The user type enum object. */
-  userTypeEnum = UserType;
-
-  /** Whether the action to get split get container modal. */
-  showContainerModal = false;
 
   constructor(
     private documentService: DocumentService,
@@ -132,7 +136,7 @@ export class StationDocumentsModalComponent implements OnInit {
    *
    * @param isScroll When paginate documents by scroll.
    */
-  getDocumentsByScrollAndSearch(isScroll = false): void {
+  private getDocumentsByScrollAndSearch(isScroll = false): void {
     this.pageScroll = isScroll ? this.pageScroll + 1 : 1;
     this.isLoadingScroll = true;
     this.documentService
@@ -274,6 +278,7 @@ export class StationDocumentsModalComponent implements OnInit {
       },
     });
   }
+
 
   /**
    * The closeModal() function closes the modal.

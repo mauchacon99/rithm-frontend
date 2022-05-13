@@ -277,13 +277,13 @@ describe('StationDocumentsModalComponent', () => {
       component.totalNumDocs = 10;
       component.dataSourceTable = new MatTableDataSource(documents);
       const spyMethod = spyOn(
-        component,
-        'getDocumentsByScrollAndSearch'
+        TestBed.inject(DocumentService),
+        'getStationDocuments'
       ).and.callThrough();
 
       component.validateScroll(mockScroll as unknown as Event);
 
-      expect(spyMethod).toHaveBeenCalledOnceWith(true);
+      expect(spyMethod).toHaveBeenCalled();
     });
 
     it('should call getStationDocuments when search documents', () => {
@@ -295,7 +295,7 @@ describe('StationDocumentsModalComponent', () => {
         'getStationDocuments'
       ).and.callThrough();
 
-      component.getDocumentsByScrollAndSearch();
+      component['getDocumentsByScrollAndSearch']();
 
       expect(spyService).toHaveBeenCalledOnceWith(
         component['stationRithmId'],
@@ -311,7 +311,7 @@ describe('StationDocumentsModalComponent', () => {
         'getStationDocuments'
       ).and.callThrough();
 
-      component.getDocumentsByScrollAndSearch(true);
+      component['getDocumentsByScrollAndSearch'](true);
 
       expect(spyService).toHaveBeenCalledOnceWith(
         component['stationRithmId'],
@@ -335,9 +335,29 @@ describe('StationDocumentsModalComponent', () => {
         'displayError'
       ).and.callThrough();
 
-      component.getDocumentsByScrollAndSearch();
+      component['getDocumentsByScrollAndSearch']();
 
       expect(spyService).toHaveBeenCalled();
+    });
+  });
+
+  it('should call service to get document tab list', () => {
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getStationDocuments'
+    ).and.callThrough();
+    component['stationRithmId'] = '123-456-789';
+    component.search = 'doc';
+
+    const testPromise = new Promise(() => {
+      component.getSearchResult();
+    });
+    testPromise.then(() => {
+      expect(spyService).toHaveBeenCalledOnceWith(
+        component['stationRithmId'],
+      1,
+      component.search,
+      );
     });
   });
 });
