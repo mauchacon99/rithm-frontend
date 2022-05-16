@@ -8,11 +8,19 @@
 <app-error-widget
   *ngIf="failedLoadWidget"
   id="error-load-widget"
-  [errorMessage]="'Unable to retrieve document data'"
+  [errorMessage]="
+    widgetDeleted
+      ? 'Oops, it looks like this document has been removed.'
+      : 'Unable to retrieve container data'
+  "
   [permission]="permissionError"
+  [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
+  (deleteWidget)="removeWidget()"
   (tryAgain)="getDocumentWidget()"
 >
 </app-error-widget>
+
 <div
   *ngIf="!isLoading && !failedLoadWidget"
   class="w-full h-full"

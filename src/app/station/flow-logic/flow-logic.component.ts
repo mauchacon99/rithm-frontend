@@ -3,12 +3,14 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
+  Question,
   Power,
   Rule,
   RuleEquation,
@@ -18,13 +20,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { first, map, Observable, startWith } from 'rxjs';
+import { first, map, Observable, startWith, takeUntil, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for the flow logic tab on a station.
@@ -34,7 +36,10 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit, OnChanges {
+export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Schedule trigger type form. */
   scheduleTriggerForm: FormGroup;
 
@@ -55,6 +60,9 @@ export class FlowLogicComponent implements OnInit, OnChanges {
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
+
+  /** The station Flow Logic Rule. */
+  currentStationQuestions: Question[] = [];
 
   /* Loading the rules list  by type  */
   flowLogicLoadingByRuleType: string | null = null;
@@ -148,6 +156,17 @@ export class FlowLogicComponent implements OnInit, OnChanges {
     if (this.flowLogicView && !this.stationPowers.length) {
       this.getStationPowers();
     }
+  }
+
+  /**
+   * Listen the currentStationQuestions Service.
+   */
+  private subscribeCurrentStationQuestions(): void {
+    this.stationService.currentStationQuestions$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        this.currentStationQuestions = questions;
+      });
   }
 
   /**
@@ -542,5 +561,13 @@ export class FlowLogicComponent implements OnInit, OnChanges {
           );
         },
       });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
