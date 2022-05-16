@@ -170,7 +170,7 @@ export class MockSplitService {
    *
    * @returns Split treatment.
    */
-  public getDashboardGridUpdate(): string {
+  public getDashboardGridUpdateTreatment(): string {
     return 'on';
   }
 }

@@ -183,7 +183,7 @@ export class SplitService {
    *
    * @returns Split treatment.
    */
-  public getDashboardGridUpdate(): string {
+  public getDashboardGridUpdateTreatment(): string {
     return this.splitClient.getTreatment('dashboard_grid_update_split');
   }
 }

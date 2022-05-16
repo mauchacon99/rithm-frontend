@@ -793,9 +793,9 @@ describe('DashboardComponent', () => {
         'getDashboardLibraryTreatment'
       ).and.callThrough();
       // isUpdateGrid
-      const spyGetDashboardGridUpdate = spyOn(
+      const spyGetDashboardGridUpdateTreatment = spyOn(
         splitService,
-        'getDashboardGridUpdate'
+        'getDashboardGridUpdateTreatment'
       ).and.callThrough();
 
       splitService.sdkReady$.next();
@@ -804,7 +804,7 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
-      expect(spyGetDashboardGridUpdate).toHaveBeenCalled();
+      expect(spyGetDashboardGridUpdateTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
       expect(component.isUpdateGrid).toBeTrue();
