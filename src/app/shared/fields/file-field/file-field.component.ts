@@ -84,16 +84,25 @@ export class FileFieldComponent
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
+    const fileName = this.field.answer?.fileName;
     this.fileFieldForm = this.fb.group({
-      [this.field.questionType]: [this.fieldValue, []],
+      [this.field.questionType]: [
+        fileName && fileName.length ? fileName : '',
+        [],
+      ],
     });
 
     if (this.field.isRequired) {
       this.fileFieldForm.get('fileType')?.setValidators([Validators.required]);
+
+      if (fileName && fileName.length) {
+        this.fileFieldForm.get('fileType')?.valid;
+      }
     }
 
     this.fileFieldForm.get('fileType')?.markAsTouched();
     this.fileFieldForm.get('fileType')?.updateValueAndValidity();
+
     if (this.field.answer?.value && this.field.answer?.fileName) {
       this.getDocumentDetails();
     }
@@ -214,6 +223,7 @@ export class FileFieldComponent
           this.fileName = fileData.name;
           this.fileSize = fileData.size;
         }
+        this.fileFieldForm.get('fileType')?.setValue(this.fileName);
       });
   }
 
@@ -245,6 +255,7 @@ export class FileFieldComponent
         .pipe(first())
         .subscribe({
           next: () => {
+            this.fileFieldForm.get('fileType')?.setValue('');
             this.isFileUploaded = false;
             this.isFileDeleted = false;
             this.popupService.notify(
