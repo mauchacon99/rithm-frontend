@@ -84,6 +84,17 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   /** The powers of current station. */
   stationPowers: Power[] = [];
 
+  /** The powers that are currently being edited. */
+  powersInProgress: Power = {
+    rithmId: uuidv4(),
+    triggers: [],
+    actions: [],
+    stationRithmId: '',
+    flowToStationRithmIds: [],
+    name: 'Untitled Rule',
+    condition: 'Condition Rule',
+  };
+
   /** The date and time zone shown, if true. */
   showDateTimeZone = false;
 
@@ -477,15 +488,21 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Rwmove or add trigger in the rules stations.
+   * Remove or add trigger in the rules stations.
    *
    * @param triggerType The trigger type switched.
    * @param eventToggle The event.
    */
   removeOrAddTriggerType(
-    triggerType: string,
+    triggerType:
+      | 'manualFlow'
+      | 'documentArrived'
+      | 'anyDocumentArrived'
+      | 'documentLeft'
+      | 'anyDocumentLeft',
     eventToggle: MatSlideToggleChange
   ): void {
+    this.powersInProgress.stationRithmId = this.rithmId;
     if (eventToggle.checked) {
       const triggerPower: PowerTrigger = {
         rithmId: uuidv4(),
@@ -515,15 +532,12 @@ export class FlowLogicComponent implements OnInit, OnChanges {
           triggerPower.type = TriggerType.DocumentLeft;
           break;
       }
-      this.stationPowers.map((power) => {
-        power.triggers.push(triggerPower);
-      });
+      this.powersInProgress.triggers.push(triggerPower);
     } else {
-      this.stationPowers.map((power) => {
-        power.triggers = power.triggers.filter(
+      this.powersInProgress.triggers =
+        this.powersInProgress.triggers.filter(
           (trigger) => triggerType !== trigger.type
         );
-      });
     }
   }
 }

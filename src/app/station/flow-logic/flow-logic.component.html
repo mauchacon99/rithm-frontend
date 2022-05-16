@@ -334,7 +334,7 @@
             ></i>
           </p>
           <mat-slide-toggle
-            (change)="removeOrAddTriggerType('manualFlow', $event)"
+            (change)="ruleSelectedMenu === 'rules' ? removeOrAddTriggerType('manualFlow', $event) : ''"
           ></mat-slide-toggle>
         </div>
         <div
@@ -345,7 +345,7 @@
             {{ ruleSelectedMenu === 'triggers' ? 'only on ' : 'on' }} arrival
           </p>
           <mat-slide-toggle
-            (change)="removeOrAddTriggerType('documentArrived', $event)"
+            (change)="ruleSelectedMenu === 'rules' ? removeOrAddTriggerType('documentArrived', $event) : ''"
           ></mat-slide-toggle>
         </div>
         <div
@@ -357,7 +357,7 @@
             arrival
           </p>
           <mat-slide-toggle
-          (change)="removeOrAddTriggerType('anyDocumentArrived', $event)"
+          (change)="ruleSelectedMenu === 'rules' ? removeOrAddTriggerType('anyDocumentArrived', $event) : ''"
           ></mat-slide-toggle>
         </div>
         <div
@@ -369,7 +369,7 @@
             container departure
           </p>
           <mat-slide-toggle
-          (change)="removeOrAddTriggerType('anyDocumentLeft', $event)"
+          (change)="ruleSelectedMenu === 'rules' ? removeOrAddTriggerType('anyDocumentLeft', $event) : ''"
           ></mat-slide-toggle>
         </div>
         <div
