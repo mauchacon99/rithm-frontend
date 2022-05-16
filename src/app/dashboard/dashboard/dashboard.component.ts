@@ -115,6 +115,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   showButtonSetting = false;
 
+  /** Show only button delete widget in drawer. */
+  deleteWidget = false;
+
+  /** Permission dashboard. */
+  dashboardPermission = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -271,7 +277,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       widgetItem,
       widgetIndex,
       quantityElementsWidget,
+      deleteWidget: this.deleteWidget,
     });
+    this.deleteWidget = false;
+  }
+
+  /** Open drawer only button delete widget. */
+  removeWidget(): void {
+    this.deleteWidget = true;
+    this.editMode = true;
+    this.configEditMode();
   }
 
   /**
@@ -376,6 +391,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dashboardDataCopy = JSON.parse(
             JSON.stringify(this.dashboardData)
           );
+          this.dashboardPermission =
+            this.dashboardData.isEditable || this.isAdmin;
           this.isLoading = false;
           this.getQueryParams();
         },
@@ -452,6 +469,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dashboardDataCopy = JSON.parse(
               JSON.stringify(this.dashboardData)
             );
+            this.dashboardPermission =
+              this.dashboardData.isEditable || this.isAdmin;
           } else {
             this.isCreateNewDashboard = true;
           }

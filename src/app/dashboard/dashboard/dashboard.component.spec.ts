@@ -432,6 +432,8 @@ describe('DashboardComponent', () => {
     });
 
     it('Should toggle drawer of the widgets', () => {
+      component.deleteWidget = true;
+      fixture.detectChanges();
       const quantityElementsWidget = 2;
       spyOn(sidenavDrawer, 'toggleDrawer');
       const widgetItem = {
@@ -458,6 +460,7 @@ describe('DashboardComponent', () => {
         widgetItem,
         widgetIndex,
         quantityElementsWidget,
+        deleteWidget: true,
       });
     });
 
