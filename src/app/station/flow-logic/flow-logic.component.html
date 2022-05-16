@@ -65,7 +65,7 @@
                     <p
                       class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                     >
-                      {{ equation.leftOperand.text | titlecase }}
+                      {{ equation.leftOperand.text }}
                       <span class="font-semibold px-2">
                         {{ translateOperator(equation.operatorType) }}</span
                       >
@@ -148,7 +148,7 @@
                     <p
                       class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                     >
-                      {{ subRule.equations[0].leftOperand.text | titlecase }}
+                      {{ subRule.equations[0].leftOperand.text }}
                       <span class="font-semibold px-2">
                         -
                         {{
@@ -156,7 +156,7 @@
                         }}
                         -</span
                       >
-                      {{ subRule.equations[0].rightOperand.text | titlecase }}
+                      {{ subRule.equations[0].rightOperand.text }}
                     </p>
                     <figure class="flex">
                       <button
@@ -300,9 +300,18 @@
           >
             Station Triggers
           </p>
-          <button mat-icon-button>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
             <i class="fa-solid fa-ellipsis"></i>
           </button>
+          <mat-menu #menu="matMenu">
+            <button
+              data-testid="delete-power-station"
+              id="delete-power-station"
+              mat-menu-item
+            >
+              Delete Rule
+            </button>
+          </mat-menu>
         </div>
       </section>
       <section class="rules-right-side-triggers w-full">

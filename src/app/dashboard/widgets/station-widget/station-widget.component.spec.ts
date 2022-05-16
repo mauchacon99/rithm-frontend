@@ -860,7 +860,9 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('value 1');
+        ).toEqual(
+          '<i class="fas fa-check-square text-accent-500"></i> value 1'
+        );
       });
 
       it("should return '---' when questionType is check or select and dont have checked value", () => {
@@ -894,7 +896,7 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('---');
+        ).toEqual('<i class="fas fa-square text-secondary-500"></i> value 1');
       });
     });
 

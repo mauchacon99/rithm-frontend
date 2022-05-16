@@ -813,8 +813,7 @@ describe('StationComponent', () => {
           },
         ],
         type: FrameType.Input,
-        // eslint-disable-next-line max-len
-        data: '[{"rithmId":"3j4k-3h2j-hj4j","prompt":"Short Text","questionType":"shortText","isReadOnly":false,"isRequired":false,"isPrivate":false,"children":[],"originalStationRithmId":"3j4k-3h2j-hj4j-3h2Y","possibleAnswers":[]}]',
+        data: '',
         id: 1,
       },
       {
@@ -839,8 +838,7 @@ describe('StationComponent', () => {
           },
         ],
         type: FrameType.Input,
-        // eslint-disable-next-line max-len
-        data: '[{"rithmId":"3j4k-3h2j-hj4j","prompt":"Short Text","questionType":"shortText","isReadOnly":false,"isRequired":false,"isPrivate":false,"children":[],"originalStationRithmId":"3j4k-3h2j-hj4j-3h2Y","possibleAnswers":[]}]',
+        data: '',
         id: 2,
       },
     ];
