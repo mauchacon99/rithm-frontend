@@ -3,8 +3,7 @@ import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
 import { MatSortModule } from '@angular/material/sort';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockDocumentService } from 'src/mocks';
+import { MockDocumentService } from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 
 import { ContainerPreBuiltWidgetComponent } from './container-pre-built-widget.component';
@@ -20,7 +19,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
   let fixture: ComponentFixture<ContainerPreBuiltWidgetComponent>;
-  let errorService: ErrorService;
   let documentService: DocumentService;
   let sidenavDrawerService: SidenavDrawerService;
   const containers: ContainerWidgetPreBuilt[] = [
@@ -49,7 +47,6 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         BrowserAnimationsModule,
       ],
       providers: [
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -57,7 +54,6 @@ describe('ContainerPreBuiltWidgetComponent', () => {
   });
 
   beforeEach(() => {
-    errorService = TestBed.inject(ErrorService);
     documentService = TestBed.inject(DocumentService);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(ContainerPreBuiltWidgetComponent);
@@ -129,14 +125,12 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorComponent = fixture.nativeElement.querySelector(
       '#error-load-widget-container-pre-built'
     );
     expect(errorComponent).toBeTruthy();
-    expect(spyMethodError).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
     expect(spyMethod).toHaveBeenCalled();
   });
@@ -334,11 +328,32 @@ describe('ContainerPreBuiltWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getContainerWidgetPreBuilt();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(documentService, 'getContainerWidgetPreBuilt').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getContainerWidgetPreBuilt();
+
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });
