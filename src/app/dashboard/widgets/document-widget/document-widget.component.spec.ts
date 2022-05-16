@@ -673,7 +673,6 @@ describe('DocumentWidgetComponent', () => {
     };
     component.isLoading = false;
     component['parseDataColumnsWidget']();
-    spyOnProperty(component, 'getValueQuestions').and.returnValue([]);
 
     fixture.detectChanges();
     const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
