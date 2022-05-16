@@ -14,6 +14,7 @@ import {
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
+import { UsersAdd } from 'src/app/dashboard/dashboard.service';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -811,7 +812,7 @@ export class MockDashboardService {
    */
   addDashboardMembers(
     dashboardRithmId: string,
-    users: MemberDashboard[]
+    users: UsersAdd[]
   ): Observable<MemberDashboard[]> {
     const responseMembers: MemberDashboard[] = [
       {
