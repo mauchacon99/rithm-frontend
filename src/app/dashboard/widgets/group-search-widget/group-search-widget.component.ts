@@ -9,7 +9,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { first, Subject, takeUntil } from 'rxjs';
-import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MapService } from 'src/app/map/map.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
@@ -37,11 +36,17 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Set data for group widget. */
   @Input() dataWidget!: string;
 
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -82,9 +87,11 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
   /** Display error if user have permissions to see widget. */
   permissionError = true;
 
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
+
   constructor(
     private stationService: StationService,
-    private errorService: ErrorService,
     private dialog: MatDialog,
     private router: Router,
     private mapService: MapService,
@@ -130,12 +137,16 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.isLoading = false;
           this.errorStationGroup = true;
-          this.errorService.logError(error);
         },
       });
   }
@@ -188,6 +199,12 @@ export class GroupSearchWidgetComponent implements OnInit, OnDestroy {
     );
     this.mapService.mapHelper.viewStationButtonClick$.next(true);
     this.router.navigate([`/map`]);
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */
