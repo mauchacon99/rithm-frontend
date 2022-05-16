@@ -963,8 +963,8 @@ describe('DashboardComponent', () => {
       role: null,
       organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
       profileImageRithmId: '123-456-789',
-      defaultDashboardType: null,
-      defaultDashboardId: null,
+      defaultDashboardType: '',
+      defaultDashboardId: '',
     });
     const spyService = spyOn(
       dashboardService,
@@ -990,8 +990,8 @@ describe('DashboardComponent', () => {
     component['setNullDashboardUser']();
 
     expect(spyService).toHaveBeenCalledOnceWith({
-      defaultDashboardType: null,
-      defaultDashboardId: null,
+      defaultDashboardType: '',
+      defaultDashboardId: '',
     });
     expect(errorService).toHaveBeenCalled();
   });

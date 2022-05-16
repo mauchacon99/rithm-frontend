@@ -631,8 +631,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private setNullDashboardUser(): void {
     this.userService
       .updateUserAccount({
-        defaultDashboardType: null,
-        defaultDashboardId: null,
+        defaultDashboardType: '',
+        defaultDashboardId: '',
       })
       .pipe(first())
       .subscribe({

@@ -174,14 +174,15 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
 
     deleteDashboard$.pipe(first()).subscribe({
       next: () => {
-        if (
-          (isCurrentPrincipalDashboard && isPrincipalDashboard) ||
-          isDefaultDashboard
-        )
-          this.dashboardService.toggleLoadingDashboard(false, true);
+        if (isDefaultDashboard) {
+          this.setDefaultDashboard(true);
+        }
         //dashboardService.toggleLoadingDashboard is to reload dashboard component
-        else if (isCurrentDashboard) this.router.navigate(['/', 'dashboard']);
-
+        else if (isCurrentPrincipalDashboard && isPrincipalDashboard) {
+          this.dashboardService.toggleLoadingDashboard(false, true);
+        } else if (isCurrentDashboard) {
+          this.router.navigate(['/', 'dashboard']);
+        }
         this.popupService.notify('Dashboard removed successfully');
       },
       error: (error: unknown) => {
@@ -189,8 +190,9 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
         if (
           isCurrentDashboard ||
           (isCurrentPrincipalDashboard && isPrincipalDashboard)
-        )
+        ) {
           this.dashboardService.toggleLoadingDashboard(false, true);
+        }
 
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -234,18 +236,30 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  /** Set default dashboard. */
-  setDefaultDashboard(): void {
+  /**
+   * Set default dashboard.
+   *
+   * @param clearDashboard If dashboard delete is default dashboard.
+   */
+  setDefaultDashboard(clearDashboard = false): void {
     const defaultDashboard: UserAccountInfo = {
-      defaultDashboardType: this.dashboardRole,
-      defaultDashboardId: this.rithmId,
+      defaultDashboardType: clearDashboard ? '' : this.dashboardRole,
+      defaultDashboardId: clearDashboard ? '' : this.rithmId,
     };
 
     this.userService
       .updateUserAccount(defaultDashboard)
       .pipe(first())
       .subscribe({
+        next: () => {
+          if (clearDashboard) {
+            this.dashboardService.toggleLoadingDashboard(false, true);
+          }
+        },
         error: (error: unknown) => {
+          if (clearDashboard) {
+            this.dashboardService.toggleLoadingDashboard(false, true);
+          }
           this.errorService.logError(error);
         },
       });
