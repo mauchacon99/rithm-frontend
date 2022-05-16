@@ -446,7 +446,7 @@ export class StationComponent
    *
    * @returns True if width is below a certain amount.
    */
-  get isMobile(): boolean {
+  get isMobileView(): boolean {
     return window.innerWidth <= 640;
   }
 
