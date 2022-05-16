@@ -854,9 +854,12 @@ export class MockDashboardService {
   /**
    * Get users to dashboard personal.
    *
+   * @param dashboardRithmId Users to add to dashboard.
    * @returns An Observable of an array of MemberDashboard objects.
    */
-  getUsersDashboardPersonal(): Observable<MemberDashboard[]> {
+  getUsersDashboardPersonal(
+    dashboardRithmId: string
+  ): Observable<MemberDashboard[]> {
     const responseMembers: MemberDashboard[] = [
       {
         rithmId: '123-456-789',
