@@ -447,7 +447,7 @@ export class StationComponent
    * @returns True if width is below a certain amount.
    */
   get isMobile(): boolean {
-    return window.innerWidth <= 672;
+    return window.innerWidth <= 640;
   }
 
   /**
