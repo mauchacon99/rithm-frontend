@@ -697,7 +697,6 @@ describe('DocumentWidgetComponent', () => {
       '#no-selected-question-message'
     );
     expect(emptyQuestion).toBeTruthy();
-
   });
 
   it('should catch error when the widget has been deleted', () => {
@@ -720,13 +719,13 @@ describe('DocumentWidgetComponent', () => {
       stations: [],
     };
     fixture.detectChanges();
-    const spyDeteleWidget = spyOn(
+    const spyDeleteWidget = spyOn(
       component.deleteWidget,
       'emit'
     ).and.callThrough();
     const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
     component.removeWidget();
-    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDeleteWidget).toHaveBeenCalled();
     expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });
