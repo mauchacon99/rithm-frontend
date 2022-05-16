@@ -183,7 +183,7 @@ export class SplitService {
    *
    * @returns Split treatment.
    */
-  public getAssignUserStationTableWidgetTreatment(): string {
+  public getAssignUserWidgetTreatment(): string {
     return this.splitClient.getTreatment(
       'assign_user_from_station_table_widget'
     );

@@ -170,7 +170,7 @@ export class MockSplitService {
    *
    * @returns Split treatment.
    */
-  public getAssignUserStationTableWidgetTreatment(): string {
+  public getAssignUserWidgetTreatment(): string {
     return 'on';
   }
 }

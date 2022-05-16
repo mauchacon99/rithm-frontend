@@ -331,6 +331,7 @@ describe('DashboardComponent', () => {
     component.isCreateNewDashboard = false;
     component.isLoading = false;
     component.isAddWidget = true;
+    component.canAssignUserWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
       name: 'Organization 1',
@@ -499,7 +500,10 @@ describe('DashboardComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
-        data: dataDashboard.rithmId,
+        data: {
+          dashboardRithmId: dataDashboard.rithmId,
+          canAssignUserWidget: component.canAssignUserWidget,
+        },
       };
       const spyDialog = spyOn(
         TestBed.inject(MatDialog),
@@ -783,7 +787,7 @@ describe('DashboardComponent', () => {
       //canAssignUserStationTableWidget
       const spyGetAssignUserStationTableWidgetTreatment = spyOn(
         splitService,
-        'getAssignUserStationTableWidgetTreatment'
+        'getAssignUserWidgetTreatment'
       ).and.callThrough();
 
       splitService.sdkReady$.next();
