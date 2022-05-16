@@ -148,7 +148,11 @@
           Current dashboard has no widgets to display.
         </div>
         <gridster
-          [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
+          [ngClass]="
+            editMode
+              ? 'h-[calc(100vh-300px)] md:h-[calc(100vh-245px)]'
+              : 'gridster'
+          "
           class="bg-transparent px-0 scrollbar"
           [options]="options"
         >

@@ -346,7 +346,8 @@ export class StationComponent
   ngOnInit(): void {
     this.getTreatment();
     this.sidenavDrawerService.setDrawer(this.drawer);
-
+    this.getParams();
+    this.getPreviousAndNextStations();
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -395,8 +396,6 @@ export class StationComponent
       next: () => {
         this.viewNewStation =
           this.splitService.getStationDocumentTreatment() === 'on';
-        this.getParams();
-        this.getPreviousAndNextStations();
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -946,10 +945,8 @@ export class StationComponent
                     ? frame.questions.length
                     : 4;
                 frame.minItemCols = 6;
-                frame.questions =
-                  frame.questions && frame.questions?.length > 0
-                    ? frame.questions
-                    : JSON.parse(frame.data);
+                frame.cols = frame.cols < frame.minItemCols ? 6 : frame.cols;
+                frame.rows = frame.rows < frame.minItemRows ? 4 : frame.rows;
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:
@@ -1030,29 +1027,17 @@ export class StationComponent
    */
   private saveStationWidgetsChanges(): void {
     this.widgetLoading = true;
-    this.inputFrameWidgetItems.map((field) => {
-      if (field.questions) {
-        field.data = JSON.stringify(field.questions);
-      }
-    });
     this.stationService
       .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
-        next: (inputFrames) => {
-          inputFrames.forEach((input, index) => {
-            input.id = index;
-            if (input.data && JSON.parse(input.data)?.length > 0) {
-              input.questions = [];
-              input.questions = JSON.parse(input.data);
-            } else if (input.type === FrameType.Input) {
-              input.questions = [];
-            }
-          });
-          this.inputFrameWidgetItems = inputFrames;
-          if (inputFrames.length) {
+        next: () => {
+          /** If we get in this section is cause the saved was succeed. If so can keep the same info sent. */
+          if (this.inputFrameWidgetItems.length) {
             this.saveInputFrameQuestions(
-              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+              this.inputFrameWidgetItems.filter(
+                (iframe) => iframe.type === FrameType.Input
+              )
             );
           } else {
             this.widgetLoading = false;
@@ -1079,16 +1064,13 @@ export class StationComponent
     if (frames.length) {
       const frameQuestionRequest: Observable<Question[]>[] = [];
       frames.forEach((frame) => {
-        if (frame.data !== '') {
-          const fQuestions: Question[] = JSON.parse(frame.data);
-          if (fQuestions.length) {
-            frameQuestionRequest.push(
-              this.stationService.saveInputFrameQuestions(
-                frame.rithmId,
-                fQuestions
-              )
-            );
-          }
+        if (frame.questions?.length) {
+          frameQuestionRequest.push(
+            this.stationService.saveInputFrameQuestions(
+              frame.rithmId,
+              frame.questions
+            )
+          );
         }
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
