@@ -267,7 +267,7 @@
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
-          (click)="displayRuleContent('rules')"
+          (click)="displayRuleContent('rules'); getPreviousAndNextStations()"
         >
           <i class="fa-regular fa-square-plus"></i> New Rule
         </li>
@@ -593,7 +593,27 @@
           >
             <!-- Tab Flow -->
             <mat-tab label="tab-flow" aria-label="tab-flow">
-              <section></section>
+              <section
+                class="tab-flow-content flex items-center"
+                [formGroup]="flowFieldForm"
+              >
+                <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+                  <mat-label> Available Stations </mat-label>
+                  <mat-select formControlName="stations" multiple>
+                    <mat-option
+                      *ngFor="let option of filteredStations$ | async"
+                      [value]="option.rithmId"
+                    >
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="px-3" *ngIf="stationLoading">
+                  <app-loading-indicator
+                    inlineText="Loading Stations..."
+                  ></app-loading-indicator>
+                </div>
+              </section>
             </mat-tab>
 
             <!-- Tab Container -->

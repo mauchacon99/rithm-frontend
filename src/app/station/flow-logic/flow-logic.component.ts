@@ -20,7 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { first, Subject, takeUntil } from 'rxjs';
+import { first, map, Observable, startWith, takeUntil, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
@@ -108,6 +108,19 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /**Filtered form station List. */
+  filteredStations$: Observable<ConnectedStationInfo[]> | undefined;
+
+  /** The form to add this field in the template. */
+  flowFieldForm!: FormGroup;
+
+  /** The list of all stations. */
+  stations: ConnectedStationInfo[] = [];
+
+  /** Loading/Errors block. */
+  /* Loading in input auto-complete the list of all stations. */
+  stationLoading = false;
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -129,7 +142,20 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
-    this.subscribeCurrentStationQuestions();
+
+    this.flowFieldForm = this.fb.group({
+      stations: [''],
+    });
+    this.getStationPowers();
+  }
+
+  /**
+   * Detect changes.
+   */
+  ngOnChanges(): void {
+    if (this.flowLogicView && !this.stationPowers.length) {
+      this.getStationPowers();
+    }
   }
 
   /**
@@ -141,15 +167,6 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((questions) => {
         this.currentStationQuestions = questions;
       });
-  }
-
-  /**
-   * Detect changes.
-   */
-  ngOnChanges(): void {
-    if (this.flowLogicView && !this.stationPowers.length) {
-      this.getStationPowers();
-    }
   }
 
   /**
@@ -418,11 +435,55 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Completes all subscriptions.
+   * Get the list of all stations.
    */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+  getPreviousAndNextStations(): void {
+    this.stationLoading = true;
+    this.stationService
+      .getPreviousAndNextStations(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = [];
+          this.stations = this.stations.concat(stations.nextStations);
+          this.stations = this.stations.concat(stations.previousStations);
+          this.filterStations();
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
+   * Filter the list of all stations.
+   */
+  private filterStations(): void {
+    /** Set the filter List for auto searching. */
+    this.filteredStations$ =
+      this.flowFieldForm.controls.stations.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value))
+      );
+  }
+
+  /**
+   * Filtered Values.
+   *
+   * @param value Current String in Field Forms.
+   * @returns Filtered value.
+   */
+  private _filter(value: string): ConnectedStationInfo[] {
+    const filterValue = value?.toLowerCase();
+    return this.stations.filter((option) =>
+      option.name.toLowerCase().includes(filterValue)
+    );
   }
 
   /**
@@ -500,5 +561,13 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
