@@ -61,11 +61,17 @@
         <mat-list-item
           matRipple
           class="option-list cursor-pointer"
+          [ngClass]="{
+            'bg-accent-100':
+              user.defaultDashboardId === dashboard.rithmId &&
+              isPrincipalPageDashboard
+          }"
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
           (click)="hiddenDrawer()"
           [routerLink]="
             isPrincipalPageDashboard &&
+            !user.defaultDashboardId &&
             !i &&
             dashboardRole === roleDashboardMenu.Company
               ? ['/', 'dashboard']
@@ -76,7 +82,7 @@
           <div class="w-2">
             <i
               class="fa-solid fa-house-user text-accent-300 text-base"
-              *ngIf="indexDefaultDashboard === i"
+              *ngIf="user.defaultDashboardId === dashboard.rithmId"
             ></i>
           </div>
 
@@ -90,7 +96,6 @@
               [rithmId]="dashboard.rithmId"
               [showDefaultDashboard]="showDefaultDashboard"
               [index]="i"
-              (markDefaultDashboard)="markDefaultDashboard($event, i)"
             ></app-options-menu>
           </div>
         </mat-list-item>
