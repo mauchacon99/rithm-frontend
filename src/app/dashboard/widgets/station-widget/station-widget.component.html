@@ -97,11 +97,20 @@
     <div class="flex-grow overflow-auto scrollbar">
       <div *ngIf="dataStationWidget">
         <div
-          *ngIf="!dataSourceTable?.data?.length"
+          *ngIf="!dataStationWidget.documents.length"
           class="text-center my-4 text-sm"
           id="no-docs-message"
         >
           No documents found in station.
+        </div>
+        <div
+          *ngIf="
+            !dataSourceTable?.data?.length && dataStationWidget.documents.length
+          "
+          class="text-center my-4 text-sm"
+          id="no-columns-message"
+        >
+          No column selected
         </div>
         <ng-container *ngIf="dataSourceTable?.data?.length">
           <ng-container

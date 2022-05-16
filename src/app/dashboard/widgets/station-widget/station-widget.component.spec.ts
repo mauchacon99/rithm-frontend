@@ -496,6 +496,27 @@ describe('StationWidgetComponent', () => {
     expect(noDocsMessage).toBeFalsy();
   });
 
+  fit('should not display a message when there are documents and no selected columns', () => {
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeFalsy();
+  });
+
+  fit('should display a message when there  are not documents and no selected columns', () => {
+    component.dataSourceTable = new MatTableDataSource([] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    component.dataStationWidget.documents = [];
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeTrue();
+  });
+
   it('should show a gear icon in edit mode', () => {
     component.showButtonSetting = true;
     component.isLoading = false;
