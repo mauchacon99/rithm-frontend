@@ -4,7 +4,10 @@ import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MemberDashboard, RoleDashboardMenu } from 'src/models';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import {
+  DashboardService,
+  UsersAdd,
+} from 'src/app/dashboard/dashboard.service';
 
 /**Interface data modal. */
 interface ModalData {
@@ -40,7 +43,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   errorGetUsersMember = false;
 
   /** Users to add to dashboard. */
-  usersAdd!: MemberDashboard[];
+  usersAdd!: UsersAdd[];
 
   /** Selected filter. */
   selectedFilterValue: FilterOptionTypeMemberDashboard =

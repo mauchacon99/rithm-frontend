@@ -18,6 +18,15 @@ import {
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
+/** Local interface to add user to dashboard. */
+export interface UsersAdd {
+  /** User rithm Id. */
+  userRithmId: string;
+  /** Is Editable. */
+  isEditable: true;
+  /** Can view dashboard. */
+  canView: true;
+}
 
 /**
  * Service for all business logic involving the dashboard.
@@ -504,7 +513,7 @@ export class DashboardService {
    */
   addDashboardMembers(
     dashboardRithmId: string,
-    users: MemberDashboard[]
+    users: UsersAdd[]
   ): Observable<DashboardData> {
     return this.http.post<DashboardData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,

@@ -15,7 +15,7 @@ import {
   MemberDashboard,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
-import { DashboardService } from './dashboard.service';
+import { DashboardService, UsersAdd } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -773,7 +773,7 @@ describe('DashboardService', () => {
 
   it('should add user to dashboard', () => {
     const expectDashboardData: DashboardData = {
-      rithmId: '102030405060708090100',
+      rithmId: 'C4D41659-C7E7-4430-B36A-4AA33F56EBD6',
       name: 'Untitled Dashboard',
       type: RoleDashboardMenu.Company,
       widgets: [
@@ -794,24 +794,16 @@ describe('DashboardService', () => {
       isEditable: false,
       canView: false,
     };
-    const responseMembers: MemberDashboard[] = [
+    const responseMembers: UsersAdd[] = [
       {
-        rithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
-        firstName: 'Boba2',
-        lastName: 'Fett',
-        email: 'boba.fett@inpivota.com',
+        userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
         canView: true,
         isEditable: true,
-        profileImageRithmId: '383D75B3-AC4A-431C-9597-F3DA1A136547',
       },
       {
-        rithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
-        firstName: 'Din',
-        lastName: 'Djarin',
-        email: 'din.djarin@inpivota.com',
+        userRithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
         canView: true,
         isEditable: true,
-        profileImageRithmId: '19DEEFC5-5090-4986-9C19-4E971F715D59',
       },
     ];
     service

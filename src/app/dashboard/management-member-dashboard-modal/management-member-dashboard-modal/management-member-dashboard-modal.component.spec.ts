@@ -1,11 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
-import { MemberDashboard, RoleDashboardMenu } from 'src/models';
+import { RoleDashboardMenu } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import {
+  DashboardService,
+  UsersAdd,
+} from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
@@ -34,42 +37,16 @@ describe('ManagementMemberDashboardModalComponent', () => {
     dashboardType: RoleDashboardMenu.Personal,
   };
 
-  const testUsers: MemberDashboard[] = [
+  const testUsers: UsersAdd[] = [
     {
-      rithmId: '123-456-789',
-      profileImageRithmId: '123-456-789',
-      firstName: 'Test 1',
-      lastName: 'Eagle 1',
-      email: 'test1@email.com',
+      userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
       canView: true,
       isEditable: true,
     },
     {
-      rithmId: '987-654-321',
-      profileImageRithmId: '987-654-321',
-      firstName: 'Test 2',
-      lastName: 'Eagle 2',
-      email: 'test2@email.com',
-      canView: false,
-      isEditable: true,
-    },
-    {
-      rithmId: '654-987-321',
-      profileImageRithmId: '654-987-321',
-      firstName: 'Test 3',
-      lastName: 'Eagle 3',
-      email: 'test3@email.com',
+      userRithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
       canView: true,
-      isEditable: false,
-    },
-    {
-      rithmId: '654-321-987',
-      profileImageRithmId: '654-321-987',
-      firstName: 'Test 4',
-      lastName: 'Eagle 4',
-      email: 'test4@email.com',
-      canView: false,
-      isEditable: false,
+      isEditable: true,
     },
   ];
   let dashboardService: DashboardService;
