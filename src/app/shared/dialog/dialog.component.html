@@ -1,5 +1,5 @@
 <!-- Title -->
-<h4 id="title" class="text-center" [ngClass]="{ 'text-error-500': important }">
+<h4 id="title" class="text-left text-primary-500">
   {{ title }}
 </h4>
 
@@ -7,7 +7,7 @@
 <mat-dialog-content
   *ngIf="type !== dialogType.Prompt"
   id="message"
-  class="py-4 whitespace-pre-wrap overflow-y-auto"
+  class="whitespace-pre-wrap overflow-y-auto"
 >
   {{ message }}
 </mat-dialog-content>
@@ -36,6 +36,7 @@
   <!-- Cancel -->
   <button
     *ngIf="type !== dialogType.Alert"
+    class="uppercase"
     id="cancel"
     mat-button
     [mat-dialog-close]="type === dialogType.Prompt ? undefined : false"
@@ -47,6 +48,7 @@
   <!-- OK -->
   <button
     *ngIf="type !== dialogType.Terms"
+    class="bg-error-500 text-white uppercase"
     id="confirm"
     mat-button
     [color]="materialColor"
