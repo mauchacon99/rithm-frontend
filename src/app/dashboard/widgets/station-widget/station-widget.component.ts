@@ -167,6 +167,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
@@ -175,6 +178,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Reload stations or document Flowed or saved. */
   @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -229,6 +235,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Display error if user have permissions to see widget. */
   permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Type of drawer opened. */
   drawerContext!: string;
@@ -312,12 +321,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.failedLoadWidget = true;
           this.isLoading = false;
-          this.errorService.logError(error);
         },
       });
   }
@@ -617,6 +630,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         stationId: this.stationRithmId,
       },
     });
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */
