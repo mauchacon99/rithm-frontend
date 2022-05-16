@@ -164,4 +164,13 @@ export class MockSplitService {
   public getDefaultDashboardTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get the if can update dashboard grid.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardGridUpdate(): string {
+    return 'on';
+  }
 }
