@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Permission dashboard. */
   dashboardPermission = false;
 
-  /** If can update grid. */
+  /** If user can update grid. */
   isUpdateGrid = false;
 
   /** Show the dashboard menu. */
