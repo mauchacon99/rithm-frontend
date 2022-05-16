@@ -328,7 +328,7 @@ export class UserFormComponent
    *
    * @param imageRithmId Image id to update.
    */
-  updateUserImage(imageRithmId: string): void {
+  private updateUserImage(imageRithmId: string): void {
     this.isLoadingImageUser = imageRithmId ? 'uploading' : 'deleting';
     this.errorUploadImageUser = false;
     this.userService
