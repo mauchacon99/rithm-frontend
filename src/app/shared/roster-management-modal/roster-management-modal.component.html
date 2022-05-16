@@ -61,7 +61,7 @@
     <div
       class="screen-box-roster"
       [ngClass]="{
-        'loading-active absolute top-2 left-0 h-full w-full z-1': loadingMembers
+        'loading-active absolute top-0 left-0 h-full w-full z-1': loadingMembers
       }"
     ></div>
     <!-- Loading indicator for list of members -->
@@ -154,11 +154,15 @@
   <!-- Buttons -->
   <div mat-dialog-actions class="flex justify-end">
     <button
-      data-testid="close-dialog-button"
       mat-button
       color="accent"
-      [mat-dialog-close]="true"
+      id="close-dialog-button"
+      data-testid="close-dialog-button"
       [disabled]="loadingMembers"
+      [mat-dialog-close]="true"
+      [ngClass]="{
+        'text-secondary-200': loadingMembers
+      }"
     >
       Done
     </button>
