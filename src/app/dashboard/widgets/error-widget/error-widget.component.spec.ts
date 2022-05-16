@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { UserService } from 'src/app/core/user.service';
-import { MockUserService } from 'src/mocks';
 
 import { ErrorWidgetComponent } from './error-widget.component';
 
@@ -13,7 +11,6 @@ describe('ErrorWidgetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ErrorWidgetComponent],
       providers: [
-        { provide: UserService, useClass: MockUserService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
@@ -65,7 +62,6 @@ describe('ErrorWidgetComponent', () => {
   it('should hidden button if do not have permission and not is admin', () => {
     component.widgetDeleted = true;
     component.dashboardPermission = false;
-    component.isAdmin = false;
     fixture.detectChanges();
     const buttonDelete =
       fixture.debugElement.nativeElement.querySelector('#delete-widget');
@@ -74,8 +70,7 @@ describe('ErrorWidgetComponent', () => {
 
   it('should show button if is admin', () => {
     component.widgetDeleted = true;
-    component.dashboardPermission = false;
-    component.isAdmin = true;
+    component.dashboardPermission = true;
     fixture.detectChanges();
     const buttonDelete =
       fixture.debugElement.nativeElement.querySelector('#delete-widget');

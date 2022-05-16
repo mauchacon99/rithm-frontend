@@ -286,6 +286,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   removeWidget(): void {
     this.deleteWidget = true;
     this.editMode = true;
+    this.configEditMode();
   }
 
   /**
@@ -390,7 +391,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dashboardDataCopy = JSON.parse(
             JSON.stringify(this.dashboardData)
           );
-          this.dashboardPermission = this.dashboardData.isEditable;
+          this.dashboardPermission =
+            this.dashboardData.isEditable || this.isAdmin;
           this.isLoading = false;
           this.getQueryParams();
         },
@@ -467,7 +469,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dashboardDataCopy = JSON.parse(
               JSON.stringify(this.dashboardData)
             );
-            this.dashboardPermission = this.dashboardData.isEditable;
+            this.dashboardPermission =
+              this.dashboardData.isEditable || this.isAdmin;
           } else {
             this.isCreateNewDashboard = true;
           }

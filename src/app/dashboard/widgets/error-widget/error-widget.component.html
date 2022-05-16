@@ -2,15 +2,11 @@
   <div class="w-full h-full flex items-center justify-center">
     <div class="w-full text-center">
       <i
-        [ngClass]="
-          !permission || widgetDeleted ? 'text-accent-500' : 'text-error-500'
-        "
+        [ngClass]="!permission ? 'text-accent-500' : 'text-error-500'"
         class="fas fa-exclamation-triangle text-3xl"
       ></i>
       <h3
-        [ngClass]="
-          !permission || widgetDeleted ? 'text-accent-500' : 'text-error-500'
-        "
+        [ngClass]="!permission ? 'text-accent-500' : 'text-error-500'"
         class="truncate"
       >
         ERROR
@@ -22,8 +18,14 @@
             : 'You do not have permission to view this widget'
         }}
       </p>
+
+      <p class="text-sm mb-5" *ngIf="!dashboardPermission && widgetDeleted">
+        You do not have permission to edit this dashboard.
+      </p>
       <button
-        *ngIf="permission && !widgetDeleted"
+        *ngIf="
+          permission && !widgetDeleted && drawerContext !== 'menuDashboard'
+        "
         mat-stroked-button
         color="warn"
         (click)="reloadRequest()"
@@ -34,9 +36,7 @@
       </button>
 
       <button
-        *ngIf="
-          (dashboardPermission && widgetDeleted) || (isAdmin && widgetDeleted)
-        "
+        *ngIf="dashboardPermission && widgetDeleted"
         mat-stroked-button
         color="warn"
         (click)="removeWidget()"

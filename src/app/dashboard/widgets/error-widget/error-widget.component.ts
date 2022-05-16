@@ -1,6 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for show error.
@@ -10,7 +17,7 @@ import { UserService } from 'src/app/core/user.service';
   templateUrl: './error-widget.component.html',
   styleUrls: ['./error-widget.component.scss'],
 })
-export class ErrorWidgetComponent implements OnInit {
+export class ErrorWidgetComponent implements OnInit, OnDestroy {
   /** Show message error. */
   @Input() errorMessage!: string;
 
@@ -26,11 +33,14 @@ export class ErrorWidgetComponent implements OnInit {
   /** Output try again. */
   @Output() tryAgain = new EventEmitter();
 
-  /** Output try again. */
+  /** Output open drawer for delete widget. */
   @Output() deleteWidget = new EventEmitter();
 
-  /** Validate if the current user is admin. */
-  isAdmin = false;
+  /** Context of drawer opened. */
+  drawerContext!: string;
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
 
   /**
    * Whether the drawer is open.
@@ -41,14 +51,15 @@ export class ErrorWidgetComponent implements OnInit {
     return this.sidenavDrawerService.isDrawerOpen;
   }
 
-  constructor(
-    private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService
-  ) {}
+  constructor(private sidenavDrawerService: SidenavDrawerService) {}
 
   /** Init method. */
   ngOnInit(): void {
-    this.isAdmin = this.userService.isAdmin;
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((drawerContext) => {
+        this.drawerContext = drawerContext;
+      });
   }
 
   /**
@@ -63,5 +74,13 @@ export class ErrorWidgetComponent implements OnInit {
    */
   removeWidget(): void {
     this.deleteWidget.emit();
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
