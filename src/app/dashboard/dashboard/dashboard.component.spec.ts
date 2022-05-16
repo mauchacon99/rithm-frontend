@@ -288,7 +288,7 @@ describe('DashboardComponent', () => {
   it('should catch error if petition to return dashboard for id service fails when is dashboard default', () => {
     spyOn(dashboardService, 'getDashboardWidgets').and.returnValue(
       throwError(() => {
-        throw new HttpErrorResponse({ error: 'any error', status: 404 });
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
       })
     );
     const spyError = spyOn(
