@@ -442,9 +442,9 @@ export class StationComponent
   }
 
   /**
-   * Whether the screen width is below a certain amount.
+   * Whether the screen width is lesser than 640px.
    *
-   * @returns True if width is below a certain amount.
+   * @returns True if width is lesser than 640px.
    */
   get isMobileView(): boolean {
     return window.innerWidth <= 640;
