@@ -16,8 +16,4 @@ export interface MemberDashboard {
   canView: boolean;
   /** If can edit dashboard. */
   isEditable: boolean;
-  /** Image in Base64 the user. */
-  image: string;
-  /** Name the image the user. */
-  imageName: string;
 }

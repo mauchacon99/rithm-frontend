@@ -514,9 +514,6 @@ export class DashboardService {
         email: 'test1@email.com',
         canView: true,
         isEditable: true,
-        image:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
-        imageName: 'dev',
       },
       {
         rithmId: '987-654-321',
@@ -526,9 +523,6 @@ export class DashboardService {
         email: 'test2@email.com',
         canView: false,
         isEditable: true,
-        image:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
-        imageName: 'dev',
       },
       {
         rithmId: '654-987-321',
@@ -538,9 +532,6 @@ export class DashboardService {
         email: 'test3@email.com',
         canView: true,
         isEditable: false,
-        image:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
-        imageName: 'dev',
       },
       {
         rithmId: '654-321-987',
@@ -550,9 +541,6 @@ export class DashboardService {
         email: 'test4@email.com',
         canView: false,
         isEditable: false,
-        image:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAADSCAYAAACRit',
-        imageName: 'dev',
       },
     ];
 
