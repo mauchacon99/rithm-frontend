@@ -780,6 +780,11 @@ describe('DashboardComponent', () => {
         splitService,
         'getDashboardLibraryTreatment'
       ).and.callThrough();
+      //canAssignUserStationTableWidget
+      const spyGetAssignUserStationTableWidgetTreatment = spyOn(
+        splitService,
+        'getAssignUserStationTableWidgetTreatment'
+      ).and.callThrough();
 
       splitService.sdkReady$.next();
       component.ngOnInit();
@@ -787,6 +792,7 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
+      expect(spyGetAssignUserStationTableWidgetTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
     });

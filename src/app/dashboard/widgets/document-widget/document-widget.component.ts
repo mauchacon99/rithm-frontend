@@ -50,6 +50,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** If can assign user. */
+  @Input() canAssignUserStationTableWidget = false;
+
   /** Data widget. */
   private _dataWidget = '';
 

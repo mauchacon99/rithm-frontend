@@ -177,4 +177,15 @@ export class SplitService {
   public getDefaultDashboardTreatment(): string {
     return this.splitClient.getTreatment('default_dashboard_split');
   }
+
+  /**
+   * Get assign user from station table widget.
+   *
+   * @returns Split treatment.
+   */
+  public getAssignUserStationTableWidgetTreatment(): string {
+    return this.splitClient.getTreatment(
+      'assign_user_from_station_table_widget'
+    );
+  }
 }

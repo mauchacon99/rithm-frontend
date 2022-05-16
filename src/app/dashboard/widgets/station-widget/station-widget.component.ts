@@ -82,6 +82,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** If can assign user. */
+  @Input() canAssignUserStationTableWidget = false;
+
   /** Image to banner. */
   @Input() image!: DocumentImage;
 

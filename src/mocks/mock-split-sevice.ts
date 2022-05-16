@@ -164,4 +164,13 @@ export class MockSplitService {
   public getDefaultDashboardTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get assign user from station table widget.
+   *
+   * @returns Split treatment.
+   */
+  public getAssignUserStationTableWidgetTreatment(): string {
+    return 'on';
+  }
 }

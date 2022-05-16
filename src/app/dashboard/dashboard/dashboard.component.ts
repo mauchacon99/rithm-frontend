@@ -106,6 +106,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** View the button Add Widget in edit mode. */
   isAddWidget = false;
 
+  /** If can assign user. */
+  canAssignUserStationTableWidget = false;
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
@@ -225,6 +228,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
+        this.canAssignUserStationTableWidget =
+          this.splitService.getAssignUserStationTableWidgetTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
