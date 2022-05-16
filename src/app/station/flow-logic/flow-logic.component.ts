@@ -630,7 +630,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
       );
     }
   }
-  
+
   /**
    * Completes all subscriptions.
    */
