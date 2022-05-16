@@ -1167,6 +1167,7 @@ describe('FlowLogicComponent', () => {
     );
     component.intervalRepeatTypeSelect();
     expect(component.showRepeatForever).toBeFalse();
+  });
 
   it('should call the method that returns all stations.', () => {
     const prevAndNextStations = spyOn(
