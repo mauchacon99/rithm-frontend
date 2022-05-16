@@ -177,4 +177,15 @@ export class SplitService {
   public getDefaultDashboardTreatment(): string {
     return this.splitClient.getTreatment('default_dashboard_split');
   }
+
+  /**
+   * Get detail dashboard popover.
+   *
+   * @returns Split treatment.
+   */
+  public getFieldDetailDashboardPopoverTreatment(): string {
+    return this.splitClient.getTreatment(
+      'field_details_dashboard_popover_split'
+    );
+  }
 }

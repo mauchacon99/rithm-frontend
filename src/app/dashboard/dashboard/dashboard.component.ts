@@ -121,6 +121,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Permission dashboard. */
   dashboardPermission = false;
 
+  /** Show detail dashboard popover. */
+  showDetailDashboardPopover = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -231,6 +234,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
+        this.showDetailDashboardPopover =
+          this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

@@ -164,4 +164,13 @@ export class MockSplitService {
   public getDefaultDashboardTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get detail dashboard popover.
+   *
+   * @returns Split treatment.
+   */
+  public getFieldDetailDashboardPopoverTreatment(): string {
+    return 'on';
+  }
 }

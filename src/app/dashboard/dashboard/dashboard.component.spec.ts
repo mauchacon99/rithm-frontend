@@ -792,6 +792,7 @@ describe('DashboardComponent', () => {
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
+      expect(component.showDetailDashboardPopover).toBeTrue();
     });
 
     it('should catch split error ', () => {
@@ -809,6 +810,7 @@ describe('DashboardComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
+      expect(component.showDetailDashboardPopover).toBeFalse();
     });
   });
 

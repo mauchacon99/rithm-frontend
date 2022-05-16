@@ -35,7 +35,7 @@ export interface QuestionValuesColumn {
  */
 @Component({
   selector:
-    'app-document-widget[dataWidget][editMode][showButtonSetting][widgetItem]',
+    'app-document-widget[dataWidget][editMode][showButtonSetting][widgetItem][showDetailDashboardPopover]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
@@ -48,6 +48,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
+
+  /** Show detail dashboard popover. */
+  @Input() showDetailDashboardPopover = false;
 
   /** Data widget. */
   private _dataWidget = '';
