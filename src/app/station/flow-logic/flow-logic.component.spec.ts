@@ -36,7 +36,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { DocumentService } from 'src/app/core/document.service';
@@ -53,6 +53,8 @@ import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
+
+const formBuilder = new FormBuilder();
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -175,6 +177,8 @@ describe('FlowLogicComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         { provide: SplitService, useClass: MockSplitService },
         { provide: UserService, useClass: MockUserService },
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
       ],
     }).compileComponents();
   });
@@ -1163,5 +1167,29 @@ describe('FlowLogicComponent', () => {
     );
     component.intervalRepeatTypeSelect();
     expect(component.showRepeatForever).toBeFalse();
+  it('should call the method that returns all stations.', () => {
+    const prevAndNextStations = spyOn(
+      TestBed.inject(StationService),
+      'getPreviousAndNextStations'
+    ).and.callThrough();
+    component.getPreviousAndNextStations();
+    expect(prevAndNextStations).toHaveBeenCalledOnceWith(component.rithmId);
+  });
+
+  it('should show error message when request for get all stations fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getPreviousAndNextStations'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getPreviousAndNextStations();
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 });
