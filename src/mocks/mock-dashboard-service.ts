@@ -805,10 +805,14 @@ export class MockDashboardService {
   /**
    * Add members to dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @param users Users to add to dashboard.
    * @returns List users added.
    */
-  addDashboardMembers(users: MemberDashboard[]): Observable<MemberDashboard[]> {
+  addDashboardMembers(
+    dashboardRithmId: string,
+    users: MemberDashboard[]
+  ): Observable<MemberDashboard[]> {
     const responseMembers: MemberDashboard[] = [
       {
         rithmId: '123-456-789',

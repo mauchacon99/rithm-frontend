@@ -819,11 +819,15 @@ describe('DashboardService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectDashboardData);
       });
-
+    const expectBody = {
+      dashboardRithmId: expectDashboardData.rithmId,
+      users: responseMembers,
+    };
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`
     );
     expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectBody);
     req.flush(expectDashboardData);
     httpTestingController.verify();
   });
