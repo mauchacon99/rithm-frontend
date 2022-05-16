@@ -333,7 +333,9 @@
               [matTooltipPosition]="'right'"
             ></i>
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            (change)="removeOrAddTriggerType('manualFlow', $event)"
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -342,7 +344,9 @@
             Check container
             {{ ruleSelectedMenu === 'triggers' ? 'only on ' : 'on' }} arrival
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            (change)="removeOrAddTriggerType('documentArrived', $event)"
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -352,7 +356,9 @@
             {{ ruleSelectedMenu === 'triggers' ? 'new ' : '' }} container
             arrival
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+          (change)="removeOrAddTriggerType('anyDocumentArrived', $event)"
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -362,7 +368,9 @@
             {{ ruleSelectedMenu === 'triggers' ? 'on ' : '' }} containers on
             container departure
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+          (change)="removeOrAddTriggerType('anyDocumentLeft', $event)"
+          ></mat-slide-toggle>
         </div>
         <div
           class="title flex items-center border-b border-secondary-50 pl-8 pr-6 pt-8 pb-10"

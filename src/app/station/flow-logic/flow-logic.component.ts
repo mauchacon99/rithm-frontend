@@ -10,9 +10,11 @@ import {
   ConnectedStationInfo,
   FlowLogicRule,
   Power,
+  PowerTrigger,
   Rule,
   RuleEquation,
   RuleType,
+  TriggerType,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
@@ -24,6 +26,8 @@ import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Component for the flow logic tab on a station.
@@ -470,5 +474,56 @@ export class FlowLogicComponent implements OnInit, OnChanges {
           );
         },
       });
+  }
+
+  /**
+   * Rwmove or add trigger in the rules stations.
+   *
+   * @param triggerType The trigger type switched.
+   * @param eventToggle The event.
+   */
+  removeOrAddTriggerType(
+    triggerType: string,
+    eventToggle: MatSlideToggleChange
+  ): void {
+    if (eventToggle.checked) {
+      const triggerPower: PowerTrigger = {
+        rithmId: uuidv4(),
+        type: TriggerType.ManualFlow,
+        source: '',
+        value: '',
+      };
+
+      switch (triggerType) {
+        case TriggerType.ManualFlow:
+          triggerPower.type = TriggerType.ManualFlow;
+          break;
+
+        case TriggerType.AnyDocumentArrived:
+          triggerPower.type = TriggerType.AnyDocumentArrived;
+          break;
+
+        case TriggerType.AnyDocumentLeft:
+          triggerPower.type = TriggerType.AnyDocumentLeft;
+          break;
+
+        case TriggerType.DocumentArrived:
+          triggerPower.type = TriggerType.DocumentArrived;
+          break;
+
+        case TriggerType.DocumentLeft:
+          triggerPower.type = TriggerType.DocumentLeft;
+          break;
+      }
+      this.stationPowers.map((power) => {
+        power.triggers.push(triggerPower);
+      });
+    } else {
+      this.stationPowers.map((power) => {
+        power.triggers = power.triggers.filter(
+          (trigger) => triggerType !== trigger.type
+        );
+      });
+    }
   }
 }
