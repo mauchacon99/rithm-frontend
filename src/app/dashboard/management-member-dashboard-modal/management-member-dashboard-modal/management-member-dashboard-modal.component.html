@@ -55,15 +55,20 @@
     class="h-[calc(100%-190px)] md:h-[calc(100%-140px)] overflow-scroll scrollbar"
   >
     <div class="mt-3 md:ml-5">
-      <mat-checkbox formControlName="checkAll">Select All</mat-checkbox>
+      <mat-checkbox formControlName="checkAll" id="check-all"
+        >Select All</mat-checkbox
+      >
     </div>
     <div>
-      <div *ngIf="!membersDashboard.length">there are not member for show</div>
+      <div class="w-full text-center mt-5" *ngIf="!membersDashboard.length">
+        There are not member for show.
+      </div>
       <ng-container *ngFor="let member of membersDashboard; let i = index">
         <app-member-dashboard-list-modal
-          [formControlName]="i"
+          [formControlName]="'member-' + i"
           [member]="member"
           [setCheckAll]="checkAll"
+          [index]="i"
         ></app-member-dashboard-list-modal>
       </ng-container>
     </div>

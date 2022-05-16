@@ -69,15 +69,6 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
     return this.form.controls['checkAll'].value;
   }
 
-  /**
-   * Get members in form.
-   *
-   * @returns FormArray.
-   */
-  /*   get members(): FormArray {
-    return this.form.get('members') as FormArray;
-  } */
-
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public modalData: ModalData,
@@ -102,7 +93,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Add form for each user. */
   private addForms(): void {
     for (let index = 0; index < this.membersDashboard.length; index++) {
-      this.form.addControl(index.toString(), this.fb.control(''));
+      this.form.addControl(`member-${index}`, this.fb.control(''));
     }
   }
 

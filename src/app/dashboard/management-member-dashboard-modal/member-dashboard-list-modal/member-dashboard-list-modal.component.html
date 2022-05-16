@@ -3,14 +3,18 @@
   [formGroup]="form"
 >
   <div
-    class="flex items-center md:ml-5"
+    class="flex items-center md:ml-5 w-9/12 overflow-hidden"
     [ngClass]="{
       'space-x-2': isMobileDevice,
       'space-x-5': !isMobileDevice
     }"
   >
     <div>
-      <mat-checkbox formControlName="check"></mat-checkbox>
+      <mat-checkbox
+        formControlName="check"
+        (change)="onChange()"
+        id="can-view-{{ index }}"
+      ></mat-checkbox>
     </div>
     <div
       class="flex items-center"
@@ -25,11 +29,16 @@
         >
         </app-user-avatar>
       </div>
-      <div>
-        <p class="text-sm md:text-base">
+      <div class="w-full">
+        <p class="w-[100px] sm:w-full text-sm md:text-base truncate">
           {{ member.firstName + ' ' + member.lastName }}
         </p>
-        <p class="text-sm md:text-base text-accent-500">{{ member.email }}</p>
+
+        <p
+          class="w-[100px] sm:w-full text-sm md:text-base text-accent-500 truncate"
+        >
+          {{ member.email }}
+        </p>
       </div>
     </div>
   </div>
@@ -41,7 +50,10 @@
         'chip-custom-width': isMobileDevice
       }"
     >
-      <mat-chip [disabled]="!check" (click)="onChange()"
+      <mat-chip
+        [disabled]="!check"
+        (click)="onChangeIsEditable()"
+        id="can-edit-{{ index }}"
         >Edit
         <i
           class="fa-solid ml-2"

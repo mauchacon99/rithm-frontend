@@ -27,12 +27,21 @@ export class MemberDashboardListModalComponent
   /** Member dashboard. */
   @Input() member!: MemberDashboard;
 
+  /** Index member. */
+  @Input() index!: number;
+
   /** Status checkAll. */
   @Input() set setCheckAll(status: boolean) {
     if (this.form) {
       this.form.patchValue({
         check: status,
       });
+      if (!status) {
+        this.isEditable = false;
+        this.form.patchValue({
+          isEditable: this.isEditable,
+        });
+      }
     }
   }
 
@@ -48,7 +57,7 @@ export class MemberDashboardListModalComponent
    * @returns Status check.
    */
   get check(): boolean {
-    return !!this.form.controls['check'].value;
+    return this.form.controls['check'].value;
   }
 
   /**
@@ -71,8 +80,8 @@ export class MemberDashboardListModalComponent
   /** Init method. */
   ngOnInit(): void {
     this.form = this.fb.group({
-      check: this.fb.control(false),
-      isEditable: this.fb.control(false),
+      check: this.fb.control(this.member.canView),
+      isEditable: this.fb.control(this.member.isEditable),
     });
   }
 
@@ -111,9 +120,21 @@ export class MemberDashboardListModalComponent
   /**
    * Status isEditable.
    */
-  onChange(): void {
+  onChangeIsEditable(): void {
     if (this.check) {
       this.isEditable = !this.isEditable;
+      this.form.patchValue({
+        isEditable: this.isEditable,
+      });
+    }
+  }
+
+  /**
+   * Change check.
+   */
+  onChange(): void {
+    if (!this.check) {
+      this.isEditable = false;
       this.form.patchValue({
         isEditable: this.isEditable,
       });

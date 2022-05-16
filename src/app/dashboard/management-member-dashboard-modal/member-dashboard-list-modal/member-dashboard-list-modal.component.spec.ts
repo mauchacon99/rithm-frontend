@@ -51,11 +51,27 @@ describe('MemberDashboardListModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should change status in isEdit', () => {
+  it('should set default value in isEditable when check is false', () => {
+    component.isEditable = true;
+    spyOnProperty(component, 'check').and.returnValue(false);
+    fixture.detectChanges();
+    component.onChange();
+    expect(component.isEditable).toBeFalse();
+    expect(component.form.controls['isEditable'].value).toBeFalse();
+  });
+
+  it('should change value in isEditable when clicked chip', () => {
+    const index = 1;
+    component.index = index;
     component.isEditable = false;
     spyOnProperty(component, 'check').and.returnValue(true);
     fixture.detectChanges();
-    component.onChange();
+
+    const chip = fixture.debugElement.nativeElement.querySelector(
+      '#can-edit-' + index
+    );
+    expect(chip).toBeTruthy();
+    chip.click();
     expect(component.isEditable).toBeTrue();
     expect(component.form.controls['isEditable'].value).toBeTrue();
   });
