@@ -1,25 +1,8 @@
-<div class="mb-3" [formGroup]="fileFieldForm">
-  <mat-form-field
-    class="w-full"
-    appearance="outline"
-    *ngIf="isStation; else titleFileField"
-  >
-    <mat-label> {{ field.prompt }} </mat-label>
-    <div matPrefix class="icon">
-      <!-- Text Icons -->
-      <i class="fas fa-tag"></i>
-    </div>
-    <input
-      *ngIf="field.questionType === fieldTypeEnum.File"
-      matInput
-      [required]="field.isRequired"
-      [formControlName]="field.questionType"
-      (dateChange)="updateFieldAnswer()"
-    />
-  </mat-form-field>
-  <ng-template #titleFileField>
-    <p class="text-sm pb-4">{{ field.prompt }}</p>
-  </ng-template>
+<div class="app-file-field mb-3" [formGroup]="fileFieldForm">
+  <p class="text-sm pb-4">
+    {{ field.prompt }}
+    <span class="text-error-500" *ngIf="field.isRequired"> (*) </span>
+  </p>
   <button
     *ngIf="!isFileUploaded"
     mat-stroked-button
@@ -33,25 +16,25 @@
     <i class="fas fa-arrow-up-from-bracket"></i>
     <span class="text-base"> Upload </span>
   </button>
+  <section *ngIf="isFileUploaded" class="flex w-3/4 justify-start">
+    <div class="w-14 text-center">
+      <i class="fa-solid fa-file text-4xl text-secondary-300 px-2 py-3"></i>
+    </div>
+    <div class="w-auto py-3">
+      <span class="block text-sm text-accent-300">{{ fileName }}</span>
+      <span class="block text-xs">{{ fileSize.toFixed(2) }}kb</span>
+    </div>
+    <div
+      class="w-13 text-center cursor-pointer"
+      (click)="deleteDocument()"
+      [ngClass]="{ 'pointer-events-none opacity-50': isFileDeleted }"
+    >
+      <i class="fas fa-times text-xl text-secondary-500 px-4 py-3"></i>
+    </div>
+    <app-loading-indicator
+      *ngIf="isFileDeleted"
+      [diameter]="30"
+      class="pt-3"
+    ></app-loading-indicator>
+  </section>
 </div>
-<section *ngIf="isFileUploaded" class="flex w-3/4 justify-start">
-  <div class="w-14 text-center">
-    <i class="fa-solid fa-file text-4xl text-secondary-300 px-2 py-3"></i>
-  </div>
-  <div class="w-auto py-3">
-    <span class="block text-sm text-accent-300">{{ fileName }}</span>
-    <span class="block text-xs">{{ fileSize.toFixed(2) }}kb</span>
-  </div>
-  <div
-    class="w-13 text-center cursor-pointer"
-    (click)="deleteDocument()"
-    [ngClass]="{ 'pointer-events-none opacity-50': isFileDeleted }"
-  >
-    <i class="fas fa-times text-xl text-secondary-500 px-4 py-3"></i>
-  </div>
-  <app-loading-indicator
-    *ngIf="isFileDeleted"
-    [diameter]="30"
-    class="pt-3"
-  ></app-loading-indicator>
-</section>
