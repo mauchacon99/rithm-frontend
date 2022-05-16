@@ -7,8 +7,15 @@
 <app-error-widget
   *ngIf="errorStationPrebuilt"
   id="error-load-widget-station-pre-built"
-  [errorMessage]="'Unable to retrieve stations data'"
+  [errorMessage]="
+    widgetDeleted
+      ? 'Oops, it looks like this station has been removed.'
+      : 'Unable to retrieve stations data'
+  "
   [permission]="permissionError"
+  [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
+  (deleteWidget)="removeWidget()"
   (tryAgain)="getStationWidgetPreBuiltData()"
 >
 </app-error-widget>

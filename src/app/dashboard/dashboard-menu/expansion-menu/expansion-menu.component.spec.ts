@@ -13,7 +13,7 @@ import {
   MockUserService,
 } from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { DashboardData, RoleDashboardMenu, User, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { of, throwError } from 'rxjs';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -70,21 +70,6 @@ describe('ExpansionMenuComponent', () => {
       canView: false,
     },
   ];
-
-  const testUser: User = {
-    firstName: 'Samus',
-    lastName: 'Aran',
-    email: 'ycantmetroidcrawl@metroid.com',
-    isEmailVerified: true,
-    createdDate: new Date().toISOString(),
-    rithmId: 'kj34k3jkj',
-    notificationSettings: null,
-    role: null,
-    organization: '',
-    profileImageRithmId: 'f47cf568-27a4-4968-5628-f46ccfee24ff',
-    defaultDashboardType: RoleDashboardMenu.Personal,
-    defaultDashboardId: '347cf568-27a4-4968-5628-046ccfee24fd',
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -343,54 +328,6 @@ describe('ExpansionMenuComponent', () => {
     button.click();
     expect(spyHiddenDrawer).toHaveBeenCalledOnceWith();
     expect(spyDrawer).toHaveBeenCalledOnceWith('menuDashboard');
-  });
-
-  it('Should subscribe to user.userData$', () => {
-    component.indexDefaultDashboard = 1;
-    fixture.detectChanges();
-    component.dashboardRole = RoleDashboardMenu.Company;
-    const spyUserService = spyOn(
-      TestBed.inject(UserService).userData$,
-      'next'
-    ).and.callThrough();
-    component.ngOnInit();
-    TestBed.inject(UserService).userData$.next(testUser);
-    expect(spyUserService).toHaveBeenCalled();
-    expect(component.indexDefaultDashboard).toBeUndefined();
-  });
-
-  it('Should hidden icon if default dashboard is not defined', () => {
-    component.indexDefaultDashboard = 1;
-    fixture.detectChanges();
-    const user: User = {
-      firstName: 'Samus',
-      lastName: 'Aran',
-      email: 'ycantmetroidcrawl@metroid.com',
-      isEmailVerified: true,
-      createdDate: new Date().toISOString(),
-      rithmId: 'kj34k3jkj',
-      notificationSettings: null,
-      role: null,
-      organization: '',
-      profileImageRithmId: 'f47cf568-27a4-4968-5628-f46ccfee24ff',
-      defaultDashboardType: '' as RoleDashboardMenu,
-      defaultDashboardId: '',
-    };
-
-    component.dashboardRole = RoleDashboardMenu.Company;
-    const spyUserService = spyOn(
-      TestBed.inject(UserService).userData$,
-      'next'
-    ).and.callThrough();
-    component.ngOnInit();
-    TestBed.inject(UserService).userData$.next(user);
-    expect(spyUserService).toHaveBeenCalled();
-    expect(component.indexDefaultDashboard).toBeUndefined();
-  });
-
-  it('Should set index of default dashboard', () => {
-    component.markDefaultDashboard(true, 2);
-    expect(component.indexDefaultDashboard).toBe(2);
   });
 
   it('Should hidden options in company if not is admin', () => {

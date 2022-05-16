@@ -8,14 +8,13 @@ import {
 } from '@angular/core';
 import { first, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
 import {
   ColumnFieldsWidget,
   DashboardItem,
   DocumentWidget,
   Question,
   QuestionFieldType,
-  reloadStationFlow,
+  ReloadStationFlow,
   WidgetType,
 } from 'src/models';
 import { Router } from '@angular/router';
@@ -71,7 +70,7 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** A setter for the stationFlow property to reload document when its flowed. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     if (this.documentRithmId) {
       if (
         value &&
@@ -83,8 +82,14 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -118,6 +123,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   /** Display error if user have permissions to see widget. */
   permissionError = true;
 
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
+
   /** Columns for list the widget. */
   documentColumns: ColumnFieldsWidget[] = [];
 
@@ -125,7 +133,6 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
   questionFieldType = QuestionFieldType;
 
   constructor(
-    private errorService: ErrorService,
     private documentService: DocumentService,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService
@@ -174,12 +181,16 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.isLoading = false;
           this.failedLoadWidget = true;
-          this.errorService.logError(error);
         },
       });
   }
@@ -290,6 +301,12 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
       return question.prompt || null;
     }
     return question?.answer?.value || null;
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

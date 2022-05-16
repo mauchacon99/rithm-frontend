@@ -65,7 +65,7 @@
                     <p
                       class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                     >
-                      {{ equation.leftOperand.text | titlecase }}
+                      {{ equation.leftOperand.text }}
                       <span class="font-semibold px-2">
                         {{ translateOperator(equation.operatorType) }}</span
                       >
@@ -148,7 +148,7 @@
                     <p
                       class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                     >
-                      {{ subRule.equations[0].leftOperand.text | titlecase }}
+                      {{ subRule.equations[0].leftOperand.text }}
                       <span class="font-semibold px-2">
                         -
                         {{
@@ -156,7 +156,7 @@
                         }}
                         -</span
                       >
-                      {{ subRule.equations[0].rightOperand.text | titlecase }}
+                      {{ subRule.equations[0].rightOperand.text }}
                     </p>
                     <figure class="flex">
                       <button
@@ -267,7 +267,7 @@
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
-          (click)="displayRuleContent('rules')"
+          (click)="displayRuleContent('rules'); getPreviousAndNextStations()"
         >
           <i class="fa-regular fa-square-plus"></i> New Rule
         </li>
@@ -508,9 +508,10 @@
           </section>
         </form>
       </section>
+
       <section
-        *ngIf="ruleSelectedMenu === 'rules'"
         class="rules-right-side-conditions w-full"
+        *ngIf="ruleSelectedMenu === 'rules'"
       >
         <div
           class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
@@ -519,39 +520,19 @@
           <div class="select-condition">
             <mat-form-field appearance="outline">
               <mat-label> Condition Requirement </mat-label>
-              <mat-select [(ngModel)]="selectedConditionType">
+              <mat-select [(value)]="selectedConditionType">
                 <mat-option value="all"> All must be true </mat-option>
                 <mat-option value="any"> Any must be true </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
-        <div class="w-full py-6">
-          <ng-container *ngIf="!flowLogicRules.length">
-            <div class="flex justify-center">
-              <i class="fa-solid fa-clipboard-list text-accent-500 fa-3x"></i>
-            </div>
-            <div class="flex justify-center">
-              <p class="w-1/2 text-center text-sm py-4">
-                Conditions check the value saved on the container the trigger
-                actions
-              </p>
-            </div>
-          </ng-container>
-          <div
-            class="flex"
-            [ngClass]="[
-              flowLogicRules.length ? 'justify-start pl-8' : 'justify-center'
-            ]"
-          >
-            <button
-              mat-stroked-button
-              data-testid="add-condition"
-              color="accent"
-            >
-              Add Condition
-            </button>
-          </div>
+        <div class="conditions-container">
+          <app-conditions
+            [flowLogicRules]="flowLogicRules"
+            [currentStationQuestions]="currentStationQuestions"
+            [stationRithmId]="rithmId"
+          ></app-conditions>
         </div>
       </section>
       <section
@@ -620,7 +601,27 @@
           >
             <!-- Tab Flow -->
             <mat-tab label="tab-flow" aria-label="tab-flow">
-              <section></section>
+              <section
+                class="tab-flow-content flex items-center"
+                [formGroup]="flowFieldForm"
+              >
+                <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+                  <mat-label> Available Stations </mat-label>
+                  <mat-select formControlName="stations" multiple>
+                    <mat-option
+                      *ngFor="let option of filteredStations$ | async"
+                      [value]="option.rithmId"
+                    >
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="px-3" *ngIf="stationLoading">
+                  <app-loading-indicator
+                    inlineText="Loading Stations..."
+                  ></app-loading-indicator>
+                </div>
+              </section>
             </mat-tab>
 
             <!-- Tab Container -->
