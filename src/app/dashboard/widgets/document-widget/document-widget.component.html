@@ -134,6 +134,17 @@
         >
           This document doesn't have any questions.
         </div>
+        <div
+          class="text-center py-2 text-sm"
+          *ngIf="
+            dataDocumentWidget.questions.length &&
+            !getValueQuestions.length &&
+            !getDefaultValueQuestions.length
+          "
+          id="no-selected-question-message"
+        >
+          This document has no selected questions to display.
+        </div>
       </div>
     </div>
   </div>

@@ -681,4 +681,33 @@ describe('DocumentWidgetComponent', () => {
     );
     expect(emptyQuestion).toBeTruthy();
   });
+
+  it('should show no selected message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: questions,
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+    spyOnProperty(component, 'getValueQuestions').and.returnValue([]);
+    spyOnProperty(component, 'getDefaultValueQuestions').and.returnValue([]);
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#no-selected-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
 });
