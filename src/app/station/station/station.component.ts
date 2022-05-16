@@ -346,7 +346,8 @@ export class StationComponent
   ngOnInit(): void {
     this.getTreatment();
     this.sidenavDrawerService.setDrawer(this.drawer);
-
+    this.getParams();
+    this.getPreviousAndNextStations();
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -395,8 +396,6 @@ export class StationComponent
       next: () => {
         this.viewNewStation =
           this.splitService.getStationDocumentTreatment() === 'on';
-        this.getParams();
-        this.getPreviousAndNextStations();
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
