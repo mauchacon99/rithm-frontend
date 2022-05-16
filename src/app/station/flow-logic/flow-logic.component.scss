@@ -69,15 +69,14 @@
   }
 
   .trigger-repeat-forever-section {
-    @apply mb-6 flex justify-between;
+    @apply flex justify-between mb-6;
   }
 
   .trigger-type-section,
   .trigger-interval-time-section,
   .trigger-repeat-section {
-    @apply mb-6;
+    @apply min-w-[400px] mb-6;
 
-    min-width: 400px;
     max-width: 420px;
 
     .trigger-datepicker-section {
