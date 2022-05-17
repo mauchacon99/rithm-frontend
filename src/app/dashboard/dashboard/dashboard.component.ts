@@ -122,6 +122,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Permission dashboard. */
   dashboardPermission = false;
 
+  /** If user can update grid. */
+  isUpdateGrid = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -232,6 +235,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
+        this.isUpdateGrid =
+          this.splitService.getDashboardGridUpdateTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
