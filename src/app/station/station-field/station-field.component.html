@@ -56,24 +56,27 @@
             ></app-data-link-field>
           </ng-container>
           <ng-template #textField>
-            <app-text-field
-              [field]="labelField"
-              [formControlName]="field.questionType"
-              [toolBar]="true"
-              [labelTag]="'Name your field'"
-              [validateMask]="false"
-            ></app-text-field>
-            <button
-              *ngIf="field.questionType === fieldType.File"
-              mat-stroked-button
-              class="ml-2"
-              color="accent"
-              [disabled]="true"
-              data-testid="upload-button-disabled"
-            >
-              <i class="fas fa-arrow-up-from-bracket"></i>
-              <span class="text-base"> Upload </span>
-            </button>
+            <div class="station-file-component">
+              <app-text-field
+                [field]="labelField"
+                [formControlName]="field.questionType"
+                [toolBar]="true"
+                [labelTag]="'Name your field'"
+                [validateMask]="false"
+              ></app-text-field>
+              <button
+                *ngIf="field.questionType === fieldType.File"
+                id="upload-button-disabled"
+                data-testid="upload-button-disabled"
+                mat-stroked-button
+                class="ml-2"
+                color="accent"
+                [disabled]="true"
+              >
+                <i class="fas fa-arrow-up-from-bracket"></i>
+                <span class="text-base"> Upload </span>
+              </button>
+            </div>
           </ng-template>
         </div>
         <!-- Options/Items -->

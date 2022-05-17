@@ -21,7 +21,7 @@ import {
   StationRosterMember,
   Question,
   WidgetDocument,
-  reloadStationFlow,
+  ReloadStationFlow,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -127,7 +127,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** Set data for station widget. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     if (this.stationRithmId && value) {
       // if it's the same current station was flow or destiny station flowed.
       if (
@@ -164,6 +164,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
@@ -171,7 +174,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @Output() expandWidget = new EventEmitter<boolean>();
 
   /** Reload stations or document Flowed or saved. */
-  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
+  @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -226,6 +232,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Display error if user have permissions to see widget. */
   permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Type of drawer opened. */
   drawerContext!: string;
@@ -309,12 +318,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.failedLoadWidget = true;
           this.isLoading = false;
-          this.errorService.logError(error);
         },
       });
   }
@@ -537,11 +550,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       (questionDocument) => questionDocument.rithmId === questionRithmId
     );
     if (question) {
-      if (
-        question.questionType === this.questionFieldType.CheckList ||
-        question.questionType === this.questionFieldType.MultiSelect ||
-        question.questionType === this.questionFieldType.Select
-      ) {
+      if (question.questionType === this.questionFieldType.Select) {
         if (question?.answer?.asArray?.length) {
           if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
             return '---';
@@ -556,11 +565,33 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         }
         return null;
       }
+
+      if (
+        question.questionType === this.questionFieldType.CheckList ||
+        question.questionType === this.questionFieldType.MultiSelect
+      ) {
+        if (question?.answer?.asArray?.length) {
+          const values: string[] = [];
+          question?.answer?.asArray?.map((answer) => {
+            values.push(
+              `<i class="fas ${
+                answer.isChecked
+                  ? 'fa-check-square text-accent-500'
+                  : 'fa-square text-secondary-500'
+              }"></i> ${answer.value}`
+            );
+          });
+          return values.join('<br>') || null;
+        }
+        return null;
+      }
+
       if (question.questionType === this.questionFieldType.Instructions) {
         return question.prompt || null;
       }
       return question?.answer?.value || null;
     }
+
     return null;
   }
 
@@ -596,6 +627,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         stationId: this.stationRithmId,
       },
     });
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

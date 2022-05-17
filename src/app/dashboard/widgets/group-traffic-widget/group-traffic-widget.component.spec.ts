@@ -1,10 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ErrorService } from 'src/app/core/error.service';
-import {
-  MockDashboardService,
-  MockErrorService,
-  MockStationService,
-} from 'src/mocks';
+import { MockDashboardService, MockStationService } from 'src/mocks';
 import { GroupTrafficWidgetComponent } from './group-traffic-widget.component';
 import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
@@ -22,7 +17,6 @@ describe('GroupTrafficWidgetComponent', () => {
   let fixture: ComponentFixture<GroupTrafficWidgetComponent>;
   let stationService: StationService;
   let dashboardService: DashboardService;
-  let errorService: ErrorService;
   let sidenavDrawerService: SidenavDrawerService;
   const dataWidget =
     '{"stationGroupRithmId":"7f0611fe-dfd2-42ec-9e06-9f4e4e0b24bb", "valueShowGraphic":"5"}';
@@ -66,7 +60,6 @@ describe('GroupTrafficWidgetComponent', () => {
       ],
       imports: [NgChartsModule],
       providers: [
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
@@ -77,7 +70,6 @@ describe('GroupTrafficWidgetComponent', () => {
   beforeEach(() => {
     stationService = TestBed.inject(StationService);
     dashboardService = TestBed.inject(DashboardService);
-    errorService = TestBed.inject(ErrorService);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(GroupTrafficWidgetComponent);
     component = fixture.componentInstance;
@@ -119,7 +111,6 @@ describe('GroupTrafficWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -127,7 +118,6 @@ describe('GroupTrafficWidgetComponent', () => {
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorGroupTraffic).toBeTrue();
-    expect(spyService).toHaveBeenCalled();
   });
 
   it('should call and show sidenavService', () => {
@@ -251,11 +241,30 @@ describe('GroupTrafficWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getGroupTrafficData();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(stationService, 'getGroupTrafficData').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getGroupTrafficData();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

@@ -182,17 +182,6 @@ describe('StationWidgetComponent', () => {
     );
   });
 
-  it('should show error message when request station widget document  data', () => {
-    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
-  });
-
   it('should show button if station is manual', () => {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
@@ -860,7 +849,9 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('value 1');
+        ).toEqual(
+          '<i class="fas fa-check-square text-accent-500"></i> value 1'
+        );
       });
 
       it("should return '---' when questionType is check or select and dont have checked value", () => {
@@ -894,7 +885,7 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('---');
+        ).toEqual('<i class="fas fa-square text-secondary-500"></i> value 1');
       });
     });
 
@@ -1005,11 +996,30 @@ describe('StationWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetDocuments();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getStationWidgetDocuments();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });
