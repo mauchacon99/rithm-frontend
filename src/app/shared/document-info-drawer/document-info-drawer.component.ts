@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
 import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
+import { Location } from '@angular/common';
 
 /**
  * Component for document drawer.
@@ -130,7 +131,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -163,6 +165,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
               ? true
               : false;
         }
+        console.log(location.path())
         if (!this.isStation && dataDrawer.documentRithmId) {
           this.getLastUpdated();
           this.getAssignedUserToDocument();
@@ -504,7 +507,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             this.popupService.notify('The document has been deleted.');
-            this.router.navigateByUrl('dashboard');
+            this.location.back();
           },
           error: (error: unknown) => {
             this.errorService.displayError(
