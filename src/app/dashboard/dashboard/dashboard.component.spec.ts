@@ -518,6 +518,7 @@ describe('DashboardComponent', () => {
         maxWidth: '1500px',
         data: {
           dashboardRithmId: dataDashboard.rithmId,
+          showDetailWidgetPopover: false,
           canAssignUserWidget: component.canAssignUserWidget,
         },
       };
@@ -812,6 +813,7 @@ describe('DashboardComponent', () => {
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
       expect(component.canAssignUserWidget).toBeTrue();
+      expect(component.showDetailWidgetPopover).toBeTrue();
     });
 
     it('should catch split error ', () => {
@@ -829,6 +831,7 @@ describe('DashboardComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
+      expect(component.showDetailWidgetPopover).toBeFalse();
       expect(component.canAssignUserWidget).toBeFalse();
     });
   });
