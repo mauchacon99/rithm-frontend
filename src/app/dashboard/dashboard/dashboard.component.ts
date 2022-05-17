@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dashboardPermission = false;
 
   /** Show detail dashboard popover. */
-  showDetailDashboardPopover = false;
+  showDetailWidgetPopover = false;
 
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
@@ -234,7 +234,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
-        this.showDetailDashboardPopover =
+        this.showDetailWidgetPopover =
           this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
       },
       error: (error: unknown) => {
@@ -618,7 +618,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         'custom-margin-modal',
       ],
       maxWidth: '1500px',
-      data: this.dashboardData.rithmId,
+      data: {
+        rithmId: this.dashboardData.rithmId,
+        showDetailWidgetPopover: this.showDetailWidgetPopover,
+      },
     });
     dialog
       .afterClosed()

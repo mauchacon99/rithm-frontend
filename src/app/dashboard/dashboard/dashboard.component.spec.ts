@@ -502,7 +502,10 @@ describe('DashboardComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
-        data: dataDashboard.rithmId,
+        data: {
+          rithmId: dataDashboard.rithmId,
+          showDetailWidgetPopover: false,
+        },
       };
       const spyDialog = spyOn(
         TestBed.inject(MatDialog),
@@ -792,7 +795,7 @@ describe('DashboardComponent', () => {
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
-      expect(component.showDetailDashboardPopover).toBeTrue();
+      expect(component.showDetailWidgetPopover).toBeTrue();
     });
 
     it('should catch split error ', () => {
@@ -810,7 +813,7 @@ describe('DashboardComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
-      expect(component.showDetailDashboardPopover).toBeFalse();
+      expect(component.showDetailWidgetPopover).toBeFalse();
     });
   });
 

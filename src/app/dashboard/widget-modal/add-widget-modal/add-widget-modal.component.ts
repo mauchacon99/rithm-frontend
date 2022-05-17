@@ -47,6 +47,9 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section Pre built. */
   showPreBuilt = false;
 
+  /** Show detail widget popover. */
+  showDetailWidgetPopover = false;
+
   /** Data to force pre built template. */
   itemWidgetModalSelectedData: SelectedItemWidgetModel = {
     itemType: 'preBuilt',
@@ -65,12 +68,19 @@ export class AddWidgetModalComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public matData: string,
+    @Inject(MAT_DIALOG_DATA)
+    public matData: {
+      /** Rithm id. */
+      rithmId: string;
+      /** Show detail widget popover. */
+      showDetailWidgetPopover: boolean;
+    },
     private splitService: SplitService,
     private errorService: ErrorService,
     private userService: UserService
   ) {
-    this.dashboardRithmId = matData;
+    this.dashboardRithmId = matData.rithmId;
+    this.showDetailWidgetPopover = matData.showDetailWidgetPopover;
   }
 
   /**
