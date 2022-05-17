@@ -10,7 +10,6 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
 import { ContainerWidgetPreBuilt, ReloadStationFlow } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -88,6 +87,9 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
 
@@ -96,6 +98,9 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
 
   /** Reload stations or document Flowed or saved. */
   @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -148,12 +153,14 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Display error if user have permissions to see widget. */
   permissionError = true;
 
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
+
   /** Document id selected for view. */
   documentSelected: ContainerWidgetPreBuilt | null = null;
 
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private sidenavDrawerService: SidenavDrawerService
   ) {}
@@ -193,12 +200,16 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.isLoading = false;
           this.failedGetContainers = true;
-          this.errorService.logError(error);
         },
       });
   }
@@ -283,6 +294,12 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Toggle drawer when click on edit group search widget. */
   toggleEditStation(): void {
     this.toggleDrawer.emit(+this.containers.length);
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

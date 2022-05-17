@@ -45,6 +45,7 @@ import {
   SCALE_REDUCED_RENDER,
   CONNECTION_LINE_WIDTH_ZOOM_OUT,
   ICON_STATION_GROUP_OPTION,
+  ICON_Y_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -1339,11 +1340,20 @@ export class StationGroupElementService {
           ? NODE_HOVER_COLOR
           : BUTTON_DEFAULT_COLOR;
 
+      // Save the current bounding box, according to the icon
+      let boundingBox = ctx.measureText(icon).actualBoundingBoxDescent;
+
+      // If it is a cancel button type we add the spacing to the icon
+      if (typeButton === 'buttonCancel' && boundingBox <= 0) {
+        const scaledIcon = boundingBox + ICON_Y_PADDING * this.mapScale;
+        boundingBox = scaledIcon;
+      }
+
       // Paint the icon on the map.
       ctx.fillText(
         icon,
         displacedMap ? newPoint.x - pointStart.x : newPoint.x,
-        ctx.measureText(icon).actualBoundingBoxDescent
+        boundingBox
       );
       const path = new Path2D();
       // Create a circle over the icon button for hovering.

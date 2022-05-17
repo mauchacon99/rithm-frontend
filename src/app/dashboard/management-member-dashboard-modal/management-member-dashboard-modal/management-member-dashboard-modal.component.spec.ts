@@ -140,7 +140,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
       'getUsersDashboardPersonal'
     ).and.callThrough();
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
+    expect(spyService).toHaveBeenCalledOnceWith(component.dashboardRithmId);
   });
 
   it('should catch error if petition to return getUsersDashboardPersonal', () => {

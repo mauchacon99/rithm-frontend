@@ -80,7 +80,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
     this.isLoadingGetUserMembers = true;
     this.errorGetUsersMember = false;
     this.dashboardService
-      .getUsersDashboardPersonal()
+      .getUsersDashboardPersonal(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (membersDashboard) => {

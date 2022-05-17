@@ -42,6 +42,7 @@ describe('WidgetDrawerComponent', () => {
     },
     widgetIndex: 0,
     isCloseDrawer: false,
+    deleteWidget: true,
   };
 
   beforeEach(async () => {
@@ -366,5 +367,6 @@ describe('WidgetDrawerComponent', () => {
     expect(component.dataDrawer.widgetItem).toEqual(dataEditWidget.widgetItem);
     expect(component.widgetType).toEqual(WidgetType.Station);
     expect(component.imageUploaded).toEqual(expectedImage);
+    expect(component.showOnlyButtonDelete).toBeTrue();
   });
 });
