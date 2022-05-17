@@ -87,9 +87,7 @@
   .trigger-type-section,
   .trigger-interval-time-section,
   .trigger-repeat-section {
-    @apply min-w-[400px] mb-6;
-
-    max-width: 420px;
+    @apply min-w-[400px] max-w-[420px] mb-6;
 
     .trigger-datepicker-section {
       @apply mb-6;
