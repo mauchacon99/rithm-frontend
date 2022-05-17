@@ -241,12 +241,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
-        this.showDetailWidgetPopover =
-          this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
-        this.isUpdateGrid =
-          this.splitService.getDashboardGridUpdateTreatment() === 'on';
         this.canAssignUserWidget =
           this.splitService.getAssignUserWidgetTreatment() === 'on';
+        this.showDetailWidgetPopover =
+          this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);

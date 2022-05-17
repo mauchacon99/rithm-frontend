@@ -812,9 +812,8 @@ describe('DashboardComponent', () => {
       expect(spyGetAssignUserStationTableWidgetTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
-      expect(component.showDetailWidgetPopover).toBeTrue();
-      expect(component.isUpdateGrid).toBeTrue();
       expect(component.canAssignUserWidget).toBeTrue();
+      expect(component.showDetailWidgetPopover).toBeTrue();
     });
 
     it('should catch split error ', () => {
