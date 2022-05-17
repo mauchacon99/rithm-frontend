@@ -234,6 +234,7 @@ describe('StationDocumentsModalComponent', () => {
 
   it('should call close the modal in dialogRef service', () => {
     component.showContainerModal = true;
+    component.isLoading = false;
     fixture.detectChanges();
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
     const spyMethod = spyOn(component, 'closeModal').and.callThrough();

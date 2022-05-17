@@ -1,10 +1,10 @@
 <ng-container
-  *ngIf="showContainerModal; then newTemplate; else oldTemplate"
+  *ngIf="showContainerModal && !isLoading; then newTemplate; else oldTemplate"
 ></ng-container>
 
 <!-- New template -->
 <ng-template #newTemplate>
-  <div class="modal-container overflow-hidden">
+  <div class="modal-container overflow-hidden sm:h-[calc(100vh - 100px)]">
     <!-- header -->
     <div class="input-search">
       <div class="flex justify-between items-center">
@@ -398,7 +398,7 @@
   </div>
 
   <!-- Buttons -->
-  <div mat-dialog-actions class="flex justify-end">
+  <div *ngIf="!isLoading" mat-dialog-actions class="flex justify-end">
     <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
     <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
       Close

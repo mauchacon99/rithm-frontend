@@ -244,6 +244,7 @@ describe('GroupSearchWidgetComponent', () => {
 
   it('should executed modal for render documents the specific station', () => {
     const expectData = {
+      panelClass: ['h-[80vh]'],
       minWidth: '300px',
       data: {
         stationName: dataStationGroupWidget.stations[0].name,
