@@ -1180,4 +1180,14 @@ describe('FlowLogicComponent', () => {
     component.getPreviousAndNextStations();
     expect(displayErrorSpy).toHaveBeenCalled();
   });
+
+  it('should call the method that add or remove the triggers in the power progress.', () => {
+    const prevAndNextStations = spyOn(
+      TestBed.inject(StationService),
+      'getPreviousAndNextStations'
+    ).and.callThrough();
+    component.getPreviousAndNextStations();
+    expect(prevAndNextStations).toHaveBeenCalledOnceWith(component.rithmId);
+  });
+
 });

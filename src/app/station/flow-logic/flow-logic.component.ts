@@ -132,6 +132,9 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The list of all stations. */
   stations: ConnectedStationInfo[] = [];
 
+   /** List trigger type. */
+   triggerType = TriggerType;
+
   /** Loading/Errors block. */
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
@@ -585,44 +588,17 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
    * @param eventToggle The event.
    */
   removeOrAddTriggerType(
-    triggerType:
-      | 'manualFlow'
-      | 'documentArrived'
-      | 'anyDocumentArrived'
-      | 'documentLeft'
-      | 'anyDocumentLeft',
+    triggerType:TriggerType,
     eventToggle: MatSlideToggleChange
   ): void {
     this.powersInProgress.stationRithmId = this.rithmId;
     if (eventToggle.checked) {
       const triggerPower: PowerTrigger = {
         rithmId: uuidv4(),
-        type: TriggerType.ManualFlow,
+        type: triggerType,
         source: '',
         value: '',
       };
-
-      switch (triggerType) {
-        case TriggerType.ManualFlow:
-          triggerPower.type = TriggerType.ManualFlow;
-          break;
-
-        case TriggerType.AnyDocumentArrived:
-          triggerPower.type = TriggerType.AnyDocumentArrived;
-          break;
-
-        case TriggerType.AnyDocumentLeft:
-          triggerPower.type = TriggerType.AnyDocumentLeft;
-          break;
-
-        case TriggerType.DocumentArrived:
-          triggerPower.type = TriggerType.DocumentArrived;
-          break;
-
-        case TriggerType.DocumentLeft:
-          triggerPower.type = TriggerType.DocumentLeft;
-          break;
-      }
       this.powersInProgress.triggers.push(triggerPower);
     } else {
       this.powersInProgress.triggers = this.powersInProgress.triggers.filter(

@@ -336,7 +336,7 @@
           <mat-slide-toggle
             (change)="
               ruleSelectedMenu === 'rules'
-                ? removeOrAddTriggerType('manualFlow', $event)
+                ? removeOrAddTriggerType(triggerType.ManualFlow, $event)
                 : ''
             "
           ></mat-slide-toggle>
@@ -351,7 +351,7 @@
           <mat-slide-toggle
             (change)="
               ruleSelectedMenu === 'rules'
-                ? removeOrAddTriggerType('documentArrived', $event)
+                ? removeOrAddTriggerType(triggerType.DocumentArrived, $event)
                 : ''
             "
           ></mat-slide-toggle>
@@ -367,7 +367,7 @@
           <mat-slide-toggle
             (change)="
               ruleSelectedMenu === 'rules'
-                ? removeOrAddTriggerType('anyDocumentArrived', $event)
+                ? removeOrAddTriggerType(triggerType.AnyDocumentArrived, $event)
                 : ''
             "
           ></mat-slide-toggle>
@@ -383,7 +383,7 @@
           <mat-slide-toggle
             (change)="
               ruleSelectedMenu === 'rules'
-                ? removeOrAddTriggerType('anyDocumentLeft', $event)
+                ? removeOrAddTriggerType(triggerType.AnyDocumentLeft, $event)
                 : ''
             "
           ></mat-slide-toggle>
