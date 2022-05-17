@@ -182,17 +182,6 @@ describe('StationWidgetComponent', () => {
     );
   });
 
-  it('should show error message when request station widget document  data', () => {
-    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
-  });
-
   it('should show button if station is manual', () => {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
@@ -505,6 +494,50 @@ describe('StationWidgetComponent', () => {
     const noDocsMessage =
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
+  });
+
+  it('should not display a message when there are documents and no selected columns', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.dataSourceTable = new MatTableDataSource([
+      {
+        rithmId: component.dataStationWidget.documents[0].rithmId,
+        name: component.dataStationWidget.documents[0].name,
+      },
+    ] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeFalsy();
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeNull();
+  });
+
+  it('should display a message when there  are not documents and no selected columns', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.dataSourceTable = new MatTableDataSource([] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    fixture.detectChanges();
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeTruthy();
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeNull();
   });
 
   it('should show a gear icon in edit mode', () => {
@@ -1007,11 +1040,30 @@ describe('StationWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetDocuments();
-
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getStationWidgetDocuments();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

@@ -18,8 +18,12 @@
             : 'You do not have permission to view this widget'
         }}
       </p>
+
+      <p class="text-sm mb-5" *ngIf="!dashboardPermission && widgetDeleted">
+        You do not have permission to edit this dashboard.
+      </p>
       <button
-        *ngIf="permission"
+        *ngIf="permission && !widgetDeleted"
         mat-stroked-button
         color="warn"
         (click)="reloadRequest()"
@@ -27,6 +31,18 @@
         data-testid="try-again"
       >
         Try Again
+      </button>
+
+      <button
+        *ngIf="dashboardPermission && widgetDeleted"
+        mat-stroked-button
+        color="warn"
+        (click)="removeWidget()"
+        id="delete-widget"
+        data-testid="delete-widget"
+        [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
+      >
+        Remove widget
       </button>
     </div>
   </div>

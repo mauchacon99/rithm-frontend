@@ -8,11 +8,19 @@
 <app-error-widget
   *ngIf="failedLoadWidget"
   id="error-load-widget"
-  [errorMessage]="'Unable to retrieve document data'"
+  [errorMessage]="
+    widgetDeleted
+      ? 'Oops, it looks like this document has been removed.'
+      : 'Unable to retrieve container data'
+  "
   [permission]="permissionError"
+  [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
+  (deleteWidget)="removeWidget()"
   (tryAgain)="getDocumentWidget()"
 >
 </app-error-widget>
+
 <div
   *ngIf="!isLoading && !failedLoadWidget"
   class="w-full h-full"
@@ -130,8 +138,20 @@
         <div
           class="text-center py-2 text-sm"
           *ngIf="!dataDocumentWidget.questions.length"
+          id="without-question-message"
         >
           This document doesn't have any questions.
+        </div>
+        <div
+          class="text-center py-2 text-sm"
+          *ngIf="
+            dataDocumentWidget.questions.length &&
+            !getValueQuestions.length &&
+            !getDefaultValueQuestions.length
+          "
+          id="no-selected-question-message"
+        >
+          This document has no selected questions to display.
         </div>
       </div>
     </div>

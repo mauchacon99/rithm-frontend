@@ -480,9 +480,13 @@ describe('DashboardService', () => {
       canView: false,
     };
 
-    const expectBody = { name: expectedResponse.name };
+    const expectBody = {
+      name: expectedResponse.name,
+      canView: true,
+      isEditable: true,
+    };
 
-    service.generateNewPersonalDashboard().subscribe((response) => {
+    service.generateNewPersonalDashboard(true, true).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
 
@@ -557,10 +561,17 @@ describe('DashboardService', () => {
       canView: false,
     };
 
-    const expectBody = { name: expectedResponse.name };
-    service.generateNewOrganizationDashboard().subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    const expectBody = {
+      name: expectedResponse.name,
+      canView: true,
+      isEditable: true,
+    };
+
+    service
+      .generateNewOrganizationDashboard(true, true)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
@@ -816,6 +827,7 @@ describe('DashboardService', () => {
   });
 
   it('should get users to dashboard personal', () => {
+    const dashboardRithmId = '123-654-789';
     const expectedResponse: MemberDashboard[] = [
       {
         rithmId: '123-456-789',
@@ -855,8 +867,21 @@ describe('DashboardService', () => {
       },
     ];
 
-    service.getUsersDashboardPersonal().subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    service
+      .getUsersDashboardPersonal(dashboardRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/shared-users?dashboardRithmId=${dashboardRithmId}`
+    );
+
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('dashboardRithmId')).toEqual(
+      dashboardRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });

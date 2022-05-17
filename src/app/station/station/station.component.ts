@@ -116,6 +116,9 @@ export class StationComponent
   /** Old interface station data link widgets. */
   dataLinkArray: DataLinkObject[] = [];
 
+  /** Current stations questions. */
+  currentStationQuestions: Question[] = [];
+
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
@@ -450,6 +453,24 @@ export class StationComponent
   }
 
   /**
+   * Validate the conditions to display the Save or Save Rules button.
+   *
+   * @returns If display the button, can be true or false.
+   */
+  get stationInputFrames(): Question[] {
+    let dataFiltered = [] as Question[];
+    if (this.inputFrameWidgetItems) {
+      this.inputFrameWidgetItems.map((frame) => {
+        if (frame?.questions && frame.type === FrameType.Input) {
+          dataFiltered = dataFiltered.concat(frame.questions);
+        }
+      });
+    }
+
+    return dataFiltered;
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
@@ -520,6 +541,9 @@ export class StationComponent
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
         },
         error: (error: unknown) => {
           this.navigateBack();
@@ -989,6 +1013,9 @@ export class StationComponent
             this.inputFrameWidgetItems.push(frame);
             this.changedOptions();
           });
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
           this.widgetLoading = false;
         },
         error: (error: unknown) => {
@@ -1013,6 +1040,7 @@ export class StationComponent
         hasQuestions = true;
       }
     });
+
     if (hasQuestions) {
       const confirm = await this.popupService.confirm({
         title: ' ',
@@ -1052,6 +1080,9 @@ export class StationComponent
             this.widgetLoading = false;
             this.setGridMode('preview');
           }
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
           this.changedOptions();
         },
         error: (error: unknown) => {
