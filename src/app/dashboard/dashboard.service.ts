@@ -387,24 +387,34 @@ export class DashboardService {
   /**
    * Generates a new personal dashboard.
    *
+   * @param canView The user can view the dashboard.
+   * @param isEditable The user can edit the dashboard.
    * @returns Returns a new default dashboard.
    */
-  generateNewPersonalDashboard(): Observable<DashboardData> {
+  generateNewPersonalDashboard(
+    canView: boolean,
+    isEditable: boolean
+  ): Observable<DashboardData> {
     return this.http.post<DashboardData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`,
-      { name: 'Untitled Dashboard' }
+      { name: 'Untitled Dashboard', canView, isEditable }
     );
   }
 
   /**
    * Generates a new dashboard.
    *
+   * @param canView The user can view the dashboard.
+   * @param isEditable The user can edit the dashboard.
    * @returns Returns a new default dashboard.
    */
-  generateNewOrganizationDashboard(): Observable<DashboardData> {
+  generateNewOrganizationDashboard(
+    canView: boolean,
+    isEditable: boolean
+  ): Observable<DashboardData> {
     return this.http.post<DashboardData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
-      { name: 'Untitled Dashboard' }
+      { name: 'Untitled Dashboard', canView, isEditable }
     );
   }
 
