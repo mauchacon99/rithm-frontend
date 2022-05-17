@@ -188,4 +188,15 @@ export class SplitService {
       'assign_user_from_station_table_widget'
     );
   }
+
+  /**
+   * Get detail dashboard popover.
+   *
+   * @returns Split treatment.
+   */
+  public getFieldDetailDashboardPopoverTreatment(): string {
+    return this.splitClient.getTreatment(
+      'field_details_dashboard_popover_split'
+    );
+  }
 }
