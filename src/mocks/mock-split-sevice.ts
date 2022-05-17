@@ -166,11 +166,11 @@ export class MockSplitService {
   }
 
   /**
-   * Get the if can update dashboard grid.
+   * Get assign user from station table widget.
    *
    * @returns Split treatment.
    */
-  public getDashboardGridUpdateTreatment(): string {
+  public getAssignUserWidgetTreatment(): string {
     return 'on';
   }
 }
