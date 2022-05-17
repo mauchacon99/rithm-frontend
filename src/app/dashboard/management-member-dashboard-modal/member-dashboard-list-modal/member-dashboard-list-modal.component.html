@@ -2,13 +2,7 @@
   class="w-full flex justify-between py-3 overflow-hidden items-center"
   [formGroup]="form"
 >
-  <div
-    class="w-[70%] flex items-center"
-    [ngClass]="{
-      'space-x-2': isMobileDevice,
-      'space-x-5': !isMobileDevice
-    }"
-  >
+  <div class="w-[70%] flex items-center space-x-4 container-row">
     <div class="ml-3">
       <mat-checkbox
         formControlName="check"
@@ -22,7 +16,7 @@
         [firstName]="member.firstName"
         [lastName]="member.lastName"
         [profileImageRithmId]="member.profileImageRithmId"
-        [isDrawer]="isMobileDevice ? false : true"
+        [isDrawer]="true"
       >
       </app-user-avatar>
     </div>
@@ -31,15 +25,16 @@
       <p class="w-[90%] text-sm sm:text-base truncate">
         {{ member.firstName + ' ' + member.lastName }}
       </p>
-      <p class="w-[90%] text-sm sm:text-base truncate">{{ member.email }}</p>
+      <p class="w-[90%] text-sm sm:text-base truncate text-accent-500">
+        {{ member.email }}
+      </p>
     </div>
   </div>
 
   <div>
     <mat-chip-list
       [ngClass]="{
-        'chip-custom': isEditable,
-        'chip-custom-width': isMobileDevice
+        'chip-custom': isEditable
       }"
     >
       <mat-chip

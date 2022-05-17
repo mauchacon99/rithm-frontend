@@ -5,7 +5,6 @@ import {
   FormGroup,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { MobileBrowserChecker } from 'src/helpers';
 import { MemberDashboard } from 'src/models';
 
 /** List members. */
@@ -58,15 +57,6 @@ export class MemberDashboardListModalComponent
    */
   get check(): boolean {
     return this.form.controls['check'].value;
-  }
-
-  /**
-   * Detect if is isMobileDevice.
-   *
-   * @returns Is mobil.
-   */
-  get isMobileDevice(): boolean {
-    return new MobileBrowserChecker().isMobileDevice;
   }
 
   /**
