@@ -12,7 +12,7 @@ import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widg
 /** Description widget modal. */
 @Component({
   selector:
-    'app-description-widget-modal[itemWidgetModalSelected][widgetType][showDetailWidgetPopover]',
+    'app-description-widget-modal[itemWidgetModalSelected][widgetType][canAssignUserWidget][showDetailWidgetPopover]',
   templateUrl: './description-widget-modal.component.html',
   styleUrls: ['./description-widget-modal.component.scss'],
 })
@@ -25,6 +25,9 @@ export class DescriptionWidgetModalComponent implements OnInit {
 
   /** Show detail dashboard popover. */
   @Input() showDetailWidgetPopover = false;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /**
    * Get data widget with stringify.

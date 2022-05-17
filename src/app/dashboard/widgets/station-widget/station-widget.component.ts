@@ -59,7 +59,7 @@ interface ColumnsSpecificOfWidget {
  */
 @Component({
   selector:
-    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting][showDetailWidgetPopover]',
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting][canAssignUserWidget][showDetailWidgetPopover]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -84,6 +84,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Show detail dashboard popover. */
   @Input() showDetailWidgetPopover = false;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /** Image to banner. */
   @Input() image!: DocumentImage;

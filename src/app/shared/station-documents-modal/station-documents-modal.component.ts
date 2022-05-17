@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -90,8 +84,7 @@ export class StationDocumentsModalComponent implements OnInit {
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>,
     private router: Router,
     private splitService: SplitService,
-    private userService: UserService,
-    private cd: ChangeDetectorRef
+    private userService: UserService
   ) {
     this.stationRithmId = this.modalData.stationId;
   }
@@ -155,7 +148,6 @@ export class StationDocumentsModalComponent implements OnInit {
               ? this.documents.concat(documentsResponse.documents)
               : documentsResponse.documents;
             this.dataSourceTable = new MatTableDataSource(this.documents);
-            this.cd.detectChanges();
             this.totalNumDocs = documentsResponse.totalDocuments;
             this.userType = documentsResponse.userType;
           }

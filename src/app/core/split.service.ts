@@ -179,12 +179,14 @@ export class SplitService {
   }
 
   /**
-   * Get the if can update dashboard grid.
+   * Get assign user from station table widget.
    *
    * @returns Split treatment.
    */
-  public getDashboardGridUpdateTreatment(): string {
-    return this.splitClient.getTreatment('dashboard_grid_update_split');
+  public getAssignUserWidgetTreatment(): string {
+    return this.splitClient.getTreatment(
+      'assign_user_from_station_table_widget'
+    );
   }
 
   /**
