@@ -140,10 +140,10 @@ export class StationFieldComponent
       optionField: [''],
       [`isRequired-${this.field.rithmId}`]: {
         disabled: isDisabled,
-        readonly: this.field.isReadOnly,
+        value: this.field.isRequired,
       },
       [`isPrivate-${this.field.rithmId}`]: [this.field.isPrivate],
-      [`isReadonly-${this.field.rithmId}`]: [this.field.isReadOnly],
+      [`isReadonly-${this.field.rithmId}`]: [!this.field.isReadOnly],
     });
     this.stationFieldForm.valueChanges
       .pipe(takeUntil(this.destroyed$))
@@ -309,7 +309,16 @@ export class StationFieldComponent
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = !checkboxEvent.checked;
     if (this.field.isReadOnly) {
-      this.field.isRequired = false;
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].setValue(false);
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].disable();
+    } else {
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].enable();
     }
     this.stationService.touchStationForm();
   }
