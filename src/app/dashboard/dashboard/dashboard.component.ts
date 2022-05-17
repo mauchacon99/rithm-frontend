@@ -125,6 +125,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Permission dashboard. */
   dashboardPermission = false;
 
+  /** Show detail dashboard popover. */
+  showDetailWidgetPopover = false;
+
+  /** If user can update grid. */
+  isUpdateGrid = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -237,6 +243,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getDashboardLibraryTreatment() === 'on';
         this.canAssignUserWidget =
           this.splitService.getAssignUserWidgetTreatment() === 'on';
+        this.showDetailWidgetPopover =
+          this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -631,6 +639,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       maxWidth: '1500px',
       data: {
         dashboardRithmId: this.dashboardData.rithmId,
+        showDetailWidgetPopover: this.showDetailWidgetPopover,
         canAssignUserWidget: this.canAssignUserWidget,
       },
     });
