@@ -11,7 +11,8 @@ import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widg
 
 /** Description widget modal. */
 @Component({
-  selector: 'app-description-widget-modal[itemWidgetModalSelected][widgetType]',
+  selector:
+    'app-description-widget-modal[itemWidgetModalSelected][widgetType][canAssignUserWidget]',
   templateUrl: './description-widget-modal.component.html',
   styleUrls: ['./description-widget-modal.component.scss'],
 })
@@ -21,6 +22,9 @@ export class DescriptionWidgetModalComponent implements OnInit {
 
   /** Widget type to preview widget selected. */
   @Input() widgetType: WidgetType | 'defaultDocument' = WidgetType.Document;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /**
    * Get data widget with stringify.
