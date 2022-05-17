@@ -120,8 +120,11 @@ export class OptionsMenuComponent implements OnInit, OnDestroy {
     this.dashboardService.toggleLoadingDashboard(true);
     const generateDashboard$ =
       this.dashboardRole === this.roleDashboardMenu.Personal
-        ? this.dashboardService.generateNewPersonalDashboard()
-        : this.dashboardService.generateNewOrganizationDashboard();
+        ? this.dashboardService.generateNewPersonalDashboard(true, true)
+        : this.dashboardService.generateNewOrganizationDashboard(
+            true,
+            this.isAdmin
+          );
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
         this.isGenerateNewDashboard = false;
