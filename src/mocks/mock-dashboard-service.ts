@@ -622,9 +622,14 @@ export class MockDashboardService {
   /**
    * Generates a new dashboard personal.
    *
+   * @param canView The user can view the dashboard.
+   * @param isEditable The user can edit the dashboard.
    * @returns Returns a new default dashboard.
    */
-  generateNewPersonalDashboard(): Observable<DashboardData> {
+  generateNewPersonalDashboard(
+    canView: boolean,
+    isEditable: boolean
+  ): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
       type: RoleDashboardMenu.Personal,
@@ -644,8 +649,8 @@ export class MockDashboardService {
           maxItemRows: 12,
         },
       ],
-      isEditable: false,
-      canView: false,
+      isEditable,
+      canView,
     };
 
     return of(newDashboard).pipe(delay(1000));
@@ -654,9 +659,14 @@ export class MockDashboardService {
   /**
    * Generates a new dashboard.
    *
+   * @param canView The user can view the dashboard.
+   * @param isEditable The user can edit the dashboard.
    * @returns Returns a new default dashboard.
    */
-  generateNewOrganizationDashboard(): Observable<DashboardData> {
+  generateNewOrganizationDashboard(
+    canView: boolean,
+    isEditable: boolean
+  ): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
@@ -676,8 +686,8 @@ export class MockDashboardService {
           maxItemRows: 12,
         },
       ],
-      isEditable: false,
-      canView: false,
+      isEditable,
+      canView,
     };
 
     return of(newDashboard).pipe(delay(1000));
