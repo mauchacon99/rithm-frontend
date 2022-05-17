@@ -64,7 +64,7 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Label Select of modal. */
   label = 'Select Station';
 
-  /** The Label Select of modal. */
+  /** Whether the user was assigned to the document or not. */
   assignedUser: number | undefined = 0;
 
   constructor(
@@ -212,7 +212,7 @@ export class ConnectedStationsModalComponent implements OnInit {
   moveDocument(): void {
     this.moveDocumentError = false;
     this.connectedStationLoading = true;
-    if (this.assignedUser && this.assignedUser > 0) {
+    if (this.assignedUser) {
       this.unassignUserToDocument();
     }
     const moveDocument: MoveDocument = {
