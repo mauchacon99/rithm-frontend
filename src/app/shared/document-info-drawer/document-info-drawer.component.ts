@@ -165,7 +165,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
               ? true
               : false;
         }
-        console.log(location.path());
         if (!this.isStation && dataDrawer.documentRithmId) {
           this.getLastUpdated();
           this.getAssignedUserToDocument();
