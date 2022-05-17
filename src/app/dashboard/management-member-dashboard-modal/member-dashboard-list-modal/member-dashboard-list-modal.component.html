@@ -1,1 +1,55 @@
-<p>member-dashboard-list-modal works!</p>
+<div
+  class="w-full flex justify-between py-3 overflow-hidden items-center"
+  [formGroup]="form"
+>
+  <div class="w-[70%] flex items-center space-x-4 container-row">
+    <div class="ml-3">
+      <mat-checkbox
+        formControlName="check"
+        (change)="onChange()"
+        id="can-view-{{ index }}"
+      ></mat-checkbox>
+    </div>
+
+    <div>
+      <app-user-avatar
+        [firstName]="member.firstName"
+        [lastName]="member.lastName"
+        [profileImageRithmId]="member.profileImageRithmId"
+        [isDrawer]="true"
+      >
+      </app-user-avatar>
+    </div>
+
+    <div class="w-[70%] container-info">
+      <p class="w-[90%] text-sm sm:text-base truncate">
+        {{ member.firstName + ' ' + member.lastName }}
+      </p>
+      <p class="w-[90%] text-sm sm:text-base truncate text-accent-500">
+        {{ member.email }}
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <mat-chip-list
+      [ngClass]="{
+        'chip-custom': isEditable
+      }"
+    >
+      <mat-chip
+        [disabled]="!check"
+        (click)="onChangeIsEditable()"
+        id="can-edit-{{ index }}"
+        >Edit
+        <i
+          class="fa-solid ml-2"
+          [ngClass]="{
+            'fa-circle-check': isEditable,
+            'fa-circle-xmark': !isEditable
+          }"
+        ></i>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</div>
