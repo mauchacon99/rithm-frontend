@@ -47,6 +47,9 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section Pre built. */
   showPreBuilt = false;
 
+  /** Show detail widget popover. */
+  showDetailWidgetPopover = false;
+
   /** If can assign user. */
   canAssignUserWidget = false;
 
@@ -72,6 +75,8 @@ export class AddWidgetModalComponent implements OnInit {
     public matData: {
       /**Dashboard Rithm id */
       dashboardRithmId: string;
+      /** Show detail widget popover. */
+      showDetailWidgetPopover: boolean;
       /** If can assign user. */
       canAssignUserWidget: boolean;
     },
@@ -79,6 +84,7 @@ export class AddWidgetModalComponent implements OnInit {
     private errorService: ErrorService,
     private userService: UserService
   ) {
+    this.showDetailWidgetPopover = matData.showDetailWidgetPopover;
     this.dashboardRithmId = matData.dashboardRithmId;
     this.canAssignUserWidget = matData.canAssignUserWidget;
   }
