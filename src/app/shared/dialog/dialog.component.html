@@ -48,10 +48,13 @@
   <!-- OK -->
   <button
     *ngIf="type !== dialogType.Terms"
-    class="bg-error-500 text-white uppercase"
+    class="hover:text-white uppercase"
+    [ngClass]="{
+      'hover:bg-error-500 text-error-500': important,
+      'hover:bg-accent-500 text-accent-500': !important
+    }"
     id="confirm"
     mat-button
-    [color]="materialColor"
     [mat-dialog-close]="type === dialogType.Prompt ? promptValue : true"
     data-testid="dialog-ok"
   >
