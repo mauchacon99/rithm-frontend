@@ -94,7 +94,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   stationPowers: Power[] = [];
 
   /** The powers that are currently being edited. */
-  powersInProgress: Power = {
+  editedPower: Power = {
     rithmId: uuidv4(),
     triggers: [],
     actions: [],
@@ -591,7 +591,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
     triggerType: TriggerType,
     eventToggle: MatSlideToggleChange
   ): void {
-    this.powersInProgress.stationRithmId = this.rithmId;
+    this.editedPower.stationRithmId = this.rithmId;
     if (eventToggle.checked) {
       const triggerPower: PowerTrigger = {
         rithmId: uuidv4(),
@@ -599,11 +599,12 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
         source: '',
         value: '',
       };
-      this.powersInProgress.triggers.push(triggerPower);
+      this.editedPower.triggers.push(triggerPower);
     } else {
-      this.powersInProgress.triggers = this.powersInProgress.triggers.filter(
-        (trigger) => triggerType !== trigger.type
+      const triggerIndex = this.editedPower.triggers.findIndex(
+        (trigger) => triggerType === trigger.type
       );
+      this.editedPower.triggers.splice(triggerIndex, 1);
     }
   }
 

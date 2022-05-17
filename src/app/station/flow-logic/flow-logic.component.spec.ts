@@ -1184,7 +1184,7 @@ describe('FlowLogicComponent', () => {
 
   it('should call the method that will add triggers on the current power.', () => {
     const eventToggle = { checked: true } as MatSlideToggleChange;
-    component.powersInProgress = {
+    component.editedPower = {
       rithmId: '3juk-3333l-9f9f9f-8888ff',
       triggers: [],
       actions: [],
@@ -1198,7 +1198,7 @@ describe('FlowLogicComponent', () => {
       'removeOrAddTriggerType'
     ).and.callThrough();
     component.removeOrAddTriggerType(TriggerType.ManualFlow, eventToggle);
-    expect(component.powersInProgress.triggers.length).toBeGreaterThanOrEqual(
+    expect(component.editedPower.triggers.length).toBeGreaterThanOrEqual(
       1
     );
     expect(spyRemoveOrAddTrigger).toHaveBeenCalledOnceWith(
@@ -1209,7 +1209,7 @@ describe('FlowLogicComponent', () => {
 
   it('should call the method that will remove triggers on the current power.', () => {
     const eventToggle = { checked: false } as MatSlideToggleChange;
-    component.powersInProgress = {
+    component.editedPower = {
       rithmId: '3juk-3333l-9f9f9f-8888ff',
       triggers: [
         {
@@ -1230,7 +1230,7 @@ describe('FlowLogicComponent', () => {
       'removeOrAddTriggerType'
     ).and.callThrough();
     component.removeOrAddTriggerType(TriggerType.ManualFlow, eventToggle);
-    expect(component.powersInProgress.triggers.length).toEqual(0);
+    expect(component.editedPower.triggers.length).toEqual(0);
     expect(spyRemoveOrAddTrigger).toHaveBeenCalledOnceWith(
       TriggerType.ManualFlow,
       eventToggle
