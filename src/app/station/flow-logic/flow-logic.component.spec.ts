@@ -54,8 +54,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
 import {
-  MatSlideToggle,
-  MatSlideToggleChange,
+  MatSlideToggleChange
 } from '@angular/material/slide-toggle';
 
 const formBuilder = new FormBuilder();
