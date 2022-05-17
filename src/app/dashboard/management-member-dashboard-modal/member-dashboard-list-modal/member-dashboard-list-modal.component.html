@@ -3,41 +3,35 @@
   [formGroup]="form"
 >
   <div
-    class="flex items-center md:ml-5"
+    class="w-[70%] flex items-center"
     [ngClass]="{
       'space-x-2': isMobileDevice,
       'space-x-5': !isMobileDevice
     }"
   >
-    <div class="ml-3 md:ml-0">
+    <div class="ml-3">
       <mat-checkbox
         formControlName="check"
         (change)="onChange()"
         id="can-view-{{ index }}"
       ></mat-checkbox>
     </div>
-    <div
-      class="flex items-center"
-      [ngClass]="{ 'space-x-2': isMobileDevice, 'space-x-5': !isMobileDevice }"
-    >
-      <div>
-        <app-user-avatar
-          [firstName]="member.firstName"
-          [lastName]="member.lastName"
-          [profileImageRithmId]="member.profileImageRithmId"
-          [isDrawer]="isMobileDevice ? false : true"
-        >
-        </app-user-avatar>
-      </div>
-      <div class="w-full">
-        <p class="hidden sm:block">
-          {{ member.firstName + ' ' + member.lastName }}
-        </p>
 
-        <p class="hidden sm:block">
-          {{ member.email }}
-        </p>
-      </div>
+    <div>
+      <app-user-avatar
+        [firstName]="member.firstName"
+        [lastName]="member.lastName"
+        [profileImageRithmId]="member.profileImageRithmId"
+        [isDrawer]="isMobileDevice ? false : true"
+      >
+      </app-user-avatar>
+    </div>
+
+    <div class="w-[70%] container-info">
+      <p class="w-[90%] text-sm sm:text-base truncate">
+        {{ member.firstName + ' ' + member.lastName }}
+      </p>
+      <p class="w-[90%] text-sm sm:text-base truncate">{{ member.email }}</p>
     </div>
   </div>
 

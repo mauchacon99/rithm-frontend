@@ -3,3 +3,9 @@
     @apply bg-accent-200;
   }
 }
+
+@media (max-width: 360px) {
+  .container-info {
+    display: none;
+  }
+}
