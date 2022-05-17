@@ -811,6 +811,7 @@ describe('DashboardComponent', () => {
       expect(spyGetAssignUserStationTableWidgetTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
+      expect(component.canAssignUserWidget).toBeTrue();
     });
 
     it('should catch split error ', () => {
@@ -828,6 +829,7 @@ describe('DashboardComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
+      expect(component.canAssignUserWidget).toBeFalse();
     });
   });
 
