@@ -585,7 +585,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
    * Remove or add trigger in the rules stations.
    *
    * @param triggerType The trigger type switched.
-   * @param eventToggle The event.
+   * @param eventToggle The event that checked the toogle.
    */
   removeOrAddTriggerType(
     triggerType:TriggerType,
