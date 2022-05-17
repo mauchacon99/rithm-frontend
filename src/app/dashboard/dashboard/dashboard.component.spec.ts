@@ -47,6 +47,7 @@ import { MobileBrowserChecker } from 'src/helpers';
 import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -74,6 +75,8 @@ describe('DashboardComponent', () => {
     isEditable: true,
     canView: false,
   };
+  let userService: UserService;
+  let dashboardService: DashboardService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -127,6 +130,8 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     component.dashboardData = dataDashboard;
+    userService = TestBed.inject(UserService);
+    dashboardService = TestBed.inject(DashboardService);
     fixture.detectChanges();
   });
 
@@ -196,7 +201,7 @@ describe('DashboardComponent', () => {
       'updateDashboard'
     ).and.callThrough();
     const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'updatePersonalDashboard'
     ).and.callThrough();
 
@@ -229,7 +234,7 @@ describe('DashboardComponent', () => {
     ).and.callThrough();
 
     const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'updateOrganizationDashboard'
     ).and.callThrough();
 
@@ -248,7 +253,7 @@ describe('DashboardComponent', () => {
 
   it('should returns the organization`s dashboard list', () => {
     const spyService = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'getOrganizationDashboard'
     ).and.callThrough();
     component['getOrganizationDashboard']();
@@ -256,10 +261,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
-    spyOn(
-      TestBed.inject(DashboardService),
-      'getOrganizationDashboard'
-    ).and.returnValue(
+    spyOn(dashboardService, 'getOrganizationDashboard').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -274,7 +276,7 @@ describe('DashboardComponent', () => {
 
   it('should call service dashboard for id', () => {
     const spyService = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'getDashboardWidgets'
     ).and.callThrough();
 
@@ -283,11 +285,22 @@ describe('DashboardComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
-  it('should catch error if petition to return dashboard for id service fails', () => {
-    spyOn(
-      TestBed.inject(DashboardService),
-      'getDashboardWidgets'
-    ).and.returnValue(
+  it('should catch error if petition to return dashboard for id service fails when is dashboard default', () => {
+    spyOn(dashboardService, 'getDashboardWidgets').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getDashboardByRithmId'](dashboardRithmId, true);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return dashboard for id service fails when is not dashboard default', () => {
+    spyOn(dashboardService, 'getDashboardWidgets').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -611,16 +624,14 @@ describe('DashboardComponent', () => {
       quantityElementsWidget,
     };
 
-    TestBed.inject(DashboardService).updateDashboardWidgets(
-      expectEditDataWidget
-    );
+    dashboardService.updateDashboardWidgets(expectEditDataWidget);
 
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
   });
 
   it('should emit DashboardService.isLoadingDashboard$ and call getParams', () => {
     const spyRoute = spyOn(TestBed.inject(ActivatedRoute).params, 'subscribe');
-    TestBed.inject(DashboardService).toggleLoadingDashboard(true, true);
+    dashboardService.toggleLoadingDashboard(true, true);
     fixture.detectChanges();
     expect(component.isLoading).toBeTrue();
     expect(component.errorLoadingDashboard).toBeFalse();
@@ -765,11 +776,9 @@ describe('DashboardComponent', () => {
 
   describe('Testing split.io', () => {
     let splitService: SplitService;
-    let userService: UserService;
 
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
-      userService = TestBed.inject(UserService);
     });
 
     it('should call split service and treatments', () => {
@@ -936,4 +945,62 @@ describe('DashboardComponent', () => {
     expect(component.editMode).toBeTrue();
     expect(spyService).toHaveBeenCalled();
   }));
+
+  it('should get default dashboard', () => {
+    const spyService = spyOn(
+      dashboardService,
+      'getDashboardWidgets'
+    ).and.callThrough();
+
+    component['getDefaultDashboard']();
+
+    expect(spyService).toHaveBeenCalledOnceWith(
+      userService.user.defaultDashboardId as string
+    );
+  });
+
+  it('should not get default dashboard', () => {
+    spyOnProperty(userService, 'user').and.returnValue({
+      rithmId: '123',
+      firstName: 'Testy',
+      lastName: 'Test',
+      email: 'test@test.com',
+      isEmailVerified: true,
+      notificationSettings: null,
+      createdDate: '1/2/34',
+      role: null,
+      organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+      profileImageRithmId: '123-456-789',
+      defaultDashboardType: '',
+      defaultDashboardId: '',
+    });
+    const spyService = spyOn(
+      dashboardService,
+      'getOrganizationDashboard'
+    ).and.callThrough();
+
+    component['getDefaultDashboard']();
+
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should set null dashboard default to user', () => {
+    const spyService = spyOn(userService, 'updateUserAccount').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const errorService = spyOn(
+      TestBed.inject(ErrorService),
+      'logError'
+    ).and.callThrough();
+
+    component['setNullDashboardUser']();
+
+    expect(spyService).toHaveBeenCalledOnceWith({
+      defaultDashboardType: '',
+      defaultDashboardId: '',
+    });
+    expect(errorService).toHaveBeenCalled();
+  });
 });
