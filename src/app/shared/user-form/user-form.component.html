@@ -2,14 +2,8 @@
   <div *ngIf="!accountCreate && showProfilePhoto">
     <div
       class="w-full flex space-x-3 py-5 items-center"
-      [ngClass]="{ 'animate-pulse': isLoadingUploadImageUser }"
+      [ngClass]="{ 'animate-pulse': isLoadingImageUser }"
     >
-      <input
-        type="hidden"
-        name="isLoadingImage"
-        formControlName="isLoadingImage"
-      />
-      <input type="hidden" name="vaultRithmId" formControlName="vaultRithmId" />
       <app-user-avatar
         [firstName]="accountCreate ? firstName.value : currentUser.firstName"
         [lastName]="accountCreate ? lastName.value : currentUser.lastName"
@@ -18,7 +12,7 @@
       ></app-user-avatar>
 
       <div>
-        <ng-container *ngIf="!profileImageRithmId && !isLoadingUploadImageUser">
+        <ng-container *ngIf="!profileImageRithmId && !isLoadingImageUser">
           <button
             mat-stroked-button
             color="accent"
@@ -32,7 +26,7 @@
             Upload image
           </button>
         </ng-container>
-        <ng-container *ngIf="profileImageRithmId && !isLoadingUploadImageUser">
+        <ng-container *ngIf="profileImageRithmId && !isLoadingImageUser">
           <div class="grid gap-4 grid-cols-2 padding-button">
             <div>
               <button
@@ -51,7 +45,6 @@
               <button
                 mat-button
                 color="warn"
-                mat-button
                 id="delete-image-button"
                 data-testid="delete-image-button"
                 type="button"
@@ -81,9 +74,9 @@
         (change)="uploadImage($event)"
       />
       <!--Loading upload image-->
-      <div *ngIf="isLoadingUploadImageUser" id="loading-upload-photo">
+      <div *ngIf="isLoadingImageUser" id="loading-upload-photo">
         <app-loading-indicator
-          [inlineText]="'Uploading...'"
+          [inlineText]="isLoadingImageUser + '...' | titlecase"
         ></app-loading-indicator>
       </div>
     </div>
