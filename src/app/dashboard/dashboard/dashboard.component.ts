@@ -107,6 +107,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** View the button Add Widget in edit mode. */
   isAddWidget = false;
 
+  /** If can assign user. */
+  canAssignUserWidget = false;
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
@@ -121,9 +124,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Permission dashboard. */
   dashboardPermission = false;
-
-  /** If user can update grid. */
-  isUpdateGrid = false;
 
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
@@ -235,8 +235,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
-        this.isUpdateGrid =
-          this.splitService.getDashboardGridUpdateTreatment() === 'on';
+        this.canAssignUserWidget =
+          this.splitService.getAssignUserWidgetTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -629,7 +629,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         'custom-margin-modal',
       ],
       maxWidth: '1500px',
-      data: this.dashboardData.rithmId,
+      data: {
+        dashboardRithmId: this.dashboardData.rithmId,
+        canAssignUserWidget: this.canAssignUserWidget,
+      },
     });
     dialog
       .afterClosed()

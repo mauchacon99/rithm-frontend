@@ -35,7 +35,7 @@ export interface QuestionValuesColumn {
  */
 @Component({
   selector:
-    'app-document-widget[dataWidget][editMode][showButtonSetting][widgetItem]',
+    'app-document-widget[dataWidget][editMode][showButtonSetting][widgetItem][canAssignUserWidget]',
   templateUrl: './document-widget.component.html',
   styleUrls: ['./document-widget.component.scss'],
 })
@@ -48,6 +48,9 @@ export class DocumentWidgetComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /** Data widget. */
   private _dataWidget = '';

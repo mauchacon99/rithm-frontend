@@ -344,6 +344,7 @@ describe('DashboardComponent', () => {
     component.isCreateNewDashboard = false;
     component.isLoading = false;
     component.isAddWidget = true;
+    component.canAssignUserWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
       name: 'Organization 1',
@@ -515,7 +516,10 @@ describe('DashboardComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
-        data: dataDashboard.rithmId,
+        data: {
+          dashboardRithmId: dataDashboard.rithmId,
+          canAssignUserWidget: component.canAssignUserWidget,
+        },
       };
       const spyDialog = spyOn(
         TestBed.inject(MatDialog),
@@ -792,10 +796,10 @@ describe('DashboardComponent', () => {
         splitService,
         'getDashboardLibraryTreatment'
       ).and.callThrough();
-      // isUpdateGrid
-      const spyGetDashboardGridUpdateTreatment = spyOn(
+      //canAssignUserStationTableWidget
+      const spyGetAssignUserStationTableWidgetTreatment = spyOn(
         splitService,
-        'getDashboardGridUpdateTreatment'
+        'getAssignUserWidgetTreatment'
       ).and.callThrough();
 
       splitService.sdkReady$.next();
@@ -804,10 +808,10 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
-      expect(spyGetDashboardGridUpdateTreatment).toHaveBeenCalled();
+      expect(spyGetAssignUserStationTableWidgetTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
-      expect(component.isUpdateGrid).toBeTrue();
+      expect(component.canAssignUserWidget).toBeTrue();
     });
 
     it('should catch split error ', () => {
@@ -825,6 +829,7 @@ describe('DashboardComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
+      expect(component.canAssignUserWidget).toBeFalse();
     });
   });
 
