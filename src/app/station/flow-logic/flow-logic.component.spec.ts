@@ -1198,9 +1198,7 @@ describe('FlowLogicComponent', () => {
       'removeOrAddTriggerType'
     ).and.callThrough();
     component.removeOrAddTriggerType(TriggerType.ManualFlow, eventToggle);
-    expect(component.editedPower.triggers.length).toBeGreaterThanOrEqual(
-      1
-    );
+    expect(component.editedPower.triggers.length).toBeGreaterThanOrEqual(1);
     expect(spyRemoveOrAddTrigger).toHaveBeenCalledOnceWith(
       TriggerType.ManualFlow,
       eventToggle
