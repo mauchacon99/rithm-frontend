@@ -59,7 +59,7 @@ interface ColumnsSpecificOfWidget {
  */
 @Component({
   selector:
-    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting]',
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting][canAssignUserWidget]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -81,6 +81,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /** Image to banner. */
   @Input() image!: DocumentImage;

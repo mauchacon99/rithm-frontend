@@ -1,0 +1,17 @@
+.chip-custom {
+  .mat-standard-chip {
+    @apply bg-accent-200;
+  }
+}
+
+@media (max-width: 300px) {
+  .container-info {
+    display: none;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 400px) {
+  .container-row {
+    width: calc(100% - 140px);
+  }
+}
