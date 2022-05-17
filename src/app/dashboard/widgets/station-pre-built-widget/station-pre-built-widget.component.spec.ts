@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { MockStationService } from 'src/mocks';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
@@ -18,7 +17,6 @@ describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
   let fixture: ComponentFixture<StationPreBuiltWidgetComponent>;
   let stationService: StationService;
-  let errorService: ErrorService;
   let matDialog: MatDialog;
   let sidenavDrawerService: SidenavDrawerService;
 
@@ -51,7 +49,6 @@ describe('StationPreBuiltWidgetComponent', () => {
       ],
       imports: [RosterModule, MatDialogModule, MatSortModule],
       providers: [
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: StationService, useClass: MockStationService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -62,7 +59,6 @@ describe('StationPreBuiltWidgetComponent', () => {
     fixture = TestBed.createComponent(StationPreBuiltWidgetComponent);
     component = fixture.componentInstance;
     stationService = TestBed.inject(StationService);
-    errorService = TestBed.inject(ErrorService);
     matDialog = TestBed.inject(MatDialog);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     component.stationWidgetData = stationWidgetData;
@@ -101,7 +97,6 @@ describe('StationPreBuiltWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -109,7 +104,6 @@ describe('StationPreBuiltWidgetComponent', () => {
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorStationPrebuilt).toBeTrue();
-    expect(spyService).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -211,11 +205,31 @@ describe('StationPreBuiltWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getStationWidgetPreBuiltData();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(stationService, 'getStationWidgetPreBuiltData').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getStationWidgetPreBuiltData();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

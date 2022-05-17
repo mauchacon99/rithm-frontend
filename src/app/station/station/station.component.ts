@@ -116,6 +116,9 @@ export class StationComponent
   /** Old interface station data link widgets. */
   dataLinkArray: DataLinkObject[] = [];
 
+  /** Current stations questions. */
+  currentStationQuestions: Question[] = [];
+
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
@@ -346,7 +349,8 @@ export class StationComponent
   ngOnInit(): void {
     this.getTreatment();
     this.sidenavDrawerService.setDrawer(this.drawer);
-
+    this.getParams();
+    this.getPreviousAndNextStations();
     this.subscribeDrawerContext();
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
@@ -395,8 +399,6 @@ export class StationComponent
       next: () => {
         this.viewNewStation =
           this.splitService.getStationDocumentTreatment() === 'on';
-        this.getParams();
-        this.getPreviousAndNextStations();
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -439,6 +441,33 @@ export class StationComponent
       // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
+  }
+
+  /**
+   * Whether the screen width is lesser than 640px.
+   *
+   * @returns True if width is lesser than 640px.
+   */
+  get isMobileView(): boolean {
+    return window.innerWidth <= 640;
+  }
+
+  /**
+   * Validate the conditions to display the Save or Save Rules button.
+   *
+   * @returns If display the button, can be true or false.
+   */
+  get stationInputFrames(): Question[] {
+    let dataFiltered = [] as Question[];
+    if (this.inputFrameWidgetItems) {
+      this.inputFrameWidgetItems.map((frame) => {
+        if (frame?.questions && frame.type === FrameType.Input) {
+          dataFiltered = dataFiltered.concat(frame.questions);
+        }
+      });
+    }
+
+    return dataFiltered;
   }
 
   /**
@@ -512,6 +541,9 @@ export class StationComponent
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
         },
         error: (error: unknown) => {
           this.navigateBack();
@@ -946,10 +978,8 @@ export class StationComponent
                     ? frame.questions.length
                     : 4;
                 frame.minItemCols = 6;
-                frame.questions =
-                  frame.questions && frame.questions?.length > 0
-                    ? frame.questions
-                    : JSON.parse(frame.data);
+                frame.cols = frame.cols < frame.minItemCols ? 6 : frame.cols;
+                frame.rows = frame.rows < frame.minItemRows ? 4 : frame.rows;
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:
@@ -983,6 +1013,9 @@ export class StationComponent
             this.inputFrameWidgetItems.push(frame);
             this.changedOptions();
           });
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
           this.widgetLoading = false;
         },
         error: (error: unknown) => {
@@ -1007,6 +1040,7 @@ export class StationComponent
         hasQuestions = true;
       }
     });
+
     if (hasQuestions) {
       const confirm = await this.popupService.confirm({
         title: ' ',
@@ -1030,34 +1064,25 @@ export class StationComponent
    */
   private saveStationWidgetsChanges(): void {
     this.widgetLoading = true;
-    this.inputFrameWidgetItems.map((field) => {
-      if (field.questions) {
-        field.data = JSON.stringify(field.questions);
-      }
-    });
     this.stationService
       .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
-        next: (inputFrames) => {
-          inputFrames.forEach((input, index) => {
-            input.id = index;
-            if (input.data && JSON.parse(input.data)?.length > 0) {
-              input.questions = [];
-              input.questions = JSON.parse(input.data);
-            } else if (input.type === FrameType.Input) {
-              input.questions = [];
-            }
-          });
-          this.inputFrameWidgetItems = inputFrames;
-          if (inputFrames.length) {
+        next: () => {
+          /** If we get in this section is cause the saved was succeed. If so can keep the same info sent. */
+          if (this.inputFrameWidgetItems.length) {
             this.saveInputFrameQuestions(
-              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+              this.inputFrameWidgetItems.filter(
+                (iframe) => iframe.type === FrameType.Input
+              )
             );
           } else {
             this.widgetLoading = false;
             this.setGridMode('preview');
           }
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
           this.changedOptions();
         },
         error: (error: unknown) => {
@@ -1079,16 +1104,13 @@ export class StationComponent
     if (frames.length) {
       const frameQuestionRequest: Observable<Question[]>[] = [];
       frames.forEach((frame) => {
-        if (frame.data !== '') {
-          const fQuestions: Question[] = JSON.parse(frame.data);
-          if (fQuestions.length) {
-            frameQuestionRequest.push(
-              this.stationService.saveInputFrameQuestions(
-                frame.rithmId,
-                fQuestions
-              )
-            );
-          }
+        if (frame.questions?.length) {
+          frameQuestionRequest.push(
+            this.stationService.saveInputFrameQuestions(
+              frame.rithmId,
+              frame.questions
+            )
+          );
         }
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);

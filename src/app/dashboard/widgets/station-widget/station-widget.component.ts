@@ -21,7 +21,7 @@ import {
   StationRosterMember,
   Question,
   WidgetDocument,
-  reloadStationFlow,
+  ReloadStationFlow,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -59,7 +59,7 @@ interface ColumnsSpecificOfWidget {
  */
 @Component({
   selector:
-    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting]',
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting][canAssignUserWidget][showDetailWidgetPopover]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -81,6 +81,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
+
+  /** Show detail dashboard popover. */
+  @Input() showDetailWidgetPopover = false;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /** Image to banner. */
   @Input() image!: DocumentImage;
@@ -127,7 +133,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   }
 
   /** Set data for station widget. */
-  @Input() set stationFlow(value: reloadStationFlow) {
+  @Input() set stationFlow(value: ReloadStationFlow) {
     if (this.stationRithmId && value) {
       // if it's the same current station was flow or destiny station flowed.
       if (
@@ -164,6 +170,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
@@ -171,7 +180,10 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @Output() expandWidget = new EventEmitter<boolean>();
 
   /** Reload stations or document Flowed or saved. */
-  @Output() reloadStationsFlow = new EventEmitter<reloadStationFlow>();
+  @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -226,6 +238,9 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Display error if user have permissions to see widget. */
   permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Type of drawer opened. */
   drawerContext!: string;
@@ -309,12 +324,16 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           const { status } = error as HttpErrorResponse;
-          if (status === 403) {
-            this.permissionError = false;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
           }
           this.failedLoadWidget = true;
           this.isLoading = false;
-          this.errorService.logError(error);
         },
       });
   }
@@ -614,6 +633,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         stationId: this.stationRithmId,
       },
     });
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

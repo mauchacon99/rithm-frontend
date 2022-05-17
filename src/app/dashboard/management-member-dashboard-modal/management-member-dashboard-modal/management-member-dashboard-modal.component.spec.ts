@@ -11,7 +11,7 @@ import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -74,6 +74,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
   ];
   let dashboardService: DashboardService;
   let errorService: ErrorService;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -91,11 +92,13 @@ describe('ManagementMemberDashboardModalComponent', () => {
         MatSelectModule,
         MatInputModule,
         FormsModule,
+        ReactiveFormsModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DashboardService, useClass: MockDashboardService },
+        { provide: FormBuilder, useValue: formBuilder },
       ],
     }).compileComponents();
   });
@@ -140,7 +143,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
       'getUsersDashboardPersonal'
     ).and.callThrough();
     component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
+    expect(spyService).toHaveBeenCalledOnceWith(component.dashboardRithmId);
   });
 
   it('should catch error if petition to return getUsersDashboardPersonal', () => {
@@ -165,6 +168,25 @@ describe('ManagementMemberDashboardModalComponent', () => {
     fixture.detectChanges();
     const loader = fixture.debugElement.nativeElement.querySelector(
       '#app-loading-indicator-user-member'
+    );
+    expect(loader).toBeTruthy();
+  });
+
+  it('should add forms in form', () => {
+    component.membersDashboard = testUsers;
+    fixture.detectChanges();
+    component['addForms']();
+    //subtract here the extra fields
+    expect(Object.keys(component.form.value).length - 1).toBe(testUsers.length);
+  });
+
+  it('should show message error if not have members for show', () => {
+    component.isLoadingGetUserMembers = false;
+    component.errorGetUsersMember = false;
+    component.membersDashboard = [];
+    fixture.detectChanges();
+    const loader = fixture.debugElement.nativeElement.querySelector(
+      '#message-error-members'
     );
     expect(loader).toBeTruthy();
   });
