@@ -47,6 +47,12 @@ export class AddWidgetModalComponent implements OnInit {
   /** Show section Pre built. */
   showPreBuilt = false;
 
+  /** Show detail widget popover. */
+  showDetailWidgetPopover = false;
+
+  /** If can assign user. */
+  canAssignUserWidget = false;
+
   /** Data to force pre built template. */
   itemWidgetModalSelectedData: SelectedItemWidgetModel = {
     itemType: 'preBuilt',
@@ -65,12 +71,22 @@ export class AddWidgetModalComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddWidgetModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public matData: string,
+    @Inject(MAT_DIALOG_DATA)
+    public matData: {
+      /**Dashboard Rithm id */
+      dashboardRithmId: string;
+      /** Show detail widget popover. */
+      showDetailWidgetPopover: boolean;
+      /** If can assign user. */
+      canAssignUserWidget: boolean;
+    },
     private splitService: SplitService,
     private errorService: ErrorService,
     private userService: UserService
   ) {
-    this.dashboardRithmId = matData;
+    this.showDetailWidgetPopover = matData.showDetailWidgetPopover;
+    this.dashboardRithmId = matData.dashboardRithmId;
+    this.canAssignUserWidget = matData.canAssignUserWidget;
   }
 
   /**
