@@ -795,6 +795,11 @@ describe('DashboardComponent', () => {
         splitService,
         'getDashboardLibraryTreatment'
       ).and.callThrough();
+      // isUpdateGrid
+      const spyGetDashboardGridUpdateTreatment = spyOn(
+        splitService,
+        'getDashboardGridUpdateTreatment'
+      ).and.callThrough();
 
       splitService.sdkReady$.next();
       component.ngOnInit();
@@ -802,9 +807,11 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
+      expect(spyGetDashboardGridUpdateTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
       expect(component.showDetailWidgetPopover).toBeTrue();
+      expect(component.isUpdateGrid).toBeTrue();
     });
 
     it('should catch split error ', () => {

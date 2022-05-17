@@ -179,6 +179,15 @@ export class SplitService {
   }
 
   /**
+   * Get the if can update dashboard grid.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardGridUpdateTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_grid_update_split');
+  }
+
+  /**
    * Get detail dashboard popover.
    *
    * @returns Split treatment.

@@ -166,6 +166,15 @@ export class MockSplitService {
   }
 
   /**
+   * Get the if can update dashboard grid.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardGridUpdateTreatment(): string {
+    return 'on';
+  }
+
+  /**
    * Get detail dashboard popover.
    *
    * @returns Split treatment.

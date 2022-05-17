@@ -125,6 +125,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Show detail dashboard popover. */
   showDetailWidgetPopover = false;
 
+  /** If user can update grid. */
+  isUpdateGrid = false;
+
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
 
@@ -237,6 +240,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getDashboardLibraryTreatment() === 'on';
         this.showDetailWidgetPopover =
           this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
+        this.isUpdateGrid =
+          this.splitService.getDashboardGridUpdateTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
