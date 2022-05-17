@@ -132,8 +132,8 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The list of all stations. */
   stations: ConnectedStationInfo[] = [];
 
-   /** List trigger type. */
-   triggerType = TriggerType;
+  /** List trigger type. */
+  triggerType = TriggerType;
 
   /** Loading/Errors block. */
   /* Loading in input auto-complete the list of all stations. */
@@ -588,7 +588,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
    * @param eventToggle The event that checked the toogle.
    */
   removeOrAddTriggerType(
-    triggerType:TriggerType,
+    triggerType: TriggerType,
     eventToggle: MatSlideToggleChange
   ): void {
     this.powersInProgress.stationRithmId = this.rithmId;
