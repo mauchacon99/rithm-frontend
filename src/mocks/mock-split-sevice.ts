@@ -164,4 +164,22 @@ export class MockSplitService {
   public getDefaultDashboardTreatment(): string {
     return 'on';
   }
+
+  /**
+   * Get assign user from station table widget.
+   *
+   * @returns Split treatment.
+   */
+  public getAssignUserWidgetTreatment(): string {
+    return 'on';
+  }
+
+  /**
+   * Get detail dashboard popover.
+   *
+   * @returns Split treatment.
+   */
+  public getFieldDetailDashboardPopoverTreatment(): string {
+    return 'on';
+  }
 }
