@@ -38,7 +38,7 @@ export interface User {
   profileImageRithmId: string;
 
   /** Dashboard type default dashboard for this user. */
-  defaultDashboardType: RoleDashboardMenu;
+  defaultDashboardType: RoleDashboardMenu | '';
 
   /** Dashboard rithmId  default dashboard for this user. */
   defaultDashboardId: string;
