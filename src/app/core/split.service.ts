@@ -177,4 +177,13 @@ export class SplitService {
   public getDefaultDashboardTreatment(): string {
     return this.splitClient.getTreatment('default_dashboard_split');
   }
+
+  /**
+   * Get the if can update dashboard grid.
+   *
+   * @returns Split treatment.
+   */
+  public getDashboardGridUpdateTreatment(): string {
+    return this.splitClient.getTreatment('dashboard_grid_update_split');
+  }
 }
