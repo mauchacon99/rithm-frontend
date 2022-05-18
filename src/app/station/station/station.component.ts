@@ -1452,7 +1452,7 @@ export class StationComponent
   private getAllStations(): void {
     this.stationDataLoading = true;
     this.stationService
-      .getAllStations()
+      .getAllStationsOptimized()
       .pipe(first())
       .subscribe({
         next: (stations) => {

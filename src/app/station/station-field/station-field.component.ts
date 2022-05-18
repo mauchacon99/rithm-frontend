@@ -420,7 +420,7 @@ export class StationFieldComponent
   private getAllStations(): void {
     this.stationLoading = true;
     this.stationService
-      .getAllStations()
+      .getAllStationsOptimized()
       .pipe(first())
       .subscribe({
         next: (stations) => {

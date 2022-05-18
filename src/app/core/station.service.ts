@@ -69,7 +69,7 @@ export class StationService {
   stationQuestionTitle$ = new Subject<Question>();
 
   /** The questions to be updated when it changes in station page. */
-  allStations$ = new BehaviorSubject<Station[]>([]);
+  allStations$ = new BehaviorSubject<StationOptimized[]>([]);
 
   /** Set unTouch to data-link form. */
   dataLinkFormUnTouched$ = new Subject<void>();
