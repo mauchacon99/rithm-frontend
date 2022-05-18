@@ -3,14 +3,14 @@ import { MockDashboardService, MockStationService } from 'src/mocks';
 import { GroupTrafficWidgetComponent } from './group-traffic-widget.component';
 import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardItem, GroupTrafficData, WidgetType } from 'src/models';
 import { NgChartsModule } from 'ng2-charts';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('GroupTrafficWidgetComponent', () => {
   let component: GroupTrafficWidgetComponent;
