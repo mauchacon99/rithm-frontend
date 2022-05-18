@@ -21,7 +21,7 @@
 
 <!-- New template -->
 <ng-template #newTemplate>
-  <div class="modal-container sm:h-[calc(100vh - 100px)]">
+  <div class="h-full w-full">
     <!-- header -->
     <div class="input-search">
       <div class="flex justify-between items-center">
@@ -298,19 +298,15 @@
 
 <!-- Old template -->
 <ng-template #oldTemplate>
-  <div class="modal-container">
+  <ng-container *ngIf="!isLoading">
     <h4 class="text-center">{{ modalData.stationName }}</h4>
-    <div class="h-5/6 overflow-auto cursor-default pt-5">
-      <span *ngIf="!isLoading && totalNumDocs === 0">
+    <div class="h-7/10 overflow-auto cursor-default pt-3">
+      <span *ngIf="totalNumDocs === 0">
         <div class="flex justify-around items-center h-full">
           There are no documents in this station
         </div>
       </span>
-      <span
-        *ngIf="
-          !isLoading && !errorLoadingStationDocumentsModal && totalNumDocs > 0
-        "
-      >
+      <span *ngIf="totalNumDocs > 0">
         <p
           class="text-error-700 text-center"
           *ngIf="userType === userTypeEnum.None"
@@ -407,31 +403,31 @@
           </div>
         </div>
       </span>
-      <ng-container *ngIf="isLoading; then loading"></ng-container>
-      <ng-container
-        *ngIf="
-          errorLoadingStationDocumentsModal && !isLoading;
-          then errorMessage
-        "
-      ></ng-container>
+      <app-loading-indicator
+        class="h-full flex justify-center items-center"
+        *ngIf="isLoading"
+      ></app-loading-indicator>
     </div>
-  </div>
 
-  <div *ngIf="!isLoading && totalNumDocs > 0" class="flex justify-center">
-    <app-pagination
-      (currentPageNum)="getDocuments($event)"
-      [numItems]="totalNumDocs"
-      [numPerPage]="10"
-      [activeNum]="activeNum"
-    >
-    </app-pagination>
-  </div>
-
-  <!-- Buttons -->
-  <div *ngIf="!isLoading" mat-dialog-actions class="flex justify-end">
-    <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
-    <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
-      Close
-    </button>
-  </div>
+    <div *ngIf="totalNumDocs > 0" class="flex justify-center">
+      <app-pagination
+        (currentPageNum)="getDocuments($event)"
+        [numItems]="totalNumDocs"
+        [numPerPage]="10"
+        [activeNum]="activeNum"
+      >
+      </app-pagination>
+    </div>
+    <!-- Buttons -->
+    <div mat-dialog-actions class="flex justify-end">
+      <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
+      <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
+        Close
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isLoading; then loading"></ng-container>
+  <ng-container
+    *ngIf="errorLoadingStationDocumentsModal && !isLoading; then errorMessage"
+  ></ng-container>
 </ng-template>

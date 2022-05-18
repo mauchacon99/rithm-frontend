@@ -1,25 +1,3 @@
-.modal-container {
-  height: 70vh;
-  width: 1000px;
-
-  @media screen and (max-width: 1280px) {
-    width: 800px;
-  }
-
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-  }
-
-  @media screen and (max-width: 767px) {
-    width: 389px;
-  }
-
-  @media screen and (max-width: 575px) {
-    width: 100%;
-    height: 480px;
-  }
-}
-
 // New template styles
 .input-search {
   ::ng-deep .mat-form-field {
