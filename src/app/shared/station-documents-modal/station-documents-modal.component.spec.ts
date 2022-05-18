@@ -361,4 +361,26 @@ describe('StationDocumentsModalComponent', () => {
       );
     });
   });
+
+  it('should show error message new template', () => {
+    component.showContainerModal = true;
+    component.isLoading = false;
+    component.errorLoadingStationDocumentsModal = true;
+    fixture.detectChanges();
+    const errorMessage = fixture.nativeElement.querySelector(
+      '#error-loading-station-documents-modal'
+    );
+    expect(errorMessage).toBeTruthy();
+  });
+
+  it('should show error message new old template', () => {
+    component.showContainerModal = false;
+    component.isLoading = false;
+    component.errorLoadingStationDocumentsModal = true;
+    fixture.detectChanges();
+    const errorMessage = fixture.nativeElement.querySelector(
+      '#error-loading-station-documents-modal'
+    );
+    expect(errorMessage).toBeTruthy();
+  });
 });

@@ -1,10 +1,27 @@
 <ng-container
   *ngIf="showContainerModal && !isLoading; then newTemplate; else oldTemplate"
 ></ng-container>
+<ng-template #errorMessage>
+  <div
+    class="text-error-500 text-center my-4"
+    id="error-loading-station-documents-modal"
+    *ngIf="errorLoadingStationDocumentsModal"
+  >
+    Unable to retrieve data.
+  </div>
+</ng-template>
+<ng-template #loading>
+  <!-- Loading -->
+  <app-loading-indicator
+    class="h-full flex justify-center items-center"
+    *ngIf="isLoading"
+    id="loading-station-document-modal"
+  ></app-loading-indicator>
+</ng-template>
 
 <!-- New template -->
 <ng-template #newTemplate>
-  <div class="modal-container overflow-hidden sm:h-[calc(100vh - 100px)]">
+  <div class="modal-container sm:h-[calc(100vh - 100px)]">
     <!-- header -->
     <div class="input-search">
       <div class="flex justify-between items-center">
@@ -38,7 +55,11 @@
     </div>
 
     <div
-      *ngIf="!isLoading && dataSourceTable?.data?.length"
+      *ngIf="
+        !isLoading &&
+        !errorLoadingStationDocumentsModal &&
+        dataSourceTable?.data?.length
+      "
       class="mt-5 h-[calc(100%-142px)] overflow-auto scrollbar"
       (scroll)="validateScroll($event)"
     >
@@ -236,7 +257,11 @@
     </div>
 
     <div
-      *ngIf="!isLoading && !dataSourceTable?.data?.length"
+      *ngIf="
+        !isLoading &&
+        !errorLoadingStationDocumentsModal &&
+        !dataSourceTable?.data?.length
+      "
       class="mt-5 text-center text-base"
     >
       There are not containers.
@@ -244,12 +269,10 @@
         <app-loading-indicator inlineText="Loading..."></app-loading-indicator>
       </div>
     </div>
-
-    <!-- Loading -->
-    <app-loading-indicator
-      class="h-full flex justify-center items-center"
-      *ngIf="isLoading"
-    ></app-loading-indicator>
+    <ng-container *ngIf="isLoading; then loading"></ng-container>
+    <ng-container
+      *ngIf="errorLoadingStationDocumentsModal && !isLoading; then errorMessage"
+    ></ng-container>
   </div>
 
   <!-- Button sort -->
@@ -283,7 +306,11 @@
           There are no documents in this station
         </div>
       </span>
-      <span *ngIf="!isLoading && totalNumDocs > 0">
+      <span
+        *ngIf="
+          !isLoading && !errorLoadingStationDocumentsModal && totalNumDocs > 0
+        "
+      >
         <p
           class="text-error-700 text-center"
           *ngIf="userType === userTypeEnum.None"
@@ -380,10 +407,13 @@
           </div>
         </div>
       </span>
-      <app-loading-indicator
-        class="h-full flex justify-center items-center"
-        *ngIf="isLoading"
-      ></app-loading-indicator>
+      <ng-container *ngIf="isLoading; then loading"></ng-container>
+      <ng-container
+        *ngIf="
+          errorLoadingStationDocumentsModal && !isLoading;
+          then errorMessage
+        "
+      ></ng-container>
     </div>
   </div>
 
