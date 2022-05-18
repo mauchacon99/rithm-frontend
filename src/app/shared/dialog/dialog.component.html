@@ -1,65 +1,65 @@
 <section class="confirm-modal-content">
-<!-- Title -->
-<h4 id="title" class="text-left text-primary-500">
-  {{ title }}
-</h4>
+  <!-- Title -->
+  <h4 id="title" class="text-left text-primary-500">
+    {{ title }}
+  </h4>
 
-<!-- Message if not a prompt dialog. -->
-<mat-dialog-content
-  *ngIf="type !== dialogType.Prompt"
-  id="message"
-  class="whitespace-pre-wrap overflow-y-auto"
->
-  {{ message }}
-</mat-dialog-content>
-
-<!-- Input if a prompt dialog. -->
-<div *ngIf="type === dialogType.Prompt" class="grid grid-cols-1">
-  <!-- TODO: Adjust padding when we start using this -->
-
-  <!-- Message -->
-  <p id="message">{{ message }}</p>
-
-  <!-- Input -->
-  <mat-form-field class="p-0" appearance="outline">
-    <mat-label *ngIf="promptLabel">{{ promptLabel }}</mat-label>
-    <input
-      matInput
-      cdkFocusInitial
-      [(ngModel)]="promptValue"
-      data-testid="prompt-input"
-    />
-  </mat-form-field>
-</div>
-
-<!-- Buttons -->
-<div mat-dialog-actions class="flex justify-end">
-  <!-- Cancel -->
-  <button
-    *ngIf="type !== dialogType.Alert"
-    class="uppercase"
-    id="cancel"
-    mat-button
-    [mat-dialog-close]="type === dialogType.Prompt ? undefined : false"
-    data-testid="dialog-cancel"
+  <!-- Message if not a prompt dialog. -->
+  <mat-dialog-content
+    *ngIf="type !== dialogType.Prompt"
+    id="message"
+    class="whitespace-pre-wrap overflow-y-auto"
   >
-    {{ cancelButtonText }}
-  </button>
+    {{ message }}
+  </mat-dialog-content>
 
-  <!-- OK -->
-  <button
-    *ngIf="type !== dialogType.Terms"
-    class="hover:text-white uppercase"
-    [ngClass]="{
-      'hover:bg-error-500 text-error-500': important,
-      'hover:bg-accent-500 text-accent-500': !important
-    }"
-    id="confirm"
-    mat-button
-    [mat-dialog-close]="type === dialogType.Prompt ? promptValue : true"
-    data-testid="dialog-ok"
-  >
-    {{ okButtonText }}
-  </button>
-</div>
+  <!-- Input if a prompt dialog. -->
+  <div *ngIf="type === dialogType.Prompt" class="grid grid-cols-1">
+    <!-- TODO: Adjust padding when we start using this -->
+
+    <!-- Message -->
+    <p id="message">{{ message }}</p>
+
+    <!-- Input -->
+    <mat-form-field class="p-0" appearance="outline">
+      <mat-label *ngIf="promptLabel">{{ promptLabel }}</mat-label>
+      <input
+        matInput
+        cdkFocusInitial
+        [(ngModel)]="promptValue"
+        data-testid="prompt-input"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- Buttons -->
+  <div mat-dialog-actions class="flex justify-end">
+    <!-- Cancel -->
+    <button
+      *ngIf="type !== dialogType.Alert"
+      class="uppercase"
+      id="cancel"
+      mat-button
+      [mat-dialog-close]="type === dialogType.Prompt ? undefined : false"
+      data-testid="dialog-cancel"
+    >
+      {{ cancelButtonText }}
+    </button>
+
+    <!-- OK -->
+    <button
+      *ngIf="type !== dialogType.Terms"
+      class="hover:text-white uppercase"
+      [ngClass]="{
+        'hover:bg-error-500 text-error-500': important,
+        'hover:bg-accent-500 text-accent-500': !important
+      }"
+      id="confirm"
+      mat-button
+      [mat-dialog-close]="type === dialogType.Prompt ? promptValue : true"
+      data-testid="dialog-ok"
+    >
+      {{ okButtonText }}
+    </button>
+  </div>
 </section>
