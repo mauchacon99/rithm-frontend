@@ -37,25 +37,35 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
           this.selectedFilterValue === FilterOptionTypeMemberDashboard.CanEdit
         ) {
           return (
-            (member.firstName.includes(this.search) ||
-              member.lastName.includes(this.search) ||
-              member.email.includes(this.search)) &&
+            (member.firstName
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+              member.lastName
+                .toLowerCase()
+                .includes(this.search.toLowerCase()) ||
+              member.email.toLowerCase().includes(this.search.toLowerCase())) &&
             member.isEditable
           );
         } else if (
           this.selectedFilterValue === FilterOptionTypeMemberDashboard.ViewOnly
         ) {
           return (
-            (member.firstName.includes(this.search) ||
-              member.lastName.includes(this.search) ||
-              member.email.includes(this.search)) &&
+            (member.firstName
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+              member.lastName
+                .toLowerCase()
+                .includes(this.search.toLowerCase()) ||
+              member.email.toLowerCase().includes(this.search.toLowerCase())) &&
             member.canView
           );
         } else {
           return (
-            member.firstName.includes(this.search) ||
-            member.lastName.includes(this.search) ||
-            member.email.includes(this.search)
+            member.firstName
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+            member.lastName.toLowerCase().includes(this.search.toLowerCase()) ||
+            member.email.toLowerCase().includes(this.search.toLowerCase())
           );
         }
       });

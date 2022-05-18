@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
-import { MemberDashboard, RoleDashboardMenu } from 'src/models';
+import {
+  FilterOptionTypeMemberDashboard,
+  MemberDashboard,
+  RoleDashboardMenu,
+} from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
@@ -189,5 +193,81 @@ describe('ManagementMemberDashboardModalComponent', () => {
       '#message-error-members'
     );
     expect(loader).toBeTruthy();
+  });
+
+  describe('getter members dashboard', () => {
+    const membersDashboard: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Lion 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+    beforeEach(() => {
+      component.membersDashboard = membersDashboard;
+    });
+
+    it('should get all members', () => {
+      component.search = '';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.All;
+      expect(component.membersDashboardFiltered.length).toEqual(4);
+      expect(component.membersDashboardFiltered).toEqual(membersDashboard);
+    });
+
+    it('should get members when use filter ViewOnly and search', () => {
+      component.search = 'test1@email.com';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.ViewOnly;
+      const expectData = [membersDashboard[0]];
+      expect(component.membersDashboardFiltered.length).toEqual(1);
+      expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
+
+    it('should get members when use filter CanEdit and search', () => {
+      component.search = 'test1@email.com';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.CanEdit;
+      const expectData = [membersDashboard[0]];
+      expect(component.membersDashboardFiltered.length).toEqual(1);
+      expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
+
+    it('should get members when use search', () => {
+      component.search = 'eagle';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.All;
+      const [member1, member2, member3] = membersDashboard;
+      const expectData = [member1, member2, member3];
+      expect(component.membersDashboardFiltered.length).toEqual(3);
+      expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
   });
 });
