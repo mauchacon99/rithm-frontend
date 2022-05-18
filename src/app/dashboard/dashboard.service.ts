@@ -16,7 +16,7 @@ import {
   ColumnFieldsWidget,
   MemberDashboard,
   MemberAddDashboard,
-} from 'src/models/index';
+} from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 /**
