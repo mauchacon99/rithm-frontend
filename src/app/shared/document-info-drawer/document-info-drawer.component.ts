@@ -502,19 +502,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     if (deleteDoc) {
       this.sidenavDrawerService.closeDrawer();
       this.documentService
-      .deleteDocument(this.documentRithmId)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.sidenavDrawerService.toggleDrawer('documentInfo', {
-            stationRithmId: this.stationRithmId,
-            documentRithmId:'',
-            isStation: this.isStation,
-            isUserAdminOrOwner:this.isUserAdminOrOwner
-          });
-          this.popupService.notify('The document has been deleted.');
-          this.location.back();
-         },
+        .deleteDocument(this.documentRithmId)
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            this.sidenavDrawerService.toggleDrawer('documentInfo', {
+              stationRithmId: this.stationRithmId,
+              documentRithmId: '',
+              isStation: this.isStation,
+              isUserAdminOrOwner: this.isUserAdminOrOwner,
+            });
+            this.popupService.notify('The document has been deleted.');
+            this.location.back();
+          },
           error: (error: unknown) => {
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
