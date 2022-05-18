@@ -197,6 +197,10 @@ export class DataLinkFieldComponent
               this.bindSavedDataLinkToForm('selectedMatchingValue');
               this.bindSavedDataLinkToForm('selectedDisplayFields');
             }
+            if (this.questions.length > 0 || !this.questionLoading) {
+              this.dataLinkFieldForm.controls.selectedMatchingValue.enable();
+              this.dataLinkFieldForm.controls.selectedDisplayFields.enable();
+            }
           },
           error: (error: unknown) => {
             this.questionLoading = false;
