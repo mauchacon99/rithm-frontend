@@ -27,6 +27,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -85,6 +86,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: { close } },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -197,7 +199,7 @@ describe('ConnectedStationsModalComponent', () => {
     expect(reviewError).toBeTruthy();
   });
 
-  it('should redirect to dashboard when document is moved', () => {
+  fit('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
     component.formMoveDocument.setValue(station);
@@ -207,15 +209,24 @@ describe('ConnectedStationsModalComponent', () => {
       toStationRithmIds: [station.rithmId],
       documentRithmId: documentId,
     };
+
     const spyMoveDocument = spyOn(
       TestBed.inject(DocumentService),
       'moveDocument'
     ).and.callFake(() => of(dataExpect));
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
+    const spyDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
     component.moveDocument();
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+    expect(spyDrawer).toHaveBeenCalledWith('documentInfo', {
+      stationRithmId: station.rithmId,
+    });
     expect(spyMatDialogRef).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('dashboard');
   });

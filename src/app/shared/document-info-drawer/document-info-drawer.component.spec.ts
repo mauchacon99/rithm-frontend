@@ -363,6 +363,7 @@ describe('DocumentInfoDrawerComponent', () => {
       component,
       'openModalMoveDocument'
     ).and.callThrough();
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     const btnMoveDocument = fixture.nativeElement.querySelector(
       '#move-document-modal'
     );
@@ -387,6 +388,8 @@ describe('DocumentInfoDrawerComponent', () => {
       TestBed.inject(MatDialog),
       'open'
     ).and.callThrough();
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
+
     component.openModalMoveDocument();
     expect(dialogSpy).toHaveBeenCalledOnceWith(
       ConnectedStationsModalComponent,
