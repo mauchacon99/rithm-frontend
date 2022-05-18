@@ -199,7 +199,7 @@ describe('ConnectedStationsModalComponent', () => {
     expect(reviewError).toBeTruthy();
   });
 
-  fit('should redirect to dashboard when document is moved', () => {
+  it('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
     component.formMoveDocument.setValue(station);
