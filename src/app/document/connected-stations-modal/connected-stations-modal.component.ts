@@ -15,6 +15,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for connected stations.
@@ -76,7 +77,8 @@ export class ConnectedStationsModalComponent implements OnInit {
     private router: Router,
     public dialogRef: MatDialogRef<ConnectedStationsModalComponent>,
     private stationService: StationService,
-    private userService: UserService
+    private userService: UserService,
+    private sidenavDrawerService: SidenavDrawerService,
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
@@ -225,6 +227,9 @@ export class ConnectedStationsModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.sidenavDrawerService.toggleDrawer('documentInfo', {
+            stationRithmId: this.formMoveDocument.value?.rithmId,
+          });
           this.popupService.notify('The document has been moved successfully');
           this.moveDocumentError = false;
           this.connectedStationLoading = false;

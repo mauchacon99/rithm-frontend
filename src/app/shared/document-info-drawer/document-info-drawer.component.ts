@@ -570,6 +570,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Open a modal to move document.
    */
   openModalMoveDocument(): void {
+    this.sidenavDrawerService.closeDrawer();
     this.dialog.open(ConnectedStationsModalComponent, {
       data: {
         documentRithmId: this.documentRithmId,
