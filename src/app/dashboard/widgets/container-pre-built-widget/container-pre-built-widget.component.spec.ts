@@ -4,10 +4,8 @@ import { throwError } from 'rxjs';
 import { MatSortModule } from '@angular/material/sort';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 
 import { ContainerPreBuiltWidgetComponent } from './container-pre-built-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -15,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { ContainerWidgetPreBuilt } from 'src/models';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('ContainerPreBuiltWidgetComponent', () => {
   let component: ContainerPreBuiltWidgetComponent;
