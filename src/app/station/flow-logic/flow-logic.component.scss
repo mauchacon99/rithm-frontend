@@ -62,6 +62,10 @@
         ::ng-deep .mat-tab-header {
           display: none !important;
         }
+
+        ::ng-deep .mat-form-field-underline {
+          @apply hidden;
+        }
       }
     }
   }
@@ -69,7 +73,7 @@
 
 .tab-flow-content {
   ::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 0;
+    @apply pb-0;
   }
 }
 

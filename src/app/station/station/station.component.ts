@@ -541,9 +541,11 @@ export class StationComponent
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
-          this.stationService.currentStationQuestions$.next(
-            this.stationInputFrames
-          );
+          if (this.viewNewStation) {
+            this.stationService.currentStationQuestions$.next(
+              this.stationInputFrames
+            );
+          }
         },
         error: (error: unknown) => {
           this.navigateBack();

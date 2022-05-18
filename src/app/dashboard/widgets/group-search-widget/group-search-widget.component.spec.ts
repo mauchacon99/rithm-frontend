@@ -11,8 +11,6 @@ import { throwError } from 'rxjs';
 import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
 import { MockMapService, MockStationService } from 'src/mocks';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { StationGroupData } from 'src/models/station-group-data';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { StationComponent } from 'src/app/station/station/station.component';
@@ -20,6 +18,8 @@ import { MapService } from 'src/app/map/map.service';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
