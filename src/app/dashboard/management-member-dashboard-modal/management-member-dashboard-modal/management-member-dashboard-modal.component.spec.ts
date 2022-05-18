@@ -5,6 +5,7 @@ import {
   FilterOptionTypeMemberDashboard,
   MemberDashboard,
   RoleDashboardMenu,
+  MemberAddDashboard,
 } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
@@ -38,6 +39,19 @@ describe('ManagementMemberDashboardModalComponent', () => {
     dashboardType: RoleDashboardMenu.Personal,
   };
 
+  const testUsersAdd: MemberAddDashboard[] = [
+    {
+      userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
+      canView: true,
+      isEditable: true,
+    },
+    {
+      userRithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
+      canView: true,
+      isEditable: true,
+    },
+  ];
+
   const testUsers: MemberDashboard[] = [
     {
       rithmId: '123-456-789',
@@ -49,30 +63,12 @@ describe('ManagementMemberDashboardModalComponent', () => {
       isEditable: true,
     },
     {
-      rithmId: '987-654-321',
-      profileImageRithmId: '987-654-321',
+      rithmId: '123-856-789',
+      profileImageRithmId: '325-456-789',
       firstName: 'Test 2',
-      lastName: 'Eagle 2',
-      email: 'test2@email.com',
-      canView: false,
-      isEditable: true,
-    },
-    {
-      rithmId: '654-987-321',
-      profileImageRithmId: '654-987-321',
-      firstName: 'Test 3',
       lastName: 'Eagle 3',
-      email: 'test3@email.com',
+      email: 'test2@email.com',
       canView: true,
-      isEditable: false,
-    },
-    {
-      rithmId: '654-321-987',
-      profileImageRithmId: '654-321-987',
-      firstName: 'Test 4',
-      lastName: 'Eagle 4',
-      email: 'test4@email.com',
-      canView: false,
       isEditable: false,
     },
   ];
@@ -111,7 +107,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     fixture = TestBed.createComponent(ManagementMemberDashboardModalComponent);
     component = fixture.componentInstance;
     component.dashboardRithmId = '123-123-132';
-    component.usersAdd = testUsers;
+    component.membersAddDashboard = testUsersAdd;
     dashboardService = TestBed.inject(DashboardService);
     errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
@@ -138,7 +134,10 @@ describe('ManagementMemberDashboardModalComponent', () => {
       'addDashboardMembers'
     ).and.callThrough();
     component.addDashboardMembers();
-    expect(spyService).toHaveBeenCalledOnceWith(component.usersAdd);
+    expect(spyService).toHaveBeenCalledOnceWith(
+      component.dashboardRithmId,
+      component.membersAddDashboard
+    );
   });
 
   it('should call getUsersDashboardPersonal', () => {

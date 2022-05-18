@@ -62,6 +62,12 @@ export class MockStationService {
   /** The question title to be updated when it's updated in setting drawer. */
   stationQuestionTitle$ = new Subject<Question>();
 
+  /** The questions to be updated when it changes in station page. */
+  allStations$ = new BehaviorSubject<Station[]>([]);
+
+  /** Set unTouch to data-link form. */
+  dataLinkFormUnTouched$ = new Subject<void>();
+
   /**
    * Gets a station information.
    *
@@ -1889,6 +1895,53 @@ export class MockStationService {
   }
 
   /**
+   * Gets the data link widgets.
+   *
+   * @param stationRithmId The current station id.
+   * @returns The data link objects.
+   */
+  getDataLinks(stationRithmId: string): Observable<DataLinkObject[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get data link objects',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const dataLinks: DataLinkObject[] = [
+        {
+          rithmId: '2130AA93-6629-41C2-A668-D6B25D12878C',
+          sourceStationRithmId: '0040c5bd-4d53-4267-9bda-6975b6f0123f',
+          targetStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          baseQuestionRithmId: 'd76c63ec-0258-494d-9748-6c3aef0e6c10',
+          matchingQuestionRithmId: 'a306752a-2d6e-4190-a0ef-fbc8e5e0f6e9',
+          displayFields: ['a306752a-2d6e-4190-a0ef-fbc8e5e0f6e9'],
+          frameRithmId: '',
+        },
+        {
+          rithmId: '2130AA93-6629-41C2-A668-D6B25D12878C',
+          sourceStationRithmId: '0040c5bd-4d53-4267-9bda-6975b6f0123f',
+          targetStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          baseQuestionRithmId: 'd76c63ec-0258-494d-9748-6c3aef0e6c10',
+          matchingQuestionRithmId: 'a306752a-2d6e-4190-a0ef-fbc8e5e0f6e9',
+          displayFields: ['a306752a-2d6e-4190-a0ef-fbc8e5e0f6e9'],
+          frameRithmId: '',
+        },
+      ];
+      return of(dataLinks).pipe(delay(1000));
+    }
+  }
+
+  /** Set unTouch to station template form. */
+  unTouchDataLinkForm(): void {
+    this.dataLinkFormUnTouched$.next();
+  }
+
+  /**
+   * Get powers of current station.
    * Gets all the stations of way optimized.
    *
    * @returns An list with all stations.

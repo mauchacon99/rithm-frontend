@@ -11,9 +11,10 @@ import {
   ItemListWidgetModal,
   ColumnFieldsWidget,
   MemberDashboard,
+  Document,
+  MemberAddDashboard,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
-import { Document } from 'src/models';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -815,50 +816,38 @@ export class MockDashboardService {
   /**
    * Add members to dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @param users Users to add to dashboard.
    * @returns List users added.
    */
-  addDashboardMembers(users: MemberDashboard[]): Observable<MemberDashboard[]> {
-    const responseMembers: MemberDashboard[] = [
-      {
-        rithmId: '123-456-789',
-        profileImageRithmId: '123-456-789',
-        firstName: 'Test 1',
-        lastName: 'Eagle 1',
-        email: 'test1@email.com',
-        canView: true,
-        isEditable: true,
-      },
-      {
-        rithmId: '987-654-321',
-        profileImageRithmId: '987-654-321',
-        firstName: 'Test 2',
-        lastName: 'Eagle 2',
-        email: 'test2@email.com',
-        canView: false,
-        isEditable: true,
-      },
-      {
-        rithmId: '654-987-321',
-        profileImageRithmId: '654-987-321',
-        firstName: 'Test 3',
-        lastName: 'Eagle 3',
-        email: 'test3@email.com',
-        canView: true,
-        isEditable: false,
-      },
-      {
-        rithmId: '654-321-987',
-        profileImageRithmId: '654-321-987',
-        firstName: 'Test 4',
-        lastName: 'Eagle 4',
-        email: 'test4@email.com',
-        canView: false,
-        isEditable: false,
-      },
-    ];
+  addDashboardMembers(
+    dashboardRithmId: string,
+    users: MemberAddDashboard[]
+  ): Observable<DashboardData> {
+    const updateDashboard: DashboardData = {
+      rithmId: '',
+      name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Personal,
+      widgets: [
+        {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+          cols: 0,
+          rows: 0,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: 'string',
+          minItemRows: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          maxItemCols: 0,
+        },
+      ],
+      isEditable: false,
+      canView: false,
+    };
 
-    return of(responseMembers).pipe(delay(1000));
+    return of(updateDashboard).pipe(delay(1000));
   }
 
   /**
