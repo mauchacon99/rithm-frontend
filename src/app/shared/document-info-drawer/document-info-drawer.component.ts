@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 import { LocationModalComponent } from 'src/app/document/folder/location-modal/location-modal.component';
 import { UserListModalComponent } from 'src/app/document/user-list-modal/user-list-modal.component';
+import { Location } from '@angular/common';
 
 /**
  * Component for document drawer.
@@ -130,7 +131,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -177,7 +179,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
-    if (!this.isStation) {
+    if (this.documentRithmId && this.documentRithmId.length) {
       this.getCurrentStations();
     }
     this.subscribeDocumentName();
@@ -498,13 +500,20 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       important: true,
     });
     if (deleteDoc) {
+      this.sidenavDrawerService.closeDrawer();
       this.documentService
         .deleteDocument(this.documentRithmId)
         .pipe(first())
         .subscribe({
           next: () => {
+            this.sidenavDrawerService.toggleDrawer('documentInfo', {
+              stationRithmId: this.stationRithmId,
+              documentRithmId: '',
+              isStation: this.isStation,
+              isUserAdminOrOwner: this.isUserAdminOrOwner,
+            });
             this.popupService.notify('The document has been deleted.');
-            this.router.navigateByUrl('dashboard');
+            this.location.back();
           },
           error: (error: unknown) => {
             this.errorService.displayError(
