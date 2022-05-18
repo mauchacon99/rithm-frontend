@@ -9,7 +9,7 @@ import {
   MemberAddDashboard,
   MemberDashboard,
   RoleDashboardMenu,
-} from 'src/models/index';
+} from 'src/models';
 
 /**Interface data modal. */
 interface ModalData {
