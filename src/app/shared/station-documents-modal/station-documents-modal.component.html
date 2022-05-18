@@ -300,13 +300,13 @@
 <ng-template #oldTemplate>
   <ng-container *ngIf="!isLoading">
     <h4 class="text-center">{{ modalData.stationName }}</h4>
-    <div class="h-7/10 overflow-auto cursor-default pt-3">
+    <div class="h-7/10 cursor-default pt-3">
       <span *ngIf="totalNumDocs === 0">
-        <div class="flex justify-around items-center h-full">
+        <div class="flex justify-around items-center">
           There are no documents in this station
         </div>
       </span>
-      <span *ngIf="totalNumDocs > 0">
+      <div *ngIf="totalNumDocs > 0">
         <p
           class="text-error-700 text-center"
           *ngIf="userType === userTypeEnum.None"
@@ -331,78 +331,82 @@
             <strong class="font-semibold">Last Updated</strong>
           </div>
         </div>
-        <div
-          *ngFor="let document of documents"
-          (click)="checkDocPermission(document.documentRithmId)"
-          [ngClass]="{
-            'cursor-pointer': userType !== userTypeEnum.None || isUserAdmin
-          }"
-          class="grid grid-cols-12 xl:grid-cols-10 mb-4 rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200"
-        >
+        <div class="max-h-[330px] scroll-auto overflow-auto">
           <div
-            matTooltip="This document has been escalated."
-            matTooltipPosition="above"
-            [matTooltipDisabled]="!document.isEscalated"
-            class="flex col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4"
+            *ngFor="let document of documents"
+            (click)="checkDocPermission(document.documentRithmId)"
+            [ngClass]="{
+              'cursor-pointer': userType !== userTypeEnum.None || isUserAdmin
+            }"
+            class="grid grid-cols-12 xl:grid-cols-10 mb-4 rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200"
           >
-            <!-- Priority -->
-            <div class="circle-30-accent mr-3 shrink-0">
-              {{ document.priority }}
-            </div>
-            <p
-              [ngClass]="{ 'warn-text': document.isEscalated }"
-              class="leading-7 truncate whitespace-nowrap"
-              [matTooltip]="document.documentName"
+            <div
+              matTooltip="This document has been escalated."
+              matTooltipPosition="above"
+              [matTooltipDisabled]="!document.isEscalated"
+              class="flex col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4"
             >
-              <!-- Escalated icon -->
-              <i
-                *ngIf="document.isEscalated"
-                class="fas fa-exclamation-circle"
-              ></i>
-              <!-- Document name -->
-              {{ document.documentName }}
-            </p>
-          </div>
-          <!-- Assigned -->
-          <div class="md:col-span-4 col-span-6 lg:col-span-3 xl:col-span-2">
-            <span *ngIf="document?.userAssigned" class="flex">
-              <div class="mr-3">
-                <app-user-avatar
-                  [firstName]="document.userAssigned.firstName"
-                  [lastName]="document.userAssigned.lastName"
-                  [hideToolTip]="true"
-                  [profileImageRithmId]="
-                    document?.userAssigned?.profileImageRithmId || ''
-                  "
-                ></app-user-avatar>
+              <!-- Priority -->
+              <div class="circle-30-accent mr-3 shrink-0">
+                {{ document.priority }}
               </div>
-              <div class="hidden leading-7 truncate whitespace-nowrap md:block">
-                {{ document.userAssigned.firstName }}
-                {{ document.userAssigned.lastName }}
-              </div>
-            </span>
-          </div>
-          <!-- Time in station -->
-          <div
-            class="hidden leading-7 whitespace-nowrap md:block md:col-span-4 lg:col-span-3 xl:col-span-2"
-          >
-            {{ getElapsedTime(document.flowedTimeUTC) }}
-          </div>
-          <!-- Last updated -->
-          <div
-            class="hidden leading-7 whitespace-nowrap lg:block lg:col-span-3 xl:col-span-2"
-          >
-            {{
-              getElapsedTime(document.updatedTimeUTC) === '1 day' ||
-              getElapsedTime(document.updatedTimeUTC) === 'Unknown'
-                ? getElapsedTime(document.updatedTimeUTC) === '1 day'
-                  ? 'Yesterday'
-                  : getElapsedTime(document.updatedTimeUTC)
-                : getElapsedTime(document.updatedTimeUTC) + ' ago'
-            }}
+              <p
+                [ngClass]="{ 'warn-text': document.isEscalated }"
+                class="leading-7 truncate whitespace-nowrap"
+                [matTooltip]="document.documentName"
+              >
+                <!-- Escalated icon -->
+                <i
+                  *ngIf="document.isEscalated"
+                  class="fas fa-exclamation-circle"
+                ></i>
+                <!-- Document name -->
+                {{ document.documentName }}
+              </p>
+            </div>
+            <!-- Assigned -->
+            <div class="md:col-span-4 col-span-6 lg:col-span-3 xl:col-span-2">
+              <span *ngIf="document?.userAssigned" class="flex">
+                <div class="mr-3">
+                  <app-user-avatar
+                    [firstName]="document.userAssigned.firstName"
+                    [lastName]="document.userAssigned.lastName"
+                    [hideToolTip]="true"
+                    [profileImageRithmId]="
+                      document?.userAssigned?.profileImageRithmId || ''
+                    "
+                  ></app-user-avatar>
+                </div>
+                <div
+                  class="hidden leading-7 truncate whitespace-nowrap md:block"
+                >
+                  {{ document.userAssigned.firstName }}
+                  {{ document.userAssigned.lastName }}
+                </div>
+              </span>
+            </div>
+            <!-- Time in station -->
+            <div
+              class="hidden leading-7 whitespace-nowrap md:block md:col-span-4 lg:col-span-3 xl:col-span-2"
+            >
+              {{ getElapsedTime(document.flowedTimeUTC) }}
+            </div>
+            <!-- Last updated -->
+            <div
+              class="hidden leading-7 whitespace-nowrap lg:block lg:col-span-3 xl:col-span-2"
+            >
+              {{
+                getElapsedTime(document.updatedTimeUTC) === '1 day' ||
+                getElapsedTime(document.updatedTimeUTC) === 'Unknown'
+                  ? getElapsedTime(document.updatedTimeUTC) === '1 day'
+                    ? 'Yesterday'
+                    : getElapsedTime(document.updatedTimeUTC)
+                  : getElapsedTime(document.updatedTimeUTC) + ' ago'
+              }}
+            </div>
           </div>
         </div>
-      </span>
+      </div>
       <app-loading-indicator
         class="h-full flex justify-center items-center"
         *ngIf="isLoading"
