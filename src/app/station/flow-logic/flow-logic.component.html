@@ -444,10 +444,10 @@
                 (selectionChange)="triggerTypeSelect()"
               >
                 <mat-option
-                  *ngFor="let option of scheduleTriggerOptions | keyvalue"
-                  [value]="option.value"
+                  *ngFor="let option of scheduleTriggerOptions"
+                  [value]="option"
                 >
-                  {{ option.value }}
+                  {{ option }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -507,6 +507,63 @@
                 <mat-select>
                   <mat-option></mat-option>
                 </mat-select>
+              </mat-form-field>
+            </section>
+
+            <section class="trigger-repeat-section">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Repeat</mat-label>
+                <mat-select
+                  formControlName="intervalRepeatType"
+                  (selectionChange)="intervalRepeatTypeSelect()"
+                >
+                  <mat-option
+                    *ngFor="
+                      let repeat of dateIntervalRepeatOptions;
+                      let i = index
+                    "
+                    [value]="repeat"
+                    [disabled]="i === 1 || i === 2"
+                  >
+                    {{ repeat }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </section>
+
+            <section
+              class="trigger-repeat-forever-section"
+              *ngIf="showRepeatForever"
+            >
+              Repeat Forever
+              <mat-slide-toggle formControlName="isRepeat"> </mat-slide-toggle>
+            </section>
+
+            <section
+              class="trigger-end-repeat-section"
+              *ngIf="
+                showRepeatForever &&
+                !scheduleTriggerForm.controls.isRepeat.value
+              "
+            >
+              <mat-form-field
+                class="w-full"
+                color="accent"
+                appearance="outline"
+              >
+                <mat-label>End Repeat</mat-label>
+                <input
+                  matInput
+                  readonly
+                  formControlName="endRepeatDate"
+                  [min]="startDate"
+                  [matDatepicker]="endRepeat"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="endRepeat"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #endRepeat></mat-datepicker>
               </mat-form-field>
             </section>
           </section>
