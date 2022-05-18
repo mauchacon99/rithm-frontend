@@ -22,6 +22,47 @@ interface ModalData {
   styleUrls: ['./management-member-dashboard-modal.component.scss'],
 })
 export class ManagementMemberDashboardModalComponent implements OnInit {
+  /**
+   * Get members by dashboard filtered.
+   *
+   * @returns Members of dashboard.
+   */
+  get membersDashboardFiltered(): MemberDashboard[] {
+    if (
+      this.search ||
+      this.selectedFilterValue !== FilterOptionTypeMemberDashboard.All
+    ) {
+      return this.membersDashboard.filter((member) => {
+        if (
+          this.selectedFilterValue === FilterOptionTypeMemberDashboard.CanEdit
+        ) {
+          return (
+            (member.firstName.includes(this.search) ||
+              member.lastName.includes(this.search) ||
+              member.email.includes(this.search)) &&
+            member.isEditable
+          );
+        } else if (
+          this.selectedFilterValue === FilterOptionTypeMemberDashboard.ViewOnly
+        ) {
+          return (
+            (member.firstName.includes(this.search) ||
+              member.lastName.includes(this.search) ||
+              member.email.includes(this.search)) &&
+            member.canView
+          );
+        } else {
+          return (
+            member.firstName.includes(this.search) ||
+            member.lastName.includes(this.search) ||
+            member.email.includes(this.search)
+          );
+        }
+      });
+    }
+    return this.membersDashboard;
+  }
+
   /** Members dashboard personal. */
   membersDashboard!: MemberDashboard[];
 

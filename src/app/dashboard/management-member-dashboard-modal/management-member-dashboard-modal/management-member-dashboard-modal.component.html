@@ -63,11 +63,13 @@
       <div
         class="w-full text-center mt-5"
         id="message-error-members"
-        *ngIf="!membersDashboard.length"
+        *ngIf="!membersDashboardFiltered.length"
       >
         There are not member for show.
       </div>
-      <ng-container *ngFor="let member of membersDashboard; let i = index">
+      <ng-container
+        *ngFor="let member of membersDashboardFiltered; let i = index"
+      >
         <app-member-dashboard-list-modal
           [formControlName]="'member-' + i"
           [member]="member"
