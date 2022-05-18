@@ -78,7 +78,7 @@ export class ConnectedStationsModalComponent implements OnInit {
     public dialogRef: MatDialogRef<ConnectedStationsModalComponent>,
     private stationService: StationService,
     private userService: UserService,
-    private sidenavDrawerService: SidenavDrawerService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
