@@ -191,7 +191,7 @@ describe('DocumentInfoDrawerComponent', () => {
       TestBed.inject(DocumentService),
       'deleteDocument'
     ).and.callThrough();
-
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     await component.deleteDocument();
 
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
@@ -209,7 +209,7 @@ describe('DocumentInfoDrawerComponent', () => {
       TestBed.inject(PopupService),
       'confirm'
     ).and.callThrough();
-
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     await component.deleteDocument();
 
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
