@@ -1156,6 +1156,20 @@ describe('FlowLogicComponent', () => {
     });
   });
 
+  it('should show Date interval repeat when repeat never not selected.', () => {
+    component.scheduleTriggerForm.controls['intervalRepeatType'].setValue('');
+    component.intervalRepeatTypeSelect();
+    expect(component.showRepeatForever).toBeTrue();
+  });
+
+  it('should hide Date interval repeat when selected repeat never.', () => {
+    component.scheduleTriggerForm.controls['intervalRepeatType'].setValue(
+      'Never'
+    );
+    component.intervalRepeatTypeSelect();
+    expect(component.showRepeatForever).toBeFalse();
+  });
+
   it('should call the method that returns all stations.', () => {
     const prevAndNextStations = spyOn(
       TestBed.inject(StationService),
