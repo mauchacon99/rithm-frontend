@@ -26,7 +26,7 @@ import { DataLinkModalComponent } from 'src/app/shared/data-link-modal/data-link
  * Reusable component for every field data-link.
  */
 @Component({
-  selector: 'app-data-link-field',
+  selector: 'app-data-link-field[stationLoading]',
   templateUrl: './data-link-field.component.html',
   styleUrls: ['./data-link-field.component.scss'],
   providers: [
@@ -65,11 +65,21 @@ export class DataLinkFieldComponent
   /** The document field to display. */
   @Input() field!: Question;
 
+  /** The document field to display. */
+  @Input() data!: DataLinkObject;
+
   /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
   /** The list of all stations. */
-  stations: Station[] = [];
+  @Input() stations: Station[] = [];
+
+  /** Loading/Errors block. */
+  /* Loading in input auto-complete the list of all stations. */
+  @Input() stationLoading = false;
+
+  /* Hide help section for saved data links. */
+  @Input() hideHelp = false;
 
   /** The list of selected station questions for the select matching value.*/
   questions: Question[] = [];
@@ -82,10 +92,6 @@ export class DataLinkFieldComponent
 
   /* The name for display fields  label  */
   displayFieldsLabel = 'Display Fields';
-
-  /** Loading/Errors block. */
-  /* Loading in input auto-complete the list of all stations. */
-  stationLoading = false;
 
   /* Loading in input  the station questions selected . */
   questionLoading = false;
@@ -111,6 +117,9 @@ export class DataLinkFieldComponent
         this.currentStationQuestions = questions.filter(
           (q) => q.questionType !== QuestionFieldType.DataLink
         );
+        if (this.data) {
+          this.bindSavedDataLinkToForm('selectBaseValue');
+        }
       });
   }
 
@@ -140,31 +149,15 @@ export class DataLinkFieldComponent
     this.dataLinkFieldForm.controls.targetStation.markAllAsTouched();
     this.dataLinkFieldForm.controls.selectBaseValue.markAllAsTouched();
     this.subscribeCurrentStationQuestions();
-    this.getAllStations();
-  }
 
-  /**
-   * Get the list of all stations.
-   */
-  private getAllStations(): void {
-    this.stationLoading = true;
-    this.stationService
-      .getAllStations()
-      .pipe(first())
-      .subscribe({
-        next: (stations) => {
-          this.stations = stations;
-          this.filterStations();
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Failed to get all stations for this data link field.',
-            error,
-            false
-          );
-        },
+    this.stationService.allStations$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stations) => {
+        this.stations = stations;
+        this.filterStations();
+        if (this.data) {
+          this.bindSavedDataLinkToForm('targetStation');
+        }
       });
   }
 
@@ -200,6 +193,14 @@ export class DataLinkFieldComponent
             this.questionLoading = false;
             this.dataLinkFieldForm.controls.selectedMatchingValue.markAllAsTouched();
             this.dataLinkFieldForm.controls.selectedDisplayFields.markAllAsTouched();
+            if (this.data) {
+              this.bindSavedDataLinkToForm('selectedMatchingValue');
+              this.bindSavedDataLinkToForm('selectedDisplayFields');
+            }
+            if (this.questions.length > 0 || !this.questionLoading) {
+              this.dataLinkFieldForm.controls.selectedMatchingValue.enable();
+              this.dataLinkFieldForm.controls.selectedDisplayFields.enable();
+            }
           },
           error: (error: unknown) => {
             this.questionLoading = false;
@@ -345,5 +346,71 @@ export class DataLinkFieldComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Completes all subscriptions.
+   *
+   * @param field Form field to which data is binding.
+   */
+  private bindSavedDataLinkToForm(field: string): void {
+    const displayIds = [];
+    switch (field) {
+      case 'selectBaseValue':
+        this.dataLinkFieldForm
+          .get('selectBaseValue')
+          ?.setValue(
+            this.currentStationQuestions.find(
+              (e) => e.rithmId === this.data.baseQuestionRithmId
+            )?.rithmId
+          );
+        this.dataLinkFieldForm.controls.selectBaseValue.markAllAsTouched();
+        this.stationService.unTouchDataLinkForm();
+        break;
+      case 'selectedMatchingValue':
+        this.dataLinkFieldForm
+          .get('selectedMatchingValue')
+          ?.setValue(
+            this.questions.find(
+              (e) => e.rithmId === this.data.matchingQuestionRithmId
+            )?.rithmId
+          );
+        this.dataLinkFieldForm.controls.selectedMatchingValue.markAllAsTouched();
+        this.stationService.unTouchDataLinkForm();
+        break;
+      case 'selectedDisplayFields':
+        for (const id of this.data.displayFields) {
+          displayIds.push(
+            this.questions.find((e) => e.rithmId.includes(id))?.rithmId
+          );
+        }
+        this.dataLinkFieldForm
+          .get('selectedDisplayFields')
+          ?.setValue(displayIds);
+        this.dataLinkFieldForm.controls.selectedDisplayFields.markAllAsTouched();
+        this.stationService.unTouchDataLinkForm();
+        break;
+      case 'targetStation':
+        this.dataLinkFieldForm
+          .get('targetStation')
+          ?.setValue(
+            this.stations.find(
+              (e) => e.rithmId === this.data.targetStationRithmId
+            )?.name
+          );
+        this.getStationQuestions(
+          <string>(
+            this.stations.find(
+              (e) => e.rithmId === this.data.targetStationRithmId
+            )?.name
+          )
+        );
+        this.dataLinkFieldForm.controls.targetStation.markAllAsTouched();
+        this.subscribeCurrentStationQuestions();
+        this.stationService.unTouchDataLinkForm();
+        break;
+      default:
+        return;
+    }
   }
 }
