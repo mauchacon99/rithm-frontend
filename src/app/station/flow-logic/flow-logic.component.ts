@@ -142,7 +142,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
-
+    this.subscribeCurrentStationQuestions();
     this.flowFieldForm = this.fb.group({
       stations: [''],
     });
