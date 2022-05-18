@@ -14,7 +14,7 @@ import {
   ColumnFieldsWidget,
   MemberDashboard,
   MemberAddDashboard,
-} from 'src/models/index';
+} from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
