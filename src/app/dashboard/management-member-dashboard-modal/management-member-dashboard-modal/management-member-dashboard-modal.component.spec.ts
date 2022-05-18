@@ -236,6 +236,15 @@ describe('ManagementMemberDashboardModalComponent', () => {
     ];
     beforeEach(() => {
       component.membersDashboard = membersDashboard;
+      membersDashboard.map((member) => {
+        component.form.addControl(
+          member.rithmId,
+          TestBed.inject(FormBuilder).control({
+            check: member.canView,
+            isEditable: member.isEditable,
+          })
+        );
+      });
     });
 
     it('should get all members', () => {
@@ -268,6 +277,32 @@ describe('ManagementMemberDashboardModalComponent', () => {
       const expectData = [member1, member2, member3];
       expect(component.membersDashboardFiltered.length).toEqual(3);
       expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
+
+    it('should return true getSearch if find a member', () => {
+      component.search = 'Test 1';
+      expect(component['getSearch'](membersDashboard[0])).toBeTrue();
+    });
+
+    it('should return false getSearch if find a member', () => {
+      component.search = 'Test 2';
+      expect(component['getSearch'](membersDashboard[0])).toBeFalse();
+    });
+
+    it('should patch values when select all change', () => {
+      const spyForm = spyOn(component.form, 'patchValue').and.callThrough();
+      component.form.controls['checkAll'].setValue(false);
+
+      component.onChangeSelectAll();
+      const expectData = {
+        check: false,
+        isEditable: false,
+      };
+
+      expect(spyForm).toHaveBeenCalled();
+      membersDashboard.map(({ rithmId }) => {
+        expect(component.form.controls[rithmId].value).toEqual(expectData);
+      });
     });
   });
 });

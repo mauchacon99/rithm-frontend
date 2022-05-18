@@ -29,48 +29,32 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    */
   get membersDashboardFiltered(): MemberDashboard[] {
     if (
-      this.search ||
-      this.selectedFilterValue !== FilterOptionTypeMemberDashboard.All
+      (this.search ||
+        this.selectedFilterValue !== FilterOptionTypeMemberDashboard.All) &&
+      this.membersDashboard &&
+      this.membersDashboard.length
     ) {
       return this.membersDashboard.filter((member) => {
         if (
           this.selectedFilterValue === FilterOptionTypeMemberDashboard.CanEdit
         ) {
           return (
-            (member.firstName
-              .toLowerCase()
-              .includes(this.search.toLowerCase()) ||
-              member.lastName
-                .toLowerCase()
-                .includes(this.search.toLowerCase()) ||
-              member.email.toLowerCase().includes(this.search.toLowerCase())) &&
-            member.isEditable
+            this.getSearch(member) &&
+            this.form.controls[member.rithmId].value.isEditable
           );
         } else if (
           this.selectedFilterValue === FilterOptionTypeMemberDashboard.ViewOnly
         ) {
           return (
-            (member.firstName
-              .toLowerCase()
-              .includes(this.search.toLowerCase()) ||
-              member.lastName
-                .toLowerCase()
-                .includes(this.search.toLowerCase()) ||
-              member.email.toLowerCase().includes(this.search.toLowerCase())) &&
-            member.canView
+            this.getSearch(member) &&
+            this.form.controls[member.rithmId].value.check
           );
         } else {
-          return (
-            member.firstName
-              .toLowerCase()
-              .includes(this.search.toLowerCase()) ||
-            member.lastName.toLowerCase().includes(this.search.toLowerCase()) ||
-            member.email.toLowerCase().includes(this.search.toLowerCase())
-          );
+          return this.getSearch(member);
         }
       });
     }
-    return this.membersDashboard;
+    return this.membersDashboard || [];
   }
 
   /** Members dashboard personal. */
@@ -143,9 +127,46 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
 
   /** Add form for each user. */
   private addForms(): void {
-    for (let index = 0; index < this.membersDashboard.length; index++) {
-      this.form.addControl(`member-${index}`, this.fb.control(''));
-    }
+    this.membersDashboard.map((member) => {
+      this.form.addControl(
+        member.rithmId,
+        this.fb.control({
+          check: member.canView,
+          isEditable: member.isEditable,
+        })
+      );
+    });
+  }
+
+  /**
+   * Filter search by member.
+   *
+   * @param member Member.
+   * @returns True if member exist.
+   */
+  private getSearch(member: MemberDashboard): boolean {
+    return (
+      `${member.firstName} ${member.lastName}`
+        .toLowerCase()
+        .includes(this.search.toLowerCase()) ||
+      member.email.toLowerCase().includes(this.search.toLowerCase())
+    );
+  }
+
+  /**
+   * Callback when click select all.
+   */
+  onChangeSelectAll(): void {
+    this.membersDashboard.map((member) => {
+      this.form.patchValue({
+        [member.rithmId]: {
+          check: this.checkAll,
+          isEditable: !this.checkAll
+            ? false
+            : this.form.controls[member.rithmId].value.isEditable,
+        },
+      });
+    });
   }
 
   /** Get users to dashboard personal. */

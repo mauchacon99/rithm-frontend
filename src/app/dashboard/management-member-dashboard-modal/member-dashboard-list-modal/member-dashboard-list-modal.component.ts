@@ -59,12 +59,6 @@ export class MemberDashboardListModalComponent
     return this.form.controls['check'].value;
   }
 
-  /**
-   * The `onTouched` function.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => {};
-
   constructor(private fb: FormBuilder) {}
 
   /** Init method. */
@@ -74,6 +68,12 @@ export class MemberDashboardListModalComponent
       isEditable: this.fb.control(this.member.isEditable),
     });
   }
+
+  /**
+   * The `onTouched` function.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onTouched: () => void = () => {};
 
   /**
    * Set value in user.
