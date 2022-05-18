@@ -13,7 +13,7 @@ import {
   MemberDashboard,
   Document,
   MemberAddDashboard,
-} from 'src/models/index';
+} from 'src/models';
 import { delay } from 'rxjs/operators';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
