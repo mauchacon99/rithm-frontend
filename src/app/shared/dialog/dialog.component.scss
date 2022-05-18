@@ -1,3 +1,7 @@
 .mat-dialog-title {
   font-family: Montserrat, sans-serif;
 }
+
+.mat-dialog-content {
+  @apply pt-4;
+}
