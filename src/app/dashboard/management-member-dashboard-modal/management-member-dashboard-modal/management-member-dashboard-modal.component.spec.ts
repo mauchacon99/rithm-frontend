@@ -5,7 +5,7 @@ import {
   MemberDashboard,
   RoleDashboardMenu,
   MemberAddDashboard,
-} from 'src/models/index';
+} from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
