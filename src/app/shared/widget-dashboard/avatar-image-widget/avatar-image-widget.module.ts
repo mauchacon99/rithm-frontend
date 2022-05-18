@@ -7,4 +7,4 @@ import { AvatarImageWidgetComponent } from './avatar-image-widget.component';
   imports: [CommonModule],
   exports: [AvatarImageWidgetComponent],
 })
-export class AvatarImageModule {}
+export class AvatarImageWidgetModule {}

@@ -55,7 +55,7 @@ import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/manag
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
 import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/error-widget.module';
-import { BannerImageModule } from 'src/app/shared/widget-dashboard/banner-image-widget/banner-image.module';
+import { BannerImageWidgetModule } from 'src/app/shared/widget-dashboard/banner-image-widget/banner-image-widget.module';
 
 @NgModule({
   declarations: [
@@ -117,7 +117,7 @@ import { BannerImageModule } from 'src/app/shared/widget-dashboard/banner-image-
     MatChipsModule,
     LoadingWidgetModule,
     ErrorWidgetModule,
-    BannerImageModule,
+    BannerImageWidgetModule,
   ],
   providers: [MobileBrowserChecker],
 })
