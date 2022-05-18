@@ -53,6 +53,7 @@
             <app-data-link-field
               [field]="field"
               [formControlName]="field.questionType"
+              [stationLoading]="stationLoading"
             ></app-data-link-field>
           </ng-container>
           <ng-template #textField>
@@ -146,10 +147,6 @@
           <mat-checkbox
             [name]="field.rithmId"
             [formControlName]="'isRequired-' + field.rithmId"
-            [disabled]="
-              field.isReadOnly &&
-              stationRithmId !== field.originalStationRithmId
-            "
             [checked]="field.isRequired"
             (change)="setRequired($event)"
           >

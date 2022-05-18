@@ -183,6 +183,15 @@ export class StationComponent
   /** Circles in the gridster. */
   circlesWidget!: string;
 
+  /** Saved station data link widgets. */
+  savedDataLinkArray: DataLinkObject[] = [];
+
+  /** Saved station data link widgets. */
+  savedDataLinkArrayQuestions: Question[] = [];
+
+  /** Loading until all stations are returned. */
+  stationDataLoading = false;
+
   /** Flag to indicate whether the focus is on a text component or not. */
   showTextAlignIcons = false;
 
@@ -209,6 +218,7 @@ export class StationComponent
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
+      dataLinkForm: this.fb.control(''),
     });
   }
 
@@ -256,6 +266,17 @@ export class StationComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
+  }
+
+  /**
+   * Listen the DataLink form is updated with saved data-links.
+   */
+  private subscribeDataLinkFormUnTouched(): void {
+    this.stationService.dataLinkFormUnTouched$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.resetStationForm();
       });
   }
 
@@ -355,8 +376,10 @@ export class StationComponent
     this.subscribeDocumentStationNameFields();
     this.subscribeStationName();
     this.subscribeStationFormTouched();
+    this.subscribeDataLinkFormUnTouched();
     this.subscribeStationQuestion();
     this.subscribeStationDataLink();
+    this.displayDataLinks();
     if (!this.editMode) this.setGridMode('preview');
   }
 
@@ -436,11 +459,21 @@ export class StationComponent
         (!this.stationForm.valid ||
           !(
             this.stationForm.dirty ||
-            this.stationForm.controls.stationTemplateForm.touched
+            this.stationForm.controls.stationTemplateForm.touched ||
+            this.stationForm.controls.dataLinkForm.touched
           ))) ||
       // If current tab is flow and there are no pending flow rules.
       (this.pendingFlowLogicRules.length === 0 && this.isFlowLogicTab)
     );
+  }
+
+  /**
+   * Whether the screen width is lesser than 640px.
+   *
+   * @returns True if width is lesser than 640px.
+   */
+  get isMobileView(): boolean {
+    return window.innerWidth <= 640;
   }
 
   /**
@@ -532,9 +565,11 @@ export class StationComponent
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
-          this.stationService.currentStationQuestions$.next(
-            this.stationInputFrames
-          );
+          if (this.viewNewStation) {
+            this.stationService.currentStationQuestions$.next(
+              this.stationInputFrames
+            );
+          }
         },
         error: (error: unknown) => {
           this.navigateBack();
@@ -1363,6 +1398,7 @@ export class StationComponent
     setTimeout(() => {
       this.stationForm.markAsPristine();
       this.stationForm.controls.stationTemplateForm.markAsUntouched();
+      this.stationForm.controls.dataLinkForm.markAsUntouched();
     }, 0);
   }
 
@@ -1372,5 +1408,67 @@ export class StationComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Display the saved data links.
+   */
+  private displayDataLinks(): void {
+    this.stationService
+      .getDataLinks(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (dataLinks) => {
+          this.savedDataLinkArray = dataLinks;
+          for (let i = 0; i < this.savedDataLinkArray.length; i++) {
+            const newQuestion: Question = {
+              rithmId: uuidv4(),
+              prompt: '',
+              questionType: QuestionFieldType.DataLink,
+              isReadOnly: false,
+              isRequired: false,
+              isPrivate: false,
+              children: [],
+              originalStationRithmId: this.stationRithmId,
+            };
+            this.savedDataLinkArrayQuestions.push(newQuestion);
+          }
+        },
+        error: (error: unknown) => {
+          this.stationDataLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
+    if (this.stationService.allStations$.value.length === 0) {
+      this.getAllStations();
+    }
+  }
+
+  /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.stationDataLoading = true;
+    this.stationService
+      .getAllStationsOptimized()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stationService.allStations$.next(stations);
+          this.stationDataLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationDataLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
   }
 }

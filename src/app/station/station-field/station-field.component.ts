@@ -18,11 +18,17 @@ import {
 } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { RandomIdGenerator } from 'src/helpers';
-import { Question, QuestionFieldType, PossibleAnswer } from 'src/models';
+import {
+  Question,
+  QuestionFieldType,
+  PossibleAnswer,
+  Station,
+} from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Station Field Component.
@@ -61,6 +67,9 @@ export class StationFieldComponent
 
   /** Notifies that the field control to move the field has been selected. */
   @Output() move: EventEmitter<'up' | 'down'> = new EventEmitter();
+
+  /** Loading until all stations are returned. */
+  stationLoading = false;
 
   /** The form to add to the template.*/
   stationFieldForm!: FormGroup;
@@ -103,10 +112,14 @@ export class StationFieldComponent
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** The list of all stations. */
+  stations: Station[] = [];
+
   constructor(
     private popupService: PopupService,
     private fb: FormBuilder,
-    private stationService: StationService
+    private stationService: StationService,
+    private errorService: ErrorService
   ) {
     this.randomIdGenerator = new RandomIdGenerator();
   }
@@ -131,13 +144,25 @@ export class StationFieldComponent
         this.addOption(this.field.questionType);
       }
     }
+    if (
+      this.field.questionType === this.fieldType.DataLink &&
+      this.stationService.allStations$.value.length === 0
+    ) {
+      this.getAllStations();
+    }
+    const isDisabled =
+      this.field.isReadOnly &&
+      this.stationRithmId !== this.field.originalStationRithmId;
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
       [this.field.questionType]: [''],
       optionField: [''],
-      [`isRequired-${this.field.rithmId}`]: [this.field.isRequired],
+      [`isRequired-${this.field.rithmId}`]: {
+        disabled: isDisabled,
+        value: this.field.isRequired,
+      },
       [`isPrivate-${this.field.rithmId}`]: [this.field.isPrivate],
-      [`isReadonly-${this.field.rithmId}`]: [this.field.isReadOnly],
+      [`isReadonly-${this.field.rithmId}`]: [!this.field.isReadOnly],
     });
     this.stationFieldForm.valueChanges
       .pipe(takeUntil(this.destroyed$))
@@ -152,6 +177,22 @@ export class StationFieldComponent
    * @returns The Label tag for each additional field.
    */
   get labelTag(): string {
+    const label =
+      this.field.questionType === this.fieldType.Select
+        ? 'Add Option'
+        : this.field.questionType === this.fieldType.MultiSelect ||
+          this.field.questionType === this.fieldType.CheckList
+        ? 'Add Item'
+        : 'Name your field';
+    return label;
+  }
+
+  /**
+   * Returns the correct label tag.
+   *
+   * @returns The Label tag for each additional field.
+   */
+  get disable(): string {
     const label =
       this.field.questionType === this.fieldType.Select
         ? 'Add Option'
@@ -287,7 +328,16 @@ export class StationFieldComponent
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = !checkboxEvent.checked;
     if (this.field.isReadOnly) {
-      this.field.isRequired = false;
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].setValue(false);
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].disable();
+    } else {
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].enable();
     }
     this.stationService.touchStationForm();
   }
@@ -362,5 +412,29 @@ export class StationFieldComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.stationLoading = true;
+    this.stationService
+      .getAllStationsOptimized()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stationService.allStations$.next(stations);
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
   }
 }

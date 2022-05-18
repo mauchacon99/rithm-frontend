@@ -296,9 +296,8 @@ describe('DocumentInfoDrawerComponent', () => {
 
   it('should show popup dialog to unassigned user', async () => {
     const dialogExpectData: DialogOptions = {
-      title: 'Are you sure?',
-      message:
-        'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      title: 'Unassign User',
+      message: 'This action cannot be undone',
       okButtonText: 'Unassign',
       cancelButtonText: 'Cancel',
       important: true,

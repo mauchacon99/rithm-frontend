@@ -41,6 +41,9 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   /** Station Rithm id. */
   @Input() stationRithmId = '';
 
+  /** Whether the element is rendered from station or documents (true by default). */
+  @Input() isStation = true;
+
   /** Emit an event to adjust its heigth when its number of children overpass its number of rows. */
   @Output() widgetRowAdjustment: EventEmitter<number> = new EventEmitter();
 
