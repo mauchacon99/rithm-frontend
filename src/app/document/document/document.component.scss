@@ -59,3 +59,7 @@
     @apply flex flex-col space-y-2;
   }
 }
+
+.max-width-footer {
+  max-width: var(--max-width-footer) !important;
+}

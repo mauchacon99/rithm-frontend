@@ -288,6 +288,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Checks after the component views and child views.
    */
   ngAfterViewChecked(): void {
+    // Set the maximum width using a css variable for the footer of the new interface.
+    const scroll = document.querySelector('.drawer-content');
+    document.documentElement.style.setProperty(
+      '--max-width-footer',
+      `${scroll?.clientWidth}px`
+    );
     this.changeDetectorR.detectChanges();
   }
 
