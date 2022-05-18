@@ -333,7 +333,15 @@
               [matTooltipPosition]="'right'"
             ></i>
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-manual-flow"
+            data-testid="toggle-trigger-manual-flow"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.ManualFlow, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -342,7 +350,15 @@
             Check container
             {{ ruleSelectedMenu === 'triggers' ? 'only on ' : 'on' }} arrival
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-document-arrived"
+            data-testid="toggle-trigger-document-arrived"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.DocumentArrived, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -352,7 +368,15 @@
             {{ ruleSelectedMenu === 'triggers' ? 'new ' : '' }} container
             arrival
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-any-document-arrived"
+            data-testid="toggle-trigger-any-document-arrived"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.AnyDocumentArrived, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -362,7 +386,15 @@
             {{ ruleSelectedMenu === 'triggers' ? 'on ' : '' }} containers on
             container departure
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-any-document-left"
+            data-testid="toggle-trigger-any-document-left"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.AnyDocumentLeft, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title flex items-center border-b border-secondary-50 pl-8 pr-6 pt-8 pb-10"
