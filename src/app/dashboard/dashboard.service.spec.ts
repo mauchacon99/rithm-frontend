@@ -13,9 +13,10 @@ import {
   ItemListWidgetModal,
   ColumnFieldsWidget,
   MemberDashboard,
+  UsersAdd
 } from 'src/models';
 import { environment } from 'src/environments/environment';
-import { DashboardService, UsersAdd } from './dashboard.service';
+import { DashboardService } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 

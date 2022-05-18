@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
-import { MemberDashboard, RoleDashboardMenu } from 'src/models';
+import { MemberDashboard, RoleDashboardMenu, UsersAdd } from 'src/models/index';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
 import {
-  DashboardService,
-  UsersAdd,
+  DashboardService
 } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDashboardService } from 'src/mocks';

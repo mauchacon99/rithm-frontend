@@ -11,10 +11,10 @@ import {
   ItemListWidgetModal,
   ColumnFieldsWidget,
   MemberDashboard,
-} from 'src/models';
+  Document,
+  UsersAdd
+} from 'src/models/index';
 import { delay } from 'rxjs/operators';
-import { Document } from 'src/models';
-import { UsersAdd } from 'src/app/dashboard/dashboard.service';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 

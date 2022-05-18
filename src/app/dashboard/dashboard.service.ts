@@ -15,19 +15,10 @@ import {
   WidgetType,
   ColumnFieldsWidget,
   MemberDashboard,
-} from 'src/models';
+  UsersAdd
+} from 'src/models/index';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
-/** Local interface to add user to dashboard. */
-export interface UsersAdd {
-  /** User rithm Id. */
-  userRithmId: string;
-  /** Is Editable. */
-  isEditable: true;
-  /** Can view dashboard. */
-  canView: true;
-}
-
 /**
  * Service for all business logic involving the dashboard.
  */
