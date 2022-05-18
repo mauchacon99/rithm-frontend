@@ -952,7 +952,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   openContainersModal(): void {
     this.dialog.open(StationDocumentsModalComponent, {
-      minWidth: '370px',
+      panelClass: ['h-[560px]', 'overflow-hidden'],
+      minWidth: '300px',
       data: {
         stationName: this.stationInformation.name,
         stationId: this.stationRithmId,

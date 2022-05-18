@@ -262,7 +262,7 @@ describe('GroupSearchWidgetComponent', () => {
   it('should not show modal when edit mode is active', () => {
     component.editMode = true;
     const expectData = {
-      minWidth: '370px',
+      minWidth: '300px',
       data: {
         stationName: dataStationGroupWidget.stations[0].name,
         stationId: dataStationGroupWidget.stations[0].rithmId,

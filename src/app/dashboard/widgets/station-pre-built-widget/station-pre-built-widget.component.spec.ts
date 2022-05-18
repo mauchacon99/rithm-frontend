@@ -134,6 +134,7 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should executed modal for render documents the specific station', () => {
     const expectData = {
+      panelClass: ['h-[560px]', 'overflow-hidden'],
       minWidth: '300px',
       data: {
         stationName: stationWidgetData[0].name,
@@ -151,7 +152,7 @@ describe('StationPreBuiltWidgetComponent', () => {
   it('should not show modal when edit mode is active', () => {
     component.editMode = true;
     const expectData = {
-      minWidth: '370px',
+      minWidth: '300px',
       data: {
         stationName: stationWidgetData[0].name,
         stationId: stationWidgetData[0].rithmId,
