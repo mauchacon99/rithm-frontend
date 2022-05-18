@@ -12,7 +12,7 @@ import {
   ColumnFieldsWidget,
   MemberDashboard,
   Document,
-  UsersAdd
+  UsersAdd,
 } from 'src/models/index';
 import { delay } from 'rxjs/operators';
 

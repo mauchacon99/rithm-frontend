@@ -3,11 +3,9 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import {
-  DashboardService
-} from 'src/app/dashboard/dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { UsersAdd, MemberDashboard, RoleDashboardMenu  } from 'src/models/index';
+import { UsersAdd, MemberDashboard, RoleDashboardMenu } from 'src/models/index';
 
 /**Interface data modal. */
 interface ModalData {

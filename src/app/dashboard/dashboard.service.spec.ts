@@ -13,7 +13,7 @@ import {
   ItemListWidgetModal,
   ColumnFieldsWidget,
   MemberDashboard,
-  UsersAdd
+  UsersAdd,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';

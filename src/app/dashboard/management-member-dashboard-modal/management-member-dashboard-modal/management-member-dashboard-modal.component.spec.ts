@@ -5,9 +5,7 @@ import { MemberDashboard, RoleDashboardMenu, UsersAdd } from 'src/models/index';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
-import {
-  DashboardService
-} from 'src/app/dashboard/dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';

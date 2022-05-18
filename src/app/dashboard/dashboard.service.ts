@@ -15,7 +15,7 @@ import {
   WidgetType,
   ColumnFieldsWidget,
   MemberDashboard,
-  UsersAdd
+  UsersAdd,
 } from 'src/models/index';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
