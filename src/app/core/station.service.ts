@@ -68,6 +68,12 @@ export class StationService {
   /** The question title to be updated when it's updated in setting drawer. */
   stationQuestionTitle$ = new Subject<Question>();
 
+  /** The questions to be updated when it changes in station page. */
+  allStations$ = new BehaviorSubject<StationOptimized[]>([]);
+
+  /** Set unTouch to data-link form. */
+  dataLinkFormUnTouched$ = new Subject<void>();
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -994,6 +1000,23 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/frame-questions?frameRithmId=${frameRithmId}`,
       frameQuestions
     );
+  }
+
+  /**
+   * Gets the data link widgets.
+   *
+   * @param stationRithmId The station id that will be update.
+   * @returns The data link objects.
+   */
+  getDataLinks(stationRithmId: string): Observable<DataLinkObject[]> {
+    return this.http.get<DataLinkObject[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/data-link?stationRithmId=${stationRithmId}`
+    );
+  }
+
+  /** Set unTouch to station template form. */
+  unTouchDataLinkForm(): void {
+    this.dataLinkFormUnTouched$.next();
   }
 
   /**
