@@ -34,6 +34,36 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<Document>;
 
+  /** The station rithmId. */
+  private stationRithmId = '';
+
+  /* Value of search input. */
+  search = '';
+
+  /** Whether the action to get split get container modal. */
+  showContainerModal = false;
+
+  /** Is the content being loaded. */
+  isLoading = true;
+
+  /** Is loading to get documents by scroll. */
+  isLoadingScroll = false;
+
+  /** Total number of documents at this station. */
+  totalNumDocs = 0;
+
+  /** Number of page to get documents. */
+  pageScroll = 1;
+
+  /** The current page number. */
+  activeNum = 1;
+
+  /** Role of the user. */
+  userType = UserType.None;
+
+  /** The user type enum object. */
+  userTypeEnum = UserType;
+
   /** Columns statics to show on table. */
   displayedColumns = [
     'documentName',
@@ -43,29 +73,8 @@ export class StationDocumentsModalComponent implements OnInit {
     'viewDocument',
   ];
 
-  /** The current page number. */
-  activeNum = 1;
-
-  /** Is the content being loaded. */
-  isLoading = true;
-
-  /** The station rithmId. */
-  private stationRithmId = '';
-
-  /* Value of search input. */
-  search = '';
-
-  /** Total number of documents at this station. */
-  totalNumDocs = 0;
-
-  /** Role of the user. */
-  userType = UserType.None;
-
-  /** The user type enum object. */
-  userTypeEnum = UserType;
-
-  /** Whether the action to get split get container modal. */
-  showContainerModal = false;
+  /** Init a timeout variable to be used in method get results. */
+  timeout = setTimeout(() => '', 1000);
 
   constructor(
     private documentService: DocumentService,
@@ -98,11 +107,67 @@ export class StationDocumentsModalComponent implements OnInit {
   }
 
   /**
+   * Validate scroll to get documents.
+   *
+   * @param scroll Event of callback scroll.
+   */
+  validateScroll(scroll: Event): void {
+    const target = scroll?.target as HTMLElement;
+    const tableViewHeight = target?.offsetHeight; // viewport: ~500px
+    const tableScrollHeight = target?.scrollHeight; // length of all table
+    const scrollLocation = target?.scrollTop; // how far user scrolled
+
+    // If the user has scrolled within 200px of the bottom, add more data
+    const buffer = 200;
+    const limit = tableScrollHeight - tableViewHeight - buffer;
+
+    if (
+      scrollLocation > limit &&
+      !this.isLoadingScroll &&
+      this.dataSourceTable.data.length < this.totalNumDocs
+    ) {
+      this.getDocumentsByScrollAndSearch(true);
+    }
+  }
+
+  /**
+   * Get pagination data by infinite scroll.
+   *
+   * @param isScroll When paginate documents by scroll.
+   */
+  private getDocumentsByScrollAndSearch(isScroll = false): void {
+    this.pageScroll = isScroll ? this.pageScroll + 1 : 1;
+    this.isLoadingScroll = true;
+    this.documentService
+      .getStationDocuments(this.stationRithmId, this.pageScroll, this.search)
+      .pipe(first())
+      .subscribe({
+        next: (documentsResponse) => {
+          if (documentsResponse) {
+            this.documents = isScroll
+              ? this.documents.concat(documentsResponse.documents)
+              : documentsResponse.documents;
+            this.dataSourceTable = new MatTableDataSource(this.documents);
+            this.totalNumDocs = documentsResponse.totalDocuments;
+            this.userType = documentsResponse.userType;
+          }
+          this.isLoadingScroll = false;
+        },
+        error: (error: unknown) => {
+          this.isLoadingScroll = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Gets a page list of documents.
    *
    * @param pageNum The desired page of document results.
    */
-  //TODO: look into making this reusable since this method is similar to one on organization-management.component.ts
   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
@@ -211,6 +276,16 @@ export class StationDocumentsModalComponent implements OnInit {
         stationId: this.stationRithmId,
       },
     });
+  }
+
+  /**
+   * Sending search value to get mach result.
+   */
+  getSearchResult(): void {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.getDocumentsByScrollAndSearch();
+    }, 750);
   }
 
   /**

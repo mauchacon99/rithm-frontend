@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
-import { ErrorService } from 'src/app/core/error.service';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { MockDocumentService } from 'src/mocks';
 import {
   DocumentWidgetComponent,
   QuestionValuesColumn,
@@ -27,7 +26,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
   let fixture: ComponentFixture<DocumentWidgetComponent>;
-  let errorService: ErrorService;
   let documentService: DocumentService;
   const dataWidget =
     '{"documentRithmId":"8263330A-BCAA-40DB-8C06-D4C111D5C9DA","columns":[{"name":"Test","questionId":"45454-54545-45454"}]}';
@@ -355,16 +353,12 @@ describe('DocumentWidgetComponent', () => {
         MockComponent(LoadingWidgetComponent),
         MockComponent(ErrorWidgetComponent),
       ],
-      providers: [
-        { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService },
-      ],
+      providers: [{ provide: DocumentService, useClass: MockDocumentService }],
       imports: [MatMenuModule, RouterTestingModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    errorService = TestBed.inject(ErrorService);
     documentService = TestBed.inject(DocumentService);
     fixture = TestBed.createComponent(DocumentWidgetComponent);
     component = fixture.componentInstance;
@@ -400,14 +394,11 @@ describe('DocumentWidgetComponent', () => {
       })
     );
 
-    const spyError = spyOn(errorService, 'logError').and.callThrough();
-
     component.getDocumentWidget();
 
     expect(deleteCompanyDashboard).toHaveBeenCalledOnceWith(
       component.documentRithmId
     );
-    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call method getDocumentWidget', () => {
@@ -651,11 +642,90 @@ describe('DocumentWidgetComponent', () => {
         throw new HttpErrorResponse({ error: 'any error', status: 403 });
       })
     );
-    const spyMethodError = spyOn(errorService, 'logError').and.callThrough();
 
     component.getDocumentWidget();
 
-    expect(spyMethodError).toHaveBeenCalled();
     expect(component.permissionError).toBeFalse();
+  });
+
+  it('should show empty question message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#without-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
+
+  it('should show no selected message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: questions,
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+    spyOnProperty(component, 'getValueQuestions').and.returnValue([]);
+    spyOnProperty(component, 'getDefaultValueQuestions').and.returnValue([]);
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#no-selected-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(documentService, 'getDocumentWidget').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getDocumentWidget();
+
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    component.dataDocumentWidget = {
+      documentName: 'new document',
+      documentRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+      questions: [],
+      stations: [],
+    };
+    fixture.detectChanges();
+    const spyDeleteWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeleteWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

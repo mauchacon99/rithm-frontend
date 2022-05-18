@@ -22,7 +22,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { SplitService } from 'src/app/core/split.service';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { RoleDashboardMenu, User } from 'src/models';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DocumentService } from 'src/app/core/document.service';
@@ -290,10 +290,7 @@ describe('UserFormComponent', () => {
       const splitInitMethod = spyOn(splitService, 'initSdk').and.callThrough();
 
       splitService.sdkReady$.error('error');
-      const spyErrorService = spyOn(
-        TestBed.inject(ErrorService),
-        'logError'
-      ).and.callThrough();
+      const spyErrorService = spyOn(errorService, 'logError').and.callThrough();
       component.ngOnInit();
 
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
@@ -343,13 +340,13 @@ describe('UserFormComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call upload imageUser', () => {
+  it('should call upload imageUser', async () => {
     const spyMethod = spyOn(
       documentService,
       'uploadImageUser'
     ).and.callThrough();
     const mockFile = new File([''], 'name', { type: 'image/png' });
-    component['uploadImageUser'](mockFile);
+    await component['uploadImageUser'](mockFile);
     expect(spyMethod).toHaveBeenCalledWith(mockFile);
   });
 
@@ -395,7 +392,7 @@ describe('UserFormComponent', () => {
     component.profileImageRithmId = '';
     component.accountCreate = false;
     component.showProfilePhoto = true;
-    component.isLoadingUploadImageUser = true;
+    component.isLoadingImageUser = 'uploading';
     fixture.detectChanges();
     const isLoading = fixture.debugElement.nativeElement.querySelector(
       '#loading-upload-photo'
@@ -403,7 +400,7 @@ describe('UserFormComponent', () => {
     expect(isLoading).toBeTruthy();
   });
 
-  it('should show error  when user image is uploading', () => {
+  it('should show error when user image is uploading', () => {
     component.profileImageRithmId = '';
     component.accountCreate = false;
     component.showProfilePhoto = true;
@@ -435,5 +432,42 @@ describe('UserFormComponent', () => {
     component.profileImageRithmId = '13213211315';
     component['deleteImageUser']();
     expect(component.profileImageRithmId).toEqual('');
+  });
+
+  it('should update image user', () => {
+    const spyServiceUser = spyOn(
+      userService,
+      'updateUserAccount'
+    ).and.returnValue(of({}));
+    const spyServicePopup = spyOn(popupService, 'notify').and.callThrough();
+    const imageRithmId = '123-456-789';
+
+    component['updateUserImage'](imageRithmId);
+
+    expect(spyServiceUser).toHaveBeenCalledOnceWith({
+      vaultRithmId: imageRithmId,
+    });
+    expect(spyServicePopup).toHaveBeenCalledOnceWith(
+      'Your account settings are updated.'
+    );
+  });
+
+  it('should update image user fail', () => {
+    const spyServiceUser = spyOn(
+      userService,
+      'updateUserAccount'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
+
+    component['updateUserImage']('');
+
+    expect(spyServiceUser).toHaveBeenCalledOnceWith({
+      vaultRithmId: '',
+    });
+    expect(spyError).toHaveBeenCalled();
   });
 });

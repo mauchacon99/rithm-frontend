@@ -150,13 +150,19 @@ export class StationFieldComponent
     ) {
       this.getAllStations();
     }
+    const isDisabled =
+      this.field.isReadOnly &&
+      this.stationRithmId !== this.field.originalStationRithmId;
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
       [this.field.questionType]: [''],
       optionField: [''],
-      [`isRequired-${this.field.rithmId}`]: [this.field.isRequired],
+      [`isRequired-${this.field.rithmId}`]: {
+        disabled: isDisabled,
+        value: this.field.isRequired,
+      },
       [`isPrivate-${this.field.rithmId}`]: [this.field.isPrivate],
-      [`isReadonly-${this.field.rithmId}`]: [this.field.isReadOnly],
+      [`isReadonly-${this.field.rithmId}`]: [!this.field.isReadOnly],
     });
     this.stationFieldForm.valueChanges
       .pipe(takeUntil(this.destroyed$))
@@ -171,6 +177,22 @@ export class StationFieldComponent
    * @returns The Label tag for each additional field.
    */
   get labelTag(): string {
+    const label =
+      this.field.questionType === this.fieldType.Select
+        ? 'Add Option'
+        : this.field.questionType === this.fieldType.MultiSelect ||
+          this.field.questionType === this.fieldType.CheckList
+        ? 'Add Item'
+        : 'Name your field';
+    return label;
+  }
+
+  /**
+   * Returns the correct label tag.
+   *
+   * @returns The Label tag for each additional field.
+   */
+  get disable(): string {
     const label =
       this.field.questionType === this.fieldType.Select
         ? 'Add Option'
@@ -306,7 +328,16 @@ export class StationFieldComponent
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = !checkboxEvent.checked;
     if (this.field.isReadOnly) {
-      this.field.isRequired = false;
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].setValue(false);
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].disable();
+    } else {
+      this.stationFieldForm.controls[
+        `isRequired-${this.field.rithmId}`
+      ].enable();
     }
     this.stationService.touchStationForm();
   }

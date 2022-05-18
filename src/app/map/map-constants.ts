@@ -128,6 +128,7 @@ export const ICON_MID_HEIGHT = 92;
 export const ICON_FULL_HEIGHT = 102;
 export const ICON_RADIUS = 2;
 export const ICON_FOLD = 1;
+export const ICON_Y_PADDING = 10;
 
 // Tooltip
 export const TOOLTIP_RADIUS = 10;

@@ -3,12 +3,14 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
+  Question,
   Power,
   Rule,
   RuleEquation,
@@ -18,11 +20,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { first } from 'rxjs';
+import { first, map, Observable, startWith, takeUntil, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
+import { StationService } from 'src/app/core/station.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
@@ -33,7 +36,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit, OnChanges {
+export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Schedule trigger type form. */
   scheduleTriggerForm: FormGroup;
 
@@ -54,6 +60,9 @@ export class FlowLogicComponent implements OnInit, OnChanges {
 
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
+
+  /** The station Flow Logic Rule. */
+  currentStationQuestions: Question[] = [];
 
   /* Loading the rules list  by type  */
   flowLogicLoadingByRuleType: string | null = null;
@@ -99,6 +108,19 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /**Filtered form station List. */
+  filteredStations$: Observable<ConnectedStationInfo[]> | undefined;
+
+  /** The form to add this field in the template. */
+  flowFieldForm!: FormGroup;
+
+  /** The list of all stations. */
+  stations: ConnectedStationInfo[] = [];
+
+  /** Loading/Errors block. */
+  /* Loading in input auto-complete the list of all stations. */
+  stationLoading = false;
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -106,7 +128,8 @@ export class FlowLogicComponent implements OnInit, OnChanges {
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
-    private splitService: SplitService
+    private splitService: SplitService,
+    private stationService: StationService
   ) {
     this.scheduleTriggerForm = this.fb.group({
       scheduleTriggerType: this.fb.control(''),
@@ -119,6 +142,11 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
+
+    this.flowFieldForm = this.fb.group({
+      stations: [''],
+    });
+    this.getStationPowers();
   }
 
   /**
@@ -128,6 +156,17 @@ export class FlowLogicComponent implements OnInit, OnChanges {
     if (this.flowLogicView && !this.stationPowers.length) {
       this.getStationPowers();
     }
+  }
+
+  /**
+   * Listen the currentStationQuestions Service.
+   */
+  private subscribeCurrentStationQuestions(): void {
+    this.stationService.currentStationQuestions$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        this.currentStationQuestions = questions;
+      });
   }
 
   /**
@@ -396,6 +435,58 @@ export class FlowLogicComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Get the list of all stations.
+   */
+  getPreviousAndNextStations(): void {
+    this.stationLoading = true;
+    this.stationService
+      .getPreviousAndNextStations(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = [];
+          this.stations = this.stations.concat(stations.nextStations);
+          this.stations = this.stations.concat(stations.previousStations);
+          this.filterStations();
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this data link field.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
+   * Filter the list of all stations.
+   */
+  private filterStations(): void {
+    /** Set the filter List for auto searching. */
+    this.filteredStations$ =
+      this.flowFieldForm.controls.stations.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value))
+      );
+  }
+
+  /**
+   * Filtered Values.
+   *
+   * @param value Current String in Field Forms.
+   * @returns Filtered value.
+   */
+  private _filter(value: string): ConnectedStationInfo[] {
+    const filterValue = value?.toLowerCase();
+    return this.stations.filter((option) =>
+      option.name.toLowerCase().includes(filterValue)
+    );
+  }
+
+  /**
    * Toggle the responsive view to hide/show rules list.
    *
    * @param menuSelected Rules menu selected.
@@ -470,5 +561,13 @@ export class FlowLogicComponent implements OnInit, OnChanges {
           );
         },
       });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

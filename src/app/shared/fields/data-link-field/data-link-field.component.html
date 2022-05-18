@@ -55,10 +55,7 @@
       </i>
     </mat-label>
 
-    <mat-select
-      [disabled]="!questions.length || questionLoading"
-      formControlName="selectedMatchingValue"
-    >
+    <mat-select formControlName="selectedMatchingValue">
       <mat-option
         *ngFor="let option of questions"
         class="text-sm"
@@ -87,11 +84,7 @@
       <i *ngIf="questionLoading" class="fa-solid fa-spin fa-spinner fa-2x1">
       </i>
     </mat-label>
-    <mat-select
-      multiple
-      [disabled]="!questions.length || questionLoading"
-      formControlName="selectedDisplayFields"
-    >
+    <mat-select multiple formControlName="selectedDisplayFields">
       <mat-option
         *ngFor="let option of questions"
         class="text-sm"

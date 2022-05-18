@@ -127,11 +127,18 @@ export class DataLinkFieldComponent
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
+    const isDisabled = !this.questions.length || this.questionLoading;
     this.dataLinkFieldForm = this.fb.group({
       targetStation: [this.fieldValue, [Validators.required]],
-      selectedMatchingValue: ['', [Validators.required]],
+      selectedMatchingValue: [
+        { value: '', disabled: isDisabled },
+        [Validators.required],
+      ],
       selectBaseValue: ['', [Validators.required]],
-      selectedDisplayFields: ['', [Validators.required]],
+      selectedDisplayFields: [
+        { value: '', disabled: isDisabled },
+        [Validators.required],
+      ],
     });
     this.dataLinkDefault.frameRithmId = this.field.rithmId;
     this.dataLinkDefault.rithmId = this.field.rithmId;

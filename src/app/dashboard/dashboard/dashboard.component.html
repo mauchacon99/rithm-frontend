@@ -148,7 +148,11 @@
           Current dashboard has no widgets to display.
         </div>
         <gridster
-          [ngClass]="editMode ? 'edit-mode-gridster' : 'gridster'"
+          [ngClass]="
+            editMode
+              ? 'h-[calc(100vh-300px)] md:h-[calc(100vh-245px)]'
+              : 'gridster'
+          "
           class="bg-transparent px-0 scrollbar"
           [options]="options"
         >
@@ -178,9 +182,13 @@
               [stationFlow]="stationFlow"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [showDetailWidgetPopover]="showDetailWidgetPopover"
+              [canAssignUserWidget]="canAssignUserWidget"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
               (reloadStationsFlow)="stationFlow = $event"
+              (deleteWidget)="removeWidget()"
             >
             </app-station-widget>
             <app-document-widget
@@ -194,7 +202,11 @@
               [stationFlow]="stationFlow"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [showDetailWidgetPopover]="showDetailWidgetPopover"
+              [canAssignUserWidget]="canAssignUserWidget"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             >
             </app-document-widget>
             <app-group-search-widget
@@ -203,7 +215,9 @@
               [widgetType]="item.widgetType"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             >
             </app-group-search-widget>
             <app-group-traffic-widget
@@ -214,13 +228,17 @@
               [widgetItem]="item"
               [indexWidget]="index"
               [isMobileDevice]="mobileBrowserChecker.isMobileDevice"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             ></app-group-traffic-widget>
             <app-station-pre-built-widget
               *ngIf="item.widgetType === enumWidgetType.PreBuiltStation"
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
+              (deleteWidget)="removeWidget()"
             ></app-station-pre-built-widget>
 
             <app-container-pre-built-widget
@@ -228,9 +246,11 @@
               [editMode]="editMode"
               [showButtonSetting]="showButtonSetting"
               [stationFlow]="stationFlow"
+              [dashboardPermission]="dashboardPermission"
               (toggleDrawer)="toggleWidgetDrawer(item, index, $event)"
               (expandWidget)="toggleExpandWidget(index, $event)"
               (reloadStationsFlow)="stationFlow = $event"
+              (deleteWidget)="removeWidget()"
             >
             </app-container-pre-built-widget>
           </gridster-item>

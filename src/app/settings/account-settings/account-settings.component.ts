@@ -57,13 +57,12 @@ export class AccountSettingsComponent {
    */
   private updateUserAccount(): void {
     const userFormData = this.settingsForm.get('userForm')?.value;
-    const { firstName, lastName, confirmPassword, vaultRithmId } = userFormData;
+    const { firstName, lastName, confirmPassword } = userFormData;
     this.userService
       .updateUserAccount({
         firstName,
         lastName,
         password: confirmPassword,
-        vaultRithmId,
       })
       .pipe(first())
       .subscribe({
@@ -74,7 +73,7 @@ export class AccountSettingsComponent {
           this.accountSettingsService.setUser({
             firstName,
             lastName,
-            profileImageRithmId: vaultRithmId,
+            profileImageRithmId: this.userService.user.profileImageRithmId,
           });
         },
         error: (error: unknown) => {
