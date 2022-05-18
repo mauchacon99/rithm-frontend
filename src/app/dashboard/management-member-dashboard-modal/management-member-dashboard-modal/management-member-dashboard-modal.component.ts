@@ -10,7 +10,6 @@ import {
   MemberDashboard,
   RoleDashboardMenu,
 } from 'src/models';
-
 /**Interface data modal. */
 interface ModalData {
   /** Selected dashboardRithmId. */
@@ -171,6 +170,13 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
         },
       });
     });
+  }
+
+  /**
+   * Deselect check all.
+   */
+  deselectCheckAll(): void {
+    this.form.controls['checkAll'].reset();
   }
 
   /** Get users to dashboard personal. */

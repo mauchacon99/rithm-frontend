@@ -288,6 +288,15 @@ describe('ManagementMemberDashboardModalComponent', () => {
       expect(component['getSearch'](membersDashboard[0])).toBeFalse();
     });
 
+    it('should call reset checkAll', () => {
+      const spyReset = spyOn(
+        component.form.controls['checkAll'],
+        'reset'
+      ).and.callThrough();
+      component['deselectCheckAll']();
+      expect(spyReset).toHaveBeenCalled();
+    });
+
     it('should patch values when select all change', () => {
       const spyForm = spyOn(component.form, 'patchValue').and.callThrough();
       component.form.controls['checkAll'].setValue(false);

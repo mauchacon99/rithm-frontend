@@ -76,8 +76,9 @@
         <app-member-dashboard-list-modal
           [formControlName]="member.rithmId"
           [member]="member"
-          [setCheckAll]="checkAll"
+          [checkAll]="checkAll"
           [index]="i"
+          (deselectCheckAll)="deselectCheckAll()"
         ></app-member-dashboard-list-modal>
       </ng-container>
     </div>
