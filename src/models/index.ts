@@ -82,4 +82,4 @@ export * from './power';
 export * from './member-dashboard';
 export * from './reload-station-flow';
 export * from './options-compress-file';
-export * from './user-add';
+export * from './member-add-dashboard';

@@ -13,8 +13,8 @@ import {
   ItemListWidgetModal,
   ColumnFieldsWidget,
   MemberDashboard,
-  UsersAdd,
-} from 'src/models';
+  MemberAddDashboard,
+} from 'src/models/index';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
@@ -806,7 +806,7 @@ describe('DashboardService', () => {
       isEditable: false,
       canView: false,
     };
-    const responseMembers: UsersAdd[] = [
+    const responseMembers: MemberAddDashboard[] = [
       {
         userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
         canView: true,

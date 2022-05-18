@@ -15,7 +15,7 @@ import {
   WidgetType,
   ColumnFieldsWidget,
   MemberDashboard,
-  UsersAdd,
+  MemberAddDashboard,
 } from 'src/models/index';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -514,7 +514,7 @@ export class DashboardService {
    */
   addDashboardMembers(
     dashboardRithmId: string,
-    users: UsersAdd[]
+    users: MemberAddDashboard[]
   ): Observable<DashboardData> {
     return this.http.post<DashboardData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`,

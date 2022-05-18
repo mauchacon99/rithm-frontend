@@ -12,7 +12,7 @@ import {
   ColumnFieldsWidget,
   MemberDashboard,
   Document,
-  UsersAdd,
+  MemberAddDashboard,
 } from 'src/models/index';
 import { delay } from 'rxjs/operators';
 
@@ -822,7 +822,7 @@ export class MockDashboardService {
    */
   addDashboardMembers(
     dashboardRithmId: string,
-    users: UsersAdd[]
+    users: MemberAddDashboard[]
   ): Observable<DashboardData> {
     const updateDashboard: DashboardData = {
       rithmId: '',

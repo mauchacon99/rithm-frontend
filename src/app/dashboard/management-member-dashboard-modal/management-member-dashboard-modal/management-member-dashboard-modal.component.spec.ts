@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
-import { MemberDashboard, RoleDashboardMenu, UsersAdd } from 'src/models/index';
+import {
+  MemberDashboard,
+  RoleDashboardMenu,
+  MemberAddDashboard,
+} from 'src/models/index';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
@@ -34,7 +38,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     dashboardType: RoleDashboardMenu.Personal,
   };
 
-  const testUsersAdd: UsersAdd[] = [
+  const testUsersAdd: MemberAddDashboard[] = [
     {
       userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
       canView: true,
@@ -102,7 +106,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     fixture = TestBed.createComponent(ManagementMemberDashboardModalComponent);
     component = fixture.componentInstance;
     component.dashboardRithmId = '123-123-132';
-    component.usersAdd = testUsersAdd;
+    component.membersAddDashboard = testUsersAdd;
     dashboardService = TestBed.inject(DashboardService);
     errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
@@ -131,7 +135,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     component.addDashboardMembers();
     expect(spyService).toHaveBeenCalledOnceWith(
       component.dashboardRithmId,
-      component.usersAdd
+      component.membersAddDashboard
     );
   });
 

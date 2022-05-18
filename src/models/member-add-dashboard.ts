@@ -1,5 +1,5 @@
 /** Interface to use to add user to dashboard. */
-export interface UsersAdd {
+export interface MemberAddDashboard {
   /** User rithm Id. */
   userRithmId: string;
   /** Is Editable. */

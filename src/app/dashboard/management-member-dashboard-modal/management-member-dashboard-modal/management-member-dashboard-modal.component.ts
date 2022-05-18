@@ -5,7 +5,11 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { UsersAdd, MemberDashboard, RoleDashboardMenu } from 'src/models/index';
+import {
+  MemberAddDashboard,
+  MemberDashboard,
+  RoleDashboardMenu,
+} from 'src/models/index';
 
 /**Interface data modal. */
 interface ModalData {
@@ -44,7 +48,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   errorGetUsersMember = false;
 
   /** Users to add to dashboard. */
-  usersAdd!: UsersAdd[];
+  membersAddDashboard!: MemberAddDashboard[];
 
   /** Selected filter. */
   selectedFilterValue: FilterOptionTypeMemberDashboard =
@@ -128,7 +132,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    */
   addDashboardMembers(): void {
     this.dashboardService
-      .addDashboardMembers(this.dashboardRithmId, this.usersAdd)
+      .addDashboardMembers(this.dashboardRithmId, this.membersAddDashboard)
       .pipe(first())
       .subscribe({
         next: () => {
