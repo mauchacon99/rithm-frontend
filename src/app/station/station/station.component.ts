@@ -444,6 +444,15 @@ export class StationComponent
   }
 
   /**
+   * Whether the screen width is lesser than 640px.
+   *
+   * @returns True if width is lesser than 640px.
+   */
+  get isMobileView(): boolean {
+    return window.innerWidth <= 640;
+  }
+
+  /**
    * Validate the conditions to display the Save or Save Rules button.
    *
    * @returns If display the button, can be true or false.

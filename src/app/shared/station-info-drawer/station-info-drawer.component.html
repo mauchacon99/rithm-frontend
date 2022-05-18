@@ -17,7 +17,7 @@
     <ng-template matTabContent>
       <div class="grid grid-cols-1 px-2">
         <!-- Station Name -->
-        <section class="flex py-4">
+        <section class="flex" [ngClass]="editMode ? 'pt-4' : 'py-4'">
           <div
             class="col-span-12 pt-2"
             *ngIf="
@@ -31,7 +31,6 @@
           <ng-template #editStationName>
             <div class="setting-name-section w-full">
               <mat-form-field
-                hintLabel="Max Characters length"
                 appearance="outline"
                 class="w-full mat-station-name"
               >
@@ -42,15 +41,11 @@
                   id="station"
                   data-testid="station-name-field"
                   autocomplete="off"
-                  maxlength="30"
                   [(ngModel)]="stationName"
                   (keyup)="reportNewStationMapChange()"
                   (blur)="stationName = deleteSpace(stationName)"
                   [disabled]="savingNameStation"
                 />
-                <mat-hint align="end"
-                  >{{ stationName.length || 0 }}/30</mat-hint
-                >
                 <button
                   matSuffix
                   id="save-station-name-button"
