@@ -39,14 +39,12 @@ import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widg
 import { DocumentWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { CustomTabWidgetModalComponent } from 'src/app/dashboard/widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { ItemListWidgetModalComponent } from 'src/app/dashboard/widget-modal/item-list-widget-modal/item-list-widget-modal.component';
-import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
 import { ListWidgetModalComponent } from 'src/app/dashboard/widget-modal/list-widget-modal/list-widget-modal.component';
 import { StationWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/station-widget-template-modal/station-widget-template-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 import { DescriptionWidgetModalComponent } from 'src/app/dashboard/widget-modal/description-widget-modal/description-widget-modal.component';
 import { GroupWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
-import { AvatarImageWidgetComponent } from 'src/app/dashboard/widgets/avatar-image-widget/avatar-image-widget.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
@@ -57,6 +55,7 @@ import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/manag
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
 import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/error-widget.module';
+import { BannerImageWidgetModule } from 'src/app/shared/widget-dashboard/banner-image-widget/banner-image-widget.module';
 
 @NgModule({
   declarations: [
@@ -73,14 +72,12 @@ import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/
     AddWidgetModalComponent,
     CustomTabWidgetModalComponent,
     ItemListWidgetModalComponent,
-    BannerImageWidgetComponent,
     ListWidgetModalComponent,
     StationWidgetTemplateModalComponent,
     DocumentWidgetTemplateModalComponent,
     DescriptionWidgetModalComponent,
     GroupWidgetTemplateModalComponent,
     GroupSearchWidgetComponent,
-    AvatarImageWidgetComponent,
     GroupTrafficWidgetComponent,
     StationPreBuiltWidgetComponent,
     PreBuiltWidgetTemplateModalComponent,
@@ -120,6 +117,7 @@ import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/
     MatChipsModule,
     LoadingWidgetModule,
     ErrorWidgetModule,
+    BannerImageWidgetModule,
   ],
   providers: [MobileBrowserChecker],
 })

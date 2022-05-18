@@ -53,6 +53,7 @@ import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 const formBuilder = new FormBuilder();
 
@@ -1155,6 +1156,20 @@ describe('FlowLogicComponent', () => {
     });
   });
 
+  it('should show Date interval repeat when repeat never not selected.', () => {
+    component.scheduleTriggerForm.controls['intervalRepeatType'].setValue('');
+    component.intervalRepeatTypeSelect();
+    expect(component.showRepeatForever).toBeTrue();
+  });
+
+  it('should hide Date interval repeat when selected repeat never.', () => {
+    component.scheduleTriggerForm.controls['intervalRepeatType'].setValue(
+      'Never'
+    );
+    component.intervalRepeatTypeSelect();
+    expect(component.showRepeatForever).toBeFalse();
+  });
+
   it('should call the method that returns all stations.', () => {
     const prevAndNextStations = spyOn(
       TestBed.inject(StationService),
@@ -1179,5 +1194,58 @@ describe('FlowLogicComponent', () => {
     ).and.callThrough();
     component.getPreviousAndNextStations();
     expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should call the method that will add triggers on the current power.', () => {
+    const eventToggle = { checked: true } as MatSlideToggleChange;
+    component.editedPower = {
+      rithmId: '3juk-3333l-9f9f9f-8888ff',
+      triggers: [],
+      actions: [],
+      stationRithmId: component.rithmId,
+      flowToStationRithmIds: [],
+      name: 'Untitled Rule',
+      condition: 'Condition Rule',
+    };
+    const spyRemoveOrAddTrigger = spyOn(
+      component,
+      'removeOrAddTriggerType'
+    ).and.callThrough();
+    component.removeOrAddTriggerType(TriggerType.ManualFlow, eventToggle);
+    expect(component.editedPower.triggers.length).toBeGreaterThanOrEqual(1);
+    expect(spyRemoveOrAddTrigger).toHaveBeenCalledOnceWith(
+      TriggerType.ManualFlow,
+      eventToggle
+    );
+  });
+
+  it('should call the method that will remove triggers on the current power.', () => {
+    const eventToggle = { checked: false } as MatSlideToggleChange;
+    component.editedPower = {
+      rithmId: '3juk-3333l-9f9f9f-8888ff',
+      triggers: [
+        {
+          rithmId: '3juk-3333l-9f9f9f-55GGG',
+          type: TriggerType.ManualFlow,
+          source: '',
+          value: '',
+        },
+      ],
+      actions: [],
+      stationRithmId: component.rithmId,
+      flowToStationRithmIds: [],
+      name: 'Untitled Rule',
+      condition: 'Condition Rule',
+    };
+    const spyRemoveOrAddTrigger = spyOn(
+      component,
+      'removeOrAddTriggerType'
+    ).and.callThrough();
+    component.removeOrAddTriggerType(TriggerType.ManualFlow, eventToggle);
+    expect(component.editedPower.triggers.length).toEqual(0);
+    expect(spyRemoveOrAddTrigger).toHaveBeenCalledOnceWith(
+      TriggerType.ManualFlow,
+      eventToggle
+    );
   });
 });

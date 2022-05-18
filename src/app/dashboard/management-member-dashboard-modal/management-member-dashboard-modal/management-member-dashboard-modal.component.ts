@@ -3,9 +3,13 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { MemberDashboard, RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  MemberAddDashboard,
+  MemberDashboard,
+  RoleDashboardMenu,
+} from 'src/models';
 
 /**Interface data modal. */
 interface ModalData {
@@ -44,7 +48,7 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   errorGetUsersMember = false;
 
   /** Users to add to dashboard. */
-  usersAdd!: MemberDashboard[];
+  membersAddDashboard!: MemberAddDashboard[];
 
   /** Selected filter. */
   selectedFilterValue: FilterOptionTypeMemberDashboard =
@@ -128,11 +132,11 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    */
   addDashboardMembers(): void {
     this.dashboardService
-      .addDashboardMembers(this.usersAdd)
+      .addDashboardMembers(this.dashboardRithmId, this.membersAddDashboard)
       .pipe(first())
       .subscribe({
-        next: (currentUsers) => {
-          this.membersDashboard = currentUsers;
+        next: () => {
+          this.getUsersDashboardPersonal();
         },
         error: (error: unknown) => {
           this.errorService.displayError(
