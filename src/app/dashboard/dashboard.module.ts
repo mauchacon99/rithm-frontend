@@ -56,7 +56,7 @@ import { MemberDashboardListModalComponent } from './management-member-dashboard
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
-import { ErrorWidgetModule } from '../shared/widget-dashboard/error-widget/error-widget.module';
+import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/error-widget.module';
 
 @NgModule({
   declarations: [
