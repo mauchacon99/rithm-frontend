@@ -1,13 +1,14 @@
 <div [formGroup]="dataLinkFieldForm" class="flex flex-col">
   <div class="flex flex-row justify-start text-xs space-x-2 mb-2">
     <span class="text-primary-500">DATA LINK</span>
-    <mat-divider [vertical]="true"></mat-divider>
+    <mat-divider *ngIf="!hideHelp" [vertical]="true"></mat-divider>
     <button
       type="button"
       class="underline cursor-pointer text-accent-500"
       (click)="openModalHelp()"
       id="data-help-modal"
       data-testid="data-help-modal"
+      *ngIf="!hideHelp"
     >
       Help
     </button>
@@ -42,6 +43,9 @@
         <p *ngIf="option.name">{{ option.name }}</p>
       </mat-option>
     </mat-autocomplete>
+    <mat-icon matSuffix *ngIf="stationLoading">
+      <app-loading-indicator [diameter]="24"></app-loading-indicator>
+    </mat-icon>
   </mat-form-field>
   <!-- Matching Value -->
   <mat-form-field class="md:w-2/5 w-full" appearance="outline">
