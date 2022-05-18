@@ -65,7 +65,7 @@
                     <p
                       class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                     >
-                      {{ equation.leftOperand.text | titlecase }}
+                      {{ equation.leftOperand.text }}
                       <span class="font-semibold px-2">
                         {{ translateOperator(equation.operatorType) }}</span
                       >
@@ -148,7 +148,7 @@
                     <p
                       class="flex flex-col items-start sm:flex-row sm:items-end py-2 pl-3 text-secondary-500"
                     >
-                      {{ subRule.equations[0].leftOperand.text | titlecase }}
+                      {{ subRule.equations[0].leftOperand.text }}
                       <span class="font-semibold px-2">
                         -
                         {{
@@ -156,7 +156,7 @@
                         }}
                         -</span
                       >
-                      {{ subRule.equations[0].rightOperand.text | titlecase }}
+                      {{ subRule.equations[0].rightOperand.text }}
                     </p>
                     <figure class="flex">
                       <button
@@ -248,7 +248,10 @@
 </ng-container>
 
 <ng-template #newView>
-  <div class="rules-tab-content">
+  <div
+    *ngIf="!powersLoading; else powersLoadingIndicator"
+    class="rules-tab-content"
+  >
     <aside
       class="rules-left-side p-4"
       [ngClass]="{ showRulesList: showRulesList }"
@@ -264,7 +267,7 @@
         <li
           class="py-2 cursor-pointer"
           [ngClass]="{ 'text-accent-500': ruleSelectedMenu === 'rules' }"
-          (click)="displayRuleContent('rules'); getAllStations()"
+          (click)="displayRuleContent('rules'); getPreviousAndNextStations()"
         >
           <i class="fa-regular fa-square-plus"></i> New Rule
         </li>
@@ -297,9 +300,18 @@
           >
             Station Triggers
           </p>
-          <button mat-icon-button>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
             <i class="fa-solid fa-ellipsis"></i>
           </button>
+          <mat-menu #menu="matMenu">
+            <button
+              data-testid="delete-power-station"
+              id="delete-power-station"
+              mat-menu-item
+            >
+              Delete Rule
+            </button>
+          </mat-menu>
         </div>
       </section>
       <section class="rules-right-side-triggers w-full">
@@ -368,7 +380,10 @@
         >
           <p class="tracking-tight text-sm">SCHEDULED TRIGGERS</p>
         </div>
-        <div class="flex justify-center items-center flex-col text-center mb-6">
+        <div
+          class="flex justify-center items-center flex-col text-center mb-6"
+          *ngIf="!scheduleTrigger"
+        >
           <i class="far fa-clock text-4xl text-accent-500 mt-6"></i>
           <p class="py-4 w-5/6 md:w-2/4 text-sm">
             Schedule triggers can be configured to check conditions and flow
@@ -378,14 +393,117 @@
             mat-stroked-button
             data-testid="button-addTrigger-schedule"
             color="accent"
+            (click)="scheduleTrigger = !scheduleTrigger"
           >
             Add Trigger
           </button>
         </div>
+
+        <form
+          class="shedule-content-section"
+          *ngIf="scheduleTrigger"
+          [formGroup]="scheduleTriggerForm"
+        >
+          <section class="trigger-type-section">
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Trigger Type</mat-label>
+              <mat-select
+                formControlName="scheduleTriggerType"
+                (selectionChange)="triggerTypeSelect()"
+              >
+                <mat-option
+                  *ngFor="let option of scheduleTriggerOptions | keyvalue"
+                  [value]="option.value"
+                >
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </section>
+
+          <section
+            class="trigger-interval-time-section"
+            *ngIf="showDateTimeZone"
+          >
+            <section class="trigger-datepicker-section">
+              <mat-form-field
+                class="w-full"
+                color="accent"
+                appearance="outline"
+              >
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </section>
+
+            <section class="trigger-time-section">
+              <mat-form-field appearance="outline">
+                <input matInput value="11" />
+              </mat-form-field>
+              <span>:</span>
+              <mat-form-field appearance="outline">
+                <input matInput value="00" />
+              </mat-form-field>
+              <mat-button-toggle-group
+                appearance="legacy"
+                name="actionButtons"
+                aria-label="Action buttons"
+                value="0"
+                [vertical]="true"
+                color="accent"
+              >
+                <mat-button-toggle
+                  value="0"
+                  data-testid="toggle-button-am"
+                  id="toggle-button-am"
+                  >AM
+                </mat-button-toggle>
+                <mat-button-toggle
+                  value="1"
+                  data-testid="toggle-button-pm"
+                  id="toggle-button-pm"
+                  >PM
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Time Zone</mat-label>
+                <mat-select>
+                  <mat-option></mat-option>
+                </mat-select>
+              </mat-form-field>
+            </section>
+          </section>
+
+          <section class="schedule-control-buttons flex space-x-2">
+            <button
+              mat-button
+              data-testid="button-schedule-cancel"
+              id="button-schedule-cancel"
+              (click)="scheduleTrigger = !scheduleTrigger"
+            >
+              Cancel
+            </button>
+            <button
+              mat-button
+              data-testid="button-schedule-Save"
+              id="button-schedule-Save"
+              color="accent"
+              [disabled]
+            >
+              Save
+            </button>
+          </section>
+        </form>
       </section>
+
       <section
-        *ngIf="ruleSelectedMenu === 'rules'"
         class="rules-right-side-conditions w-full"
+        *ngIf="ruleSelectedMenu === 'rules'"
       >
         <div
           class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
@@ -394,39 +512,19 @@
           <div class="select-condition">
             <mat-form-field appearance="outline">
               <mat-label> Condition Requirement </mat-label>
-              <mat-select [(ngModel)]="selectedConditionType">
+              <mat-select [(value)]="selectedConditionType">
                 <mat-option value="all"> All must be true </mat-option>
                 <mat-option value="any"> Any must be true </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
-        <div class="w-full py-6">
-          <ng-container *ngIf="!flowLogicRules.length">
-            <div class="flex justify-center">
-              <i class="fa-solid fa-clipboard-list text-accent-500 fa-3x"></i>
-            </div>
-            <div class="flex justify-center">
-              <p class="w-1/2 text-center text-sm py-4">
-                Conditions check the value saved on the container the trigger
-                actions
-              </p>
-            </div>
-          </ng-container>
-          <div
-            class="flex"
-            [ngClass]="[
-              flowLogicRules.length ? 'justify-start pl-8' : 'justify-center'
-            ]"
-          >
-            <button
-              mat-stroked-button
-              data-testid="add-condition"
-              color="accent"
-            >
-              Add Condition
-            </button>
-          </div>
+        <div class="conditions-container">
+          <app-conditions
+            [flowLogicRules]="flowLogicRules"
+            [currentStationQuestions]="currentStationQuestions"
+            [stationRithmId]="rithmId"
+          ></app-conditions>
         </div>
       </section>
       <section
@@ -436,10 +534,10 @@
         <div
           class="title h-14 flex justify-between items-center bg-secondary-50 pl-8 pr-6"
         >
-          <p class="tracking-tight text-sm">Actions</p>
+          <p class="tracking-tight text-sm">ACTIONS</p>
         </div>
         <div
-          class="action-buttons-container border-b border-secondary-50 pt-8 pb-10 overflow-x-auto"
+          class="action-buttons-container flex flex-wrap items-center pt-8 overflow-x-auto"
         >
           <mat-button-toggle-group
             name="actionButtons"
@@ -488,11 +586,9 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-        <div
-          class="tabs-flow-container justify-between items-center pl-8 pr-6 overflow-x-auto"
-        >
+        <div class="action-tabs-section w-full min-h-[350px]">
           <mat-tab-group
-            class="tabs-flow-rules"
+            class="action-tabs"
             [selectedIndex]="groupTabsFlow.value"
           >
             <!-- Tab Flow -->
@@ -533,7 +629,9 @@
 
             <!-- Tab Container -->
             <mat-tab label="tab-container" aria-label="tab-container">
-              <section></section>
+              <section class="pt-6 pb-10">
+                <app-container-actions></app-container-actions>
+              </section>
             </mat-tab>
 
             <!-- Tab User -->
@@ -568,4 +666,11 @@
       </section>
     </div>
   </div>
+  <ng-template #powersLoadingIndicator>
+    <div class="flex h-full justify-center items-center">
+      <app-loading-indicator
+        id="component-power-loading"
+      ></app-loading-indicator>
+    </div>
+  </ng-template>
 </ng-template>

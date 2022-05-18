@@ -153,6 +153,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the amount of containers of a station. */
   numberContainersLoading = false;
 
+  /** Loading while saving the station name is underway. */
+  savingNameStation = false;
+
   /**
    * Whether the station is selected and it's in center of the map.
    *
@@ -389,13 +392,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationLoading = false;
             this.lastUpdatedLoading = false;
           },
-          // eslint-disable-next-line
-          error: (error: any) => {
-            if (error?.status === 400) {
-              this.sidenavDrawerService.closeDrawer();
-            } else {
-              this.stationLoading = false;
-            }
+          error: (error: unknown) => {
+            this.sidenavDrawerService.closeDrawer();
+            this.stationLoading = false;
             this.allowAllOrgError = true;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
@@ -870,6 +869,32 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.savingButtonText = false;
+          this.errorService.displayError(
+            'Something went wrong on our end when updating the flow button text and we are looking into it. \
+                Please try again in a little while',
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Save Station Name.
+   */
+  saveNameStationButton(): void {
+    this.savingNameStation = true;
+    this.stationName = this.stationName.trim();
+    this.stationService
+      .updateStationName(this.stationName, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.updateStationInfoDrawerName();
+          this.stationInformation.name = this.stationName;
+          this.savingNameStation = false;
+        },
+        error: (error: unknown) => {
+          this.savingNameStation = false;
           this.errorService.displayError(
             'Something went wrong on our end when updating the flow button text and we are looking into it. \
                 Please try again in a little while',

@@ -10,6 +10,7 @@ import {
   MockDashboardService,
   MockErrorService,
   MockPopupService,
+  MockUserService,
 } from 'src/mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,10 +22,17 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
+import { UserService } from 'src/app/core/user.service';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
   let fixture: ComponentFixture<OptionsMenuComponent>;
+  let userService: UserService;
+  let dashboardService: DashboardService;
+  let errorService: ErrorService;
+  let sidenavDrawerService: SidenavDrawerService;
+  let popupService: PopupService;
 
   /** Expected data to return when generate new dashboard. */
   const expectNewDashboard: DashboardData = {
@@ -46,6 +54,8 @@ describe('OptionsMenuComponent', () => {
         maxItemRows: 12,
       },
     ],
+    isEditable: false,
+    canView: false,
   };
 
   beforeEach(async () => {
@@ -60,6 +70,18 @@ describe('OptionsMenuComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            // eslint-disable-next-line rxjs/finnish
+            paramMap: of(
+              convertToParamMap({
+                dashboardId: '747cf568-27a4-4968-5628-046ccfee24fd',
+              })
+            ),
+          },
+        },
       ],
       imports: [
         MatMenuModule,
@@ -79,6 +101,11 @@ describe('OptionsMenuComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OptionsMenuComponent);
     component = fixture.componentInstance;
+    userService = TestBed.inject(UserService);
+    dashboardService = TestBed.inject(DashboardService);
+    errorService = TestBed.inject(ErrorService);
+    sidenavDrawerService = TestBed.inject(SidenavDrawerService);
+    popupService = TestBed.inject(PopupService);
     fixture.detectChanges();
   });
 
@@ -88,16 +115,13 @@ describe('OptionsMenuComponent', () => {
 
   it('should call service from generateNewOrganizationDashboard', async () => {
     component.dashboardRole = RoleDashboardMenu.Company;
-    const spyToggleMenu = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const spyToggleMenu = spyOn(sidenavDrawerService, 'toggleDrawer');
     const spyLoadingDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'toggleLoadingDashboard'
     );
     const spyService = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'generateNewOrganizationDashboard'
     ).and.returnValue(of(expectNewDashboard));
 
@@ -112,27 +136,18 @@ describe('OptionsMenuComponent', () => {
 
   it('should show an error message when calling generateNewOrganizationDashboard', () => {
     component.dashboardRole = RoleDashboardMenu.Company;
-    const spyToggleMenu = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const spyToggleMenu = spyOn(sidenavDrawerService, 'toggleDrawer');
     const spyLoadingDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'toggleLoadingDashboard'
     );
-    spyOn(
-      TestBed.inject(DashboardService),
-      'generateNewOrganizationDashboard'
-    ).and.returnValue(
+    spyOn(dashboardService, 'generateNewOrganizationDashboard').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
 
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
 
     component.generateNewDashboard();
     expect(spyLoadingDashboard).toHaveBeenCalled();
@@ -142,16 +157,13 @@ describe('OptionsMenuComponent', () => {
 
   it('should call service from generateNewPersonalDashboard', async () => {
     component.dashboardRole = RoleDashboardMenu.Personal;
-    const spyToggleMenu = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const spyToggleMenu = spyOn(sidenavDrawerService, 'toggleDrawer');
     const spyLoadingDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'toggleLoadingDashboard'
     );
     const spyService = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'generateNewPersonalDashboard'
     ).and.returnValue(of(expectNewDashboard));
 
@@ -166,27 +178,18 @@ describe('OptionsMenuComponent', () => {
 
   it('should show an error message when calling generateNewPersonalDashboard', () => {
     component.dashboardRole = RoleDashboardMenu.Personal;
-    const spyToggleMenu = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
-    spyOn(
-      TestBed.inject(DashboardService),
-      'generateNewPersonalDashboard'
-    ).and.returnValue(
+    const spyToggleMenu = spyOn(sidenavDrawerService, 'toggleDrawer');
+    spyOn(dashboardService, 'generateNewPersonalDashboard').and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
     const spyLoadingDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'toggleLoadingDashboard'
     );
 
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
 
     component.generateNewDashboard();
     expect(spyLoadingDashboard).toHaveBeenCalled();
@@ -199,7 +202,7 @@ describe('OptionsMenuComponent', () => {
     fixture.detectChanges();
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const deleteCompanyDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'deleteOrganizationDashboard'
     ).and.returnValue(
       throwError(() => {
@@ -207,15 +210,9 @@ describe('OptionsMenuComponent', () => {
       })
     );
 
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
 
-    const toggleDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const toggleDrawer = spyOn(sidenavDrawerService, 'toggleDrawer');
 
     component.deleteDashboard(rithmId);
 
@@ -229,7 +226,7 @@ describe('OptionsMenuComponent', () => {
     fixture.detectChanges();
     const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const deleteIndividualDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'deletePersonalDashboard'
     ).and.returnValue(
       throwError(() => {
@@ -237,15 +234,9 @@ describe('OptionsMenuComponent', () => {
       })
     );
 
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
+    const spyError = spyOn(errorService, 'displayError').and.callThrough();
 
-    const toggleDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const toggleDrawer = spyOn(sidenavDrawerService, 'toggleDrawer');
 
     component.deleteDashboard(rithmId);
 
@@ -263,10 +254,7 @@ describe('OptionsMenuComponent', () => {
       important: true,
     };
 
-    const popUpConfirmSpy = spyOn(
-      TestBed.inject(PopupService),
-      'confirm'
-    ).and.callThrough();
+    const popUpConfirmSpy = spyOn(popupService, 'confirm').and.callThrough();
 
     await component.confirmDashboardDelete();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(confirmationData);
@@ -283,24 +271,18 @@ describe('OptionsMenuComponent', () => {
     ).and.callThrough();
 
     const deleteCompanyDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'deleteOrganizationDashboard'
     ).and.returnValue(of('rithmId'));
 
     const deletePersonalDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'deletePersonalDashboard'
     ).and.returnValue(of('rithmId'));
 
-    const popUpNotifySpy = spyOn(
-      TestBed.inject(PopupService),
-      'notify'
-    ).and.callThrough();
+    const popUpNotifySpy = spyOn(popupService, 'notify').and.callThrough();
 
-    const toggleDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const toggleDrawer = spyOn(sidenavDrawerService, 'toggleDrawer');
 
     component.deleteDashboard(rithmId);
     expect(deleteDashboard).toHaveBeenCalledOnceWith(rithmId);
@@ -321,24 +303,18 @@ describe('OptionsMenuComponent', () => {
     ).and.callThrough();
 
     const deleteCompanyDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'deleteOrganizationDashboard'
     ).and.returnValue(of('rithmId'));
 
     const deletePersonalDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'deletePersonalDashboard'
     ).and.returnValue(of('rithmId'));
 
-    const popUpNotifySpy = spyOn(
-      TestBed.inject(PopupService),
-      'notify'
-    ).and.callThrough();
+    const popUpNotifySpy = spyOn(popupService, 'notify').and.callThrough();
 
-    const toggleDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const toggleDrawer = spyOn(sidenavDrawerService, 'toggleDrawer');
 
     component.deleteDashboard(rithmId);
 
@@ -352,18 +328,15 @@ describe('OptionsMenuComponent', () => {
   it('should call dashboardService.toggleLoadingDashboard for update dashboard when is deleted', () => {
     component.dashboardRole = RoleDashboardMenu.Company;
     component.index = 0;
-    const rithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const rithmId = '747cf568-27a4-4968-5628-046ccfee24fd';
     fixture.detectChanges();
 
     const deletePersonalDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'toggleLoadingDashboard'
     ).and.callThrough();
 
-    const toggleDrawer = spyOn(
-      TestBed.inject(SidenavDrawerService),
-      'toggleDrawer'
-    );
+    const toggleDrawer = spyOn(sidenavDrawerService, 'toggleDrawer');
 
     component.deleteDashboard(rithmId);
     expect(deletePersonalDashboard).toHaveBeenCalled();
@@ -398,11 +371,108 @@ describe('OptionsMenuComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
+        disableClose: true,
         data: {
           dashboardRithmId: rithmId,
           dashboardType: RoleDashboardMenu.Company,
         },
       }
     );
+  });
+
+  it('should set default dashboard', () => {
+    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
+    component.dashboardRole = RoleDashboardMenu.Company;
+    component.rithmId = defaultDashboard;
+    const updateUserAccountSpy = spyOn(
+      userService,
+      'updateUserAccount'
+    ).and.callThrough();
+    component.setDefaultDashboard();
+    expect(updateUserAccountSpy).toHaveBeenCalledOnceWith({
+      defaultDashboardType: RoleDashboardMenu.Company,
+      defaultDashboardId: defaultDashboard,
+    });
+  });
+
+  it('should call errorService if petition updateUserAccount fail', () => {
+    const defaultDashboard = '747cf568-27a4-4968-5628-046ccfee24fd';
+    component.dashboardRole = RoleDashboardMenu.Company;
+    component.rithmId = defaultDashboard;
+    const updateUserAccountSpy = spyOn(
+      userService,
+      'updateUserAccount'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const logErrorSpy = spyOn(errorService, 'logError').and.callThrough();
+
+    component.setDefaultDashboard();
+    expect(updateUserAccountSpy).toHaveBeenCalledOnceWith({
+      defaultDashboardType: RoleDashboardMenu.Company,
+      defaultDashboardId: defaultDashboard,
+    });
+    expect(logErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should get params of path', () => {
+    component.ngOnInit();
+    expect(component.paramRithmId).toEqual(
+      '747cf568-27a4-4968-5628-046ccfee24fd'
+    );
+  });
+
+  it('should delete dashboard when is default dashboard', () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
+    const spyMethod = spyOn(component, 'setDefaultDashboard').and.callThrough();
+    spyOn(dashboardService, 'deleteOrganizationDashboard').and.returnValue(
+      of('rithmId')
+    );
+    spyOn(sidenavDrawerService, 'toggleDrawer');
+
+    component['deleteDashboard'](userService.user.defaultDashboardId);
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(true);
+  });
+
+  it('should set default dashboard when clear default', () => {
+    const spyService = spyOn(userService, 'updateUserAccount').and.returnValue(
+      of(userService.user)
+    );
+    const spyLoadingDashboard = spyOn(
+      dashboardService,
+      'toggleLoadingDashboard'
+    );
+
+    component.setDefaultDashboard(true);
+
+    expect(spyService).toHaveBeenCalledOnceWith({
+      defaultDashboardType: '',
+      defaultDashboardId: '',
+    });
+    expect(spyLoadingDashboard).toHaveBeenCalledOnceWith(false, true);
+  });
+
+  it('should set default dashboard when clear default and return error', () => {
+    const spyService = spyOn(userService, 'updateUserAccount').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyLoadingDashboard = spyOn(
+      dashboardService,
+      'toggleLoadingDashboard'
+    );
+
+    component.setDefaultDashboard(true);
+
+    expect(spyService).toHaveBeenCalledOnceWith({
+      defaultDashboardType: '',
+      defaultDashboardId: '',
+    });
+    expect(spyLoadingDashboard).toHaveBeenCalledOnceWith(false, true);
   });
 });

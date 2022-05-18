@@ -59,6 +59,9 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
   /** Widget index of opened widget-drawer. */
   widgetIndex!: number;
 
+  /** Show only button delete widget. */
+  showOnlyButtonDelete: boolean | undefined = false;
+
   /** Whether the called widget-drawer. */
   drawerMode: 'widgetDashboard' = 'widgetDashboard';
 
@@ -92,6 +95,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
           this.dataDrawer = dataDrawer;
           this.widgetIndex = dataDrawer.widgetIndex;
           this.widgetType = dataDrawer.widgetItem.widgetType;
+          this.showOnlyButtonDelete = dataDrawer.deleteWidget;
           this.imageUploaded = {
             imageId: dataDrawer.widgetItem.imageId || null,
             imageName: dataDrawer.widgetItem.imageName || null,
@@ -218,7 +222,7 @@ export class WidgetDrawerComponent implements OnInit, OnDestroy {
       } else {
         this.popupService.alert({
           title: 'Image format is not valid.',
-          message: 'Please select a file with extension jpeg, jpg, png, gif.',
+          message: 'Please select a file with extension jpeg, jpg, png.',
           important: true,
         });
       }

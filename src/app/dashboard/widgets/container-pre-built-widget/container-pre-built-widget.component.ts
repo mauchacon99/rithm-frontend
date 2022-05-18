@@ -10,12 +10,12 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { first, Subject, takeUntil } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { ErrorService } from 'src/app/core/error.service';
-import { ContainerWidgetPreBuilt } from 'src/models';
+import { ContainerWidgetPreBuilt, ReloadStationFlow } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatSort } from '@angular/material/sort';
 import { DocumentComponent } from 'src/app/document/document/document.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Container preview build. */
 @Component({
@@ -56,14 +56,51 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
-  /** If expand or not the widget. */
-  @Output() expandWidget = new EventEmitter<boolean>();
-
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
 
+  /** Set data for station widget. */
+  @Input() set stationFlow(value: ReloadStationFlow) {
+    // Is it was call flow or save.
+    if (value) {
+      // If document flowed or saved exist on this container.
+      if (
+        this.containers.some(
+          ({ documentRithmId }) => documentRithmId === value.documentFlow
+        ) ||
+        value.stationFlow.includes('rithmIdTempOnlySaveUser')
+      ) {
+        // If document flowed or saved it's open, and it's the same
+        if (
+          this.isDocument &&
+          this.documentSelected?.documentRithmId === value.documentFlow
+        ) {
+          this.viewDocument(null, true);
+        } // If document flowed or saved it's open, and it's not the same.
+        else if (this.isDocument) {
+          this.reloadDocumentList = true;
+        } // Reload documents.
+        else {
+          this.getContainerWidgetPreBuilt();
+        }
+      }
+    }
+  }
+
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
+  /** If expand or not the widget. */
+  @Output() expandWidget = new EventEmitter<boolean>();
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
+
+  /** Reload stations or document Flowed or saved. */
+  @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -86,7 +123,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Interface for list data in widget. */
   dataSourceTable!: MatTableDataSource<ContainerWidgetPreBuilt>;
 
-  /** Columns staticts to show on table. */
+  /** Columns statics to show on table. */
   displayedColumns = [
     'documentName',
     'timeInStation',
@@ -113,12 +150,17 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** View detail document. */
   isDocument = false;
 
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
+
   /** Document id selected for view. */
   documentSelected: ContainerWidgetPreBuilt | null = null;
 
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private sidenavDrawerService: SidenavDrawerService
   ) {}
@@ -145,6 +187,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   getContainerWidgetPreBuilt(): void {
     this.isLoading = true;
     this.failedGetContainers = false;
+    this.permissionError = true;
     this.documentService
       .getContainerWidgetPreBuilt()
       .pipe(first())
@@ -156,9 +199,17 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
           this.dataSourceTable = new MatTableDataSource(containers);
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
+          }
           this.isLoading = false;
           this.failedGetContainers = true;
-          this.errorService.logError(error);
         },
       });
   }
@@ -213,11 +264,20 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
    *
    * @param isReturnListDocuments To return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow Station rithm id when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[]
   ): void {
+    if (stationFlow.length) {
+      this.reloadStationsFlow.emit({
+        stationFlow,
+        currentStation: this.documentSelected?.stationRithmId || '',
+        documentFlow: this.documentSelected?.documentRithmId || '',
+      });
+    }
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
     } else {
@@ -234,6 +294,12 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   /** Toggle drawer when click on edit group search widget. */
   toggleEditStation(): void {
     this.toggleDrawer.emit(+this.containers.length);
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

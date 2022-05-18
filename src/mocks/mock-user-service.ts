@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, ReplaySubject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
 import {
@@ -20,20 +20,30 @@ export class MockUserService {
   /** The access token to be used to authenticate for every request. */
   accessToken = new AccessToken('tokentokentokentokentoken');
 
-  /** The currently signed in user. */
-  user: User = {
-    rithmId: '123',
-    firstName: 'Testy',
-    lastName: 'Test',
-    email: 'test@test.com',
-    isEmailVerified: true,
-    notificationSettings: null,
-    createdDate: '1/2/34',
-    role: null,
-    organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-    defaultDashboardType: RoleDashboardMenu.Personal,
-    defaultDashboardId: '747cf568-27a4-4968-5628-046ccfee24fd',
-  };
+  /** Data of signed-in user. */
+  userData$: ReplaySubject<User> = new ReplaySubject(1);
+
+  /**
+   * The currently signed in user.
+   *
+   * @returns The current user.
+   */
+  get user(): User {
+    return {
+      rithmId: '123',
+      firstName: 'Testy',
+      lastName: 'Test',
+      email: 'test@test.com',
+      isEmailVerified: true,
+      notificationSettings: null,
+      createdDate: '1/2/34',
+      role: null,
+      organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+      profileImageRithmId: '123-456-789',
+      defaultDashboardType: RoleDashboardMenu.Personal,
+      defaultDashboardId: '747cf568-27a4-4968-5628-046ccfee24fd',
+    };
+  }
 
   /**
    * Signs the user in to the system.

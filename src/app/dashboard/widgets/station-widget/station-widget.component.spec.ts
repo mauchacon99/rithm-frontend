@@ -35,6 +35,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { UserService } from 'src/app/core/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -179,17 +180,6 @@ describe('StationWidgetComponent', () => {
       component.stationRithmId,
       component.columnsFieldPetition
     );
-  });
-
-  it('should show error message when request station widget document  data', () => {
-    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
-    component.ngOnInit();
-    expect(spyService).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
@@ -506,6 +496,50 @@ describe('StationWidgetComponent', () => {
     expect(noDocsMessage).toBeFalsy();
   });
 
+  it('should not display a message when there are documents and no selected columns', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.dataSourceTable = new MatTableDataSource([
+      {
+        rithmId: component.dataStationWidget.documents[0].rithmId,
+        name: component.dataStationWidget.documents[0].name,
+      },
+    ] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeFalsy();
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeNull();
+  });
+
+  it('should display a message when there  are not documents and no selected columns', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.dataSourceTable = new MatTableDataSource([] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    fixture.detectChanges();
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeTruthy();
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeNull();
+  });
+
   it('should show a gear icon in edit mode', () => {
     component.showButtonSetting = true;
     component.isLoading = false;
@@ -577,13 +611,13 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should be reloadDocumentList true when call widgetReloadListDocuments', () => {
-    component.widgetReloadListDocuments(false, true);
+    component.widgetReloadListDocuments(false, true, []);
     expect(component.reloadDocumentList).toBeTrue();
   });
 
   it('should return list of documents and reload list', () => {
     const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
-    component.widgetReloadListDocuments(true, false);
+    component.widgetReloadListDocuments(true, false, []);
     expect(component.reloadDocumentList).toBeFalse();
     expect(spyMethod).toHaveBeenCalledOnceWith('', true);
   });
@@ -859,7 +893,9 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('value 1');
+        ).toEqual(
+          '<i class="fas fa-check-square text-accent-500"></i> value 1'
+        );
       });
 
       it("should return '---' when questionType is check or select and dont have checked value", () => {
@@ -893,7 +929,7 @@ describe('StationWidgetComponent', () => {
 
         expect(
           component['getValueQuestion'](question.rithmId, documents[0])
-        ).toEqual('---');
+        ).toEqual('<i class="fas fa-square text-secondary-500"></i> value 1');
       });
     });
 
@@ -904,5 +940,130 @@ describe('StationWidgetComponent', () => {
         question
       );
     });
+  });
+
+  it('should emit reloadStationsFlow', () => {
+    component.documentIdSelected = '333-333-333';
+    const stationFlow = ['123-456-789'];
+    component.stationRithmId = '4fb462ec-0772-49dc-8cfb-3849d70ad168';
+    const spyEmit = spyOn(
+      component.reloadStationsFlow,
+      'emit'
+    ).and.callThrough();
+
+    component.widgetReloadListDocuments(true, true, stationFlow);
+
+    expect(spyEmit).toHaveBeenCalledOnceWith({
+      stationFlow,
+      currentStation: component.stationRithmId,
+      documentFlow: component.documentIdSelected,
+    });
+  });
+
+  it('should call getStationWidgetDocuments when stationFlow change', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.isDocument = false;
+    component.stationRithmId = '123-456-789';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should set reloadDocumentList to true when stationFlow change', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.documentIdSelected = '234-234234-6666';
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call viewDocument when stationFlow change', () => {
+    component.documentIdSelected = '333-333-333';
+    component.isDocument = true;
+    component.stationRithmId = '222-222-222';
+    const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+    component.stationFlow = {
+      stationFlow: ['123-456-789'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalledWith('', true);
+  });
+
+  it('should set reloadDocumentList to true when a document was saved', () => {
+    component.reloadDocumentList = false;
+    component.isDocument = true;
+    component.documentIdSelected = '333-333-333';
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['rithmIdTempOnlySave'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(component.reloadDocumentList).toBeTrue();
+  });
+
+  it('should call getStationWidgetDocuments when stationFlow change and assign new user', () => {
+    const spyMethod = spyOn(
+      component,
+      'getStationWidgetDocuments'
+    ).and.callThrough();
+    component.columnsAllField = [
+      {
+        name: ColumnsDocumentInfo.AssignedUser,
+      },
+    ];
+    component.isDocument = false;
+    component.stationRithmId = '222-222-222';
+    component.stationFlow = {
+      stationFlow: ['rithmIdTempOnlySaveUser'],
+      currentStation: '222-222-222',
+      documentFlow: '333-333-333',
+    };
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
+      })
+    );
+
+    component.getStationWidgetDocuments();
+    expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(documentService, 'getStationWidgetDocuments').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getStationWidgetDocuments();
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

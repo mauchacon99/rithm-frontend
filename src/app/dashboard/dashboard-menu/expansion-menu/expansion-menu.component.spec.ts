@@ -7,7 +7,11 @@ import { ExpansionMenuComponent } from './expansion-menu.component';
 import { MockComponent } from 'ng-mocks';
 import { OptionsMenuComponent } from '../options-menu/options-menu.component';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDashboardService, MockErrorService } from 'src/mocks';
+import {
+  MockDashboardService,
+  MockErrorService,
+  MockUserService,
+} from 'src/mocks';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { of, throwError } from 'rxjs';
@@ -15,6 +19,7 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { RouterTestingModule } from '@angular/router/testing';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { UserService } from 'src/app/core/user.service';
 
 describe('ExpansionMenuComponent', () => {
   let component: ExpansionMenuComponent;
@@ -39,6 +44,8 @@ describe('ExpansionMenuComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     },
     {
       rithmId: '123654-789654-7852',
@@ -59,6 +66,8 @@ describe('ExpansionMenuComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     },
   ];
 
@@ -73,6 +82,7 @@ describe('ExpansionMenuComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: UserService, useClass: MockUserService },
       ],
       imports: [
         MatExpansionModule,
@@ -318,5 +328,30 @@ describe('ExpansionMenuComponent', () => {
     button.click();
     expect(spyHiddenDrawer).toHaveBeenCalledOnceWith();
     expect(spyDrawer).toHaveBeenCalledOnceWith('menuDashboard');
+  });
+
+  it('Should hidden options in company if not is admin', () => {
+    component.isAdmin = false;
+    fixture.detectChanges();
+    const options =
+      fixture.debugElement.nativeElement.querySelector('#options');
+    expect(options).toBeNull();
+  });
+
+  it('Should show options in company just if admin', () => {
+    component.isAdmin = true;
+    fixture.detectChanges();
+    const options =
+      fixture.debugElement.nativeElement.querySelector('#options');
+    expect(options).toBeTruthy();
+  });
+
+  it('Should show options in personal', () => {
+    component.dashboardRole = RoleDashboardMenu.Personal;
+    component.isAdmin = false;
+    fixture.detectChanges();
+    const options =
+      fixture.debugElement.nativeElement.querySelector('#options');
+    expect(options).toBeTruthy();
   });
 });

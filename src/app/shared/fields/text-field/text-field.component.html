@@ -1,4 +1,4 @@
-<div [formGroup]="textFieldForm">
+<div class="app-text-field" [formGroup]="textFieldForm">
   <mat-form-field
     class="w-full"
     appearance="outline"
@@ -97,7 +97,7 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <div *ngIf="isStation; else noStation">
+    <ng-container *ngIf="isStation; else noStation">
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput"
         matInput
@@ -147,7 +147,7 @@
         "
       >
       </textarea>
-    </div>
+    </ng-container>
     <ng-template #noStation>
       <input
         *ngIf="field.questionType !== fieldTypeEnum.LongText"

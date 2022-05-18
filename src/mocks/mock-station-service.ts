@@ -22,9 +22,11 @@ import {
   DocumentEvent,
   GroupTrafficData,
   StationWidgetPreBuilt,
-  DocumentCurrentStation,
   RoleDashboardMenu,
+  Power,
+  TriggerType,
 } from 'src/models';
+import { StationOptimized } from 'src/models/station-optimized';
 
 /**
  * Mocks methods of the `StationService`.
@@ -1622,6 +1624,7 @@ export class MockStationService {
             createdDate: '1/2/34',
             role: null,
             organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+            profileImageRithmId: '123-456-789',
             defaultDashboardType: RoleDashboardMenu.Personal,
             defaultDashboardId: '547cf568-27a4-4968-5628-046ccfee24fd',
           },
@@ -1842,5 +1845,81 @@ export class MockStationService {
       },
     ];
     return of(mockUserGroupAdmin).pipe(delay(1000));
+  }
+
+  /**
+   * Get the users roster to the station.
+   *
+   * @param stationRithmId The id of the current station.
+   * @returns StationRosterMember array.
+   */
+  getStationAllRoster(
+    stationRithmId: string
+  ): Observable<StationRosterMember[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot retrieve the users roster of the station',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const userRoster: StationRosterMember[] = [
+        {
+          rithmId: 'e769aee2-76a4-40fb-a2ee-52112c4a0422',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+        {
+          rithmId: '755036EA-A624-495F-AE5E-3F3ADBF2BC56',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ];
+      return of(userRoster).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Gets all the stations of way optimized.
+   *
+   * @returns An list with all stations.
+   */
+  getAllStationsOptimized(): Observable<StationOptimized[]> {
+    const stationOptimized: StationOptimized[] = [
+      {
+        rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
+        name: 'Test Name',
+        instructions: 'Instructions Test #1',
+        dueDate: '1 day',
+        createdByRithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        createdDateUTC: '2021-12-13T22:27:48.39',
+        updatedByRithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        updatedDateUTC: '2022-05-09T16:13:28.3564695',
+        organizationRithmId: '7D9854CF-1070-4F4C-81C1-7ACD433A2EE1',
+        archived: false,
+        priority: 0,
+        locationX: -377,
+        locationY: 33,
+        documentGeneratorStatus: 1,
+        workerCanRenameDocuments: true,
+        notes: null,
+        isChained: false,
+        allowExternalWorkers: true,
+        allowAllOrgWorkers: true,
+        altStationButtons: false,
+        allowPreviousButton: true,
+        flowButton: 'Flow Test #1',
+      },
+    ];
+    return of(stationOptimized).pipe(delay(1000));
   }
 }

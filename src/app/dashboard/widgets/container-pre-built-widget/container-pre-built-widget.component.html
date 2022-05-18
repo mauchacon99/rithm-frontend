@@ -8,7 +8,15 @@
 <app-error-widget
   *ngIf="failedGetContainers"
   id="error-load-widget-container-pre-built"
-  [errorMessage]="'Unable to retrieve containers data'"
+  [errorMessage]="
+    widgetDeleted
+      ? 'Oops, it looks like this widget has been removed.'
+      : 'Unable to retrieve containers data'
+  "
+  [permission]="permissionError"
+  [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
+  (deleteWidget)="removeWidget()"
   (tryAgain)="getContainerWidgetPreBuilt()"
 >
 </app-error-widget>
@@ -283,7 +291,8 @@
       (returnDocumentsWidget)="
         widgetReloadListDocuments(
           $event.isReturnListDocuments,
-          $event.isReloadListDocuments
+          $event.isReloadListDocuments,
+          $event.stationFlow
         )
       "
       [documentRithmIdWidget]="documentSelected?.documentRithmId || ''"

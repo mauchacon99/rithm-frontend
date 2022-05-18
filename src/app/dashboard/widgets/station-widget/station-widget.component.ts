@@ -21,6 +21,7 @@ import {
   StationRosterMember,
   Question,
   WidgetDocument,
+  ReloadStationFlow,
 } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
@@ -31,6 +32,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -57,7 +59,7 @@ interface ColumnsSpecificOfWidget {
  */
 @Component({
   selector:
-    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting]',
+    'app-station-widget[dataWidget][editMode][widgetType][showButtonSetting][canAssignUserWidget][showDetailWidgetPopover]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
   providers: [UtcTimeConversion],
@@ -79,6 +81,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   @Input() showButtonSetting = false;
+
+  /** Show detail dashboard popover. */
+  @Input() showDetailWidgetPopover = false;
+
+  /** If can assign user. */
+  @Input() canAssignUserWidget = false;
 
   /** Image to banner. */
   @Input() image!: DocumentImage;
@@ -124,11 +132,58 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     return this._editMode;
   }
 
+  /** Set data for station widget. */
+  @Input() set stationFlow(value: ReloadStationFlow) {
+    if (this.stationRithmId && value) {
+      // if it's the same current station was flow or destiny station flowed.
+      if (
+        value.stationFlow.includes(this.stationRithmId) ||
+        value.currentStation === this.stationRithmId
+      ) {
+        // If the document selected was flow.
+        if (
+          this.documentIdSelected === value.documentFlow &&
+          this.isDocument &&
+          !value.stationFlow.includes('rithmIdTempOnlySave') &&
+          !value.stationFlow.includes('rithmIdTempOnlySaveUser')
+        ) {
+          this.viewDocument('', true);
+        }
+        // If there is any document opened and the document was not flow, or the document saved.
+        else if (this.isDocument) {
+          this.reloadDocumentList = true;
+        }
+        // If there are no documents opened.
+        else if (!value.stationFlow.includes('rithmIdTempOnlySaveUser')) {
+          this.getStationWidgetDocuments();
+        }
+        // If the document has assigned new user.
+        else if (
+          value.stationFlow.includes('rithmIdTempOnlySaveUser') &&
+          this.columnsAllField.some(
+            (column) => column.name === this.columnsDocumentInfo.AssignedUser
+          )
+        ) {
+          this.getStationWidgetDocuments();
+        }
+      }
+    }
+  }
+
+  /** Dashboard permission for current user. */
+  @Input() dashboardPermission = false;
+
   /** Open drawer. */
   @Output() toggleDrawer = new EventEmitter<number>();
 
   /** If expand or not the widget. */
   @Output() expandWidget = new EventEmitter<boolean>();
+
+  /** Reload stations or document Flowed or saved. */
+  @Output() reloadStationsFlow = new EventEmitter<ReloadStationFlow>();
+
+  /** Remove widget from drawer if this widget has been deleted. */
+  @Output() deleteWidget = new EventEmitter();
 
   /**
    * Whether the drawer is open.
@@ -180,6 +235,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
 
   /** View detail document. */
   isDocument = false;
+
+  /** Display error if user have permissions to see widget. */
+  permissionError = true;
+
+  /** Show error if this widget has been removed. */
+  widgetDeleted = false;
 
   /** Type of drawer opened. */
   drawerContext!: string;
@@ -250,6 +311,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   getStationWidgetDocuments(): void {
     this.failedLoadWidget = false;
     this.isLoading = true;
+    this.permissionError = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId, this.columnsFieldPetition)
       .pipe(first())
@@ -261,9 +323,17 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
           this.generateDataTable();
         },
         error: (error: unknown) => {
+          const { status } = error as HttpErrorResponse;
+          switch (status) {
+            case 400:
+              this.widgetDeleted = true;
+              break;
+            case 403:
+              this.permissionError = false;
+              break;
+          }
           this.failedLoadWidget = true;
           this.isLoading = false;
-          this.errorService.logError(error);
         },
       });
   }
@@ -315,11 +385,20 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
    *
    * @param isReturnListDocuments To return to list of documents, true to reload list.
    * @param isReloadListDocuments Reload list of documents when click to see list.
+   * @param stationFlow Station rithm id when flow document.
    */
   widgetReloadListDocuments(
     isReturnListDocuments: boolean,
-    isReloadListDocuments: boolean
+    isReloadListDocuments: boolean,
+    stationFlow: string[]
   ): void {
+    if (stationFlow.length) {
+      this.reloadStationsFlow.emit({
+        stationFlow,
+        currentStation: this.stationRithmId,
+        documentFlow: this.documentIdSelected,
+      });
+    }
     if (isReloadListDocuments) {
       this.reloadDocumentList = isReloadListDocuments;
     } else {
@@ -477,11 +556,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
       (questionDocument) => questionDocument.rithmId === questionRithmId
     );
     if (question) {
-      if (
-        question.questionType === this.questionFieldType.CheckList ||
-        question.questionType === this.questionFieldType.MultiSelect ||
-        question.questionType === this.questionFieldType.Select
-      ) {
+      if (question.questionType === this.questionFieldType.Select) {
         if (question?.answer?.asArray?.length) {
           if (!question?.answer?.asArray?.some((check) => check.isChecked)) {
             return '---';
@@ -496,11 +571,33 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         }
         return null;
       }
+
+      if (
+        question.questionType === this.questionFieldType.CheckList ||
+        question.questionType === this.questionFieldType.MultiSelect
+      ) {
+        if (question?.answer?.asArray?.length) {
+          const values: string[] = [];
+          question?.answer?.asArray?.map((answer) => {
+            values.push(
+              `<i class="fas ${
+                answer.isChecked
+                  ? 'fa-check-square text-accent-500'
+                  : 'fa-square text-secondary-500'
+              }"></i> ${answer.value}`
+            );
+          });
+          return values.join('<br>') || null;
+        }
+        return null;
+      }
+
       if (question.questionType === this.questionFieldType.Instructions) {
         return question.prompt || null;
       }
       return question?.answer?.value || null;
     }
+
     return null;
   }
 
@@ -536,6 +633,12 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
         stationId: this.stationRithmId,
       },
     });
+  }
+
+  /** Emit event for delete widget. */
+  removeWidget(): void {
+    this.deleteWidget.emit();
+    this.toggleDrawer.emit(0);
   }
 
   /** Clean subscriptions. */

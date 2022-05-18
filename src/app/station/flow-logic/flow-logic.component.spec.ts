@@ -14,6 +14,9 @@ import {
   Rule,
   RuleType,
   FlowLogicRule,
+  TriggerType,
+  Power,
+  ActionType,
 } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -48,6 +51,8 @@ import { UserService } from 'src/app/core/user.service';
 
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ContainerActionsComponent } from './actions/container-actions/container-actions.component';
 
 const formBuilder = new FormBuilder();
 
@@ -111,6 +116,36 @@ describe('FlowLogicComponent', () => {
       },
     },
   ];
+  const powerRemove: Power[] = [
+    {
+      rithmId: '3j4k-3h2j-hj4j',
+      triggers: [
+        {
+          rithmId: '3j4k-3h2j-hj5h',
+          type: TriggerType.ManualFlow,
+          source: 'Source Trigger #1',
+          value: 'Value Trigger #1',
+        },
+      ],
+      actions: [
+        {
+          rithmId: '3j4k-3h2j-ft5h',
+          type: ActionType.CreateDocument,
+          target: 'Target Action #1',
+          data: 'Data Action #1',
+          resultMapping: 'Result Action #1',
+          header: 'Header Action #1',
+        },
+      ],
+      stationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowToStationRithmIds: [
+        '73d47261-1932-4fcf-82bd-159eb1a72422',
+        '73d47261-1932-4fcf-82bd-159eb1a7242g',
+      ],
+      name: 'Power Test #1',
+      condition: 'Condition Test #1',
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -124,6 +159,7 @@ describe('FlowLogicComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         MatTooltipModule,
+        MatDatepickerModule,
       ],
       declarations: [
         FlowLogicComponent,
@@ -132,6 +168,7 @@ describe('FlowLogicComponent', () => {
         MockComponent(TextFieldComponent),
         MockComponent(NumberFieldComponent),
         MockComponent(DateFieldComponent),
+        MockComponent(ContainerActionsComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -1014,6 +1051,67 @@ describe('FlowLogicComponent', () => {
     });
   });
 
+  it('should call the method that get powers of the station.', () => {
+    component.flowLogicView = true;
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getStationPowers'
+    ).and.callThrough();
+    component.ngOnChanges();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should detect when the getStationPowers method fails.', () => {
+    component.flowLogicView = true;
+    spyOn(TestBed.inject(DocumentService), 'getStationPowers').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnChanges();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method that will be deleted powers of the station.', () => {
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'deleteStationPowers'
+    ).and.callThrough();
+    component.deleteStationPowers(powerRemove[0]);
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should detect when the deleteStationPowers method fails.', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'deleteStationPowers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.deleteStationPowers(powerRemove[0]);
+    expect(spyError).toHaveBeenCalled();
+  });
+  it('should activate the loading in the powers of station', () => {
+    component.flowLogicView = true;
+    component.powersLoading = true;
+    fixture.detectChanges();
+    const powersLoading = fixture.debugElement.nativeElement.querySelector(
+      '#component-power-loading'
+    );
+    expect(component.powersLoading).toBeTrue();
+    expect(powersLoading).toBeTruthy();
+  });
+
   describe('Testing split.io', () => {
     let splitService: SplitService;
     let userService: UserService;
@@ -1058,26 +1156,28 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should call the method that returns all stations.', () => {
-    const getAllStations = spyOn(
+    const prevAndNextStations = spyOn(
       TestBed.inject(StationService),
-      'getAllStations'
+      'getPreviousAndNextStations'
     ).and.callThrough();
-
-    component.getAllStations();
-    expect(getAllStations).toHaveBeenCalled();
+    component.getPreviousAndNextStations();
+    expect(prevAndNextStations).toHaveBeenCalledOnceWith(component.rithmId);
   });
 
   it('should show error message when request for get all stations fails', () => {
-    spyOn(TestBed.inject(StationService), 'getAllStations').and.returnValue(
+    spyOn(
+      TestBed.inject(StationService),
+      'getPreviousAndNextStations'
+    ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const spyError = spyOn(
+    const displayErrorSpy = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.getAllStations();
-    expect(spyError).toHaveBeenCalled();
+    component.getPreviousAndNextStations();
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 });

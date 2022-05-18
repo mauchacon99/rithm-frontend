@@ -7,7 +7,15 @@
 <app-error-widget
   *ngIf="errorGroupTraffic"
   id="error-load-widget-group-traffic"
-  [errorMessage]="'Unable to retrieve group traffic data'"
+  [errorMessage]="
+    widgetDeleted
+      ? 'Oops, it looks like this group has been removed.'
+      : 'Unable to retrieve group traffic data'
+  "
+  [permission]="permissionError"
+  [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
+  (deleteWidget)="removeWidget()"
   (tryAgain)="getGroupTrafficData()"
 >
 </app-error-widget>

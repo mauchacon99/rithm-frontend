@@ -20,6 +20,7 @@ import {
   DashboardData,
   DashboardItem,
   EditDataWidget,
+  ReloadStationFlow,
   RoleDashboardMenu,
   WidgetType,
 } from 'src/models';
@@ -28,6 +29,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { MobileBrowserChecker } from 'src/helpers';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Main component for the dashboard screens.
@@ -87,6 +89,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Dashboard data Copy for save original data in mode edit. */
   dashboardDataCopy!: DashboardData;
 
+  /** Reload station when document has flow. */
+  stationFlow!: ReloadStationFlow;
+
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
@@ -102,6 +107,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** View the button Add Widget in edit mode. */
   isAddWidget = false;
 
+  /** If can assign user. */
+  canAssignUserWidget = false;
+
   /** Load indicator in dashboard. */
   isLoading = false;
 
@@ -110,6 +118,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Show setting button widget. */
   showButtonSetting = false;
+
+  /** Show only button delete widget in drawer. */
+  deleteWidget = false;
+
+  /** Permission dashboard. */
+  dashboardPermission = false;
+
+  /** Show detail dashboard popover. */
+  showDetailWidgetPopover = false;
+
+  /** If user can update grid. */
+  isUpdateGrid = false;
 
   /** Show the dashboard menu. */
   drawerContext: 'menuDashboard' | 'widgetDashboard' = 'menuDashboard';
@@ -132,6 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     defaultLayerIndex: 1,
     maxLayerIndex: 2,
     baseLayerIndex: 1,
+    disableWarnings: true,
   };
 
   constructor(
@@ -220,6 +241,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.splitService.getConfigWidgetsTreatment() === 'on';
         this.isAddWidget =
           this.splitService.getDashboardLibraryTreatment() === 'on';
+        this.canAssignUserWidget =
+          this.splitService.getAssignUserWidgetTreatment() === 'on';
+        this.showDetailWidgetPopover =
+          this.splitService.getFieldDetailDashboardPopoverTreatment() === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
@@ -266,7 +291,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       widgetItem,
       widgetIndex,
       quantityElementsWidget,
+      deleteWidget: this.deleteWidget,
     });
+    this.deleteWidget = false;
+  }
+
+  /** Open drawer only button delete widget. */
+  removeWidget(): void {
+    this.deleteWidget = true;
+    this.editMode = true;
+    this.configEditMode();
   }
 
   /**
@@ -357,8 +391,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Get dashboard by rithmId.
    *
    * @param dashboardRithmId String of rithmId of dashboard.
+   * @param isDefault Boolean if the dashboard to load is default.
    */
-  private getDashboardByRithmId(dashboardRithmId: string): void {
+  private getDashboardByRithmId(
+    dashboardRithmId: string,
+    isDefault = false
+  ): void {
     this.editMode = false;
     this.errorLoadingDashboard = false;
     this.isLoading = true;
@@ -371,17 +409,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dashboardDataCopy = JSON.parse(
             JSON.stringify(this.dashboardData)
           );
+          this.dashboardPermission =
+            this.dashboardData.isEditable || this.isAdmin;
           this.isLoading = false;
           this.getQueryParams();
         },
         error: (error: unknown) => {
           this.errorLoadingDashboard = true;
           this.isLoading = false;
+          const { status } = error as HttpErrorResponse;
+          if (isDefault && status === 400) {
+            this.getOrganizationDashboard();
+            this.setNullDashboardUser();
+          } else {
+            this.router.navigateByUrl('dashboard');
+          }
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-          this.router.navigateByUrl('dashboard');
         },
       });
   }
@@ -407,7 +453,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (dashboardId) {
           this.getDashboardByRithmId(dashboardId);
         } else {
-          this.getOrganizationDashboard();
+          this.getDefaultDashboard();
         }
       },
       error: (error: unknown) => {
@@ -422,7 +468,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Get query params to toggle edit mode. */
   private getQueryParams(): void {
     this.route.queryParams.pipe(first()).subscribe((queryParams) => {
-      this.editMode = queryParams['editMode'] === 'true';
+      this.editMode =
+        this.isAdmin ||
+        (this.dashboardData.type === this.roleDashboardMenu.Personal &&
+          this.dashboardData.isEditable)
+          ? queryParams['editMode'] === 'true'
+          : false;
       this.configEditMode();
     });
   }
@@ -442,6 +493,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dashboardDataCopy = JSON.parse(
               JSON.stringify(this.dashboardData)
             );
+            this.dashboardPermission =
+              this.dashboardData.isEditable || this.isAdmin;
           } else {
             this.isCreateNewDashboard = true;
           }
@@ -584,7 +637,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         'custom-margin-modal',
       ],
       maxWidth: '1500px',
-      data: this.dashboardData.rithmId,
+      data: {
+        dashboardRithmId: this.dashboardData.rithmId,
+        showDetailWidgetPopover: this.showDetailWidgetPopover,
+        canAssignUserWidget: this.canAssignUserWidget,
+      },
     });
     dialog
       .afterClosed()
@@ -593,6 +650,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (widgetItem) {
           this.dashboardData.widgets.push(widgetItem);
         }
+      });
+  }
+
+  /** Load dashboard by default dashboard by user. */
+  private getDefaultDashboard(): void {
+    const user = this.userService.user;
+    if (user && user.defaultDashboardId && user.defaultDashboardType) {
+      this.getDashboardByRithmId(user.defaultDashboardId, true);
+    } else {
+      this.getOrganizationDashboard();
+    }
+  }
+
+  /** Set dashboard to null when the dashboard default does not exist. */
+  private setNullDashboardUser(): void {
+    this.userService
+      .updateUserAccount({
+        defaultDashboardType: '',
+        defaultDashboardId: '',
+      })
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.logError(error);
+        },
       });
   }
 

@@ -25,7 +25,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FrameType,
   MoveDocument,
@@ -84,6 +84,16 @@ describe('DocumentComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
         { provide: SplitService, useClass: MockSplitService },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            // eslint-disable-next-line rxjs/finnish
+            queryParams: of({
+              stationId: '4fb462ec-0772-49dc-8cfb-3849d70ad168',
+              documentId: 'f74147da-fd64-4244-b533-081990118e95',
+            }),
+          },
+        },
       ],
     }).compileComponents();
   });
@@ -562,7 +572,8 @@ describe('DocumentComponent', () => {
       expect(expectSpyMethod).toHaveBeenCalled();
     });
 
-    it('Should disable buttons save and flow when is not admin or owner worker', () => {
+    it('should disable buttons save and flow when is not admin or owner worker', () => {
+      component.footerExpanded = true;
       component.documentInformation.stationOwners = [
         {
           email: 'rithmadmin@inpivota.com',
@@ -582,29 +593,6 @@ describe('DocumentComponent', () => {
       expect(btnFlow.disabled).toBeTrue();
       expect(btnSave.disabled).toBeTrue();
       expect(component.isUserAdminOrOwner).toBeFalse();
-    });
-
-    it('Should disable buttons save and flow when is not admin or owner worker', () => {
-      const userRithmId = TestBed.inject(UserService).user.rithmId;
-      component.documentInformation.stationOwners = [
-        {
-          email: 'rithmadmin@inpivota.com',
-          firstName: 'admin',
-          isAssigned: false,
-          lastName: 'user',
-          rithmId: userRithmId,
-        },
-      ];
-      component.isWidget = true;
-      component.documentLoading = false;
-      fixture.detectChanges();
-      const btnFlow =
-        fixture.elementRef.nativeElement.querySelector('#document-flow');
-      const btnSave =
-        fixture.elementRef.nativeElement.querySelector('#document-save');
-      expect(btnFlow.disabled).toBeFalse();
-      expect(btnSave.disabled).toBeFalse();
-      expect(component.isUserAdminOrOwner).toBeTrue();
     });
   });
 
@@ -654,6 +642,7 @@ describe('DocumentComponent', () => {
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: true,
       isReloadListDocuments: false,
+      stationFlow: [],
     });
   });
 
@@ -722,18 +711,38 @@ describe('DocumentComponent', () => {
     );
   });
 
-  it('should emit event for executed petition and refresh widget', () => {
+  it('should emit event for executed petition and refresh widget', async () => {
     component.isWidget = true;
-    const spyEmit = spyOn(component.returnDocumentsWidget, 'emit');
+    component.shouldFlowContainer = false;
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'saveDocumentAnswer'
+    ).and.returnValue(of([]));
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'updateDocumentName'
+    ).and.returnValue(of('New container Name'));
+
+    const spyEmit = spyOn(
+      component.returnDocumentsWidget,
+      'emit'
+    ).and.callThrough();
     const spyMethod = spyOn(
       component,
       'widgetReloadListDocuments'
     ).and.callThrough();
-    component.saveDocumentChanges();
-    expect(spyMethod).toHaveBeenCalledOnceWith(false, true);
+
+    await component.saveDocumentChanges();
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(false, true, [
+      'rithmIdTempOnlySave',
+    ]);
     expect(spyEmit).toHaveBeenCalledOnceWith({
       isReturnListDocuments: false,
       isReloadListDocuments: true,
+      stationFlow: ['rithmIdTempOnlySave'],
     });
   });
 
@@ -794,5 +803,31 @@ describe('DocumentComponent', () => {
       documentId,
       FrameType.DataLink
     );
+  });
+
+  it('should call getContainerWidgets when calling ngOnInit and is not a widget', () => {
+    const spyService = spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return get container widgets fails', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getContainerWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 });

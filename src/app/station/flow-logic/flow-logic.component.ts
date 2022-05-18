@@ -1,23 +1,32 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ConnectedStationInfo,
   FlowLogicRule,
+  Question,
+  Power,
   Rule,
   RuleEquation,
   RuleType,
-  Station,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { first, map, Observable, startWith } from 'rxjs';
+import { first, map, Observable, startWith, takeUntil, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for the flow logic tab on a station.
@@ -27,7 +36,13 @@ import { StationService } from 'src/app/core/station.service';
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent implements OnInit {
+export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Schedule trigger type form. */
+  scheduleTriggerForm: FormGroup;
+
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
@@ -46,6 +61,9 @@ export class FlowLogicComponent implements OnInit {
   /** The station Flow Logic Rule. */
   flowLogicRules: FlowLogicRule[] = [];
 
+  /** The station Flow Logic Rule. */
+  currentStationQuestions: Question[] = [];
+
   /* Loading the rules list  by type  */
   flowLogicLoadingByRuleType: string | null = null;
 
@@ -62,12 +80,27 @@ export class FlowLogicComponent implements OnInit {
   /** Selected value condition type for rules. */
   selectedConditionType = 'all';
 
+  /** Schedule trigger type list view if true. */
+  scheduleTrigger = false;
+
+  /** The different options for the schedule trigger type. */
+  readonly scheduleTriggerOptions = ['Container Check', 'Date Interval'];
+
+  /** The powers of current station. */
+  stationPowers: Power[] = [];
+
+  /** The date and time zone shown, if true. */
+  showDateTimeZone = false;
+
   /** Lading/Errors block. */
   /* Loading the list of rules of flow logic*/
   ruleLoading = false;
 
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
+
+  /* Loading the powers on the station*/
+  powersLoading = false;
 
   /** The error if rules fails . */
   ruleError = false;
@@ -76,31 +109,35 @@ export class FlowLogicComponent implements OnInit {
   flowRuleError = false;
 
   /**Filtered form station List. */
-  filteredStations$: Observable<Station[]> | undefined;
+  filteredStations$: Observable<ConnectedStationInfo[]> | undefined;
 
   /** The form to add this field in the template. */
   flowFieldForm!: FormGroup;
 
   /** The list of all stations. */
-  stations: Station[] = [];
+  stations: ConnectedStationInfo[] = [];
 
   /** Loading/Errors block. */
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
   /** The list of selected stations in flow section. */
-  flowStations: Station[] = [];
+  flowStations: ConnectedStationInfo[] = [];
 
   constructor(
+    private fb: FormBuilder,
     public dialog: MatDialog,
     private popupService: PopupService,
     private errorService: ErrorService,
     private documentService: DocumentService,
     private userService: UserService,
     private splitService: SplitService,
-    private fb: FormBuilder,
     private stationService: StationService
-  ) {}
+  ) {
+    this.scheduleTriggerForm = this.fb.group({
+      scheduleTriggerType: this.fb.control(''),
+    });
+  }
 
   /**
    * Life cycle init the component.
@@ -112,6 +149,27 @@ export class FlowLogicComponent implements OnInit {
     this.flowFieldForm = this.fb.group({
       stations: [''],
     });
+    this.getStationPowers();
+  }
+
+  /**
+   * Detect changes.
+   */
+  ngOnChanges(): void {
+    if (this.flowLogicView && !this.stationPowers.length) {
+      this.getStationPowers();
+    }
+  }
+
+  /**
+   * Listen the currentStationQuestions Service.
+   */
+  private subscribeCurrentStationQuestions(): void {
+    this.stationService.currentStationQuestions$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((questions) => {
+        this.currentStationQuestions = questions;
+      });
   }
 
   /**
@@ -382,14 +440,16 @@ export class FlowLogicComponent implements OnInit {
   /**
    * Get the list of all stations.
    */
-  getAllStations(): void {
+  getPreviousAndNextStations(): void {
     this.stationLoading = true;
     this.stationService
-      .getAllStations()
+      .getPreviousAndNextStations(this.rithmId)
       .pipe(first())
       .subscribe({
         next: (stations) => {
-          this.stations = stations;
+          this.stations = [];
+          this.stations = this.stations.concat(stations.nextStations);
+          this.stations = this.stations.concat(stations.previousStations);
           this.filterStations();
           this.stationLoading = false;
         },
@@ -422,7 +482,7 @@ export class FlowLogicComponent implements OnInit {
    * @param value Current String in Field Forms.
    * @returns Filtered value.
    */
-  private _filter(value: string): Station[] {
+  private _filter(value: string): ConnectedStationInfo[] {
     const filterValue = value?.toLowerCase();
     return this.stations.filter((option) =>
       option.name.toLowerCase().includes(filterValue)
@@ -460,5 +520,72 @@ export class FlowLogicComponent implements OnInit {
         this.flowStations.push(station);
       }
     });
+  }
+
+  /**
+   * Get the powers (triggers, actions, flow) of current station.
+   *
+   */
+  private getStationPowers(): void {
+    this.powersLoading = true;
+    this.documentService
+      .getStationPowers(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (powers) => {
+          this.stationPowers = powers;
+          this.powersLoading = false;
+        },
+        error: (error: unknown) => {
+          this.powersLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update's the selected schedule trigger type array for date interval the time zone to display.
+   *
+   */
+  triggerTypeSelect(): void {
+    const selectedTriggerType =
+      this.scheduleTriggerForm.controls.scheduleTriggerType.value;
+    if (selectedTriggerType === 'Date Interval') {
+      this.showDateTimeZone = true;
+    } else {
+      this.showDateTimeZone = false;
+    }
+  }
+
+  /**
+   * Delete the power of current station.
+   *
+   * @param powerRemove The power that will be removed.
+   */
+  deleteStationPowers(powerRemove: Power): void {
+    this.documentService
+      .deleteStationPowers(powerRemove.rithmId, this.rithmId)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

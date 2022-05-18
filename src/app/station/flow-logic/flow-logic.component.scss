@@ -16,6 +16,12 @@
   }
 }
 
+.tabs-flow-container {
+  ::ng-deep .mat-tab-header {
+    border-bottom: 0;
+  }
+}
+
 .rules-tab-content {
   @apply flex h-full flex-wrap sm:flex-nowrap;
 
@@ -33,35 +39,74 @@
   }
 
   .rules-right-side {
-    .action-buttons-container {
-      .button-group {
-        @apply mx-8;
+    .rules-right-side-actions {
+      .action-buttons-container {
+        .button-group {
+          @apply mx-8;
 
-        ::ng-deep .mat-button-toggle {
-          width: 120px;
+          ::ng-deep .mat-button-toggle {
+            width: 120px;
 
-          .mat-button-toggle-button {
-            @apply h-10 flex justify-center items-center text-xs;
+            .mat-button-toggle-button {
+              @apply h-10 flex justify-center items-center text-xs;
+            }
+          }
+
+          ::ng-deep .mat-button-toggle-checked {
+            @apply bg-accent-500 text-white;
           }
         }
+      }
 
-        ::ng-deep .mat-button-toggle-checked {
-          @apply bg-accent-500 text-white;
+      .action-tabs-section {
+        ::ng-deep .mat-tab-header {
+          display: none !important;
         }
       }
     }
   }
 }
 
-.tabs-flow-container {
-  ::ng-deep .mat-tab-header {
-    border-bottom: 0;
+.tab-flow-content {
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
   }
 }
 
-.tab-flow-content ::ng-deep {
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
+.shedule-content-section {
+  @apply py-6 px-8;
+
+  ::ng-deep .mat-form-field-wrapper {
+    @apply m-0 pb-0;
+  }
+
+  .trigger-type-section,
+  .trigger-interval-time-section {
+    @apply mb-6;
+
+    min-width: 400px;
+    max-width: 420px;
+
+    .trigger-datepicker-section {
+      @apply mb-6;
+    }
+
+    .trigger-time-section {
+      @apply flex items-center space-x-2;
+
+      ::ng-deep .mat-form-field:nth-child(1),
+      ::ng-deep .mat-form-field:nth-child(3) {
+        @apply w-14 text-center;
+      }
+
+      ::ng-deep .mat-button-toggle-group {
+        @apply shadow-none border border-secondary-50 rounded-md w-20;
+
+        ::ng-deep .mat-button-toggle-label-content {
+          @apply p-0 leading-[32px];
+        }
+      }
+    }
   }
 }
 

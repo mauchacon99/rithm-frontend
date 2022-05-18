@@ -47,6 +47,7 @@ import { MobileBrowserChecker } from 'src/helpers';
 import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -71,7 +72,11 @@ describe('DashboardComponent', () => {
         maxItemRows: 12,
       },
     ],
+    isEditable: true,
+    canView: false,
   };
+  let userService: UserService;
+  let dashboardService: DashboardService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -98,6 +103,7 @@ describe('DashboardComponent', () => {
         { provide: ElementRef, useValue: MockService(ElementRef) },
         { provide: MobileBrowserChecker, useClass: MobileBrowserChecker },
       ],
+
       imports: [
         MatSidenavModule,
         NoopAnimationsModule,
@@ -124,6 +130,8 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     component.dashboardData = dataDashboard;
+    userService = TestBed.inject(UserService);
+    dashboardService = TestBed.inject(DashboardService);
     fixture.detectChanges();
   });
 
@@ -185,13 +193,15 @@ describe('DashboardComponent', () => {
       name: 'update Dashboard',
       widgets: [],
       type: RoleDashboardMenu.Personal,
+      isEditable: false,
+      canView: false,
     };
     const spyMethodUpdateDashboard = spyOn(
       component,
       'updateDashboard'
     ).and.callThrough();
     const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'updatePersonalDashboard'
     ).and.callThrough();
 
@@ -215,6 +225,8 @@ describe('DashboardComponent', () => {
       name: 'update Dashboard',
       widgets: [],
       type: RoleDashboardMenu.Company,
+      isEditable: false,
+      canView: false,
     };
     const spyMethodUpdateDashboard = spyOn(
       component,
@@ -222,7 +234,7 @@ describe('DashboardComponent', () => {
     ).and.callThrough();
 
     const spyServiceUpdateDashboard = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'updateOrganizationDashboard'
     ).and.callThrough();
 
@@ -241,7 +253,7 @@ describe('DashboardComponent', () => {
 
   it('should returns the organization`s dashboard list', () => {
     const spyService = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'getOrganizationDashboard'
     ).and.callThrough();
     component['getOrganizationDashboard']();
@@ -249,10 +261,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
-    spyOn(
-      TestBed.inject(DashboardService),
-      'getOrganizationDashboard'
-    ).and.returnValue(
+    spyOn(dashboardService, 'getOrganizationDashboard').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -267,7 +276,7 @@ describe('DashboardComponent', () => {
 
   it('should call service dashboard for id', () => {
     const spyService = spyOn(
-      TestBed.inject(DashboardService),
+      dashboardService,
       'getDashboardWidgets'
     ).and.callThrough();
 
@@ -276,11 +285,22 @@ describe('DashboardComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
-  it('should catch error if petition to return dashboard for id service fails', () => {
-    spyOn(
-      TestBed.inject(DashboardService),
-      'getDashboardWidgets'
-    ).and.returnValue(
+  it('should catch error if petition to return dashboard for id service fails when is dashboard default', () => {
+    spyOn(dashboardService, 'getDashboardWidgets').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getDashboardByRithmId'](dashboardRithmId, true);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return dashboard for id service fails when is not dashboard default', () => {
+    spyOn(dashboardService, 'getDashboardWidgets').and.returnValue(
       throwError(() => {
         throw new Error();
       })
@@ -324,6 +344,7 @@ describe('DashboardComponent', () => {
     component.isCreateNewDashboard = false;
     component.isLoading = false;
     component.isAddWidget = true;
+    component.canAssignUserWidget = true;
     component.dashboardData = {
       rithmId: '123654-789654-7852',
       name: 'Organization 1',
@@ -343,6 +364,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     fixture.detectChanges();
     const spyDialog = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
@@ -423,6 +446,8 @@ describe('DashboardComponent', () => {
     });
 
     it('Should toggle drawer of the widgets', () => {
+      component.deleteWidget = true;
+      fixture.detectChanges();
       const quantityElementsWidget = 2;
       spyOn(sidenavDrawer, 'toggleDrawer');
       const widgetItem = {
@@ -449,6 +474,7 @@ describe('DashboardComponent', () => {
         widgetItem,
         widgetIndex,
         quantityElementsWidget,
+        deleteWidget: true,
       });
     });
 
@@ -490,7 +516,11 @@ describe('DashboardComponent', () => {
           'custom-margin-modal',
         ],
         maxWidth: '1500px',
-        data: dataDashboard.rithmId,
+        data: {
+          dashboardRithmId: dataDashboard.rithmId,
+          showDetailWidgetPopover: false,
+          canAssignUserWidget: component.canAssignUserWidget,
+        },
       };
       const spyDialog = spyOn(
         TestBed.inject(MatDialog),
@@ -526,6 +556,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     let renderer: Renderer2;
 
@@ -594,16 +626,14 @@ describe('DashboardComponent', () => {
       quantityElementsWidget,
     };
 
-    TestBed.inject(DashboardService).updateDashboardWidgets(
-      expectEditDataWidget
-    );
+    dashboardService.updateDashboardWidgets(expectEditDataWidget);
 
     expect(spyMethod).toHaveBeenCalledOnceWith(expectEditDataWidget);
   });
 
   it('should emit DashboardService.isLoadingDashboard$ and call getParams', () => {
     const spyRoute = spyOn(TestBed.inject(ActivatedRoute).params, 'subscribe');
-    TestBed.inject(DashboardService).toggleLoadingDashboard(true, true);
+    dashboardService.toggleLoadingDashboard(true, true);
     fixture.detectChanges();
     expect(component.isLoading).toBeTrue();
     expect(component.errorLoadingDashboard).toBeFalse();
@@ -650,6 +680,8 @@ describe('DashboardComponent', () => {
         },
       ],
       type: RoleDashboardMenu.Company,
+      isEditable: false,
+      canView: false,
     };
 
     component.dashboardData = dashboardData;
@@ -675,6 +707,9 @@ describe('DashboardComponent', () => {
   });
 
   it('should get queryParam edit and toggleEditMode', fakeAsync(() => {
+    component.dashboardData.isEditable = true;
+    fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
     TestBed.inject(Router).navigate(
       ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
       {
@@ -713,6 +748,8 @@ describe('DashboardComponent', () => {
           y: 0,
         },
       ],
+      isEditable: false,
+      canView: false,
     };
     fixture.detectChanges();
 
@@ -741,11 +778,9 @@ describe('DashboardComponent', () => {
 
   describe('Testing split.io', () => {
     let splitService: SplitService;
-    let userService: UserService;
 
     beforeEach(() => {
       splitService = TestBed.inject(SplitService);
-      userService = TestBed.inject(UserService);
     });
 
     it('should call split service and treatments', () => {
@@ -762,6 +797,11 @@ describe('DashboardComponent', () => {
         splitService,
         'getDashboardLibraryTreatment'
       ).and.callThrough();
+      //canAssignUserStationTableWidget
+      const spyGetAssignUserStationTableWidgetTreatment = spyOn(
+        splitService,
+        'getAssignUserWidgetTreatment'
+      ).and.callThrough();
 
       splitService.sdkReady$.next();
       component.ngOnInit();
@@ -769,8 +809,11 @@ describe('DashboardComponent', () => {
       expect(splitInitMethod).toHaveBeenCalledOnceWith(dataOrganization);
       expect(spyGetConfigWidgetsTreatment).toHaveBeenCalled();
       expect(spyGetDashboardLibraryTreatment).toHaveBeenCalled();
+      expect(spyGetAssignUserStationTableWidgetTreatment).toHaveBeenCalled();
       expect(component.isAddWidget).toBeTrue();
       expect(component.showButtonSetting).toBeTrue();
+      expect(component.canAssignUserWidget).toBeTrue();
+      expect(component.showDetailWidgetPopover).toBeTrue();
     });
 
     it('should catch split error ', () => {
@@ -788,6 +831,8 @@ describe('DashboardComponent', () => {
       expect(errorService).toHaveBeenCalled();
       expect(component.isAddWidget).toBeFalse();
       expect(component.showButtonSetting).toBeFalse();
+      expect(component.showDetailWidgetPopover).toBeFalse();
+      expect(component.canAssignUserWidget).toBeFalse();
     });
   });
 
@@ -846,5 +891,126 @@ describe('DashboardComponent', () => {
     component.ngOnInit();
     expect(component.options.mobileBreakpoint).toBe(1920);
     expect(spyChangeGridster).toHaveBeenCalled();
+  });
+
+  it('should show editMode button when user=admin and type=Company', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Company;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    fixture.detectChanges();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeTruthy();
+  });
+
+  it('should show editMode button when user=admin and type=personal', () => {
+    component.editMode = false;
+    component.isLoading = false;
+    component.isCreateNewDashboard = false;
+    component.errorLoadingDashboard = false;
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    fixture.detectChanges();
+    const editMode = fixture.nativeElement.querySelector('#menu-edit-button');
+    expect(editMode).toBeTruthy();
+  });
+
+  it('should validate getQueryParams when user=admin', fakeAsync(() => {
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
+    component['getQueryParams']();
+    expect(component.editMode).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
+  }));
+
+  it('should validate getQueryParams when user=!admin and type=personal', fakeAsync(() => {
+    component.dashboardData.type = RoleDashboardMenu.Personal;
+    component.dashboardData.isEditable = true;
+    fixture.detectChanges();
+    spyOnProperty(component, 'isAdmin').and.returnValue(false);
+    TestBed.inject(Router).navigate(
+      ['/', 'dashboard', '2433D3E3-D3BA-4F18-A0D3-2121968EC7F5'],
+      {
+        queryParams: { editMode: true },
+      }
+    );
+    const spyService = spyOn(
+      TestBed.inject(ActivatedRoute).queryParams,
+      'subscribe'
+    ).and.callThrough();
+    tick();
+    component['getQueryParams']();
+    expect(component.editMode).toBeTrue();
+    expect(spyService).toHaveBeenCalled();
+  }));
+
+  it('should get default dashboard', () => {
+    const spyService = spyOn(
+      dashboardService,
+      'getDashboardWidgets'
+    ).and.callThrough();
+
+    component['getDefaultDashboard']();
+
+    expect(spyService).toHaveBeenCalledOnceWith(
+      userService.user.defaultDashboardId as string
+    );
+  });
+
+  it('should not get default dashboard', () => {
+    spyOnProperty(userService, 'user').and.returnValue({
+      rithmId: '123',
+      firstName: 'Testy',
+      lastName: 'Test',
+      email: 'test@test.com',
+      isEmailVerified: true,
+      notificationSettings: null,
+      createdDate: '1/2/34',
+      role: null,
+      organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+      profileImageRithmId: '123-456-789',
+      defaultDashboardType: '',
+      defaultDashboardId: '',
+    });
+    const spyService = spyOn(
+      dashboardService,
+      'getOrganizationDashboard'
+    ).and.callThrough();
+
+    component['getDefaultDashboard']();
+
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should set null dashboard default to user', () => {
+    const spyService = spyOn(userService, 'updateUserAccount').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const errorService = spyOn(
+      TestBed.inject(ErrorService),
+      'logError'
+    ).and.callThrough();
+
+    component['setNullDashboardUser']();
+
+    expect(spyService).toHaveBeenCalledOnceWith({
+      defaultDashboardType: '',
+      defaultDashboardId: '',
+    });
+    expect(errorService).toHaveBeenCalled();
   });
 });

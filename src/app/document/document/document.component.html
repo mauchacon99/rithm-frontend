@@ -73,18 +73,24 @@
             <app-document-info-header
               (sendNewUserAssigned)="setNewAssignedUser($event)"
               [isWidget]="isWidget"
-              (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
+              (isReloadListDocuments)="
+                widgetReloadListDocuments(false, $event, [
+                  'rithmIdTempOnlySaveUser'
+                ])
+              "
               [documentInformation]="documentInformation"
               [viewNewStation]="false"
             ></app-document-info-header>
 
             <app-document-template
-              class="flex flex-col"
+              class="flex flex-col pb-14"
               [ngClass]="{ 'pb-7': !isWidget }"
               [stationInstructions]="documentInformation.instructions"
               [documentFields]="documentInformation.questions"
               [isWidget]="isWidget"
               formControlName="documentTemplateForm"
+              [documentRithmId]="documentInformation.documentRithmId"
+              [stationRithmId]="documentInformation.stationRithmId"
             >
             </app-document-template>
             <div class="pb-5 px-px" *ngIf="!isWidget">
@@ -112,24 +118,16 @@
                 </mat-expansion-panel>
               </mat-accordion>
             </div>
-            <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
-              <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
+            <!-- Footer -->
+            <div
+              *ngIf="!isWidget"
+              class="hidden md:block w-full fixed z-10 bottom-0 left-0"
+            >
+              <div class="grid grid-cols-12">
                 <div
-                  class="flex space-x-4"
-                  [ngClass]="{
-                    'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
-                      !isWidget
-                  }"
+                  class="flex space-x-4 lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer"
                 >
                   <div class="flex-grow">
-                    <span *ngIf="!isWidget" class="mr-3 inline-block lg:hidden">
-                      <button mat-icon-button color="primary">
-                        <i
-                          class="fas fa-exclamation-circle text-3xl text-primary-500"
-                          matTooltip="Escalate Document"
-                        ></i>
-                      </button>
-                    </span>
                     <span class="mr-3"
                       ><button
                         type="button"
@@ -181,7 +179,7 @@
                     {{ flowButtonName }}
                   </button>
                 </div>
-                <div *ngIf="!isWidget" class="relative hidden lg:block">
+                <div class="relative hidden lg:block">
                   <svg
                     class="absolute top-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -210,6 +208,74 @@
                 </div>
               </div>
             </div>
+            <!-- Footer mobile -->
+            <mat-accordion
+              class="responsive-bottom-bar fixed bottom-0 left-0 w-full z-10"
+              [ngClass]="{ 'md:hidden': !isWidget }"
+            >
+              <mat-expansion-panel [(expanded)]="footerExpanded" hideToggle>
+                <mat-expansion-panel-header class="text-base">
+                  <mat-panel-title data-testid="all-fields">
+                    <i
+                      class="fa-solid"
+                      [ngClass]="{
+                        'fa-chevron-down': footerExpanded,
+                        'fa-chevron-up': !footerExpanded
+                      }"
+                    ></i>
+                  </mat-panel-title>
+                  <mat-panel-description class="justify-end space-x-2">
+                    <button
+                      *ngIf="allowPreviousButton && previousStations.length"
+                      type="button"
+                      id="document-previous-station"
+                      data-testid="document-previous-station"
+                      (click)="flowDocumentToPreviousStation()"
+                      mat-button
+                      color="accent"
+                    >
+                      PREVIOUS
+                    </button>
+                    <button
+                      type="submit"
+                      mat-raised-button
+                      id="document-flow"
+                      data-testid="document-flow"
+                      [disabled]="
+                        !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                      "
+                      (click)="shouldFlowContainer = true"
+                      color="accent"
+                    >
+                      {{ flowButtonName }}
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                  <button
+                    type="submit"
+                    data-testid="document-save"
+                    id="document-save"
+                    [disabled]="
+                      !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                    "
+                    mat-stroked-button
+                    color="accent"
+                  >
+                    SAVE
+                  </button>
+                  <button
+                    type="button"
+                    id="document-cancel"
+                    data-testid="document-cancel"
+                    mat-stroked-button
+                    (click)="cancelDocument()"
+                  >
+                    CANCEL
+                  </button>
+                </ng-template>
+              </mat-expansion-panel>
+            </mat-accordion>
           </form>
         </div>
         <!-- Right column -->
@@ -268,7 +334,11 @@
             <app-document-info-header
               (sendNewUserAssigned)="setNewAssignedUser($event)"
               [isWidget]="isWidget"
-              (isReloadListDocuments)="widgetReloadListDocuments(false, $event)"
+              (isReloadListDocuments)="
+                widgetReloadListDocuments(false, $event, [
+                  'rithmIdTempOnlySaveUser'
+                ])
+              "
               [documentInformation]="documentInformation"
               [viewNewStation]="false"
             ></app-document-info-header>
@@ -317,32 +387,26 @@
             </div>
             <app-document-template
               *ngIf="isWidget"
-              class="flex flex-col"
+              class="flex flex-col pb-14"
               [ngClass]="{ 'pb-7': !isWidget }"
               [stationInstructions]="documentInformation.instructions"
               [documentFields]="documentInformation.questions"
               [isWidget]="isWidget"
               formControlName="documentTemplateForm"
+              [documentRithmId]="documentInformation.documentRithmId"
+              [stationRithmId]="documentInformation.stationRithmId"
             >
             </app-document-template>
-            <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
-              <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
+            <!-- Footer -->
+            <div
+              *ngIf="!isWidget"
+              class="hidden md:block w-full fixed z-10 bottom-0 left-0"
+            >
+              <div class="grid grid-cols-12">
                 <div
-                  class="flex space-x-4"
-                  [ngClass]="{
-                    'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
-                      !isWidget
-                  }"
+                  class="flex space-x-4 lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer"
                 >
                   <div class="flex-grow">
-                    <span *ngIf="!isWidget" class="mr-3 inline-block lg:hidden">
-                      <button mat-icon-button color="primary">
-                        <i
-                          class="fas fa-exclamation-circle text-3xl text-primary-500"
-                          matTooltip="Escalate Document"
-                        ></i>
-                      </button>
-                    </span>
                     <span class="mr-3"
                       ><button
                         type="button"
@@ -381,8 +445,8 @@
                     Previous Station
                   </button>
                   <button
-                    type="submit"
                     mat-raised-button
+                    type="submit"
                     color="accent"
                     data-testid="document-flow"
                     id="document-flow"
@@ -394,7 +458,7 @@
                     {{ flowButtonName }}
                   </button>
                 </div>
-                <div *ngIf="!isWidget" class="relative hidden lg:block">
+                <div class="relative hidden lg:block">
                   <svg
                     class="absolute top-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -423,6 +487,74 @@
                 </div>
               </div>
             </div>
+            <!-- Footer mobile -->
+            <mat-accordion
+              class="responsive-bottom-bar fixed bottom-0 left-0 w-full z-10"
+              [ngClass]="{ 'md:hidden': !isWidget }"
+            >
+              <mat-expansion-panel [(expanded)]="footerExpanded" hideToggle>
+                <mat-expansion-panel-header class="text-base">
+                  <mat-panel-title data-testid="all-fields">
+                    <i
+                      class="fa-solid"
+                      [ngClass]="{
+                        'fa-chevron-down': footerExpanded,
+                        'fa-chevron-up': !footerExpanded
+                      }"
+                    ></i>
+                  </mat-panel-title>
+                  <mat-panel-description class="justify-end space-x-2">
+                    <button
+                      *ngIf="allowPreviousButton && previousStations.length"
+                      type="button"
+                      id="document-previous-station"
+                      data-testid="document-previous-station"
+                      (click)="flowDocumentToPreviousStation()"
+                      mat-button
+                      color="accent"
+                    >
+                      PREVIOUS
+                    </button>
+                    <button
+                      type="submit"
+                      mat-raised-button
+                      id="document-flow"
+                      data-testid="document-flow"
+                      [disabled]="
+                        !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                      "
+                      (click)="shouldFlowContainer = true"
+                      color="accent"
+                    >
+                      {{ flowButtonName }}
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                  <button
+                    type="submit"
+                    data-testid="document-save"
+                    id="document-save"
+                    [disabled]="
+                      !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                    "
+                    mat-stroked-button
+                    color="accent"
+                  >
+                    SAVE
+                  </button>
+                  <button
+                    type="button"
+                    id="document-cancel"
+                    data-testid="document-cancel"
+                    mat-stroked-button
+                    (click)="cancelDocument()"
+                  >
+                    CANCEL
+                  </button>
+                </ng-template>
+              </mat-expansion-panel>
+            </mat-accordion>
           </form>
         </div>
         <!-- Right column -->

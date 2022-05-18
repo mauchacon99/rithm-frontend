@@ -10,12 +10,7 @@ import { throwError } from 'rxjs';
 
 import { GroupSearchWidgetComponent } from './group-search-widget.component';
 import { StationService } from 'src/app/core/station.service';
-import { ErrorService } from 'src/app/core/error.service';
-import {
-  MockErrorService,
-  MockMapService,
-  MockStationService,
-} from 'src/mocks';
+import { MockMapService, MockStationService } from 'src/mocks';
 import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { StationGroupData } from 'src/models/station-group-data';
@@ -24,12 +19,12 @@ import { StationComponent } from 'src/app/station/station/station.component';
 import { MapService } from 'src/app/map/map.service';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('GroupSearchWidgetComponent', () => {
   let component: GroupSearchWidgetComponent;
   let fixture: ComponentFixture<GroupSearchWidgetComponent>;
   let stationService: StationService;
-  let errorService: ErrorService;
   let mapService: MapService;
   let sidenavDrawerService: SidenavDrawerService;
   const dataWidget =
@@ -109,7 +104,6 @@ describe('GroupSearchWidgetComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService },
         { provide: MapService, useClass: MockMapService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
@@ -118,7 +112,6 @@ describe('GroupSearchWidgetComponent', () => {
 
   beforeEach(() => {
     stationService = TestBed.inject(StationService);
-    errorService = TestBed.inject(ErrorService);
     mapService = TestBed.inject(MapService);
     sidenavDrawerService = TestBed.inject(SidenavDrawerService);
     fixture = TestBed.createComponent(GroupSearchWidgetComponent);
@@ -148,7 +141,6 @@ describe('GroupSearchWidgetComponent', () => {
         throw new Error();
       })
     );
-    const spyService = spyOn(errorService, 'logError').and.callThrough();
     component.ngOnInit();
     fixture.detectChanges();
     const errorElement = fixture.debugElement.nativeElement.querySelector(
@@ -156,7 +148,6 @@ describe('GroupSearchWidgetComponent', () => {
     );
     expect(errorElement).toBeTruthy();
     expect(component.errorStationGroup).toBeTrue();
-    expect(spyService).toHaveBeenCalled();
   });
 
   it('should rendered component loading for widget', () => {
@@ -380,5 +371,40 @@ describe('GroupSearchWidgetComponent', () => {
     component.isDrawerOpen;
     expect(spyMethod).toHaveBeenCalled();
     expect(component.isDrawerOpen).toBeTrue();
+  });
+
+  it("should catch error when user don't have permissions", () => {
+    spyOn(stationService, 'getStationGroups').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 403 });
+      })
+    );
+
+    component.getStationGroups();
+
+    expect(component.permissionError).toBeFalse();
+  });
+
+  it('should catch error when the widget has been deleted', () => {
+    spyOn(stationService, 'getStationGroups').and.returnValue(
+      throwError(() => {
+        throw new HttpErrorResponse({ error: 'any error', status: 400 });
+      })
+    );
+
+    component.getStationGroups();
+
+    expect(component.widgetDeleted).toBeTrue();
+  });
+
+  it('should call removeWidget', () => {
+    const spyDeteleWidget = spyOn(
+      component.deleteWidget,
+      'emit'
+    ).and.callThrough();
+    const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
+    component.removeWidget();
+    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

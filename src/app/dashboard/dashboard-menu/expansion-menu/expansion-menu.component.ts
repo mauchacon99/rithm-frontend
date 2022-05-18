@@ -3,9 +3,10 @@ import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardData } from 'src/models';
+import { DashboardData, User } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -28,6 +29,15 @@ export class ExpansionMenuComponent implements OnInit {
    */
   @Input() showDefaultDashboard = false;
 
+  /**
+   * Current user.
+   *
+   * @returns Current user .
+   */
+  get user(): User {
+    return this.userService.user;
+  }
+
   /** Status expanded, this save the state the panel for show icon expanded. */
   panelOpenState = true;
 
@@ -46,15 +56,20 @@ export class ExpansionMenuComponent implements OnInit {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
+  /** Is admin. */
+  isAdmin = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   /** Init live cycle component. */
   ngOnInit(): void {
+    this.isAdmin = this.userService.isAdmin;
     this.getToListDashboards();
     this.isPrincipalPageDashboard = this.router.url === '/dashboard';
   }

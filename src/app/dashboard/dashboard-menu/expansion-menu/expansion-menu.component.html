@@ -25,6 +25,8 @@
         </div>
       </div>
       <app-options-menu
+        id="options"
+        *ngIf="isAdmin || dashboardRole === roleDashboardMenu.Personal"
         [isManageMember]="isManageMember"
         [dashboardRole]="dashboardRole"
         [isDashboardListOptions]="true"
@@ -59,11 +61,17 @@
         <mat-list-item
           matRipple
           class="option-list cursor-pointer"
+          [ngClass]="{
+            'bg-accent-100':
+              user.defaultDashboardId === dashboard.rithmId &&
+              isPrincipalPageDashboard
+          }"
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
           (click)="hiddenDrawer()"
           [routerLink]="
             isPrincipalPageDashboard &&
+            !user.defaultDashboardId &&
             !i &&
             dashboardRole === roleDashboardMenu.Company
               ? ['/', 'dashboard']
@@ -71,6 +79,13 @@
           "
           routerLinkActive="bg-accent-100"
         >
+          <div class="w-2">
+            <i
+              class="fa-solid fa-house-user text-accent-300 text-base"
+              *ngIf="user.defaultDashboardId === dashboard.rithmId"
+            ></i>
+          </div>
+
           <div class="w-full flex justify-between items-center ml-5">
             {{ dashboard.name.trim() || 'Untitled Dashboard.' }}
             <app-options-menu

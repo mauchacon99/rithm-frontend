@@ -116,6 +116,9 @@ export class StationComponent
   /** Old interface station data link widgets. */
   dataLinkArray: DataLinkObject[] = [];
 
+  /** Current stations questions. */
+  currentStationQuestions: Question[] = [];
+
   /** Flag that renames the save button when the selected tab is Flow Logic. */
   isFlowLogicTab = false;
 
@@ -179,6 +182,16 @@ export class StationComponent
 
   /** Circles in the gridster. */
   circlesWidget!: string;
+
+  /** Flag to indicate whether the focus is on a text component or not. */
+  showTextAlignIcons = false;
+
+  /** List of all text widget types. */
+  readonly textWidgetTypes = [
+    FrameType.Body,
+    FrameType.Title,
+    FrameType.Headline,
+  ];
 
   constructor(
     private stationService: StationService,
@@ -431,10 +444,37 @@ export class StationComponent
   }
 
   /**
+   * Whether the screen width is lesser than 640px.
+   *
+   * @returns True if width is lesser than 640px.
+   */
+  get isMobileView(): boolean {
+    return window.innerWidth <= 640;
+  }
+
+  /**
+   * Validate the conditions to display the Save or Save Rules button.
+   *
+   * @returns If display the button, can be true or false.
+   */
+  get stationInputFrames(): Question[] {
+    let dataFiltered = [] as Question[];
+    if (this.inputFrameWidgetItems) {
+      this.inputFrameWidgetItems.map((frame) => {
+        if (frame?.questions && frame.type === FrameType.Input) {
+          dataFiltered = dataFiltered.concat(frame.questions);
+        }
+      });
+    }
+
+    return dataFiltered;
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.params.pipe(first()).subscribe({
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
         if (!params.stationId) {
           this.handleInvalidParams();
@@ -491,17 +531,19 @@ export class StationComponent
             this.stationForm.controls.generalInstructions.setValue(
               stationInfo.instructions
             );
-            // this.inputFrameWidgetItems[0].questions =
-            //   this.stationInformation.questions;
-            /** Update the current station questions whenever it changes. */
             this.stationService.updateCurrentStationQuestions(
               this.stationInformation.questions
             );
-            this.getStationWidgets();
+            if (this.viewNewStation) {
+              this.getStationWidgets();
+            }
           }
           this.resetStationForm();
           this.stationInformation.flowButton = stationInfo.flowButton || 'Flow';
           this.stationLoading = false;
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
         },
         error: (error: unknown) => {
           this.navigateBack();
@@ -626,12 +668,6 @@ export class StationComponent
         );
     }
     const petitionsUpdateStation = [
-      // Update station Name.
-      this.stationService.updateStationName(
-        this.stationName,
-        this.stationInformation.rithmId
-      ),
-
       // Update appended fields to document.
       this.stationService.updateDocumentNameTemplate(
         this.stationInformation.rithmId,
@@ -658,7 +694,7 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: ([, , , stationQuestions]) => {
+        next: ([, , stationQuestions]) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
           if (stationQuestions) {
@@ -855,6 +891,7 @@ export class StationComponent
         this.settingMode = false;
         this.isOpenDrawerLeft = false;
         this.closeSettingDrawer();
+        this.showTextAlignIcons = false;
         break;
       case 'setting':
         enabledMode = false;
@@ -863,6 +900,7 @@ export class StationComponent
       case 'layout':
         enabledMode = true;
         this.closeSettingDrawer();
+        this.showTextAlignIcons = false;
         break;
       default:
         break;
@@ -933,12 +971,15 @@ export class StationComponent
             frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
-                frame.minItemRows = 4;
+                frame.minItemRows =
+                  frame.questions &&
+                  frame.questions?.length &&
+                  frame.questions?.length > 4
+                    ? frame.questions.length
+                    : 4;
                 frame.minItemCols = 6;
-                frame.questions =
-                  frame.questions && frame.questions?.length > 0
-                    ? frame.questions
-                    : JSON.parse(frame.data);
+                frame.cols = frame.cols < frame.minItemCols ? 6 : frame.cols;
+                frame.rows = frame.rows < frame.minItemRows ? 4 : frame.rows;
                 this.inputFrameList.push('inputFrameWidget-' + index);
                 break;
               case FrameType.Headline:
@@ -972,6 +1013,9 @@ export class StationComponent
             this.inputFrameWidgetItems.push(frame);
             this.changedOptions();
           });
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
           this.widgetLoading = false;
         },
         error: (error: unknown) => {
@@ -989,12 +1033,14 @@ export class StationComponent
    * and Save or update the changes to the station frame widgets.
    */
   async saveStationWidgetChanges(): Promise<void> {
+    this.showTextAlignIcons = false;
     let hasQuestions = false;
     this.inputFrameWidgetItems.map((field) => {
       if (field.questions?.length === 0) {
         hasQuestions = true;
       }
     });
+
     if (hasQuestions) {
       const confirm = await this.popupService.confirm({
         title: ' ',
@@ -1018,34 +1064,25 @@ export class StationComponent
    */
   private saveStationWidgetsChanges(): void {
     this.widgetLoading = true;
-    this.inputFrameWidgetItems.map((field) => {
-      if (field.questions) {
-        field.data = JSON.stringify(field.questions);
-      }
-    });
     this.stationService
       .saveStationWidgets(this.stationRithmId, this.inputFrameWidgetItems)
       .pipe(first())
       .subscribe({
-        next: (inputFrames) => {
-          inputFrames.forEach((input, index) => {
-            input.id = index;
-            if (input.data && JSON.parse(input.data)?.length > 0) {
-              input.questions = [];
-              input.questions = JSON.parse(input.data);
-            } else if (input.type === FrameType.Input) {
-              input.questions = [];
-            }
-          });
-          this.inputFrameWidgetItems = inputFrames;
-          if (inputFrames.length) {
+        next: () => {
+          /** If we get in this section is cause the saved was succeed. If so can keep the same info sent. */
+          if (this.inputFrameWidgetItems.length) {
             this.saveInputFrameQuestions(
-              inputFrames.filter((iframe) => iframe.type === FrameType.Input)
+              this.inputFrameWidgetItems.filter(
+                (iframe) => iframe.type === FrameType.Input
+              )
             );
           } else {
             this.widgetLoading = false;
             this.setGridMode('preview');
           }
+          this.stationService.currentStationQuestions$.next(
+            this.stationInputFrames
+          );
           this.changedOptions();
         },
         error: (error: unknown) => {
@@ -1067,16 +1104,13 @@ export class StationComponent
     if (frames.length) {
       const frameQuestionRequest: Observable<Question[]>[] = [];
       frames.forEach((frame) => {
-        if (frame.data !== '') {
-          const fQuestions: Question[] = JSON.parse(frame.data);
-          if (fQuestions.length) {
-            frameQuestionRequest.push(
-              this.stationService.saveInputFrameQuestions(
-                frame.rithmId,
-                fQuestions
-              )
-            );
-          }
+        if (frame.questions?.length) {
+          frameQuestionRequest.push(
+            this.stationService.saveInputFrameQuestions(
+              frame.rithmId,
+              frame.questions
+            )
+          );
         }
       });
       this.forkJoinFrameQuestions(frameQuestionRequest);
@@ -1122,6 +1156,7 @@ export class StationComponent
     if (confirm) {
       this.editMode = false;
       this.setGridMode('preview');
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1227,6 +1262,7 @@ export class StationComponent
     this.isOpenDrawerLeft = !this.isOpenDrawerLeft;
     if (this.settingMode) {
       this.setGridMode('layout');
+      this.showTextAlignIcons = false;
     }
   }
 
@@ -1240,6 +1276,7 @@ export class StationComponent
     field: Question | ImageWidgetObject | string,
     type: FrameType
   ): void {
+    this.showTextAlignIcons = false;
     /** If the left drawer is open, it must be closed. */
     if (this.isOpenDrawerLeft) {
       this.isOpenDrawerLeft = false;
@@ -1283,6 +1320,17 @@ export class StationComponent
    */
   focusWidget(index: number): void {
     this.widgetFocused = index === this.widgetFocused ? -1 : index;
+    if (this.widgetFocused !== -1 && this.settingMode) {
+      if (
+        this.textWidgetTypes.includes(
+          this.inputFrameWidgetItems[this.widgetFocused].type
+        )
+      ) {
+        this.showTextAlignIcons = true;
+      }
+    } else {
+      this.showTextAlignIcons = false;
+    }
   }
 
   /**

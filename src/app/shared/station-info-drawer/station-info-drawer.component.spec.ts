@@ -767,4 +767,44 @@ describe('StationInfoDrawerComponent', () => {
       expectData
     );
   });
+
+  it('should change name in the input of station', () => {
+    component.stationRithmId = stationId;
+    component.stationName = 'Untitled Name';
+    const updateNameStationSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateStationName'
+    ).and.callThrough();
+
+    component.saveNameStationButton();
+
+    expect(updateNameStationSpy).toHaveBeenCalledWith(
+      component.stationName,
+      component.stationRithmId
+    );
+  });
+
+  it('should display error message on change name station', () => {
+    component.stationRithmId = stationId;
+    component.stationName = 'Untitled Name';
+    const updateNameStationSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateStationName'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.saveNameStationButton();
+
+    expect(updateNameStationSpy).toHaveBeenCalledWith(
+      component.stationName,
+      component.stationRithmId
+    );
+    expect(spyError).toHaveBeenCalled();
+  });
 });
