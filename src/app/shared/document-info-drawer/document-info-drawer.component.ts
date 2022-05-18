@@ -521,9 +521,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   async unassignUser(): Promise<void> {
     const userUnassigned = await this.popupService.confirm({
-      title: 'Are you sure?',
-      message:
-        'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      title: 'Unassign User',
+      message: 'This action cannot be undone',
       okButtonText: 'Unassign',
       cancelButtonText: 'Cancel',
       important: true,
