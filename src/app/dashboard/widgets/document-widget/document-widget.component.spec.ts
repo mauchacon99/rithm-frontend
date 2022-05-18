@@ -7,8 +7,6 @@ import {
 } from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,6 +20,8 @@ import {
   WidgetType,
 } from 'src/models';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;

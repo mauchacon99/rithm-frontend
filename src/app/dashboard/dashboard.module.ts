@@ -33,8 +33,6 @@ import { DocumentModule } from 'src/app/document/document.module';
 import { DocumentWidgetComponent } from './widgets/document-widget/document-widget.component';
 import { StationWidgetDrawerComponent } from './drawer-widget/station-widget-drawer/station-widget-drawer.component';
 import { WidgetDrawerComponent } from './drawer-widget/widget-drawer/widget-drawer.component';
-import { LoadingWidgetComponent } from './widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from './widgets/error-widget/error-widget.component';
 import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-widget-modal.component';
 import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
@@ -57,6 +55,8 @@ import { ManagementMemberDashboardModalComponent } from './management-member-das
 import { MemberDashboardListModalComponent } from './management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
+import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
+import { ErrorWidgetModule } from '../shared/widget-dashboard/error-widget/error-widget.module';
 
 @NgModule({
   declarations: [
@@ -69,8 +69,6 @@ import { MatChipsModule } from '@angular/material/chips';
     DocumentWidgetComponent,
     StationWidgetDrawerComponent,
     WidgetDrawerComponent,
-    LoadingWidgetComponent,
-    ErrorWidgetComponent,
     DocumentWidgetDrawerComponent,
     AddWidgetModalComponent,
     CustomTabWidgetModalComponent,
@@ -120,6 +118,8 @@ import { MatChipsModule } from '@angular/material/chips';
     NgChartsModule,
     MatCheckboxModule,
     MatChipsModule,
+    LoadingWidgetModule,
+    ErrorWidgetModule,
   ],
   providers: [MobileBrowserChecker],
 })
