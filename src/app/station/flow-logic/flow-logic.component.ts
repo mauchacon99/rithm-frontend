@@ -12,9 +12,11 @@ import {
   FlowLogicRule,
   Question,
   Power,
+  PowerTrigger,
   Rule,
   RuleEquation,
   RuleType,
+  TriggerType,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
@@ -27,6 +29,8 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationService } from 'src/app/core/station.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Component for the flow logic tab on a station.
@@ -89,6 +93,17 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The powers of current station. */
   stationPowers: Power[] = [];
 
+  /** The powers that are currently being edited. */
+  editedPower: Power = {
+    rithmId: uuidv4(),
+    triggers: [],
+    actions: [],
+    stationRithmId: '',
+    flowToStationRithmIds: [],
+    name: 'Untitled Rule',
+    condition: 'Condition Rule',
+  };
+
   /** The date and time zone shown, if true. */
   showDateTimeZone = false;
 
@@ -135,6 +150,9 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
 
   /** The list of all stations. */
   stations: ConnectedStationInfo[] = [];
+
+  /** List trigger type. */
+  triggerType = TriggerType;
 
   /** Loading/Errors block. */
   /* Loading in input auto-complete the list of all stations. */
@@ -600,6 +618,33 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Remove or add trigger in the rules stations.
+   *
+   * @param triggerType The trigger type switched.
+   * @param eventToggle The event that checked the toogle.
+   */
+  removeOrAddTriggerType(
+    triggerType: TriggerType,
+    eventToggle: MatSlideToggleChange
+  ): void {
+    this.editedPower.stationRithmId = this.rithmId;
+    if (eventToggle.checked) {
+      const triggerPower: PowerTrigger = {
+        rithmId: uuidv4(),
+        type: triggerType,
+        source: '',
+        value: '',
+      };
+      this.editedPower.triggers.push(triggerPower);
+    } else {
+      const triggerIndex = this.editedPower.triggers.findIndex(
+        (trigger) => triggerType === trigger.type
+      );
+      this.editedPower.triggers.splice(triggerIndex, 1);
+    }
   }
 
   /**

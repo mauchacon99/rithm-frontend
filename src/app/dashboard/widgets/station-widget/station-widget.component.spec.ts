@@ -24,8 +24,6 @@ import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -36,6 +34,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { UserService } from 'src/app/core/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 /** Represents data of columns. */
 interface DataTableValues {
@@ -494,6 +494,50 @@ describe('StationWidgetComponent', () => {
     const noDocsMessage =
       fixture.debugElement.nativeElement.querySelector('#no-docs-message');
     expect(noDocsMessage).toBeFalsy();
+  });
+
+  it('should not display a message when there are documents and no selected columns', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.dataSourceTable = new MatTableDataSource([
+      {
+        rithmId: component.dataStationWidget.documents[0].rithmId,
+        name: component.dataStationWidget.documents[0].name,
+      },
+    ] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeFalsy();
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeNull();
+  });
+
+  it('should display a message when there  are not documents and no selected columns', () => {
+    component.isLoading = false;
+    component.failedLoadWidget = false;
+    component.isDocument = false;
+    component.dataSourceTable = new MatTableDataSource([] as DataTableValues[]);
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents,
+    };
+    fixture.detectChanges();
+    const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
+      '#no-columns-message'
+    );
+    expect(noColumnsMessage).toBeTruthy();
+    const noDocsMessage =
+      fixture.debugElement.nativeElement.querySelector('#no-docs-message');
+    expect(noDocsMessage).toBeNull();
   });
 
   it('should show a gear icon in edit mode', () => {
