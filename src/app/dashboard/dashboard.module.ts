@@ -39,14 +39,12 @@ import { AddWidgetModalComponent } from './widget-modal/add-widget-modal/add-wid
 import { DocumentWidgetDrawerComponent } from './drawer-widget/document-widget-drawer/document-widget-drawer.component';
 import { CustomTabWidgetModalComponent } from './widget-modal/custom-tab-widget-modal/custom-tab-widget-modal.component';
 import { ItemListWidgetModalComponent } from './widget-modal/item-list-widget-modal/item-list-widget-modal.component';
-import { BannerImageWidgetComponent } from './widgets/banner-image-widget/banner-image-widget.component';
 import { ListWidgetModalComponent } from './widget-modal/list-widget-modal/list-widget-modal.component';
 import { StationWidgetTemplateModalComponent } from './widget-modal/station-widget-template-modal/station-widget-template-modal.component';
 import { DocumentWidgetTemplateModalComponent } from './widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 import { DescriptionWidgetModalComponent } from './widget-modal/description-widget-modal/description-widget-modal.component';
 import { GroupWidgetTemplateModalComponent } from './widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 import { GroupSearchWidgetComponent } from './widgets/group-search-widget/group-search-widget.component';
-import { AvatarImageWidgetComponent } from './widgets/avatar-image-widget/avatar-image-widget.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
 import { GroupTrafficWidgetComponent } from './widgets/group-traffic-widget/group-traffic-widget.component';
@@ -57,6 +55,7 @@ import { ManagementMemberDashboardModalComponent } from './management-member-das
 import { MemberDashboardListModalComponent } from './management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
+import { WidgetDashboardModule } from '../shared/widget-dashboard/widget-dashboard.module';
 
 @NgModule({
   declarations: [
@@ -75,14 +74,12 @@ import { MatChipsModule } from '@angular/material/chips';
     AddWidgetModalComponent,
     CustomTabWidgetModalComponent,
     ItemListWidgetModalComponent,
-    BannerImageWidgetComponent,
     ListWidgetModalComponent,
     StationWidgetTemplateModalComponent,
     DocumentWidgetTemplateModalComponent,
     DescriptionWidgetModalComponent,
     GroupWidgetTemplateModalComponent,
     GroupSearchWidgetComponent,
-    AvatarImageWidgetComponent,
     GroupTrafficWidgetComponent,
     StationPreBuiltWidgetComponent,
     PreBuiltWidgetTemplateModalComponent,
@@ -120,6 +117,7 @@ import { MatChipsModule } from '@angular/material/chips';
     NgChartsModule,
     MatCheckboxModule,
     MatChipsModule,
+    WidgetDashboardModule,
   ],
   providers: [MobileBrowserChecker],
 })
