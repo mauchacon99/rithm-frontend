@@ -5,6 +5,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { MemberDashboard, RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**Interface data modal. */
 interface ModalData {
@@ -33,6 +34,9 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Enum type of role dashboard. */
   enumRoleDashboardMenu = RoleDashboardMenu;
 
+  /** Form users. */
+  form!: FormGroup;
+
   /** Loading get user members. */
   isLoadingGetUserMembers = false;
 
@@ -56,22 +60,40 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
   /** Search value. */
   search = '';
 
-  /** Select all checked. */
-  checkedSelectAll = false;
+  /**
+   * Get status check.
+   *
+   * @returns Status check.
+   */
+  get checkAll(): boolean {
+    return this.form.controls['checkAll'].value;
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public modalData: ModalData,
     private dashboardService: DashboardService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private fb: FormBuilder
   ) {}
 
   /** Init method. */
   ngOnInit(): void {
+    this.form = this.fb.group({
+      checkAll: this.fb.control(false),
+    });
+
     this.dashboardRithmId = this.modalData.dashboardRithmId;
     this.dashboardType = this.modalData.dashboardType;
     if (this.dashboardType === this.enumRoleDashboardMenu.Personal) {
       this.getUsersDashboardPersonal();
+    }
+  }
+
+  /** Add form for each user. */
+  private addForms(): void {
+    for (let index = 0; index < this.membersDashboard.length; index++) {
+      this.form.addControl(`member-${index}`, this.fb.control(''));
     }
   }
 
@@ -80,13 +102,14 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
     this.isLoadingGetUserMembers = true;
     this.errorGetUsersMember = false;
     this.dashboardService
-      .getUsersDashboardPersonal()
+      .getUsersDashboardPersonal(this.dashboardRithmId)
       .pipe(first())
       .subscribe({
         next: (membersDashboard) => {
           this.isLoadingGetUserMembers = false;
           this.errorGetUsersMember = false;
           this.membersDashboard = membersDashboard;
+          this.addForms();
         },
         error: (error: unknown) => {
           this.isLoadingGetUserMembers = false;
@@ -118,12 +141,5 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
           );
         },
       });
-  }
-
-  /**
-   * Detected change in mat-select.
-   */
-  matSelectChange(): void {
-    /** Detected change here with selectedFilterValue. */
   }
 }

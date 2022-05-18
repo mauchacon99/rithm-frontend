@@ -648,6 +648,57 @@ describe('DocumentWidgetComponent', () => {
     expect(component.permissionError).toBeFalse();
   });
 
+  it('should show empty question message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#without-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
+
+  it('should show no selected message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: questions,
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+    spyOnProperty(component, 'getValueQuestions').and.returnValue([]);
+    spyOnProperty(component, 'getDefaultValueQuestions').and.returnValue([]);
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#no-selected-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
+
   it('should catch error when the widget has been deleted', () => {
     spyOn(documentService, 'getDocumentWidget').and.returnValue(
       throwError(() => {
@@ -668,13 +719,13 @@ describe('DocumentWidgetComponent', () => {
       stations: [],
     };
     fixture.detectChanges();
-    const spyDeteleWidget = spyOn(
+    const spyDeleteWidget = spyOn(
       component.deleteWidget,
       'emit'
     ).and.callThrough();
     const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
     component.removeWidget();
-    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDeleteWidget).toHaveBeenCalled();
     expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });

@@ -499,7 +499,11 @@
                               type="button"
                               class="drag-handler"
                               data-testid="button-drag-handler"
-                              *ngIf="widgetMoveButton === i && layoutMode"
+                              *ngIf="
+                                widgetMoveButton === i &&
+                                layoutMode &&
+                                !isMobileView
+                              "
                             >
                               <i class="fas fa-arrows fa-xl"></i>
                             </button>
