@@ -190,7 +190,7 @@ describe('StationFieldComponent', () => {
   it('should call the method that returns all stations.', () => {
     const getAllStations = spyOn(
       TestBed.inject(StationService),
-      'getAllStations'
+      'getAllStationsOptimized'
     ).and.callThrough();
 
     component['getAllStations']();
@@ -198,7 +198,10 @@ describe('StationFieldComponent', () => {
   });
 
   it('should show error message when request for get all stations fails', () => {
-    spyOn(TestBed.inject(StationService), 'getAllStations').and.returnValue(
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllStationsOptimized'
+    ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
