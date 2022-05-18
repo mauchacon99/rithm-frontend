@@ -28,7 +28,7 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
+import { BannerImageWidgetComponent } from 'src/app/shared/widget-dashboard/banner-image-widget/banner-image-widget.component';
 import { MatSortModule } from '@angular/material/sort';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
