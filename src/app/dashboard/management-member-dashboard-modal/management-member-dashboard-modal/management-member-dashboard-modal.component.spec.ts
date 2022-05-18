@@ -9,8 +9,6 @@ import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockDashboardService } from 'src/mocks';
 import { throwError } from 'rxjs';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
@@ -19,6 +17,8 @@ import {
   BrowserAnimationsModule,
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('ManagementMemberDashboardModalComponent', () => {
   let component: ManagementMemberDashboardModalComponent;
