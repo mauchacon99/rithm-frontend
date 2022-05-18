@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
-import { RoleDashboardMenu } from 'src/models';
+import { MemberDashboard, RoleDashboardMenu } from 'src/models';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 
 import { ManagementMemberDashboardModalComponent } from './management-member-dashboard-modal.component';
@@ -37,7 +37,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     dashboardType: RoleDashboardMenu.Personal,
   };
 
-  const testUsers: UsersAdd[] = [
+  const testUsersAdd: UsersAdd[] = [
     {
       userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
       canView: true,
@@ -47,6 +47,27 @@ describe('ManagementMemberDashboardModalComponent', () => {
       userRithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
       canView: true,
       isEditable: true,
+    },
+  ];
+
+  const testUsers: MemberDashboard[] = [
+    {
+      rithmId: '123-456-789',
+      profileImageRithmId: '123-456-789',
+      firstName: 'Test 1',
+      lastName: 'Eagle 1',
+      email: 'test1@email.com',
+      canView: true,
+      isEditable: true,
+    },
+    {
+      rithmId: '123-856-789',
+      profileImageRithmId: '325-456-789',
+      firstName: 'Test 2',
+      lastName: 'Eagle 3',
+      email: 'test2@email.com',
+      canView: true,
+      isEditable: false,
     },
   ];
   let dashboardService: DashboardService;
@@ -84,7 +105,7 @@ describe('ManagementMemberDashboardModalComponent', () => {
     fixture = TestBed.createComponent(ManagementMemberDashboardModalComponent);
     component = fixture.componentInstance;
     component.dashboardRithmId = '123-123-132';
-    component.usersAdd = testUsers;
+    component.usersAdd = testUsersAdd;
     dashboardService = TestBed.inject(DashboardService);
     errorService = TestBed.inject(ErrorService);
     fixture.detectChanges();
