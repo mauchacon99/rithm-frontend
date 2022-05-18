@@ -123,6 +123,25 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** The different options for the date interval repeat type. */
+  readonly dateIntervalRepeatOptions = [
+    'Never',
+    'Every minute (coming soon)',
+    'Hourly (coming soon)',
+    'Daily',
+    'Weekly',
+    'Weekdays',
+    'Weekends',
+    'Monthly',
+    'Yearly',
+  ];
+
+  /** Display date interval repeat section if 'never' isn't selected, else hide. */
+  showRepeatForever = false;
+
+  /** The end repeat start. */
+  startDate = new Date();
+
   /**Filtered form station List. */
   filteredStations$: Observable<ConnectedStationInfo[]> | undefined;
 
@@ -151,7 +170,13 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   ) {
     this.scheduleTriggerForm = this.fb.group({
       scheduleTriggerType: this.fb.control(''),
+      intervalRepeatType: this.fb.control(''),
+      isRepeat: false,
+      endRepeatDate: '',
     });
+
+    /** The date interval end repeat date to be next of the current date. */
+    this.startDate.setDate(this.startDate.getDate() + 1);
   }
 
   /**
@@ -557,6 +582,20 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
       this.showDateTimeZone = true;
     } else {
       this.showDateTimeZone = false;
+    }
+  }
+
+  /**
+   * Update's the selected interval repeat type array for date interval
+   * repeat forever section to display.
+   */
+  intervalRepeatTypeSelect(): void {
+    const selectedIntervalRepeatType =
+      this.scheduleTriggerForm.controls.intervalRepeatType.value;
+    if (selectedIntervalRepeatType !== 'Never') {
+      this.showRepeatForever = true;
+    } else {
+      this.showRepeatForever = false;
     }
   }
 
