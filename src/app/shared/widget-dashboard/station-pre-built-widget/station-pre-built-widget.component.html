@@ -1,0 +1,221 @@
+<!--Loading the widget-->
+<app-loading-widget
+  *ngIf="isLoading"
+  id="app-loading-indicator-station-pre-built"
+></app-loading-widget>
+<!--Show error in the widget-->
+<app-error-widget
+  *ngIf="errorStationPrebuilt"
+  id="error-load-widget-station-pre-built"
+  [errorMessage]="
+    widgetDeleted
+      ? 'Oops, it looks like this station has been removed.'
+      : 'Unable to retrieve stations data'
+  "
+  [permission]="permissionError"
+  [widgetDeleted]="widgetDeleted"
+  [dashboardPermission]="dashboardPermission"
+  (deleteWidget)="removeWidget()"
+  (tryAgain)="getStationWidgetPreBuiltData()"
+>
+</app-error-widget>
+<div
+  *ngIf="!isLoading && !errorStationPrebuilt && stationWidgetData"
+  class="h-full w-full p-2"
+>
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold truncate mb-2">My Stations</h3>
+    <div *ngIf="editMode && showButtonSetting">
+      <button
+        mat-icon-button
+        [disabled]="isDrawerOpen && drawerContext !== 'menuDashboard'"
+        (click)="toggleEditStation()"
+        id="toggle-edit-station-pre-built"
+        data-testid="toggle-edit-station-pre-built"
+        class="text-secondary-500"
+      >
+        <i class="fas fa-cog text-base"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-grow overflow-auto scrollbar h-[calc(100%-40px)]">
+    <ng-container
+      *ngIf="stationWidgetData.length; then tableStations; else emptyStations"
+    >
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #tableStations>
+  <table
+    mat-table
+    [dataSource]="dataSourceTable"
+    [matSortDisabled]="editMode"
+    matSort
+    class="w-full table-sort"
+  >
+    <!-- Name Station -->
+    <ng-container matColumnDef="name">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'name' ||
+            !dataSourceTable.sort?.direction
+        }"
+      >
+        <p class="font-semibold truncate text-xs text-secondary-300">STATION</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'name' }"
+        >
+        </ng-container>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        {{ element['name']?.trim() || 'N/A' }}
+      </td>
+    </ng-container>
+
+    <!-- Total Containers -->
+    <ng-container matColumnDef="totalContainers">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'totalContainers' ||
+            !dataSourceTable.sort?.direction
+        }"
+      >
+        <p class="font-semibold truncate text-xs text-secondary-300">
+          CONTAINERS
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'totalContainers' }
+          "
+        >
+        </ng-container>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        <a *ngIf="!editMode" (click)="openDocsModal(element)"
+          >{{ element['totalContainers'] }} Containers</a
+        >
+        <span *ngIf="editMode"
+          >{{ element['totalContainers'] }} Containers</span
+        >
+      </td>
+    </ng-container>
+
+    <!-- Station Group -->
+    <ng-container matColumnDef="groupName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'groupName' ||
+            !dataSourceTable.sort?.direction
+        }"
+      >
+        <p class="font-semibold truncate text-xs text-secondary-300">GROUP</p>
+        <ng-container
+          *ngTemplateOutlet="buttonSort; context: { $implicit: 'groupName' }"
+        >
+        </ng-container>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        {{ element['groupName']?.trim() || 'N/A' }}
+      </td>
+    </ng-container>
+
+    <!-- Station Owners -->
+    <ng-container matColumnDef="stationOwners">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="pr-2 max-w-[150px]"
+        [ngClass]="{
+          'text-transparent hover:text-primary-300':
+            dataSourceTable.sort?.active !== 'stationOwners' ||
+            !dataSourceTable.sort?.direction
+        }"
+      >
+        <p class="font-semibold truncate text-xs text-secondary-300">
+          STATION OWNERS
+        </p>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonSort;
+            context: { $implicit: 'stationOwners' }
+          "
+        >
+        </ng-container>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="min-w-[150px] px-2 text-xs text-secondary-500"
+      >
+        <div class="ml-2.5">
+          <app-roster
+            [stationId]="element['rithmId'] || ''"
+            [isWorker]="false"
+            [editMode]="!editMode"
+            [stationMembers]="element['stationOwners'] || []"
+            [fromDrawer]="true"
+          >
+          </app-roster>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</ng-template>
+
+<ng-template #emptyStations>
+  <div class="text-center my-4 text-sm">There are not stations.</div>
+</ng-template>
+
+<ng-template #buttonSort let-type>
+  <i
+    *ngIf="!editMode"
+    class="fas text-base ml-3"
+    [ngClass]="{
+      'text-accent-500':
+        dataSourceTable.sort?.active === type &&
+        dataSourceTable.sort?.direction,
+      'fa-caret-down':
+        dataSourceTable.sort?.direction === 'desc' &&
+        dataSourceTable.sort?.active === type,
+      'fa-caret-up':
+        (dataSourceTable.sort?.direction === 'asc' &&
+          dataSourceTable.sort?.active === type) ||
+        dataSourceTable.sort?.active !== type ||
+        !dataSourceTable.sort?.direction
+    }"
+  ></i>
+</ng-template>
