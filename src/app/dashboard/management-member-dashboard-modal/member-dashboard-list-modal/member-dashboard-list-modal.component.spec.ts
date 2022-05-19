@@ -79,4 +79,43 @@ describe('MemberDashboardListModalComponent', () => {
     expect(component.isEditable).toBeTrue();
     expect(component.form.controls['isEditable'].value).toBeTrue();
   });
+  describe('getter checkAll', () => {
+    beforeEach(() => {
+      const fb = TestBed.inject(FormBuilder);
+      component.form = fb.group({
+        check: fb.control(true),
+        isEditable: fb.control(true),
+      });
+    });
+
+    it('should set isCheck', () => {
+      component.isCheck = false;
+      component.checkAll = true;
+      expect(component.isCheck).toBeTrue();
+    });
+
+    it('should call patchValue', () => {
+      const spyPatchValue = spyOn(
+        component.form,
+        'patchValue'
+      ).and.callThrough();
+      component.isCheck = false;
+      component.checkAll = false;
+      expect(spyPatchValue).toHaveBeenCalledOnceWith({
+        check: false,
+        isEditable: false,
+      });
+    });
+
+    it('should emit deselectCheckAll', () => {
+      spyOnProperty(component, 'checkAll').and.returnValue(true);
+      spyOnProperty(component, 'check').and.returnValue(false);
+      const spyEmit = spyOn(
+        component.deselectCheckAll,
+        'emit'
+      ).and.callThrough();
+      component.onChange();
+      expect(spyEmit).toHaveBeenCalled();
+    });
+  });
 });

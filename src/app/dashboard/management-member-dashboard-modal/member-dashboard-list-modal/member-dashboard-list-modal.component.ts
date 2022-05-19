@@ -48,12 +48,8 @@ export class MemberDashboardListModalComponent
       if (!this.isCheck) {
         this.form.patchValue({
           check: status,
+          isEditable: false,
         });
-        if (!status) {
-          this.form.patchValue({
-            isEditable: false,
-          });
-        }
       }
     }
   }
