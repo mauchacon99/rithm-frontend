@@ -52,7 +52,9 @@ describe('MemberDashboardListModalComponent', () => {
   });
 
   it('should set default value in isEditable when check is false', () => {
-    component.isEditable = true;
+    component.form.patchValue({
+      isEditable: true,
+    });
     spyOnProperty(component, 'check').and.returnValue(false);
     fixture.detectChanges();
     component.onChange();
@@ -63,7 +65,9 @@ describe('MemberDashboardListModalComponent', () => {
   it('should change value in isEditable when clicked chip', () => {
     const index = 1;
     component.index = index;
-    component.isEditable = false;
+    component.form.patchValue({
+      isEditable: false,
+    });
     spyOnProperty(component, 'check').and.returnValue(true);
     fixture.detectChanges();
 
@@ -74,5 +78,44 @@ describe('MemberDashboardListModalComponent', () => {
     chip.click();
     expect(component.isEditable).toBeTrue();
     expect(component.form.controls['isEditable'].value).toBeTrue();
+  });
+  describe('getter checkAll', () => {
+    beforeEach(() => {
+      const fb = TestBed.inject(FormBuilder);
+      component.form = fb.group({
+        check: fb.control(true),
+        isEditable: fb.control(true),
+      });
+    });
+
+    it('should set isCheck', () => {
+      component.isCheck = false;
+      component.checkAll = true;
+      expect(component.isCheck).toBeTrue();
+    });
+
+    it('should call patchValue', () => {
+      const spyPatchValue = spyOn(
+        component.form,
+        'patchValue'
+      ).and.callThrough();
+      component.isCheck = false;
+      component.checkAll = false;
+      expect(spyPatchValue).toHaveBeenCalledOnceWith({
+        check: false,
+        isEditable: false,
+      });
+    });
+
+    it('should emit deselectCheckAll', () => {
+      spyOnProperty(component, 'checkAll').and.returnValue(true);
+      spyOnProperty(component, 'check').and.returnValue(false);
+      const spyEmit = spyOn(
+        component.deselectCheckAll,
+        'emit'
+      ).and.callThrough();
+      component.onChange();
+      expect(spyEmit).toHaveBeenCalled();
+    });
   });
 });
