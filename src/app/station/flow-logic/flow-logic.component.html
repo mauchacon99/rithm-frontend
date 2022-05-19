@@ -682,29 +682,38 @@
           >
             <!-- Tab Flow -->
             <mat-tab label="tab-flow" aria-label="tab-flow">
-              <section
-                class="tab-flow-content flex items-center"
-                [formGroup]="flowFieldForm"
-              >
-                <mat-form-field class="md:w-2/5 w-full" appearance="outline">
-                  <mat-label> Available Stations </mat-label>
-                  <mat-select formControlName="stations" multiple>
-                    <mat-option
-                      *ngFor="let option of filteredStations$ | async"
-                      [value]="option.rithmId"
+              <section class="tab-flow-content px-8 pt-6 pb-10">
+                <div class="flex items-center" [formGroup]="flowFieldForm">
+                  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+                    <mat-label> Available Stations </mat-label>
+                    <mat-select
+                      formControlName="stations"
+                      multiple
+                      (selectionChange)="flowStationSelect()"
                     >
-                      {{ option.name }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <div class="px-3" *ngIf="stationLoading">
-                  <app-loading-indicator
-                    inlineText="Loading Stations..."
-                  ></app-loading-indicator>
+                      <mat-option
+                        *ngFor="let option of filteredStations$ | async"
+                        [value]="option.rithmId"
+                      >
+                        {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div class="flex items-center px-3" *ngIf="stationLoading">
+                    <app-loading-indicator
+                      inlineText="Loading Stations..."
+                    ></app-loading-indicator>
+                  </div>
                 </div>
+                <mat-form-field class="station-chip-list">
+                  <mat-chip-list #chipList aria-label="station selection">
+                    <mat-chip *ngFor="let station of flowStations">
+                      {{ station.name }}
+                    </mat-chip>
+                  </mat-chip-list>
+                </mat-form-field>
               </section>
             </mat-tab>
-
             <!-- Tab Container -->
             <mat-tab label="tab-container" aria-label="tab-container">
               <section class="pt-6 pb-10">
