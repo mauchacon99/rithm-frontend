@@ -2183,7 +2183,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       ) {
         //open documents modal for clicked station.
         this.dialog.open(StationDocumentsModalComponent, {
-          minWidth: '370px',
+          panelClass: ['h-[560px]', 'overflow-hidden'],
+          minWidth: '300px',
           data: {
             stationName: station.stationName,
             stationId: station.rithmId,

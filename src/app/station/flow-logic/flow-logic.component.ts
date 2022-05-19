@@ -12,9 +12,11 @@ import {
   FlowLogicRule,
   Question,
   Power,
+  PowerTrigger,
   Rule,
   RuleEquation,
   RuleType,
+  TriggerType,
 } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
@@ -27,6 +29,8 @@ import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationService } from 'src/app/core/station.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Component for the flow logic tab on a station.
@@ -89,6 +93,17 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The powers of current station. */
   stationPowers: Power[] = [];
 
+  /** The powers that are currently being edited. */
+  editedPower: Power = {
+    rithmId: uuidv4(),
+    triggers: [],
+    actions: [],
+    stationRithmId: '',
+    flowToStationRithmIds: [],
+    name: 'Untitled Rule',
+    condition: 'Condition Rule',
+  };
+
   /** The date and time zone shown, if true. */
   showDateTimeZone = false;
 
@@ -108,6 +123,25 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The error if rules fails . */
   flowRuleError = false;
 
+  /** The different options for the date interval repeat type. */
+  readonly dateIntervalRepeatOptions = [
+    'Never',
+    'Every minute (coming soon)',
+    'Hourly (coming soon)',
+    'Daily',
+    'Weekly',
+    'Weekdays',
+    'Weekends',
+    'Monthly',
+    'Yearly',
+  ];
+
+  /** Display date interval repeat section if 'never' isn't selected, else hide. */
+  showRepeatForever = false;
+
+  /** The end repeat start. */
+  startDate = new Date();
+
   /**Filtered form station List. */
   filteredStations$: Observable<ConnectedStationInfo[]> | undefined;
 
@@ -117,9 +151,15 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /** The list of all stations. */
   stations: ConnectedStationInfo[] = [];
 
+  /** List trigger type. */
+  triggerType = TriggerType;
+
   /** Loading/Errors block. */
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
+
+  /** The list of selected stations in flow section. */
+  flowStations: ConnectedStationInfo[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -133,7 +173,13 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   ) {
     this.scheduleTriggerForm = this.fb.group({
       scheduleTriggerType: this.fb.control(''),
+      intervalRepeatType: this.fb.control(''),
+      isRepeat: false,
+      endRepeatDate: '',
     });
+
+    /** The date interval end repeat date to be next of the current date. */
+    this.startDate.setDate(this.startDate.getDate() + 1);
   }
 
   /**
@@ -142,7 +188,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
-
+    this.subscribeCurrentStationQuestions();
     this.flowFieldForm = this.fb.group({
       stations: [''],
     });
@@ -506,7 +552,22 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
+   * Update's the selected station array data which is displayed as chips.
+   *
+   */
+  flowStationSelect(): void {
+    this.flowStations = [];
+    this.flowFieldForm.controls.stations.value.map((stationId: string) => {
+      const station = this.stations.find((e) => e.rithmId === stationId);
+      if (station) {
+        this.flowStations.push(station);
+      }
+    });
+  }
+
+  /**
    * Get the powers (triggers, actions, flow) of current station.
+   *
    */
   private getStationPowers(): void {
     this.powersLoading = true;
@@ -543,6 +604,20 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
+   * Update's the selected interval repeat type array for date interval
+   * repeat forever section to display.
+   */
+  intervalRepeatTypeSelect(): void {
+    const selectedIntervalRepeatType =
+      this.scheduleTriggerForm.controls.intervalRepeatType.value;
+    if (selectedIntervalRepeatType !== 'Never') {
+      this.showRepeatForever = true;
+    } else {
+      this.showRepeatForever = false;
+    }
+  }
+
+  /**
    * Delete the power of current station.
    *
    * @param powerRemove The power that will be removed.
@@ -561,6 +636,33 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Remove or add trigger in the rules stations.
+   *
+   * @param triggerType The trigger type switched.
+   * @param eventToggle The event that checked the toogle.
+   */
+  removeOrAddTriggerType(
+    triggerType: TriggerType,
+    eventToggle: MatSlideToggleChange
+  ): void {
+    this.editedPower.stationRithmId = this.rithmId;
+    if (eventToggle.checked) {
+      const triggerPower: PowerTrigger = {
+        rithmId: uuidv4(),
+        type: triggerType,
+        source: '',
+        value: '',
+      };
+      this.editedPower.triggers.push(triggerPower);
+    } else {
+      const triggerIndex = this.editedPower.triggers.findIndex(
+        (trigger) => triggerType === trigger.type
+      );
+      this.editedPower.triggers.splice(triggerIndex, 1);
+    }
   }
 
   /**

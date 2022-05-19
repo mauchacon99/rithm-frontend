@@ -15,6 +15,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for connected stations.
@@ -64,6 +65,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Label Select of modal. */
   label = 'Select Station';
 
+  /** Whether the user was assigned to the document or not. */
+  assignedUser: number | undefined = 0;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
@@ -73,10 +77,12 @@ export class ConnectedStationsModalComponent implements OnInit {
     private router: Router,
     public dialogRef: MatDialogRef<ConnectedStationsModalComponent>,
     private stationService: StationService,
-    private userService: UserService
+    private userService: UserService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
+    this.assignedUser = data.assignedUser;
   }
 
   /**
@@ -186,11 +192,31 @@ export class ConnectedStationsModalComponent implements OnInit {
   }
 
   /**
+   * Unassign user to document.
+   */
+  private unassignUserToDocument(): void {
+    this.documentService
+      .unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Move the document from a station to another.
    */
   moveDocument(): void {
     this.moveDocumentError = false;
     this.connectedStationLoading = true;
+    if (this.assignedUser) {
+      this.unassignUserToDocument();
+    }
     const moveDocument: MoveDocument = {
       fromStationRithmId: this.stationRithmId,
       toStationRithmIds: [this.formMoveDocument.value?.rithmId],
@@ -201,6 +227,9 @@ export class ConnectedStationsModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.sidenavDrawerService.toggleDrawer('documentInfo', {
+            stationRithmId: this.formMoveDocument.value?.rithmId,
+          });
           this.popupService.notify('The document has been moved successfully');
           this.moveDocumentError = false;
           this.connectedStationLoading = false;

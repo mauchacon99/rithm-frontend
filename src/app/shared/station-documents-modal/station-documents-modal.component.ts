@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -49,6 +55,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Is loading to get documents by scroll. */
   isLoadingScroll = false;
 
+  /** Error Loading component. */
+  errorLoadingStationDocumentsModal = false;
+
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
@@ -84,7 +93,8 @@ export class StationDocumentsModalComponent implements OnInit {
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>,
     private router: Router,
     private splitService: SplitService,
-    private userService: UserService
+    private userService: UserService,
+    private cd: ChangeDetectorRef
   ) {
     this.stationRithmId = this.modalData.stationId;
   }
@@ -148,6 +158,7 @@ export class StationDocumentsModalComponent implements OnInit {
               ? this.documents.concat(documentsResponse.documents)
               : documentsResponse.documents;
             this.dataSourceTable = new MatTableDataSource(this.documents);
+            this.cd.detectChanges();
             this.totalNumDocs = documentsResponse.totalDocuments;
             this.userType = documentsResponse.userType;
           }
@@ -171,6 +182,7 @@ export class StationDocumentsModalComponent implements OnInit {
   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
+    this.errorLoadingStationDocumentsModal = false;
     this.documentService
       .getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
@@ -183,9 +195,11 @@ export class StationDocumentsModalComponent implements OnInit {
             this.userType = documentsResponse.userType;
           }
           this.isLoading = false;
+          this.errorLoadingStationDocumentsModal = false;
         },
         error: (error: unknown) => {
           this.isLoading = false;
+          this.errorLoadingStationDocumentsModal = true;
           this.closeModal();
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",

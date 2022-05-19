@@ -55,7 +55,10 @@
     class="h-[calc(100%-190px)] md:h-[calc(100%-140px)] overflow-scroll scrollbar"
   >
     <div class="mt-3 ml-3">
-      <mat-checkbox formControlName="checkAll" id="check-all"
+      <mat-checkbox
+        formControlName="checkAll"
+        (change)="onChangeSelectAll()"
+        id="check-all"
         >Select All</mat-checkbox
       >
     </div>
@@ -63,16 +66,19 @@
       <div
         class="w-full text-center mt-5"
         id="message-error-members"
-        *ngIf="!membersDashboard.length"
+        *ngIf="!membersDashboardFiltered.length"
       >
         There are not member for show.
       </div>
-      <ng-container *ngFor="let member of membersDashboard; let i = index">
+      <ng-container
+        *ngFor="let member of membersDashboardFiltered; let i = index"
+      >
         <app-member-dashboard-list-modal
-          [formControlName]="'member-' + i"
+          [formControlName]="member.rithmId"
           [member]="member"
-          [setCheckAll]="checkAll"
+          [checkAll]="checkAll"
           [index]="i"
+          (deselectCheckAll)="deselectCheckAll()"
         ></app-member-dashboard-list-modal>
       </ng-container>
     </div>

@@ -4,6 +4,7 @@ import { UserService } from 'src/app/core/user.service';
 import { SplitService } from 'src/app/core/split.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { first } from 'rxjs';
+
 /**
  * Main menu component for dashboard menu drawer.
  */

@@ -112,6 +112,21 @@
                         ></textarea>
                       </mat-form-field>
                     </div>
+                    <ng-container
+                      *ngFor="let data of savedDataLinkArray; let i = index"
+                    >
+                      <app-data-link-field
+                        [field]="savedDataLinkArrayQuestions[i]"
+                        formControlName="dataLinkForm"
+                        [data]="data"
+                        [stationLoading]="stationDataLoading"
+                        [hideHelp]="true"
+                      ></app-data-link-field>
+                      <mat-divider
+                        *ngIf="i !== savedDataLinkArray.length - 1"
+                        class="py-3"
+                      ></mat-divider>
+                    </ng-container>
                     <app-station-template
                       [stationRithmId]="stationRithmId"
                       [fields]="stationInformation.questions"

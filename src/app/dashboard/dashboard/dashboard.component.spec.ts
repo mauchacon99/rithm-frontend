@@ -36,18 +36,18 @@ import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MenuComponent } from 'src/app/dashboard/dashboard-menu/menu/menu.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
+import { StationWidgetComponent } from 'src/app/shared/widget-dashboard/station-widget/station-widget.component';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
-import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
+import { DocumentWidgetComponent } from 'src/app/shared/widget-dashboard/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MobileBrowserChecker } from 'src/helpers';
-import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
-import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
-import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
+import { GroupSearchWidgetComponent } from 'src/app/shared/widget-dashboard/group-search-widget/group-search-widget.component';
+import { GroupTrafficWidgetComponent } from 'src/app/shared/widget-dashboard/group-traffic-widget/group-traffic-widget.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ContainerPreBuiltWidgetComponent } from 'src/app/shared/widget-dashboard/container-pre-built-widget/container-pre-built-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;

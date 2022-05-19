@@ -191,7 +191,7 @@ describe('DocumentInfoDrawerComponent', () => {
       TestBed.inject(DocumentService),
       'deleteDocument'
     ).and.callThrough();
-
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     await component.deleteDocument();
 
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
@@ -209,7 +209,7 @@ describe('DocumentInfoDrawerComponent', () => {
       TestBed.inject(PopupService),
       'confirm'
     ).and.callThrough();
-
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     await component.deleteDocument();
 
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
@@ -363,6 +363,7 @@ describe('DocumentInfoDrawerComponent', () => {
       component,
       'openModalMoveDocument'
     ).and.callThrough();
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
     const btnMoveDocument = fixture.nativeElement.querySelector(
       '#move-document-modal'
     );
@@ -374,16 +375,21 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should to call the modal to move the document', () => {
     component.documentRithmId = documentId;
     component.stationRithmId = stationId;
+    component.documentAssignedUser = [];
+
     const expectDataModal = {
       data: {
         documentRithmId: documentId,
         stationRithmId: stationId,
+        assignedUser: component.documentAssignedUser.length,
       },
     };
     const dialogSpy = spyOn(
       TestBed.inject(MatDialog),
       'open'
     ).and.callThrough();
+    spyOn(TestBed.inject(SidenavDrawerService), 'closeDrawer');
+
     component.openModalMoveDocument();
     expect(dialogSpy).toHaveBeenCalledOnceWith(
       ConnectedStationsModalComponent,

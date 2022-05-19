@@ -333,7 +333,15 @@
               [matTooltipPosition]="'right'"
             ></i>
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-manual-flow"
+            data-testid="toggle-trigger-manual-flow"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.ManualFlow, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -342,7 +350,15 @@
             Check container
             {{ ruleSelectedMenu === 'triggers' ? 'only on ' : 'on' }} arrival
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-document-arrived"
+            data-testid="toggle-trigger-document-arrived"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.DocumentArrived, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -352,7 +368,15 @@
             {{ ruleSelectedMenu === 'triggers' ? 'new ' : '' }} container
             arrival
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-any-document-arrived"
+            data-testid="toggle-trigger-any-document-arrived"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.AnyDocumentArrived, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title h-14 flex justify-between items-center border-b border-secondary-50 pl-8 pr-6"
@@ -362,7 +386,15 @@
             {{ ruleSelectedMenu === 'triggers' ? 'on ' : '' }} containers on
             container departure
           </p>
-          <mat-slide-toggle></mat-slide-toggle>
+          <mat-slide-toggle
+            id="toggle-trigger-any-document-left"
+            data-testid="toggle-trigger-any-document-left"
+            (change)="
+              ruleSelectedMenu === 'rules'
+                ? removeOrAddTriggerType(triggerType.AnyDocumentLeft, $event)
+                : ''
+            "
+          ></mat-slide-toggle>
         </div>
         <div
           class="title flex items-center border-b border-secondary-50 pl-8 pr-6 pt-8 pb-10"
@@ -412,10 +444,10 @@
                 (selectionChange)="triggerTypeSelect()"
               >
                 <mat-option
-                  *ngFor="let option of scheduleTriggerOptions | keyvalue"
-                  [value]="option.value"
+                  *ngFor="let option of scheduleTriggerOptions"
+                  [value]="option"
                 >
-                  {{ option.value }}
+                  {{ option }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -475,6 +507,63 @@
                 <mat-select>
                   <mat-option></mat-option>
                 </mat-select>
+              </mat-form-field>
+            </section>
+
+            <section class="trigger-repeat-section">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Repeat</mat-label>
+                <mat-select
+                  formControlName="intervalRepeatType"
+                  (selectionChange)="intervalRepeatTypeSelect()"
+                >
+                  <mat-option
+                    *ngFor="
+                      let repeat of dateIntervalRepeatOptions;
+                      let i = index
+                    "
+                    [value]="repeat"
+                    [disabled]="i === 1 || i === 2"
+                  >
+                    {{ repeat }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </section>
+
+            <section
+              class="trigger-repeat-forever-section"
+              *ngIf="showRepeatForever"
+            >
+              Repeat Forever
+              <mat-slide-toggle formControlName="isRepeat"> </mat-slide-toggle>
+            </section>
+
+            <section
+              class="trigger-end-repeat-section"
+              *ngIf="
+                showRepeatForever &&
+                !scheduleTriggerForm.controls.isRepeat.value
+              "
+            >
+              <mat-form-field
+                class="w-full"
+                color="accent"
+                appearance="outline"
+              >
+                <mat-label>End Repeat</mat-label>
+                <input
+                  matInput
+                  readonly
+                  formControlName="endRepeatDate"
+                  [min]="startDate"
+                  [matDatepicker]="endRepeat"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="endRepeat"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #endRepeat></mat-datepicker>
               </mat-form-field>
             </section>
           </section>
@@ -593,29 +682,38 @@
           >
             <!-- Tab Flow -->
             <mat-tab label="tab-flow" aria-label="tab-flow">
-              <section
-                class="tab-flow-content flex items-center"
-                [formGroup]="flowFieldForm"
-              >
-                <mat-form-field class="md:w-2/5 w-full" appearance="outline">
-                  <mat-label> Available Stations </mat-label>
-                  <mat-select formControlName="stations" multiple>
-                    <mat-option
-                      *ngFor="let option of filteredStations$ | async"
-                      [value]="option.rithmId"
+              <section class="tab-flow-content px-8 pt-6 pb-10">
+                <div class="flex items-center" [formGroup]="flowFieldForm">
+                  <mat-form-field class="md:w-2/5 w-full" appearance="outline">
+                    <mat-label> Available Stations </mat-label>
+                    <mat-select
+                      formControlName="stations"
+                      multiple
+                      (selectionChange)="flowStationSelect()"
                     >
-                      {{ option.name }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <div class="px-3" *ngIf="stationLoading">
-                  <app-loading-indicator
-                    inlineText="Loading Stations..."
-                  ></app-loading-indicator>
+                      <mat-option
+                        *ngFor="let option of filteredStations$ | async"
+                        [value]="option.rithmId"
+                      >
+                        {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div class="flex items-center px-3" *ngIf="stationLoading">
+                    <app-loading-indicator
+                      inlineText="Loading Stations..."
+                    ></app-loading-indicator>
+                  </div>
                 </div>
+                <mat-form-field class="station-chip-list">
+                  <mat-chip-list #chipList aria-label="station selection">
+                    <mat-chip *ngFor="let station of flowStations">
+                      {{ station.name }}
+                    </mat-chip>
+                  </mat-chip-list>
+                </mat-form-field>
               </section>
             </mat-tab>
-
             <!-- Tab Container -->
             <mat-tab label="tab-container" aria-label="tab-container">
               <section class="pt-6 pb-10">
