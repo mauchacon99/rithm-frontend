@@ -23,9 +23,8 @@ export class SettingFieldsComponent implements OnInit {
 
   /** Init method. */
   ngOnInit(): void {
-    if (!this.field.value || !this.field.value?.length) {
-      this.field.value = this.inputTextTag;
-      this.setQuestionTitle();
+    if (!this.field.prompt || !this.field.prompt?.length) {
+      this.field.prompt = this.inputTextTag;
     }
   }
 
@@ -54,13 +53,12 @@ export class SettingFieldsComponent implements OnInit {
    *
    */
   deleteExtraSpaces(): void {
-    if (this.field.value && this.field.value.length) {
-      this.field.value = this.field.value.replace(/\s+/g, ' ').trim();
+    if (this.field.prompt && this.field.prompt.length) {
+      this.field.prompt = this.field.prompt.replace(/\s+/g, ' ').trim();
     }
-    if (!this.field.value || !this.field.value?.length) {
-      this.field.value = this.inputTextTag;
+    if (!this.field.prompt || !this.field.prompt?.length) {
+      this.field.prompt = this.inputTextTag;
     }
-    this.setQuestionTitle();
   }
 
   /**
@@ -70,13 +68,6 @@ export class SettingFieldsComponent implements OnInit {
     if (this.isPrevious) {
       this.field.isRequired = this.field.isReadOnly && this.field.isRequired;
     }
-  }
-
-  /**
-   * Set the question title.
-   */
-  setQuestionTitle(): void {
-    this.stationService.stationQuestionTitle$.next(this.field);
   }
 
   /**

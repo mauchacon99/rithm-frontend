@@ -9,7 +9,7 @@
     }"
   >
     <!-- Whether is a widget but is not a station (is a container) -->
-    <mat-label *ngIf="widgetItem && !isStation">{{ labelTag }}</mat-label>
+    <mat-label *ngIf="widgetItem">{{ labelTag }}</mat-label>
     <!-- Whether is not a widget no matter if is a station or container-->
     <mat-label *ngIf="!widgetItem">{{ labelTag }}</mat-label>
     <div matPrefix class="icon">
@@ -99,10 +99,10 @@
     </div>
     <ng-container *ngIf="isStation; else noStation">
       <input
-        *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput"
+        *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput "
         matInput
         type="{{
-          toolBar || field.questionType === fieldTypeEnum.File
+          toolBar || field.questionType === fieldTypeEnum.File || field.questionType === fieldTypeEnum.Date
             ? 'text'
             : field.questionType
         }}"
@@ -112,9 +112,24 @@
         (change)="updateFieldPrompt()"
         [readonly]="widgetItem"
         [placeholder]="
-          widgetItem ? (labelTag.length ? labelTag : field.prompt) : ''
+          widgetItem ? (labelTag && labelTag.length ? labelTag : field.prompt) : ''
         "
       />
+      <textarea
+        *ngIf="field.questionType === fieldTypeEnum.Instructions && !isInput"
+        matInput
+        rows="3"
+        spellcheck="true"
+        [required]="
+          field.isRequired || field.questionType === fieldTypeEnum.Instructions
+        "
+        [formControlName]="field.questionType"
+        (change)="updateFieldPrompt()"
+        [placeholder]="
+          widgetItem ? (labelTag && labelTag.length ? labelTag : field.prompt) : ''
+        "
+      >
+      </textarea>
       <input
         *ngIf="field.questionType !== fieldTypeEnum.Instructions && isInput"
         matInput
@@ -129,24 +144,9 @@
         (keyup)="updateFieldAnswer()"
         [readonly]="widgetItem"
         [placeholder]="
-          widgetItem ? (labelTag.length ? labelTag : field.prompt) : ''
+          widgetItem ? (labelTag && labelTag.length ? labelTag : field.prompt) : ''
         "
       />
-      <textarea
-        *ngIf="field.questionType === fieldTypeEnum.Instructions && !isInput"
-        matInput
-        rows="3"
-        spellcheck="true"
-        [required]="
-          field.isRequired || field.questionType === fieldTypeEnum.Instructions
-        "
-        [formControlName]="field.questionType"
-        (change)="updateFieldPrompt()"
-        [placeholder]="
-          widgetItem ? (labelTag.length ? labelTag : field.prompt) : ''
-        "
-      >
-      </textarea>
     </ng-container>
     <ng-template #noStation>
       <input
