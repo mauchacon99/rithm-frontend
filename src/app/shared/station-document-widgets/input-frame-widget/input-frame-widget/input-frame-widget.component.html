@@ -44,17 +44,59 @@
       ></app-text-field>
     </div>
   </section>
-  <section *ngIf="!isStation">
+  <section class="container-gridster-form" *ngIf="!isStation">
     <div *ngFor="let field of fields" class="relative">
       <div *ngIf="field.question">
         <app-text-field
-        [field]="field.question"
-        [isStation]="isStation"
-        [labelTag]="field.question.prompt"
-        [widgetItem]="true"
+          *ngIf="
+            field.question.questionType === fieldTypes.ShortText ||
+            field.question.questionType === fieldTypes.LongText ||
+            field.question.questionType === fieldTypes.URL ||
+            field.question.questionType === fieldTypes.State ||
+            field.question.questionType === fieldTypes.City ||
+            field.question.questionType === fieldTypes.Email
+          "
+          [field]="field.question"
+          [isStation]="isStation"
+          [labelTag]="field.question.prompt"
+          [widgetItem]="true"
         ></app-text-field>
+        <app-number-field
+          *ngIf="
+            field.question.questionType === fieldTypes.Number ||
+            field.question.questionType === fieldTypes.Phone ||
+            field.question.questionType === fieldTypes.Zip ||
+            field.question.questionType === fieldTypes.CreditCard ||
+            field.question.questionType === fieldTypes.Currency
+          "
+          [field]="field.question"
+        ></app-number-field>
+        <app-date-field
+          *ngIf="
+            field.question.questionType === fieldTypes.Date ||
+            field.question.questionType === fieldTypes.DateTime
+          "
+          [field]="field.question"
+        ></app-date-field>
+        <app-select-field
+          *ngIf="
+            field.question.questionType === fieldTypes.Select ||
+            field.question.questionType === fieldTypes.MultiSelect
+          "
+          [field]="field.question"
+        >
+        </app-select-field>
+        <app-check-field
+          *ngIf="field.question.questionType === fieldTypes.CheckList"
+          [field]="field.question"
+        >
+        </app-check-field>
+        <app-nested-field
+          *ngIf="field.question.questionType === fieldTypes.AddressLine"
+          [field]="field.question"
+        >
+        </app-nested-field>
       </div>
     </div>
   </section>
-
 </ng-template>

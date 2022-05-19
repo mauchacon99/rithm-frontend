@@ -364,7 +364,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-
           this.inputFrameWidgetItems = inputFrames.splice(1);
           this.changedOptions();
         },
@@ -692,7 +691,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Change options in grid.
    *
    */
-   changedOptions(): void {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }

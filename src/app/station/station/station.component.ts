@@ -1174,10 +1174,15 @@ export class StationComponent
       });
       if (confirmRemove) {
         const frameId = this.inputFrameWidgetItems[this.widgetFocused].rithmId;
-        const frameListElement = this.inputFrameList.find( (e)=> e  === `inputFrameWidget-${frameId}`);
+        const frameListElement = this.inputFrameList.find(
+          (e) => e === `inputFrameWidget-${frameId}`
+        );
         this.inputFrameWidgetItems.splice(this.widgetFocused, 1);
-        if (frameListElement){
-          this.inputFrameList.splice(this.inputFrameList.indexOf(frameListElement), 1);
+        if (frameListElement) {
+          this.inputFrameList.splice(
+            this.inputFrameList.indexOf(frameListElement),
+            1
+          );
         }
         this.widgetFocused = -1;
         this.changedOptions();

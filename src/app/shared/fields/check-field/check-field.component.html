@@ -1,7 +1,13 @@
-<p *ngIf="field.prompt" class="pb-1 italic">
-  {{ field.prompt }}
-  <span class="text-error-500" *ngIf="field.isRequired"> (*) </span>
-</p>
+<div *ngIf="field.prompt" class="flex items-center">
+  <!-- Checklist Icon -->
+  <div matPrefix class="icon">
+    <i class="fas fa-list"></i>
+  </div>
+  <p class="italic">
+    {{ field.prompt
+    }}<span class="text-error-500" *ngIf="field.isRequired"> (*) </span>
+  </p>
+</div>
 <div
   [formGroup]="checkFieldForm"
   class="w-full text-secondary-400 leading-7 pb-4"

@@ -59,13 +59,6 @@ describe('SettingFieldsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the question title to stationQuestionTitle observable', () => {
-    component.setQuestionTitle();
-    service.stationQuestionTitle$.subscribe((response) => {
-      expect(response).toBe(component.field);
-    });
-  });
-
   it('should return false the method that modify isPrevious', () => {
     const spyProperty = spyOnProperty(
       component,
@@ -127,23 +120,23 @@ describe('SettingFieldsComponent', () => {
 
   it('should delete extra spaces in fields name', () => {
     component.field = {
-      prompt: 'Fake question 1',
+      prompt: 'Short     Text     Field',
       rithmId: '3j4k-3h2j-hj4j',
       questionType: QuestionFieldType.Number,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
       children: [],
-      value: 'Short     Text     Field',
+      value: '',
     };
     fixture.detectChanges();
     component.deleteExtraSpaces();
-    expect(component.field.value).toEqual('Short Text Field');
+    expect(component.field.prompt).toEqual('Short Text Field');
   });
 
-  it('should set the default field value as its own type', () => {
+  it('should set the default field prompt as its own type', () => {
     component.field = {
-      prompt: 'Fake question 1',
+      prompt: 'Number',
       rithmId: '3j4k-3h2j-hj4j',
       questionType: QuestionFieldType.Number,
       isReadOnly: false,
@@ -154,7 +147,7 @@ describe('SettingFieldsComponent', () => {
     };
     fixture.detectChanges();
     component.deleteExtraSpaces();
-    expect(component.field.value).toEqual(component.inputTextTag);
+    expect(component.field.prompt).toEqual(component.inputTextTag);
   });
 
   it('should convert a camelCase string into Title Case', () => {

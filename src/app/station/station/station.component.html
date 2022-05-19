@@ -478,7 +478,7 @@
                               widgetItem.type === frameType.CircleImage,
                             'border-accent-300 border-2': widgetFocused === i
                           }"
-                          (click)=" layoutMode ? focusWidget(i) : ''"
+                          (click)="layoutMode ? focusWidget(i) : ''"
                           *ngFor="
                             let widgetItem of inputFrameWidgetItems;
                             let i = index;

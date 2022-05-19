@@ -85,6 +85,16 @@
         *ngIf="field.questionType === fieldTypeEnum.File"
         class="fa-solid fa-tag"
       ></i>
+      <!-- State Icon -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.State"
+        class="fa-solid fa-map-location-dot"
+      ></i>
+      <!-- ZipCode Icon -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Zip"
+        class="fa-solid fa-mailbox"
+      ></i>
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
       <button
@@ -99,10 +109,12 @@
     </div>
     <ng-container *ngIf="isStation; else noStation">
       <input
-        *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput "
+        *ngIf="field.questionType !== fieldTypeEnum.Instructions && !isInput"
         matInput
         type="{{
-          toolBar || field.questionType === fieldTypeEnum.File || field.questionType === fieldTypeEnum.Date
+          toolBar ||
+          field.questionType === fieldTypeEnum.File ||
+          field.questionType === fieldTypeEnum.Date
             ? 'text'
             : field.questionType
         }}"
@@ -112,7 +124,11 @@
         (change)="updateFieldPrompt()"
         [readonly]="widgetItem"
         [placeholder]="
-          widgetItem ? (labelTag && labelTag.length ? labelTag : field.prompt) : ''
+          widgetItem
+            ? labelTag && labelTag.length
+              ? labelTag
+              : field.prompt
+            : ''
         "
       />
       <textarea
@@ -126,7 +142,11 @@
         [formControlName]="field.questionType"
         (change)="updateFieldPrompt()"
         [placeholder]="
-          widgetItem ? (labelTag && labelTag.length ? labelTag : field.prompt) : ''
+          widgetItem
+            ? labelTag && labelTag.length
+              ? labelTag
+              : field.prompt
+            : ''
         "
       >
       </textarea>
@@ -144,7 +164,11 @@
         (keyup)="updateFieldAnswer()"
         [readonly]="widgetItem"
         [placeholder]="
-          widgetItem ? (labelTag && labelTag.length ? labelTag : field.prompt) : ''
+          widgetItem
+            ? labelTag && labelTag.length
+              ? labelTag
+              : field.prompt
+            : ''
         "
       />
     </ng-container>
