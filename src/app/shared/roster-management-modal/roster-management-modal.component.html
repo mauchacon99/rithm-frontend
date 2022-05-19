@@ -7,9 +7,9 @@
   </div>
 
   <!-- Current roster members -->
-  <div class="pt-2 flex justify-center items-center h-full">
+  <div class="pt-2 flex justify-center items-center w-full h-full">
     <div
-      class="gap-2 flex justify-center"
+      class="gap-2 flex flex-wrap justify-center"
       *ngIf="
         rosterMembers.length > 0 || loadingMembers;
         else rosterMembersEmpty
@@ -55,15 +55,9 @@
 
   <!-- List of organization members -->
   <div
-    class="flex items-start justify-center pt-4 overflow-y-auto relative list-area"
+    class="flex items-start justify-center pt-4 overflow-y-auto list-area"
     *ngIf="totalPotentialUsers > 0 || listLoading"
   >
-    <div
-      class="screen-box-roster"
-      [ngClass]="{
-        'loading-active absolute top-0 left-0 h-full w-full z-1': loadingMembers
-      }"
-    ></div>
     <!-- Loading indicator for list of members -->
     <div
       class="h-full w-full flex justify-center items-center pt-2"
@@ -80,7 +74,14 @@
       *ngIf="!listLoading"
     >
       <ng-container *ngFor="let user of users">
-        <div class="h-100">
+        <div class="h-100 relative">
+          <div
+            class="screen-box-roster"
+            [ngClass]="{
+              'loading-active absolute top-0 left-0 h-full w-full z-1':
+                loadingMembers
+            }"
+          ></div>
           <div
             [ngClass]="{
               'border-accent-500':
