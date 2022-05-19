@@ -1,4 +1,11 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -29,26 +36,34 @@ export class MemberDashboardListModalComponent
   /** Index member. */
   @Input() index!: number;
 
+  private _checkAll = false;
+
   /** Status checkAll. */
-  @Input() set setCheckAll(status: boolean) {
+  @Input() set checkAll(status: boolean) {
+    this._checkAll = status;
     if (this.form) {
-      this.form.patchValue({
-        check: status,
-      });
-      if (!status) {
-        this.isEditable = false;
+      if (status) {
+        this.isCheck = true;
+      }
+      if (!this.isCheck) {
         this.form.patchValue({
-          isEditable: this.isEditable,
+          check: status,
+          isEditable: false,
         });
       }
     }
   }
 
-  /** Form user. */
-  form!: FormGroup;
+  /**
+   * Get checkAll.
+   *
+   * @returns A boolean.
+   */
+  get checkAll(): boolean {
+    return this._checkAll;
+  }
 
-  /** Current user can edit. */
-  isEditable = false;
+  @Output() deselectCheckAll = new EventEmitter<void>();
 
   /**
    * Get status check.
@@ -60,10 +75,19 @@ export class MemberDashboardListModalComponent
   }
 
   /**
-   * The `onTouched` function.
+   * Get isEditable.
+   *
+   * @returns Status isEditable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => {};
+  get isEditable(): boolean {
+    return this.form.controls['isEditable'].value;
+  }
+
+  /** Form user. */
+  form!: FormGroup;
+
+  /** Member can view. */
+  isCheck = false;
 
   constructor(private fb: FormBuilder) {}
 
@@ -74,6 +98,12 @@ export class MemberDashboardListModalComponent
       isEditable: this.fb.control(this.member.isEditable),
     });
   }
+
+  /**
+   * The `onTouched` function.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onTouched: () => void = () => {};
 
   /**
    * Set value in user.
@@ -112,9 +142,8 @@ export class MemberDashboardListModalComponent
    */
   onChangeIsEditable(): void {
     if (this.check) {
-      this.isEditable = !this.isEditable;
       this.form.patchValue({
-        isEditable: this.isEditable,
+        isEditable: !this.isEditable,
       });
     }
   }
@@ -123,11 +152,14 @@ export class MemberDashboardListModalComponent
    * Change check.
    */
   onChange(): void {
+    this.isCheck = this.check;
     if (!this.check) {
-      this.isEditable = false;
       this.form.patchValue({
-        isEditable: this.isEditable,
+        isEditable: false,
       });
+      if (this.checkAll) {
+        this.deselectCheckAll.emit();
+      }
     }
   }
 }
