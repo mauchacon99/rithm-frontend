@@ -7,7 +7,7 @@ import { ListWidgetModalComponent } from './list-widget-modal.component';
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 import { GroupWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/group-widget-template-modal/group-widget-template-modal.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
-import { StationPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/station-pre-built-widget/station-pre-built-widget.component';
+import { StationPreBuiltWidgetComponent } from 'src/app/shared/widget-dashboard/station-pre-built-widget/station-pre-built-widget.component';
 
 describe('ListWidgetModalComponent', () => {
   let component: ListWidgetModalComponent;
