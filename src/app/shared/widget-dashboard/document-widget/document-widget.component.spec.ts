@@ -295,6 +295,18 @@ describe('DocumentWidgetComponent', () => {
       {
         stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
         stationName: 'New station',
+        stationOwners: {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+        rosterUsers: {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
       },
     ],
   };
@@ -439,6 +451,18 @@ describe('DocumentWidgetComponent', () => {
         {
           stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
           stationName: 'New station',
+          stationOwners: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
+          rosterUsers: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
         },
       ],
     };
@@ -477,6 +501,18 @@ describe('DocumentWidgetComponent', () => {
         {
           stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
           stationName: 'New station',
+          stationOwners: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
+          rosterUsers: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
         },
       ],
     };
@@ -519,6 +555,18 @@ describe('DocumentWidgetComponent', () => {
           {
             stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
             stationName: 'New station',
+            stationOwners: {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
+            rosterUsers: {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
           },
         ],
       };
@@ -611,6 +659,18 @@ describe('DocumentWidgetComponent', () => {
           {
             stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
             stationName: 'New station',
+            stationOwners: {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
+            rosterUsers: {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
           },
         ],
       };
@@ -657,6 +717,18 @@ describe('DocumentWidgetComponent', () => {
         {
           stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
           stationName: 'New station',
+          stationOwners: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
+          rosterUsers: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
         },
       ],
     };
@@ -684,6 +756,18 @@ describe('DocumentWidgetComponent', () => {
         {
           stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
           stationName: 'New station',
+          stationOwners: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
+          rosterUsers: {
+            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'email@email.com',
+          },
         },
       ],
     };
