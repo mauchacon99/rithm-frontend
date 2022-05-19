@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoadingWidgetComponent } from './loading-widget.component';
+
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
 import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
