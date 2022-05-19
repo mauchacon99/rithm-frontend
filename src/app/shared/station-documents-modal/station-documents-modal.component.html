@@ -331,7 +331,10 @@
             <strong class="font-semibold">Last Updated</strong>
           </div>
         </div>
-        <div class="max-h-[330px] scroll-auto overflow-auto">
+
+        <div
+          class="h-[calc(100vh-259px)] sm:h-[330px] scroll-auto overflow-auto"
+        >
           <div
             *ngFor="let document of documents"
             (click)="checkDocPermission(document.documentRithmId)"
@@ -406,28 +409,33 @@
             </div>
           </div>
         </div>
-      </div>
-      <app-loading-indicator
-        class="h-full flex justify-center items-center"
-        *ngIf="isLoading"
-      ></app-loading-indicator>
-    </div>
 
-    <div *ngIf="totalNumDocs > 0" class="flex justify-center">
-      <app-pagination
-        (currentPageNum)="getDocuments($event)"
-        [numItems]="totalNumDocs"
-        [numPerPage]="10"
-        [activeNum]="activeNum"
-      >
-      </app-pagination>
-    </div>
-    <!-- Buttons -->
-    <div mat-dialog-actions class="flex justify-end">
-      <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
-      <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
-        Close
-      </button>
+        <app-loading-indicator
+          class="h-full flex justify-center items-center"
+          *ngIf="isLoading"
+        ></app-loading-indicator>
+      </div>
+      <div *ngIf="totalNumDocs > 0" class="flex justify-center">
+        <app-pagination
+          (currentPageNum)="getDocuments($event)"
+          [numItems]="totalNumDocs"
+          [numPerPage]="10"
+          [activeNum]="activeNum"
+        >
+        </app-pagination>
+      </div>
+      <!-- Buttons -->
+      <div mat-dialog-actions class="flex justify-end">
+        <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
+        <button
+          id="confirm"
+          mat-button
+          color="accent"
+          [mat-dialog-close]="true"
+        >
+          Close
+        </button>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngIf="isLoading; then loading"></ng-container>
