@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { RouterModule } from '@angular/router';
 
 import { DocumentWidgetComponent } from 'src/app/shared/widget-dashboard/document-widget/document-widget.component';
 import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
@@ -12,6 +13,7 @@ import { BannerImageWidgetModule } from 'src/app/shared/widget-dashboard/banner-
   declarations: [DocumentWidgetComponent],
   imports: [
     CommonModule,
+    RouterModule,
     LoadingWidgetModule,
     ErrorWidgetModule,
     BannerImageWidgetModule,
