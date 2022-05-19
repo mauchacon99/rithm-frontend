@@ -10,8 +10,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./file-download-modal.component.scss'],
 })
 export class FileDownloadModalComponent {
-
-
   constructor(public dialogRef: MatDialogRef<FileDownloadModalComponent>) {}
 
   /**

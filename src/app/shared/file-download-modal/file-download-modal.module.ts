@@ -2,12 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FileDownloadModalComponent } from './file-download-modal.component';
 
-
-
 @NgModule({
   declarations: [FileDownloadModalComponent],
-  imports: [
-    CommonModule
-  ]
+  imports: [CommonModule],
 })
-export class FileDownloadModalModule { }
+export class FileDownloadModalModule {}

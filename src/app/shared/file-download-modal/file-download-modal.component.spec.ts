@@ -9,12 +9,9 @@ describe('FileDownloadModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FileDownloadModalComponent ],
-      providers: [
-        { provide: MatDialogRef, useValue: { close } }
-      ],
-    })
-    .compileComponents();
+      declarations: [FileDownloadModalComponent],
+      providers: [{ provide: MatDialogRef, useValue: { close } }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
