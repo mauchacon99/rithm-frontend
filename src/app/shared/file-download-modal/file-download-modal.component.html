@@ -1,0 +1,35 @@
+<div class="modal-container">
+  <section class="flex flex-col">
+    <div class="whitespace-pre-wrap overflow-y-auto">
+      <img
+        src="https://thumbs.dreamstime.com/b/sin-foto-ni-icono-de-imagen-en-blanco-cargar-im%C3%A1genes-o-falta-marca-no-disponible-pr%C3%B3xima-se%C3%B1al-silueta-naturaleza-simple-marco-215973362.jpg"
+        alt="Girl in a jacket"
+      />
+    </div>
+
+    <!-- Title -->
+    <h4 id="title" class="text-left text-accent-500">
+      <i class="fa-solid fa-file-image"></i> filename.jpge
+    </h4>
+    <!-- Buttons -->
+    <div mat-dialog-actions class="flex justify-end self-end">
+      <button
+        mat-button
+        mat-dialog-close
+        data-testid="close-modal-btn"
+        id="close-modal-btn "
+        class="uppercase mx-3 font-bold text-accent-400"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        data-testid="download-modal-btn"
+        id="download-modal-btn"
+        class="text-white px-4 py-2 uppercase buttton shadow-xl rounded bg-accent-800"
+      >
+        Download
+      </button>
+    </div>
+  </section>
+</div>
