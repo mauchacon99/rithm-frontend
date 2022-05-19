@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 import {
+  FilterOptionTypeMemberDashboard,
   MemberDashboard,
   RoleDashboardMenu,
   MemberAddDashboard,
@@ -191,5 +192,131 @@ describe('ManagementMemberDashboardModalComponent', () => {
       '#message-error-members'
     );
     expect(loader).toBeTruthy();
+  });
+
+  describe('getter members dashboard', () => {
+    const membersDashboard: MemberDashboard[] = [
+      {
+        rithmId: '123-456-789',
+        profileImageRithmId: '123-456-789',
+        firstName: 'Test 1',
+        lastName: 'Eagle 1',
+        email: 'test1@email.com',
+        canView: true,
+        isEditable: true,
+      },
+      {
+        rithmId: '987-654-321',
+        profileImageRithmId: '987-654-321',
+        firstName: 'Test 2',
+        lastName: 'Eagle 2',
+        email: 'test2@email.com',
+        canView: false,
+        isEditable: true,
+      },
+      {
+        rithmId: '654-987-321',
+        profileImageRithmId: '654-987-321',
+        firstName: 'Test 3',
+        lastName: 'Eagle 3',
+        email: 'test3@email.com',
+        canView: true,
+        isEditable: false,
+      },
+      {
+        rithmId: '654-321-987',
+        profileImageRithmId: '654-321-987',
+        firstName: 'Test 4',
+        lastName: 'Lion 4',
+        email: 'test4@email.com',
+        canView: false,
+        isEditable: false,
+      },
+    ];
+    beforeEach(() => {
+      component.membersDashboard = membersDashboard;
+      membersDashboard.map((member) => {
+        component.form.addControl(
+          member.rithmId,
+          TestBed.inject(FormBuilder).control({
+            check: member.canView,
+            isEditable: member.isEditable,
+          })
+        );
+      });
+    });
+
+    it('should get all members', () => {
+      component.search = '';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.All;
+      expect(component.membersDashboardFiltered.length).toEqual(4);
+      expect(component.membersDashboardFiltered).toEqual(membersDashboard);
+    });
+
+    it('should get members when use filter ViewOnly and search', () => {
+      component.search = 'test1@email.com';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.ViewOnly;
+      const expectData = [membersDashboard[0]];
+      expect(component.membersDashboardFiltered.length).toEqual(1);
+      expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
+
+    it('should get members when use filter CanEdit and search', () => {
+      component.search = 'test1@email.com';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.CanEdit;
+      const expectData = [membersDashboard[0]];
+      expect(component.membersDashboardFiltered.length).toEqual(1);
+      expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
+
+    it('should get members when use search', () => {
+      component.search = 'eagle';
+      component.selectedFilterValue = FilterOptionTypeMemberDashboard.All;
+      const [member1, member2, member3] = membersDashboard;
+      const expectData = [member1, member2, member3];
+      expect(component.membersDashboardFiltered.length).toEqual(3);
+      expect(component.membersDashboardFiltered).toEqual(expectData);
+    });
+
+    it('should return true getSearch if find a member', () => {
+      component.search = 'Test 1';
+      expect(component['getSearch'](membersDashboard[0])).toBeTrue();
+    });
+
+    it('should return false getSearch if find a member', () => {
+      component.search = 'Test 2';
+      expect(component['getSearch'](membersDashboard[0])).toBeFalse();
+    });
+
+    it('should search apply trim', () => {
+      component.search = '    ';
+      component.membersDashboardFiltered;
+      expect(component.search).toEqual('');
+    });
+
+    it('should call reset checkAll', () => {
+      const spyReset = spyOn(
+        component.form.controls['checkAll'],
+        'reset'
+      ).and.callThrough();
+      component['deselectCheckAll']();
+      expect(spyReset).toHaveBeenCalled();
+    });
+
+    it('should patch values when select all change', () => {
+      const spyForm = spyOn(component.form, 'patchValue').and.callThrough();
+      component.form.controls['checkAll'].setValue(false);
+
+      component.onChangeSelectAll();
+      const expectData = {
+        check: false,
+        isEditable: false,
+      };
+
+      expect(spyForm).toHaveBeenCalled();
+      membersDashboard.map(({ rithmId }) => {
+        expect(component.form.controls[rithmId].value).toEqual(expectData);
+      });
+    });
   });
 });

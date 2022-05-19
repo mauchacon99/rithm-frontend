@@ -158,6 +158,9 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   /* Loading in input auto-complete the list of all stations. */
   stationLoading = false;
 
+  /** The list of selected stations in flow section. */
+  flowStations: ConnectedStationInfo[] = [];
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -185,7 +188,7 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.getTreatment();
     this.getStationFlowLogicRule();
-
+    this.subscribeCurrentStationQuestions();
     this.flowFieldForm = this.fb.group({
       stations: [''],
     });
@@ -549,7 +552,22 @@ export class FlowLogicComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
+   * Update's the selected station array data which is displayed as chips.
+   *
+   */
+  flowStationSelect(): void {
+    this.flowStations = [];
+    this.flowFieldForm.controls.stations.value.map((stationId: string) => {
+      const station = this.stations.find((e) => e.rithmId === stationId);
+      if (station) {
+        this.flowStations.push(station);
+      }
+    });
+  }
+
+  /**
    * Get the powers (triggers, actions, flow) of current station.
+   *
    */
   private getStationPowers(): void {
     this.powersLoading = true;

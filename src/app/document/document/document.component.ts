@@ -259,6 +259,12 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((documentName) => {
+        if (
+          this.documentInformation &&
+          documentName.baseName !== this.documentInformation.documentName
+        ) {
+          this.documentForm.markAllAsTouched();
+        }
         this.documentName = documentName.baseName;
       });
   }
@@ -268,6 +274,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.documentService.documentAnswer$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((answer) => {
+        this.documentForm.markAllAsTouched();
         const answerFound = this.documentAnswer.find(
           (da) => da.questionRithmId === answer.questionRithmId
         );
@@ -510,7 +517,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Save document changes with the save button.
    */
   saveDocumentChanges(): void {
-    this.documentForm.markAllAsTouched();
     this.documentLoading = true;
     const requestArray = [
       // Update the document name.
@@ -530,6 +536,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.documentForm.markAsUntouched();
           if (this.shouldFlowContainer) {
             this.autoFlowContainer();
             this.shouldFlowContainer = false;
