@@ -1,0 +1,27 @@
+.input-search {
+  ::ng-deep .mat-form-field {
+    height: 50px;
+    width: 100%;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+    @apply h-[50px] w-full sm:w-2/3;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding-top: 1px !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 2px;
+  }
+
+  input.mat-input-element {
+    margin-top: 3px;
+    margin-left: 8px;
+  }
+}
+
+.container-group {
+  height: calc(100% - 122px);
+}
