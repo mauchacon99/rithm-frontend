@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
 
-import { DescriptionWidgetModalComponent } from './description-widget-modal.component';
 import { DashboardItem, SelectedItemWidgetModel, WidgetType } from 'src/models';
 import { MockDashboardService } from 'src/mocks';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockComponent } from 'ng-mocks';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { DescriptionWidgetModalComponent } from 'src/app/dashboard/widget-modal/description-widget-modal/description-widget-modal.component';
 import { GroupSearchWidgetComponent } from 'src/app/shared/widget-dashboard/group-search-widget/group-search-widget.component';
-import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widget/document-widget.component';
-import { MatDialogRef } from '@angular/material/dialog';
-import { StationWidgetComponent } from 'src/app/dashboard/widgets/station-widget/station-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/shared/widget-dashboard/group-traffic-widget/group-traffic-widget.component';
 import { StationPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/station-pre-built-widget/station-pre-built-widget.component';
+import { DocumentWidgetComponent } from 'src/app/shared/widget-dashboard/document-widget/document-widget.component';
+import { StationWidgetComponent } from 'src/app/shared/widget-dashboard/station-widget/station-widget.component';
 
 describe('DescriptionWidgetModalComponent', () => {
   let component: DescriptionWidgetModalComponent;
