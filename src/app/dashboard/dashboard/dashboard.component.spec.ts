@@ -18,11 +18,11 @@ import { GridsterModule } from 'angular-gridster2';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ElementRef, Renderer2, Type } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { MockComponent, MockService } from 'ng-mocks';
 
+import { DashboardComponent } from './dashboard.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import {
   MockDashboardService,
   MockErrorService,
@@ -30,24 +30,24 @@ import {
   MockUserService,
   MockPopupService,
 } from 'src/mocks';
-import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MenuComponent } from 'src/app/dashboard/dashboard-menu/menu/menu.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationWidgetComponent } from 'src/app/shared/widget-dashboard/station-widget/station-widget.component';
+import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
-import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
-import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
+import { DocumentWidgetComponent } from 'src/app/shared/widget-dashboard/document-widget/document-widget.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MobileBrowserChecker } from 'src/helpers';
 import { GroupSearchWidgetComponent } from 'src/app/shared/widget-dashboard/group-search-widget/group-search-widget.component';
 import { GroupTrafficWidgetComponent } from 'src/app/shared/widget-dashboard/group-traffic-widget/group-traffic-widget.component';
-import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
-import { StationWidgetComponent } from 'src/app/shared/widget-dashboard/station-widget/station-widget.component';
-import { DocumentWidgetComponent } from 'src/app/shared/widget-dashboard/document-widget/document-widget.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ContainerPreBuiltWidgetComponent } from 'src/app/shared/widget-dashboard/container-pre-built-widget/container-pre-built-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
