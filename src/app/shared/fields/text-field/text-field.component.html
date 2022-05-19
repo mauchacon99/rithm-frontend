@@ -9,7 +9,7 @@
     }"
   >
     <!-- Whether is a widget but is not a station (is a container) -->
-    <mat-label *ngIf="widgetItem">{{ labelTag }}</mat-label>
+    <mat-label *ngIf="widgetItem && !isStation">{{ labelTag }}</mat-label>
     <!-- Whether is not a widget no matter if is a station or container-->
     <mat-label *ngIf="!widgetItem">{{ labelTag }}</mat-label>
     <div matPrefix class="icon">

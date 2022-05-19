@@ -7,7 +7,7 @@ import { NumberFieldModule } from 'src/app/shared/fields/number-field/number-fie
 import { SelectFieldModule } from 'src/app/shared/fields/select-field/select-field.module';
 import { CheckFieldModule } from 'src/app/shared/fields/check-field/check-field.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { NestedFieldModule } from '../../fields/nested-field/nested-field.module';
+import { NestedFieldModule } from 'src/app/shared/fields/nested-field/nested-field.module';
 
 @NgModule({
   declarations: [InputFrameWidgetComponent],
