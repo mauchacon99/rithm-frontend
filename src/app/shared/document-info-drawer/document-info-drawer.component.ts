@@ -552,6 +552,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.documentAssignedUser = [];
           this.assignedUserLoading = false;
         },
         error: (error: unknown) => {
@@ -569,10 +570,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Open a modal to move document.
    */
   openModalMoveDocument(): void {
+    this.sidenavDrawerService.closeDrawer();
     this.dialog.open(ConnectedStationsModalComponent, {
       data: {
         documentRithmId: this.documentRithmId,
         stationRithmId: this.stationRithmId,
+        assignedUser: this.documentAssignedUser.length,
       },
     });
   }
