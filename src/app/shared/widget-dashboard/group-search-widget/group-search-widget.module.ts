@@ -4,20 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
-import { ErrorWidgetModule } from '../error-widget/error-widget.module';
-import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
-import { GroupSearchWidgetComponent } from './group-search-widget.component';
+
+import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/error-widget.module';
+import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
+import { GroupSearchWidgetComponent } from 'src/app/shared/widget-dashboard/group-search-widget/group-search-widget.component';
 
 @NgModule({
   declarations: [GroupSearchWidgetComponent],
   imports: [
     CommonModule,
-    LoadingWidgetModule,
-    ErrorWidgetModule,
     MatInputModule,
     FormsModule,
     MatButtonModule,
     RouterModule,
+    LoadingWidgetModule,
+    ErrorWidgetModule,
   ],
   exports: [GroupSearchWidgetComponent],
 })
