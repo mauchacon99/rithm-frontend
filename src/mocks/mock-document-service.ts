@@ -1560,18 +1560,22 @@ export class MockDocumentService {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      stationOwners: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
-      rosterUsers: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents: [
         {
           rithmId: '123-123-123',
@@ -1788,18 +1792,22 @@ export class MockDocumentService {
         {
           stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
           stationName: 'New station',
-          stationOwners: {
-            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-            firstName: 'First Name',
-            lastName: 'Last Name',
-            email: 'email@email.com',
-          },
-          rosterUsers: {
-            rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-            firstName: 'First Name',
-            lastName: 'Last Name',
-            email: 'email@email.com',
-          },
+          stationOwners: [
+            {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
+          ],
+          rosterUsers: [
+            {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
+          ],
         },
       ],
     };

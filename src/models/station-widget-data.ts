@@ -12,10 +12,10 @@ export interface StationWidgetData {
   documentGeneratorStatus: DocumentGenerationStatus;
 
   /** Members from station owners. */
-  stationOwners: StationRosterMember;
+  stationOwners: StationRosterMember[];
 
   /** Members from roster users. */
-  rosterUsers: StationRosterMember;
+  rosterUsers: StationRosterMember[];
 
   /** The documents list. */
   documents: WidgetDocument[];

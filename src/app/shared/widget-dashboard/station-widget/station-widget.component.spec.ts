@@ -159,18 +159,22 @@ describe('StationWidgetComponent', () => {
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      stationOwners: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
-      rosterUsers: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents,
     };
     fixture.detectChanges();
@@ -198,18 +202,22 @@ describe('StationWidgetComponent', () => {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      stationOwners: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
-      rosterUsers: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents: [
         {
           rithmId: '123-123-123',
@@ -266,18 +274,22 @@ describe('StationWidgetComponent', () => {
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.None,
-      stationOwners: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
-      rosterUsers: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents: [
         {
           rithmId: '123-123-123',
@@ -545,18 +557,22 @@ describe('StationWidgetComponent', () => {
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      stationOwners: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
-      rosterUsers: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents,
     };
     const noColumnsMessage = fixture.debugElement.nativeElement.querySelector(
@@ -576,18 +592,22 @@ describe('StationWidgetComponent', () => {
     component.dataStationWidget = {
       stationName: 'Station Name',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      stationOwners: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
-      rosterUsers: {
-        rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'email@email.com',
-      },
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents,
     };
     fixture.detectChanges();

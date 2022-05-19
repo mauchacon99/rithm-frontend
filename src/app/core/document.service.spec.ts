@@ -695,19 +695,26 @@ describe('DocumentService', () => {
   });
 
   it('should return data station widget', () => {
-    const stationUser = {
-      rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-      firstName: 'First Name',
-      lastName: 'Last Name',
-      email: 'email@email.com',
-    };
-
     const columns = { data: ['123-654-798', '753-951-789'] };
     const dataWidgetStation: StationWidgetData = {
       stationName: 'Dev1',
       documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      stationOwners: stationUser,
-      rosterUsers: stationUser,
+      stationOwners: [
+        {
+          rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
+      rosterUsers: [
+        {
+          rithmId: '3113442d-12c6-2035-893a-86fa9deca721',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          email: 'email@email.com',
+        },
+      ],
       documents: [
         {
           rithmId: '123-123-123',
@@ -857,13 +864,6 @@ describe('DocumentService', () => {
   });
 
   it('should call method getDocumentWidget', () => {
-    const stationUser = {
-      rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
-      firstName: 'First Name',
-      lastName: 'Last Name',
-      email: 'email@email.com',
-    };
-
     const documentRithm = 'CDB317AA-A5FE-431D-B003-784A578B3FC2';
     const expectedResponse: DocumentWidget = {
       documentName: 'Untitled Document',
@@ -903,9 +903,22 @@ describe('DocumentService', () => {
         {
           stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
           stationName: 'New station',
-
-          stationOwners: stationUser,
-          rosterUsers: stationUser,
+          stationOwners: [
+            {
+              rithmId: '4113442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
+          ],
+          rosterUsers: [
+            {
+              rithmId: '1213442c-82c6-4035-893a-86fa9deca721',
+              firstName: 'First Name',
+              lastName: 'Last Name',
+              email: 'email@email.com',
+            },
+          ],
         },
       ],
     };

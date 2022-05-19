@@ -11,8 +11,8 @@ export interface StationList {
   stationRithmId: string;
 
   /** Members from station owners. */
-  stationOwners: StationRosterMember;
+  stationOwners: StationRosterMember[];
 
   /** Members from roster owners. */
-  rosterUsers: StationRosterMember;
+  rosterUsers: StationRosterMember[];
 }
