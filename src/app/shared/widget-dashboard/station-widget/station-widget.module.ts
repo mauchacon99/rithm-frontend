@@ -4,6 +4,7 @@ import { StationWidgetComponent } from 'src/app/shared/widget-dashboard/station-
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { RouterModule } from '@angular/router';
 
 import { DocumentModule } from 'src/app/document/document.module';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
@@ -18,6 +19,7 @@ import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-wid
     MatButtonModule,
     MatTableModule,
     MatSortModule,
+    RouterModule,
     DocumentModule,
     UserAvatarModule,
     BannerImageWidgetModule,
