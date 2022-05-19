@@ -14,8 +14,8 @@ import { RosterModule } from 'src/app/shared/roster/roster.module';
     LoadingWidgetModule,
     ErrorWidgetModule,
     MatTableModule,
-    MatSortModule,
     RosterModule,
+    MatSortModule,
   ],
   exports: [StationPreBuiltWidgetComponent],
 })
