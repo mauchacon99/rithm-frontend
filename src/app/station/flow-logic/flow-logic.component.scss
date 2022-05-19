@@ -80,19 +80,21 @@
     @apply m-0 pb-0;
   }
 
-  .trigger-type-section,
-  .trigger-interval-time-section {
-    @apply mb-6;
+  .trigger-repeat-forever-section {
+    @apply flex justify-between mb-6;
+  }
 
-    min-width: 400px;
-    max-width: 420px;
+  .trigger-type-section,
+  .trigger-interval-time-section,
+  .trigger-repeat-section {
+    @apply min-w-[400px] max-w-[420px] mb-6;
 
     .trigger-datepicker-section {
       @apply mb-6;
     }
 
     .trigger-time-section {
-      @apply flex items-center space-x-2;
+      @apply flex items-center space-x-2 mb-6;
 
       ::ng-deep .mat-form-field:nth-child(1),
       ::ng-deep .mat-form-field:nth-child(3) {

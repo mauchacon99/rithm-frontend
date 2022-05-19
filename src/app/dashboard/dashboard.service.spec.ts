@@ -13,6 +13,7 @@ import {
   ItemListWidgetModal,
   ColumnFieldsWidget,
   MemberDashboard,
+  MemberAddDashboard,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -480,9 +481,13 @@ describe('DashboardService', () => {
       canView: false,
     };
 
-    const expectBody = { name: expectedResponse.name };
+    const expectBody = {
+      name: expectedResponse.name,
+      canView: true,
+      isEditable: true,
+    };
 
-    service.generateNewPersonalDashboard().subscribe((response) => {
+    service.generateNewPersonalDashboard(true, true).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
 
@@ -557,10 +562,17 @@ describe('DashboardService', () => {
       canView: false,
     };
 
-    const expectBody = { name: expectedResponse.name };
-    service.generateNewOrganizationDashboard().subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    const expectBody = {
+      name: expectedResponse.name,
+      canView: true,
+      isEditable: true,
+    };
+
+    service
+      .generateNewOrganizationDashboard(true, true)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
@@ -772,50 +784,60 @@ describe('DashboardService', () => {
   });
 
   it('should add user to dashboard', () => {
-    const responseMembers: MemberDashboard[] = [
+    const expectDashboardData: DashboardData = {
+      rithmId: 'C4D41659-C7E7-4430-B36A-4AA33F56EBD6',
+      name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          rithmId: '147cf568-27a4-4968-5628-046ccfee24fd',
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+      isEditable: false,
+      canView: false,
+    };
+    const responseMembers: MemberAddDashboard[] = [
       {
-        rithmId: '123-456-789',
-        profileImageRithmId: '123-456-789',
-        firstName: 'Test 1',
-        lastName: 'Eagle 1',
-        email: 'test1@email.com',
+        userRithmId: '7fff6288-cb06-4626-8b58-9c157bc15646',
         canView: true,
         isEditable: true,
       },
       {
-        rithmId: '987-654-321',
-        profileImageRithmId: '987-654-321',
-        firstName: 'Test 2',
-        lastName: 'Eagle 2',
-        email: 'test2@email.com',
-        canView: false,
-        isEditable: true,
-      },
-      {
-        rithmId: '654-987-321',
-        profileImageRithmId: '654-987-321',
-        firstName: 'Test 3',
-        lastName: 'Eagle 3',
-        email: 'test3@email.com',
+        userRithmId: '92c53ccd-dab1-44ad-976d-86a48d2104b5',
         canView: true,
-        isEditable: false,
-      },
-      {
-        rithmId: '654-321-987',
-        profileImageRithmId: '654-321-987',
-        firstName: 'Test 4',
-        lastName: 'Eagle 4',
-        email: 'test4@email.com',
-        canView: false,
-        isEditable: false,
+        isEditable: true,
       },
     ];
-    service.addDashboardMembers(responseMembers).subscribe((response) => {
-      expect(response).toEqual(responseMembers);
-    });
+    service
+      .addDashboardMembers(expectDashboardData.rithmId, responseMembers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectDashboardData);
+      });
+    const expectBody = {
+      dashboardRithmId: expectDashboardData.rithmId,
+      users: responseMembers,
+    };
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/dashboard-share`
+    );
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectBody);
+    req.flush(expectDashboardData);
+    httpTestingController.verify();
   });
 
   it('should get users to dashboard personal', () => {
+    const dashboardRithmId = '123-654-789';
     const expectedResponse: MemberDashboard[] = [
       {
         rithmId: '123-456-789',
@@ -855,8 +877,21 @@ describe('DashboardService', () => {
       },
     ];
 
-    service.getUsersDashboardPersonal().subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+    service
+      .getUsersDashboardPersonal(dashboardRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/shared-users?dashboardRithmId=${dashboardRithmId}`
+    );
+
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('dashboardRithmId')).toEqual(
+      dashboardRithmId
+    );
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });

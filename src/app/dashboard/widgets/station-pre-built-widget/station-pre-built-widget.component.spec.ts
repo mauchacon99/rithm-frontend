@@ -6,12 +6,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { StationPreBuiltWidgetComponent } from './station-pre-built-widget.component';
 import { throwError } from 'rxjs';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('StationPreBuiltWidgetComponent', () => {
   let component: StationPreBuiltWidgetComponent;
@@ -134,6 +134,7 @@ describe('StationPreBuiltWidgetComponent', () => {
 
   it('should executed modal for render documents the specific station', () => {
     const expectData = {
+      panelClass: ['h-[560px]', 'overflow-hidden'],
       minWidth: '300px',
       data: {
         stationName: stationWidgetData[0].name,
@@ -151,7 +152,7 @@ describe('StationPreBuiltWidgetComponent', () => {
   it('should not show modal when edit mode is active', () => {
     component.editMode = true;
     const expectData = {
-      minWidth: '370px',
+      minWidth: '300px',
       data: {
         stationName: stationWidgetData[0].name,
         stationId: stationWidgetData[0].rithmId,

@@ -7,8 +7,6 @@ import {
 } from './document-widget.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockComponent } from 'ng-mocks';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,6 +20,8 @@ import {
   WidgetType,
 } from 'src/models';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 describe('DocumentWidgetComponent', () => {
   let component: DocumentWidgetComponent;
@@ -648,6 +648,57 @@ describe('DocumentWidgetComponent', () => {
     expect(component.permissionError).toBeFalse();
   });
 
+  it('should show empty question message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#without-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
+
+  it('should show no selected message', () => {
+    component.dataDocumentWidget = {
+      documentName: 'Untitled Document',
+      documentRithmId,
+      questions: [
+        {
+          stationRithmId: '123132-123123-123123',
+          questions: questions,
+        },
+      ],
+      stations: [
+        {
+          stationRithmId: '431D-B003-784A578B3FC2-CDB317AA-A5FE',
+          stationName: 'New station',
+        },
+      ],
+    };
+    component.isLoading = false;
+    component['parseDataColumnsWidget']();
+    spyOnProperty(component, 'getValueQuestions').and.returnValue([]);
+    spyOnProperty(component, 'getDefaultValueQuestions').and.returnValue([]);
+
+    fixture.detectChanges();
+    const emptyQuestion = fixture.debugElement.nativeElement.querySelector(
+      '#no-selected-question-message'
+    );
+    expect(emptyQuestion).toBeTruthy();
+  });
+
   it('should catch error when the widget has been deleted', () => {
     spyOn(documentService, 'getDocumentWidget').and.returnValue(
       throwError(() => {
@@ -668,13 +719,13 @@ describe('DocumentWidgetComponent', () => {
       stations: [],
     };
     fixture.detectChanges();
-    const spyDeteleWidget = spyOn(
+    const spyDeleteWidget = spyOn(
       component.deleteWidget,
       'emit'
     ).and.callThrough();
     const spyDrawer = spyOn(component.toggleDrawer, 'emit').and.callThrough();
     component.removeWidget();
-    expect(spyDeteleWidget).toHaveBeenCalled();
+    expect(spyDeleteWidget).toHaveBeenCalled();
     expect(spyDrawer).toHaveBeenCalledOnceWith(0);
   });
 });
