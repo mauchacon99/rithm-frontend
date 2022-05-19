@@ -148,7 +148,8 @@
                       data-testid="document-save"
                       id="document-save"
                       [disabled]="
-                        !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                        !documentForm.touched ||
+                        (isWidget && !isUserAdminOrOwner)
                       "
                     >
                       Save
