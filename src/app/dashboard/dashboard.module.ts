@@ -4,7 +4,6 @@ import { MatInputModule } from '@angular/material/input';
 import { GridsterModule } from 'angular-gridster2';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -15,7 +14,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
-import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { NgChartsModule } from 'ng2-charts';
@@ -27,10 +25,8 @@ import { OptionsMenuComponent } from 'src/app/dashboard/dashboard-menu/options-m
 import { ExpansionMenuComponent } from 'src/app/dashboard/dashboard-menu/expansion-menu/expansion-menu.component';
 import { MenuComponent } from 'src/app/dashboard/dashboard-menu/menu/menu.component';
 import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
-import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { StationDocumentsModalModule } from 'src/app/shared/station-documents-modal/station-documents-modal.module';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
-import { DocumentModule } from 'src/app/document/document.module';
 import { StationWidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/station-widget-drawer/station-widget-drawer.component';
 import { WidgetDrawerComponent } from 'src/app/dashboard/drawer-widget/widget-drawer/widget-drawer.component';
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
@@ -85,10 +81,8 @@ import { StationPreBuiltWidgetModule } from 'src/app/shared/widget-dashboard/sta
     ReactiveFormsModule,
     GridsterModule,
     LoadingIndicatorModule,
-    RosterModule,
     StationDocumentsModalModule,
     UserAvatarModule,
-    DocumentModule,
     FormsModule,
     MatSelectModule,
     MatDialogModule,
@@ -97,13 +91,11 @@ import { StationPreBuiltWidgetModule } from 'src/app/shared/widget-dashboard/sta
     MatTabsModule,
     MatInputModule,
     MatMenuModule,
-    MatCardModule,
     MatButtonModule,
     MatSidenavModule,
     MatExpansionModule,
     MatListModule,
     MatButtonToggleModule,
-    MatSortModule,
     ComingSoonMessageModule,
     NgChartsModule,
     MatCheckboxModule,

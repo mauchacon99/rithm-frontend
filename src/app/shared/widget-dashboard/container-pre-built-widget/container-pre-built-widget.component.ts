@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -29,6 +30,7 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) set tableSort(value: MatSort) {
     if (value) {
       this.dataSourceTable.sort = value;
+      this.cd.detectChanges();
     }
   }
 
@@ -162,7 +164,8 @@ export class ContainerPreBuiltWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private documentService: DocumentService,
     private utcTimeConversion: UtcTimeConversion,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private cd: ChangeDetectorRef
   ) {}
 
   /** Init method. */
