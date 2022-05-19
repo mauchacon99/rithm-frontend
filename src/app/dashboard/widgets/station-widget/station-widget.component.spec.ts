@@ -24,18 +24,18 @@ import { StationWidgetComponent } from './station-widget.component';
 import { MockComponent } from 'ng-mocks';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { LoadingWidgetComponent } from 'src/app/dashboard/widgets/loading-widget/loading-widget.component';
-import { ErrorWidgetComponent } from 'src/app/dashboard/widgets/error-widget/error-widget.component';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BannerImageWidgetComponent } from 'src/app/dashboard/widgets/banner-image-widget/banner-image-widget.component';
+import { BannerImageWidgetComponent } from 'src/app/shared/widget-dashboard/banner-image-widget/banner-image-widget.component';
 import { MatSortModule } from '@angular/material/sort';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 import { UserService } from 'src/app/core/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingWidgetComponent } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.component';
+import { ErrorWidgetComponent } from 'src/app/shared/widget-dashboard/error-widget/error-widget.component';
 
 /** Represents data of columns. */
 interface DataTableValues {

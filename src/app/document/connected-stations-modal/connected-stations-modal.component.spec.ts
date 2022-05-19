@@ -27,6 +27,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -85,6 +86,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: { close } },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -207,15 +209,24 @@ describe('ConnectedStationsModalComponent', () => {
       toStationRithmIds: [station.rithmId],
       documentRithmId: documentId,
     };
+
     const spyMoveDocument = spyOn(
       TestBed.inject(DocumentService),
       'moveDocument'
     ).and.callFake(() => of(dataExpect));
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
+    const spyDrawer = spyOn(
+      TestBed.inject(SidenavDrawerService),
+      'toggleDrawer'
+    );
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
+
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
     component.moveDocument();
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+    expect(spyDrawer).toHaveBeenCalledWith('documentInfo', {
+      stationRithmId: station.rithmId,
+    });
     expect(spyMatDialogRef).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('dashboard');
   });
@@ -297,5 +308,46 @@ describe('ConnectedStationsModalComponent', () => {
   it('should return name station to display', () => {
     const expectData = component.displayFn(station);
     expect(expectData).toEqual(station.name);
+  });
+
+  it('should call the service to unassign a user when move a document.', () => {
+    component.assignedUser = 1;
+    fixture.detectChanges();
+
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
+
+    const unassignSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'unassignUserToDocument'
+    ).and.callThrough();
+    component.moveDocument();
+
+    expect(unassignSpy).toHaveBeenCalledOnceWith(
+      component.documentRithmId,
+      component.stationRithmId
+    );
+  });
+
+  it('should show error message when request for unassigned user fails.', () => {
+    component.assignedUser = 1;
+    fixture.detectChanges();
+
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'unassignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.moveDocument();
+    expect(spyError).toHaveBeenCalled();
   });
 });

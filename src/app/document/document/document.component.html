@@ -148,7 +148,8 @@
                       data-testid="document-save"
                       id="document-save"
                       [disabled]="
-                        !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                        !documentForm.touched ||
+                        (isWidget && !isUserAdminOrOwner)
                       "
                     >
                       Save
@@ -379,6 +380,7 @@
                         stationViewMode="preview"
                         [stationRithmId]="stationRithmIdWidget"
                         [id]="widgetItem.id"
+                        [isStation]="false"
                       ></app-input-frame-widget>
                     </ng-container>
                   </div>
