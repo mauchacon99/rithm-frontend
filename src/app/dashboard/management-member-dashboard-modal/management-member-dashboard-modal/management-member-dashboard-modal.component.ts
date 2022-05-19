@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 import { first } from 'rxjs';
@@ -31,6 +31,10 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
    * @returns Members of dashboard.
    */
   get membersDashboardFiltered(): MemberDashboard[] {
+    if (this.search && !this.search.trim()) {
+      this.search = this.search.trim();
+      this.cd.detectChanges();
+    }
     if (
       (this.search ||
         this.selectedFilterValue !== FilterOptionTypeMemberDashboard.All) &&
@@ -112,7 +116,8 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
     public modalData: ModalData,
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {}
 
   /** Init method. */

@@ -50,9 +50,8 @@ export class MemberDashboardListModalComponent
           check: status,
         });
         if (!status) {
-          this.isEditable = false;
           this.form.patchValue({
-            isEditable: this.isEditable,
+            isEditable: false,
           });
         }
       }
@@ -70,15 +69,6 @@ export class MemberDashboardListModalComponent
 
   @Output() deselectCheckAll = new EventEmitter<void>();
 
-  /** Form user. */
-  form!: FormGroup;
-
-  /** Current user can edit. */
-  isEditable = false;
-
-  /** Member can view. */
-  isCheck = false;
-
   /**
    * Get status check.
    *
@@ -87,6 +77,21 @@ export class MemberDashboardListModalComponent
   get check(): boolean {
     return this.form.controls['check'].value;
   }
+
+  /**
+   * Get isEditable.
+   *
+   * @returns Status isEditable.
+   */
+  get isEditable(): boolean {
+    return this.form.controls['isEditable'].value;
+  }
+
+  /** Form user. */
+  form!: FormGroup;
+
+  /** Member can view. */
+  isCheck = false;
 
   constructor(private fb: FormBuilder) {}
 
@@ -141,9 +146,8 @@ export class MemberDashboardListModalComponent
    */
   onChangeIsEditable(): void {
     if (this.check) {
-      this.isEditable = !this.isEditable;
       this.form.patchValue({
-        isEditable: this.isEditable,
+        isEditable: !this.isEditable,
       });
     }
   }
@@ -154,9 +158,8 @@ export class MemberDashboardListModalComponent
   onChange(): void {
     this.isCheck = this.check;
     if (!this.check) {
-      this.isEditable = false;
       this.form.patchValue({
-        isEditable: this.isEditable,
+        isEditable: false,
       });
       if (this.checkAll) {
         this.deselectCheckAll.emit();

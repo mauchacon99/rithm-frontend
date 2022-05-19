@@ -52,7 +52,9 @@ describe('MemberDashboardListModalComponent', () => {
   });
 
   it('should set default value in isEditable when check is false', () => {
-    component.isEditable = true;
+    component.form.patchValue({
+      isEditable: true,
+    });
     spyOnProperty(component, 'check').and.returnValue(false);
     fixture.detectChanges();
     component.onChange();
@@ -63,7 +65,9 @@ describe('MemberDashboardListModalComponent', () => {
   it('should change value in isEditable when clicked chip', () => {
     const index = 1;
     component.index = index;
-    component.isEditable = false;
+    component.form.patchValue({
+      isEditable: false,
+    });
     spyOnProperty(component, 'check').and.returnValue(true);
     fixture.detectChanges();
 

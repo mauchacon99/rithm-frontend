@@ -288,6 +288,12 @@ describe('ManagementMemberDashboardModalComponent', () => {
       expect(component['getSearch'](membersDashboard[0])).toBeFalse();
     });
 
+    it('should search apply trim', () => {
+      component.search = '    ';
+      component.membersDashboardFiltered;
+      expect(component.search).toEqual('');
+    });
+
     it('should call reset checkAll', () => {
       const spyReset = spyOn(
         component.form.controls['checkAll'],
