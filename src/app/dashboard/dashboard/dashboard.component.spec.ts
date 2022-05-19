@@ -44,8 +44,8 @@ import { DocumentWidgetComponent } from 'src/app/dashboard/widgets/document-widg
 import { AddWidgetModalComponent } from 'src/app/dashboard/widget-modal/add-widget-modal/add-widget-modal.component';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MobileBrowserChecker } from 'src/helpers';
-import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
-import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
+import { GroupSearchWidgetComponent } from 'src/app/shared/widget-dashboard/group-search-widget/group-search-widget.component';
+import { GroupTrafficWidgetComponent } from 'src/app/shared/widget-dashboard/group-traffic-widget/group-traffic-widget.component';
 import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
 import { HttpErrorResponse } from '@angular/common/http';
 

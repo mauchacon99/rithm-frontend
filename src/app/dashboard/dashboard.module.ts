@@ -44,18 +44,18 @@ import { StationWidgetTemplateModalComponent } from 'src/app/dashboard/widget-mo
 import { DocumentWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/document-widget-template-modal/document-widget-template-modal.component';
 import { DescriptionWidgetModalComponent } from 'src/app/dashboard/widget-modal/description-widget-modal/description-widget-modal.component';
 import { GroupWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/group-widget-template-modal/group-widget-template-modal.component';
-import { GroupSearchWidgetComponent } from 'src/app/dashboard/widgets/group-search-widget/group-search-widget.component';
 import { ComingSoonMessageModule } from 'src/app/shared/coming-soon-message/coming-soon-message.module';
 import { MobileBrowserChecker } from 'src/helpers/mobile-browser-checker';
-import { GroupTrafficWidgetComponent } from 'src/app/dashboard/widgets/group-traffic-widget/group-traffic-widget.component';
 import { StationPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/station-pre-built-widget/station-pre-built-widget.component';
 import { PreBuiltWidgetTemplateModalComponent } from 'src/app/dashboard/widget-modal/pre-built-widget-template-modal/pre-built-widget-template-modal.component';
 import { ContainerPreBuiltWidgetComponent } from 'src/app/dashboard/widgets/container-pre-built-widget/container-pre-built-widget.component';
 import { ManagementMemberDashboardModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/management-member-dashboard-modal/management-member-dashboard-modal.component';
 import { MemberDashboardListModalComponent } from 'src/app/dashboard/management-member-dashboard-modal/member-dashboard-list-modal/member-dashboard-list-modal.component';
 import { LoadingWidgetModule } from 'src/app/shared/widget-dashboard/loading-widget/loading-widget.module';
-import { ErrorWidgetModule } from 'src/app/shared/widget-dashboard/error-widget/error-widget.module';
 import { BannerImageWidgetModule } from 'src/app/shared/widget-dashboard/banner-image-widget/banner-image-widget.module';
+import { GroupSearchWidgetModule } from 'src/app/shared/widget-dashboard/group-search-widget/group-search-widget.module';
+import { ErrorWidgetModule } from '../shared/widget-dashboard/error-widget/error-widget.module';
+import { GroupTrafficWidgetModule } from 'src/app/shared/widget-dashboard/group-traffic-widget/group-traffic-widget.module';
 
 @NgModule({
   declarations: [
@@ -77,8 +77,6 @@ import { BannerImageWidgetModule } from 'src/app/shared/widget-dashboard/banner-
     DocumentWidgetTemplateModalComponent,
     DescriptionWidgetModalComponent,
     GroupWidgetTemplateModalComponent,
-    GroupSearchWidgetComponent,
-    GroupTrafficWidgetComponent,
     StationPreBuiltWidgetComponent,
     PreBuiltWidgetTemplateModalComponent,
     ContainerPreBuiltWidgetComponent,
@@ -118,6 +116,8 @@ import { BannerImageWidgetModule } from 'src/app/shared/widget-dashboard/banner-
     LoadingWidgetModule,
     ErrorWidgetModule,
     BannerImageWidgetModule,
+    GroupSearchWidgetModule,
+    GroupTrafficWidgetModule,
   ],
   providers: [MobileBrowserChecker],
 })
