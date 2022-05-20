@@ -290,7 +290,7 @@
     </ng-container>
     <ng-template #newContainer>
       <div
-        class="textured-bg grid grid-cols-12 min-h-full"
+        class="textured-bg grid grid-cols-12 min-h-full drawer-content"
         [ngClass]="{ 'mt-10': !isWidget }"
       >
         <!-- Left column -->
@@ -402,7 +402,7 @@
             <!-- Footer -->
             <div
               *ngIf="!isWidget"
-              class="hidden md:block w-full fixed z-10 bottom-0 left-0"
+              class="hidden md:block w-full fixed z-10 bottom-0 left-0 max-width-footer"
             >
               <div class="grid grid-cols-12">
                 <div
@@ -459,33 +459,6 @@
                   >
                     {{ flowButtonName }}
                   </button>
-                </div>
-                <div class="relative hidden lg:block">
-                  <svg
-                    class="absolute top-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g
-                      id="escalation_line"
-                      data-name="escalation_line"
-                      transform="translate(1)"
-                    >
-                      <line
-                        id="Line_95"
-                        data-name="Line 95"
-                        x2="20"
-                        transform="translate(0 3.5)"
-                        fill="none"
-                        stroke="#031023"
-                        stroke-linecap="round"
-                        stroke-width="2"
-                      />
-                    </g>
-                  </svg>
-                  <i
-                    class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500"
-                    matTooltip="Escalate Document"
-                  ></i>
                 </div>
               </div>
             </div>
