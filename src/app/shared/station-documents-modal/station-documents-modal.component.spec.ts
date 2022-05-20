@@ -234,6 +234,7 @@ describe('StationDocumentsModalComponent', () => {
 
   it('should call close the modal in dialogRef service', () => {
     component.showContainerModal = true;
+    component.isLoading = false;
     fixture.detectChanges();
     const spyMatDialogRef = spyOn(TestBed.inject(MatDialogRef), 'close');
     const spyMethod = spyOn(component, 'closeModal').and.callThrough();
@@ -359,5 +360,27 @@ describe('StationDocumentsModalComponent', () => {
         component.search
       );
     });
+  });
+
+  it('should show error message new template', () => {
+    component.showContainerModal = true;
+    component.isLoading = false;
+    component.errorLoadingStationDocumentsModal = true;
+    fixture.detectChanges();
+    const errorMessage = fixture.nativeElement.querySelector(
+      '#error-loading-station-documents-modal'
+    );
+    expect(errorMessage).toBeTruthy();
+  });
+
+  it('should show error message new old template', () => {
+    component.showContainerModal = false;
+    component.isLoading = false;
+    component.errorLoadingStationDocumentsModal = true;
+    fixture.detectChanges();
+    const errorMessage = fixture.nativeElement.querySelector(
+      '#error-loading-station-documents-modal'
+    );
+    expect(errorMessage).toBeTruthy();
   });
 });

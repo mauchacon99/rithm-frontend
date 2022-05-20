@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilterOptionTypeMemberDashboard } from 'src/models/enums/filter-option-type-member-dashboard';
 import { first } from 'rxjs';
@@ -10,7 +10,6 @@ import {
   MemberDashboard,
   RoleDashboardMenu,
 } from 'src/models';
-
 /**Interface data modal. */
 interface ModalData {
   /** Selected dashboardRithmId. */
@@ -26,6 +25,45 @@ interface ModalData {
   styleUrls: ['./management-member-dashboard-modal.component.scss'],
 })
 export class ManagementMemberDashboardModalComponent implements OnInit {
+  /**
+   * Get members by dashboard filtered.
+   *
+   * @returns Members of dashboard.
+   */
+  get membersDashboardFiltered(): MemberDashboard[] {
+    if (this.search && !this.search.trim()) {
+      this.search = this.search.trim();
+      this.cd.detectChanges();
+    }
+    if (
+      (this.search ||
+        this.selectedFilterValue !== FilterOptionTypeMemberDashboard.All) &&
+      this.membersDashboard &&
+      this.membersDashboard.length
+    ) {
+      return this.membersDashboard.filter((member) => {
+        if (
+          this.selectedFilterValue === FilterOptionTypeMemberDashboard.CanEdit
+        ) {
+          return (
+            this.getSearch(member) &&
+            this.form.controls[member.rithmId].value.isEditable
+          );
+        } else if (
+          this.selectedFilterValue === FilterOptionTypeMemberDashboard.ViewOnly
+        ) {
+          return (
+            this.getSearch(member) &&
+            this.form.controls[member.rithmId].value.check
+          );
+        } else {
+          return this.getSearch(member);
+        }
+      });
+    }
+    return this.membersDashboard || [];
+  }
+
   /** Members dashboard personal. */
   membersDashboard!: MemberDashboard[];
 
@@ -78,7 +116,8 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
     public modalData: ModalData,
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {}
 
   /** Init method. */
@@ -96,9 +135,53 @@ export class ManagementMemberDashboardModalComponent implements OnInit {
 
   /** Add form for each user. */
   private addForms(): void {
-    for (let index = 0; index < this.membersDashboard.length; index++) {
-      this.form.addControl(`member-${index}`, this.fb.control(''));
-    }
+    this.membersDashboard.map((member) => {
+      this.form.addControl(
+        member.rithmId,
+        this.fb.control({
+          check: member.canView,
+          isEditable: member.isEditable,
+        })
+      );
+    });
+  }
+
+  /**
+   * Filter search by member.
+   *
+   * @param member Member.
+   * @returns True if member exist.
+   */
+  private getSearch(member: MemberDashboard): boolean {
+    return (
+      `${member.firstName} ${member.lastName}`
+        .toLowerCase()
+        .includes(this.search.toLowerCase()) ||
+      member.email.toLowerCase().includes(this.search.toLowerCase())
+    );
+  }
+
+  /**
+   * Callback when click select all.
+   */
+  onChangeSelectAll(): void {
+    this.membersDashboard.map((member) => {
+      this.form.patchValue({
+        [member.rithmId]: {
+          check: this.checkAll,
+          isEditable: !this.checkAll
+            ? false
+            : this.form.controls[member.rithmId].value.isEditable,
+        },
+      });
+    });
+  }
+
+  /**
+   * Deselect check all.
+   */
+  deselectCheckAll(): void {
+    this.form.controls['checkAll'].reset();
   }
 
   /** Get users to dashboard personal. */

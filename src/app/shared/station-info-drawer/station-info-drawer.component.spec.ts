@@ -754,7 +754,8 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should open a modal that shows the containers of the current station', () => {
     const expectData = {
-      minWidth: '370px',
+      panelClass: ['h-[560px]', 'overflow-hidden'],
+      minWidth: '300px',
       data: {
         stationName: component.stationInformation.name,
         stationId: stationId,

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -69,6 +70,7 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) set tableSort(value: MatSort) {
     if (value) {
       this.dataSourceTable.sort = value;
+      this.cd.detectChanges();
     }
   }
 
@@ -264,7 +266,8 @@ export class StationWidgetComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private sidenavDrawerService: SidenavDrawerService,
     private dashboardService: DashboardService,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   /**
