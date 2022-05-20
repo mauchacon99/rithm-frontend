@@ -36,7 +36,7 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   @Input() widgetMode!: 'layout' | 'setting' | 'preview';
 
   /** Id of the current Gridster item. */
-  @Input() id!: number;
+  @Input() id!: string;
 
   /** Station Rithm id. */
   @Input() stationRithmId = '';
@@ -79,40 +79,10 @@ export class InputFrameWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Listen the stationQuestionTitle Service.
-   */
-  private stationQuestionTitle$(): void {
-    this.stationService.stationQuestionTitle$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((questionTitle) => {
-        if (
-          questionTitle &&
-          this.widgetMode === 'setting' &&
-          this.fields &&
-          this.fields.length > 0
-        ) {
-          const questionIndex = this.fields?.findIndex(
-            (e) => e.rithmId === questionTitle.rithmId
-          );
-          /** Verify that the index exists.*/
-          if (questionIndex >= 0) {
-            if (!this.tempTitle) {
-              this.tempTitle = this.fields[questionIndex].prompt.slice();
-            }
-
-            this.fields[questionIndex].prompt =
-              questionTitle.value || this.tempTitle;
-          }
-        }
-      });
-  }
-
-  /**
    * Set up deleteStationQuestions subscriptions.
    */
   ngOnInit(): void {
     this.subscribeDeleteStationQuestion();
-    this.stationQuestionTitle$();
   }
 
   /**

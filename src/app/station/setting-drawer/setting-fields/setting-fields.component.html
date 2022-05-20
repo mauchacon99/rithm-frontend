@@ -18,11 +18,10 @@
             id="field-setting-input"
             data-testid="field-setting-input"
             placeholder="Name your field"
-            [(ngModel)]="field.value"
+            [(ngModel)]="field.prompt"
             [maxlength]="field.questionType === 'shortText' ? 50 : null"
             autocomplete="off"
             (blur)="deleteExtraSpaces()"
-            (ngModelChange)="setQuestionTitle()"
           />
         </mat-form-field>
         <ng-template #fieldNameStatic>
@@ -33,7 +32,10 @@
   </section>
   <section class="w-full py-3 px-4 border-b border-secondary-200 border-solid">
     <p class="mb-1 tracking-tight font-semibold">Input Settings</p>
-    <div class="flex flex-row justify-between items-center text-sm py-3">
+    <div
+      *ngIf="stationRithmId !== field.originalStationRithmId"
+      class="flex flex-row justify-between items-center text-sm py-3"
+    >
       Editable
       <mat-slide-toggle
         class="mat-slide"

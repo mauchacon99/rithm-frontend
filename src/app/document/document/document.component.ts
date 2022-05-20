@@ -377,7 +377,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
-          this.inputFrameWidgetItems = inputFrames;
+          this.inputFrameWidgetItems = inputFrames.splice(1);
+          this.changedOptions();
         },
         error: (error: unknown) => {
           this.errorService.displayError(
@@ -697,6 +698,16 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           );
         },
       });
+  }
+
+  /**
+   * Change options in grid.
+   *
+   */
+  changedOptions(): void {
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
   }
 
   /**
