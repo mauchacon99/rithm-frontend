@@ -28,7 +28,7 @@
     "@angular/material": "^13.3.7",
     "@angular/platform-browser": "^13.3.7",
     "@angular/platform-browser-dynamic": "^13.3.8",
-    "@angular/router": "^13.3.8",
+    "@angular/router": "^13.3.9",
     "@ngneat/cashew": "^3.0.0",
     "@popperjs/core": "^2.11.5",
     "@splitsoftware/splitio-browserjs": "^0.5.0",
