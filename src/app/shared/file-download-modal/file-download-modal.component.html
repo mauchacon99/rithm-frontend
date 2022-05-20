@@ -1,0 +1,33 @@
+<div class="bg-white w-full">
+  <div
+    class="bg-secondary-50 flex h-[330px] items-center justify-center mt-[-24px] mx-[-24px] overflow-y-auto text-4xl text-primary-100 whitespace-pre-wrap"
+  >
+    <i class="fa-solid fa-image"></i>
+  </div>
+  <section class="flex flex-col">
+    <!-- Title -->
+    <h4 id="title" class="text-left text-accent-500">
+      <i class="fa-solid fa-file-image"></i> filename.jpge
+    </h4>
+    <!-- Buttons -->
+    <div mat-dialog-actions class="flex justify-end self-end">
+      <button
+        mat-button
+        mat-dialog-close
+        data-testid="close-modal-btn"
+        id="close-modal-btn"
+        class="uppercase mx-3 font-bold text-accent-400"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        data-testid="download-modal-btn"
+        id="download-modal-btn"
+        class="text-white px-4 py-2 uppercase buttton shadow-xl rounded bg-accent-800"
+      >
+        Download
+      </button>
+    </div>
+  </section>
+</div>

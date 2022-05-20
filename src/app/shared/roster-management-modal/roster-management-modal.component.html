@@ -5,10 +5,11 @@
       Manage {{ isGroup ? 'Group' : 'Station' }} {{ rosterType | titlecase }}
     </h4>
   </div>
+
   <!-- Current roster members -->
-  <div class="pt-2 flex justify-center items-center h-full">
+  <div class="pt-2 flex justify-center items-center w-full h-full">
     <div
-      class="gap-2 flex justify-center"
+      class="gap-2 flex flex-wrap justify-center"
       *ngIf="
         rosterMembers.length > 0 || loadingMembers;
         else rosterMembersEmpty
@@ -51,6 +52,7 @@
   <div class="flex justify-center text-xs" *ngIf="addRemoveRosterError">
     <span class="text-error-500">Error: Unable to add/remove member</span>
   </div>
+
   <!-- List of organization members -->
   <div
     class="flex items-start justify-center pt-4 overflow-y-auto list-area"
@@ -72,12 +74,20 @@
       *ngIf="!listLoading"
     >
       <ng-container *ngFor="let user of users">
-        <div class="h-100">
+        <div class="h-100 relative">
+          <div
+            class="screen-box-roster"
+            [ngClass]="{
+              'loading-active absolute top-0 left-0 h-full w-full z-1':
+                loadingMembers
+            }"
+          ></div>
           <div
             [ngClass]="{
               'border-accent-500':
                 rosterType === 'workers' ? user.isWorker : user.isOwner,
-              'border-error-500': userHadLastError(user.rithmId)
+              'border-error-500': userHadLastError(user.rithmId),
+              'pointer-events-none': loadingMembers
             }"
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
             (click)="toggleSelectedUser(user.rithmId)"
@@ -122,10 +132,14 @@
   >
     <p>Members not found</p>
   </div>
+
   <!-- Paginator -->
   <div
     *ngIf="!listLoading && totalPotentialUsers > 0"
     class="flex justify-center"
+    [ngClass]="{
+      'pointer-events-none text-secondary-200': loadingMembers
+    }"
   >
     <app-pagination
       (currentPageNum)="
@@ -137,13 +151,19 @@
     >
     </app-pagination>
   </div>
+
   <!-- Buttons -->
   <div mat-dialog-actions class="flex justify-end">
     <button
-      data-testid="close-dialog-button"
       mat-button
       color="accent"
+      id="close-dialog-button"
+      data-testid="close-dialog-button"
+      [disabled]="loadingMembers"
       [mat-dialog-close]="true"
+      [ngClass]="{
+        'text-secondary-200': loadingMembers
+      }"
     >
       Done
     </button>

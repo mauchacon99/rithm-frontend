@@ -1,7 +1,13 @@
 .list-area {
-  height: 360px;
+  @apply h-[360px];
 
   @media screen and (max-width: 767px) {
-    height: 300px;
+    @apply h-[300px];
+  }
+
+  .screen-box-roster {
+    &.loading-active {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
   }
 }
