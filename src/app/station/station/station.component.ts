@@ -992,8 +992,9 @@ export class StationComponent
       .pipe(first())
       .subscribe({
         next: (inputFrames) => {
+          /** Temporal slice() to remove the default frame created from backend .*/
           /**Add individual properties for every Type. */
-          inputFrames?.forEach((frame, index) => {
+          inputFrames?.slice(1).forEach((frame, index) => {
             frame.id = index;
             switch (frame.type) {
               case FrameType.Input:
@@ -1006,7 +1007,7 @@ export class StationComponent
                 frame.minItemCols = 6;
                 frame.cols = frame.cols < frame.minItemCols ? 6 : frame.cols;
                 frame.rows = frame.rows < frame.minItemRows ? 4 : frame.rows;
-                this.inputFrameList.push('inputFrameWidget-' + index);
+                this.inputFrameList.push('inputFrameWidget-' + frame.rithmId);
                 break;
               case FrameType.Headline:
                 frame.minItemCols = 6;
@@ -1157,6 +1158,7 @@ export class StationComponent
       .subscribe({
         next: () => {
           this.widgetLoading = false;
+          this.changedOptions();
           this.setGridMode('preview');
         },
         error: (error: unknown) => {
@@ -1191,14 +1193,25 @@ export class StationComponent
     if (this.widgetFocused > -1) {
       const confirmRemove = await this.popupService.confirm({
         title: 'Remove widget?',
-        message: '\nThe selected widget will be removed.',
+        message: 'The selected widget will be removed.',
         okButtonText: 'Yes',
         cancelButtonText: 'No',
         important: true,
       });
       if (confirmRemove) {
+        const frameId = this.inputFrameWidgetItems[this.widgetFocused].rithmId;
+        const frameListElement = this.inputFrameList.find(
+          (e) => e === `inputFrameWidget-${frameId}`
+        );
         this.inputFrameWidgetItems.splice(this.widgetFocused, 1);
+        if (frameListElement) {
+          this.inputFrameList.splice(
+            this.inputFrameList.indexOf(frameListElement),
+            1
+          );
+        }
         this.widgetFocused = -1;
+        this.changedOptions();
       }
     }
   }
@@ -1237,7 +1250,7 @@ export class StationComponent
         inputFrame.minItemRows = 4;
         inputFrame.minItemCols = 6;
         inputFrame.questions = [];
-        this.inputFrameList.push('inputFrameWidget-' + inputFrame.id);
+        this.inputFrameList.push('inputFrameWidget-' + inputFrame.rithmId);
         break;
       case FrameType.Headline:
         inputFrame.cols = 24;

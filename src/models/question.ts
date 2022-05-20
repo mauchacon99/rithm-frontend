@@ -5,6 +5,9 @@ import { PossibleAnswer } from './possible-answer';
  * Represents a question/field on a station or document.
  */
 export interface Question {
+  /** When frame-by-types return inputFrames with questions. */
+  question?: Question;
+
   /** The global Rithm ID for the question type. */
   rithmId: string;
 
