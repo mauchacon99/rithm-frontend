@@ -43,7 +43,7 @@
     "ngx-mat-select-search": "^4.1.1",
     "rxjs": "^7.4.0",
     "tslib": "^2.4.0",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.0",
     "zone.js": "~0.11.5"
   },
   "devDependencies": {
@@ -61,7 +61,7 @@
     "@strut-software/stylelint-config": "^1.1.1",
     "@types/jasmine": "^4.0.3",
     "@types/node": "^16.11.36",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "5.25.0",
     "@typescript-eslint/parser": "5.25.0",
     "autoprefixer": "^10.4.7",
